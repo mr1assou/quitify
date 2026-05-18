@@ -1,53 +1,50 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Runtime color palettes for SVG / Ionicons / native props.
+ * Tailwind `className` uses `dark:` variants separately (see tailwind.config.js).
+ *
+ * Brand palette is warm brown + cream. The `accent` slot is a coral terracotta
+ * used for "win / unlocked / resisted" — intentionally NOT green.
  */
+export const lightColors = {
+  background: "#FFFFFF",
+  primary: "#795548",
+  primaryDark: "#3E2723",
+  primaryLight: "#A1887F",
+  secondary: "#BC9C88",
+  foreground: "#2A1A12",
+  mutedForeground: "#7A6E66",
+  accent: "#E0825A",
+  accentSoft: "#F4D6C5",
+  alert: "#DC3545",
+  section: "#F8F5F2",
+  border: "#EFE6DF",
+  white: "#FFFFFF",
+} as const;
 
-import { Platform } from 'react-native';
+export const darkColors = {
+  background: "#100D0B",
+  primary: "#D7B8A3",
+  primaryDark: "#F5E9DF",
+  primaryLight: "#EDD9C8",
+  secondary: "#8D735F",
+  foreground: "#F5EFE9",
+  mutedForeground: "#A89F97",
+  accent: "#F09775",
+  accentSoft: "#3A2A21",
+  alert: "#EF5350",
+  section: "#1B1613",
+  border: "#2E2622",
+  white: "#FFFFFF",
+} as const;
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+export type ThemeColors = typeof lightColors;
+export type ThemeResolved = "light" | "dark";
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
-};
+export function getThemeColors(resolved: ThemeResolved): ThemeColors {
+  return resolved === "dark" ? darkColors : lightColors;
+}
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+/** @deprecated Use `useTheme().colors` in components */
+export const colors = lightColors;
+
+export type ColorToken = keyof ThemeColors;

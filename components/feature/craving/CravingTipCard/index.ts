@@ -1,0 +1,1 @@
+export { CravingTipCard } from "./CravingTipCard";

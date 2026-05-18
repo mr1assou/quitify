@@ -1,0 +1,1 @@
+export { TapGame } from "./TapGame";

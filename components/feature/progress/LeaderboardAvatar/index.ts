@@ -1,0 +1,1 @@
+export { LeaderboardAvatar } from "./LeaderboardAvatar";

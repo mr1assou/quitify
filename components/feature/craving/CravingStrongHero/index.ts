@@ -1,0 +1,1 @@
+export { CravingStrongHero } from "./CravingStrongHero";

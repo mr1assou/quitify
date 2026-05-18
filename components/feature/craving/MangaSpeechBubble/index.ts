@@ -1,0 +1,1 @@
+export { MangaSpeechBubble } from "./MangaSpeechBubble";

@@ -1,0 +1,1 @@
+export { IntroPagerGradient } from "./IntroPagerGradient";

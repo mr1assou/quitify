@@ -1,0 +1,1 @@
+export { MotivationQuoteCard } from "./MotivationQuoteCard";

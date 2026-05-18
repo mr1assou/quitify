@@ -1,0 +1,1 @@
+export { GlobalRankCard } from "./GlobalRankCard";
