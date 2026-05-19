@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { useMemo } from "react";
 import {
   KeyboardAvoidingView,
@@ -7,30 +7,25 @@ import {
   View,
 } from "react-native";
 
+import { CountryFields } from "@/components/feature/onboarding/CountryFields";
 import { CreateProfileStep } from "@/components/feature/onboarding/CreateProfileStep";
+import { QuitDateFields } from "@/components/feature/onboarding/QuitDateFields";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
+import { OnboardingSectionDivider } from "@/components/feature/onboarding/shared/OnboardingSectionDivider";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
 import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { parseBirthYmd } from "@/utils/birthdate";
+import { useQuitPlanHandlers } from "@/hooks/useQuitPlanHandlers";
+import { isCreateProfileStepComplete } from "@/utils/createProfileOnboarding";
 
 export default function OnboardingCreateProfile() {
   const { draft, patch } = useOnboarding();
+  const quitDateHandlers = useQuitPlanHandlers(draft, patch);
 
-  const canContinue = useMemo(() => {
-    const t = draft.username.trim();
-    const bd =
-      draft.birthYear != null && draft.birthMonth != null && draft.birthDay != null
-        ? parseBirthYmd(draft.birthYear, draft.birthMonth, draft.birthDay)
-        : null;
-    return t.length > 0 && draft.sex !== undefined && bd !== null;
-  }, [
-    draft.username,
-    draft.sex,
-    draft.birthYear,
-    draft.birthMonth,
-    draft.birthDay,
-  ]);
+  const canContinue = useMemo(
+    () => isCreateProfileStepComplete(draft),
+    [draft],
+  );
 
   return (
     <KeyboardAvoidingView
@@ -41,10 +36,9 @@ export default function OnboardingCreateProfile() {
         step={5}
         total={ONBOARDING_TOTAL_STEPS}
         title="Let's create your profile now"
-        subtitle="A few details so Quitify can greet you properly and tailor the experience."
         primaryLabel="Continue"
         primaryDisabled={!canContinue}
-        onPrimary={() => router.push("/onboarding/nicotine-consumption")}
+        onPrimary={() => safeRouter.push("/onboarding/nicotine-consumption")}
         showBack
         scrollBody
       >
@@ -53,18 +47,22 @@ export default function OnboardingCreateProfile() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 8 }}
         >
-          <View className="pb-2">
+          <View className="gap-8 pb-2">
             <CreateProfileStep
               username={draft.username}
               onUsernameChange={(username) => patch({ username })}
               sex={draft.sex}
               onSexChange={(sex: ProfileSex) => patch({ sex })}
-              birthMonth={draft.birthMonth}
-              birthDay={draft.birthDay}
-              birthYear={draft.birthYear}
-              onBirthMonthChange={(birthMonth) => patch({ birthMonth })}
-              onBirthDayChange={(birthDay) => patch({ birthDay })}
-              onBirthYearChange={(birthYear) => patch({ birthYear })}
+            />
+            <OnboardingSectionDivider />
+            <CountryFields draft={draft} patch={patch} />
+            <OnboardingSectionDivider />
+            <QuitDateFields
+              draft={draft}
+              onSelectPreset={quitDateHandlers.selectPreset}
+              onMonthChange={quitDateHandlers.updateCustomMonth}
+              onDayChange={quitDateHandlers.updateCustomDay}
+              onYearChange={quitDateHandlers.updateCustomYear}
             />
           </View>
         </ScrollView>

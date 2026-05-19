@@ -79,6 +79,24 @@ export type PrimaryInterestOption = {
 /** Onboarding step 6 only collects cigarette consumption. */
 export type NicotineConsumptionFormId = "cigarettes";
 
+/* ----------------------------- Quit plan -------------------------------- */
+
+export type QuitMethod = "cold_turkey" | "gradual";
+
+export type QuitMethodOption = {
+  id: QuitMethod;
+  label: string;
+  hint: string;
+};
+
+export type QuitStartPreset = "now" | "tomorrow" | "custom";
+
+export type QuitStartPresetOption = {
+  id: QuitStartPreset;
+  label: string;
+  hint: string;
+};
+
 /* ----------------------------- Onboarding draft -------------------------- */
 
 /**
@@ -102,7 +120,19 @@ export type OnboardingDraft = {
   cigarettesPerDay: number;
   cigarettesPerPack: number;
   packCost?: number;
+  /** ISO 3166-1 alpha-2 from REST Countries (step 5). */
+  countryCode?: string;
   currency: string;
+
+  /** How the user plans to quit (step 6). */
+  quitMethod?: QuitMethod;
+  /** When to start: today, tomorrow, or a custom calendar day. */
+  quitStartPreset?: QuitStartPreset;
+  /** Used when `quitStartPreset` is `custom`. */
+  quitStartMonth?: number;
+  quitStartDay?: number;
+  quitStartYear?: number;
+  /** Local midnight of the chosen quit / streak start day. */
   startTimestamp: number;
 };
 

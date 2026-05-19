@@ -1,0 +1,1 @@
+export { MotivationVideoCard } from "./MotivationVideoCard";

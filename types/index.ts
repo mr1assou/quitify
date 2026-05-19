@@ -8,6 +8,7 @@
 export type * from "./account";
 export type * from "./app";
 export type * from "./badge";
+export type * from "./country";
 export type * from "./craving";
 export type * from "./dailyFocus";
 export type * from "./intro";

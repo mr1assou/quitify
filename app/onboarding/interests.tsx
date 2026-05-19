@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { View } from "react-native";
 
 import { InterestPickStep } from "@/components/feature/onboarding/InterestPickStep";
@@ -29,7 +29,7 @@ export default function Interests() {
       title="What interests you the most?"
       primaryLabel="Continue"
       primaryDisabled={!canContinue}
-      onPrimary={() => router.push("/onboarding/create-profile")}
+      onPrimary={() => safeRouter.push("/onboarding/create-profile")}
       showBack
       scrollBody
     >

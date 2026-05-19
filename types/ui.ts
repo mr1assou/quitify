@@ -6,6 +6,12 @@ export type DropdownOption = {
   label: string;
 };
 
+/** String-valued option for dropdowns (e.g. enum-like choices). */
+export type StringDropdownOption = {
+  value: string;
+  label: string;
+};
+
 /** Row contract for the `ListGroup` UI component. */
 export type ListRow = {
   id: string;

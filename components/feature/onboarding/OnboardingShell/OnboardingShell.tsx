@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
@@ -44,7 +44,7 @@ export function OnboardingShell({
         <View className="flex-row items-center justify-between">
           {showBack ? (
             <Pressable
-              onPress={() => router.back()}
+              onPress={() => safeRouter.back()}
               className="-ml-2 h-10 w-10 items-center justify-center rounded-full active:bg-section dark:active:bg-d-surface"
             >
               <Ionicons name="chevron-back" size={22} color={colors.foreground} />

@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { useEffect, useMemo } from "react";
 import {
   KeyboardAvoidingView,
@@ -12,10 +12,12 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboardingNicotineForm";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useQuitPlanHandlers } from "@/hooks/useQuitPlanHandlers";
 import { isNicotineConsumptionStepComplete } from "@/utils/nicotineOnboarding";
 
 export default function NicotineConsumptionOnboarding() {
   const { draft, patch } = useOnboarding();
+  const { selectMethod } = useQuitPlanHandlers(draft, patch);
 
   useEffect(() => {
     if (draft.nicotineConsumptionForm !== CIGARETTE_CONSUMPTION_FORM) {
@@ -36,7 +38,7 @@ export default function NicotineConsumptionOnboarding() {
         title="Your cigarette habits"
         primaryLabel="Continue"
         primaryDisabled={!canContinue}
-        onPrimary={() => router.push("/onboarding/analyzing")}
+        onPrimary={() => safeRouter.push("/onboarding/analyzing")}
         showBack
         scrollBody
       >
@@ -47,7 +49,11 @@ export default function NicotineConsumptionOnboarding() {
           showsVerticalScrollIndicator={false}
         >
           <View className="w-full pb-6">
-            <NicotineConsumptionFields draft={draft} patch={patch} />
+            <NicotineConsumptionFields
+              draft={draft}
+              patch={patch}
+              onSelectQuitMethod={selectMethod}
+            />
           </View>
         </ScrollView>
       </OnboardingShell>

@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { View } from "react-native";
 
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
@@ -30,7 +30,7 @@ export default function Reasons() {
       subtitle="Pick what matters most to you. You can choose more than one."
       primaryLabel="Continue"
       primaryDisabled={!canContinue}
-      onPrimary={() => router.push("/onboarding/motivation")}
+      onPrimary={() => safeRouter.push("/onboarding/motivation")}
       showBack={false}
     >
       <View className="w-full">

@@ -1,0 +1,1 @@
+export { TapDestroyIdleView } from "./TapDestroyIdleView";

@@ -4,6 +4,7 @@ import type {
   PrimaryInterestId,
   PriorQuitAttempts,
   ProfileSex,
+  QuitMethod,
 } from "@/types/onboarding";
 
 /** The persisted user profile saved at the end of onboarding. */
@@ -17,6 +18,7 @@ export type UserProfile = {
   cigarettesPerDay: number;
   cigarettesPerPack: number;
   packCost: number;
+  countryCode?: string;
   currency: string;
   quitReasonIds?: string[];
   motivationLevel?: MotivationLevel;
@@ -24,4 +26,5 @@ export type UserProfile = {
   primaryInterests?: PrimaryInterestId[];
   nicotineConsumptionForm?: NicotineConsumptionFormId;
   nicotineHabitYears?: number;
+  quitMethod?: QuitMethod;
 };

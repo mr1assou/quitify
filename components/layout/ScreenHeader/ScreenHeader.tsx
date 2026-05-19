@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { type ReactNode } from "react";
 import { Text, View } from "react-native";
 
@@ -27,7 +27,7 @@ export function ScreenHeader({ eyebrow, title, subtitle, trailing }: Props) {
           <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">{subtitle}</Text>
         ) : null}
       </View>
-      <View>{trailing ?? <HamburgerButton onPress={() => router.push("/profile")} />}</View>
+      <View>{trailing ?? <HamburgerButton onPress={() => safeRouter.push("/profile")} />}</View>
     </View>
   );
 }

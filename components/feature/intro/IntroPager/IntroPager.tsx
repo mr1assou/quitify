@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -50,7 +50,7 @@ export function IntroPager() {
 
   const goNext = () => {
     if (isLast) {
-      router.replace(NEXT_ROUTE);
+      safeRouter.replace(NEXT_ROUTE);
       return;
     }
     goTo(index + 1);

@@ -23,6 +23,8 @@ type Props = {
   onChange: (value: number | undefined) => void;
   /** Short label on the row e.g. "Mo" / "Day" / "Yr" when compact */
   compactHint?: string;
+  hideLabel?: boolean;
+  controlHeight?: number;
 };
 
 export function SelectField({
@@ -32,6 +34,8 @@ export function SelectField({
   options,
   onChange,
   compactHint,
+  hideLabel = false,
+  controlHeight,
 }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -45,20 +49,35 @@ export function SelectField({
 
   return (
     <View className="min-w-0 flex-1">
-      <Text className="mb-1 text-xs text-muted-foreground dark:text-d-muted">
-        {compactHint ?? fieldLabel}
-      </Text>
+      {hideLabel ? null : (
+        <Text className="mb-1 text-xs text-muted-foreground dark:text-d-muted">
+          {compactHint ?? fieldLabel}
+        </Text>
+      )}
       <Pressable
         onPress={() => setOpen(true)}
-        className="flex-row items-center justify-between rounded-2xl bg-section px-3 py-3 dark:bg-d-surface"
+        className={
+          hideLabel
+            ? "flex-row items-center justify-center rounded-2xl bg-section px-2 dark:bg-d-surface"
+            : "flex-row items-center justify-between rounded-2xl bg-section px-3 py-3 dark:bg-d-surface"
+        }
+        style={controlHeight != null ? { height: controlHeight } : undefined}
       >
         <Text
-          className="flex-1 text-base text-foreground dark:text-d-text"
+          className={
+            hideLabel
+              ? "flex-1 text-center text-sm text-foreground dark:text-d-text"
+              : "flex-1 text-base text-foreground dark:text-d-text"
+          }
           numberOfLines={1}
         >
           {selectedLabel ?? placeholder}
         </Text>
-        <Ionicons name="chevron-down" size={20} color={colors.mutedForeground} />
+        <Ionicons
+          name="chevron-down"
+          size={hideLabel ? 14 : 20}
+          color={colors.mutedForeground}
+        />
       </Pressable>
 
       <Modal visible={open} transparent animationType="fade">

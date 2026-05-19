@@ -1,0 +1,1 @@
+export { MemoryBoard } from "./MemoryBoard";

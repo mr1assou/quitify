@@ -1,30 +1,56 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
+import { useCallback, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IntroPagerGradient } from "@/components/feature/intro/IntroPagerGradient";
-import { Button } from "@/components/ui/Button";
+import { OnboardingSocialAuth } from "@/components/feature/onboarding/OnboardingSocialAuth";
 import { introHeroImageHeight } from "@/constants/intro";
 import { useApp } from "@/context/AppContext";
 import { buildProfile, useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
 
 const CELEBRATION_TITLE = "Your smoke-free story starts here";
-const CELEBRATION_CAPTION = "Quitify is here for you 24/7";
 
 export default function OnboardingProfile() {
   const { colors, resolved } = useTheme();
+  const insets = useSafeAreaInsets();
   const { draft } = useOnboarding();
-  const { completeOnboarding } = useApp();
+  const { completeOnboarding, setAccount } = useApp();
+  const [busy, setBusy] = useState(false);
   const { height: winH } = useWindowDimensions();
   const [pageW, setPageW] = useState(0);
   const [pageH, setPageH] = useState(0);
   const imageHeight = Math.min(Math.round(introHeroImageHeight(winH) * 1.08), 510);
+  const bottomPad = insets.bottom + 40;
+
+  const continueWithGoogle = useCallback(() => {
+    if (busy) return;
+    setBusy(true);
+    const name = draft.username.trim();
+    setAccount({
+      name: name.length > 0 ? name : undefined,
+      email: `google-${Date.now()}@quitify.app`,
+      createdAt: Date.now(),
+    });
+    completeOnboarding(buildProfile(draft));
+    safeRouter.replace("/(tabs)");
+  }, [busy, completeOnboarding, draft, setAccount]);
+
+  const continueWithEmail = useCallback(() => {
+    safeRouter.push({ pathname: "/signup", params: { fromCelebration: "1" } });
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      setBusy(false);
+    }, []),
+  );
 
   return (
-    <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
+    <SafeAreaView className="flex-1" edges={["top"]}>
       <View
         className="flex-1"
         onLayout={(e) => {
@@ -46,10 +72,14 @@ export default function OnboardingProfile() {
           </View>
         ) : null}
 
-        <View className="z-10 flex-1 px-6">
-          <View className="pt-2">
+        <View
+          className="z-10 min-h-0 flex-1 px-6"
+          style={{ paddingBottom: bottomPad }}
+        >
+          {/* Back — fixed header */}
+          <View className="shrink-0 justify-center" style={{ height: 48 }}>
             <Pressable
-              onPress={() => router.back()}
+              onPress={() => safeRouter.back()}
               className="-ml-2 h-10 w-10 items-center justify-center rounded-full active:bg-section/60 dark:active:bg-d-surface/80"
               accessibilityRole="button"
               accessibilityLabel="Back"
@@ -58,32 +88,25 @@ export default function OnboardingProfile() {
             </Pressable>
           </View>
 
-          <View className="min-h-0 flex-1 justify-center pb-4">
-            <View className="items-stretch px-1">
-              <Text className="text-center text-3xl font-bold leading-9 text-foreground dark:text-d-text">
-                {CELEBRATION_TITLE}
-              </Text>
-              <Image
-                source={require("../../assets/images/yes.png")}
-                style={{ width: "100%", height: imageHeight, marginTop: 24 }}
-                resizeMode="contain"
-                accessibilityLabel="Celebration illustration"
-              />
-              <Text className="mt-6 text-center text-2xl font-bold leading-8 text-black dark:text-white">
-                {CELEBRATION_CAPTION}
-              </Text>
-            </View>
+          {/* Hero — title + image */}
+          <View className="min-h-0 flex-1 justify-center px-1" style={{ marginTop: 20 }}>
+            <Text className="text-center text-3xl font-bold leading-9 text-foreground dark:text-d-text">
+              {CELEBRATION_TITLE}
+            </Text>
+            <Image
+              source={require("../../assets/images/yes.png")}
+              style={{ width: "100%", height: imageHeight, marginTop: 24 }}
+              resizeMode="contain"
+              accessibilityLabel="Celebration illustration"
+            />
           </View>
 
-          <View className="pb-4">
-            <Button
-              label="Start my journey"
-              size="lg"
-              fullWidth
-              onPress={() => {
-                completeOnboarding(buildProfile(draft));
-                router.replace("/(tabs)");
-              }}
+          {/* Sign-in — above home indicator */}
+          <View className="shrink-0 pt-6">
+            <OnboardingSocialAuth
+              onGoogle={continueWithGoogle}
+              onEmail={continueWithEmail}
+              disabled={busy}
             />
           </View>
         </View>

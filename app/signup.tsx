@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
+import { useCallback, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -15,15 +16,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/Button";
 import { useApp } from "@/context/AppContext";
+import { buildProfile, useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function Signup() {
-  const { setAccount, setFlag } = useApp();
+  const { fromCelebration } = useLocalSearchParams<{ fromCelebration?: string }>();
+  const fromCelebrationScreen = fromCelebration === "1";
+  const { state, completeOnboarding, setAccount, setFlag } = useApp();
+  const { draft } = useOnboarding();
   const { colors } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   const valid = email.includes("@") && email.includes(".");
+
+  const enterAppFromCelebration = useCallback(() => {
+    completeOnboarding(buildProfile(draft));
+    safeRouter.replace("/(tabs)");
+  }, [completeOnboarding, draft]);
 
   const submit = () => {
     if (!valid) return;
@@ -33,12 +43,16 @@ export default function Signup() {
       createdAt: Date.now(),
     });
     setFlag("hasSeenSignupPrompt", true);
-    router.back();
+    if (fromCelebrationScreen) enterAppFromCelebration();
+    else if (state.isOnboarded) safeRouter.replace("/(tabs)");
+    else router.back();
   };
 
   const skip = () => {
     setFlag("hasSeenSignupPrompt", true);
-    router.back();
+    if (fromCelebrationScreen) enterAppFromCelebration();
+    else if (state.isOnboarded) safeRouter.replace("/(tabs)");
+    else router.back();
   };
 
   return (

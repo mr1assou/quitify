@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { View } from "react-native";
 
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
@@ -18,7 +18,7 @@ export default function QuitAttempts() {
       subtitle="Choose the option that fits you best. There is no wrong answer."
       primaryLabel="Continue"
       primaryDisabled={!choice}
-      onPrimary={() => router.push("/onboarding/interests")}
+      onPrimary={() => safeRouter.push("/onboarding/interests")}
       showBack
     >
       <View className="w-full">

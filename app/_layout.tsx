@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AppProvider } from "@/context/AppContext";
 import { CommunityProvider } from "@/context/CommunityContext";
+import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import "@/global.css";
 
@@ -15,9 +16,11 @@ export default function RootLayout() {
       <ThemeProvider>
         <SafeAreaProvider>
           <AppProvider>
-            <CommunityProvider>
-              <ThemedRoot />
-            </CommunityProvider>
+            <OnboardingProvider>
+              <CommunityProvider>
+                <ThemedRoot />
+              </CommunityProvider>
+            </OnboardingProvider>
           </AppProvider>
         </SafeAreaProvider>
       </ThemeProvider>

@@ -1,10 +1,6 @@
-import { View } from "react-native";
-
-import { Chip } from "@/components/ui/Chip";
-import {
-  MOTIVATION_LEVEL_OPTIONS,
-  type MotivationLevel,
-} from "@/constants/onboardingMotivation";
+import { OnboardingChipGroup } from "@/components/feature/onboarding/shared/OnboardingChipGroup";
+import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboardingMotivation";
+import type { MotivationLevel } from "@/types/onboarding";
 
 type Props = {
   selected?: MotivationLevel;
@@ -13,17 +9,10 @@ type Props = {
 
 export function MotivationStep({ selected, onSelect }: Props) {
   return (
-    <View className="w-full gap-3">
-      {MOTIVATION_LEVEL_OPTIONS.map((opt) => (
-        <Chip
-          key={opt.id}
-          label={opt.label}
-          size="lg"
-          fullWidth
-          selected={selected === opt.id}
-          onPress={() => onSelect(opt.id)}
-        />
-      ))}
-    </View>
+    <OnboardingChipGroup
+      options={MOTIVATION_LEVEL_OPTIONS}
+      selected={selected}
+      onSelect={onSelect}
+    />
   );
 }

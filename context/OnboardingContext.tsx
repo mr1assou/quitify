@@ -24,6 +24,7 @@ const initial: OnboardingDraft = {
   cigarettesPerDay: 0,
   cigarettesPerPack: 0,
   currency: "USD",
+  quitStartPreset: "now",
   startTimestamp: startOfLocalDay(),
 };
 
@@ -74,6 +75,7 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
     cigarettesPerDay: draft.cigarettesPerDay,
     cigarettesPerPack: draft.cigarettesPerPack,
     packCost: draft.packCost ?? 0,
+    countryCode: draft.countryCode,
     currency: draft.currency,
     quitReasonIds: reasonIds.length > 0 ? [...reasonIds] : undefined,
     motivationLevel: draft.motivationLevel,
@@ -82,5 +84,6 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
       draft.primaryInterestIds.length > 0 ? [...draft.primaryInterestIds] : undefined,
     nicotineConsumptionForm: "cigarettes",
     nicotineHabitYears: draft.nicotineHabitYears,
+    quitMethod: draft.quitMethod,
   };
 }

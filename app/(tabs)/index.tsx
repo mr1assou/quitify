@@ -1,4 +1,5 @@
-import { router, useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -26,7 +27,7 @@ export default function Home() {
       }
       if (gates.shouldShowPaywall) {
         setFlag("hasSeenPaywall", true);
-        const t = setTimeout(() => router.push("/paywall"), 250);
+        const t = setTimeout(() => safeRouter.push("/paywall"), 250);
         return () => clearTimeout(t);
       }
     }, [gates.shouldShowSignup, gates.shouldShowPaywall, setFlag]),

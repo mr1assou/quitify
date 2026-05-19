@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import { type ReactNode } from "react";
+import { type ReactNode, useRef } from "react";
 import { Pressable, Text, type PressableProps } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -18,6 +18,8 @@ type ButtonProps = Omit<PressableProps, "children" | "style"> & {
   leading?: ReactNode;
   trailing?: ReactNode;
   haptic?: boolean;
+  /** Ignores rapid repeat presses (e.g. double-tap navigating twice). */
+  preventDoublePress?: boolean;
 };
 
 const containerByVariant: Record<Variant, string> = {
@@ -58,11 +60,13 @@ export function Button({
   leading,
   trailing,
   haptic = true,
+  preventDoublePress = true,
   disabled,
   onPress,
   ...rest
 }: ButtonProps) {
   const scale = useSharedValue(1);
+  const pressLockedRef = useRef(false);
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   return (
@@ -76,6 +80,13 @@ export function Button({
         scale.value = withSpring(1, { damping: 14, stiffness: 220 });
       }}
       onPress={(e) => {
+        if (preventDoublePress && pressLockedRef.current) return;
+        if (preventDoublePress) {
+          pressLockedRef.current = true;
+          setTimeout(() => {
+            pressLockedRef.current = false;
+          }, 700);
+        }
         if (haptic) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
         onPress?.(e);
       }}

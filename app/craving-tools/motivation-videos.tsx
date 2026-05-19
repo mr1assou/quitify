@@ -1,5 +1,5 @@
-import { CravingToolPlaceholder } from "@/components/feature/craving/CravingToolPlaceholder";
+import { MotivationVideosScreen } from "@/components/feature/craving/motivation-videos/MotivationVideosScreen";
 
-export default function MotivationVideosScreen() {
-  return <CravingToolPlaceholder toolId="motivation-videos" />;
+export default function MotivationVideosRoute() {
+  return <MotivationVideosScreen />;
 }

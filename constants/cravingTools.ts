@@ -82,7 +82,7 @@ export const CRAVING_TOOLS: readonly CravingTool[] = [
   },
   {
     id: "motivation-videos",
-    label: "Motivational videos",
+    label: "Videos",
     description: "Watch & breathe",
     icon: "play-circle-outline",
     colors: {

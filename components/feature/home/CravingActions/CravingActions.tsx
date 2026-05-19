@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { Text, View } from "react-native";
 
 import { CravingCTA } from "@/components/feature/home/CravingCTA";
@@ -10,10 +10,10 @@ export function CravingActions() {
       <View className="flex-row items-center justify-center gap-3 px-1">
         <SlipCTA
           onPress={() =>
-            router.push({ pathname: "/craving-session", params: { start: "slip" } })
+            safeRouter.push({ pathname: "/craving-session", params: { start: "slip" } })
           }
         />
-        <CravingCTA onPress={() => router.push("/craving-session")} />
+        <CravingCTA onPress={() => safeRouter.push("/craving-session")} />
       </View>
     </View>
   );

@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { View } from "react-native";
 
 import { MotivationStep } from "@/components/feature/onboarding/MotivationStep";
@@ -18,7 +18,7 @@ export default function Motivation() {
       subtitle="Choose the level that fits you today. There is no wrong answer."
       primaryLabel="Continue"
       primaryDisabled={!level}
-      onPrimary={() => router.push("/onboarding/quit-attempts")}
+      onPrimary={() => safeRouter.push("/onboarding/quit-attempts")}
       showBack
     >
       <View className="w-full">

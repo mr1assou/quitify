@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -63,7 +63,7 @@ export default function ProfileModal() {
       destructive: true,
       onPress: () => {
         reset();
-        router.replace("/onboarding");
+        safeRouter.replace("/onboarding");
       },
     },
   ];
@@ -76,7 +76,7 @@ export default function ProfileModal() {
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
         <View className="flex-row items-center justify-between px-4 pt-2">
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => safeRouter.back()}
             className="h-11 w-11 items-center justify-center rounded-full bg-section active:opacity-70 dark:bg-d-surface"
           >
             <Ionicons name="close" size={22} color={colors.foreground} />
@@ -117,7 +117,7 @@ export default function ProfileModal() {
 
           {!state.isPremium ? (
             <Pressable
-              onPress={() => router.push("/paywall")}
+              onPress={() => safeRouter.push("/paywall")}
               className="active:opacity-70"
             >
               <View className="rounded-3xl bg-primary p-4">

@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
@@ -20,7 +20,7 @@ export function CravingToolsGrid() {
             description={tool.description}
             icon={tool.icon}
             colors={isDark ? tool.darkColors : tool.colors}
-            onPress={() => router.push(tool.href)}
+            onPress={() => safeRouter.push(tool.href)}
           />
         ))}
       </View>

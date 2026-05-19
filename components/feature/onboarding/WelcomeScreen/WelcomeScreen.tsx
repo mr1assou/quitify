@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -55,24 +55,15 @@ export function WelcomeScreen() {
             label="Let's get started"
             size="lg"
             fullWidth
-            onPress={() => router.push("/intro")}
+            onPress={() => safeRouter.push("/intro")}
           />
-
-          <Pressable
-            onPress={() => router.push("/signup")}
-            className="items-center py-2 active:opacity-70"
-          >
-            <Text className="text-center text-base font-semibold text-primary dark:text-d-primary">
-              I already have an account · Log in
-            </Text>
-          </Pressable>
 
           <View className="mt-1 items-center gap-2 px-1">
             <Text className="text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
               {TERMS_INTRO}
             </Text>
             <Pressable
-              onPress={() => router.push("/terms")}
+              onPress={() => safeRouter.push("/terms")}
               className="items-center py-1 active:opacity-70"
             >
               <Text className="text-base font-semibold text-foreground underline dark:text-d-text">

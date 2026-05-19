@@ -1,9 +1,8 @@
 import { Stack } from "expo-router";
 
-import { OnboardingProvider } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
 
-function ThemedOnboardingStack() {
+export default function OnboardingLayout() {
   const { colors } = useTheme();
   return (
     <Stack
@@ -13,13 +12,5 @@ function ThemedOnboardingStack() {
         contentStyle: { backgroundColor: colors.background },
       }}
     />
-  );
-}
-
-export default function OnboardingLayout() {
-  return (
-    <OnboardingProvider>
-      <ThemedOnboardingStack />
-    </OnboardingProvider>
   );
 }

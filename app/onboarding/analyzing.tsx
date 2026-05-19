@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { safeRouter } from "@/utils/safeRouter";
 import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,7 +31,7 @@ const TASKS: readonly AnalyzingTask[] = [
 
 export default function OnboardingAnalyzing() {
   const onComplete = useCallback(() => {
-    router.replace("/onboarding/profile");
+    safeRouter.replace("/onboarding/profile");
   }, []);
 
   return (

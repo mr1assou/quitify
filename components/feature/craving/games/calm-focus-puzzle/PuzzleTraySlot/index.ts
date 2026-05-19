@@ -1,0 +1,1 @@
+export { PuzzleTraySlot } from "./PuzzleTraySlot";
