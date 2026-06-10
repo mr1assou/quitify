@@ -12,17 +12,17 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboardingNicotineForm";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { useQuitPlanHandlers } from "@/hooks/useQuitPlanHandlers";
 import { isNicotineConsumptionStepComplete } from "@/utils/nicotineOnboarding";
 
 export default function NicotineConsumptionOnboarding() {
   const { draft, patch } = useOnboarding();
-  const { selectMethod } = useQuitPlanHandlers(draft, patch);
 
   useEffect(() => {
+    const next: Parameters<typeof patch>[0] = {};
     if (draft.nicotineConsumptionForm !== CIGARETTE_CONSUMPTION_FORM) {
-      patch({ nicotineConsumptionForm: CIGARETTE_CONSUMPTION_FORM });
+      next.nicotineConsumptionForm = CIGARETTE_CONSUMPTION_FORM;
     }
+    if (Object.keys(next).length > 0) patch(next);
   }, [draft.nicotineConsumptionForm, patch]);
 
   const canContinue = useMemo(() => isNicotineConsumptionStepComplete(draft), [draft]);
@@ -49,11 +49,7 @@ export default function NicotineConsumptionOnboarding() {
           showsVerticalScrollIndicator={false}
         >
           <View className="w-full pb-6">
-            <NicotineConsumptionFields
-              draft={draft}
-              patch={patch}
-              onSelectQuitMethod={selectMethod}
-            />
+            <NicotineConsumptionFields draft={draft} patch={patch} />
           </View>
         </ScrollView>
       </OnboardingShell>

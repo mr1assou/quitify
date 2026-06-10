@@ -18,7 +18,6 @@ export const QUIT_METHOD_OPTIONS: readonly QuitMethodOption[] = [
 
 export const QUIT_START_PRESET_OPTIONS: readonly QuitStartPresetOption[] = [
   { id: "now", label: "Now", hint: "Start today" },
-  { id: "tomorrow", label: "Tomorrow", hint: "Begin first thing tomorrow" },
   { id: "custom", label: "Custom", hint: "Choose your own quit day" },
 ] as const;
 

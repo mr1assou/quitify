@@ -1,11 +1,13 @@
 import * as Haptics from "expo-haptics";
 import { type ReactNode, useRef } from "react";
-import { Pressable, Text, type PressableProps } from "react-native";
+import { ActivityIndicator, Pressable, Text, type PressableProps } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+
+import { useTheme } from "@/context/ThemeContext";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger" | "accent";
 type Size = "sm" | "md" | "lg";
@@ -18,8 +20,8 @@ type ButtonProps = Omit<PressableProps, "children" | "style"> & {
   leading?: ReactNode;
   trailing?: ReactNode;
   haptic?: boolean;
-  /** Ignores rapid repeat presses (e.g. double-tap navigating twice). */
   preventDoublePress?: boolean;
+  loading?: boolean;
 };
 
 const containerByVariant: Record<Variant, string> = {
@@ -61,18 +63,23 @@ export function Button({
   trailing,
   haptic = true,
   preventDoublePress = true,
+  loading = false,
   disabled,
   onPress,
   ...rest
 }: ButtonProps) {
+  const { colors } = useTheme();
   const scale = useSharedValue(1);
   const pressLockedRef = useRef(false);
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const isDisabled = disabled || loading;
+  const spinnerColor =
+    variant === "ghost" || variant === "secondary" ? colors.primary : colors.white;
 
   return (
     <AnimatedPressable
       {...rest}
-      disabled={disabled}
+      disabled={isDisabled}
       onPressIn={() => {
         scale.value = withSpring(0.96, { damping: 18, stiffness: 280 });
       }}
@@ -96,14 +103,22 @@ export function Button({
         sizeContainer[size],
         containerByVariant[variant],
         fullWidth ? "w-full" : "self-start",
-        disabled ? "opacity-50" : "",
+        isDisabled ? "opacity-50" : "",
       ].join(" ")}
     >
-      {leading}
-      <Text className={[sizeText[size], textByVariant[variant], leading ? "ml-2" : ""].join(" ")}>
-        {label}
-      </Text>
-      {trailing}
+      {loading ? (
+        <ActivityIndicator size="small" color={spinnerColor} />
+      ) : (
+        <>
+          {leading}
+          <Text
+            className={[sizeText[size], textByVariant[variant], leading ? "ml-2" : ""].join(" ")}
+          >
+            {label}
+          </Text>
+          {trailing}
+        </>
+      )}
     </AnimatedPressable>
   );
 }

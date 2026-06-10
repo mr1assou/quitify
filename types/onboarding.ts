@@ -6,6 +6,13 @@
  * UI components, and persisted profile data.
  */
 
+import type {
+  CigarettesPerDayBandId,
+  NicotineHabitYearsBandId,
+} from "@/constants/onboardingNicotineBands";
+
+export type { CigarettesPerDayBandId, NicotineHabitYearsBandId };
+
 /* ------------------------------ Profile sex ------------------------------ */
 
 export type ProfileSex = "female" | "male" | "prefer_not_say";
@@ -89,7 +96,7 @@ export type QuitMethodOption = {
   hint: string;
 };
 
-export type QuitStartPreset = "now" | "tomorrow" | "custom";
+export type QuitStartPreset = "now" | "custom";
 
 export type QuitStartPresetOption = {
   id: QuitStartPreset;
@@ -116,17 +123,26 @@ export type OnboardingDraft = {
 
   nicotineConsumptionForm?: NicotineConsumptionFormId;
   nicotineHabitYears?: number;
+  nicotineHabitYearsBand?: NicotineHabitYearsBandId;
 
   cigarettesPerDay: number;
+  cigarettesPerDayBand?: CigarettesPerDayBandId;
   cigarettesPerPack: number;
+  /** Raw pack size text the user typed (whole number, min 1). */
+  cigarettesPerPackInput?: string;
   packCost?: number;
+  /** Raw pack cost text the user typed (for payload / DB). */
+  packCostInput?: string;
   /** ISO 3166-1 alpha-2 from REST Countries (step 5). */
   countryCode?: string;
+  /** Display name from REST Countries (step 5), used in payload / DB. */
+  countryName?: string;
+  /** PNG flag URL from REST Countries (step 5). */
+  countryFlag?: string;
   currency: string;
 
-  /** How the user plans to quit (step 6). */
   quitMethod?: QuitMethod;
-  /** When to start: today, tomorrow, or a custom calendar day. */
+  /** When to start: now or a custom calendar day. */
   quitStartPreset?: QuitStartPreset;
   /** Used when `quitStartPreset` is `custom`. */
   quitStartMonth?: number;

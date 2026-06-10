@@ -8,13 +8,15 @@ import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { UnlockSuccessCard } from "@/components/feature/profile/UnlockSuccessCard";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useApp } from "@/context/AppContext";
+import { useLogout } from "@/hooks/useLogout";
 import { useTheme } from "@/context/ThemeContext";
 import { useStats } from "@/hooks/useStats";
 import { formatDate } from "@/utils/format";
 import { habitQuantityLabel } from "@/utils/profileConsumptionLabel";
 
 export default function ProfileModal() {
-  const { state, setPremium, setAccount, reset } = useApp();
+  const { state, setPremium } = useApp();
+  const signOut = useLogout();
   const { colors } = useTheme();
   const stats = useStats();
   const profile = state.profile;
@@ -32,7 +34,7 @@ export default function ProfileModal() {
           icon: "log-out-outline",
           label: "Log out",
           destructive: true,
-          onPress: () => setAccount(null),
+          onPress: () => void signOut(),
         },
       ]
     : [
@@ -40,7 +42,7 @@ export default function ProfileModal() {
           id: "signup",
           icon: "cloud-upload-outline",
           label: "Save my progress",
-          onPress: () => router.push("/signup"),
+          onPress: () => safeRouter.push("/signup"),
         },
       ];
 
@@ -55,16 +57,6 @@ export default function ProfileModal() {
       id: "smoke",
       icon: "logo-no-smoking",
       label: habitQuantityLabel(profile),
-    },
-    {
-      id: "reset",
-      icon: "power-outline",
-      label: "Reset my journey",
-      destructive: true,
-      onPress: () => {
-        reset();
-        safeRouter.replace("/onboarding");
-      },
     },
   ];
 

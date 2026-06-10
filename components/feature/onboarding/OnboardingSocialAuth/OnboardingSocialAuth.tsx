@@ -10,6 +10,8 @@ type Props = {
   onGoogle: () => void;
   onEmail: () => void;
   disabled?: boolean;
+  googleDisabled?: boolean;
+  emailDisabled?: boolean;
 };
 
 type SocialButtonProps = {
@@ -56,18 +58,27 @@ function SocialSignInButton({ label, onPress, disabled, icon }: SocialButtonProp
 }
 
 /** Google sign-in + email link on the post-onboarding celebration screen. */
-export function OnboardingSocialAuth({ onGoogle, onEmail, disabled }: Props) {
+export function OnboardingSocialAuth({
+  onGoogle,
+  onEmail,
+  disabled,
+  googleDisabled,
+  emailDisabled,
+}: Props) {
+  const googleOff = googleDisabled ?? disabled;
+  const emailOff = emailDisabled ?? disabled;
+
   return (
     <View>
       <SocialSignInButton
         label="Continue with Google"
         onPress={onGoogle}
-        disabled={disabled}
+        disabled={googleOff}
         icon={<GoogleGLogo size={22} />}
       />
       <Pressable
         onPress={onEmail}
-        disabled={disabled}
+        disabled={emailOff}
         accessibilityRole="link"
         accessibilityLabel="Continue with email"
         className="items-center pt-5 active:opacity-70"

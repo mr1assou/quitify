@@ -1,7 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef } from "react";
-import { ActivityIndicator, View } from "react-native";
-
+import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { getCommunityUser } from "@/constants/communityUsers";
 import { useCommunity } from "@/context/CommunityContext";
 
@@ -33,9 +32,5 @@ export default function ChatByUserScreen() {
     sendMessage(id, "👋");
   }, [id, sendMessage, state.threads]);
 
-  return (
-    <View className="flex-1 items-center justify-center bg-background dark:bg-d-bg">
-      <ActivityIndicator />
-    </View>
-  );
+  return <ThemedLoadingScreen />;
 }

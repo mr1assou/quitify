@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { useAppHydration } from "@/hooks/useAppHydration";
 import type {
   AppFlags,
   AppState,
@@ -16,16 +17,24 @@ import type {
   UserAccount,
   UserProfile,
 } from "@/types";
+import { clearStoredAuth } from "@/utils/auth/clearStoredAuth";
 import { dayKey } from "@/utils/dates";
-
 type Action =
+  | {
+      type: "RESTORE_SESSION";
+      isOnboarded: boolean;
+      profile: UserProfile | null;
+      account: UserAccount | null;
+    }
   | { type: "COMPLETE_ONBOARDING"; profile: UserProfile }
   | { type: "UPDATE_PROFILE"; patch: Partial<UserProfile> }
   | {
       type: "LOG_CRAVING";
       outcome: CravingOutcome;
+      cigarettesCount?: number;
       intensity?: 1 | 2 | 3;
       durationMs?: number;
+      serverId?: number;
     }
   | { type: "DELETE_CRAVING"; id: string }
   | { type: "TOGGLE_MISSION_TASK"; missionDay: number; taskId: string; value: boolean }
@@ -53,6 +62,13 @@ const initialState: AppState = {
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case "RESTORE_SESSION":
+      return {
+        ...state,
+        isOnboarded: action.isOnboarded,
+        profile: action.profile,
+        account: action.account,
+      };
     case "COMPLETE_ONBOARDING":
       return { ...state, isOnboarded: true, profile: action.profile };
     case "UPDATE_PROFILE":
@@ -64,16 +80,13 @@ function reducer(state: AppState, action: Action): AppState {
         id: `${now}-${Math.random().toString(36).slice(2, 8)}`,
         timestamp: now,
         outcome: action.outcome,
+        cigarettesCount: action.cigarettesCount,
         intensity: action.intensity,
         durationMs: action.durationMs,
+        serverId: action.serverId,
       };
-      let profile = state.profile;
-      if (action.outcome === "relapse" && profile) {
-        profile = { ...profile, streakStart: now };
-      }
       return {
         ...state,
-        profile,
         cravings: [log, ...state.cravings],
         flags: { ...state.flags, hasLoggedFirstCraving: true },
       };
@@ -126,18 +139,22 @@ function reducer(state: AppState, action: Action): AppState {
 
 type AppContextValue = {
   state: AppState;
+  isHydrated: boolean;
   completeOnboarding: (profile: UserProfile) => void;
   updateProfile: (patch: Partial<UserProfile>) => void;
   logCraving: (input: {
     outcome: CravingOutcome;
+    cigarettesCount?: number;
     intensity?: 1 | 2 | 3;
     durationMs?: number;
+    serverId?: number;
   }) => void;
   deleteCraving: (id: string) => void;
   toggleMissionTask: (missionDay: number, taskId: string, value: boolean) => void;
   completeMission: (missionDay: number) => void;
   setPremium: (value: boolean) => void;
   setAccount: (account: UserAccount | null) => void;
+  logout: () => Promise<void>;
   setFlag: (key: keyof AppFlags, value: boolean) => void;
   reset: () => void;
 };
@@ -147,17 +164,33 @@ const AppContext = createContext<AppContextValue | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const completeOnboarding = useCallback(
-    (profile: UserProfile) => dispatch({ type: "COMPLETE_ONBOARDING", profile }),
+  const onRestore = useCallback(
+    (payload: {
+      isOnboarded: boolean;
+      profile: UserProfile | null;
+      account: UserAccount | null;
+    }) => dispatch({ type: "RESTORE_SESSION", ...payload }),
     [],
   );
+
+  const isHydrated = useAppHydration(onRestore);
+
+  const completeOnboarding = useCallback((profile: UserProfile) => {
+    dispatch({ type: "COMPLETE_ONBOARDING", profile });
+  }, []);
+
   const updateProfile = useCallback(
     (patch: Partial<UserProfile>) => dispatch({ type: "UPDATE_PROFILE", patch }),
     [],
   );
   const logCraving = useCallback(
-    (input: { outcome: CravingOutcome; intensity?: 1 | 2 | 3; durationMs?: number }) =>
-      dispatch({ type: "LOG_CRAVING", ...input }),
+    (input: {
+      outcome: CravingOutcome;
+      cigarettesCount?: number;
+      intensity?: 1 | 2 | 3;
+      durationMs?: number;
+      serverId?: number;
+    }) => dispatch({ type: "LOG_CRAVING", ...input }),
     [],
   );
   const deleteCraving = useCallback(
@@ -178,6 +211,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (account: UserAccount | null) => dispatch({ type: "SET_ACCOUNT", account }),
     [],
   );
+
+  const logout = useCallback(async () => {
+    await clearStoredAuth();
+    dispatch({ type: "RESET" });
+  }, []);
+
   const setFlag = useCallback(
     (key: keyof AppFlags, value: boolean) => dispatch({ type: "SET_FLAG", key, value }),
     [],
@@ -187,6 +226,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AppContextValue>(
     () => ({
       state,
+      isHydrated,
       completeOnboarding,
       updateProfile,
       logCraving,
@@ -195,11 +235,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeMission,
       setPremium,
       setAccount,
+      logout,
       setFlag,
       reset,
     }),
     [
       state,
+      isHydrated,
       completeOnboarding,
       updateProfile,
       logCraving,
@@ -208,6 +250,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeMission,
       setPremium,
       setAccount,
+      logout,
       setFlag,
       reset,
     ],

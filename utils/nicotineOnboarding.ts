@@ -1,24 +1,46 @@
+import { isValidCigarettesPerPack } from "@/constants/onboardingNicotineBands";
 import type { OnboardingDraft } from "@/types";
-import { isQuitMethodComplete } from "@/utils/quitPlan";
 
-function filledPositive(n: number | undefined): boolean {
-  return typeof n === "number" && Number.isFinite(n) && n > 0;
+/** True when the user typed a value that is 0 or otherwise below the minimum. */
+export function hasInvalidCigarettesPerPackInput(draft: OnboardingDraft): boolean {
+  const input = draft.cigarettesPerPackInput?.trim();
+  return (
+    input != null &&
+    input.length > 0 &&
+    !isValidCigarettesPerPack(draft.cigarettesPerPack)
+  );
 }
 
-function filledNonNegative(n: number | undefined): boolean {
-  return typeof n === "number" && Number.isFinite(n) && n >= 0;
+function hasValidCigarettesPerPackInput(draft: OnboardingDraft): boolean {
+  const input = draft.cigarettesPerPackInput?.trim();
+  return (
+    input != null &&
+    input.length > 0 &&
+    isValidCigarettesPerPack(draft.cigarettesPerPack)
+  );
+}
+
+function hasValidPackCost(draft: OnboardingDraft): boolean {
+  const input = draft.packCostInput?.trim();
+  return (
+    input != null &&
+    input.length > 0 &&
+    typeof draft.packCost === "number" &&
+    Number.isFinite(draft.packCost) &&
+    draft.packCost > 0
+  );
 }
 
 export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
   return (
-    filledPositive(draft.cigarettesPerDay) &&
-    filledNonNegative(draft.packCost) &&
-    filledPositive(draft.cigarettesPerPack) &&
-    filledNonNegative(draft.nicotineHabitYears)
+    draft.cigarettesPerDayBand != null &&
+    hasValidCigarettesPerPackInput(draft) &&
+    hasValidPackCost(draft) &&
+    draft.nicotineHabitYearsBand != null
   );
 }
 
-/** Step 6: cigarette habits + quit method. */
+/** Step 6: cigarette habit fields (dropdowns + pack cost). */
 export function isNicotineConsumptionStepComplete(draft: OnboardingDraft): boolean {
-  return isNicotineHabitsComplete(draft) && isQuitMethodComplete(draft);
+  return isNicotineHabitsComplete(draft);
 }

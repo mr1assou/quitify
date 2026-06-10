@@ -22,10 +22,6 @@ export type StatsDashboard = {
   cravingBuckets: CravingTimeBucket[];
 };
 
-/**
- * Composed dashboard state for the Stats screen.
- * Recomputes on each minute-tick (and when range changes).
- */
 export function useStatsDashboard(): StatsDashboard | null {
   const { state } = useApp();
   const now = useNow(60_000);

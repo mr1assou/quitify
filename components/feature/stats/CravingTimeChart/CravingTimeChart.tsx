@@ -8,9 +8,15 @@ import type { CravingTimeBucket } from "@/types/statsDashboard";
 
 type Props = {
   buckets: CravingTimeBucket[];
+  title?: string;
+  emptyMessage?: string;
 };
 
-export function CravingTimeChart({ buckets }: Props) {
+export function CravingTimeChart({
+  buckets,
+  title = "Cravings by time of day",
+  emptyMessage = "No cravings logged yet.",
+}: Props) {
   const { colors } = useTheme();
   const total = buckets.reduce((sum, b) => sum + b.count, 0);
   const max = Math.max(1, ...buckets.map((b) => b.count));
@@ -25,11 +31,11 @@ export function CravingTimeChart({ buckets }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Cravings by time of day
+              {title}
             </Text>
             <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
               {total === 0
-                ? "No cravings logged yet."
+                ? emptyMessage
                 : `Peak time: ${peak?.label.toLowerCase()} · ${total} total`}
             </Text>
           </View>

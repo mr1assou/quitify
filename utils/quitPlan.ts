@@ -2,8 +2,6 @@ import type { OnboardingDraft } from "@/types";
 import type { QuitStartPreset } from "@/types/onboarding";
 import { clampDayToMonth, startOfLocalDay } from "@/utils/dates";
 
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
-
 export type QuitStartYmd = {
   year: number;
   month: number;
@@ -38,12 +36,9 @@ export function parseQuitStartYmd(
   return dt.getTime();
 }
 
+/** "Quit now" = this exact moment (streak starts at 0s and counts up). */
 export function quitStartTimestampForNow(now = Date.now()): number {
-  return startOfLocalDay(now);
-}
-
-export function quitStartTimestampForTomorrow(now = Date.now()): number {
-  return startOfLocalDay(now + MS_PER_DAY);
+  return now;
 }
 
 export function hasFullCustomQuitYmd(draft: OnboardingDraft): boolean {
@@ -65,7 +60,7 @@ export function customQuitTimestampFromDraft(
   );
 }
 
-/** Draft patch when the user picks Now / Tomorrow / Custom preset. */
+/** Draft patch when the user picks Now or Custom preset. */
 export function quitStartPatchForPreset(
   preset: QuitStartPreset,
 ): Partial<OnboardingDraft> {
@@ -73,15 +68,6 @@ export function quitStartPatchForPreset(
     return {
       quitStartPreset: preset,
       startTimestamp: quitStartTimestampForNow(),
-      quitStartMonth: undefined,
-      quitStartDay: undefined,
-      quitStartYear: undefined,
-    };
-  }
-  if (preset === "tomorrow") {
-    return {
-      quitStartPreset: preset,
-      startTimestamp: quitStartTimestampForTomorrow(),
       quitStartMonth: undefined,
       quitStartDay: undefined,
       quitStartYear: undefined,
@@ -113,20 +99,11 @@ export function quitStartPatchForCustomYmd(
   return patch;
 }
 
-/** Step 5 — quit start date (now / tomorrow / custom). */
+/** Step 5 — quit start date (now or custom). */
 export function isQuitDateComplete(draft: OnboardingDraft): boolean {
   if (!draft.quitStartPreset) return false;
-  if (draft.quitStartPreset === "now" || draft.quitStartPreset === "tomorrow") {
+  if (draft.quitStartPreset === "now") {
     return Number.isFinite(draft.startTimestamp);
   }
   return customQuitTimestampFromDraft(draft) != null;
-}
-
-/** Step 6 — cold turkey vs gradual. */
-export function isQuitMethodComplete(draft: OnboardingDraft): boolean {
-  return draft.quitMethod != null;
-}
-
-export function isQuitPlanComplete(draft: OnboardingDraft): boolean {
-  return isQuitDateComplete(draft) && isQuitMethodComplete(draft);
 }

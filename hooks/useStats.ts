@@ -3,19 +3,16 @@ import { useMemo } from "react";
 import { useApp } from "@/context/AppContext";
 import { useNow } from "@/hooks/useNow";
 import { dayKey, lastNDayKeys } from "@/utils/dates";
-import {
-  deriveStats,
-  getBadgeProgress,
-  getUnlockedBadges,
-  type DerivedStats,
-} from "@/utils/calculations";
+import { getBadgeProgress, getUnlockedBadges } from "@/utils/calculations";
+import { computeStreak } from "@/utils/streak";
+import type { DerivedStats } from "@/types";
 
 export function useStats(intervalMs = 60_000): DerivedStats | null {
   const { state } = useApp();
   const now = useNow(intervalMs);
   return useMemo(() => {
     if (!state.profile) return null;
-    return deriveStats(state.profile, now);
+    return computeStreak(state.profile, now);
   }, [state.profile, now]);
 }
 

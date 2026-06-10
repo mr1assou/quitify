@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import type { OnboardingDraft } from "@/types";
-import type { QuitMethod, QuitStartPreset } from "@/types/onboarding";
+import type { QuitStartPreset } from "@/types/onboarding";
 import {
   quitStartPatchForCustomYmd,
   quitStartPatchForPreset,
@@ -9,13 +9,8 @@ import {
 
 type Patch = (next: Partial<OnboardingDraft>) => void;
 
-/** Quit date (step 5) and quit method (step 6) draft updates. */
+/** Quit date (step 5) draft updates. */
 export function useQuitPlanHandlers(draft: OnboardingDraft, patch: Patch) {
-  const selectMethod = useCallback(
-    (quitMethod: QuitMethod) => patch({ quitMethod }),
-    [patch],
-  );
-
   const selectPreset = useCallback(
     (preset: QuitStartPreset) => patch(quitStartPatchForPreset(preset)),
     [patch],
@@ -39,7 +34,6 @@ export function useQuitPlanHandlers(draft: OnboardingDraft, patch: Patch) {
   );
 
   return {
-    selectMethod,
     selectPreset,
     updateCustomMonth,
     updateCustomDay,

@@ -1,52 +1,98 @@
-import { ScrollView, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { CravingTimeChart } from "@/components/feature/stats/CravingTimeChart";
-import { SavingsBreakdownCard } from "@/components/feature/stats/SavingsBreakdownCard";
-import { SavingsChartCard } from "@/components/feature/stats/SavingsChartCard";
-import { StatsSummaryGrid } from "@/components/feature/stats/StatsSummaryGrid";
+import { AttemptHistoryCard } from "@/components/feature/stats/AttemptHistoryCard";
+import { SlipsHistoryCard } from "@/components/feature/stats/SlipsHistoryCard";
+import { StatsOverviewCard } from "@/components/feature/stats/StatsOverviewCard";
+import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
-import { useCravingSummary, useStats } from "@/hooks/useStats";
-import { useStatsDashboard } from "@/hooks/useStatsDashboard";
+import { useTheme } from "@/context/ThemeContext";
+import { useUserStats } from "@/hooks/useUserStats";
+import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
 
 export default function Stats() {
+  const { colors } = useTheme();
   const { state } = useApp();
-  const stats = useStats();
-  const cravingSummary = useCravingSummary();
-  const dashboard = useStatsDashboard();
+  const { data, loading, error, refresh } = useUserStats();
+  const [refreshing, setRefreshing] = useState(false);
 
-  if (!stats || !state.profile || !dashboard) return null;
+  const profile = state.profile;
+  const timeZone = data?.timezone || getDeviceTimezone();
+  const economics =
+    data?.economics ??
+    (profile
+      ? {
+          cigarettesPerDay: profile.cigarettesPerDay,
+          cigarettesPerPack: profile.cigarettesPerPack,
+          packCost: profile.packCost,
+        }
+      : undefined);
 
-  const currency = state.profile.currency;
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <ScreenHeader title="Your Stats" />
-
-        <View className="mt-6 gap-4 px-6">
-          <StatsSummaryGrid
-            moneySaved={stats.moneySaved}
-            cigarettesAvoided={stats.cigarettesAvoided}
-            hoursReclaimed={stats.minutesReclaimed / 60}
-            cravingsHandled={cravingSummary.resisted}
-            currency={currency}
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120, flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => void onRefresh()}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+            progressBackgroundColor={colors.background}
           />
+        }
+      >
+        <ScreenHeader leading={<AppBrandMark />} />
 
-          <SavingsChartCard
-            range={dashboard.range}
-            onRangeChange={dashboard.setRange}
-            series={dashboard.series}
-            currency={currency}
-          />
+        <Text className="mt-4 px-6 text-lg font-semibold text-foreground dark:text-d-text">
+          Your Stats
+        </Text>
 
-          <SavingsBreakdownCard
-            breakdown={dashboard.savings}
-            currency={currency}
-          />
+        <View className="mt-4 gap-4 px-6">
+          {loading && !data ? (
+            <View className="items-center py-16">
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : error && !data ? (
+            <View className="items-center gap-4 py-16">
+              <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
+                {error}
+              </Text>
+              <Pressable
+                onPress={() => void refresh()}
+                className="rounded-2xl bg-primary px-5 py-3"
+              >
+                <Text className="text-sm font-semibold text-white">Try again</Text>
+              </Pressable>
+            </View>
+          ) : data && profile && economics ? (
+            <>
+              <StatsOverviewCard
+                currency={data.currency}
+                attempts={data.attempts}
+                slips={data.slips}
+                economics={economics}
+              />
 
-          <CravingTimeChart buckets={dashboard.cravingBuckets} />
+              <SlipsHistoryCard slips={data.slips} timeZone={timeZone} />
+
+              <AttemptHistoryCard
+                attempts={data.attempts}
+                slips={data.slips}
+                economics={economics}
+                currency={data.currency}
+                timeZone={timeZone}
+              />
+            </>
+          ) : null}
         </View>
       </ScrollView>
     </SafeAreaView>

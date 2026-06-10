@@ -1,6 +1,6 @@
 /** Fixed line shown in the craving-session speech bubble. */
 export const CRAVING_SESSION_BUBBLE_MESSAGE =
-  "You are stronger, you are stronger — you can do it!";
+  "You are stronger, you are stronger you can do it!";
 
 /** Short, punchy lines for the craving-session manga speech bubble. */
 export const CRAVING_MOTIVATION_MESSAGES = [

@@ -12,6 +12,7 @@ import type {
   OnboardingDraft,
   UserProfile,
 } from "@/types";
+import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboardingNicotineBands";
 import { parseBirthYmd } from "@/utils/birthdate";
 import { startOfLocalDay } from "@/utils/dates";
 
@@ -72,8 +73,13 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
     birthDate: birthDate ?? undefined,
     quitDate: draft.startTimestamp,
     streakStart: draft.startTimestamp,
+    currentAttemptNumber: 1,
+    slipCigarettesTotal: 0,
     cigarettesPerDay: draft.cigarettesPerDay,
-    cigarettesPerPack: draft.cigarettesPerPack,
+    cigarettesPerPack:
+      draft.cigarettesPerPack > 0
+        ? draft.cigarettesPerPack
+        : DEFAULT_CIGARETTES_PER_PACK,
     packCost: draft.packCost ?? 0,
     countryCode: draft.countryCode,
     currency: draft.currency,

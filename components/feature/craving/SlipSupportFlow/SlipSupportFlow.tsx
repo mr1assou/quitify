@@ -1,23 +1,19 @@
 import { router } from "expo-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingOutcomePhase } from "@/components/feature/craving/CravingOutcomePhase";
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
-import { useCravingOutcomeLog } from "@/hooks/useCravingOutcomeLog";
+import { SlipSubmittingOverlay } from "@/components/feature/craving/SlipSubmittingOverlay";
+import { useOutcomeBackHandler } from "@/hooks/useOutcomeBackHandler";
+import { useSlipSubmit } from "@/hooks/useSlipSubmit";
 
 export function SlipSupportFlow() {
-  const [showOutcomeBack, setShowOutcomeBack] = useState(false);
-  const outcomeBackRef = useRef<(() => void) | null>(null);
-  const { submit, undo } = useCravingOutcomeLog();
+  const { submit, undo, isSubmitting } = useSlipSubmit();
+  const { showBack, register, goBack } = useOutcomeBackHandler();
 
   const close = useCallback(() => router.back(), []);
-
-  const handleOutcomeBackChange = useCallback((handler: (() => void) | null) => {
-    outcomeBackRef.current = handler;
-    setShowOutcomeBack(!!handler);
-  }, []);
 
   return (
     <SafeAreaView
@@ -26,9 +22,9 @@ export function SlipSupportFlow() {
     >
       <CravingSessionHeader
         title="Slip support"
-        showBack={showOutcomeBack}
-        onBack={() => outcomeBackRef.current?.()}
-        onClose={close}
+        showBack={showBack && !isSubmitting}
+        onBack={goBack}
+        onClose={isSubmitting ? () => {} : close}
       />
 
       <View className="flex-1">
@@ -38,9 +34,12 @@ export function SlipSupportFlow() {
           onSubmit={submit}
           onUndoSubmit={undo}
           onDone={close}
-          onOutcomeBackChange={handleOutcomeBackChange}
+          onOutcomeBackChange={register}
+          isSubmitting={isSubmitting}
         />
       </View>
+
+      <SlipSubmittingOverlay visible={isSubmitting} />
     </SafeAreaView>
   );
 }

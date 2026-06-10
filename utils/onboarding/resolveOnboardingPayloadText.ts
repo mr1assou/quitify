@@ -1,0 +1,102 @@
+import {
+  CIGARETTES_PER_DAY_BANDS,
+  NICOTINE_HABIT_YEARS_BANDS,
+} from "@/constants/onboardingNicotineBands";
+import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboardingMotivation";
+import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboardingPrimaryInterest";
+import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboardingPriorQuitAttempts";
+import { QUIT_REASON_OPTIONS } from "@/constants/onboardingReasons";
+import { QUIT_START_PRESET_OPTIONS } from "@/constants/onboardingQuitPlan";
+import { PROFILE_SEX_OPTIONS } from "@/constants/onboardingSex";
+import type { OnboardingDraft } from "@/types";
+import type { OnboardingPayload } from "@/types/onboardingPayload";
+import { currencySymbol } from "@/utils/format";
+import { resolveQuitDateForApi } from "@/utils/onboarding/resolveQuitDateForApi";
+
+type LabeledOption = { id: string; label: string };
+
+function labelForId(
+  options: readonly LabeledOption[],
+  id: string | undefined,
+): string | undefined {
+  if (!id) return undefined;
+  return options.find((o) => o.id === id)?.label;
+}
+
+function labelsForIds(
+  options: readonly LabeledOption[],
+  ids: readonly string[],
+): string[] {
+  return ids
+    .map((id) => labelForId(options, id))
+    .filter((label): label is string => label != null);
+}
+
+function resolveCurrencyDisplay(currency: string): string {
+  const symbol = currencySymbol(currency);
+  const trimmed = symbol.trim();
+  if (trimmed.length > 0 && trimmed !== currency) return trimmed;
+  return currency;
+}
+
+function resolvePackPriceText(draft: OnboardingDraft): string | undefined {
+  const raw = draft.packCostInput?.trim();
+  if (!raw) return undefined;
+  const symbol = currencySymbol(draft.currency).trim();
+  if (symbol.length > 0 && symbol !== draft.currency) {
+    return `${symbol}${raw}`;
+  }
+  return `${draft.currency} ${raw}`;
+}
+
+export function resolveOnboardingPayloadText(
+  draft: OnboardingDraft,
+  syncedAt = Date.now(),
+): OnboardingPayload {
+  const cigarettesBand = CIGARETTES_PER_DAY_BANDS.find(
+    (b) => b.id === draft.cigarettesPerDayBand,
+  );
+  const yearsBand = NICOTINE_HABIT_YEARS_BANDS.find(
+    (b) => b.id === draft.nicotineHabitYearsBand,
+  );
+
+  return {
+    step1: {
+      quitReasons: labelsForIds(QUIT_REASON_OPTIONS, draft.quitReasonIds),
+    },
+    step2: {
+      motivation: labelForId(MOTIVATION_LEVEL_OPTIONS, draft.motivationLevel),
+    },
+    step3: {
+      priorQuitAttempts: labelForId(
+        PRIOR_QUIT_ATTEMPT_OPTIONS,
+        draft.priorQuitAttempts,
+      ),
+    },
+    step4: {
+      primaryInterests: labelsForIds(
+        PRIMARY_INTEREST_OPTIONS,
+        draft.primaryInterestIds,
+      ),
+    },
+    step5: {
+      username: draft.username.trim(),
+      sex: labelForId(PROFILE_SEX_OPTIONS, draft.sex),
+      country: draft.countryName,
+      countryFlag: draft.countryFlag,
+      currency: resolveCurrencyDisplay(draft.currency),
+      quitDatePreset: labelForId(QUIT_START_PRESET_OPTIONS, draft.quitStartPreset),
+      quitDate: resolveQuitDateForApi(draft, syncedAt),
+    },
+    step6: {
+      cigarettesPerDay:
+        draft.cigarettesPerDay >= 1
+          ? draft.cigarettesPerDay
+          : (cigarettesBand?.cigarettesPerDay ?? 0),
+      cigarettesPerDayNote: cigarettesBand?.hint,
+      packPrice: resolvePackPriceText(draft),
+      yearsSmoking: yearsBand?.label,
+      cigarettesPerPack: draft.cigarettesPerPack,
+    },
+  };
+}

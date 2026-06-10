@@ -21,8 +21,6 @@ export function currencySymbol(code: string): string {
   }
 }
 
-/** Pretty-prints a duration in hours as `Xd Yh` or `Yh Zm` for short ranges. */
-/** Human-readable life regained from minutes (e.g. "30 days", "5h 20m"). */
 export function formatLifeGained(totalMinutes: number): string {
   const m = Math.max(0, Math.round(totalMinutes));
   if (m < 60) return `${m} min`;
@@ -59,6 +57,13 @@ export function formatDuration(hours: number): string {
   const days = Math.floor(hours / 24);
   const remH = Math.floor(hours - days * 24);
   return remH ? `${days}d ${remH}h` : `${days}d`;
+}
+
+export function formatDisplayName(name: string): string {
+  const trimmed = name.trim();
+  if (!trimmed) return trimmed;
+  const lower = trimmed.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 
 export function formatNumber(value: number): string {

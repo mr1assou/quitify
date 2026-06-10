@@ -1,25 +1,25 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useMemo } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
 import { useNow } from "@/hooks/useNow";
+import { formatCurrentStreak } from "@/utils/streak";
 import { formatLifeGained, formatNumber } from "@/utils/format";
 
 type Props = {
   streakStart: number;
+  attemptNumber: number;
   moneySaved: number;
   cigarettesAvoided: number;
   lifeMinutesGained: number;
   currencySymbol: string;
 };
 
-function pad(n: number) {
-  return n < 10 ? `0${n}` : String(n);
-}
-
 export function StreakHero({
   streakStart,
+  attemptNumber,
   moneySaved,
   cigarettesAvoided,
   lifeMinutesGained,
@@ -27,13 +27,10 @@ export function StreakHero({
 }: Props) {
   const { colors } = useTheme();
   const now = useNow(1000);
-
-  const ms = Math.max(0, now - streakStart);
-  const totalSec = Math.floor(ms / 1000);
-  const days = Math.floor(totalSec / 86400);
-  const hours = Math.floor((totalSec % 86400) / 3600);
-  const minutes = Math.floor((totalSec % 3600) / 60);
-  const seconds = totalSec % 60;
+  const streakLabel = useMemo(
+    () => formatCurrentStreak(streakStart, now),
+    [streakStart, now],
+  );
 
   const moneyDisplay = `${currencySymbol}${moneySaved.toLocaleString(undefined, {
     minimumFractionDigits: moneySaved < 100 ? 2 : 0,
@@ -42,19 +39,23 @@ export function StreakHero({
 
   return (
     <Animated.View entering={FadeIn.duration(450)} className="items-center">
-      <Text className="text-sm font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-        Current streak
-      </Text>
-
-      <View className="mt-4 flex-row items-end">
-        <Unit value={pad(days)} label="days" />
-        <Separator />
-        <Unit value={pad(hours)} label="hours" />
-        <Separator />
-        <Unit value={pad(minutes)} label="minutes" />
-        <Separator />
-        <Unit value={pad(seconds)} label="seconds" muted />
+      <View className="flex-row items-center justify-center gap-2">
+        <Text className="text-sm font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+          Current streak
+        </Text>
+        <View className="rounded-full bg-section px-2.5 py-0.5 dark:bg-d-surface">
+          <Text className="text-xs font-semibold text-foreground dark:text-d-text">
+            Attempt {attemptNumber}
+          </Text>
+        </View>
       </View>
+
+      <Text
+        className="mt-4 px-1 text-center text-2xl font-bold leading-9 tabular-nums text-foreground dark:text-d-text"
+        accessibilityLabel={`Current streak ${streakLabel}, attempt ${attemptNumber}`}
+      >
+        {streakLabel}
+      </Text>
 
       <View className="mt-8 w-full gap-3">
         <View className="flex-row gap-3">
@@ -83,41 +84,6 @@ export function StreakHero({
   );
 }
 
-function Unit({
-  value,
-  label,
-  muted = false,
-}: {
-  value: string;
-  label: string;
-  muted?: boolean;
-}) {
-  return (
-    <View className="items-center px-1.5">
-      <Text
-        className={`text-5xl font-bold tabular-nums ${
-          muted
-            ? "text-muted-foreground dark:text-d-muted"
-            : "text-foreground dark:text-d-text"
-        }`}
-      >
-        {value}
-      </Text>
-      <Text className="mt-1.5 text-xs uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-        {label}
-      </Text>
-    </View>
-  );
-}
-
-function Separator() {
-  return (
-    <Text className="mx-0.5 -translate-y-2.5 text-4xl font-bold text-muted-foreground dark:text-d-muted">
-      :
-    </Text>
-  );
-}
-
 function StatPill({
   icon,
   tint,
@@ -143,7 +109,7 @@ function StatPill({
       >
         <Ionicons name={icon} size={22} color="#fff" />
       </View>
-      <View className="flex-1 min-w-0">
+      <View className="min-w-0 flex-1">
         <Text
           className="text-xl font-bold text-foreground dark:text-d-text"
           numberOfLines={1}

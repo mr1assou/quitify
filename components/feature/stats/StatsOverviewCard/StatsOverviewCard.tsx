@@ -1,0 +1,99 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useMemo, useState } from "react";
+import { Text, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+
+import { RangeTabs } from "@/components/feature/stats/RangeTabs";
+import { StatBlock } from "@/components/feature/stats/StatBlock";
+import { Card } from "@/components/ui/Card";
+import { useTheme } from "@/context/ThemeContext";
+import { useNow } from "@/hooks/useNow";
+import type {
+  AttemptStatsRow,
+  SlipStatsRow,
+  StatsEconomics,
+  StatsFilterRange,
+} from "@/types/userStats";
+import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/format";
+import { computeOverviewForRange } from "@/utils/stats/filterStatsByRange";
+
+type Props = {
+  currency: string;
+  attempts: AttemptStatsRow[];
+  slips: SlipStatsRow[];
+  economics: StatsEconomics;
+};
+
+export function StatsOverviewCard({ currency, attempts, slips, economics }: Props) {
+  const { colors } = useTheme();
+  const [range, setRange] = useState<StatsFilterRange>("lifetime");
+  const now = useNow(60_000);
+
+  const impact = useMemo(
+    () => computeOverviewForRange(attempts, slips, economics, range, now),
+    [attempts, slips, economics, range, now],
+  );
+
+  const smokeFreeHours = impact.durationSeconds / 3600;
+
+  return (
+    <Animated.View entering={FadeInDown.duration(420)}>
+      <Card variant="section">
+        <View className="flex-row items-center">
+          <View className="mr-3 h-10 w-10 items-center justify-center rounded-2xl bg-accent">
+            <Ionicons name="stats-chart" size={18} color={colors.white} />
+          </View>
+          <View className="flex-1 justify-center">
+            <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+              Overview
+            </Text>
+          </View>
+        </View>
+
+        <View className="mt-4">
+          <RangeTabs variant="filter" value={range} onChange={setRange} />
+        </View>
+
+        <View key={range} className="mt-4 gap-3">
+          <View className="flex-row gap-3">
+            <StatBlock
+              label="Money saved"
+              value={impact.moneySaved}
+              display={formatCurrency(impact.moneySaved, currency)}
+              icon="cash"
+              accent="primary"
+              delay={0}
+            />
+            <StatBlock
+              label="Cigarettes avoided"
+              value={impact.cigarettesAvoided}
+              display={formatNumber(impact.cigarettesAvoided)}
+              icon="ban"
+              accent="alert"
+              delay={40}
+            />
+          </View>
+
+          <View className="flex-row gap-3">
+            <StatBlock
+              label="Life gained"
+              value={impact.lifeMinutesGained}
+              display={formatLifeGained(impact.lifeMinutesGained)}
+              icon="heart"
+              accent="accent"
+              delay={80}
+            />
+            <StatBlock
+              label="Smoke-free time"
+              value={smokeFreeHours}
+              display={formatDuration(smokeFreeHours)}
+              icon="time"
+              accent="secondary"
+              delay={120}
+            />
+          </View>
+        </View>
+      </Card>
+    </Animated.View>
+  );
+}

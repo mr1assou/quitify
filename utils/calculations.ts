@@ -1,13 +1,7 @@
 import { BADGES } from "@/constants/badges";
-import type { Badge, BadgeProgress, DerivedStats, UserProfile } from "@/types";
+import type { Badge, BadgeProgress } from "@/types";
 
-import { computeStreak } from "./streak";
-
-export type { DerivedStats, BadgeProgress } from "@/types";
-
-export function deriveStats(profile: UserProfile, now = Date.now()): DerivedStats {
-  return computeStreak(profile, now);
-}
+export type { BadgeProgress } from "@/types";
 
 export function getBadgeProgress(daysQuit: number, isPremium: boolean): BadgeProgress {
   const visible = BADGES.filter((b) => isPremium || !b.premium);

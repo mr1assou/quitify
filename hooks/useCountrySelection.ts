@@ -11,6 +11,8 @@ export function useCountrySelection(patch: Patch) {
     (country: Country) => {
       patch({
         countryCode: country.code,
+        countryName: country.name,
+        countryFlag: country.flagPng,
         currency: country.currencyCode,
       });
     },

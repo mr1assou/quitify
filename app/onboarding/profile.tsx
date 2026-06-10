@@ -1,16 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { safeRouter } from "@/utils/safeRouter";
 import { useCallback, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IntroPagerGradient } from "@/components/feature/intro/IntroPagerGradient";
+import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { OnboardingSocialAuth } from "@/components/feature/onboarding/OnboardingSocialAuth";
 import { introHeroImageHeight } from "@/constants/intro";
 import { useApp } from "@/context/AppContext";
-import { buildProfile, useOnboarding } from "@/context/OnboardingContext";
+import { useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useGoogleSignIn } from "@/hooks/useGoogleSignIn";
+import { finalizeGoogleAuth } from "@/services/auth/finalizeGoogleAuth";
 
 const CELEBRATION_TITLE = "Your smoke-free story starts here";
 
@@ -19,25 +29,29 @@ export default function OnboardingProfile() {
   const insets = useSafeAreaInsets();
   const { draft } = useOnboarding();
   const { completeOnboarding, setAccount } = useApp();
+  const { googleError } = useLocalSearchParams<{ googleError?: string }>();
+  const { signInWithGoogle, isReady } = useGoogleSignIn();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { height: winH } = useWindowDimensions();
   const [pageW, setPageW] = useState(0);
   const [pageH, setPageH] = useState(0);
   const imageHeight = Math.min(Math.round(introHeroImageHeight(winH) * 1.08), 510);
   const bottomPad = insets.bottom + 40;
 
-  const continueWithGoogle = useCallback(() => {
-    if (busy) return;
+  const continueWithGoogle = useCallback(async () => {
+    if (busy || !isReady) return;
     setBusy(true);
-    const name = draft.username.trim();
-    setAccount({
-      name: name.length > 0 ? name : undefined,
-      email: `google-${Date.now()}@quitify.app`,
-      createdAt: Date.now(),
-    });
-    completeOnboarding(buildProfile(draft));
-    safeRouter.replace("/(tabs)");
-  }, [busy, completeOnboarding, draft, setAccount]);
+    setError(null);
+    try {
+      const auth = await signInWithGoogle();
+      await finalizeGoogleAuth(auth, draft, { setAccount, completeOnboarding });
+      safeRouter.replace("/(tabs)");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Google sign-in failed");
+      setBusy(false);
+    }
+  }, [busy, isReady, signInWithGoogle, draft, setAccount, completeOnboarding]);
 
   const continueWithEmail = useCallback(() => {
     safeRouter.push({ pathname: "/signup", params: { fromCelebration: "1" } });
@@ -46,8 +60,17 @@ export default function OnboardingProfile() {
   useFocusEffect(
     useCallback(() => {
       setBusy(false);
-    }, []),
+      if (googleError) {
+        setError(String(googleError));
+      } else {
+        setError(null);
+      }
+    }, [googleError]),
   );
+
+  if (busy) {
+    return <ThemedLoadingScreen />;
+  }
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
@@ -103,10 +126,14 @@ export default function OnboardingProfile() {
 
           {/* Sign-in — above home indicator */}
           <View className="shrink-0 pt-6">
+            {error ? (
+              <Text className="mb-3 text-center text-sm text-alert">{error}</Text>
+            ) : null}
             <OnboardingSocialAuth
               onGoogle={continueWithGoogle}
               onEmail={continueWithEmail}
-              disabled={busy}
+              googleDisabled={busy || !isReady}
+              emailDisabled={busy}
             />
           </View>
         </View>

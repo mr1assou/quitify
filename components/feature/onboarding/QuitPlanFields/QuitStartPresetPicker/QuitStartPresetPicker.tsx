@@ -20,7 +20,7 @@ type Props = {
   onYearChange: (year: number | undefined) => void;
 };
 
-const PRESETS: readonly QuitStartPreset[] = ["now", "tomorrow", "custom"];
+const PRESETS: readonly QuitStartPreset[] = ["now", "custom"];
 
 function isQuitStartPreset(value: string): value is QuitStartPreset {
   return (PRESETS as readonly string[]).includes(value);

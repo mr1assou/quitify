@@ -1,3 +1,6 @@
+/** App logo (header, splash, icon). */
+export const APP_LOGO_IMAGE = require("../assets/images/logo.png");
+
 /** Current user profile photo (leaderboard + onboarding). */
 export const USER_AVATAR_IMAGE = require("../assets/images/yes.png");
 

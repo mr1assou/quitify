@@ -15,6 +15,9 @@ export type UserProfile = {
   birthDate?: number;
   quitDate: number;
   streakStart: number;
+  currentAttemptNumber: number;
+  /** Lifetime cigarettes smoked during lapses (subtracted from avoided count). */
+  slipCigarettesTotal?: number;
   cigarettesPerDay: number;
   cigarettesPerPack: number;
   packCost: number;

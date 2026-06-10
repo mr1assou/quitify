@@ -57,6 +57,16 @@ export function WelcomeScreen() {
             fullWidth
             onPress={() => safeRouter.push("/intro")}
           />
+          <Pressable
+            onPress={() => safeRouter.push("/onboarding/profile")}
+            className="items-center py-2 active:opacity-70"
+            accessibilityRole="button"
+            accessibilityLabel="I already have an account"
+          >
+            <Text className="text-base font-semibold text-foreground dark:text-d-text">
+              I already have an account
+            </Text>
+          </Pressable>
 
           <View className="mt-1 items-center gap-2 px-1">
             <Text className="text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">

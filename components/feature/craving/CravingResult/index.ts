@@ -1,1 +1,1 @@
-export { CravingResult } from "./CravingResult";
+export { CravingResult, type CravingResultProps } from "./CravingResult";

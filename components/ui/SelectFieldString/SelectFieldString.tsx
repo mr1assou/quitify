@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Modal,
   Pressable,
@@ -23,8 +24,9 @@ type Props = {
   allowClear?: boolean;
   showLabel?: boolean;
   controlHeight?: number;
-  /** Tighter padding and type for narrow inline controls (e.g. quit date "Custom"). */
   compact?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
 };
 
 export function SelectFieldString({
@@ -37,6 +39,8 @@ export function SelectFieldString({
   showLabel = true,
   controlHeight,
   compact = false,
+  disabled = false,
+  loading = false,
 }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -81,11 +85,13 @@ export function SelectFieldString({
         </Text>
       ) : null}
       <Pressable
-        onPress={() => setOpen(true)}
+        onPress={() => !disabled && !loading && setOpen(true)}
+        disabled={disabled || loading}
         className={[
           "flex-row items-center justify-between rounded-2xl bg-section dark:bg-d-surface",
           compact ? "px-2" : "px-4",
           controlHeight == null && !compact ? "py-3" : "",
+          disabled || loading ? "opacity-50" : "",
         ].join(" ")}
         style={controlHeight != null ? { height: controlHeight } : undefined}
       >
@@ -99,11 +105,15 @@ export function SelectFieldString({
         >
           {selectedLabel ?? placeholder}
         </Text>
-        <Ionicons
-          name="chevron-down"
-          size={compact ? 16 : 18}
-          color={colors.mutedForeground}
-        />
+        {loading ? (
+          <ActivityIndicator size="small" color={colors.primary} />
+        ) : (
+          <Ionicons
+            name="chevron-down"
+            size={compact ? 16 : 18}
+            color={colors.mutedForeground}
+          />
+        )}
       </Pressable>
 
       <Modal visible={open} transparent animationType="fade">
