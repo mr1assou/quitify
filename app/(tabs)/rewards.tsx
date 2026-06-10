@@ -7,6 +7,7 @@ import { AchievementProgressRings } from "@/components/feature/progress/Achievem
 import { BadgesGallery } from "@/components/feature/progress/BadgesGallery";
 import { NextBadgeCard } from "@/components/feature/progress/NextBadgeCard";
 import { RankLeaderboard } from "@/components/feature/progress/RankLeaderboard";
+import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import type { AchievementSection } from "@/constants/achievementSections";
 import { useApp } from "@/context/AppContext";
@@ -27,13 +28,12 @@ export default function AchievementScreen() {
 
   if (!progress || !leaderboard) return null;
 
-  const header = HEADER[section];
   const badgeSummary = computeAchievementBadgeSummary(progress, state.isPremium);
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <ScreenHeader title={header.title} />
+        <ScreenHeader leading={<AppBrandMark />} />
 
         <View className="mt-6 gap-4 px-6">
           <AchievementSectionTabs value={section} onChange={setSection} />

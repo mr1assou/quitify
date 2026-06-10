@@ -2,7 +2,6 @@ import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-import { Card } from "@/components/ui/Card";
 import { getCommunityUser } from "@/constants/communityUsers";
 import { useCommunity } from "@/context/CommunityContext";
 import type { FeedItem } from "@/types/community";
@@ -40,26 +39,22 @@ export function PostCard({ item }: Props) {
   };
 
   return (
-    <Card variant="surface" className="border border-section dark:border-d-border" padded={false}>
-      <View className="p-4">
-        <PostHeader author={author} createdAt={post.createdAt} />
+    <View>
+      <PostHeader author={author} createdAt={post.createdAt} />
 
-        {post.text ? (
-          <Pressable onPress={openPost} className="mt-3">
-            <Text className="text-base leading-6 text-foreground dark:text-d-text">
-              {post.text}
-            </Text>
-          </Pressable>
-        ) : null}
-      </View>
+      {post.text ? (
+        <Pressable onPress={openPost} className="mt-3">
+          <Text className="text-base leading-6 text-foreground dark:text-d-text">{post.text}</Text>
+        </Pressable>
+      ) : null}
 
       {post.media ? (
-        <Pressable onPress={openPost} className="px-4">
+        <Pressable onPress={openPost} className="mt-3">
           <PostMedia media={post.media} />
         </Pressable>
       ) : null}
 
-      <View className="px-4 pb-3">
+      <View className="mt-2">
         <PostActions
           likeCount={post.likeCount}
           likedByMe={post.likedByMe}
@@ -72,7 +67,7 @@ export function PostCard({ item }: Props) {
         />
 
         {commentsOpen ? (
-          <View className="mt-3 border-t border-section pt-3 dark:border-d-border">
+          <View className="mt-3 border-t border-border pt-3 dark:border-d-border">
             {comments.length === 0 ? (
               <Text className="pb-2 text-center text-sm text-muted-foreground dark:text-d-muted">
                 No comments yet. Be the first.
@@ -91,6 +86,6 @@ export function PostCard({ item }: Props) {
           </View>
         ) : null}
       </View>
-    </Card>
+    </View>
   );
 }

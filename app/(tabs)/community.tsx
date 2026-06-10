@@ -11,6 +11,7 @@ import {
 import { InlinePostComposer } from "@/components/feature/community/InlinePostComposer";
 import { PostCard } from "@/components/feature/community/PostCard";
 import { UserSearchPanel } from "@/components/feature/community/UserSearchPanel";
+import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatUnreadTotal } from "@/hooks/useChat";
@@ -21,7 +22,7 @@ export default function CommunityScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
-      <ScreenHeader title="Community" />
+      <ScreenHeader leading={<AppBrandMark />} />
 
       {section === "feed" ? (
         <FeedTab section={section} onSectionChange={setSection} />
@@ -85,6 +86,14 @@ function MessagesEntry() {
   );
 }
 
+function FeedPostSeparator() {
+  return (
+    <View className="mx-6">
+      <View className="h-px bg-border dark:bg-d-border" />
+    </View>
+  );
+}
+
 function FeedTab({
   section,
   onSectionChange,
@@ -101,8 +110,9 @@ function FeedTab({
       ListHeaderComponent={
         <CommunityScrollHeader section={section} onSectionChange={onSectionChange} />
       }
+      ItemSeparatorComponent={FeedPostSeparator}
       renderItem={({ item }) => (
-        <View className="px-6 pt-4">
+        <View className="px-6 py-4">
           <PostCard item={item} />
         </View>
       )}

@@ -5,8 +5,10 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { AttemptDetailModal } from "@/components/feature/stats/AttemptDetailModal";
 import { RangeTabs } from "@/components/feature/stats/RangeTabs";
+import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
+import { usePaginatedList } from "@/hooks/usePaginatedList";
 import type {
   AttemptStatsRow,
   SlipStatsRow,
@@ -44,6 +46,11 @@ export function AttemptHistoryCard({
     [attempts, slips, economics, range],
   );
 
+  const { page, totalPages, setPage, paginatedItems: visibleAttempts } = usePaginatedList(
+    filteredAttempts,
+    range,
+  );
+
   return (
     <>
       <Animated.View entering={FadeInDown.duration(420)}>
@@ -78,7 +85,7 @@ export function AttemptHistoryCard({
             </View>
           ) : (
             <View className="mt-4 gap-2">
-              {filteredAttempts.map((row) => (
+              {visibleAttempts.map((row) => (
                 <AttemptRow
                   key={row.attemptNumber}
                   row={row}
@@ -87,6 +94,7 @@ export function AttemptHistoryCard({
                   onPress={() => setSelectedAttempt(row)}
                 />
               ))}
+              <StatsListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
             </View>
           )}
         </Card>

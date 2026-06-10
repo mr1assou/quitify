@@ -5,8 +5,10 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { SlipDetailModal } from "@/components/feature/stats/SlipDetailModal/SlipDetailModal";
+import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
+import { usePaginatedList } from "@/hooks/usePaginatedList";
 import type { SlipStatsRow, StatsFilterRange } from "@/types/userStats";
 import { slipOutcomeLabel } from "@/utils/stats/slipPresentation";
 import { formatNumber } from "@/utils/format";
@@ -26,6 +28,11 @@ export function SlipsHistoryCard({ slips, timeZone }: Props) {
   const filteredSlips = useMemo(
     () => filterSlipsByRange(slips, range),
     [slips, range],
+  );
+
+  const { page, totalPages, setPage, paginatedItems: visibleSlips } = usePaginatedList(
+    filteredSlips,
+    range,
   );
 
   return (
@@ -62,7 +69,7 @@ export function SlipsHistoryCard({ slips, timeZone }: Props) {
             </View>
           ) : (
             <View className="mt-4 gap-2">
-              {filteredSlips.map((slip) => (
+              {visibleSlips.map((slip) => (
                 <SlipRow
                   key={slip.slipEventId}
                   slip={slip}
@@ -70,6 +77,7 @@ export function SlipsHistoryCard({ slips, timeZone }: Props) {
                   onPress={() => setSelectedSlip(slip)}
                 />
               ))}
+              <StatsListPagination page={page} totalPages={totalPages} onPageChange={setPage} />
             </View>
           )}
         </Card>
