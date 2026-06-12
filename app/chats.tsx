@@ -4,6 +4,7 @@ import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ChatListRow } from "@/components/feature/chat/ChatListRow";
+import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/useChat";
 
@@ -15,19 +16,18 @@ export default function ChatsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
-      <View className="flex-row items-center justify-between px-4 py-3">
-        <Pressable onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="chevron-back" size={26} color={colors.foreground} />
-        </Pressable>
-        <Text className="text-base font-bold text-foreground dark:text-d-text">Chats</Text>
-        <Pressable
-          onPress={() => router.push("/(tabs)/community")}
-          hitSlop={8}
-          accessibilityLabel="New chat"
-        >
-          <Ionicons name="create-outline" size={22} color={colors.primary} />
-        </Pressable>
-      </View>
+      <StackScreenHeader
+        title="Chats"
+        rightAction={
+          <Pressable
+            onPress={() => router.push("/community-search")}
+            hitSlop={8}
+            accessibilityLabel="Find user"
+          >
+            <Ionicons name="search-outline" size={22} color={colors.primary} />
+          </Pressable>
+        }
+      />
 
       <FlatList
         data={threads}

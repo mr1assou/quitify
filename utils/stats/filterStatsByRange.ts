@@ -1,7 +1,6 @@
 import { MINUTES_LIFE_PER_CIGARETTE_AVOIDED } from "@/constants/health";
 import type {
   AttemptStatsRow,
-  SlipStatsRow,
   StatsEconomics,
   StatsFilterRange,
   StatsImpact,
@@ -51,17 +50,20 @@ function attemptImpactFromRow(attempt: AttemptStatsRow): StatsImpact {
   };
 }
 
-function slipCigarettesInPeriod(
-  slips: SlipStatsRow[],
-  periodStart: number,
-  periodEnd: number,
+function slipCigarettesForSegment(
+  attempt: AttemptStatsRow,
+  segmentStart: number,
+  segmentEnd: number,
+  now: number,
 ): number {
-  return slips
-    .filter((slip) => {
-      const loggedAt = Date.parse(slip.loggedAt);
-      return loggedAt >= periodStart && loggedAt <= periodEnd;
-    })
-    .reduce((sum, slip) => sum + slip.cigarettesCount, 0);
+  const attemptStart = Date.parse(attempt.startedAt);
+  const attemptEnd = attempt.endedAt ? Date.parse(attempt.endedAt) : now;
+  const attemptDuration = Math.max(1, attemptEnd - attemptStart);
+  const segmentDuration = Math.max(0, segmentEnd - segmentStart);
+
+  return Math.round(
+    attempt.slipCigarettesSmoked * (segmentDuration / attemptDuration),
+  );
 }
 
 function computeSegmentImpact(
@@ -85,14 +87,8 @@ function computeSegmentImpact(
   };
 }
 
-/**
- * Impact for one attempt clipped to a filter window.
- * Completed attempts use their stored snapshot when the full attempt is visible.
- * Active attempts (and partial windows) are recomputed live with server economics.
- */
 function impactForAttemptSegment(
   attempt: AttemptStatsRow,
-  slips: SlipStatsRow[],
   economics: StatsEconomics,
   windowStart: number | null,
   now: number,
@@ -115,40 +111,12 @@ function impactForAttemptSegment(
     return attemptImpactFromRow(attempt);
   }
 
-  const slipCigarettes = slipCigarettesInPeriod(slips, segmentStart, segmentEnd);
+  const slipCigarettes = slipCigarettesForSegment(attempt, segmentStart, segmentEnd, now);
   return computeSegmentImpact(economics, segmentStart, segmentEnd, slipCigarettes);
-}
-
-export function computeOverviewForRange(
-  attempts: AttemptStatsRow[],
-  slips: SlipStatsRow[],
-  economics: StatsEconomics,
-  range: StatsFilterRange,
-  now = Date.now(),
-): StatsImpact {
-  const windowStart = windowStartMs(range, now);
-
-  return attempts.reduce(
-    (total, attempt) =>
-      sumImpact(total, impactForAttemptSegment(attempt, slips, economics, windowStart, now)),
-    EMPTY_IMPACT,
-  );
-}
-
-export function filterSlipsByRange(
-  slips: SlipStatsRow[],
-  range: StatsFilterRange,
-  now = Date.now(),
-): SlipStatsRow[] {
-  const windowStart = windowStartMs(range, now);
-  if (windowStart === null) return slips;
-
-  return slips.filter((slip) => Date.parse(slip.loggedAt) >= windowStart);
 }
 
 export function filterAttemptsByRange(
   attempts: AttemptStatsRow[],
-  slips: SlipStatsRow[],
   economics: StatsEconomics,
   range: StatsFilterRange,
   now = Date.now(),
@@ -166,6 +134,6 @@ export function filterAttemptsByRange(
     })
     .map((attempt) => ({
       ...attempt,
-      ...impactForAttemptSegment(attempt, slips, economics, windowStart, now),
+      ...impactForAttemptSegment(attempt, economics, windowStart, now),
     }));
 }

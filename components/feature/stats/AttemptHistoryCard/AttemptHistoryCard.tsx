@@ -9,22 +9,15 @@ import { StatsListPagination } from "@/components/feature/stats/StatsListPaginat
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
 import { usePaginatedList } from "@/hooks/usePaginatedList";
-import type {
-  AttemptStatsRow,
-  SlipStatsRow,
-  StatsEconomics,
-  StatsFilterRange,
-} from "@/types/userStats";
+import type { AttemptStatsRow, StatsEconomics, StatsFilterRange } from "@/types/userStats";
 import {
   attemptOutcomeLabel,
   formatAttemptDateRange,
 } from "@/utils/stats/attemptPresentation";
-import { formatCurrency, formatDuration, formatNumber } from "@/utils/format";
 import { filterAttemptsByRange } from "@/utils/stats/filterStatsByRange";
 
 type Props = {
   attempts: AttemptStatsRow[];
-  slips: SlipStatsRow[];
   economics: StatsEconomics;
   currency: string;
   timeZone: string;
@@ -32,7 +25,6 @@ type Props = {
 
 export function AttemptHistoryCard({
   attempts,
-  slips,
   economics,
   currency,
   timeZone,
@@ -42,8 +34,8 @@ export function AttemptHistoryCard({
   const [selectedAttempt, setSelectedAttempt] = useState<AttemptStatsRow | null>(null);
 
   const filteredAttempts = useMemo(
-    () => filterAttemptsByRange(attempts, slips, economics, range),
-    [attempts, slips, economics, range],
+    () => filterAttemptsByRange(attempts, economics, range),
+    [attempts, economics, range],
   );
 
   const { page, totalPages, setPage, paginatedItems: visibleAttempts } = usePaginatedList(
@@ -89,7 +81,6 @@ export function AttemptHistoryCard({
                 <AttemptRow
                   key={row.attemptNumber}
                   row={row}
-                  currency={currency}
                   timeZone={timeZone}
                   onPress={() => setSelectedAttempt(row)}
                 />
@@ -112,16 +103,13 @@ export function AttemptHistoryCard({
 
 function AttemptRow({
   row,
-  currency,
   timeZone,
   onPress,
 }: {
   row: AttemptStatsRow;
-  currency: string;
   timeZone: string;
   onPress: () => void;
 }) {
-  const hours = row.durationSeconds / 3600;
   const status = attemptOutcomeLabel(row);
 
   return (
@@ -155,10 +143,6 @@ function AttemptRow({
 
       <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
         {formatAttemptDateRange(row, timeZone)}
-      </Text>
-      <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-        {formatDuration(hours)} smoke-free · {formatNumber(row.cigarettesAvoided)} cigs avoided ·{" "}
-        {formatCurrency(row.moneySaved, currency)} saved
       </Text>
     </Pressable>
   );

@@ -16,6 +16,7 @@
         "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/logo.png"
       },
+      "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.quitsmoking"
@@ -25,6 +26,12 @@
       "favicon": "./assets/images/logo.png"
     },
     "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Quitify to access your photos to attach images to posts."
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",

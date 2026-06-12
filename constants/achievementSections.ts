@@ -1,5 +1,5 @@
 export const ACHIEVEMENT_SECTIONS = [
-  { id: "rank", label: "Rank" },
+  { id: "rank", label: "Global Rank" },
   { id: "badges", label: "Badges" },
 ] as const;
 

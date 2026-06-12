@@ -1,3 +1,4 @@
+import { countryFlagForRank } from "@/constants/leaderboardCountries";
 import { LEADERBOARD_NAMES } from "@/constants/leaderboardNames";
 import { MEDIAN_XP } from "@/constants/ranks";
 import type { LeaderboardEntry, LeaderboardRow, LeaderboardSnapshot } from "@/types/leaderboard";
@@ -27,6 +28,7 @@ function toEntry(
   userName: string,
   isCurrentUser: boolean,
   badgeId: string,
+  countryFlag: string,
 ): LeaderboardEntry {
   return {
     rank,
@@ -34,6 +36,7 @@ function toEntry(
     xp,
     isCurrentUser,
     badgeId,
+    countryFlag,
   };
 }
 
@@ -51,7 +54,15 @@ function buildCommunityRows(
     const xp = xpForSyntheticRank(rank, total);
     rows.push({
       kind: "entry",
-      entry: toEntry(rank, total, xp, userName, false, resolveBadgeIdForXp(xp)),
+      entry: toEntry(
+        rank,
+        total,
+        xp,
+        userName,
+        false,
+        resolveBadgeIdForXp(xp),
+        countryFlagForRank(rank),
+      ),
     });
   }
 
@@ -64,15 +75,25 @@ export function buildLeaderboard({
   position,
   total,
   currentUserBadgeId,
+  userCountryFlag,
 }: {
   xp: number;
   userName: string;
   position: number;
   total: number;
   currentUserBadgeId: string;
+  userCountryFlag: string;
 }): LeaderboardSnapshot {
   const safePosition = Math.min(Math.max(1, position), total);
-  const currentUser = toEntry(safePosition, total, xp, userName, true, currentUserBadgeId);
+  const currentUser = toEntry(
+    safePosition,
+    total,
+    xp,
+    userName,
+    true,
+    currentUserBadgeId,
+    userCountryFlag,
+  );
   const others = buildCommunityRows(total, xp, userName, safePosition);
 
   return {

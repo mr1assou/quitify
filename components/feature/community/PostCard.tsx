@@ -10,14 +10,14 @@ import { CommentComposer } from "./CommentComposer";
 import { CommentRow } from "./CommentRow";
 import { PostActions } from "./PostActions";
 import { PostHeader } from "./PostHeader";
-import { PostMedia } from "./PostMedia";
+import { PostContent } from "./PostContent";
 
 type Props = {
   item: FeedItem;
 };
 
 export function PostCard({ item }: Props) {
-  const { toggleLike, share, addComment, state } = useCommunity();
+  const { votePost, share, addComment, state } = useCommunity();
   const { post, author } = item;
   const [commentsOpen, setCommentsOpen] = useState(false);
 
@@ -42,26 +42,17 @@ export function PostCard({ item }: Props) {
     <View>
       <PostHeader author={author} createdAt={post.createdAt} />
 
-      {post.text ? (
-        <Pressable onPress={openPost} className="mt-3">
-          <Text className="text-base leading-6 text-foreground dark:text-d-text">{post.text}</Text>
-        </Pressable>
-      ) : null}
-
-      {post.media ? (
-        <Pressable onPress={openPost} className="mt-3">
-          <PostMedia media={post.media} />
-        </Pressable>
-      ) : null}
+      <PostContent post={post} onPress={openPost} />
 
       <View className="mt-2">
         <PostActions
-          likeCount={post.likeCount}
-          likedByMe={post.likedByMe}
+          upvoteCount={post.upvoteCount}
+          downvoteCount={post.downvoteCount}
+          myVote={post.myVote}
           commentCount={post.commentIds.length}
           shareCount={post.shareCount}
           commentsActive={commentsOpen}
-          onToggleLike={() => toggleLike(post.id)}
+          onVote={(vote) => votePost(post.id, vote)}
           onComment={onCommentPress}
           onShare={() => share(post.id)}
         />

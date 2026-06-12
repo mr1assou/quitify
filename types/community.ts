@@ -1,47 +1,56 @@
+import type { PostTagId } from "@/constants/postTags";
+
 export type CommunityUser = {
   id: string;
-  /** Display name. */
   name: string;
-  /** @-style handle, lowercase, no spaces. */
   handle: string;
-  /** Short profile blurb. */
   bio: string;
-  /** Smoke-free streak in days (used for status + badge). */
   smokeFreeDays: number;
-  /** Highest badge tier this person has earned (from constants/badges). */
   badgeId: string;
-  /** When true, render the in-app user avatar (yes.png). */
+  countryFlag: string;
+  /** Synthetic rank used for profile photo cycling in the feed. */
+  avatarRank: number;
+  /** Display rank on the player profile screen. */
+  leaderboardRank: number;
   isCurrentUser?: boolean;
-  /** Optional location hint shown on profile. */
   location?: string;
 };
 
+export type PostVote = "up" | "down";
+
 export type PostMediaKind = "image" | "video";
+
+export type PostMediaFrame = "square" | "portrait" | "landscape";
+
+export type PostImageCrop = {
+  scale: number;
+  /** Horizontal pan as a fraction of max pan at this scale (-1 = left edge, 1 = right edge). */
+  panX: number;
+  /** Vertical pan as a fraction of max pan at this scale (-1 = top edge, 1 = bottom edge). */
+  panY: number;
+};
 
 export type PostMedia = {
   kind: PostMediaKind;
-  /** Asset key resolved by `getPostImage`. */
   imageKey?: string;
-  /** Optional video duration (mm:ss). */
+  localUri?: string;
   durationLabel?: string;
+  frame?: PostMediaFrame;
+  crop?: PostImageCrop;
 };
 
 export type CommunityPost = {
   id: string;
   authorId: string;
-  /** Body text. */
+  title?: string;
+  tagId?: PostTagId;
   text: string;
-  /** ISO/epoch timestamp the post was created. */
   createdAt: number;
-  /** Optional attached media (image or short video). */
-  media?: PostMedia;
-  /** Total like count (already including current user if liked). */
-  likeCount: number;
-  /** Whether the current user has liked this post. */
-  likedByMe: boolean;
-  /** Total share count (display-only). */
+  media?: PostMedia[];
+  upvoteCount: number;
+  downvoteCount: number;
+  myVote: PostVote | null;
   shareCount: number;
-  /** Ordered comment ids attached to this post. */
   commentIds: string[];
 };
 
@@ -56,6 +65,5 @@ export type PostComment = {
 export type FeedItem = {
   post: CommunityPost;
   author: CommunityUser;
-  /** Last 2 comments to preview under the post. */
   previewComments: Array<{ comment: PostComment; author: CommunityUser }>;
 };

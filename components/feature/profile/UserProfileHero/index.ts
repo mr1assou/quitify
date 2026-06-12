@@ -1,0 +1,1 @@
+export { UserProfileHero } from "./UserProfileHeroPanel";

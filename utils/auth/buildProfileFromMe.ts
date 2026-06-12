@@ -23,6 +23,7 @@ export function buildProfileFromMe(me: AuthMeResponse): UserProfile {
     cigarettesPerDay: me.cigarettesPerDay ?? 0,
     cigarettesPerPack: me.cigarettesPerPack ?? DEFAULT_CIGARETTES_PER_PACK,
     packCost: parsePackPrice(me.packPrice),
+    countryFlag: me.countryFlag,
     currency: me.currency ?? "USD",
   };
 }

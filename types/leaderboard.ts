@@ -5,6 +5,8 @@ export type LeaderboardEntry = {
   isCurrentUser: boolean;
   /** Highest badge tier this player has earned. */
   badgeId: string;
+  /** PNG flag URL shown on the profile avatar. */
+  countryFlag: string;
 };
 
 export type LeaderboardGap = {

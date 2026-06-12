@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
@@ -7,76 +7,77 @@ import { useTheme } from "@/context/ThemeContext";
 import type { LeaderboardEntry } from "@/types/leaderboard";
 import { getBadgeName } from "@/utils/badges";
 import { formatNumber } from "@/utils/format";
+import { safeRouter } from "@/utils/safeRouter";
 
 type Props = {
   entry: LeaderboardEntry;
   showDivider?: boolean;
-  /** Pinned “you” row at the top of the leaderboard. */
-  pinned?: boolean;
-  totalUsers?: number;
 };
 
-function rankTone(rank: number): string {
-  if (rank === 1) return "text-accent";
-  if (rank === 2) return "text-foreground dark:text-d-text";
-  if (rank === 3) return "text-foreground dark:text-d-text";
-  return "text-muted-foreground dark:text-d-muted";
+function RankLabel({ rank }: { rank: number }) {
+  if (rank === 1) {
+    return (
+      <View className="mr-2 w-7 items-center rounded-full bg-accent/20 py-0.5">
+        <Text className="text-sm font-bold tabular-nums text-accent">{rank}</Text>
+      </View>
+    );
+  }
+
+  if (rank <= 3) {
+    return (
+      <View className="mr-2 w-7 items-center rounded-full bg-primary/15 py-0.5 dark:bg-primary/25">
+        <Text className="text-xs font-bold tabular-nums text-primary dark:text-d-text">
+          {rank}
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <Text className="mr-2 w-7 text-center text-xs font-semibold tabular-nums text-muted-foreground dark:text-d-muted">
+      {rank}
+    </Text>
+  );
 }
 
-/** Full rank with grouping (e.g. 100,000) — not abbreviated like FP totals. */
-function formatRank(rank: number): string {
-  return rank.toLocaleString(undefined, { maximumFractionDigits: 0 });
-}
-
-export function LeaderboardRow({ entry, showDivider, pinned, totalUsers }: Props) {
+export function LeaderboardRow({ entry, showDivider }: Props) {
   const { colors } = useTheme();
-  const isTopThree = !pinned && entry.rank <= 3;
   const badgeName = getBadgeName(entry.badgeId);
-  const badgeArtSize = pinned ? 32 : 28;
+
+  const openProfile = () => {
+    if (entry.isCurrentUser) {
+      safeRouter.push("/profile");
+      return;
+    }
+    safeRouter.push(`/player/${entry.rank}`);
+  };
 
   return (
     <View>
       {showDivider ? (
-        <View className="ml-[68px] h-px bg-background dark:bg-d-border" />
+        <View className="ml-28 h-px bg-background dark:bg-d-border" />
       ) : null}
-      <View
-        className={`flex-row items-center px-3 ${
-          pinned ? "py-4" : "py-3"
-        } ${entry.isCurrentUser ? "rounded-2xl bg-accent/15 dark:bg-accent/20" : ""}`}
+      <Pressable
+        onPress={openProfile}
+        className={`flex-row items-center px-3 py-3 active:opacity-80 ${
+          entry.isCurrentUser ? "rounded-2xl bg-accent/15 dark:bg-accent/20" : ""
+        }`}
+        accessibilityRole="button"
+        accessibilityLabel={`View ${entry.name}'s profile`}
       >
-        <View className={pinned ? "min-w-[76px] shrink-0 items-center justify-center" : "w-9 items-center"}>
-          {pinned ? (
-            <Text
-              className="text-sm font-bold tabular-nums text-accent"
-              numberOfLines={1}
-              adjustsFontSizeToFit
-              minimumFontScale={0.8}
-            >
-              #{formatRank(entry.rank)}
-            </Text>
-          ) : isTopThree ? (
-            <Ionicons
-              name={entry.rank === 1 ? "trophy" : "medal"}
-              size={entry.rank === 1 ? 20 : 18}
-              color={entry.rank === 1 ? colors.accent : colors.mutedForeground}
-            />
-          ) : (
-            <Text className={`text-sm font-bold tabular-nums ${rankTone(entry.rank)}`}>
-              {entry.rank}
-            </Text>
-          )}
-        </View>
+        <RankLabel rank={entry.rank} />
 
-        <LeaderboardAvatar name={entry.name} isCurrentUser={entry.isCurrentUser} />
+        <LeaderboardAvatar
+          name={entry.name}
+          isCurrentUser={entry.isCurrentUser}
+          rank={entry.rank}
+          countryFlag={entry.countryFlag}
+        />
 
         <View className="ml-3 min-w-0 flex-1">
           <View className="flex-row items-center gap-2">
             <Text
-              className={`flex-shrink text-base font-semibold ${
-                entry.isCurrentUser
-                  ? "text-foreground dark:text-d-text"
-                  : "text-foreground dark:text-d-text"
-              }`}
+              className="flex-shrink text-base font-semibold text-foreground dark:text-d-text"
               numberOfLines={1}
             >
               {entry.name}
@@ -88,7 +89,7 @@ export function LeaderboardRow({ entry, showDivider, pinned, totalUsers }: Props
             ) : null}
           </View>
           <View className="mt-1.5 flex-row items-center gap-2">
-            <BadgeArt badgeId={entry.badgeId} size={badgeArtSize} />
+            <BadgeArt badgeId={entry.badgeId} size={28} />
             <Text
               className="flex-1 text-xs font-semibold text-muted-foreground dark:text-d-muted"
               numberOfLines={1}
@@ -96,22 +97,22 @@ export function LeaderboardRow({ entry, showDivider, pinned, totalUsers }: Props
               {badgeName}
             </Text>
           </View>
-          {pinned && totalUsers ? (
-            <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-              {formatNumber(totalUsers)} people on the journey
-            </Text>
-          ) : null}
         </View>
 
         <View className="items-end pl-2">
-          <Text className="text-sm font-bold tabular-nums text-foreground dark:text-d-text">
-            {formatNumber(entry.xp)}
-          </Text>
-          <Text className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted">
+          <View className="flex-row items-center gap-1.5">
+            <View className="h-6 w-6 items-center justify-center rounded-full bg-accent">
+              <Ionicons name="flash" size={12} color={colors.white} />
+            </View>
+            <Text className="text-sm font-bold tabular-nums text-foreground dark:text-d-text">
+              {formatNumber(entry.xp)}
+            </Text>
+          </View>
+          <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted">
             FP
           </Text>
         </View>
-      </View>
+      </Pressable>
     </View>
   );
 }

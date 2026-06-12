@@ -5,7 +5,7 @@ import {
   formatLifeGained,
   formatNumber,
 } from "@/utils/format";
-import { formatUtcDateInTimezone } from "@/utils/time/formatInTimezone";
+import { formatUtcIsoInTimezone } from "@/utils/time/formatInTimezone";
 
 export type AttemptDetailRow = {
   label: string;
@@ -36,12 +36,12 @@ export function buildAttemptDetailRows(
   const rows: AttemptDetailRow[] = [
     {
       label: "Started",
-      value: formatUtcDateInTimezone(row.startedAt, timeZone),
+      value: formatUtcIsoInTimezone(row.startedAt, timeZone),
     },
     {
       label: "Ended",
       value: row.endedAt
-        ? formatUtcDateInTimezone(row.endedAt, timeZone)
+        ? formatUtcIsoInTimezone(row.endedAt, timeZone)
         : "In progress",
     },
     {
@@ -75,7 +75,7 @@ export function buildAttemptDetailRows(
 }
 
 export function formatAttemptDateRange(row: AttemptStatsRow, timeZone: string): string {
-  const start = formatUtcDateInTimezone(row.startedAt, timeZone);
+  const start = formatUtcIsoInTimezone(row.startedAt, timeZone);
   if (!row.endedAt) return `${start} – In progress`;
-  return `${start} – ${formatUtcDateInTimezone(row.endedAt, timeZone)}`;
+  return `${start} – ${formatUtcIsoInTimezone(row.endedAt, timeZone)}`;
 }

@@ -1,5 +1,6 @@
 export { computeStreak, currentMissionDay } from "./computeStreak";
-export { formatCurrentStreak } from "./formatStreakLabel";
+export { formatCurrentStreak, formatStreakDuration } from "./formatStreakLabel";
+export { maxStreakDurationMs } from "./maxStreakFromAttempts";
 export {
   breakdownElapsedMs,
   getStreakElapsedMs,

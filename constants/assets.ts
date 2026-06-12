@@ -4,7 +4,7 @@ export const APP_LOGO_IMAGE = require("../assets/images/logo.png");
 /** Current user profile photo (leaderboard + onboarding). */
 export const USER_AVATAR_IMAGE = require("../assets/images/yes.png");
 
-/** Default avatar for other players on the leaderboard. */
+/** Default avatar for other community users. */
 export const COMMUNITY_AVATAR_IMAGE = require("../assets/images/logo.png");
 
 /** Shown on the slip follow-up (“Was it just one, or are you back?”). */

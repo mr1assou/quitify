@@ -6,6 +6,7 @@ import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { useTheme } from "@/context/ThemeContext";
 import type { CommunityUser } from "@/types/community";
 import { getBadgeName } from "@/utils/badges";
+import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
 type Props = {
   user: CommunityUser;
@@ -16,7 +17,7 @@ export function UserResultRow({ user, trailing = "chevron" }: Props) {
   const { colors } = useTheme();
   const badgeName = getBadgeName(user.badgeId);
 
-  const openProfile = () => router.push(`/user/${user.id}`);
+  const openProfile = () => navigateToUserProfile(user);
   const openChat = () => router.push(`/chat-by-user/${user.id}`);
 
   return (

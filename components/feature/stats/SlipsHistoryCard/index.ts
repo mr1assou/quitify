@@ -1,1 +1,0 @@
-export { SlipsHistoryCard } from "./SlipsHistoryCard";

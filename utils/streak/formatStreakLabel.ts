@@ -61,6 +61,11 @@ function formatProgressiveCalendar(
   return segments.join(" ");
 }
 
+export function formatStreakDuration(durationMs: number, now = Date.now()): string {
+  if (durationMs <= 0) return "0s";
+  return formatCurrentStreak(now - durationMs, now);
+}
+
 export function formatCurrentStreak(quitDateMs: number, now = Date.now()): string {
   const elapsedMs = getStreakElapsedMs(quitDateMs, now);
   if (elapsedMs <= 0) return "0s";

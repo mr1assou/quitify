@@ -1,22 +1,83 @@
-import { Image } from "react-native";
+import { Image } from "expo-image";
+import { View } from "react-native";
 
-import { COMMUNITY_AVATAR_IMAGE, USER_AVATAR_IMAGE } from "@/constants/assets";
+import { profileImageForRank } from "@/constants/leaderboardProfiles";
+
+const DEFAULT_SIZE = 52;
 
 type Props = {
   name: string;
   isCurrentUser: boolean;
+  rank: number;
+  countryFlag: string;
   size?: number;
 };
 
-export function LeaderboardAvatar({ name, isCurrentUser, size = 44 }: Props) {
-  const source = isCurrentUser ? USER_AVATAR_IMAGE : COMMUNITY_AVATAR_IMAGE;
-  const label = isCurrentUser ? "Your profile photo" : `${name} profile photo`;
+function FlagBadge({ uri, size, label }: { uri: string; size: number; label: string }) {
+  const inner = Math.max(14, size - 4);
 
   return (
-    <Image
-      source={source}
-      style={{ width: size, height: size, borderRadius: size / 2 }}
-      accessibilityLabel={label}
-    />
+    <View
+      style={{
+        width: size,
+        height: size,
+        borderRadius: size / 2,
+        backgroundColor: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          source={{ uri }}
+          style={{ width: inner, height: inner * 0.7 }}
+          contentFit="contain"
+          contentPosition="center"
+          accessibilityLabel={label}
+        />
+      </View>
+    </View>
+  );
+}
+
+export function LeaderboardAvatar({
+  name,
+  isCurrentUser,
+  rank,
+  countryFlag,
+  size = DEFAULT_SIZE,
+}: Props) {
+  const source = profileImageForRank(rank);
+  const label = isCurrentUser ? "Your profile photo" : `${name} profile photo`;
+  const flagSize = Math.round(size * 0.38);
+
+  return (
+    <View style={{ width: size, height: size }}>
+      <View
+        style={{
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          source={source}
+          style={{ width: size, height: size }}
+          contentFit="cover"
+          contentPosition="top"
+          accessibilityLabel={label}
+        />
+      </View>
+
+      <View style={{ position: "absolute", bottom: -1, left: -1, zIndex: 1 }}>
+        <FlagBadge uri={countryFlag} size={flagSize} label={`${name} country flag`} />
+      </View>
+    </View>
   );
 }

@@ -19,7 +19,7 @@ export function progressToPercent(progress: number): number {
   return Math.round(Math.min(1, Math.max(0, progress)) * 100);
 }
 
-/** Badge ring + FP total for the Achievement rank tab header. */
+/** Badge ring + FP total for the stats screen header. */
 export function computeAchievementBadgeSummary(
   summary: ProgressSummary,
   isPremium = false,

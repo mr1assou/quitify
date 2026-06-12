@@ -2,10 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
-import { UserAvatar } from "@/components/feature/community/UserAvatar";
+import { BadgeArt } from "@/components/feature/progress/BadgeArt";
+import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { useTheme } from "@/context/ThemeContext";
 import type { CallKind } from "@/types/chat";
 import type { CommunityUser } from "@/types/community";
+import { getBadgeName } from "@/utils/badges";
+import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
 type Props = {
   participant: CommunityUser;
@@ -15,6 +18,8 @@ type Props = {
 /** Top bar for the chat thread screen — avatar, name, audio + video call. */
 export function ChatHeader({ participant, onCall }: Props) {
   const { colors } = useTheme();
+  const badgeName = getBadgeName(participant.badgeId);
+  const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
 
   return (
     <View className="flex-row items-center border-b border-section px-4 py-3 dark:border-d-border">
@@ -23,17 +28,34 @@ export function ChatHeader({ participant, onCall }: Props) {
       </Pressable>
 
       <Pressable
-        onPress={() => router.push(`/user/${participant.id}`)}
-        className="flex-1 flex-row items-center"
+        onPress={() => navigateToUserProfile(participant)}
+        className="min-w-0 flex-1 flex-row items-center"
       >
-        <UserAvatar user={participant} size={38} />
-        <View className="ml-3">
-          <Text className="text-base font-bold text-foreground dark:text-d-text">
+        <LeaderboardAvatar
+          name={participant.name}
+          isCurrentUser={!!participant.isCurrentUser}
+          rank={avatarRank}
+          countryFlag={participant.countryFlag}
+          size={40}
+        />
+
+        <View className="ml-3 min-w-0 flex-1">
+          <Text
+            className="text-base font-bold text-foreground dark:text-d-text"
+            numberOfLines={1}
+          >
             {participant.name}
           </Text>
-          <Text className="text-xs text-muted-foreground dark:text-d-muted">
-            {participant.smokeFreeDays}d smoke-free
-          </Text>
+
+          <View className="mt-0.5 flex-row items-center gap-1.5">
+            <BadgeArt badgeId={participant.badgeId} size={18} />
+            <Text
+              className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+              numberOfLines={1}
+            >
+              {badgeName} 
+            </Text>
+          </View>
         </View>
       </Pressable>
 

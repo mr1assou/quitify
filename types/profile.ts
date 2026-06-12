@@ -22,6 +22,8 @@ export type UserProfile = {
   cigarettesPerPack: number;
   packCost: number;
   countryCode?: string;
+  /** PNG flag URL from onboarding / profile. */
+  countryFlag?: string;
   currency: string;
   quitReasonIds?: string[];
   motivationLevel?: MotivationLevel;

@@ -2,37 +2,48 @@ import { useState } from "react";
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { AchievementProgressRings } from "@/components/feature/progress/AchievementProgressRings";
 import { AttemptHistoryCard } from "@/components/feature/stats/AttemptHistoryCard";
-import { SlipsHistoryCard } from "@/components/feature/stats/SlipsHistoryCard";
 import { StatsOverviewCard } from "@/components/feature/stats/StatsOverviewCard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useUserStats } from "@/hooks/useUserStats";
+import { useProgress } from "@/hooks/useProgress";
+import { useStatsAttempts } from "@/hooks/useStatsAttempts";
+import { useStatsOverview } from "@/hooks/useStatsOverview";
+import { computeAchievementBadgeSummary } from "@/utils/achievementProgress";
 import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
+
+function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <View className="items-center gap-4 rounded-2xl bg-section px-4 py-8 dark:bg-d-surface">
+      <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">{message}</Text>
+      <Pressable onPress={onRetry} className="rounded-2xl bg-primary px-5 py-3">
+        <Text className="text-sm font-semibold text-white">Try again</Text>
+      </Pressable>
+    </View>
+  );
+}
 
 export default function Stats() {
   const { colors } = useTheme();
   const { state } = useApp();
-  const { data, loading, error, refresh } = useUserStats();
+  const progress = useProgress();
+  const overview = useStatsOverview();
+  const attempts = useStatsAttempts();
   const [refreshing, setRefreshing] = useState(false);
 
+  const badgeSummary = progress
+    ? computeAchievementBadgeSummary(progress, state.isPremium)
+    : null;
+
   const profile = state.profile;
-  const timeZone = data?.timezone || getDeviceTimezone();
-  const economics =
-    data?.economics ??
-    (profile
-      ? {
-          cigarettesPerDay: profile.cigarettesPerDay,
-          cigarettesPerPack: profile.cigarettesPerPack,
-          packCost: profile.packCost,
-        }
-      : undefined);
+  const timeZone = attempts.data?.timezone || getDeviceTimezone();
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refresh();
+    await Promise.all([overview.refresh(), attempts.refresh()]);
     setRefreshing(false);
   };
 
@@ -57,41 +68,38 @@ export default function Stats() {
         </Text>
 
         <View className="mt-4 gap-4 px-6">
-          {loading && !data ? (
+          {badgeSummary && progress ? (
+            <AchievementProgressRings
+              badge={badgeSummary.badge}
+              freedomPoints={badgeSummary.freedomPoints}
+              currentBadgeId={badgeSummary.currentBadgeId}
+              rank={progress.rank}
+            />
+          ) : null}
+
+          {overview.loading && !overview.data ? (
             <View className="items-center py-16">
               <ActivityIndicator size="large" color={colors.primary} />
             </View>
-          ) : error && !data ? (
-            <View className="items-center gap-4 py-16">
-              <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                {error}
-              </Text>
-              <Pressable
-                onPress={() => void refresh()}
-                className="rounded-2xl bg-primary px-5 py-3"
-              >
-                <Text className="text-sm font-semibold text-white">Try again</Text>
-              </Pressable>
+          ) : overview.error && !overview.data ? (
+            <SectionError message={overview.error} onRetry={() => void overview.refresh()} />
+          ) : overview.data ? (
+            <StatsOverviewCard currency={overview.data.currency} byRange={overview.data.byRange} />
+          ) : null}
+
+          {attempts.loading && !attempts.data ? (
+            <View className="items-center py-10">
+              <ActivityIndicator size="large" color={colors.primary} />
             </View>
-          ) : data && profile && economics ? (
-            <>
-              <StatsOverviewCard
-                currency={data.currency}
-                attempts={data.attempts}
-                slips={data.slips}
-                economics={economics}
-              />
-
-              <SlipsHistoryCard slips={data.slips} timeZone={timeZone} />
-
-              <AttemptHistoryCard
-                attempts={data.attempts}
-                slips={data.slips}
-                economics={economics}
-                currency={data.currency}
-                timeZone={timeZone}
-              />
-            </>
+          ) : attempts.error && !attempts.data ? (
+            <SectionError message={attempts.error} onRetry={() => void attempts.refresh()} />
+          ) : attempts.data && profile ? (
+            <AttemptHistoryCard
+              attempts={attempts.data.attempts}
+              economics={attempts.data.economics}
+              currency={attempts.data.currency}
+              timeZone={timeZone}
+            />
           ) : null}
         </View>
       </ScrollView>

@@ -4,6 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { useProgress } from "@/hooks/useProgress";
 import type { LeaderboardSnapshot } from "@/types/leaderboard";
 import { resolveHighestUnlockedBadgeId } from "@/utils/badges";
+import { countryFlagForRank, resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
 import { buildLeaderboard } from "@/utils/leaderboard";
 
 /**
@@ -16,7 +17,11 @@ export function useLeaderboard(): LeaderboardSnapshot | null {
   return useMemo(() => {
     if (!progress) return null;
 
-    const userName = state.profile?.name?.trim() || "You";
+    const profile = state.profile;
+    const userName = profile?.name?.trim() || "You";
+    const userCountryFlag =
+      resolveCountryFlagUrl(profile?.countryFlag, profile?.countryCode) ??
+      countryFlagForRank(progress.rank.position);
 
     const currentUserBadgeId =
       resolveHighestUnlockedBadgeId(progress.badges, state.isPremium) ?? "first-step";
@@ -27,6 +32,13 @@ export function useLeaderboard(): LeaderboardSnapshot | null {
       position: progress.rank.position,
       total: progress.rank.total,
       currentUserBadgeId,
+      userCountryFlag,
     });
-  }, [progress, state.profile?.name, state.isPremium]);
+  }, [
+    progress,
+    state.profile?.countryCode,
+    state.profile?.countryFlag,
+    state.profile?.name,
+    state.isPremium,
+  ]);
 }

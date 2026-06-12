@@ -1,12 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 
-import { UserAvatar } from "@/components/feature/community/UserAvatar";
+import { BadgeArt } from "@/components/feature/progress/BadgeArt";
+import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
+import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
+import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useLeaderboard } from "@/hooks/useLeaderboard";
 import type { CommunityUser } from "@/types/community";
 import { getBadgeName } from "@/utils/badges";
 import { formatRelativeTime } from "@/utils/community";
+import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
 type Props = {
   author: CommunityUser;
@@ -17,38 +22,60 @@ type Props = {
 
 export function PostHeader({ author, createdAt, onMore }: Props) {
   const { colors } = useTheme();
+  const { state } = useApp();
+  const leaderboard = useLeaderboard();
   const badgeName = getBadgeName(author.badgeId);
+
+  const avatarRank = useMemo(() => {
+    if (author.isCurrentUser && leaderboard) return leaderboard.currentUser.rank;
+    return author.leaderboardRank;
+  }, [author.isCurrentUser, author.leaderboardRank, leaderboard]);
+
+  const countryFlag = useMemo(() => {
+    if (!author.isCurrentUser) return author.countryFlag;
+    return (
+      resolveCountryFlagUrl(state.profile?.countryFlag, state.profile?.countryCode) ??
+      author.countryFlag
+    );
+  }, [author.countryFlag, author.isCurrentUser, state.profile?.countryCode, state.profile?.countryFlag]);
 
   return (
     <View className="flex-row items-center">
       <Pressable
         hitSlop={6}
-        onPress={() => router.push(`/user/${author.id}`)}
-        className="flex-row items-center"
+        onPress={() => navigateToUserProfile(author)}
+        className="min-w-0 flex-1 flex-row items-center"
       >
-        <UserAvatar user={author} size={42} />
-        <View className="ml-3">
-          <View className="flex-row items-center">
-            <Text className="text-base font-bold text-foreground dark:text-d-text">
-              {author.name}
-            </Text>
-            <Text className="ml-1 text-sm text-muted-foreground dark:text-d-muted">
-              · @{author.handle}
-            </Text>
-          </View>
-          <View className="mt-0.5 flex-row items-center">
-            <Ionicons name="ribbon" size={12} color={colors.primary} />
-            <Text className="ml-1 text-xs text-muted-foreground dark:text-d-muted">
+        <LeaderboardAvatar
+          name={author.name}
+          isCurrentUser={!!author.isCurrentUser}
+          rank={avatarRank}
+          countryFlag={countryFlag}
+          size={44}
+        />
+
+        <View className="ml-3 min-w-0 flex-1">
+          <Text
+            className="text-base font-bold text-foreground dark:text-d-text"
+            numberOfLines={1}
+          >
+            {author.name}
+          </Text>
+
+          <View className="mt-1 flex-row items-center gap-2">
+            <BadgeArt badgeId={author.badgeId} size={22} />
+            <Text
+              className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+              numberOfLines={1}
+            >
               {badgeName} · {formatRelativeTime(createdAt)}
             </Text>
           </View>
         </View>
       </Pressable>
 
-      <View style={{ flex: 1 }} />
-
       {onMore ? (
-        <Pressable hitSlop={8} onPress={onMore}>
+        <Pressable hitSlop={8} onPress={onMore} className="ml-2">
           <Ionicons name="ellipsis-horizontal" size={20} color={colors.mutedForeground} />
         </Pressable>
       ) : null}

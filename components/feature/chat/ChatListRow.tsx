@@ -1,9 +1,11 @@
 import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
-import { UserAvatar } from "@/components/feature/community/UserAvatar";
+import { BadgeArt } from "@/components/feature/progress/BadgeArt";
+import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatThreadPreview } from "@/hooks/useChat";
+import { getBadgeName } from "@/utils/badges";
 import { formatChatRelativeDate } from "@/utils/community";
 
 type Props = {
@@ -13,6 +15,8 @@ type Props = {
 export function ChatListRow({ preview }: Props) {
   const { colors } = useTheme();
   const { participant, lastMessage, unreadCount, threadId } = preview;
+  const badgeName = getBadgeName(participant.badgeId);
+  const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
 
   const lastText = lastMessage?.text ?? "Say hi 👋";
   const lastFromMe = lastMessage?.senderId === "me";
@@ -23,7 +27,14 @@ export function ChatListRow({ preview }: Props) {
       className="flex-row items-center px-6 py-3"
       android_ripple={{ color: colors.section }}
     >
-      <UserAvatar user={participant} size={52} />
+      <LeaderboardAvatar
+        name={participant.name}
+        isCurrentUser={!!participant.isCurrentUser}
+        rank={avatarRank}
+        countryFlag={participant.countryFlag}
+        size={52}
+      />
+
       <View className="ml-3 flex-1">
         <View className="flex-row items-center">
           <Text className="flex-1 text-base font-bold text-foreground dark:text-d-text">
@@ -35,17 +46,25 @@ export function ChatListRow({ preview }: Props) {
             </Text>
           ) : null}
         </View>
-        <View className="mt-1 flex-row items-center">
+
+        <View className="mt-1 flex-row items-center gap-1.5">
+          <BadgeArt badgeId={participant.badgeId} size={18} />
           <Text
             numberOfLines={1}
-            className="flex-1 text-sm text-muted-foreground dark:text-d-muted"
-            style={unreadCount > 0 ? { color: colors.foreground, fontWeight: "600" } : undefined}
+            className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
           >
-            {lastFromMe ? "You: " : ""}{lastText}
+            {badgeName}
+            {" · "}
+            <Text
+              style={unreadCount > 0 ? { color: colors.foreground, fontWeight: "600" } : undefined}
+            >
+              {lastFromMe ? "You: " : ""}
+              {lastText}
+            </Text>
           </Text>
           {unreadCount > 0 ? (
             <View
-              className="ml-2 min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5"
+              className="ml-1 min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5"
               style={{ backgroundColor: colors.primary }}
             >
               <Text className="text-xs font-bold text-white">{unreadCount}</Text>

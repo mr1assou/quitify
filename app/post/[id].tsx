@@ -8,26 +8,34 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CommentComposer } from "@/components/feature/community/CommentComposer";
 import { CommentRow } from "@/components/feature/community/CommentRow";
 import { PostActions } from "@/components/feature/community/PostActions";
 import { PostHeader } from "@/components/feature/community/PostHeader";
-import { PostMedia } from "@/components/feature/community/PostMedia";
+import { PostContent } from "@/components/feature/community/PostContent";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityPost } from "@/hooks/useCommunityPost";
 
+const HEADER_HEIGHT = 52;
+
 export default function PostDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const detail = useCommunityPost(id ?? "");
-  const { toggleLike, share, addComment } = useCommunity();
+  const { votePost, share, addComment } = useCommunity();
+
+  const screenStyle = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+  };
 
   if (!detail) {
     return (
-      <SafeAreaView className="flex-1 bg-background dark:bg-d-bg">
+      <View className="flex-1 bg-background dark:bg-d-bg" style={screenStyle}>
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
             This post is no longer available.
@@ -39,15 +47,20 @@ export default function PostDetailScreen() {
             <Text className="text-sm font-bold text-white">Go back</Text>
           </Pressable>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const { post, author, comments } = detail;
+  const keyboardOffset =
+    Platform.OS === "ios" ? insets.top + HEADER_HEIGHT : 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
-      <View className="flex-row items-center justify-between px-4 py-3">
+    <View className="flex-1 bg-background dark:bg-d-bg" style={{ paddingTop: insets.top }}>
+      <View
+        className="flex-row items-center justify-between px-4"
+        style={{ height: HEADER_HEIGHT }}
+      >
         <Pressable hitSlop={8} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={colors.foreground} />
         </Pressable>
@@ -57,32 +70,26 @@ export default function PostDetailScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+        keyboardVerticalOffset={keyboardOffset}
         className="flex-1"
+        style={{ paddingBottom: insets.bottom }}
       >
         <ScrollView
           contentContainerStyle={{ paddingBottom: 24 }}
           keyboardShouldPersistTaps="handled"
+          nestedScrollEnabled
         >
           <View className="px-6 pt-2">
             <PostHeader author={author} createdAt={post.createdAt} />
-            {post.text ? (
-              <Text className="mt-4 text-base leading-6 text-foreground dark:text-d-text">
-                {post.text}
-              </Text>
-            ) : null}
-            {post.media ? (
-              <View className="mt-4">
-                <PostMedia media={post.media} height={280} />
-              </View>
-            ) : null}
+            <PostContent post={post} className="mt-4" mediaVariant="detail" />
 
             <PostActions
-              likeCount={post.likeCount}
-              likedByMe={post.likedByMe}
+              upvoteCount={post.upvoteCount}
+              downvoteCount={post.downvoteCount}
+              myVote={post.myVote}
               commentCount={post.commentIds.length}
               shareCount={post.shareCount}
-              onToggleLike={() => toggleLike(post.id)}
+              onVote={(vote) => votePost(post.id, vote)}
               onComment={() => {}}
               onShare={() => share(post.id)}
             />
@@ -106,10 +113,10 @@ export default function PostDetailScreen() {
           </View>
         </ScrollView>
 
-        <View className="border-t border-section px-4 py-3 dark:border-d-border">
+        <View className="border-t border-section bg-background px-4 pt-3 dark:border-d-border dark:bg-d-bg">
           <CommentComposer onSubmit={(text) => addComment(post.id, text)} />
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }

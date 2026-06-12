@@ -82,6 +82,7 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
         : DEFAULT_CIGARETTES_PER_PACK,
     packCost: draft.packCost ?? 0,
     countryCode: draft.countryCode,
+    countryFlag: draft.countryFlag,
     currency: draft.currency,
     quitReasonIds: reasonIds.length > 0 ? [...reasonIds] : undefined,
     motivationLevel: draft.motivationLevel,

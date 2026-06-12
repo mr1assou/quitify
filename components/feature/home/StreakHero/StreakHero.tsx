@@ -6,7 +6,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { useTheme } from "@/context/ThemeContext";
 import { useNow } from "@/hooks/useNow";
 import { formatCurrentStreak } from "@/utils/streak";
-import { formatLifeGained, formatNumber } from "@/utils/format";
+import { formatDate, formatLifeGained, formatNumber } from "@/utils/format";
 
 type Props = {
   streakStart: number;
@@ -31,6 +31,7 @@ export function StreakHero({
     () => formatCurrentStreak(streakStart, now),
     [streakStart, now],
   );
+  const streakSinceLabel = useMemo(() => formatDate(streakStart), [streakStart]);
 
   const moneyDisplay = `${currencySymbol}${moneySaved.toLocaleString(undefined, {
     minimumFractionDigits: moneySaved < 100 ? 2 : 0,
@@ -55,6 +56,10 @@ export function StreakHero({
         accessibilityLabel={`Current streak ${streakLabel}, attempt ${attemptNumber}`}
       >
         {streakLabel}
+      </Text>
+
+      <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
+        Since {streakSinceLabel}
       </Text>
 
       <View className="mt-8 w-full gap-3">

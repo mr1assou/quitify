@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef } from "react";
-import { FlatList, KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
@@ -27,7 +28,10 @@ export default function ChatThreadScreen() {
     const FIVE_MIN = 5 * 60 * 1000;
     return detail.messages.map((message, i) => {
       const next = detail.messages[i + 1];
-      const showTimestamp = !next || next.senderId !== message.senderId || next.createdAt - message.createdAt > FIVE_MIN;
+      const showTimestamp =
+        !next ||
+        next.senderId !== message.senderId ||
+        next.createdAt - message.createdAt > FIVE_MIN;
       return {
         message,
         fromMe: message.senderId === "me",
@@ -63,16 +67,14 @@ export default function ChatThreadScreen() {
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
       <ChatHeader participant={detail.participant} onCall={onCall} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-        className="flex-1"
-      >
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <FlatList
           ref={listRef}
+          style={{ flex: 1 }}
           data={rows}
           keyExtractor={(r) => r.message.id}
           contentContainerStyle={{ padding: 16, paddingBottom: 8 }}
+          keyboardShouldPersistTaps="handled"
           renderItem={({ item }) => (
             <MessageBubble
               message={item.message}
@@ -93,7 +95,15 @@ export default function ChatThreadScreen() {
           }
         />
 
-        <MessageComposer onSend={onSend} />
+        <MessageComposer
+          onSend={onSend}
+          onSendMedia={(items) => {
+            const summary = items
+              .map((item) => (item.kind === "video" ? "🎥 Video" : "📷 Photo"))
+              .join(" ");
+            sendMessage(detail.participant.id, summary);
+          }}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

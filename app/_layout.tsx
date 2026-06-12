@@ -1,7 +1,9 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
+import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AppProvider } from "@/context/AppContext";
@@ -13,17 +15,22 @@ import "@/global.css";
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <AppProvider>
-            <OnboardingProvider>
-              <CommunityProvider>
-                <ThemedRoot />
-              </CommunityProvider>
-            </OnboardingProvider>
-          </AppProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
+      <KeyboardProvider
+        statusBarTranslucent={Platform.OS === "android"}
+        navigationBarTranslucent={Platform.OS === "android"}
+      >
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <AppProvider>
+              <OnboardingProvider>
+                <CommunityProvider>
+                  <ThemedRoot />
+                </CommunityProvider>
+              </OnboardingProvider>
+            </AppProvider>
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   );
 }
@@ -62,18 +69,28 @@ function ThemedRoot() {
           name="profile"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
+        <Stack.Screen name="player/[rank]" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen
+          name="player/community/[id]"
+          options={{ animation: "slide_from_right" }}
+        />
         <Stack.Screen
           name="terms"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
 
-        <Stack.Screen name="post/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen
-          name="post-composer"
-          options={{ presentation: "modal", animation: "slide_from_bottom" }}
+          name="post/[id]"
+          options={{
+            animation: "slide_from_right",
+            presentation: "card",
+            gestureEnabled: true,
+            fullScreenGestureEnabled: true,
+          }}
         />
-        <Stack.Screen name="user/[id]" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="post-composer" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chats" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="community-search" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat-by-user/[id]" options={{ animation: "none" }} />
         <Stack.Screen

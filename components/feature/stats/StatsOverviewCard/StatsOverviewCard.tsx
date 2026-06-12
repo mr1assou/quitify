@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -7,32 +7,20 @@ import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { StatBlock } from "@/components/feature/stats/StatBlock";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import { useNow } from "@/hooks/useNow";
-import type {
-  AttemptStatsRow,
-  SlipStatsRow,
-  StatsEconomics,
-  StatsFilterRange,
-} from "@/types/userStats";
+import type { StatsFilterRange } from "@/types/userStats";
+import type { StatsOverviewByRange } from "@/types/statsOverview";
 import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/format";
-import { computeOverviewForRange } from "@/utils/stats/filterStatsByRange";
 
 type Props = {
   currency: string;
-  attempts: AttemptStatsRow[];
-  slips: SlipStatsRow[];
-  economics: StatsEconomics;
+  byRange: StatsOverviewByRange;
 };
 
-export function StatsOverviewCard({ currency, attempts, slips, economics }: Props) {
+export function StatsOverviewCard({ currency, byRange }: Props) {
   const { colors } = useTheme();
   const [range, setRange] = useState<StatsFilterRange>("lifetime");
-  const now = useNow(60_000);
 
-  const impact = useMemo(
-    () => computeOverviewForRange(attempts, slips, economics, range, now),
-    [attempts, slips, economics, range, now],
-  );
+  const impact = byRange[range];
 
   const smokeFreeHours = impact.durationSeconds / 3600;
 

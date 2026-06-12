@@ -11,7 +11,9 @@ import { SEED_THREADS, SEED_MESSAGES } from "@/constants/chatThreads";
 import { SEED_COMMENTS, SEED_POSTS } from "@/constants/communityPosts";
 import { CURRENT_USER_ID } from "@/constants/communityUsers";
 import type { ChatMessage, ChatThread } from "@/types/chat";
-import type { CommunityPost, PostComment } from "@/types/community";
+import type { PostTagId } from "@/constants/postTags";
+import type { CommunityPost, PostComment, PostMedia, PostVote } from "@/types/community";
+import { applyPostVote } from "@/utils/community/postVote";
 
 type State = {
   posts: CommunityPost[];
@@ -21,10 +23,10 @@ type State = {
 };
 
 type Action =
-  | { type: "TOGGLE_LIKE"; postId: string }
+  | { type: "VOTE_POST"; postId: string; vote: PostVote }
   | { type: "SHARE"; postId: string }
   | { type: "ADD_COMMENT"; postId: string; text: string }
-  | { type: "ADD_POST"; text: string; imageKey?: string }
+  | { type: "ADD_POST"; title: string; text: string; tagId?: PostTagId; media?: PostMedia[] }
   | { type: "SEND_MESSAGE"; participantId: string; text: string }
   | { type: "MARK_THREAD_READ"; threadId: string };
 
@@ -45,15 +47,9 @@ function newId(prefix: string): string {
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case "TOGGLE_LIKE": {
+    case "VOTE_POST": {
       const posts = state.posts.map((p) =>
-        p.id === action.postId
-          ? {
-              ...p,
-              likedByMe: !p.likedByMe,
-              likeCount: p.likeCount + (p.likedByMe ? -1 : 1),
-            }
-          : p,
+        p.id === action.postId ? applyPostVote(p, action.vote) : p,
       );
       return { ...state, posts };
     }
@@ -86,17 +82,21 @@ function reducer(state: State, action: Action): State {
     }
 
     case "ADD_POST": {
+      const title = action.title.trim();
       const text = action.text.trim();
-      if (!text && !action.imageKey) return state;
+      if (!title && !text && !action.media?.length) return state;
 
       const post: CommunityPost = {
         id: newId("post"),
         authorId: CURRENT_USER_ID,
+        title: title || undefined,
+        tagId: action.tagId,
         text,
         createdAt: Date.now(),
-        media: action.imageKey ? { kind: "image", imageKey: action.imageKey } : undefined,
-        likeCount: 0,
-        likedByMe: false,
+        media: action.media,
+        upvoteCount: 0,
+        downvoteCount: 0,
+        myVote: null,
         shareCount: 0,
         commentIds: [],
       };
@@ -156,10 +156,15 @@ function reducer(state: State, action: Action): State {
 
 type CommunityContextValue = {
   state: State;
-  toggleLike: (postId: string) => void;
+  votePost: (postId: string, vote: PostVote) => void;
   share: (postId: string) => void;
   addComment: (postId: string, text: string) => void;
-  addPost: (input: { text: string; imageKey?: string }) => void;
+  addPost: (input: {
+    title: string;
+    text: string;
+    tagId?: PostTagId;
+    media?: PostMedia[];
+  }) => void;
   sendMessage: (participantId: string, text: string) => void;
   markThreadRead: (threadId: string) => void;
 };
@@ -169,8 +174,8 @@ const CommunityContext = createContext<CommunityContextValue | null>(null);
 export function CommunityProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const toggleLike = useCallback((postId: string) => {
-    dispatch({ type: "TOGGLE_LIKE", postId });
+  const votePost = useCallback((postId: string, vote: PostVote) => {
+    dispatch({ type: "VOTE_POST", postId, vote });
   }, []);
   const share = useCallback((postId: string) => {
     dispatch({ type: "SHARE", postId });
@@ -178,9 +183,18 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const addComment = useCallback((postId: string, text: string) => {
     dispatch({ type: "ADD_COMMENT", postId, text });
   }, []);
-  const addPost = useCallback((input: { text: string; imageKey?: string }) => {
-    dispatch({ type: "ADD_POST", text: input.text, imageKey: input.imageKey });
-  }, []);
+  const addPost = useCallback(
+    (input: { title: string; text: string; tagId?: PostTagId; media?: PostMedia[] }) => {
+      dispatch({
+        type: "ADD_POST",
+        title: input.title,
+        text: input.text,
+        tagId: input.tagId,
+        media: input.media,
+      });
+    },
+    [],
+  );
   const sendMessage = useCallback((participantId: string, text: string) => {
     dispatch({ type: "SEND_MESSAGE", participantId, text });
   }, []);
@@ -189,8 +203,8 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<CommunityContextValue>(
-    () => ({ state, toggleLike, share, addComment, addPost, sendMessage, markThreadRead }),
-    [state, toggleLike, share, addComment, addPost, sendMessage, markThreadRead],
+    () => ({ state, votePost, share, addComment, addPost, sendMessage, markThreadRead }),
+    [state, votePost, share, addComment, addPost, sendMessage, markThreadRead],
   );
 
   return <CommunityContext.Provider value={value}>{children}</CommunityContext.Provider>;

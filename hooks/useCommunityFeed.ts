@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-import { getCommunityUser } from "@/constants/communityUsers";
 import { useCommunity } from "@/context/CommunityContext";
 import type { FeedItem } from "@/types/community";
+import { buildFeedItems } from "@/utils/community/buildFeedItems";
 
 /** Feed for the Community tab: posts + author + preview comments, newest first. */
 export function useCommunityFeed(): FeedItem[] {
@@ -10,23 +10,6 @@ export function useCommunityFeed(): FeedItem[] {
 
   return useMemo(() => {
     const sorted = [...state.posts].sort((a, b) => b.createdAt - a.createdAt);
-
-    return sorted
-      .map<FeedItem | null>((post) => {
-        const author = getCommunityUser(post.authorId);
-        if (!author) return null;
-
-        const previewComments = post.commentIds
-          .slice(-2)
-          .map((cid) => {
-            const comment = state.commentsById[cid];
-            const cAuthor = comment ? getCommunityUser(comment.authorId) : undefined;
-            return comment && cAuthor ? { comment, author: cAuthor } : null;
-          })
-          .filter((c): c is NonNullable<typeof c> => c !== null);
-
-        return { post, author, previewComments };
-      })
-      .filter((item): item is FeedItem => item !== null);
+    return buildFeedItems(sorted, state.commentsById);
   }, [state.posts, state.commentsById]);
 }
