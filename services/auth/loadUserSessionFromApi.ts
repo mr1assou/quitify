@@ -15,6 +15,7 @@ export async function loadUserSessionFromApi(
 ): Promise<UserSessionFromApi> {
   const me = await fetchAuthMe(accessToken);
   const account: UserAccount = {
+    userId: me.userId,
     email: me.email,
     name: me.name,
     createdAt: Date.now(),

@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import { View } from "react-native";
 
+import { OnlineStatusDot } from "@/components/ui/OnlineStatusDot";
 import { profileImageForRank } from "@/constants/leaderboardProfiles";
 
 const DEFAULT_SIZE = 52;
@@ -15,6 +16,8 @@ type Props = {
   imageUrl?: string | null;
   /** Horizontal offset for the country flag badge (default sits slightly outside bottom-left). */
   flagLeft?: number;
+  /** UI-only online presence dot on the bottom-right of the avatar. */
+  isOnline?: boolean;
 };
 
 function FlagBadge({ uri, size, label }: { uri: string; size: number; label: string }) {
@@ -57,10 +60,12 @@ export function LeaderboardAvatar({
   size = DEFAULT_SIZE,
   imageUrl,
   flagLeft = -1,
+  isOnline,
 }: Props) {
   const source = imageUrl ? { uri: imageUrl } : profileImageForRank(rank);
   const label = isCurrentUser ? "Your profile photo" : `${name} profile photo`;
   const flagSize = Math.round(size * 0.38);
+  const statusDotSize = Math.max(9, Math.round(size * 0.26));
 
   return (
     <View style={{ width: size, height: size }}>
@@ -84,6 +89,12 @@ export function LeaderboardAvatar({
       <View style={{ position: "absolute", bottom: -1, left: flagLeft, zIndex: 1 }}>
         <FlagBadge uri={countryFlag} size={flagSize} label={`${name} country flag`} />
       </View>
+
+      {typeof isOnline === "boolean" ? (
+        <View style={{ position: "absolute", bottom: -1, right: -1, zIndex: 2 }}>
+          <OnlineStatusDot isOnline={isOnline} size={statusDotSize} />
+        </View>
+      ) : null}
     </View>
   );
 }

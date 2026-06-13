@@ -1,44 +1,95 @@
-import { useMemo } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
-import { useProgress } from "@/hooks/useProgress";
-import type { LeaderboardSnapshot } from "@/types/leaderboard";
-import { resolveHighestUnlockedBadgeId } from "@/utils/badges";
-import { countryFlagForRank, resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
-import { buildLeaderboard } from "@/utils/leaderboard";
+import { useCommunity } from "@/context/CommunityContext";
+import { fetchLeaderboard } from "@/services/leaderboard/leaderboardApi";
+import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
+import { dbAuthorId, resolveOnlineFromMap } from "@/utils/community/presence";
+import { getLeaderboardCache, setLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
+import { mapLeaderboardFromApi } from "@/utils/leaderboard/mapLeaderboardFromApi";
 
-/**
- * Synthetic global leaderboard with the signed-in user inserted at their rank.
- */
+function applyLivePresence(
+  entry: LeaderboardEntry,
+  onlineByUserId: Record<number, boolean>,
+  presenceReady: boolean,
+): LeaderboardEntry {
+  if (entry.isCurrentUser) {
+    return { ...entry, isOnline: true };
+  }
+
+  if (!entry.userId) return entry;
+
+  const isOnline = resolveOnlineFromMap(
+    dbAuthorId(entry.userId),
+    onlineByUserId,
+    entry.isOnline,
+    presenceReady,
+  );
+
+  if (isOnline === undefined) return entry;
+  return { ...entry, isOnline };
+}
+
+function withLivePresence(
+  snapshot: LeaderboardSnapshot,
+  onlineByUserId: Record<number, boolean>,
+  presenceReady: boolean,
+): LeaderboardSnapshot {
+  return {
+    ...snapshot,
+    currentUser: applyLivePresence(snapshot.currentUser, onlineByUserId, presenceReady),
+    others: snapshot.others.map((row) =>
+      row.kind === "entry"
+        ? {
+            kind: "entry",
+            entry: applyLivePresence(row.entry, onlineByUserId, presenceReady),
+          }
+        : row,
+    ),
+    totalUsers: snapshot.totalUsers,
+  };
+}
+
+/** Global leaderboard loaded from the API (registration order, static FP/badge for now). */
 export function useLeaderboard(): LeaderboardSnapshot | null {
-  const { state } = useApp();
-  const progress = useProgress();
+  const { state: appState } = useApp();
+  const { state: communityState } = useCommunity();
+  const [snapshot, setSnapshot] = useState<LeaderboardSnapshot | null>(
+    () => getLeaderboardCache(),
+  );
+
+  const load = useCallback(async () => {
+    if (!appState.account) return;
+
+    try {
+      const response = await fetchLeaderboard();
+      const mapped = mapLeaderboardFromApi(response);
+      setLeaderboardCache(mapped);
+      setSnapshot(mapped);
+    } catch {
+      setLeaderboardCache(null);
+      setSnapshot(null);
+    }
+  }, [appState.account]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
 
   return useMemo(() => {
-    if (!progress) return null;
+    if (!snapshot) return null;
 
-    const profile = state.profile;
-    const userName = profile?.name?.trim() || "You";
-    const userCountryFlag =
-      resolveCountryFlagUrl(profile?.countryFlag, profile?.countryCode) ??
-      countryFlagForRank(progress.rank.position);
-
-    const currentUserBadgeId =
-      resolveHighestUnlockedBadgeId(progress.badges, state.isPremium) ?? "first-step";
-
-    return buildLeaderboard({
-      xp: progress.xp,
-      userName,
-      position: progress.rank.position,
-      total: progress.rank.total,
-      currentUserBadgeId,
-      userCountryFlag,
-    });
+    return withLivePresence(
+      snapshot,
+      communityState.onlineByUserId,
+      communityState.presenceReady,
+    );
   }, [
-    progress,
-    state.profile?.countryCode,
-    state.profile?.countryFlag,
-    state.profile?.name,
-    state.isPremium,
+    communityState.onlineByUserId,
+    communityState.presenceReady,
+    snapshot,
   ]);
 }

@@ -16,7 +16,12 @@ function unit(n: number, abbrev: string): string {
   return `${n} ${abbrev}`;
 }
 
-function formatHms(hours: number, minutes: number, seconds: number): string {
+function formatHm(hours: number, minutes: number): string {
+  return `${pad2(hours)}h ${pad2(minutes)}min`;
+}
+
+function formatHms(hours: number, minutes: number, seconds: number, includeSeconds: boolean): string {
+  if (!includeSeconds) return formatHm(hours, minutes);
   return `${pad2(hours)}h ${pad2(minutes)}min ${pad2(seconds)}s`;
 }
 
@@ -24,24 +29,25 @@ function pluralCount(n: number, singular: string): string {
   return `${n} ${pluralize(n, singular)}`;
 }
 
-function formatProgressiveShort(b: ElapsedBreakdown): string {
+function formatProgressiveShort(b: ElapsedBreakdown, includeSeconds: boolean): string {
   if (b.days > 0) {
-    return `${pluralCount(b.days, "day")} ${formatHms(b.hours, b.minutes, b.seconds)}`;
+    return `${pluralCount(b.days, "day")} ${formatHms(b.hours, b.minutes, b.seconds, includeSeconds)}`;
   }
   if (b.hours > 0) {
-    return formatHms(b.hours, b.minutes, b.seconds);
+    return formatHms(b.hours, b.minutes, b.seconds, includeSeconds);
   }
   if (b.minutes > 0) {
-    return `${b.minutes}min ${pad2(b.seconds)}s`;
+    return includeSeconds ? `${b.minutes}min ${pad2(b.seconds)}s` : `${b.minutes}min`;
   }
-  return `${b.seconds}s`;
+  return includeSeconds ? `${b.seconds}s` : "0min";
 }
 
 function formatProgressiveCalendar(
   p: CalendarStreakParts,
   mode: "months" | "years",
+  includeSeconds: boolean,
 ): string {
-  const hms = formatHms(p.hours, p.minutes, p.seconds);
+  const hms = formatHms(p.hours, p.minutes, p.seconds, includeSeconds);
   const segments: string[] = [];
 
   if (mode === "years" && p.years > 0) {
@@ -61,14 +67,27 @@ function formatProgressiveCalendar(
   return segments.join(" ");
 }
 
-export function formatStreakDuration(durationMs: number, now = Date.now()): string {
-  if (durationMs <= 0) return "0s";
-  return formatCurrentStreak(now - durationMs, now);
+export type FormatStreakOptions = {
+  includeSeconds?: boolean;
+};
+
+export function formatStreakDuration(
+  durationMs: number,
+  now = Date.now(),
+  options?: FormatStreakOptions,
+): string {
+  if (durationMs <= 0) return options?.includeSeconds === false ? "0min" : "0s";
+  return formatCurrentStreak(now - durationMs, now, options);
 }
 
-export function formatCurrentStreak(quitDateMs: number, now = Date.now()): string {
+export function formatCurrentStreak(
+  quitDateMs: number,
+  now = Date.now(),
+  options?: FormatStreakOptions,
+): string {
+  const includeSeconds = options?.includeSeconds !== false;
   const elapsedMs = getStreakElapsedMs(quitDateMs, now);
-  if (elapsedMs <= 0) return "0s";
+  if (elapsedMs <= 0) return includeSeconds ? "0s" : "0min";
 
   const totalDays = Math.floor(elapsedMs / MS_DAY);
 
@@ -76,9 +95,9 @@ export function formatCurrentStreak(quitDateMs: number, now = Date.now()): strin
     const calendar = getCalendarStreakParts(quitDateMs, now);
     if (calendar) {
       const mode = totalDays >= 365 ? "years" : "months";
-      return formatProgressiveCalendar(calendar, mode);
+      return formatProgressiveCalendar(calendar, mode, includeSeconds);
     }
   }
 
-  return formatProgressiveShort(breakdownElapsedMs(elapsedMs));
+  return formatProgressiveShort(breakdownElapsedMs(elapsedMs), includeSeconds);
 }

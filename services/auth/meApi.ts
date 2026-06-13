@@ -2,6 +2,7 @@ import { API_URL } from "@/config/api";
 
 /** Profile fields from `GET /auth/me` — source of truth for the mobile app. */
 export type AuthMeResponse = {
+  userId: number;
   email: string;
   name?: string;
   hasCompletedOnboarding: boolean;

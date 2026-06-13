@@ -30,6 +30,8 @@ export function useCommunityPost(postId: string): CommunityPostDetail | null {
     const author = resolveCommunityAuthor(post.authorId, {
       authorsById: state.authorsById,
       currentUserImageUrl: appState.profile?.imageUrl,
+      onlineByUserId: state.onlineByUserId,
+      presenceReady: state.presenceReady,
     });
     if (!author) return null;
 
@@ -40,11 +42,21 @@ export function useCommunityPost(postId: string): CommunityPostDetail | null {
         const cAuthor = resolveCommunityAuthor(c.authorId, {
           authorsById: state.authorsById,
           currentUserImageUrl: appState.profile?.imageUrl,
+          onlineByUserId: state.onlineByUserId,
+          presenceReady: state.presenceReady,
         });
         return cAuthor ? { comment: c, author: cAuthor } : null;
       })
       .filter((c): c is { comment: PostComment; author: CommunityUser } => c !== null);
 
     return { post, author, comments };
-  }, [appState.profile?.imageUrl, postId, state.authorsById, state.commentsById, state.posts]);
+  }, [
+    appState.profile?.imageUrl,
+    postId,
+    state.authorsById,
+    state.commentsById,
+    state.onlineByUserId,
+    state.presenceReady,
+    state.posts,
+  ]);
 }

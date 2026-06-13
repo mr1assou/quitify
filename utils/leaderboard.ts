@@ -3,6 +3,7 @@ import { LEADERBOARD_NAMES } from "@/constants/leaderboardNames";
 import { MEDIAN_XP } from "@/constants/ranks";
 import type { LeaderboardEntry, LeaderboardRow, LeaderboardSnapshot } from "@/types/leaderboard";
 import { resolveBadgeIdForXp } from "@/utils/badges";
+import { resolveMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 /** How many players appear in the community list (ranks 1..N). */
 export const COMMUNITY_TOP_COUNT = 10;
 
@@ -37,6 +38,10 @@ function toEntry(
     isCurrentUser,
     badgeId,
     countryFlag,
+    isOnline: resolveMockOnlineStatus(
+      isCurrentUser ? "me" : `leaderboard-rank-${rank}`,
+      isCurrentUser,
+    ),
   };
 }
 

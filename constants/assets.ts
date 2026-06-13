@@ -18,3 +18,6 @@ export const CRAVING_STRONG_IMAGE = require("../assets/images/craving/strong.png
 
 /** VIP / premium badge for the header. */
 export const VIP_IMAGE = require("../assets/images/vip/vip.png");
+
+/** Empty chat thread greeting illustration. */
+export const GREETING_IMAGE = require("../assets/images/greeting/greeting.png");

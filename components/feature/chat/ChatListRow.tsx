@@ -3,6 +3,7 @@ import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
+import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatThreadPreview } from "@/hooks/useChat";
 import { getBadgeName } from "@/utils/badges";
@@ -14,7 +15,7 @@ type Props = {
 
 export function ChatListRow({ preview }: Props) {
   const { colors } = useTheme();
-  const { participant, lastMessage, unreadCount, threadId } = preview;
+  const { participant, lastMessage, unreadCount, threadId, lastOutgoingReadStatus } = preview;
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
 
@@ -33,6 +34,7 @@ export function ChatListRow({ preview }: Props) {
         rank={avatarRank}
         countryFlag={participant.countryFlag}
         size={52}
+        isOnline={participant.isOnline}
       />
 
       <View className="ml-3 flex-1">
@@ -62,6 +64,9 @@ export function ChatListRow({ preview }: Props) {
               {lastText}
             </Text>
           </Text>
+          {lastFromMe && lastOutgoingReadStatus ? (
+            <MessageReadTicks status={lastOutgoingReadStatus} />
+          ) : null}
           {unreadCount > 0 ? (
             <View
               className="ml-1 min-w-[20px] items-center justify-center rounded-full px-1.5 py-0.5"

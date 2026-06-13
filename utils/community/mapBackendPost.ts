@@ -4,6 +4,7 @@ import type { PostTagId } from "@/constants/postTags";
 import type { CommunityPost, CommunityUser, PostImageCrop, PostMediaFrame } from "@/types/community";
 import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/postsApi";
 import { resolveBadgeIdForSmokeFreeDays } from "@/utils/badges";
+import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 
 export function authorIdFromFeedPost(post: BackendFeedPostResponse): string {
   return post.is_mine ? CURRENT_USER_ID : `db-${post.author.user_id}`;
@@ -15,7 +16,7 @@ export function mapBackendAuthorToCommunityUser(
   const { author } = post;
   const id = authorIdFromFeedPost(post);
 
-  return {
+  return withMockOnlineStatus({
     id,
     name: author.username?.trim() || "Member",
     handle: author.username?.trim().toLowerCase() || `user${author.user_id}`,
@@ -28,7 +29,8 @@ export function mapBackendAuthorToCommunityUser(
     leaderboardRank: 0,
     isCurrentUser: post.is_mine,
     location: author.country ?? undefined,
-  };
+    isOnline: post.is_mine ? true : author.is_online,
+  });
 }
 
 function mapPostFields(

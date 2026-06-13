@@ -71,6 +71,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
           imageUrl={avatarUrl}
           size={44}
           flagLeft={-8}
+          isOnline={author.isOnline}
         />
 
         <View className="ml-3 min-w-0 flex-1">

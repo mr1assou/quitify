@@ -1,3 +1,71 @@
+/** Time-only last-seen fragment for chat headers (e.g. "2h ago", "today at 14:32"). */
+export function formatLastSeenAgo(timestamp: number, now = Date.now()): string {
+  const diff = Math.max(0, now - timestamp);
+  const minutes = Math.floor(diff / 60_000);
+
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes} min ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const at = formatClockTime(timestamp);
+  const d = new Date(timestamp);
+  const nowD = new Date(now);
+  const sameDay =
+    d.getFullYear() === nowD.getFullYear() &&
+    d.getMonth() === nowD.getMonth() &&
+    d.getDate() === nowD.getDate();
+
+  if (sameDay) return `today at ${at}`;
+
+  const yesterday = new Date(now - 24 * 60 * 60 * 1000);
+  if (
+    d.getFullYear() === yesterday.getFullYear() &&
+    d.getMonth() === yesterday.getMonth() &&
+    d.getDate() === yesterday.getDate()
+  ) {
+    return `yesterday at ${at}`;
+  }
+
+  const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return `${date} at ${at}`;
+}
+
+/** Human-readable last-seen line for chat headers (e.g. "Last seen 2h ago"). */
+export function formatLastSeen(timestamp: number, now = Date.now()): string {
+  const diff = Math.max(0, now - timestamp);
+  const minutes = Math.floor(diff / 60_000);
+
+  if (minutes < 1) return "Last seen just now";
+  if (minutes < 60) return `Last seen ${minutes} min ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `Last seen ${hours}h ago`;
+
+  const at = formatClockTime(timestamp);
+  const d = new Date(timestamp);
+  const nowD = new Date(now);
+  const sameDay =
+    d.getFullYear() === nowD.getFullYear() &&
+    d.getMonth() === nowD.getMonth() &&
+    d.getDate() === nowD.getDate();
+
+  if (sameDay) return `Last seen today at ${at}`;
+
+  const yesterday = new Date(now - 24 * 60 * 60 * 1000);
+  if (
+    d.getFullYear() === yesterday.getFullYear() &&
+    d.getMonth() === yesterday.getMonth() &&
+    d.getDate() === yesterday.getDate()
+  ) {
+    return `Last seen yesterday at ${at}`;
+  }
+
+  const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return `Last seen ${date} at ${at}`;
+}
+
 /** Compact human-readable "X ago" string for community feed / chat. */
 export function formatRelativeTime(timestamp: number, now = Date.now()): string {
   const diff = Math.max(0, now - timestamp);

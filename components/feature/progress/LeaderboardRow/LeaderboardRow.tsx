@@ -7,6 +7,7 @@ import { useTheme } from "@/context/ThemeContext";
 import type { LeaderboardEntry } from "@/types/leaderboard";
 import { getBadgeName } from "@/utils/badges";
 import { formatNumber } from "@/utils/format";
+import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
 import { safeRouter } from "@/utils/safeRouter";
 
 type Props = {
@@ -46,7 +47,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
 
   const openProfile = () => {
     if (entry.isCurrentUser) {
-      safeRouter.push("/profile");
+      navigateToSelfPlayerProfile();
       return;
     }
     safeRouter.push(`/player/${entry.rank}`);
@@ -59,9 +60,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
       ) : null}
       <Pressable
         onPress={openProfile}
-        className={`flex-row items-center px-3 py-3 active:opacity-80 ${
-          entry.isCurrentUser ? "rounded-2xl bg-accent/15 dark:bg-accent/20" : ""
-        }`}
+        className="flex-row items-center px-3 py-3 active:opacity-80"
         accessibilityRole="button"
         accessibilityLabel={`View ${entry.name}'s profile`}
       >
@@ -72,6 +71,8 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
           isCurrentUser={entry.isCurrentUser}
           rank={entry.rank}
           countryFlag={entry.countryFlag}
+          imageUrl={entry.imageUrl}
+          isOnline={entry.isOnline}
         />
 
         <View className="ml-3 min-w-0 flex-1">

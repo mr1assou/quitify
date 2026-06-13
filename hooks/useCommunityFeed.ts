@@ -114,8 +114,20 @@ export function useCommunityFeed() {
   }, []);
 
   const feed = useMemo(() => {
-    return buildFeedItems(state.posts, state.authorsById, appState.profile?.imageUrl);
-  }, [appState.profile?.imageUrl, state.authorsById, state.posts]);
+    return buildFeedItems(
+      state.posts,
+      state.authorsById,
+      appState.profile?.imageUrl,
+      state.onlineByUserId,
+      state.presenceReady,
+    );
+  }, [
+    appState.profile?.imageUrl,
+    state.authorsById,
+    state.onlineByUserId,
+    state.presenceReady,
+    state.posts,
+  ]);
 
   const hasActiveFilter = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
 

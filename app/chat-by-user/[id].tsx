@@ -1,36 +1,38 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
-import { getCommunityUser } from "@/constants/communityUsers";
 import { useCommunity } from "@/context/CommunityContext";
+import { resolveChatParticipant } from "@/utils/chat/resolveChatParticipant";
+import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
 
 /**
- * Helper route: opens (or creates) a chat thread for the given participant id
- * and replaces with `/chat/<threadId>`. Useful from a profile or search row
- * where the caller doesn't know the thread id yet.
+ * Opens (or creates) a 1:1 chat thread for the given participant id,
+ * then replaces with `/chat/<threadId>`.
  */
 export default function ChatByUserScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { state, sendMessage } = useCommunity();
-  const seededRef = useRef(false);
+  const { state, openChatThread } = useCommunity();
 
   useEffect(() => {
-    if (!id || !getCommunityUser(id)) {
-      router.replace("/chats");
+    if (!id) {
+      router.back();
       return;
     }
 
-    const existing = state.threads.find((t) => t.participantId === id);
-    if (existing) {
-      router.replace(`/chat/${existing.id}`);
+    const participant = resolveChatParticipant(
+      id,
+      state.authorsById,
+      getLeaderboardCache(),
+    );
+    if (!participant) {
+      router.back();
       return;
     }
 
-    if (seededRef.current) return;
-    seededRef.current = true;
-    // Seed a thread with a friendly opener so chat/[id] has something to load.
-    sendMessage(id, "👋");
-  }, [id, sendMessage, state.threads]);
+    const threadId = openChatThread(id);
+    router.replace(`/chat/${threadId}`);
+  }, [id, openChatThread, state.authorsById]);
 
   return <ThemedLoadingScreen />;
 }

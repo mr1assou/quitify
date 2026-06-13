@@ -1,5 +1,8 @@
 export type ChatMessageKind = "text" | "system";
 
+/** UI-only read receipt for outgoing messages. */
+export type MessageReadStatus = "seen" | "unseen";
+
 export type ChatMessage = {
   id: string;
   threadId: string;
@@ -7,6 +10,8 @@ export type ChatMessage = {
   text: string;
   createdAt: number;
   kind: ChatMessageKind;
+  /** Mock read receipt — only meaningful on messages sent by the current user. */
+  readStatus?: MessageReadStatus;
 };
 
 export type ChatThread = {

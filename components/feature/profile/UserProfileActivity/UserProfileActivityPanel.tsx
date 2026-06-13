@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Fragment, useState, type ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import { PostCard } from "@/components/feature/community/PostCard";
 import { useTheme } from "@/context/ThemeContext";
@@ -28,6 +28,7 @@ export function UserProfileActivity({ profile }: Props) {
       {tab === "posts" ? (
         <PostFeedList
           items={activity.postFeed}
+          loading={activity.loading}
           emptyIcon="document-text-outline"
           emptyMessage="No posts yet."
           showOwnerActions={profile.isCurrentUser}
@@ -38,7 +39,8 @@ export function UserProfileActivity({ profile }: Props) {
         <ActivityList
           emptyIcon="chatbubble-outline"
           emptyMessage="No comments yet."
-          isEmpty={activity.comments.length === 0}
+          isEmpty={!activity.loading && activity.comments.length === 0}
+          loading={activity.loading}
         >
           {activity.comments.map(({ comment, post }) => (
             <Pressable
@@ -66,6 +68,7 @@ export function UserProfileActivity({ profile }: Props) {
       {tab === "upvoted" ? (
         <PostFeedList
           items={activity.upvotedFeed}
+          loading={activity.loading}
           emptyIcon="caret-up-outline"
           emptyMessage="No upvoted posts yet."
           showOwnerActions={profile.isCurrentUser}
@@ -77,17 +80,24 @@ export function UserProfileActivity({ profile }: Props) {
 
 function PostFeedList({
   items,
+  loading,
   emptyIcon,
   emptyMessage,
   showOwnerActions,
 }: {
   items: FeedItem[];
+  loading: boolean;
   emptyIcon: keyof typeof Ionicons.glyphMap;
   emptyMessage: string;
   showOwnerActions?: boolean;
 }) {
   return (
-    <ActivityList emptyIcon={emptyIcon} emptyMessage={emptyMessage} isEmpty={items.length === 0}>
+    <ActivityList
+      emptyIcon={emptyIcon}
+      emptyMessage={emptyMessage}
+      isEmpty={!loading && items.length === 0}
+      loading={loading}
+    >
       {items.map((item, index) => (
         <Fragment key={item.post.id}>
           {index > 0 ? <View className="h-px bg-border dark:bg-d-border" /> : null}
@@ -105,13 +115,23 @@ function ActivityList({
   emptyIcon,
   emptyMessage,
   isEmpty,
+  loading,
 }: {
   children: ReactNode;
   emptyIcon: keyof typeof Ionicons.glyphMap;
   emptyMessage: string;
   isEmpty: boolean;
+  loading?: boolean;
 }) {
   const { colors } = useTheme();
+
+  if (loading) {
+    return (
+      <View className="items-center rounded-2xl bg-section py-10 dark:bg-d-surface">
+        <ActivityIndicator color={colors.accent} />
+      </View>
+    );
+  }
 
   if (isEmpty) {
     return (

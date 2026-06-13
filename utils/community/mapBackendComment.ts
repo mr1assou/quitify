@@ -3,6 +3,7 @@ import { CURRENT_USER_ID } from "@/constants/communityUsers";
 import type { CommunityUser, PostComment } from "@/types/community";
 import type { BackendFeedPostAuthor, BackendPostCommentResponse } from "@/types/postsApi";
 import { resolveBadgeIdForSmokeFreeDays } from "@/utils/badges";
+import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 
 export function authorIdFromComment(comment: BackendPostCommentResponse): string {
   return comment.is_mine ? CURRENT_USER_ID : `db-${comment.author.user_id}`;
@@ -14,7 +15,7 @@ export function mapCommentAuthorToCommunityUser(
   const { author } = comment;
   const id = authorIdFromComment(comment);
 
-  return {
+  return withMockOnlineStatus({
     id,
     name: author.username?.trim() || "Member",
     handle: author.username?.trim().toLowerCase() || `user${author.user_id}`,
@@ -27,7 +28,8 @@ export function mapCommentAuthorToCommunityUser(
     leaderboardRank: 0,
     isCurrentUser: comment.is_mine,
     location: author.country ?? undefined,
-  };
+    isOnline: comment.is_mine ? true : author.is_online,
+  });
 }
 
 export function mapBackendComment(comment: BackendPostCommentResponse): PostComment {

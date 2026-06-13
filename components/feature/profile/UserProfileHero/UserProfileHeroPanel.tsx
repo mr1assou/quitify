@@ -7,6 +7,8 @@ import { useTheme } from "@/context/ThemeContext";
 import type { PlayerProfile } from "@/types/playerProfile";
 import { getBadgeName } from "@/utils/badges";
 
+const ONLINE_COLOR = "#22C55E";
+
 type Props = {
   profile: PlayerProfile;
   isPremium?: boolean;
@@ -14,6 +16,32 @@ type Props = {
   onProfilePress?: () => void;
   onEditAvatarPress?: () => void;
 };
+
+function presenceLabel(isOnline?: boolean): string | null {
+  if (typeof isOnline !== "boolean") return null;
+  return isOnline ? "Online" : "Offline";
+}
+
+function ProfileSubtitle({
+  isOnline,
+  suffix,
+}: {
+  isOnline?: boolean;
+  suffix?: string;
+}) {
+  const { colors } = useTheme();
+  const label = presenceLabel(isOnline);
+  if (!label) return null;
+
+  return (
+    <Text className="text-sm">
+      <Text style={{ color: isOnline ? ONLINE_COLOR : colors.mutedForeground }}>{label}</Text>
+      {suffix ? (
+        <Text className="text-muted-foreground dark:text-d-muted">{` · ${suffix}`}</Text>
+      ) : null}
+    </Text>
+  );
+}
 
 export function UserProfileHero({
   profile,
@@ -26,6 +54,7 @@ export function UserProfileHero({
   const badgeName = getBadgeName(profile.badgeId);
   const avatarRank = profile.rank > 0 ? profile.rank : 1;
   const canEditAvatar = profile.isCurrentUser && Boolean(onEditAvatarPress);
+  const showOnlineDot = typeof profile.isOnline === "boolean" && !canEditAvatar;
 
   const avatar = (
     <View>
@@ -36,11 +65,12 @@ export function UserProfileHero({
         countryFlag={profile.countryFlag}
         imageUrl={profile.avatarUrl}
         size={variant === "menu" ? 96 : 88}
+        isOnline={showOnlineDot ? profile.isOnline : undefined}
       />
       {canEditAvatar ? (
         <Pressable
           onPress={onEditAvatarPress}
-          className="absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full bg-primary"
+          className="absolute bottom-0 right-0 z-10 h-8 w-8 items-center justify-center rounded-full bg-primary"
           accessibilityLabel="Change profile photo"
         >
           <Ionicons name="camera" size={16} color="#fff" />
@@ -66,10 +96,10 @@ export function UserProfileHero({
           </Text>
         </Pressable>
 
-        <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">
-          {profile.countryLabel}
-          {` · ${isPremium ? "Premium member" : "Member"}`}
-        </Text>
+        <ProfileSubtitle
+          isOnline={profile.isOnline}
+          suffix={isPremium ? "Premium member" : "Member"}
+        />
       </View>
     );
   }
@@ -84,10 +114,12 @@ export function UserProfileHero({
             {profile.name}
           </Text>
 
-          <Text className="mt-0.5 text-sm text-muted-foreground dark:text-d-muted">
-            {profile.countryLabel}
-            {profile.isCurrentUser ? ` · ${isPremium ? "Premium member" : "Member"}` : ""}
-          </Text>
+          <ProfileSubtitle
+            isOnline={profile.isOnline}
+            suffix={
+              profile.isCurrentUser ? (isPremium ? "Premium member" : "Member") : undefined
+            }
+          />
 
           <View className="mt-3 flex-row items-center gap-2.5">
             <BadgeArt badgeId={profile.badgeId} size={44} />
@@ -106,9 +138,11 @@ export function UserProfileHero({
         </View>
       </View>
 
-      <Text className="mt-4 text-sm leading-5 text-foreground dark:text-d-text">
-        {profile.bio}
-      </Text>
+      {profile.bio ? (
+        <Text className="mt-4 text-sm leading-5 text-foreground dark:text-d-text">
+          {profile.bio}
+        </Text>
+      ) : null}
     </View>
   );
 }

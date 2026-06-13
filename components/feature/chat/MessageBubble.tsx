@@ -1,16 +1,18 @@
 import { Text, View } from "react-native";
 
-import type { ChatMessage } from "@/types/chat";
+import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
+import type { ChatMessage, MessageReadStatus } from "@/types/chat";
 import { formatClockTime } from "@/utils/community";
 
 type Props = {
   message: ChatMessage;
   fromMe: boolean;
+  readStatus?: MessageReadStatus;
   /** Show timestamp under bubble — usually only on the last in a group. */
   showTimestamp?: boolean;
 };
 
-export function MessageBubble({ message, fromMe, showTimestamp = true }: Props) {
+export function MessageBubble({ message, fromMe, readStatus, showTimestamp = true }: Props) {
   if (message.kind === "system") {
     return (
       <View className="my-1 items-center">
@@ -20,6 +22,9 @@ export function MessageBubble({ message, fromMe, showTimestamp = true }: Props) 
       </View>
     );
   }
+
+  const status = fromMe ? (readStatus ?? message.readStatus ?? "unseen") : undefined;
+  const time = formatClockTime(message.createdAt);
 
   return (
     <View className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}>
@@ -38,10 +43,24 @@ export function MessageBubble({ message, fromMe, showTimestamp = true }: Props) 
         >
           {message.text}
         </Text>
+
+        {fromMe && status ? (
+          <View className="mt-1 flex-row items-center justify-end gap-1">
+            <Text className="text-[10px] text-white/70">{time}</Text>
+            <MessageReadTicks status={status} onPrimary />
+          </View>
+        ) : null}
       </View>
-      {showTimestamp ? (
-        <Text className={`mt-1 text-[10px] text-muted-foreground dark:text-d-muted ${fromMe ? "mr-2" : "ml-2"}`}>
-          {formatClockTime(message.createdAt)}
+
+      {showTimestamp && !fromMe ? (
+        <Text className="ml-2 mt-1 text-[10px] text-muted-foreground dark:text-d-muted">
+          {time}
+        </Text>
+      ) : null}
+
+      {showTimestamp && fromMe && !status ? (
+        <Text className="mr-2 mt-1 text-[10px] text-muted-foreground dark:text-d-muted">
+          {time}
         </Text>
       ) : null}
     </View>

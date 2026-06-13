@@ -16,6 +16,10 @@ export type CommunityUser = {
   location?: string;
   /** Custom avatar from API (R2 profile folder). */
   avatarUrl?: string;
+  /** UI-only presence indicator (mock until real-time status exists). */
+  isOnline?: boolean;
+  /** UI-only last offline time (epoch ms). */
+  lastSeenAt?: number;
 };
 
 export type PostVote = "up" | "down";

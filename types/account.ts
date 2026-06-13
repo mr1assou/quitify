@@ -1,4 +1,5 @@
 export type UserAccount = {
+  userId?: number;
   name?: string;
   email: string;
   createdAt: number;

@@ -45,6 +45,7 @@ export type BackendFeedPostAuthor = {
   countryFlag: string | null;
   image_url: string | null;
   smoke_free_days: number;
+  is_online: boolean;
 };
 
 export type BackendFeedPostResponse = BackendPostResponse & {

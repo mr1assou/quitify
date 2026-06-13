@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
-import { useNow } from "@/hooks/useNow";
 import type { PlayerProfile } from "@/types/playerProfile";
 import type { ProfileStreak } from "@/types/profileStreak";
 import { formatNumber } from "@/utils/format";
@@ -16,21 +15,28 @@ type Props = {
 
 export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { colors } = useTheme();
-  const now = useNow(streak ? 1000 : 60_000);
+
+  /** Fixed snapshot — profile streak tiles should not tick live. */
+  const snapshotNow = useMemo(
+    () => Date.now(),
+    [streak?.streakStart, streak?.attemptNumber, streak?.maxDurationMs],
+  );
 
   const currentStreakLabel = useMemo(() => {
-    if (streak) return formatCurrentStreak(streak.streakStart, now);
+    if (streak) {
+      return formatCurrentStreak(streak.streakStart, snapshotNow, { includeSeconds: false });
+    }
     return `${profile.smokeFreeDays}d`;
-  }, [profile.smokeFreeDays, streak, now]);
+  }, [profile.smokeFreeDays, snapshotNow, streak]);
 
   const bestStreakLabel = useMemo(() => {
     if (streak) {
-      const currentDurationMs = getStreakElapsedMs(streak.streakStart, now);
+      const currentDurationMs = getStreakElapsedMs(streak.streakStart, snapshotNow);
       const bestDurationMs = Math.max(streak.maxDurationMs ?? 0, currentDurationMs);
-      return formatStreakDuration(bestDurationMs, now);
+      return formatStreakDuration(bestDurationMs, snapshotNow, { includeSeconds: false });
     }
     return `${profile.bestSmokeFreeDays}d`;
-  }, [profile.bestSmokeFreeDays, streak, now]);
+  }, [profile.bestSmokeFreeDays, snapshotNow, streak]);
 
   return (
     <View className="gap-3">

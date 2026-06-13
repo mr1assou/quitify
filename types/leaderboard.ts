@@ -1,4 +1,6 @@
 export type LeaderboardEntry = {
+  /** Database user id when loaded from the API. */
+  userId?: number;
   rank: number;
   name: string;
   xp: number;
@@ -7,6 +9,10 @@ export type LeaderboardEntry = {
   badgeId: string;
   /** PNG flag URL shown on the profile avatar. */
   countryFlag: string;
+  countryCode?: string;
+  imageUrl?: string;
+  /** UI-only online presence (mock until WebSocket/backend). */
+  isOnline?: boolean;
 };
 
 export type LeaderboardGap = {

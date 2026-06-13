@@ -6,12 +6,16 @@ export function buildFeedItems(
   posts: CommunityPost[],
   authorsById: Record<string, CommunityUser> = {},
   currentUserImageUrl?: string,
+  onlineByUserId?: Record<number, boolean>,
+  presenceReady = false,
 ): FeedItem[] {
   return posts
     .map<FeedItem | null>((post) => {
       const author = resolveCommunityAuthor(post.authorId, {
         authorsById,
         currentUserImageUrl,
+        onlineByUserId,
+        presenceReady,
       });
       if (!author) return null;
 

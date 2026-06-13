@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { usePlayerProfileStreak } from "@/hooks/usePlayerProfileStreak";
 import { ProfileImageEditorModal } from "@/components/feature/profile/ProfileImageEditorModal";
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
 import { UserProfileContent } from "@/components/feature/profile/UserProfileContent";
@@ -14,6 +15,7 @@ type Props = {
 
 export function PlayerProfileScreen({ profile }: Props) {
   const [avatarEditorOpen, setAvatarEditorOpen] = useState(false);
+  const streak = usePlayerProfileStreak(profile);
 
   if (!profile) {
     return (
@@ -37,6 +39,7 @@ export function PlayerProfileScreen({ profile }: Props) {
           <UserProfileContent
             profile={profile}
             showActions
+            streak={streak}
             onEditAvatarPress={
               profile.isCurrentUser ? () => setAvatarEditorOpen(true) : undefined
             }

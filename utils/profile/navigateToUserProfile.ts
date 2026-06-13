@@ -9,9 +9,8 @@ type NavigateToUserProfileOptions = {
   currentUserRank?: number;
 };
 
-export function navigateToSelfPlayerProfile(rank: number) {
-  if (!Number.isFinite(rank) || rank < 1) return;
-  safeRouter.push(`/player/${rank}`);
+export function navigateToSelfPlayerProfile(_rank?: number) {
+  safeRouter.push("/player/me");
 }
 
 export function navigateToUserProfile(

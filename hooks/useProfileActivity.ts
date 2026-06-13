@@ -1,58 +1,142 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
-import type { CommunityPost, FeedItem, PostComment } from "@/types/community";
+import {
+  fetchUserComments,
+  fetchUserPosts,
+  fetchUserUpvotedPosts,
+} from "@/services/users/userProfileApi";
 import type { PlayerProfile } from "@/types/playerProfile";
+import type { CommunityPost, FeedItem, PostComment } from "@/types/community";
 import { buildFeedItems } from "@/utils/community/buildFeedItems";
-import { resolveProfileCommunityUserId } from "@/utils/profile/communityProfileLinks";
+import { mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
+import { resolveProfileCommunityUserId, resolveProfileUserId } from "@/utils/profile/resolveProfileUserId";
 
 export type ProfileActivityComment = {
   comment: PostComment;
   post: CommunityPost;
 };
 
-function syntheticUpvotedPosts(
-  profile: PlayerProfile,
-  posts: CommunityPost[],
+type ProfileActivityState = {
+  postFeed: FeedItem[];
+  comments: ProfileActivityComment[];
+  upvotedFeed: FeedItem[];
+  communityUserId: string;
+  loading: boolean;
+};
+
+const EMPTY_ACTIVITY: ProfileActivityState = {
+  postFeed: [],
+  comments: [],
+  upvotedFeed: [],
+  communityUserId: "",
+  loading: false,
+};
+
+function mapProfileComments(
+  items: Awaited<ReturnType<typeof fetchUserComments>>["items"],
   communityUserId: string,
-): CommunityPost[] {
-  return posts
-    .filter((post) => post.authorId !== communityUserId)
-    .filter((post, index) => (profile.rank * 7 + index) % 5 === 0)
-    .sort((a, b) => b.createdAt - a.createdAt);
+): ProfileActivityComment[] {
+  return items.map((item) => ({
+    comment: {
+      id: String(item.comment_id),
+      postId: String(item.post_id),
+      authorId: communityUserId,
+      text: item.text,
+      createdAt: new Date(item.created_at).getTime(),
+    },
+    post: {
+      id: String(item.post.post_id),
+      authorId: "",
+      title: item.post.title,
+      text: item.post.description,
+      createdAt: 0,
+      upvoteCount: 0,
+      downvoteCount: 0,
+      shareCount: 0,
+      commentIds: [],
+    },
+  }));
 }
 
-export function useProfileActivity(profile: PlayerProfile) {
-  const { state } = useCommunity();
+export function useProfileActivity(profile: PlayerProfile): ProfileActivityState {
   const { state: appState } = useApp();
+  const { state: communityState } = useCommunity();
   const communityUserId = resolveProfileCommunityUserId(profile);
+  const userId = resolveProfileUserId(profile, appState.account?.userId);
   const currentUserImageUrl = appState.profile?.imageUrl;
 
-  return useMemo(() => {
-    const posts = state.posts
-      .filter((post) => post.authorId === communityUserId)
-      .sort((a, b) => b.createdAt - a.createdAt);
+  const [activity, setActivity] = useState<ProfileActivityState>({
+    ...EMPTY_ACTIVITY,
+    communityUserId,
+    loading: Boolean(userId),
+  });
 
-    const postFeed = buildFeedItems(posts, state.authorsById, currentUserImageUrl);
+  useEffect(() => {
+    if (!userId) {
+      setActivity({ ...EMPTY_ACTIVITY, communityUserId });
+      return;
+    }
 
-    const comments: ProfileActivityComment[] = Object.values(state.commentsById)
-      .filter((comment) => comment.authorId === communityUserId)
-      .map((comment) => {
-        const post = state.posts.find((item) => item.id === comment.postId);
-        return post ? { comment, post } : null;
-      })
-      .filter((item): item is ProfileActivityComment => item != null)
-      .sort((a, b) => b.comment.createdAt - a.comment.createdAt);
+    let cancelled = false;
+    setActivity((prev) => ({ ...prev, loading: true, communityUserId }));
 
-    const upvotedPosts = profile.isCurrentUser
-      ? state.posts
-          .filter((post) => post.myVote === "up")
-          .sort((a, b) => b.createdAt - a.createdAt)
-      : syntheticUpvotedPosts(profile, state.posts, communityUserId);
+    void (async () => {
+      try {
+        const [postsPage, commentsPage, upvotedPage] = await Promise.all([
+          fetchUserPosts(userId),
+          fetchUserComments(userId),
+          fetchUserUpvotedPosts(userId),
+        ]);
 
-    const upvotedFeed = buildFeedItems(upvotedPosts, state.authorsById, currentUserImageUrl);
+        if (cancelled) return;
 
-    return { postFeed, comments, upvotedFeed, communityUserId };
-  }, [communityUserId, currentUserImageUrl, profile, state.authorsById, state.commentsById, state.posts]);
+        const postsMapped = mapFeedPostsFromApi(postsPage.items);
+        const upvotedMapped = mapFeedPostsFromApi(upvotedPage.items);
+        const authorsById = {
+          ...postsMapped.authorsById,
+          ...upvotedMapped.authorsById,
+          ...communityState.authorsById,
+        };
+
+        setActivity({
+          communityUserId,
+          loading: false,
+          postFeed: buildFeedItems(
+            postsMapped.posts,
+            authorsById,
+            currentUserImageUrl,
+            communityState.onlineByUserId,
+            communityState.presenceReady,
+          ),
+          comments: mapProfileComments(commentsPage.items, communityUserId),
+          upvotedFeed: buildFeedItems(
+            upvotedMapped.posts,
+            authorsById,
+            currentUserImageUrl,
+            communityState.onlineByUserId,
+            communityState.presenceReady,
+          ),
+        });
+      } catch {
+        if (!cancelled) {
+          setActivity({ ...EMPTY_ACTIVITY, communityUserId, loading: false });
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    communityState.authorsById,
+    communityState.onlineByUserId,
+    communityState.presenceReady,
+    communityUserId,
+    currentUserImageUrl,
+    userId,
+  ]);
+
+  return activity;
 }

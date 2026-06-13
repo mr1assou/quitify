@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Alert, Pressable, Share, Text, View } from "react-native";
 
+import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { PlayerProfile } from "@/types/playerProfile";
+import { mapPlayerProfileToCommunityUser } from "@/utils/chat/mapPlayerProfileToCommunityUser";
 import { resolveProfileCommunityUserId } from "@/utils/profile/communityProfileLinks";
 import { safeRouter } from "@/utils/safeRouter";
 
@@ -12,10 +14,12 @@ type Props = {
 
 export function UserProfileActions({ profile }: Props) {
   const { colors } = useTheme();
+  const { upsertAuthor } = useCommunity();
 
   const onMessage = () => {
-    const userId = resolveProfileCommunityUserId(profile);
-    safeRouter.push(`/chat-by-user/${userId}`);
+    const participantId = resolveProfileCommunityUserId(profile);
+    upsertAuthor(mapPlayerProfileToCommunityUser(profile, participantId));
+    safeRouter.push(`/chat-by-user/${participantId}`);
   };
 
   const onInvite = async () => {

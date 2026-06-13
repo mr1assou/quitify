@@ -15,9 +15,10 @@ export function useGoogleSignIn() {
   const [isReady, setIsReady] = useState(true);
 
   useEffect(() => {
-    void WebBrowser.warmUpAsync();
+    // Optional Android perf hint — fails harmlessly if Chrome Custom Tabs isn't available.
+    void WebBrowser.warmUpAsync().catch(() => {});
     return () => {
-      void WebBrowser.coolDownAsync();
+      void WebBrowser.coolDownAsync().catch(() => {});
     };
   }, []);
 

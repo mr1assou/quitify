@@ -1,9 +1,14 @@
 import { useMemo } from "react";
 
 import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
+import {
+  LEADERBOARD_STATIC_BADGE_ID,
+  LEADERBOARD_STATIC_FREEDOM_POINTS,
+} from "@/constants/leaderboardPlaceholders";
 import { useApp } from "@/context/AppContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import type { PlayerProfile } from "@/types/playerProfile";
+import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
 import { buildPlayerProfile } from "@/utils/leaderboard/playerProfilePresentation";
 
 export function useSelfPlayerProfile(): PlayerProfile | null {
@@ -11,18 +16,43 @@ export function useSelfPlayerProfile(): PlayerProfile | null {
   const leaderboard = useLeaderboard();
 
   return useMemo(() => {
-    if (!leaderboard) return null;
-
-    const entry = leaderboard.currentUser;
     const profile = state.profile;
-    const name = state.account?.name?.trim() || profile?.name?.trim() || entry.name;
+    if (!profile) return null;
 
-    return buildPlayerProfile(entry, leaderboard.totalUsers, {
-      name,
-      countryFlag:
-        resolveCountryFlagUrl(profile?.countryFlag, profile?.countryCode) ?? entry.countryFlag,
-      countryCode: profile?.countryCode,
-      avatarUrl: profile?.imageUrl,
-    });
-  }, [leaderboard, state.account?.name, state.profile]);
+    const snapshot = leaderboard ?? getLeaderboardCache();
+    const name = state.account?.name?.trim() || profile.name?.trim() || "You";
+    const countryFlag =
+      resolveCountryFlagUrl(profile.countryFlag, profile.countryCode) ??
+      snapshot?.currentUser.countryFlag;
+
+    if (snapshot) {
+      return buildPlayerProfile(snapshot.currentUser, snapshot.totalUsers, {
+        name,
+        countryFlag,
+        countryCode: profile.countryCode,
+        avatarUrl: profile.imageUrl,
+      });
+    }
+
+    return buildPlayerProfile(
+      {
+        userId: state.account?.userId,
+        rank: 1,
+        name,
+        xp: LEADERBOARD_STATIC_FREEDOM_POINTS,
+        isCurrentUser: true,
+        badgeId: LEADERBOARD_STATIC_BADGE_ID,
+        countryFlag: countryFlag ?? "",
+        imageUrl: profile.imageUrl,
+        isOnline: true,
+      },
+      1,
+      {
+        name,
+        countryFlag,
+        countryCode: profile.countryCode,
+        avatarUrl: profile.imageUrl,
+      },
+    );
+  }, [leaderboard, state.account?.name, state.account?.userId, state.profile]);
 }

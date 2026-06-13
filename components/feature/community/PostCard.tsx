@@ -37,11 +37,20 @@ export function PostCard({ item, showOwnerActions = false }: Props) {
         const cAuthor = resolveCommunityAuthor(comment.authorId, {
           authorsById: state.authorsById,
           currentUserImageUrl: appState.profile?.imageUrl,
+          onlineByUserId: state.onlineByUserId,
+          presenceReady: state.presenceReady,
         });
         return cAuthor ? { comment, author: cAuthor } : null;
       })
       .filter((c): c is NonNullable<typeof c> => c !== null);
-  }, [appState.profile?.imageUrl, post.commentIds, state.authorsById, state.commentsById]);
+  }, [
+    appState.profile?.imageUrl,
+    post.commentIds,
+    state.authorsById,
+    state.commentsById,
+    state.onlineByUserId,
+    state.presenceReady,
+  ]);
 
   const openPost = () => safeRouter.push(`/post/${post.id}`);
 

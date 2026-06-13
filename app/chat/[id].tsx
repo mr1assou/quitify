@@ -5,13 +5,20 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
+import { ChatEmptyGreeting } from "@/components/feature/chat/ChatEmptyGreeting";
 import { MessageBubble } from "@/components/feature/chat/MessageBubble";
 import { MessageComposer } from "@/components/feature/chat/MessageComposer";
 import { useCommunity } from "@/context/CommunityContext";
 import { useChatThread } from "@/hooks/useChat";
 import type { CallKind, ChatMessage } from "@/types/chat";
+import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
 
-type Row = { message: ChatMessage; fromMe: boolean; showTimestamp: boolean };
+type Row = {
+  message: ChatMessage;
+  fromMe: boolean;
+  showTimestamp: boolean;
+  readStatus?: "seen" | "unseen";
+};
 
 export default function ChatThreadScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,6 +43,10 @@ export default function ChatThreadScreen() {
         message,
         fromMe: message.senderId === "me",
         showTimestamp,
+        readStatus:
+          message.senderId === "me"
+            ? resolveOutgoingReadStatus(message, detail.messages)
+            : undefined,
       };
     });
   }, [detail]);
@@ -80,18 +91,12 @@ export default function ChatThreadScreen() {
               message={item.message}
               fromMe={item.fromMe}
               showTimestamp={item.showTimestamp}
+              readStatus={item.readStatus}
             />
           )}
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: false })}
           ListEmptyComponent={
-            <View className="mt-12 items-center">
-              <Text className="text-base font-semibold text-foreground dark:text-d-text">
-                Say hi to {detail.participant.name}
-              </Text>
-              <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">
-                Be kind. We're all quitting together.
-              </Text>
-            </View>
+            <ChatEmptyGreeting participantName={detail.participant.name} />
           }
         />
 

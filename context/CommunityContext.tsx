@@ -35,6 +35,10 @@ type State = {
   commentsById: Record<string, PostComment>;
   threads: ChatThread[];
   messagesById: Record<string, ChatMessage>;
+  /** Live presence keyed by database user id (from WebSocket / Redis). */
+  onlineByUserId: Record<number, boolean>;
+  /** True after the first presence:snapshot from the server. */
+  presenceReady: boolean;
 };
 
 type Action =
@@ -62,7 +66,12 @@ type Action =
   | { type: "UPDATE_POST"; post: CommunityPost }
   | { type: "DELETE_POST"; postId: string }
   | { type: "PATCH_AUTHOR"; authorId: string; patch: Partial<CommunityUser> }
+  | { type: "SET_PRESENCE_SNAPSHOT"; onlineUserIds: number[] }
+  | { type: "PATCH_PRESENCE"; userId: number; isOnline: boolean }
+  | { type: "CLEAR_PRESENCE" }
   | { type: "SEND_MESSAGE"; participantId: string; text: string }
+  | { type: "ENSURE_CHAT_THREAD"; participantId: string; threadId: string }
+  | { type: "UPSERT_AUTHOR"; author: CommunityUser }
   | { type: "MARK_THREAD_READ"; threadId: string };
 
 function byId<T extends { id: string }>(arr: T[]): Record<string, T> {
@@ -75,6 +84,8 @@ const initialState: State = {
   commentsById: {},
   threads: SEED_THREADS,
   messagesById: byId(SEED_MESSAGES),
+  onlineByUserId: {},
+  presenceReady: false,
 };
 
 function newId(prefix: string): string {
@@ -186,13 +197,62 @@ function reducer(state: State, action: Action): State {
 
     case "PATCH_AUTHOR": {
       const existing = state.authorsById[action.authorId];
-      if (!existing) return state;
+      const authorsById = existing
+        ? {
+            ...state.authorsById,
+            [action.authorId]: { ...existing, ...action.patch },
+          }
+        : state.authorsById;
+
+      return { ...state, authorsById };
+    }
+
+    case "SET_PRESENCE_SNAPSHOT": {
+      const onlineByUserId: Record<number, boolean> = {};
+      for (const userId of action.onlineUserIds) {
+        if (Number.isFinite(userId) && userId > 0) {
+          onlineByUserId[userId] = true;
+        }
+      }
+      return { ...state, onlineByUserId, presenceReady: true };
+    }
+
+    case "PATCH_PRESENCE": {
       return {
         ...state,
-        authorsById: {
-          ...state.authorsById,
-          [action.authorId]: { ...existing, ...action.patch },
+        onlineByUserId: {
+          ...state.onlineByUserId,
+          [action.userId]: action.isOnline,
         },
+      };
+    }
+
+    case "CLEAR_PRESENCE": {
+      return { ...state, onlineByUserId: {}, presenceReady: false };
+    }
+
+    case "UPSERT_AUTHOR": {
+      return {
+        ...state,
+        authorsById: { ...state.authorsById, [action.author.id]: action.author },
+      };
+    }
+
+    case "ENSURE_CHAT_THREAD": {
+      const existing = state.threads.find((t) => t.participantId === action.participantId);
+      if (existing) return state;
+
+      return {
+        ...state,
+        threads: [
+          {
+            id: action.threadId,
+            participantId: action.participantId,
+            messageIds: [],
+            lastReadAt: Date.now(),
+          },
+          ...state.threads,
+        ],
       };
     }
 
@@ -209,6 +269,7 @@ function reducer(state: State, action: Action): State {
         text,
         createdAt: now,
         kind: "text",
+        readStatus: "unseen",
       };
 
       const messagesById = { ...state.messagesById, [message.id]: message };
@@ -259,7 +320,12 @@ type CommunityContextValue = {
   updatePost: (postId: string, payload: UpdatePostPayload) => Promise<void>;
   deletePost: (postId: string) => void;
   patchAuthor: (authorId: string, patch: Partial<CommunityUser>) => void;
+  upsertAuthor: (author: CommunityUser) => void;
+  setPresenceSnapshot: (onlineUserIds: number[]) => void;
+  patchPresence: (userId: number, isOnline: boolean) => void;
+  clearPresence: () => void;
   sendMessage: (participantId: string, text: string) => void;
+  openChatThread: (participantId: string) => string;
   markThreadRead: (threadId: string) => void;
 };
 
@@ -350,6 +416,34 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "PATCH_AUTHOR", authorId, patch });
   }, []);
 
+  const upsertAuthor = useCallback((author: CommunityUser) => {
+    dispatch({ type: "UPSERT_AUTHOR", author });
+  }, []);
+
+  const openChatThread = useCallback(
+    (participantId: string): string => {
+      const existing = state.threads.find((thread) => thread.participantId === participantId);
+      if (existing) return existing.id;
+
+      const threadId = newId("thread");
+      dispatch({ type: "ENSURE_CHAT_THREAD", participantId, threadId });
+      return threadId;
+    },
+    [state.threads],
+  );
+
+  const setPresenceSnapshot = useCallback((onlineUserIds: number[]) => {
+    dispatch({ type: "SET_PRESENCE_SNAPSHOT", onlineUserIds });
+  }, []);
+
+  const patchPresence = useCallback((userId: number, isOnline: boolean) => {
+    dispatch({ type: "PATCH_PRESENCE", userId, isOnline });
+  }, []);
+
+  const clearPresence = useCallback(() => {
+    dispatch({ type: "CLEAR_PRESENCE" });
+  }, []);
+
   const sendMessage = useCallback((participantId: string, text: string) => {
     dispatch({ type: "SEND_MESSAGE", participantId, text });
   }, []);
@@ -371,7 +465,12 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       updatePost,
       deletePost,
       patchAuthor,
+      upsertAuthor,
+      setPresenceSnapshot,
+      patchPresence,
+      clearPresence,
       sendMessage,
+      openChatThread,
       markThreadRead,
     }),
     [
@@ -386,7 +485,12 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       updatePost,
       deletePost,
       patchAuthor,
+      upsertAuthor,
+      setPresenceSnapshot,
+      patchPresence,
+      clearPresence,
       sendMessage,
+      openChatThread,
       markThreadRead,
     ],
   );

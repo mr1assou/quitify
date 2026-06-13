@@ -1,25 +1,33 @@
 import { useMemo } from "react";
 
-import { getCommunityUser } from "@/constants/communityUsers";
 import { useCommunity } from "@/context/CommunityContext";
-import type { ChatMessage } from "@/types/chat";
+import type { ChatMessage, MessageReadStatus } from "@/types/chat";
 import type { CommunityUser } from "@/types/community";
+import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
+import { resolveChatParticipant } from "@/utils/chat/resolveChatParticipant";
+import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
 
 export type ChatThreadPreview = {
   threadId: string;
   participant: CommunityUser;
   lastMessage: ChatMessage | null;
   unreadCount: number;
+  lastOutgoingReadStatus?: MessageReadStatus;
 };
 
 /** Chat list — threads sorted by most recent activity. */
 export function useChatThreads(): ChatThreadPreview[] {
   const { state } = useCommunity();
+  const leaderboard = getLeaderboardCache();
 
   return useMemo(() => {
     return state.threads
       .map<ChatThreadPreview | null>((thread) => {
-        const participant = getCommunityUser(thread.participantId);
+        const participant = resolveChatParticipant(
+          thread.participantId,
+          state.authorsById,
+          leaderboard,
+        );
         if (!participant) return null;
 
         const messages = thread.messageIds
@@ -30,8 +38,18 @@ export function useChatThreads(): ChatThreadPreview[] {
         const unreadCount = messages.filter(
           (m) => m.senderId !== "me" && m.createdAt > thread.lastReadAt,
         ).length;
+        const lastOutgoingReadStatus =
+          lastMessage?.senderId === "me"
+            ? resolveOutgoingReadStatus(lastMessage, messages)
+            : undefined;
 
-        return { threadId: thread.id, participant, lastMessage, unreadCount };
+        return {
+          threadId: thread.id,
+          participant,
+          lastMessage,
+          unreadCount,
+          lastOutgoingReadStatus,
+        };
       })
       .filter((t): t is ChatThreadPreview => t !== null)
       .sort((a, b) => {
@@ -39,7 +57,7 @@ export function useChatThreads(): ChatThreadPreview[] {
         const bt = b.lastMessage?.createdAt ?? 0;
         return bt - at;
       });
-  }, [state.threads, state.messagesById]);
+  }, [leaderboard, state.authorsById, state.messagesById, state.threads]);
 }
 
 export type ChatThreadDetail = {
@@ -50,11 +68,17 @@ export type ChatThreadDetail = {
 
 export function useChatThread(threadId: string): ChatThreadDetail | null {
   const { state } = useCommunity();
+  const leaderboard = getLeaderboardCache();
 
   return useMemo(() => {
     const thread = state.threads.find((t) => t.id === threadId);
     if (!thread) return null;
-    const participant = getCommunityUser(thread.participantId);
+
+    const participant = resolveChatParticipant(
+      thread.participantId,
+      state.authorsById,
+      leaderboard,
+    );
     if (!participant) return null;
 
     const messages = thread.messageIds
@@ -62,7 +86,7 @@ export function useChatThread(threadId: string): ChatThreadDetail | null {
       .filter((m): m is ChatMessage => Boolean(m));
 
     return { threadId: thread.id, participant, messages };
-  }, [threadId, state.threads, state.messagesById]);
+  }, [leaderboard, threadId, state.authorsById, state.messagesById, state.threads]);
 }
 
 /** Total unread across all threads (for badges). */

@@ -1,6 +1,7 @@
 import { resolveCountryLabel } from "@/constants/leaderboardCountries";
 import type { LeaderboardEntry } from "@/types/leaderboard";
 import type { PlayerProfile } from "@/types/playerProfile";
+import { dbAuthorId } from "@/utils/community/presence";
 import { estimateSmokeFreeDaysFromXp } from "@/utils/badges";
 
 const MEMBER_SINCE = [
@@ -16,17 +17,7 @@ const MEMBER_SINCE = [
   "Aug 2025",
 ];
 
-function syntheticBio(name: string, smokeFreeDays: number): string {
-  if (smokeFreeDays >= 365) {
-    return `${name} is building a long-term smoke-free life and supporting others on the same journey.`;
-  }
-  if (smokeFreeDays >= 90) {
-    return `${name} is staying consistent, earning Freedom points, and climbing the global ranks.`;
-  }
-  return `${name} is focused on daily progress, healthier habits, and staying accountable.`;
-}
-
-export function memberSinceLabelForRank(rank: number): string {
+function memberSinceLabelForRank(rank: number): string {
   return MEMBER_SINCE[Math.abs(rank - 1) % MEMBER_SINCE.length];
 }
 
@@ -55,7 +46,14 @@ export function buildPlayerProfile(
   const name = overrides?.name ?? entry.name;
 
   return {
-    id: entry.isCurrentUser ? "me" : `lb-${entry.rank}`,
+    id: entry.userId
+      ? entry.isCurrentUser
+        ? "me"
+        : dbAuthorId(entry.userId)
+      : entry.isCurrentUser
+        ? "me"
+        : `lb-${entry.rank}`,
+    userId: entry.userId,
     name,
     rank: entry.rank,
     totalPlayers,
@@ -64,11 +62,12 @@ export function buildPlayerProfile(
     countryFlag: overrides?.countryFlag ?? entry.countryFlag,
     countryLabel:
       overrides?.countryLabel ??
-      resolveCountryLabel(overrides?.countryCode, entry.rank),
+      resolveCountryLabel(overrides?.countryCode ?? entry.countryCode, entry.rank),
+    isOnline: entry.isOnline ?? entry.isCurrentUser,
     smokeFreeDays,
     bestSmokeFreeDays: bestSmokeFreeDaysForRank(smokeFreeDays, entry.rank),
     isCurrentUser: entry.isCurrentUser,
-    bio: overrides?.bio ?? syntheticBio(name, smokeFreeDays),
+    bio: overrides?.bio ?? "",
     memberSinceLabel: memberSinceLabelForRank(entry.rank),
     avatarUrl: overrides?.avatarUrl,
   };

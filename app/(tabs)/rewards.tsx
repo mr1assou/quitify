@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AchievementSectionTabs } from "@/components/feature/achievement/AchievementSectionTabs";
@@ -17,7 +17,7 @@ export default function AchievementScreen() {
   const leaderboard = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
-  if (!progress || !leaderboard) return null;
+  if (!progress) return null;
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
@@ -28,7 +28,13 @@ export default function AchievementScreen() {
           <AchievementSectionTabs value={section} onChange={setSection} />
 
           {section === "rank" ? (
-            <RankLeaderboard leaderboard={leaderboard} />
+            leaderboard ? (
+              <RankLeaderboard leaderboard={leaderboard} />
+            ) : (
+              <View className="items-center py-16">
+                <ActivityIndicator />
+              </View>
+            )
           ) : (
             <>
               <NextBadgeCard badge={progress.nextBadge} />
