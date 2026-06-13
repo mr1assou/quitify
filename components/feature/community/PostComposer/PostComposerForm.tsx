@@ -14,6 +14,8 @@ export function PostComposerForm() {
     updateImageFrame,
     updateImageCrop,
     canPost,
+    isPosting,
+    isEditing,
     onPost,
   } = usePostComposer();
 
@@ -23,7 +25,7 @@ export function PostComposerForm() {
       className="flex-1"
       keyboardVerticalOffset={Platform.OS === "ios" ? 8 : 0}
     >
-      <PostComposerHeader />
+      <PostComposerHeader isEditing={isEditing} />
       <PostComposerContent
         draft={draft}
         onUpdate={updateDraft}
@@ -32,7 +34,12 @@ export function PostComposerForm() {
         onFrameChange={updateImageFrame}
         onCropChange={updateImageCrop}
       />
-      <PostComposerFooter canPost={canPost} onPost={onPost} />
+      <PostComposerFooter
+        canPost={canPost}
+        isPosting={isPosting}
+        onPost={onPost}
+        submitLabel={isEditing ? "Save" : "Post"}
+      />
     </KeyboardAvoidingView>
   );
 }

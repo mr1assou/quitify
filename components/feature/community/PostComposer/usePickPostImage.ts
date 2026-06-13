@@ -2,8 +2,13 @@ import * as ImagePicker from "expo-image-picker";
 import { useCallback } from "react";
 import { Alert } from "react-native";
 
+export type PickedPostImage = {
+  uri: string;
+  mimeType?: string | null;
+};
+
 export function usePickPostImage() {
-  const pickImages = useCallback(async (): Promise<string[]> => {
+  const pickImages = useCallback(async (): Promise<PickedPostImage[]> => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
       Alert.alert("Permission needed", "Allow photo access to attach images to your post.");
@@ -12,13 +17,15 @@ export function usePickPostImage() {
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
-      allowsMultipleSelection: true,
-      selectionLimit: 10,
+      allowsMultipleSelection: false,
       quality: 0.85,
     });
 
     if (result.canceled) return [];
-    return result.assets.map((asset) => asset.uri).filter(Boolean);
+    const asset = result.assets[0];
+    if (!asset?.uri) return [];
+
+    return [{ uri: asset.uri, mimeType: asset.mimeType }];
   }, []);
 
   return { pickImages };

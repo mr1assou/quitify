@@ -1,9 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
+import {
+  communityFeedFilterSummary,
+  isDefaultCommunityFeedFilter,
+} from "@/constants/communityFeedFilter";
 import { useTheme } from "@/context/ThemeContext";
-import { useChatUnreadTotal } from "@/hooks/useChat";
+import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
+import { safeRouter } from "@/utils/safeRouter";
+
+import { CommunityFeedFilterModal } from "./CommunityFeedFilterModal";
 
 type ToolbarAction = {
   icon: keyof typeof Ionicons.glyphMap;
@@ -12,37 +19,72 @@ type ToolbarAction = {
   onPress: () => void;
 };
 
-export function CommunityToolbar() {
+type Props = {
+  filter: CommunityFeedFilter;
+  onFilterChange: (filter: CommunityFeedFilter) => void;
+};
+
+export function CommunityToolbar({ filter, onFilterChange }: Props) {
   const { colors } = useTheme();
-  const unread = useChatUnreadTotal();
+  const [filterOpen, setFilterOpen] = useState(false);
+  const filterActive = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
 
   const actions: ToolbarAction[] = [
     {
-      icon: "chatbubbles-outline",
-      label: "Messages",
-      badge: unread > 0 ? unread : undefined,
-      onPress: () => router.push("/chats"),
-    },
-    {
       icon: "add-outline",
       label: "Post",
-      onPress: () => router.push("/post-composer"),
+      onPress: () => safeRouter.push("/post-composer"),
     },
     {
       icon: "search-outline",
       label: "Search",
-      onPress: () => router.push("/community-search"),
+      onPress: () => safeRouter.push("/community-search"),
     },
   ];
 
   return (
-    <View className="flex-row items-center justify-end px-6 pb-2 pt-3">
-      <View className="flex-row items-center gap-1">
-        {actions.map((action) => (
-          <ToolbarIcon key={action.label} action={action} colors={colors} />
-        ))}
+    <>
+      <View className="flex-row items-center justify-between px-6 pb-2 pt-3">
+        <Pressable
+          onPress={() => setFilterOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Filter posts"
+          className="h-10 max-w-[52%] flex-row items-center rounded-full bg-section px-3 dark:bg-d-surface"
+        >
+          <Ionicons
+            name="options-outline"
+            size={18}
+            color={filterActive ? colors.primary : colors.mutedForeground}
+          />
+          <Text
+            className="ml-1.5 flex-1 text-xs font-semibold"
+            numberOfLines={1}
+            style={{ color: filterActive ? colors.primary : colors.foreground }}
+          >
+            {communityFeedFilterSummary(filter.sort, filter.tagId)}
+          </Text>
+          {filterActive ? (
+            <View
+              className="ml-1 h-2 w-2 rounded-full"
+              style={{ backgroundColor: colors.primary }}
+            />
+          ) : null}
+        </Pressable>
+
+        <View className="flex-row items-center gap-1">
+          {actions.map((action) => (
+            <ToolbarIcon key={action.label} action={action} colors={colors} />
+          ))}
+        </View>
       </View>
-    </View>
+
+      <CommunityFeedFilterModal
+        visible={filterOpen}
+        filter={filter}
+        onApply={onFilterChange}
+        onClose={() => setFilterOpen(false)}
+      />
+    </>
   );
 }
 

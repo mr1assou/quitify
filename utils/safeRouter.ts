@@ -17,9 +17,10 @@ function withNavLock(action: () => void) {
   }, NAV_LOCK_MS);
 }
 
-/** Router wrappers that ignore duplicate push/replace/back within a short window. */
+/** Router wrappers that ignore duplicate navigation within a short window. */
 export const safeRouter = {
-  push: (href: Href) => withNavLock(() => expoRouter.push(href)),
+  /** Uses navigate (not push) so the same screen is not stacked twice. */
+  push: (href: Href) => withNavLock(() => expoRouter.navigate(href)),
   replace: (href: Href) => withNavLock(() => expoRouter.replace(href)),
   back: () => withNavLock(() => expoRouter.back()),
 };

@@ -16,6 +16,7 @@ export type AuthMeResponse = {
   cigarettesPerDay?: number;
   cigarettesPerPack?: number;
   packPrice?: string;
+  imageUrl?: string;
   timezone?: string;
   slipCigarettesTotal?: number;
   currentAttemptNumber?: number;

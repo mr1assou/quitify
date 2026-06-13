@@ -12,4 +12,5 @@ export type PlayerProfile = {
   isCurrentUser: boolean;
   bio: string;
   memberSinceLabel: string;
+  avatarUrl?: string;
 };

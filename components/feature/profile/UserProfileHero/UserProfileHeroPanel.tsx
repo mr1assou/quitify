@@ -1,7 +1,9 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
+import { useTheme } from "@/context/ThemeContext";
 import type { PlayerProfile } from "@/types/playerProfile";
 import { getBadgeName } from "@/utils/badges";
 
@@ -10,6 +12,7 @@ type Props = {
   isPremium?: boolean;
   variant?: "full" | "menu";
   onProfilePress?: () => void;
+  onEditAvatarPress?: () => void;
 };
 
 export function UserProfileHero({
@@ -17,9 +20,34 @@ export function UserProfileHero({
   isPremium = false,
   variant = "full",
   onProfilePress,
+  onEditAvatarPress,
 }: Props) {
+  const { colors } = useTheme();
   const badgeName = getBadgeName(profile.badgeId);
   const avatarRank = profile.rank > 0 ? profile.rank : 1;
+  const canEditAvatar = profile.isCurrentUser && Boolean(onEditAvatarPress);
+
+  const avatar = (
+    <View>
+      <LeaderboardAvatar
+        name={profile.name}
+        isCurrentUser={profile.isCurrentUser}
+        rank={avatarRank}
+        countryFlag={profile.countryFlag}
+        imageUrl={profile.avatarUrl}
+        size={variant === "menu" ? 96 : 88}
+      />
+      {canEditAvatar ? (
+        <Pressable
+          onPress={onEditAvatarPress}
+          className="absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full bg-primary"
+          accessibilityLabel="Change profile photo"
+        >
+          <Ionicons name="camera" size={16} color="#fff" />
+        </Pressable>
+      ) : null}
+    </View>
+  );
 
   if (variant === "menu") {
     return (
@@ -31,13 +59,7 @@ export function UserProfileHero({
           accessibilityRole="button"
           accessibilityLabel={`View ${profile.name}'s profile`}
         >
-          <LeaderboardAvatar
-            name={profile.name}
-            isCurrentUser={profile.isCurrentUser}
-            rank={avatarRank}
-            countryFlag={profile.countryFlag}
-            size={96}
-          />
+          {avatar}
 
           <Text className="mt-4 text-2xl font-bold text-foreground dark:text-d-text">
             {profile.name}
@@ -55,13 +77,7 @@ export function UserProfileHero({
   return (
     <View className="px-6">
       <View className="flex-row items-center gap-4">
-        <LeaderboardAvatar
-          name={profile.name}
-          isCurrentUser={profile.isCurrentUser}
-          rank={avatarRank}
-          countryFlag={profile.countryFlag}
-          size={88}
-        />
+        {avatar}
 
         <View className="min-w-0 flex-1">
           <Text className="text-2xl font-bold text-foreground dark:text-d-text">

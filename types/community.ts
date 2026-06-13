@@ -14,6 +14,8 @@ export type CommunityUser = {
   leaderboardRank: number;
   isCurrentUser?: boolean;
   location?: string;
+  /** Custom avatar from API (R2 profile folder). */
+  avatarUrl?: string;
 };
 
 export type PostVote = "up" | "down";
@@ -52,6 +54,8 @@ export type CommunityPost = {
   myVote: PostVote | null;
   shareCount: number;
   commentIds: string[];
+  /** Total comments from API when thread ids are not loaded yet. */
+  commentCount?: number;
 };
 
 export type PostComment = {
@@ -65,5 +69,4 @@ export type PostComment = {
 export type FeedItem = {
   post: CommunityPost;
   author: CommunityUser;
-  previewComments: Array<{ comment: PostComment; author: CommunityUser }>;
 };

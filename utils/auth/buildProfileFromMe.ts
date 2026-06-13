@@ -24,6 +24,7 @@ export function buildProfileFromMe(me: AuthMeResponse): UserProfile {
     cigarettesPerPack: me.cigarettesPerPack ?? DEFAULT_CIGARETTES_PER_PACK,
     packCost: parsePackPrice(me.packPrice),
     countryFlag: me.countryFlag,
+    imageUrl: me.imageUrl,
     currency: me.currency ?? "USD",
   };
 }

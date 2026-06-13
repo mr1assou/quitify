@@ -9,11 +9,9 @@ import type { CommunityUser } from "@/types/community";
 import { normalizeSearch } from "@/utils/community";
 
 /**
- * Searching by user ID == matching the user's @handle (since that's the
- * public identifier we display everywhere). Falls back to name + id so the
- * same input works for "amina", "@aminaq" or the raw "user-amina".
+ * Match community users by username (@handle), display name, or internal id.
  */
-function searchUsersById(rawQuery: string): CommunityUser[] {
+function searchUsersByUsername(rawQuery: string): CommunityUser[] {
   const needle = normalizeSearch(rawQuery.replace(/^@/, ""));
   if (!needle) return [];
 
@@ -30,48 +28,38 @@ export function UserSearchPanel() {
   const { colors } = useTheme();
   const trimmed = query.trim();
 
-  const results = useMemo(() => searchUsersById(trimmed), [trimmed]);
+  const results = useMemo(() => searchUsersByUsername(trimmed), [trimmed]);
 
   return (
     <View className="px-6 pt-2">
-      <View className="flex-row items-center rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
-        <Ionicons name="at" size={18} color={colors.mutedForeground} />
+      <View className="flex-row items-center rounded-xl bg-section px-3 py-2 dark:bg-d-surface">
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Enter a user ID or @handle"
+          placeholder="Enter username"
           placeholderTextColor={colors.mutedForeground}
           autoCapitalize="none"
           autoCorrect={false}
-          style={{ flex: 1, marginLeft: 10, color: colors.foreground, fontSize: 15 }}
+          style={{ flex: 1, color: colors.foreground, fontSize: 14, paddingVertical: 4 }}
           returnKeyType="search"
         />
         {query.length > 0 ? (
           <Ionicons
             name="close-circle"
-            size={18}
+            size={16}
             color={colors.mutedForeground}
             onPress={() => setQuery("")}
           />
         ) : null}
       </View>
 
-      <Text className="px-1 pt-2 text-xs text-muted-foreground dark:text-d-muted">
-        Tip: try a handle like <Text className="font-bold">@aminaq</Text> or a name like{" "}
-        <Text className="font-bold">amina</Text>.
-      </Text>
-
       {!trimmed ? (
-        <EmptyState
-          icon="search"
-          title="Find someone by ID"
-          subtitle="Type a user's @handle or name to look them up."
-        />
+        <EmptyState icon="search" title="Find someone by username" />
       ) : results.length === 0 ? (
         <EmptyState
           icon="alert-circle-outline"
           title="No user found"
-          subtitle={`Nothing matches “${trimmed}”. Double-check the @handle.`}
+          subtitle={`Nothing matches “${trimmed}”. Double-check the username.`}
         />
       ) : (
         <View className="mt-4 gap-2">
@@ -91,7 +79,7 @@ function EmptyState({
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
-  subtitle: string;
+  subtitle?: string;
 }) {
   const { colors } = useTheme();
   return (
@@ -100,9 +88,11 @@ function EmptyState({
         <Ionicons name={icon} size={24} color={colors.mutedForeground} />
       </View>
       <Text className="mt-3 text-base font-bold text-foreground dark:text-d-text">{title}</Text>
-      <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
-        {subtitle}
-      </Text>
+      {subtitle ? (
+        <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
+          {subtitle}
+        </Text>
+      ) : null}
     </View>
   );
 }

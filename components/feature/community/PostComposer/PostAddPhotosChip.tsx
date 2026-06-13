@@ -22,7 +22,7 @@ export function PostAddPhotosChip({ onPress, className, embedded = false }: Prop
     >
       <Ionicons name="add" size={16} color={colors.mutedForeground} />
       <Text className="ml-1.5 text-sm font-semibold" style={{ color: colors.mutedForeground }}>
-        Add photos
+        Add photo
       </Text>
     </Pressable>
   );

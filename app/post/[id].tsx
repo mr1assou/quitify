@@ -18,6 +18,7 @@ import { PostContent } from "@/components/feature/community/PostContent";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityPost } from "@/hooks/useCommunityPost";
+import { resolveCommentCount } from "@/utils/community/postEngagement";
 
 const HEADER_HEIGHT = 52;
 
@@ -81,13 +82,13 @@ export default function PostDetailScreen() {
         >
           <View className="px-6 pt-2">
             <PostHeader author={author} createdAt={post.createdAt} />
-            <PostContent post={post} className="mt-4" mediaVariant="detail" />
+            <PostContent post={post} className="mt-4" />
 
             <PostActions
               upvoteCount={post.upvoteCount}
               downvoteCount={post.downvoteCount}
               myVote={post.myVote}
-              commentCount={post.commentIds.length}
+              commentCount={resolveCommentCount(post)}
               shareCount={post.shareCount}
               onVote={(vote) => votePost(post.id, vote)}
               onComment={() => {}}
@@ -99,17 +100,11 @@ export default function PostDetailScreen() {
 
           <View className="px-6 pt-2">
             <Text className="pt-2 text-xs font-bold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              {post.commentIds.length} comments
+              {resolveCommentCount(post)} comments
             </Text>
-            {comments.length === 0 ? (
-              <Text className="mt-6 text-center text-sm text-muted-foreground dark:text-d-muted">
-                Be the first to leave a kind word.
-              </Text>
-            ) : (
-              comments.map(({ comment, author: cAuthor }) => (
-                <CommentRow key={comment.id} comment={comment} author={cAuthor} />
-              ))
-            )}
+            {comments.map(({ comment, author: cAuthor }) => (
+              <CommentRow key={comment.id} comment={comment} author={cAuthor} />
+            ))}
           </View>
         </ScrollView>
 

@@ -15,3 +15,6 @@ export const SMOKED_RESULT_IMAGE = require("../assets/images/smoked/smoked_resul
 
 /** Shown at the start of the craving session. */
 export const CRAVING_STRONG_IMAGE = require("../assets/images/craving/strong.png");
+
+/** VIP / premium badge for the header. */
+export const VIP_IMAGE = require("../assets/images/vip/vip.png");

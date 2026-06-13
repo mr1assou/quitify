@@ -1,15 +1,137 @@
-import { useMemo } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import {
+  DEFAULT_COMMUNITY_FEED_FILTER,
+  isDefaultCommunityFeedFilter,
+} from "@/constants/communityFeedFilter";
+import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
+import { fetchPosts } from "@/services/posts/postsApi";
 import type { FeedItem } from "@/types/community";
+import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
 import { buildFeedItems } from "@/utils/community/buildFeedItems";
+import { mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
 
-/** Feed for the Community tab: posts + author + preview comments, newest first. */
-export function useCommunityFeed(): FeedItem[] {
-  const { state } = useCommunity();
+type LoadMode = "replace" | "append";
 
-  return useMemo(() => {
-    const sorted = [...state.posts].sort((a, b) => b.createdAt - a.createdAt);
-    return buildFeedItems(sorted, state.commentsById);
-  }, [state.posts, state.commentsById]);
+type LoadOptions = {
+  /** Replace feed without showing loading or pull-to-refresh indicators. */
+  silent?: boolean;
+};
+
+/** Feed for the Community tab — paginated from the API (10 posts per page). */
+export function useCommunityFeed() {
+  const { state, setPosts, appendPosts } = useCommunity();
+  const { state: appState } = useApp();
+  const [filter, setFilter] = useState<CommunityFeedFilter>(DEFAULT_COMMUNITY_FEED_FILTER);
+  const [loading, setLoading] = useState(() => state.posts.length === 0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const requestIdRef = useRef(0);
+  const didMountFilterRef = useRef(false);
+
+  const loadPosts = useCallback(
+    async (
+      activeFilter: CommunityFeedFilter,
+      mode: LoadMode,
+      offset: number,
+      options: LoadOptions = {},
+    ) => {
+      const requestId = ++requestIdRef.current;
+      const isAppend = mode === "append";
+      const isSilent = options.silent === true;
+
+      if (isAppend) {
+        setLoadingMore(true);
+      } else if (!isSilent) {
+        setLoading(true);
+      }
+
+      try {
+        const page = await fetchPosts(activeFilter, { offset });
+        if (requestId !== requestIdRef.current) return;
+
+        const { posts, authorsById } = mapFeedPostsFromApi(page.items);
+        if (isAppend) {
+          appendPosts(posts, authorsById);
+        } else {
+          setPosts(posts, authorsById);
+        }
+        setHasMore(page.has_more);
+        setError(null);
+      } catch {
+        if (requestId !== requestIdRef.current) return;
+        if (!isAppend && !isSilent) {
+          setError("Could not load posts. Pull to refresh or try again later.");
+        }
+      } finally {
+        if (requestId !== requestIdRef.current) return;
+        if (isAppend) {
+          setLoadingMore(false);
+        } else if (!isSilent) {
+          setLoading(false);
+        }
+      }
+    },
+    [appendPosts, setPosts],
+  );
+
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await loadPosts(filter, "replace", 0, { silent: true });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [filter, loadPosts]);
+
+  const loadMore = useCallback(() => {
+    if (loading || loadingMore || refreshing || !hasMore) return;
+    void loadPosts(filter, "append", state.posts.length);
+  }, [filter, hasMore, loadPosts, loading, loadingMore, refreshing, state.posts.length]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (state.posts.length === 0) {
+        void loadPosts(filter, "replace", 0);
+      }
+    }, [filter, loadPosts, state.posts.length]),
+  );
+
+  useEffect(() => {
+    if (!didMountFilterRef.current) {
+      didMountFilterRef.current = true;
+      return;
+    }
+    void loadPosts(filter, "replace", 0, { silent: true });
+  }, [filter, loadPosts]);
+
+  const applyFilter = useCallback((next: CommunityFeedFilter) => {
+    setFilter(next);
+  }, []);
+
+  const feed = useMemo(() => {
+    return buildFeedItems(state.posts, state.authorsById, appState.profile?.imageUrl);
+  }, [appState.profile?.imageUrl, state.authorsById, state.posts]);
+
+  const hasActiveFilter = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
+
+  return {
+    feed,
+    loading,
+    refreshing,
+    loadingMore,
+    hasMore,
+    error,
+    refresh,
+    loadMore,
+    filter,
+    applyFilter,
+    hasActiveFilter,
+  };
 }
+
+export type { FeedItem };

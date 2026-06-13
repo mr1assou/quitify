@@ -55,6 +55,7 @@ export function PostComposerContent({
           value={draft.body}
           onChangeText={(body) => onUpdate({ body })}
           onPickImages={onPickImages}
+          showAddPhoto={draft.images.length === 0}
         />
         <PostImageSection
           images={draft.images}

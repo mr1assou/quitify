@@ -1,0 +1,175 @@
+import { authenticatedFetch } from "@/services/api/authenticatedFetch";
+import type { PostVote } from "@/types/community";
+import type {
+  AllowedImageContentType,
+  BackendFeedPageResponse,
+  BackendPostCommentResponse,
+  BackendPostEngagement,
+  BackendPostResponse,
+  CreatePostPayload,
+  PresignedUploadResponse,
+} from "@/types/postsApi";
+import type { UpdatePostPayload } from "@/types/updatePost";
+import { DEFAULT_COMMUNITY_FEED_FILTER, COMMUNITY_FEED_PAGE_SIZE } from "@/constants/communityFeedFilter";
+import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
+import { buildPostsQueryString } from "@/utils/community/buildPostsQueryString";
+import type { PostsQueryPagination } from "@/utils/community/buildPostsQueryString";
+
+async function parseErrorMessage(res: Response, fallback: string): Promise<string> {
+  try {
+    const body = (await res.json()) as { message?: string | string[] };
+    if (Array.isArray(body.message)) return body.message[0] ?? fallback;
+    if (body.message) return body.message;
+  } catch {
+    // ignore parse errors
+  }
+  return fallback;
+}
+
+export async function requestPostUploadUrl(
+  contentType: AllowedImageContentType,
+): Promise<PresignedUploadResponse> {
+  const res = await authenticatedFetch("/upload-url", {
+    method: "POST",
+    body: JSON.stringify({ contentType }),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not prepare image upload"));
+  }
+
+  return res.json() as Promise<PresignedUploadResponse>;
+}
+
+export async function uploadImageToPresignedUrl(
+  uploadUrl: string,
+  localUri: string,
+  contentType: AllowedImageContentType,
+): Promise<void> {
+  const fileResponse = await fetch(localUri);
+  const blob = await fileResponse.blob();
+
+  const res = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: { "Content-Type": contentType },
+    body: blob,
+  });
+
+  if (!res.ok) {
+    throw new Error("Image upload failed");
+  }
+}
+
+export async function fetchPosts(
+  filter: CommunityFeedFilter = DEFAULT_COMMUNITY_FEED_FILTER,
+  pagination: PostsQueryPagination = {},
+): Promise<BackendFeedPageResponse> {
+  const query = buildPostsQueryString(filter, {
+    offset: pagination.offset ?? 0,
+    limit: pagination.limit ?? COMMUNITY_FEED_PAGE_SIZE,
+  });
+  const res = await authenticatedFetch(`/posts${query}`);
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not load posts"));
+  }
+
+  return res.json() as Promise<BackendFeedPageResponse>;
+}
+
+export async function createPost(payload: CreatePostPayload): Promise<BackendPostResponse> {
+  const res = await authenticatedFetch("/posts", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not create post"));
+  }
+
+  return res.json() as Promise<BackendPostResponse>;
+}
+
+export async function updatePost(
+  postId: string,
+  payload: UpdatePostPayload,
+): Promise<BackendPostResponse> {
+  const res = await authenticatedFetch(`/posts/${postId}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not update post"));
+  }
+
+  return res.json() as Promise<BackendPostResponse>;
+}
+
+export async function deletePost(postId: string): Promise<{ post_id: number }> {
+  const res = await authenticatedFetch(`/posts/${postId}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not delete post"));
+  }
+
+  return res.json() as Promise<{ post_id: number }>;
+}
+
+export async function voteOnPost(
+  postId: string,
+  vote: PostVote,
+): Promise<BackendPostEngagement> {
+  const res = await authenticatedFetch(`/posts/${postId}/vote`, {
+    method: "POST",
+    body: JSON.stringify({ vote }),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not update vote"));
+  }
+
+  return res.json() as Promise<BackendPostEngagement>;
+}
+
+export async function sharePost(postId: string): Promise<BackendPostEngagement> {
+  const res = await authenticatedFetch(`/posts/${postId}/share`, {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not share post"));
+  }
+
+  return res.json() as Promise<BackendPostEngagement>;
+}
+
+export async function fetchPostComments(
+  postId: string,
+): Promise<BackendPostCommentResponse[]> {
+  const res = await authenticatedFetch(`/posts/${postId}/comments`);
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not load comments"));
+  }
+
+  return res.json() as Promise<BackendPostCommentResponse[]>;
+}
+
+export async function createPostComment(
+  postId: string,
+  text: string,
+): Promise<BackendPostCommentResponse> {
+  const res = await authenticatedFetch(`/posts/${postId}/comments`, {
+    method: "POST",
+    body: JSON.stringify({ text }),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not post comment"));
+  }
+
+  return res.json() as Promise<BackendPostCommentResponse>;
+}

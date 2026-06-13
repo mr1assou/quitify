@@ -22,6 +22,7 @@ export function useSelfPlayerProfile(): PlayerProfile | null {
       countryFlag:
         resolveCountryFlagUrl(profile?.countryFlag, profile?.countryCode) ?? entry.countryFlag,
       countryCode: profile?.countryCode,
+      avatarUrl: profile?.imageUrl,
     });
   }, [leaderboard, state.account?.name, state.profile]);
 }

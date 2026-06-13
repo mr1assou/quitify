@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ComponentProps, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { Image, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -10,7 +10,6 @@ import Animated, {
 
 import type { PostImageCrop } from "@/types/community";
 import {
-  canPanCrop,
   cropFromPixelOffsets,
   getCoverScale,
   MAX_CROP_SCALE,
@@ -22,11 +21,17 @@ import {
 
 import { PostImageCropGrid } from "./PostImageCropGrid";
 
+export type PostImageCropEditorHandle = {
+  /** Commits in-progress pan/zoom and returns the latest crop. */
+  flush: () => PostImageCrop;
+};
+
 type Props = {
   uri: string;
   aspectRatio: number;
   crop: PostImageCrop;
   onCropChange: (crop: PostImageCrop) => void;
+  maskShape?: "rectangle" | "circle";
 };
 
 function clampOffsetsWorklet(
@@ -80,7 +85,11 @@ function applyClampedOffsets(
   offsetY.value = clamped.offsetY;
 }
 
-export function PostImageCropEditor({ uri, aspectRatio, crop, onCropChange }: Props) {
+export const PostImageCropEditor = forwardRef<PostImageCropEditorHandle, Props>(
+  function PostImageCropEditor(
+    { uri, aspectRatio, crop, onCropChange, maskShape = "rectangle" },
+    ref,
+  ) {
   const [containerWidth, setContainerWidth] = useState(0);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const prevAspectRatio = useRef(aspectRatio);
@@ -169,13 +178,8 @@ export function PostImageCropEditor({ uri, aspectRatio, crop, onCropChange }: Pr
     normalizedCrop,
   ]);
 
-  const canPan = useMemo(
-    () => containerWidth > 0 && imageSize.width > 0 && canPanCrop(container, imageSize, normalizedCrop),
-    [container, containerWidth, imageSize, normalizedCrop],
-  );
-
   const commitCrop = (nextScale: number, nextX: number, nextY: number) => {
-    if (containerWidth <= 0 || imageSize.width <= 0) return;
+    if (containerWidth <= 0 || imageSize.width <= 0) return crop;
 
     const nextCrop = cropFromPixelOffsets(container, imageSize, nextScale, nextX, nextY);
     const pixels = resolvePixelOffsets(container, imageSize, nextCrop);
@@ -184,7 +188,16 @@ export function PostImageCropEditor({ uri, aspectRatio, crop, onCropChange }: Pr
     offsetX.value = pixels.offsetX;
     offsetY.value = pixels.offsetY;
     onCropChange(nextCrop);
+    return nextCrop;
   };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      flush: () => commitCrop(scale.value, offsetX.value, offsetY.value),
+    }),
+    [container, containerWidth, crop, imageSize, onCropChange, scale, offsetX, offsetY],
+  );
 
   const pinch = Gesture.Pinch()
     .onBegin(() => {
@@ -204,7 +217,6 @@ export function PostImageCropEditor({ uri, aspectRatio, crop, onCropChange }: Pr
     });
 
   const pan = Gesture.Pan()
-    .enabled(canPan)
     .onBegin(() => {
       isAdjusting.value = 1;
       panStartX.value = offsetX.value;
@@ -258,25 +270,30 @@ export function PostImageCropEditor({ uri, aspectRatio, crop, onCropChange }: Pr
     opacity: isAdjusting.value,
   }));
 
+  const maskRadius =
+    maskShape === "circle" && containerWidth > 0 ? containerWidth / 2 : 12;
+
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View
-        style={[styles.container, { aspectRatio }]}
+        style={[styles.container, { aspectRatio, borderRadius: maskRadius }]}
         onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
       >
         {containerWidth > 0 ? (
           <Animated.Image source={{ uri }} style={imageStyle} resizeMode="cover" />
         ) : null}
-        {containerWidth > 0 ? <PostImageCropGrid style={gridStyle} /> : null}
+        {containerWidth > 0 ? (
+          <PostImageCropGrid style={gridStyle} shape={maskShape} radius={maskRadius} />
+        ) : null}
       </Animated.View>
     </GestureDetector>
   );
-}
+},
+);
 
 const styles = StyleSheet.create({
   container: {
     overflow: "hidden",
-    borderRadius: 12,
     backgroundColor: "#000",
   },
 });

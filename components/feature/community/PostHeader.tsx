@@ -8,8 +8,9 @@ import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
+import { useProgress } from "@/hooks/useProgress";
 import type { CommunityUser } from "@/types/community";
-import { getBadgeName } from "@/utils/badges";
+import { getBadgeName, resolveHighestUnlockedBadgeId } from "@/utils/badges";
 import { formatRelativeTime } from "@/utils/community";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
@@ -24,7 +25,14 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
   const { colors } = useTheme();
   const { state } = useApp();
   const leaderboard = useLeaderboard();
-  const badgeName = getBadgeName(author.badgeId);
+  const progress = useProgress();
+
+  const badgeId =
+    author.isCurrentUser && progress
+      ? (resolveHighestUnlockedBadgeId(progress.badges, state.isPremium) ?? author.badgeId)
+      : author.badgeId;
+
+  const badgeName = getBadgeName(badgeId);
 
   const avatarRank = useMemo(() => {
     if (author.isCurrentUser && leaderboard) return leaderboard.currentUser.rank;
@@ -39,11 +47,20 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
     );
   }, [author.countryFlag, author.isCurrentUser, state.profile?.countryCode, state.profile?.countryFlag]);
 
+  const avatarUrl = useMemo(() => {
+    if (author.isCurrentUser && state.profile?.imageUrl) return state.profile.imageUrl;
+    return author.avatarUrl;
+  }, [author.avatarUrl, author.isCurrentUser, state.profile?.imageUrl]);
+
   return (
     <View className="flex-row items-center">
       <Pressable
         hitSlop={6}
-        onPress={() => navigateToUserProfile(author)}
+        onPress={() =>
+          navigateToUserProfile(author, {
+            currentUserRank: author.isCurrentUser ? avatarRank : undefined,
+          })
+        }
         className="min-w-0 flex-1 flex-row items-center"
       >
         <LeaderboardAvatar
@@ -51,7 +68,9 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
           isCurrentUser={!!author.isCurrentUser}
           rank={avatarRank}
           countryFlag={countryFlag}
+          imageUrl={avatarUrl}
           size={44}
+          flagLeft={-8}
         />
 
         <View className="ml-3 min-w-0 flex-1">
@@ -63,7 +82,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
           </Text>
 
           <View className="mt-1 flex-row items-center gap-2">
-            <BadgeArt badgeId={author.badgeId} size={22} />
+            <BadgeArt badgeId={badgeId} size={22} />
             <Text
               className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
               numberOfLines={1}

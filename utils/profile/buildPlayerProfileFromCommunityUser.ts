@@ -29,5 +29,6 @@ export function buildPlayerProfileFromCommunityUser(
     isCurrentUser: false,
     bio: user.bio,
     memberSinceLabel: memberSinceLabelForRank(user.leaderboardRank),
+    avatarUrl: user.avatarUrl,
   };
 }

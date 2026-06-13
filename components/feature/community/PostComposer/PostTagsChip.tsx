@@ -38,7 +38,7 @@ export function PostTagsChip({ selectedTagId, onPress, onClear }: Props) {
     >
       <Ionicons name="add" size={16} color={colors.mutedForeground} />
       <Text className="ml-1.5 text-sm font-semibold" style={{ color: colors.mutedForeground }}>
-        Add tags
+        Choose a tag *
       </Text>
     </Pressable>
   );

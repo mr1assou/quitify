@@ -4,7 +4,11 @@ import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
 
-export function PostComposerHeader() {
+type Props = {
+  isEditing?: boolean;
+};
+
+export function PostComposerHeader({ isEditing = false }: Props) {
   const { colors } = useTheme();
 
   return (
@@ -12,7 +16,9 @@ export function PostComposerHeader() {
       <Pressable onPress={() => router.back()} hitSlop={8} accessibilityLabel="Close">
         <Ionicons name="close" size={24} color={colors.foreground} />
       </Pressable>
-      <Text className="text-xl font-bold text-foreground dark:text-d-text">Create post</Text>
+      <Text className="text-xl font-bold text-foreground dark:text-d-text">
+        {isEditing ? "Edit post" : "Create post"}
+      </Text>
     </View>
   );
 }

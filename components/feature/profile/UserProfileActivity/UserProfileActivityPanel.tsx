@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { Fragment, useState, type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -10,6 +9,7 @@ import type { FeedItem } from "@/types/community";
 import type { PlayerProfile } from "@/types/playerProfile";
 import type { ProfileActivityTab } from "@/types/profileActivity";
 import { formatRelativeTime } from "@/utils/community";
+import { safeRouter } from "@/utils/safeRouter";
 
 import { UserProfileActivityTabs } from "./UserProfileActivityTabsPanel";
 
@@ -30,6 +30,7 @@ export function UserProfileActivity({ profile }: Props) {
           items={activity.postFeed}
           emptyIcon="document-text-outline"
           emptyMessage="No posts yet."
+          showOwnerActions={profile.isCurrentUser}
         />
       ) : null}
 
@@ -42,7 +43,7 @@ export function UserProfileActivity({ profile }: Props) {
           {activity.comments.map(({ comment, post }) => (
             <Pressable
               key={comment.id}
-              onPress={() => router.push(`/post/${post.id}`)}
+              onPress={() => safeRouter.push(`/post/${post.id}`)}
               className="rounded-2xl bg-section p-4 dark:bg-d-surface"
             >
               <Text className="text-sm leading-5 text-foreground dark:text-d-text">
@@ -67,6 +68,7 @@ export function UserProfileActivity({ profile }: Props) {
           items={activity.upvotedFeed}
           emptyIcon="caret-up-outline"
           emptyMessage="No upvoted posts yet."
+          showOwnerActions={profile.isCurrentUser}
         />
       ) : null}
     </View>
@@ -77,10 +79,12 @@ function PostFeedList({
   items,
   emptyIcon,
   emptyMessage,
+  showOwnerActions,
 }: {
   items: FeedItem[];
   emptyIcon: keyof typeof Ionicons.glyphMap;
   emptyMessage: string;
+  showOwnerActions?: boolean;
 }) {
   return (
     <ActivityList emptyIcon={emptyIcon} emptyMessage={emptyMessage} isEmpty={items.length === 0}>
@@ -88,7 +92,7 @@ function PostFeedList({
         <Fragment key={item.post.id}>
           {index > 0 ? <View className="h-px bg-border dark:bg-d-border" /> : null}
           <View className="py-4">
-            <PostCard item={item} />
+            <PostCard item={item} showOwnerActions={showOwnerActions} />
           </View>
         </Fragment>
       ))}

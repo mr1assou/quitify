@@ -43,6 +43,7 @@ type PlayerProfileOverrides = {
   countryFlag?: string;
   countryCode?: string;
   bio?: string;
+  avatarUrl?: string;
 };
 
 export function buildPlayerProfile(
@@ -69,5 +70,6 @@ export function buildPlayerProfile(
     isCurrentUser: entry.isCurrentUser,
     bio: overrides?.bio ?? syntheticBio(name, smokeFreeDays),
     memberSinceLabel: memberSinceLabelForRank(entry.rank),
+    avatarUrl: overrides?.avatarUrl,
   };
 }

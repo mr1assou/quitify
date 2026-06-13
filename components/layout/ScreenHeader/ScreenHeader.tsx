@@ -1,8 +1,7 @@
-import { safeRouter } from "@/utils/safeRouter";
 import { type ReactNode } from "react";
 import { Text, View } from "react-native";
 
-import { HamburgerButton } from "@/components/layout/HamburgerButton";
+import { ScreenHeaderActions } from "@/components/layout/ScreenHeaderActions";
 
 type Props = {
   /** Small uppercased label (e.g. "Today", "Health"). */
@@ -29,6 +28,18 @@ export function ScreenHeader({
   trailing,
 }: Props) {
   const hasTitle = Boolean(title);
+  const isBrandBar = Boolean(leading) && !hasTitle;
+  const actions = trailing ?? <ScreenHeaderActions />;
+
+  if (isBrandBar) {
+    return (
+      <View className="flex-row items-center px-4 pt-2">
+        <View className="shrink-0">{leading}</View>
+        <View className="min-w-4 flex-1" />
+        <View className="shrink-0">{actions}</View>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -46,7 +57,7 @@ export function ScreenHeader({
           <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">{subtitle}</Text>
         ) : null}
       </View>
-      <View>{trailing ?? <HamburgerButton onPress={() => safeRouter.push("/profile")} />}</View>
+      <View className="shrink-0">{actions}</View>
     </View>
   );
 }

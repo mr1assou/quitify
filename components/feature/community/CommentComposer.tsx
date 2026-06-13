@@ -1,48 +1,92 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, TextInput, View } from "react-native";
+import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {
   placeholder?: string;
-  onSubmit: (text: string) => void;
+  compact?: boolean;
+  onSubmit: (text: string) => void | Promise<void>;
 };
 
-export function CommentComposer({ placeholder = "Write a comment…", onSubmit }: Props) {
+export function CommentComposer({
+  placeholder = "Write a comment…",
+  compact = false,
+  onSubmit,
+}: Props) {
   const { colors } = useTheme();
   const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = () => {
+  const submit = async () => {
     const trimmed = text.trim();
-    if (!trimmed) return;
-    onSubmit(trimmed);
-    setText("");
+    if (!trimmed || submitting) return;
+
+    setSubmitting(true);
+    try {
+      await onSubmit(trimmed);
+      setText("");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const disabled = text.trim().length === 0;
+  const disabled = text.trim().length === 0 || submitting;
+  const compactSendSize = 28;
 
   return (
-    <View className="flex-row items-center rounded-full bg-section px-4 py-2 dark:bg-d-surface">
+    <View
+      className={`flex-row items-center rounded-full bg-section dark:bg-d-surface ${
+        compact ? "px-3 py-1" : "px-4 py-2"
+      }`}
+    >
       <TextInput
         value={text}
         onChangeText={setText}
         placeholder={placeholder}
         placeholderTextColor={colors.mutedForeground}
-        style={{ color: colors.foreground, flex: 1 }}
+        editable={!submitting}
+        style={{
+          color: colors.foreground,
+          flex: 1,
+          fontSize: compact ? 12 : 15,
+          lineHeight: compact ? 17 : 20,
+          paddingVertical: compact ? 5 : 4,
+          minHeight: compact ? 32 : undefined,
+          maxHeight: compact ? 48 : 96,
+          opacity: submitting ? 0.6 : 1,
+        }}
         multiline
         returnKeyType="send"
-        onSubmitEditing={submit}
+        onSubmitEditing={() => void submit()}
         blurOnSubmit
       />
       <Pressable
-        onPress={submit}
+        onPress={() => void submit()}
         disabled={disabled}
         hitSlop={8}
-        className="ml-2"
-        style={{ opacity: disabled ? 0.4 : 1 }}
+        className={compact ? "ml-1 items-center justify-center rounded-full bg-primary" : "ml-2"}
+        style={
+          compact
+            ? {
+                width: compactSendSize,
+                height: compactSendSize,
+                opacity: disabled ? 0.4 : 1,
+              }
+            : { opacity: disabled ? 0.4 : 1 }
+        }
+        accessibilityLabel="Post comment"
       >
-        <Ionicons name="arrow-up-circle" size={28} color={colors.primary} />
+        {submitting ? (
+          <ActivityIndicator size="small" color={compact ? colors.white : colors.primary} />
+        ) : (
+          <Ionicons
+            name={compact ? "send" : "arrow-up-circle"}
+            size={compact ? 15 : 28}
+            color={compact ? colors.white : colors.primary}
+          />
+        )}
       </Pressable>
     </View>
   );

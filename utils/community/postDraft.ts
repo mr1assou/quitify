@@ -1,10 +1,11 @@
 import type { PostTagId } from "@/constants/postTags";
-import type { PostImageCrop, PostMedia, PostMediaFrame } from "@/types/community";
+import type { CommunityPost, PostImageCrop, PostMedia, PostMediaFrame } from "@/types/community";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
 
 export type PostDraftImage = {
   id: string;
   uri: string;
+  mimeType?: string | null;
   frame: PostMediaFrame;
   crop: PostImageCrop;
 };
@@ -23,12 +24,38 @@ export const EMPTY_POST_DRAFT: PostDraft = {
   images: [],
 };
 
-export function createDraftImage(uri: string, frame: PostMediaFrame = "portrait"): PostDraftImage {
+export function createDraftImage(
+  uri: string,
+  mimeType?: string | null,
+  frame: PostMediaFrame = "portrait",
+  crop: PostImageCrop = DEFAULT_POST_IMAGE_CROP,
+): PostDraftImage {
   return {
     id: `draft-img-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     uri,
+    mimeType,
     frame,
-    crop: DEFAULT_POST_IMAGE_CROP,
+    crop,
+  };
+}
+
+export function postDraftFromCommunityPost(post: CommunityPost): PostDraft {
+  const media = post.media?.[0];
+
+  return {
+    title: post.title ?? "",
+    body: post.text,
+    tagId: post.tagId ?? null,
+    images: media?.localUri
+      ? [
+          createDraftImage(
+            media.localUri,
+            null,
+            media.frame ?? "portrait",
+            media.crop ?? DEFAULT_POST_IMAGE_CROP,
+          ),
+        ]
+      : [],
   };
 }
 

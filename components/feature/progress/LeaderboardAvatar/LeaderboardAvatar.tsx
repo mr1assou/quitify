@@ -11,6 +11,10 @@ type Props = {
   rank: number;
   countryFlag: string;
   size?: number;
+  /** Custom uploaded avatar — falls back to rank-based placeholder. */
+  imageUrl?: string | null;
+  /** Horizontal offset for the country flag badge (default sits slightly outside bottom-left). */
+  flagLeft?: number;
 };
 
 function FlagBadge({ uri, size, label }: { uri: string; size: number; label: string }) {
@@ -51,8 +55,10 @@ export function LeaderboardAvatar({
   rank,
   countryFlag,
   size = DEFAULT_SIZE,
+  imageUrl,
+  flagLeft = -1,
 }: Props) {
-  const source = profileImageForRank(rank);
+  const source = imageUrl ? { uri: imageUrl } : profileImageForRank(rank);
   const label = isCurrentUser ? "Your profile photo" : `${name} profile photo`;
   const flagSize = Math.round(size * 0.38);
 
@@ -70,12 +76,12 @@ export function LeaderboardAvatar({
           source={source}
           style={{ width: size, height: size }}
           contentFit="cover"
-          contentPosition="top"
+          contentPosition={imageUrl ? "center" : "top"}
           accessibilityLabel={label}
         />
       </View>
 
-      <View style={{ position: "absolute", bottom: -1, left: -1, zIndex: 1 }}>
+      <View style={{ position: "absolute", bottom: -1, left: flagLeft, zIndex: 1 }}>
         <FlagBadge uri={countryFlag} size={flagSize} label={`${name} country flag`} />
       </View>
     </View>

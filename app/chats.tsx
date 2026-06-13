@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -7,6 +6,7 @@ import { ChatListRow } from "@/components/feature/chat/ChatListRow";
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/useChat";
+import { safeRouter } from "@/utils/safeRouter";
 
 export default function ChatsScreen() {
   const { colors } = useTheme();
@@ -20,7 +20,7 @@ export default function ChatsScreen() {
         title="Chats"
         rightAction={
           <Pressable
-            onPress={() => router.push("/community-search")}
+            onPress={() => safeRouter.push("/community-search")}
             hitSlop={8}
             accessibilityLabel="Find user"
           >

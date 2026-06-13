@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import type { CommunityPost, FeedItem, PostComment } from "@/types/community";
 import type { PlayerProfile } from "@/types/playerProfile";
@@ -24,14 +25,16 @@ function syntheticUpvotedPosts(
 
 export function useProfileActivity(profile: PlayerProfile) {
   const { state } = useCommunity();
+  const { state: appState } = useApp();
   const communityUserId = resolveProfileCommunityUserId(profile);
+  const currentUserImageUrl = appState.profile?.imageUrl;
 
   return useMemo(() => {
     const posts = state.posts
       .filter((post) => post.authorId === communityUserId)
       .sort((a, b) => b.createdAt - a.createdAt);
 
-    const postFeed = buildFeedItems(posts, state.commentsById);
+    const postFeed = buildFeedItems(posts, state.authorsById, currentUserImageUrl);
 
     const comments: ProfileActivityComment[] = Object.values(state.commentsById)
       .filter((comment) => comment.authorId === communityUserId)
@@ -48,8 +51,8 @@ export function useProfileActivity(profile: PlayerProfile) {
           .sort((a, b) => b.createdAt - a.createdAt)
       : syntheticUpvotedPosts(profile, state.posts, communityUserId);
 
-    const upvotedFeed = buildFeedItems(upvotedPosts, state.commentsById);
+    const upvotedFeed = buildFeedItems(upvotedPosts, state.authorsById, currentUserImageUrl);
 
     return { postFeed, comments, upvotedFeed, communityUserId };
-  }, [communityUserId, profile, state.commentsById, state.posts]);
+  }, [communityUserId, currentUserImageUrl, profile, state.authorsById, state.commentsById, state.posts]);
 }

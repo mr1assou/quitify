@@ -1,25 +1,21 @@
-import { getCommunityUser } from "@/constants/communityUsers";
-import type { CommunityPost, FeedItem, PostComment } from "@/types/community";
+import type { CommunityPost, CommunityUser, FeedItem } from "@/types/community";
+
+import { resolveCommunityAuthor } from "./resolveCommunityAuthor";
 
 export function buildFeedItems(
   posts: CommunityPost[],
-  commentsById: Record<string, PostComment>,
+  authorsById: Record<string, CommunityUser> = {},
+  currentUserImageUrl?: string,
 ): FeedItem[] {
   return posts
     .map<FeedItem | null>((post) => {
-      const author = getCommunityUser(post.authorId);
+      const author = resolveCommunityAuthor(post.authorId, {
+        authorsById,
+        currentUserImageUrl,
+      });
       if (!author) return null;
 
-      const previewComments = post.commentIds
-        .slice(-2)
-        .map((cid) => {
-          const comment = commentsById[cid];
-          const cAuthor = comment ? getCommunityUser(comment.authorId) : undefined;
-          return comment && cAuthor ? { comment, author: cAuthor } : null;
-        })
-        .filter((c): c is NonNullable<typeof c> => c !== null);
-
-      return { post, author, previewComments };
+      return { post, author };
     })
     .filter((item): item is FeedItem => item !== null);
 }

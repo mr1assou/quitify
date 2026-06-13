@@ -24,6 +24,8 @@ export type UserProfile = {
   countryCode?: string;
   /** PNG flag URL from onboarding / profile. */
   countryFlag?: string;
+  /** User-uploaded profile photo URL (R2). */
+  imageUrl?: string;
   currency: string;
   quitReasonIds?: string[];
   motivationLevel?: MotivationLevel;

@@ -91,6 +91,7 @@ function ThemedRoot() {
         <Stack.Screen name="post-composer" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chats" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="community-search" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat-by-user/[id]" options={{ animation: "none" }} />
         <Stack.Screen

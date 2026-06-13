@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { TextInput, View } from "react-native";
+import { View } from "react-native";
 
+import { LinkifiedTextInput } from "@/components/ui/LinkifiedTextInput";
 import { useTheme } from "@/context/ThemeContext";
 
 import { PostAddPhotosChip } from "./PostAddPhotosChip";
@@ -13,9 +14,15 @@ type Props = {
   value: string;
   onChangeText: (text: string) => void;
   onPickImages: () => void;
+  showAddPhoto?: boolean;
 };
 
-export function PostBodyEditor({ value, onChangeText, onPickImages }: Props) {
+export function PostBodyEditor({
+  value,
+  onChangeText,
+  onPickImages,
+  showAddPhoto = true,
+}: Props) {
   const { colors } = useTheme();
   const [inputHeight, setInputHeight] = useState(BODY_MIN_HEIGHT);
 
@@ -25,7 +32,7 @@ export function PostBodyEditor({ value, onChangeText, onPickImages }: Props) {
 
   return (
     <View className="mx-5 mt-2 px-1">
-      <TextInput
+      <LinkifiedTextInput
         value={value}
         onChangeText={onChangeText}
         placeholder="Body text (optional)"
@@ -37,8 +44,12 @@ export function PostBodyEditor({ value, onChangeText, onPickImages }: Props) {
           const nextHeight = event.nativeEvent.contentSize.height;
           setInputHeight(Math.max(BODY_MIN_HEIGHT, Math.ceil(nextHeight)));
         }}
-        style={{
+        overlayStyle={{
           color: colors.foreground,
+          fontSize: BODY_FONT_SIZE,
+          lineHeight: BODY_LINE_HEIGHT,
+        }}
+        style={{
           fontSize: BODY_FONT_SIZE,
           lineHeight: BODY_LINE_HEIGHT,
           height: inputHeight,
@@ -46,7 +57,9 @@ export function PostBodyEditor({ value, onChangeText, onPickImages }: Props) {
         }}
       />
 
-      <PostAddPhotosChip onPress={onPickImages} className="mt-3" embedded />
+      {showAddPhoto ? (
+        <PostAddPhotosChip onPress={onPickImages} className="mt-3" embedded />
+      ) : null}
     </View>
   );
 }
