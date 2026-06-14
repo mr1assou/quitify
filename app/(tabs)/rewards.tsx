@@ -9,10 +9,12 @@ import { RankLeaderboard } from "@/components/feature/progress/RankLeaderboard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import type { AchievementSection } from "@/constants/achievementSections";
+import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useProgress } from "@/hooks/useProgress";
 
 export default function AchievementScreen() {
+  const { colors } = useTheme();
   const progress = useProgress();
   const leaderboard = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
@@ -32,7 +34,7 @@ export default function AchievementScreen() {
               <RankLeaderboard leaderboard={leaderboard} />
             ) : (
               <View className="items-center py-16">
-                <ActivityIndicator />
+                <ActivityIndicator size="large" color={colors.primary} />
               </View>
             )
           ) : (

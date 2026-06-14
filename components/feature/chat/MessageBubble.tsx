@@ -3,17 +3,24 @@ import { Text, View } from "react-native";
 import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import type { ChatMessage, MessageReadStatus } from "@/types/chat";
-import { formatClockTime } from "@/utils/community";
+import { formatMessageClockTime } from "@/utils/chat/formatMessageTime";
 
 type Props = {
   message: ChatMessage;
   fromMe: boolean;
   readStatus?: MessageReadStatus;
+  timeZone: string;
   /** Show timestamp under bubble — usually only on the last in a group. */
   showTimestamp?: boolean;
 };
 
-export function MessageBubble({ message, fromMe, readStatus, showTimestamp = true }: Props) {
+export function MessageBubble({
+  message,
+  fromMe,
+  readStatus,
+  timeZone,
+  showTimestamp = true,
+}: Props) {
   if (message.kind === "system") {
     return (
       <View className="my-1 items-center">
@@ -25,7 +32,7 @@ export function MessageBubble({ message, fromMe, readStatus, showTimestamp = tru
   }
 
   const status = fromMe ? (readStatus ?? message.readStatus ?? "unseen") : undefined;
-  const time = formatClockTime(message.createdAt);
+  const time = formatMessageClockTime(message.createdAt, timeZone);
   const isMedia = message.kind === "image" || message.kind === "video" || message.kind === "audio";
   const hasMedia = isMedia && Boolean(message.mediaUrl);
 

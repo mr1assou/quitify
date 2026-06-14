@@ -6,8 +6,10 @@ import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvat
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatThreadPreview } from "@/hooks/useChat";
+import { useChatParticipantPresence } from "@/hooks/useChatParticipantPresence";
+import { useUserTimezone } from "@/hooks/useUserTimezone";
 import { getBadgeName } from "@/utils/badges";
-import { formatChatRelativeDate } from "@/utils/community";
+import { formatMessageListTime } from "@/utils/chat/formatMessageTime";
 
 type Props = {
   preview: ChatThreadPreview;
@@ -16,6 +18,8 @@ type Props = {
 export function ChatListRow({ preview }: Props) {
   const { colors } = useTheme();
   const { participant, lastMessage, unreadCount, threadId, lastOutgoingReadStatus } = preview;
+  const { isOnline } = useChatParticipantPresence(participant);
+  const timeZone = useUserTimezone();
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
 
@@ -35,7 +39,7 @@ export function ChatListRow({ preview }: Props) {
         countryFlag={participant.countryFlag}
         imageUrl={participant.avatarUrl}
         size={52}
-        isOnline={participant.isOnline}
+        isOnline={isOnline}
       />
 
       <View className="ml-3 flex-1">
@@ -45,7 +49,7 @@ export function ChatListRow({ preview }: Props) {
           </Text>
           {lastMessage ? (
             <Text className="text-xs text-muted-foreground dark:text-d-muted">
-              {formatChatRelativeDate(lastMessage.createdAt)}
+              {formatMessageListTime(lastMessage.createdAt, timeZone)}
             </Text>
           ) : null}
         </View>

@@ -23,6 +23,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThread } from "@/hooks/useChat";
 import { useChatThreadRealtime } from "@/hooks/useChatThreadRealtime";
+import { useUserTimezone } from "@/hooks/useUserTimezone";
 import type { CallKind, ChatMessage } from "@/types/chat";
 import { joinChatThread, leaveChatThread } from "@/services/realtime/chatSocket";
 import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
@@ -44,6 +45,7 @@ export default function ChatThreadScreen() {
   const threadId = typeof id === "string" ? id : "";
   const detail = useChatThread(threadId);
   const { colors } = useTheme();
+  const timeZone = useUserTimezone();
   const {
     state,
     sendMessage,
@@ -219,6 +221,7 @@ export default function ChatThreadScreen() {
                     fromMe={item.fromMe}
                     showTimestamp={item.showTimestamp}
                     readStatus={item.readStatus}
+                    timeZone={timeZone}
                   />
                 )}
                 onEndReached={() => void loadOlder()}

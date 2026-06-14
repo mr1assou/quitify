@@ -4,22 +4,18 @@ import type { PostFeedSort } from '@/types/communityFeedFilter';
 export const COMMUNITY_FEED_SORT_OPTIONS: {
   id: PostFeedSort;
   label: string;
-  description: string;
 }[] = [
   {
     id: 'newest',
     label: 'Newest',
-    description: 'Latest posts first',
   },
   {
     id: 'hottest',
     label: 'Most popular',
-    description: 'Top upvoted posts',
   },
   {
     id: 'most_commented',
     label: 'Most discussed',
-    description: 'Posts with the most comments',
   },
 ];
 

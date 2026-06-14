@@ -174,9 +174,6 @@ function SortOptionRow({
       </View>
       <View className="min-w-0 flex-1">
         <Text className="text-sm font-bold text-foreground dark:text-d-text">{option.label}</Text>
-        <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
-          {option.description}
-        </Text>
       </View>
     </Pressable>
   );
