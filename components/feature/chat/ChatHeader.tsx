@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
@@ -11,16 +10,18 @@ import type { CallKind } from "@/types/chat";
 import type { CommunityUser } from "@/types/community";
 import { getBadgeName } from "@/utils/badges";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
+import { safeRouter } from "@/utils/safeRouter";
 
 const ONLINE_COLOR = "#22C55E";
 
 type Props = {
   participant: CommunityUser;
   onCall: (kind: CallKind) => void;
+  isTyping?: boolean;
 };
 
 /** Top bar for the chat thread screen — avatar, name, audio + video call. */
-export function ChatHeader({ participant, onCall }: Props) {
+export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
   const { colors } = useTheme();
   const { isOnline, lastSeenAt } = useChatParticipantPresence(participant);
   const badgeName = getBadgeName(participant.badgeId);
@@ -30,7 +31,7 @@ export function ChatHeader({ participant, onCall }: Props) {
     <View className="flex-row items-center border-b border-section py-3 pl-1 pr-4 dark:border-d-border">
       <Pressable
         hitSlop={10}
-        onPress={() => router.back()}
+        onPress={() => safeRouter.backOr("/chats")}
         className="mr-0.5 w-7 items-center justify-center"
       >
         <Ionicons name="chevron-back" size={20} color={colors.foreground} />
@@ -45,6 +46,7 @@ export function ChatHeader({ participant, onCall }: Props) {
           isCurrentUser={!!participant.isCurrentUser}
           rank={avatarRank}
           countryFlag={participant.countryFlag}
+          imageUrl={participant.avatarUrl}
           size={40}
           isOnline={isOnline}
         />
@@ -62,13 +64,19 @@ export function ChatHeader({ participant, onCall }: Props) {
           </View>
 
           <View className="mt-0.5 flex-row items-center gap-1.5">
-            <BadgeArt badgeId={participant.badgeId} size={18} />
-            <Text
-              className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
-              numberOfLines={1}
-            >
-              {badgeName} 
-            </Text>
+            {isTyping ? (
+              <Text className="text-xs font-medium text-primary">typing…</Text>
+            ) : (
+              <>
+                <BadgeArt badgeId={participant.badgeId} size={18} />
+                <Text
+                  className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+                  numberOfLines={1}
+                >
+                  {badgeName}
+                </Text>
+              </>
+            )}
           </View>
         </View>
       </Pressable>

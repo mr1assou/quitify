@@ -1,18 +1,10 @@
 import type { ChatMessage, MessageReadStatus } from "@/types/chat";
 
-/** UI-only: seen if the other person sent a message after this one. */
+/** Seen when the peer's read cursor is at or after this message. */
 export function resolveOutgoingReadStatus(
   message: ChatMessage,
-  messages: ChatMessage[],
+  peerLastReadAt?: number,
 ): MessageReadStatus {
-  if (message.readStatus) return message.readStatus;
-
-  const index = messages.findIndex((row) => row.id === message.id);
-  if (index < 0) return "unseen";
-
-  const hasReplyAfter = messages
-    .slice(index + 1)
-    .some((row) => row.senderId !== message.senderId);
-
-  return hasReplyAfter ? "seen" : "unseen";
+  if (!peerLastReadAt) return "unseen";
+  return message.createdAt <= peerLastReadAt ? "seen" : "unseen";
 }

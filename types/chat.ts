@@ -1,6 +1,6 @@
-export type ChatMessageKind = "text" | "system";
+export type ChatMessageKind = "text" | "image" | "video" | "audio" | "system";
 
-/** UI-only read receipt for outgoing messages. */
+/** Read receipt for outgoing messages (from peer's last_read_at). */
 export type MessageReadStatus = "seen" | "unseen";
 
 export type ChatMessage = {
@@ -10,7 +10,9 @@ export type ChatMessage = {
   text: string;
   createdAt: number;
   kind: ChatMessageKind;
-  /** Mock read receipt — only meaningful on messages sent by the current user. */
+  mediaUrl?: string;
+  mediaMimeType?: string;
+  mediaDurationMs?: number;
   readStatus?: MessageReadStatus;
 };
 
@@ -20,8 +22,13 @@ export type ChatThread = {
   participantId: string;
   /** Ordered message ids (oldest → newest). */
   messageIds: string[];
-  /** Last time the current user opened this thread. */
+  /** Last time the current user read this thread (epoch ms). */
   lastReadAt: number;
+  /** When the peer last read messages in this thread. */
+  peerLastReadAt?: number;
+  unreadCount?: number;
+  /** Whether older messages exist before the loaded window. */
+  hasMoreMessages?: boolean;
 };
 
 export type CallKind = "audio" | "video";

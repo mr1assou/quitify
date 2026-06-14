@@ -11,6 +11,7 @@ import { CommunityProvider } from "@/context/CommunityContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
+import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
 import "@/global.css";
 
 export default function RootLayout() {
@@ -26,6 +27,7 @@ export default function RootLayout() {
               <OnboardingProvider>
                 <CommunityProvider>
                   <PresenceSocketBridge />
+                  <ChatSocketBridge />
                   <ThemedRoot />
                 </CommunityProvider>
               </OnboardingProvider>

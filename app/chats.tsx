@@ -4,15 +4,25 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ChatListRow } from "@/components/feature/chat/ChatListRow";
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
+import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/useChat";
 import { safeRouter } from "@/utils/safeRouter";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 
 export default function ChatsScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const { loadChatThreads } = useCommunity();
   const threads = useChatThreads();
   const listBottom = Math.max(insets.bottom, 16) + 16;
+
+  useFocusEffect(
+    useCallback(() => {
+      void loadChatThreads();
+    }, [loadChatThreads]),
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>

@@ -23,11 +23,12 @@ export function useChatThreads(): ChatThreadPreview[] {
   return useMemo(() => {
     return state.threads
       .map<ChatThreadPreview | null>((thread) => {
-        const participant = resolveChatParticipant(
-          thread.participantId,
-          state.authorsById,
-          leaderboard,
-        );
+        const participant =
+          resolveChatParticipant(
+            thread.participantId,
+            state.authorsById,
+            leaderboard,
+          ) ?? state.authorsById[thread.participantId] ?? null;
         if (!participant) return null;
 
         const messages = thread.messageIds
@@ -35,12 +36,14 @@ export function useChatThreads(): ChatThreadPreview[] {
           .filter((m): m is ChatMessage => Boolean(m));
 
         const lastMessage = messages[messages.length - 1] ?? null;
-        const unreadCount = messages.filter(
-          (m) => m.senderId !== "me" && m.createdAt > thread.lastReadAt,
-        ).length;
+        const unreadCount =
+          thread.unreadCount ??
+          messages.filter(
+            (m) => m.senderId !== "me" && m.createdAt > thread.lastReadAt,
+          ).length;
         const lastOutgoingReadStatus =
           lastMessage?.senderId === "me"
-            ? resolveOutgoingReadStatus(lastMessage, messages)
+            ? resolveOutgoingReadStatus(lastMessage, thread.peerLastReadAt)
             : undefined;
 
         return {
@@ -64,6 +67,7 @@ export type ChatThreadDetail = {
   threadId: string;
   participant: CommunityUser;
   messages: ChatMessage[];
+  peerLastReadAt?: number;
 };
 
 export function useChatThread(threadId: string): ChatThreadDetail | null {
@@ -74,18 +78,25 @@ export function useChatThread(threadId: string): ChatThreadDetail | null {
     const thread = state.threads.find((t) => t.id === threadId);
     if (!thread) return null;
 
-    const participant = resolveChatParticipant(
-      thread.participantId,
-      state.authorsById,
-      leaderboard,
-    );
+    const participant =
+      resolveChatParticipant(
+        thread.participantId,
+        state.authorsById,
+        leaderboard,
+      ) ?? state.authorsById[thread.participantId] ?? null;
     if (!participant) return null;
 
     const messages = thread.messageIds
       .map((mid) => state.messagesById[mid])
-      .filter((m): m is ChatMessage => Boolean(m));
+      .filter((m): m is ChatMessage => Boolean(m))
+      .sort((a, b) => a.createdAt - b.createdAt);
 
-    return { threadId: thread.id, participant, messages };
+    return {
+      threadId: thread.id,
+      participant,
+      messages,
+      peerLastReadAt: thread.peerLastReadAt,
+    };
   }, [leaderboard, threadId, state.authorsById, state.messagesById, state.threads]);
 }
 

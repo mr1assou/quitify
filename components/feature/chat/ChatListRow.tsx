@@ -33,6 +33,7 @@ export function ChatListRow({ preview }: Props) {
         isCurrentUser={!!participant.isCurrentUser}
         rank={avatarRank}
         countryFlag={participant.countryFlag}
+        imageUrl={participant.avatarUrl}
         size={52}
         isOnline={participant.isOnline}
       />

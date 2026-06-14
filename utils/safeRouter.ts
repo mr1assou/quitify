@@ -23,4 +23,13 @@ export const safeRouter = {
   push: (href: Href) => withNavLock(() => expoRouter.navigate(href)),
   replace: (href: Href) => withNavLock(() => expoRouter.replace(href)),
   back: () => withNavLock(() => expoRouter.back()),
+  /** Go back when possible; otherwise replace with a safe fallback route. */
+  backOr: (fallback: Href = "/chats") =>
+    withNavLock(() => {
+      if (expoRouter.canGoBack()) {
+        expoRouter.back();
+      } else {
+        expoRouter.replace(fallback);
+      }
+    }),
 };

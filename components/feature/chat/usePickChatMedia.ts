@@ -4,7 +4,10 @@ import { Alert } from "react-native";
 
 export type ChatMediaPick = {
   uri: string;
-  kind: "image" | "video";
+  kind: "image" | "video" | "audio";
+  mimeType?: string;
+  durationMs?: number;
+  sizeBytes?: number;
 };
 
 export function usePickChatMedia() {
@@ -25,13 +28,18 @@ export function usePickChatMedia() {
 
     if (result.canceled) return [];
 
-    return result.assets
-      .map((asset) => {
-        const kind = asset.type === "video" ? "video" : "image";
-        if (!asset.uri) return null;
-        return { uri: asset.uri, kind } satisfies ChatMediaPick;
-      })
-      .filter((item): item is ChatMediaPick => item !== null);
+    const items: ChatMediaPick[] = [];
+    for (const asset of result.assets) {
+      if (!asset.uri) continue;
+      items.push({
+        uri: asset.uri,
+        kind: asset.type === "video" ? "video" : "image",
+        mimeType: asset.mimeType ?? undefined,
+        durationMs: asset.duration ?? undefined,
+        sizeBytes: asset.fileSize ?? undefined,
+      });
+    }
+    return items;
   }, []);
 
   return { pickFromGallery };

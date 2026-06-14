@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -10,7 +10,7 @@ import Animated, {
 
 import { GREETING_IMAGE } from "@/constants/assets";
 
-const IMAGE_SIZE = 280;
+const IMAGE_SIZE = 240;
 const FLOAT_DISTANCE = 8;
 
 type Props = {
@@ -20,6 +20,10 @@ type Props = {
 /** Empty chat state — greeting art with a gentle up/down float. */
 export function ChatEmptyGreeting({ participantName }: Props) {
   const floatY = useSharedValue(-FLOAT_DISTANCE);
+  const firstName = useMemo(() => {
+    const trimmed = participantName.trim();
+    return trimmed.split(/\s+/)[0] || trimmed || "them";
+  }, [participantName]);
 
   useEffect(() => {
     floatY.value = withRepeat(
@@ -37,7 +41,7 @@ export function ChatEmptyGreeting({ participantName }: Props) {
   }));
 
   return (
-    <View className="mt-8 items-center px-6">
+    <View className="items-center px-8 pt-2">
       <Animated.Image
         source={GREETING_IMAGE}
         style={[{ width: IMAGE_SIZE, height: IMAGE_SIZE }, imageStyle]}
@@ -45,11 +49,11 @@ export function ChatEmptyGreeting({ participantName }: Props) {
         accessibilityLabel="Friendly greeting"
       />
 
-      <Text className="mt-6 text-center text-lg font-semibold text-foreground dark:text-d-text">
-        Say hi to {participantName}
+      <Text className="mt-4 text-center text-lg font-semibold text-foreground dark:text-d-text">
+        Say hi to {firstName}
       </Text>
-      <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
-        Be kind. We're all quitting together.
+      <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
+        Be respectful and supportive to each other. We're all here to quit smoking together.
       </Text>
     </View>
   );

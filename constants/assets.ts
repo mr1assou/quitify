@@ -21,3 +21,6 @@ export const VIP_IMAGE = require("../assets/images/vip/vip.png");
 
 /** Empty chat thread greeting illustration. */
 export const GREETING_IMAGE = require("../assets/images/greeting/greeting.png");
+
+/** Community rules reminder on create post. */
+export const COMMUNITY_ALERT_IMAGE = require("../assets/images/alert/alert.png");

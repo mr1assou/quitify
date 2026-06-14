@@ -30,7 +30,10 @@ export function resolveChatParticipant(
   authorsById: Record<string, CommunityUser>,
   leaderboardSnapshot?: LeaderboardSnapshot | null,
 ): CommunityUser | null {
-  const cached = getCommunityUser(participantId) ?? authorsById[participantId];
+  const fromAuthors = authorsById[participantId];
+  if (fromAuthors) return withMockOnlineStatus(fromAuthors);
+
+  const cached = getCommunityUser(participantId);
   if (cached) return withMockOnlineStatus(cached);
 
   const userId = parseDbUserId(participantId);

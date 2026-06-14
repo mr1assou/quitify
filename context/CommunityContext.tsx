@@ -7,8 +7,16 @@ import {
   type ReactNode,
 } from "react";
 
-import { SEED_THREADS, SEED_MESSAGES } from "@/constants/chatThreads";
+import { useApp } from "@/context/AppContext";
 import { CURRENT_USER_ID } from "@/constants/communityUsers";
+import {
+  fetchChatMessages,
+  fetchChatThreads,
+  markChatThreadRead,
+  openChatThread as openChatThreadApi,
+  sendChatMessage as sendChatMessageApi,
+} from "@/services/chat/chatApi";
+import { uploadChatMediaToR2 } from "@/services/chat/uploadChatMedia";
 import {
   createPostComment,
   fetchPostComments,
@@ -27,6 +35,12 @@ import {
 import { applyEngagementToPost } from "@/utils/community/postEngagement";
 import { applyPostVote } from "@/utils/community/postVote";
 import { mergeUpdatedPost } from "@/utils/community/mergeUpdatedPost";
+import {
+  mapBackendMessage,
+  mapBackendThreadSummary,
+} from "@/utils/chat/mapBackendChat";
+import type { ChatMediaPick } from "@/components/feature/chat/usePickChatMedia";
+import { parseDbUserId } from "@/utils/community/presence";
 import type { UpdatePostPayload } from "@/types/updatePost";
 
 type State = {
@@ -69,27 +83,115 @@ type Action =
   | { type: "SET_PRESENCE_SNAPSHOT"; onlineUserIds: number[] }
   | { type: "PATCH_PRESENCE"; userId: number; isOnline: boolean }
   | { type: "CLEAR_PRESENCE" }
-  | { type: "SEND_MESSAGE"; participantId: string; text: string }
-  | { type: "ENSURE_CHAT_THREAD"; participantId: string; threadId: string }
   | { type: "UPSERT_AUTHOR"; author: CommunityUser }
+  | {
+      type: "HYDRATE_CHAT_THREADS";
+      threads: ChatThread[];
+      messagesById: Record<string, ChatMessage>;
+      authorsById: Record<string, CommunityUser>;
+    }
+  | {
+      type: "UPSERT_CHAT_THREAD";
+      thread: ChatThread;
+      participant: CommunityUser;
+      messages: ChatMessage[];
+    }
+  | {
+      type: "SET_THREAD_MESSAGES";
+      threadId: string;
+      messages: ChatMessage[];
+      hasMore?: boolean;
+      peerLastReadAt?: number;
+    }
+  | {
+      type: "APPEND_THREAD_MESSAGES";
+      threadId: string;
+      messages: ChatMessage[];
+      hasMore: boolean;
+    }
+  | {
+      type: "RECEIVE_CHAT_MESSAGE";
+      message: ChatMessage;
+      participant?: CommunityUser;
+    }
+  | {
+      type: "REPLACE_CHAT_MESSAGE";
+      tempId: string;
+      message: ChatMessage;
+    }
+  | { type: "SET_MESSAGES_SEEN"; threadId: string; lastReadAt: number }
   | { type: "MARK_THREAD_READ"; threadId: string };
-
-function byId<T extends { id: string }>(arr: T[]): Record<string, T> {
-  return Object.fromEntries(arr.map((item) => [item.id, item]));
-}
 
 const initialState: State = {
   posts: [],
   authorsById: {},
   commentsById: {},
-  threads: SEED_THREADS,
-  messagesById: byId(SEED_MESSAGES),
+  threads: [],
+  messagesById: {},
   onlineByUserId: {},
   presenceReady: false,
 };
 
-function newId(prefix: string): string {
-  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+function mergeCommunityUser(
+  existing: CommunityUser | undefined,
+  incoming: CommunityUser,
+): CommunityUser {
+  if (!existing) return incoming;
+  return {
+    ...existing,
+    ...incoming,
+    avatarUrl: incoming.avatarUrl ?? existing.avatarUrl,
+  };
+}
+
+function mergeAuthorsById(
+  base: Record<string, CommunityUser>,
+  incoming: Record<string, CommunityUser>,
+): Record<string, CommunityUser> {
+  const merged = { ...base };
+  for (const [id, author] of Object.entries(incoming)) {
+    merged[id] = mergeCommunityUser(base[id], author);
+  }
+  return merged;
+}
+
+/** Append new ids while preserving existing order (oldest → newest). */
+function mergeMessageIdsPreservingOrder(existing: string[], ...incomingGroups: string[][]): string[] {
+  const result = [...existing];
+  const seen = new Set(existing);
+  for (const group of incomingGroups) {
+    for (const id of group) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      result.push(id);
+    }
+  }
+  return result;
+}
+
+/** List/open API only returns last_message — never shrink loaded history. */
+function mergeThreadFromSummary(existing: ChatThread | undefined, incoming: ChatThread): ChatThread {
+  if (!existing) return incoming;
+
+  return {
+    ...existing,
+    ...incoming,
+    messageIds:
+      existing.messageIds.length > 0
+        ? mergeMessageIdsPreservingOrder(existing.messageIds, incoming.messageIds)
+        : incoming.messageIds,
+    hasMoreMessages: existing.hasMoreMessages ?? incoming.hasMoreMessages,
+    lastReadAt: existing.lastReadAt,
+    peerLastReadAt: incoming.peerLastReadAt ?? existing.peerLastReadAt,
+  };
+}
+
+function isPendingChatMessageId(id: string): boolean {
+  return id.startsWith("temp-");
+}
+
+function collectPendingMessageIds(messageIds: string[]): string[] {
+  return messageIds.filter(isPendingChatMessageId);
 }
 
 function reducer(state: State, action: Action): State {
@@ -232,73 +334,201 @@ function reducer(state: State, action: Action): State {
     }
 
     case "UPSERT_AUTHOR": {
+      const author = mergeCommunityUser(
+        state.authorsById[action.author.id],
+        action.author,
+      );
       return {
         ...state,
-        authorsById: { ...state.authorsById, [action.author.id]: action.author },
+        authorsById: { ...state.authorsById, [action.author.id]: author },
       };
     }
 
-    case "ENSURE_CHAT_THREAD": {
-      const existing = state.threads.find((t) => t.participantId === action.participantId);
-      if (existing) return state;
+    case "HYDRATE_CHAT_THREADS": {
+      const apiIds = new Set(action.threads.map((thread) => thread.id));
+      const mergedApiThreads = action.threads.map((thread) => {
+        const existing = state.threads.find((row) => row.id === thread.id);
+        return mergeThreadFromSummary(existing, thread);
+      });
+      const localOnlyThreads = state.threads.filter((thread) => !apiIds.has(thread.id));
 
       return {
         ...state,
-        threads: [
-          {
-            id: action.threadId,
-            participantId: action.participantId,
-            messageIds: [],
-            lastReadAt: Date.now(),
-          },
-          ...state.threads,
-        ],
+        threads: [...mergedApiThreads, ...localOnlyThreads],
+        messagesById: { ...state.messagesById, ...action.messagesById },
+        authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
       };
     }
 
-    case "SEND_MESSAGE": {
-      const text = action.text.trim();
-      if (!text) return state;
-
-      const existing = state.threads.find((t) => t.participantId === action.participantId);
-      const now = Date.now();
-      const message: ChatMessage = {
-        id: newId("m"),
-        threadId: existing ? existing.id : newId("thread"),
-        senderId: CURRENT_USER_ID,
-        text,
-        createdAt: now,
-        kind: "text",
-        readStatus: "unseen",
+    case "UPSERT_CHAT_THREAD": {
+      const existingIndex = state.threads.findIndex((t) => t.id === action.thread.id);
+      const messagesById = { ...state.messagesById };
+      for (const message of action.messages) {
+        messagesById[message.id] = message;
+      }
+      const participant = mergeCommunityUser(
+        state.authorsById[action.participant.id],
+        action.participant,
+      );
+      const authorsById = {
+        ...state.authorsById,
+        [action.participant.id]: participant,
       };
+      const threads =
+        existingIndex >= 0
+          ? state.threads.map((thread, index) =>
+              index === existingIndex
+                ? mergeThreadFromSummary(thread, {
+                    ...action.thread,
+                    messageIds: mergeMessageIdsPreservingOrder(
+                      thread.messageIds,
+                      action.thread.messageIds,
+                      action.messages.map((message) => message.id),
+                    ),
+                  })
+                : thread,
+            )
+          : [action.thread, ...state.threads];
 
+      return { ...state, threads, messagesById, authorsById };
+    }
+
+    case "SET_THREAD_MESSAGES": {
+      const messagesById = { ...state.messagesById };
+      const messageIds: string[] = [];
+      for (const message of action.messages) {
+        messagesById[message.id] = message;
+        messageIds.push(message.id);
+      }
+
+      const existingThread = state.threads.find((thread) => thread.id === action.threadId);
+      const pendingIds = existingThread
+        ? collectPendingMessageIds(existingThread.messageIds)
+        : [];
+      for (const pendingId of pendingIds) {
+        const pending = state.messagesById[pendingId];
+        if (!pending) continue;
+        messagesById[pendingId] = pending;
+      }
+      const mergedMessageIds = mergeMessageIdsPreservingOrder(messageIds, pendingIds);
+
+      const threads = state.threads.map((thread) =>
+        thread.id === action.threadId
+          ? {
+              ...thread,
+              messageIds: mergedMessageIds,
+              hasMoreMessages: action.hasMore ?? thread.hasMoreMessages,
+              peerLastReadAt: action.peerLastReadAt ?? thread.peerLastReadAt,
+            }
+          : thread,
+      );
+
+      return { ...state, threads, messagesById };
+    }
+
+    case "APPEND_THREAD_MESSAGES": {
+      const messagesById = { ...state.messagesById };
+      const prependIds: string[] = [];
+      for (const message of action.messages) {
+        messagesById[message.id] = message;
+        prependIds.push(message.id);
+      }
+
+      const threads = state.threads.map((thread) => {
+        if (thread.id !== action.threadId) return thread;
+        const existing = new Set(thread.messageIds);
+        const olderIds = prependIds.filter((id) => !existing.has(id));
+        return {
+          ...thread,
+          messageIds: [...olderIds, ...thread.messageIds],
+          hasMoreMessages: action.hasMore,
+        };
+      });
+
+      return { ...state, threads, messagesById };
+    }
+
+    case "RECEIVE_CHAT_MESSAGE": {
+      const { message } = action;
       const messagesById = { ...state.messagesById, [message.id]: message };
+      let authorsById = state.authorsById;
+      if (action.participant) {
+        authorsById = {
+          ...authorsById,
+          [action.participant.id]: mergeCommunityUser(
+            authorsById[action.participant.id],
+            action.participant,
+          ),
+        };
+      }
 
-      let threads: ChatThread[];
+      const existing = state.threads.find((thread) => thread.id === message.threadId);
+      let threads = state.threads;
+
       if (existing) {
-        threads = state.threads.map((t) =>
-          t.id === existing.id
-            ? { ...t, messageIds: [...t.messageIds, message.id], lastReadAt: now }
-            : t,
+        const isNew = !existing.messageIds.includes(message.id);
+        threads = state.threads.map((thread) =>
+          thread.id === message.threadId
+            ? {
+                ...thread,
+                messageIds: isNew ? [...thread.messageIds, message.id] : thread.messageIds,
+                unreadCount:
+                  isNew && message.senderId !== CURRENT_USER_ID
+                    ? (thread.unreadCount ?? 0) + 1
+                    : thread.unreadCount,
+              }
+            : thread,
         );
-      } else {
+      } else if (action.participant) {
         threads = [
           {
             id: message.threadId,
-            participantId: action.participantId,
+            participantId: action.participant.id,
             messageIds: [message.id],
-            lastReadAt: now,
+            lastReadAt: Date.now(),
+            unreadCount: message.senderId !== CURRENT_USER_ID ? 1 : 0,
           },
           ...state.threads,
         ];
       }
 
-      return { ...state, messagesById, threads };
+      return { ...state, threads, messagesById, authorsById };
+    }
+
+    case "REPLACE_CHAT_MESSAGE": {
+      const messagesById = { ...state.messagesById };
+      delete messagesById[action.tempId];
+      messagesById[action.message.id] = action.message;
+
+      const threads = state.threads.map((thread) => {
+        if (!thread.messageIds.includes(action.tempId)) return thread;
+
+        const messageIds = thread.messageIds
+          .map((id) => (id === action.tempId ? action.message.id : id))
+          .filter((id, index, arr) => arr.indexOf(id) === index);
+
+        return { ...thread, messageIds };
+      });
+
+      return { ...state, threads, messagesById };
+    }
+
+    case "SET_MESSAGES_SEEN": {
+      const threads = state.threads.map((thread) => {
+        if (thread.id !== action.threadId) return thread;
+        const previous = thread.peerLastReadAt ?? 0;
+        if (action.lastReadAt <= previous) return thread;
+        return { ...thread, peerLastReadAt: action.lastReadAt };
+      });
+      return { ...state, threads };
     }
 
     case "MARK_THREAD_READ": {
-      const threads = state.threads.map((t) =>
-        t.id === action.threadId ? { ...t, lastReadAt: Date.now() } : t,
+      const now = Date.now();
+      const threads = state.threads.map((thread) =>
+        thread.id === action.threadId
+          ? { ...thread, lastReadAt: now, unreadCount: 0 }
+          : thread,
       );
       return { ...state, threads };
     }
@@ -324,15 +554,27 @@ type CommunityContextValue = {
   setPresenceSnapshot: (onlineUserIds: number[]) => void;
   patchPresence: (userId: number, isOnline: boolean) => void;
   clearPresence: () => void;
-  sendMessage: (participantId: string, text: string) => void;
-  openChatThread: (participantId: string) => string;
-  markThreadRead: (threadId: string) => void;
+  loadChatThreads: () => Promise<void>;
+  loadChatMessages: (threadId: string) => Promise<void>;
+  loadMoreChatMessages: (threadId: string) => Promise<void>;
+  openChatThreadWithPeer: (peerUserId: number) => Promise<string | null>;
+  sendMessage: (participantId: string, text: string, threadId?: string) => Promise<void>;
+  sendMediaMessages: (
+    participantId: string,
+    items: ChatMediaPick[],
+    threadId?: string,
+  ) => Promise<void>;
+  markThreadRead: (threadId: string) => Promise<void>;
+  receiveChatMessage: (message: ChatMessage, participant?: CommunityUser) => void;
+  setMessagesSeen: (threadId: string, lastReadAt: number, readerUserId: number) => void;
 };
 
 const CommunityContext = createContext<CommunityContextValue | null>(null);
 
 export function CommunityProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { state: appState } = useApp();
+  const currentUserId = appState.account?.userId ?? null;
 
   const votePost = useCallback(async (postId: string, vote: PostVote) => {
     dispatch({ type: "VOTE_POST", postId, vote });
@@ -420,17 +662,237 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "UPSERT_AUTHOR", author });
   }, []);
 
-  const openChatThread = useCallback(
-    (participantId: string): string => {
-      const existing = state.threads.find((thread) => thread.participantId === participantId);
-      if (existing) return existing.id;
+  const loadChatThreads = useCallback(async () => {
+    if (!currentUserId) return;
 
-      const threadId = newId("thread");
-      dispatch({ type: "ENSURE_CHAT_THREAD", participantId, threadId });
-      return threadId;
+    try {
+      const rows = await fetchChatThreads();
+      const threads: ChatThread[] = [];
+      const messagesById: Record<string, ChatMessage> = {};
+      const authorsById: Record<string, CommunityUser> = {};
+
+      for (const row of rows) {
+        const mapped = mapBackendThreadSummary(row, currentUserId);
+        threads.push(mapped.thread);
+        authorsById[mapped.participant.id] = mapped.participant;
+        for (const message of mapped.messages) {
+          messagesById[message.id] = message;
+        }
+      }
+
+      dispatch({ type: "HYDRATE_CHAT_THREADS", threads, messagesById, authorsById });
+    } catch {
+      // keep cached threads
+    }
+  }, [currentUserId]);
+
+  const loadChatMessages = useCallback(
+    async (threadId: string) => {
+      if (!currentUserId) return;
+
+      try {
+        const page = await fetchChatMessages(Number(threadId));
+        const messages = page.items.map((row) =>
+          mapBackendMessage(row, currentUserId),
+        );
+        dispatch({
+          type: "SET_THREAD_MESSAGES",
+          threadId,
+          messages,
+          hasMore: page.has_more,
+          peerLastReadAt: page.peer_last_read_at
+            ? Date.parse(page.peer_last_read_at)
+            : undefined,
+        });
+      } catch {
+        // keep cached messages
+      }
     },
-    [state.threads],
+    [currentUserId],
   );
+
+  const loadMoreChatMessages = useCallback(
+    async (threadId: string) => {
+      if (!currentUserId) return;
+
+      const thread = state.threads.find((row) => row.id === threadId);
+      if (!thread?.hasMoreMessages || thread.messageIds.length === 0) return;
+
+      const oldestId = thread.messageIds[0];
+      const oldest = state.messagesById[oldestId];
+      if (!oldest) return;
+
+      const before = new Date(oldest.createdAt).toISOString();
+
+      try {
+        const page = await fetchChatMessages(Number(threadId), before);
+        const messages = page.items.map((row) =>
+          mapBackendMessage(row, currentUserId),
+        );
+        dispatch({
+          type: "APPEND_THREAD_MESSAGES",
+          threadId,
+          messages,
+          hasMore: page.has_more,
+        });
+      } catch {
+        // keep current window
+      }
+    },
+    [currentUserId, state.messagesById, state.threads],
+  );
+
+  const openChatThreadWithPeer = useCallback(
+    async (peerUserId: number): Promise<string | null> => {
+      if (!currentUserId) return null;
+
+      try {
+        const summary = await openChatThreadApi(peerUserId);
+        const mapped = mapBackendThreadSummary(summary, currentUserId);
+        dispatch({
+          type: "UPSERT_CHAT_THREAD",
+          thread: mapped.thread,
+          participant: mapped.participant,
+          messages: mapped.messages,
+        });
+        return String(summary.thread_id);
+      } catch {
+        return null;
+      }
+    },
+    [currentUserId],
+  );
+
+  const receiveChatMessage = useCallback(
+    (message: ChatMessage, participant?: CommunityUser) => {
+      dispatch({ type: "RECEIVE_CHAT_MESSAGE", message, participant });
+    },
+    [],
+  );
+
+  const setMessagesSeen = useCallback(
+    (threadId: string, lastReadAt: number, readerUserId: number) => {
+      if (!currentUserId || Number(readerUserId) === Number(currentUserId)) return;
+      dispatch({ type: "SET_MESSAGES_SEEN", threadId, lastReadAt });
+    },
+    [currentUserId],
+  );
+
+  const sendMessage = useCallback(
+    async (participantId: string, text: string, threadId?: string) => {
+      const trimmed = text.trim();
+      if (!trimmed || !currentUserId) return;
+
+      const peerUserId = parseDbUserId(participantId);
+      if (!peerUserId) return;
+
+      let resolvedThreadId = threadId;
+      if (!resolvedThreadId) {
+        const existing = state.threads.find((thread) => thread.participantId === participantId);
+        resolvedThreadId = existing?.id;
+      }
+      if (!resolvedThreadId) {
+        const opened = await openChatThreadWithPeer(peerUserId);
+        if (!opened) return;
+        resolvedThreadId = opened;
+      }
+
+      const tempId = `temp-${Date.now()}`;
+      const optimistic: ChatMessage = {
+        id: tempId,
+        threadId: resolvedThreadId,
+        senderId: CURRENT_USER_ID,
+        text: trimmed,
+        createdAt: Date.now(),
+        kind: "text",
+      };
+      dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
+
+      try {
+        const sent = await sendChatMessageApi(Number(resolvedThreadId), {
+          message_type: "text",
+          text: trimmed,
+        });
+        dispatch({
+          type: "REPLACE_CHAT_MESSAGE",
+          tempId,
+          message: mapBackendMessage(sent, currentUserId),
+        });
+      } catch {
+        // optimistic message stays until refresh
+      }
+    },
+    [currentUserId, openChatThreadWithPeer, state.threads],
+  );
+
+  const sendMediaMessages = useCallback(
+    async (participantId: string, items: ChatMediaPick[], threadId?: string) => {
+      if (!currentUserId || items.length === 0) return;
+
+      const peerUserId = parseDbUserId(participantId);
+      if (!peerUserId) return;
+
+      let resolvedThreadId = threadId;
+      if (!resolvedThreadId) {
+        const existing = state.threads.find((thread) => thread.participantId === participantId);
+        resolvedThreadId = existing?.id;
+      }
+      if (!resolvedThreadId) {
+        const opened = await openChatThreadWithPeer(peerUserId);
+        if (!opened) return;
+        resolvedThreadId = opened;
+      }
+
+      for (const item of items) {
+        const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const optimistic: ChatMessage = {
+          id: tempId,
+          threadId: resolvedThreadId,
+          senderId: CURRENT_USER_ID,
+          text: "",
+          createdAt: Date.now(),
+          kind: item.kind,
+          mediaUrl: item.uri,
+          mediaMimeType: item.mimeType,
+          mediaDurationMs: item.durationMs,
+        };
+        dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
+
+        try {
+          const uploaded = await uploadChatMediaToR2({
+            uri: item.uri,
+            kind: item.kind,
+            mimeType: item.mimeType,
+          });
+          const sent = await sendChatMessageApi(Number(resolvedThreadId), {
+            message_type: item.kind,
+            media_url: uploaded.publicUrl,
+            media_mime_type: uploaded.contentType,
+            media_duration_ms: item.durationMs,
+            media_size_bytes: item.sizeBytes ?? uploaded.sizeBytes,
+          });
+          dispatch({
+            type: "REPLACE_CHAT_MESSAGE",
+            tempId,
+            message: mapBackendMessage(sent, currentUserId),
+          });
+        } catch {
+          // optimistic preview stays until refresh
+        }
+      }
+    },
+    [currentUserId, openChatThreadWithPeer, state.threads],
+  );
+
+  const markThreadRead = useCallback(async (threadId: string) => {
+    dispatch({ type: "MARK_THREAD_READ", threadId });
+
+    try {
+      await markChatThreadRead(Number(threadId));
+    } catch {
+      // local read state still updated
+    }
+  }, []);
 
   const setPresenceSnapshot = useCallback((onlineUserIds: number[]) => {
     dispatch({ type: "SET_PRESENCE_SNAPSHOT", onlineUserIds });
@@ -442,14 +904,6 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
 
   const clearPresence = useCallback(() => {
     dispatch({ type: "CLEAR_PRESENCE" });
-  }, []);
-
-  const sendMessage = useCallback((participantId: string, text: string) => {
-    dispatch({ type: "SEND_MESSAGE", participantId, text });
-  }, []);
-
-  const markThreadRead = useCallback((threadId: string) => {
-    dispatch({ type: "MARK_THREAD_READ", threadId });
   }, []);
 
   const value = useMemo<CommunityContextValue>(
@@ -469,9 +923,15 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       setPresenceSnapshot,
       patchPresence,
       clearPresence,
+      loadChatThreads,
+      loadChatMessages,
+      loadMoreChatMessages,
+      openChatThreadWithPeer,
       sendMessage,
-      openChatThread,
+      sendMediaMessages,
       markThreadRead,
+      receiveChatMessage,
+      setMessagesSeen,
     }),
     [
       state,
@@ -489,9 +949,15 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       setPresenceSnapshot,
       patchPresence,
       clearPresence,
+      loadChatThreads,
+      loadChatMessages,
+      loadMoreChatMessages,
+      openChatThreadWithPeer,
       sendMessage,
-      openChatThread,
+      sendMediaMessages,
       markThreadRead,
+      receiveChatMessage,
+      setMessagesSeen,
     ],
   );
 

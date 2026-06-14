@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 
+import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import type { ChatMessage, MessageReadStatus } from "@/types/chat";
 import { formatClockTime } from "@/utils/community";
@@ -25,27 +26,48 @@ export function MessageBubble({ message, fromMe, readStatus, showTimestamp = tru
 
   const status = fromMe ? (readStatus ?? message.readStatus ?? "unseen") : undefined;
   const time = formatClockTime(message.createdAt);
+  const isMedia = message.kind === "image" || message.kind === "video" || message.kind === "audio";
+  const hasMedia = isMedia && Boolean(message.mediaUrl);
 
   return (
     <View className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}>
       <View
         className={[
-          "max-w-[78%] rounded-3xl px-4 py-2.5",
+          hasMedia ? "max-w-[82%] overflow-hidden p-1.5" : "max-w-[78%] px-4 py-2.5",
+          "rounded-3xl",
           fromMe
             ? "bg-primary rounded-tr-md"
             : "bg-section rounded-tl-md dark:bg-d-surface",
         ].join(" ")}
       >
-        <Text
-          className={`text-base leading-5 ${
-            fromMe ? "text-white" : "text-foreground dark:text-d-text"
-          }`}
-        >
-          {message.text}
-        </Text>
+        {hasMedia ? <ChatMessageMedia message={message} fromMe={fromMe} /> : null}
+
+        {message.text ? (
+          <Text
+            className={`text-base leading-5 ${
+              hasMedia ? "px-2 pb-1 pt-2" : ""
+            } ${fromMe ? "text-white" : "text-foreground dark:text-d-text"}`}
+          >
+            {message.text}
+          </Text>
+        ) : null}
+
+        {!hasMedia && !message.text ? (
+          <Text
+            className={`text-base leading-5 ${
+              fromMe ? "text-white" : "text-foreground dark:text-d-text"
+            }`}
+          >
+            {message.kind === "image"
+              ? "📷 Photo"
+              : message.kind === "video"
+                ? "🎥 Video"
+                : "🎤 Voice message"}
+          </Text>
+        ) : null}
 
         {fromMe && status ? (
-          <View className="mt-1 flex-row items-center justify-end gap-1">
+          <View className={`flex-row items-center justify-end gap-1 ${hasMedia ? "px-2 pb-1" : "mt-1"}`}>
             <Text className="text-[10px] text-white/70">{time}</Text>
             <MessageReadTicks status={status} onPrimary />
           </View>

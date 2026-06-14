@@ -1,3 +1,4 @@
+import { useApp } from "@/context/AppContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Alert, Pressable, Share, Text, View } from "react-native";
 
@@ -5,8 +6,9 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { PlayerProfile } from "@/types/playerProfile";
 import { mapPlayerProfileToCommunityUser } from "@/utils/chat/mapPlayerProfileToCommunityUser";
-import { resolveProfileCommunityUserId } from "@/utils/profile/communityProfileLinks";
-import { safeRouter } from "@/utils/safeRouter";
+import { navigateToChatThread, openChatAndNavigate } from "@/utils/chat/openChatNavigation";
+import { dbAuthorId } from "@/utils/community/presence";
+import { resolveProfileUserId } from "@/utils/profile/communityProfileLinks";
 
 type Props = {
   profile: PlayerProfile;
@@ -14,12 +16,35 @@ type Props = {
 
 export function UserProfileActions({ profile }: Props) {
   const { colors } = useTheme();
-  const { upsertAuthor } = useCommunity();
+  const { state: appState } = useApp();
+  const { upsertAuthor, openChatThreadWithPeer, state } = useCommunity();
 
   const onMessage = () => {
-    const participantId = resolveProfileCommunityUserId(profile);
+    if (profile.isCurrentUser) return;
+
+    const peerUserId = resolveProfileUserId(profile, appState.account?.userId);
+    if (!peerUserId) {
+      Alert.alert(
+        "Can't start chat",
+        "This profile is not linked to a messaging account yet.",
+      );
+      return;
+    }
+
+    const participantId = dbAuthorId(peerUserId);
     upsertAuthor(mapPlayerProfileToCommunityUser(profile, participantId));
-    safeRouter.push(`/chat-by-user/${participantId}`);
+
+    const existing = state.threads.find((thread) => thread.participantId === participantId);
+    if (existing) {
+      void navigateToChatThread(existing.id);
+      return;
+    }
+
+    void openChatAndNavigate(peerUserId, openChatThreadWithPeer, {
+      onFailure: () => {
+        Alert.alert("Can't open chat", "Please try again.");
+      },
+    });
   };
 
   const onInvite = async () => {
