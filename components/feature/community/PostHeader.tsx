@@ -75,12 +75,17 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
         />
 
         <View className="ml-3 min-w-0 flex-1">
-          <Text
-            className="text-base font-bold text-foreground dark:text-d-text"
-            numberOfLines={1}
-          >
-            {author.name}
-          </Text>
+          <View className="min-w-0 flex-row items-baseline">
+            <Text
+              className="shrink text-base font-bold text-foreground dark:text-d-text"
+              numberOfLines={1}
+            >
+              {author.name}
+            </Text>
+            <Text className="ml-1.5 shrink-0 text-xs text-muted-foreground dark:text-d-muted">
+              · {formatRelativeTime(createdAt)}
+            </Text>
+          </View>
 
           <View className="mt-1 flex-row items-center gap-2">
             <BadgeArt badgeId={badgeId} size={22} />
@@ -88,7 +93,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
               className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
               numberOfLines={1}
             >
-              {badgeName} · {formatRelativeTime(createdAt)}
+              {badgeName}
             </Text>
           </View>
         </View>

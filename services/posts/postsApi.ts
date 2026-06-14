@@ -1,9 +1,13 @@
+import { POST_COMMENTS_PAGE_SIZE } from "@/constants/postCommentsPagination";
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import type { PostVote } from "@/types/community";
 import type {
   AllowedImageContentType,
   BackendFeedPageResponse,
+  BackendPostCommentEngagement,
   BackendPostCommentResponse,
+  BackendPostCommentsPageResponse,
+  BackendDeleteCommentResponse,
   BackendPostEngagement,
   BackendPostResponse,
   CreatePostPayload,
@@ -148,23 +152,36 @@ export async function sharePost(postId: string): Promise<BackendPostEngagement> 
 
 export async function fetchPostComments(
   postId: string,
-): Promise<BackendPostCommentResponse[]> {
-  const res = await authenticatedFetch(`/posts/${postId}/comments`);
+  pagination: { offset?: number; limit?: number } = {},
+): Promise<BackendPostCommentsPageResponse> {
+  const offset = pagination.offset ?? 0;
+  const limit = pagination.limit ?? POST_COMMENTS_PAGE_SIZE;
+  const query = new URLSearchParams({
+    offset: String(offset),
+    limit: String(limit),
+  });
+  const res = await authenticatedFetch(`/posts/${postId}/comments?${query.toString()}`);
 
   if (!res.ok) {
     throw new Error(await parseErrorMessage(res, "Could not load comments"));
   }
 
-  return res.json() as Promise<BackendPostCommentResponse[]>;
+  return res.json() as Promise<BackendPostCommentsPageResponse>;
 }
+
+export type CreatePostCommentPayload = {
+  text: string;
+  parent_comment_id?: number;
+  reply_to_user_id?: number;
+};
 
 export async function createPostComment(
   postId: string,
-  text: string,
+  payload: CreatePostCommentPayload,
 ): Promise<BackendPostCommentResponse> {
   const res = await authenticatedFetch(`/posts/${postId}/comments`, {
     method: "POST",
-    body: JSON.stringify({ text }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
@@ -172,4 +189,53 @@ export async function createPostComment(
   }
 
   return res.json() as Promise<BackendPostCommentResponse>;
+}
+
+export async function voteOnComment(
+  postId: string,
+  commentId: string,
+  vote: PostVote,
+): Promise<BackendPostCommentEngagement> {
+  const res = await authenticatedFetch(`/posts/${postId}/comments/${commentId}/vote`, {
+    method: "POST",
+    body: JSON.stringify({ vote }),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not update comment vote"));
+  }
+
+  return res.json() as Promise<BackendPostCommentEngagement>;
+}
+
+export async function updatePostComment(
+  postId: string,
+  commentId: string,
+  text: string,
+): Promise<BackendPostCommentResponse> {
+  const res = await authenticatedFetch(`/posts/${postId}/comments/${commentId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ text }),
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not update comment"));
+  }
+
+  return res.json() as Promise<BackendPostCommentResponse>;
+}
+
+export async function deletePostComment(
+  postId: string,
+  commentId: string,
+): Promise<BackendDeleteCommentResponse> {
+  const res = await authenticatedFetch(`/posts/${postId}/comments/${commentId}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not delete comment"));
+  }
+
+  return res.json() as Promise<BackendDeleteCommentResponse>;
 }

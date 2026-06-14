@@ -66,8 +66,21 @@ export type PostComment = {
   id: string;
   postId: string;
   authorId: string;
+  parentCommentId?: string | null;
+  replyToUserId?: string | null;
+  replyToHandle?: string | null;
   text: string;
   createdAt: number;
+  upvoteCount: number;
+  downvoteCount: number;
+  myVote: PostVote | null;
+};
+
+export type CommentReplyTarget = {
+  commentId: string;
+  userId: string;
+  handle: string;
+  name: string;
 };
 
 export type FeedItem = {

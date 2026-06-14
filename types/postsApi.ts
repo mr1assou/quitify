@@ -69,11 +69,39 @@ export type BackendPostEngagement = {
   my_vote: "up" | "down" | null;
 };
 
+export type BackendPostCommentReplyTo = {
+  user_id: number;
+  username: string | null;
+};
+
 export type BackendPostCommentResponse = {
   comment_id: number;
   post_id: number;
+  parent_comment_id: number | null;
+  reply_to: BackendPostCommentReplyTo | null;
   is_mine: boolean;
   text: string;
+  upvote_count: number;
+  downvote_count: number;
+  my_vote: "up" | "down" | null;
   created_at: string;
   author: BackendFeedPostAuthor;
+};
+
+export type BackendPostCommentsPageResponse = {
+  items: BackendPostCommentResponse[];
+  has_more: boolean;
+};
+
+export type BackendPostCommentEngagement = {
+  comment_id: number;
+  upvote_count: number;
+  downvote_count: number;
+  my_vote: "up" | "down" | null;
+};
+
+export type BackendDeleteCommentResponse = {
+  post_id: number;
+  comment_count: number;
+  removed_comment_ids: number[];
 };

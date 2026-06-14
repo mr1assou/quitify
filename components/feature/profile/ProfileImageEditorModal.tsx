@@ -11,6 +11,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { updateProfileImage, uploadProfileImage } from "@/services/profile/profileImageApi";
 import type { PostImageCrop } from "@/types/community";
+import { dbAuthorId } from "@/utils/community/presence";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
 import { optimizeProfileImageForUpload } from "@/utils/profile/optimizeProfileImageForUpload";
 
@@ -21,7 +22,7 @@ type Props = {
 
 export function ProfileImageEditorModal({ visible, onClose }: Props) {
   const { colors } = useTheme();
-  const { updateProfile } = useApp();
+  const { updateProfile, state: appState } = useApp();
   const { patchAuthor } = useCommunity();
   const { pickImages } = usePickPostImage();
   const cropEditorRef = useRef<PostImageCropEditorHandle>(null);
@@ -57,6 +58,10 @@ export function ProfileImageEditorModal({ visible, onClose }: Props) {
       await updateProfileImage(imageUrl);
       updateProfile({ imageUrl });
       patchAuthor(CURRENT_USER_ID, { avatarUrl: imageUrl });
+      const userId = appState.account?.userId;
+      if (userId) {
+        patchAuthor(dbAuthorId(userId), { avatarUrl: imageUrl });
+      }
       handleClose();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Could not update profile photo";
@@ -64,7 +69,7 @@ export function ProfileImageEditorModal({ visible, onClose }: Props) {
     } finally {
       setSaving(false);
     }
-  }, [crop, handleClose, patchAuthor, updateProfile, uri]);
+  }, [appState.account?.userId, crop, handleClose, patchAuthor, updateProfile, uri]);
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={handleClose}>

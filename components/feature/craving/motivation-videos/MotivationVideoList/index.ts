@@ -1,1 +1,0 @@
-export { MotivationVideoList } from "./MotivationVideoList";

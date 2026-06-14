@@ -1,38 +1,64 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import type { CommentReplyTarget } from "@/types/community";
 
 type Props = {
   placeholder?: string;
   compact?: boolean;
+  replyTo?: CommentReplyTarget | null;
   onSubmit: (text: string) => void | Promise<void>;
 };
+
+function stripReplyMention(text: string, handle?: string): string {
+  if (!handle) return text.trim();
+
+  const trimmed = text.trim();
+  const prefix = `@${handle}`;
+  if (trimmed.toLowerCase().startsWith(prefix.toLowerCase())) {
+    return trimmed.slice(prefix.length).trimStart();
+  }
+
+  return trimmed;
+}
 
 export function CommentComposer({
   placeholder = "Write a comment…",
   compact = false,
+  replyTo = null,
   onSubmit,
 }: Props) {
   const { colors } = useTheme();
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (!replyTo) return;
+
+    setText(`@${replyTo.handle} `);
+    inputRef.current?.focus();
+  }, [replyTo?.commentId, replyTo?.handle]);
 
   const submit = async () => {
     const trimmed = text.trim();
     if (!trimmed || submitting) return;
 
+    const message = stripReplyMention(trimmed, replyTo?.handle);
+    if (!message) return;
+
     setSubmitting(true);
     try {
-      await onSubmit(trimmed);
+      await onSubmit(message);
       setText("");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const disabled = text.trim().length === 0 || submitting;
+  const disabled = stripReplyMention(text, replyTo?.handle).length === 0 || submitting;
   const compactSendSize = 28;
 
   return (
@@ -42,6 +68,7 @@ export function CommentComposer({
       }`}
     >
       <TextInput
+        ref={inputRef}
         value={text}
         onChangeText={setText}
         placeholder={placeholder}

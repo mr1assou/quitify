@@ -1,6 +1,8 @@
-import { CRAVING_SESSION_BUBBLE_MESSAGE } from "@/constants/cravingMotivation";
+import { useMemo } from "react";
 
-/** Motivation line for the craving-session speech bubble. */
+import { pickCravingMotivationMessage } from "@/constants/cravingMotivation";
+
+/** One random motivation line for the current craving session. */
 export function useCravingMotivationMessage(): string {
-  return CRAVING_SESSION_BUBBLE_MESSAGE;
+  return useMemo(() => pickCravingMotivationMessage(), []);
 }

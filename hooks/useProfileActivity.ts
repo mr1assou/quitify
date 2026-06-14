@@ -45,6 +45,12 @@ function mapProfileComments(
       authorId: communityUserId,
       text: item.text,
       createdAt: new Date(item.created_at).getTime(),
+      upvoteCount: 0,
+      downvoteCount: 0,
+      myVote: null,
+      parentCommentId: null,
+      replyToUserId: null,
+      replyToHandle: null,
     },
     post: {
       id: String(item.post.post_id),
@@ -56,6 +62,7 @@ function mapProfileComments(
       downvoteCount: 0,
       shareCount: 0,
       commentIds: [],
+      myVote: null,
     },
   }));
 }
@@ -109,6 +116,7 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
             currentUserImageUrl,
             communityState.onlineByUserId,
             communityState.presenceReady,
+            userId,
           ),
           comments: mapProfileComments(commentsPage.items, communityUserId),
           upvotedFeed: buildFeedItems(
@@ -117,6 +125,7 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
             currentUserImageUrl,
             communityState.onlineByUserId,
             communityState.presenceReady,
+            userId,
           ),
         });
       } catch {

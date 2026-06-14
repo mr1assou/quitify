@@ -32,6 +32,8 @@ export function useCommunityFeed() {
   const [error, setError] = useState<string | null>(null);
   const requestIdRef = useRef(0);
   const didMountFilterRef = useRef(false);
+  const accountUserId = appState.account?.userId ?? null;
+  const prevAccountUserIdRef = useRef<number | null>(accountUserId);
 
   const loadPosts = useCallback(
     async (
@@ -93,6 +95,13 @@ export function useCommunityFeed() {
     void loadPosts(filter, "append", state.posts.length);
   }, [filter, hasMore, loadPosts, loading, loadingMore, refreshing, state.posts.length]);
 
+  useEffect(() => {
+    if (prevAccountUserIdRef.current === accountUserId) return;
+    prevAccountUserIdRef.current = accountUserId;
+    if (accountUserId == null) return;
+    void loadPosts(filter, "replace", 0);
+  }, [accountUserId, filter, loadPosts]);
+
   useFocusEffect(
     useCallback(() => {
       if (state.posts.length === 0) {
@@ -120,8 +129,10 @@ export function useCommunityFeed() {
       appState.profile?.imageUrl,
       state.onlineByUserId,
       state.presenceReady,
+      accountUserId,
     );
   }, [
+    accountUserId,
     appState.profile?.imageUrl,
     state.authorsById,
     state.onlineByUserId,

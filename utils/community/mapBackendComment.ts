@@ -4,9 +4,10 @@ import type { CommunityUser, PostComment } from "@/types/community";
 import type { BackendFeedPostAuthor, BackendPostCommentResponse } from "@/types/postsApi";
 import { resolveBadgeIdForSmokeFreeDays } from "@/utils/badges";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
+import { dbAuthorId } from "@/utils/community/presence";
 
 export function authorIdFromComment(comment: BackendPostCommentResponse): string {
-  return comment.is_mine ? CURRENT_USER_ID : `db-${comment.author.user_id}`;
+  return dbAuthorId(comment.author.user_id);
 }
 
 export function mapCommentAuthorToCommunityUser(
@@ -37,8 +38,16 @@ export function mapBackendComment(comment: BackendPostCommentResponse): PostComm
     id: String(comment.comment_id),
     postId: String(comment.post_id),
     authorId: authorIdFromComment(comment),
+    parentCommentId:
+      comment.parent_comment_id == null ? null : String(comment.parent_comment_id),
+    replyToUserId:
+      comment.reply_to?.user_id == null ? null : String(comment.reply_to.user_id),
+    replyToHandle: comment.reply_to?.username?.trim().toLowerCase() ?? null,
     text: comment.text,
     createdAt: new Date(comment.created_at).getTime(),
+    upvoteCount: comment.upvote_count,
+    downvoteCount: comment.downvote_count,
+    myVote: comment.my_vote,
   };
 }
 

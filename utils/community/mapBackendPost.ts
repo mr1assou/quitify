@@ -1,13 +1,13 @@
 import { flagUrlForCode } from "@/constants/leaderboardCountries";
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
 import type { PostTagId } from "@/constants/postTags";
 import type { CommunityPost, CommunityUser, PostImageCrop, PostMediaFrame } from "@/types/community";
 import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/postsApi";
 import { resolveBadgeIdForSmokeFreeDays } from "@/utils/badges";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
+import { dbAuthorId } from "@/utils/community/presence";
 
 export function authorIdFromFeedPost(post: BackendFeedPostResponse): string {
-  return post.is_mine ? CURRENT_USER_ID : `db-${post.author.user_id}`;
+  return dbAuthorId(post.author.user_id);
 }
 
 export function mapBackendAuthorToCommunityUser(
@@ -79,7 +79,7 @@ export function mapBackendFeedPostToCommunityPost(
 }
 
 export function mapBackendPostToCommunityPost(post: BackendPostResponse): CommunityPost {
-  return mapPostFields(post, CURRENT_USER_ID, null, []);
+  return mapPostFields(post, dbAuthorId(post.author_id), null, []);
 }
 
 export function mapFeedPostsFromApi(posts: BackendFeedPostResponse[]): {

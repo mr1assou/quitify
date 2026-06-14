@@ -1,6 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -11,13 +13,15 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CommentComposer } from "@/components/feature/community/CommentComposer";
-import { CommentRow } from "@/components/feature/community/CommentRow";
+import { CommentThreadList } from "@/components/feature/community/CommentThreadList";
 import { PostActions } from "@/components/feature/community/PostActions";
 import { PostHeader } from "@/components/feature/community/PostHeader";
 import { PostContent } from "@/components/feature/community/PostContent";
+import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityPost } from "@/hooks/useCommunityPost";
+import type { CommentReplyTarget } from "@/types/community";
 import { resolveCommentCount } from "@/utils/community/postEngagement";
 
 const HEADER_HEIGHT = 52;
@@ -27,7 +31,10 @@ export default function PostDetailScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const detail = useCommunityPost(id ?? "");
-  const { votePost, share, addComment } = useCommunity();
+  const { state: appState } = useApp();
+  const { state, votePost, share, addComment, voteComment, updateComment, deleteComment } =
+    useCommunity();
+  const [replyTarget, setReplyTarget] = useState<CommentReplyTarget | null>(null);
 
   const screenStyle = {
     paddingTop: insets.top,
@@ -52,7 +59,7 @@ export default function PostDetailScreen() {
     );
   }
 
-  const { post, author, comments } = detail;
+  const { post, author, postComments, commentsLoading } = detail;
   const keyboardOffset =
     Platform.OS === "ios" ? insets.top + HEADER_HEIGHT : 0;
 
@@ -102,14 +109,37 @@ export default function PostDetailScreen() {
             <Text className="pt-2 text-xs font-bold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
               {resolveCommentCount(post)} comments
             </Text>
-            {comments.map(({ comment, author: cAuthor }) => (
-              <CommentRow key={comment.id} comment={comment} author={cAuthor} />
-            ))}
+
+            {commentsLoading && postComments.length === 0 ? (
+              <View className="items-center py-8">
+                <ActivityIndicator color={colors.primary} />
+              </View>
+            ) : (
+              <CommentThreadList
+                comments={postComments}
+                postAuthorId={post.authorId}
+                authorsById={state.authorsById}
+                onlineByUserId={state.onlineByUserId}
+                presenceReady={state.presenceReady}
+                currentAccountUserId={appState.account?.userId ?? null}
+                onReply={setReplyTarget}
+                onVote={(commentId, vote) => void voteComment(post.id, commentId, vote)}
+                onEdit={(commentId, text) => updateComment(post.id, commentId, text)}
+                onDelete={(commentId) => deleteComment(post.id, commentId)}
+              />
+            )}
           </View>
         </ScrollView>
 
         <View className="border-t border-section bg-background px-4 pt-3 dark:border-d-border dark:bg-d-bg">
-          <CommentComposer onSubmit={(text) => addComment(post.id, text)} />
+          <CommentComposer
+            replyTo={replyTarget}
+            placeholder={replyTarget ? `Reply to @${replyTarget.handle}…` : "Write a comment…"}
+            onSubmit={async (text) => {
+              await addComment(post.id, text, replyTarget);
+              setReplyTarget(null);
+            }}
+          />
         </View>
       </KeyboardAvoidingView>
     </View>

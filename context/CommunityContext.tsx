@@ -19,14 +19,17 @@ import {
 import { uploadChatMediaToR2 } from "@/services/chat/uploadChatMedia";
 import {
   createPostComment,
+  deletePostComment,
   fetchPostComments,
   sharePost as sharePostApi,
   updatePost as updatePostApi,
+  updatePostComment,
+  voteOnComment,
   voteOnPost,
 } from "@/services/posts/postsApi";
 import type { ChatMessage, ChatThread } from "@/types/chat";
 import type { CommunityPost, CommunityUser, PostComment, PostVote } from "@/types/community";
-import type { BackendPostEngagement } from "@/types/postsApi";
+import type { BackendPostCommentEngagement, BackendPostEngagement } from "@/types/postsApi";
 import {
   mapBackendComment,
   mapCommentAuthorToCommunityUser,
@@ -41,6 +44,9 @@ import {
 } from "@/utils/chat/mapBackendChat";
 import type { ChatMediaPick } from "@/components/feature/chat/usePickChatMedia";
 import { parseDbUserId } from "@/utils/community/presence";
+import { applyCommentEngagement, applyCommentVote } from "@/utils/community/commentVote";
+import type { CommentReplyTarget } from "@/types/community";
+import { hasLoadedPostComments, countLoadedPostComments } from "@/utils/community/resolvePostCommentIds";
 import type { UpdatePostPayload } from "@/types/updatePost";
 
 type State = {
@@ -53,6 +59,10 @@ type State = {
   onlineByUserId: Record<number, boolean>;
   /** True after the first presence:snapshot from the server. */
   presenceReady: boolean;
+  commentsLoadedByPostId: Record<string, boolean>;
+  commentsHasMoreByPostId: Record<string, boolean>;
+  commentsLoadingMoreByPostId: Record<string, boolean>;
+  commentsLoadingByPostId: Record<string, boolean>;
 };
 
 type Action =
@@ -60,12 +70,29 @@ type Action =
   | { type: "SYNC_ENGAGEMENT"; postId: string; engagement: BackendPostEngagement }
   | { type: "SHARE"; postId: string }
   | { type: "ADD_COMMENT"; post: PostComment; author: CommunityUser }
+  | { type: "UPDATE_COMMENT"; comment: PostComment; author: CommunityUser }
+  | {
+      type: "DELETE_COMMENTS";
+      postId: string;
+      commentIds: string[];
+      commentCount: number;
+    }
   | {
       type: "SET_POST_COMMENTS";
       postId: string;
       comments: PostComment[];
       authorsById: Record<string, CommunityUser>;
+      hasMore: boolean;
     }
+  | {
+      type: "APPEND_POST_COMMENTS";
+      postId: string;
+      comments: PostComment[];
+      authorsById: Record<string, CommunityUser>;
+      hasMore: boolean;
+    }
+  | { type: "SET_COMMENTS_LOADING_MORE"; postId: string; loading: boolean }
+  | { type: "SET_COMMENTS_LOADING"; postId: string; loading: boolean }
   | { type: "ADD_POST"; post: CommunityPost; author?: CommunityUser }
   | {
       type: "SET_POSTS";
@@ -119,8 +146,11 @@ type Action =
       tempId: string;
       message: ChatMessage;
     }
+  | { type: "PATCH_COMMENT_VOTE"; commentId: string; vote: PostVote }
+  | { type: "SYNC_COMMENT_ENGAGEMENT"; commentId: string; engagement: BackendPostCommentEngagement }
   | { type: "SET_MESSAGES_SEEN"; threadId: string; lastReadAt: number }
-  | { type: "MARK_THREAD_READ"; threadId: string };
+  | { type: "MARK_THREAD_READ"; threadId: string }
+  | { type: "RESET" };
 
 const initialState: State = {
   posts: [],
@@ -130,6 +160,10 @@ const initialState: State = {
   messagesById: {},
   onlineByUserId: {},
   presenceReady: false,
+  commentsLoadedByPostId: {},
+  commentsHasMoreByPostId: {},
+  commentsLoadingMoreByPostId: {},
+  commentsLoadingByPostId: {},
 };
 
 function mergeCommunityUser(
@@ -238,6 +272,36 @@ function reducer(state: State, action: Action): State {
       return { ...state, posts, commentsById, authorsById };
     }
 
+    case "UPDATE_COMMENT": {
+      const commentsById = {
+        ...state.commentsById,
+        [action.comment.id]: action.comment,
+      };
+      const authorsById = {
+        ...state.authorsById,
+        [action.author.id]: action.author,
+      };
+      return { ...state, commentsById, authorsById };
+    }
+
+    case "DELETE_COMMENTS": {
+      const commentsById = { ...state.commentsById };
+      for (const commentId of action.commentIds) {
+        delete commentsById[commentId];
+      }
+      const removed = new Set(action.commentIds);
+      const posts = state.posts.map((p) =>
+        p.id === action.postId
+          ? {
+              ...p,
+              commentIds: p.commentIds.filter((id) => !removed.has(id)),
+              commentCount: action.commentCount,
+            }
+          : p,
+      );
+      return { ...state, posts, commentsById };
+    }
+
     case "SET_POST_COMMENTS": {
       const commentsById = { ...state.commentsById };
       for (const comment of action.comments) {
@@ -248,7 +312,6 @@ function reducer(state: State, action: Action): State {
           ? {
               ...p,
               commentIds: action.comments.map((c) => c.id),
-              commentCount: action.comments.length,
             }
           : p,
       );
@@ -257,6 +320,91 @@ function reducer(state: State, action: Action): State {
         posts,
         commentsById,
         authorsById: { ...state.authorsById, ...action.authorsById },
+        commentsLoadedByPostId: {
+          ...state.commentsLoadedByPostId,
+          [action.postId]: true,
+        },
+        commentsHasMoreByPostId: {
+          ...state.commentsHasMoreByPostId,
+          [action.postId]: action.hasMore,
+        },
+        commentsLoadingMoreByPostId: {
+          ...state.commentsLoadingMoreByPostId,
+          [action.postId]: false,
+        },
+      };
+    }
+
+    case "APPEND_POST_COMMENTS": {
+      const commentsById = { ...state.commentsById };
+      for (const comment of action.comments) {
+        commentsById[comment.id] = comment;
+      }
+      const posts = state.posts.map((p) => {
+        if (p.id !== action.postId) return p;
+        const mergedIds = [...p.commentIds];
+        for (const comment of action.comments) {
+          if (!mergedIds.includes(comment.id)) {
+            mergedIds.push(comment.id);
+          }
+        }
+        return { ...p, commentIds: mergedIds };
+      });
+      return {
+        ...state,
+        posts,
+        commentsById,
+        authorsById: { ...state.authorsById, ...action.authorsById },
+        commentsHasMoreByPostId: {
+          ...state.commentsHasMoreByPostId,
+          [action.postId]: action.hasMore,
+        },
+        commentsLoadingMoreByPostId: {
+          ...state.commentsLoadingMoreByPostId,
+          [action.postId]: false,
+        },
+      };
+    }
+
+    case "SET_COMMENTS_LOADING_MORE":
+      return {
+        ...state,
+        commentsLoadingMoreByPostId: {
+          ...state.commentsLoadingMoreByPostId,
+          [action.postId]: action.loading,
+        },
+      };
+
+    case "SET_COMMENTS_LOADING":
+      return {
+        ...state,
+        commentsLoadingByPostId: {
+          ...state.commentsLoadingByPostId,
+          [action.postId]: action.loading,
+        },
+      };
+
+    case "PATCH_COMMENT_VOTE": {
+      const existing = state.commentsById[action.commentId];
+      if (!existing) return state;
+      return {
+        ...state,
+        commentsById: {
+          ...state.commentsById,
+          [action.commentId]: applyCommentVote(existing, action.vote),
+        },
+      };
+    }
+
+    case "SYNC_COMMENT_ENGAGEMENT": {
+      const existing = state.commentsById[action.commentId];
+      if (!existing) return state;
+      return {
+        ...state,
+        commentsById: {
+          ...state.commentsById,
+          [action.commentId]: applyCommentEngagement(existing, action.engagement),
+        },
       };
     }
 
@@ -533,6 +681,9 @@ function reducer(state: State, action: Action): State {
       return { ...state, threads };
     }
 
+    case "RESET":
+      return initialState;
+
     default:
       return state;
   }
@@ -542,8 +693,17 @@ type CommunityContextValue = {
   state: State;
   votePost: (postId: string, vote: PostVote) => Promise<void>;
   share: (postId: string) => Promise<void>;
-  addComment: (postId: string, text: string) => Promise<void>;
+  addComment: (
+    postId: string,
+    text: string,
+    replyTo?: CommentReplyTarget | null,
+  ) => Promise<void>;
+  voteComment: (postId: string, commentId: string, vote: PostVote) => Promise<void>;
+  updateComment: (postId: string, commentId: string, text: string) => Promise<boolean>;
+  deleteComment: (postId: string, commentId: string) => Promise<boolean>;
   loadPostComments: (postId: string) => Promise<void>;
+  loadMorePostComments: (postId: string) => Promise<void>;
+  loadAllPostComments: (postId: string) => Promise<void>;
   addPost: (post: CommunityPost, author?: CommunityUser) => void;
   setPosts: (posts: CommunityPost[], authorsById: Record<string, CommunityUser>) => void;
   appendPosts: (posts: CommunityPost[], authorsById: Record<string, CommunityUser>) => void;
@@ -567,6 +727,7 @@ type CommunityContextValue = {
   markThreadRead: (threadId: string) => Promise<void>;
   receiveChatMessage: (message: ChatMessage, participant?: CommunityUser) => void;
   setMessagesSeen: (threadId: string, lastReadAt: number, readerUserId: number) => void;
+  resetCommunity: () => void;
 };
 
 const CommunityContext = createContext<CommunityContextValue | null>(null);
@@ -595,34 +756,175 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const addComment = useCallback(async (postId: string, text: string) => {
+  const addComment = useCallback(
+    async (postId: string, text: string, replyTo?: CommentReplyTarget | null) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+
+      const replyToUserId =
+        parseDbUserId(replyTo?.userId ?? "") ??
+        (replyTo?.userId === CURRENT_USER_ID ? currentUserId ?? undefined : undefined);
+
+      try {
+        const created = await createPostComment(postId, {
+          text: trimmed,
+          parent_comment_id: replyTo ? Number.parseInt(replyTo.commentId, 10) : undefined,
+          reply_to_user_id: replyToUserId,
+        });
+        dispatch({
+          type: "ADD_COMMENT",
+          post: mapBackendComment(created),
+          author: mapCommentAuthorToCommunityUser(created),
+        });
+      } catch {
+        // keep UI unchanged on failure
+      }
+    },
+    [currentUserId],
+  );
+
+  const voteComment = useCallback(async (postId: string, commentId: string, vote: PostVote) => {
+    dispatch({ type: "PATCH_COMMENT_VOTE", commentId, vote });
+    try {
+      const engagement = await voteOnComment(postId, commentId, vote);
+      dispatch({ type: "SYNC_COMMENT_ENGAGEMENT", commentId, engagement });
+    } catch {
+      dispatch({ type: "PATCH_COMMENT_VOTE", commentId, vote });
+    }
+  }, []);
+
+  const updateComment = useCallback(async (postId: string, commentId: string, text: string) => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed) return false;
 
     try {
-      const created = await createPostComment(postId, trimmed);
+      const updated = await updatePostComment(postId, commentId, trimmed);
       dispatch({
-        type: "ADD_COMMENT",
-        post: mapBackendComment(created),
-        author: mapCommentAuthorToCommunityUser(created),
+        type: "UPDATE_COMMENT",
+        comment: mapBackendComment(updated),
+        author: mapCommentAuthorToCommunityUser(updated),
       });
+      return true;
     } catch {
-      // keep UI unchanged on failure
+      return false;
+    }
+  }, []);
+
+  const deleteComment = useCallback(async (postId: string, commentId: string) => {
+    try {
+      const result = await deletePostComment(postId, commentId);
+      dispatch({
+        type: "DELETE_COMMENTS",
+        postId,
+        commentIds: result.removed_comment_ids.map(String),
+        commentCount: result.comment_count,
+      });
+      return true;
+    } catch {
+      return false;
     }
   }, []);
 
   const loadPostComments = useCallback(async (postId: string) => {
-    const post = state.posts.find((p) => p.id === postId);
-    if (post && post.commentIds.length > 0) return;
+    if (
+      hasLoadedPostComments(postId, {
+        posts: state.posts,
+        commentsById: state.commentsById,
+        commentsLoadedByPostId: state.commentsLoadedByPostId,
+      })
+    ) {
+      return;
+    }
 
     try {
-      const rows = await fetchPostComments(postId);
-      const { comments, authorsById } = mapCommentsFromApi(rows);
-      dispatch({ type: "SET_POST_COMMENTS", postId, comments, authorsById });
+      const page = await fetchPostComments(postId, { offset: 0 });
+      const { comments, authorsById } = mapCommentsFromApi(page.items);
+      dispatch({
+        type: "SET_POST_COMMENTS",
+        postId,
+        comments,
+        authorsById,
+        hasMore: page.has_more,
+      });
     } catch {
       // keep cached comments
     }
-  }, [state.posts]);
+  }, [state.commentsById, state.commentsLoadedByPostId, state.posts]);
+
+  const loadMorePostComments = useCallback(async (postId: string) => {
+    if (!state.commentsHasMoreByPostId[postId]) return;
+    if (state.commentsLoadingMoreByPostId[postId]) return;
+
+    dispatch({ type: "SET_COMMENTS_LOADING_MORE", postId, loading: true });
+
+    try {
+      const offset = countLoadedPostComments(postId, state.commentsById);
+      const page = await fetchPostComments(postId, { offset });
+      const { comments, authorsById } = mapCommentsFromApi(page.items);
+      dispatch({
+        type: "APPEND_POST_COMMENTS",
+        postId,
+        comments,
+        authorsById,
+        hasMore: page.has_more,
+      });
+    } catch {
+      dispatch({ type: "SET_COMMENTS_LOADING_MORE", postId, loading: false });
+    }
+  }, [
+    state.commentsById,
+    state.commentsHasMoreByPostId,
+    state.commentsLoadingMoreByPostId,
+  ]);
+
+  const loadAllPostComments = useCallback(async (postId: string) => {
+    const fullyLoaded =
+      state.commentsLoadedByPostId[postId] === true &&
+      state.commentsHasMoreByPostId[postId] !== true;
+    if (fullyLoaded) return;
+    if (state.commentsLoadingByPostId[postId]) return;
+
+    dispatch({ type: "SET_COMMENTS_LOADING", postId, loading: true });
+
+    try {
+      let offset = hasLoadedPostComments(postId, {
+        posts: state.posts,
+        commentsById: state.commentsById,
+        commentsLoadedByPostId: state.commentsLoadedByPostId,
+      })
+        ? countLoadedPostComments(postId, state.commentsById)
+        : 0;
+      let hasMore = state.commentsHasMoreByPostId[postId] ?? true;
+      let isFirstPage = offset === 0;
+
+      while (hasMore) {
+        const page = await fetchPostComments(postId, { offset });
+        const { comments, authorsById } = mapCommentsFromApi(page.items);
+
+        dispatch({
+          type: isFirstPage ? "SET_POST_COMMENTS" : "APPEND_POST_COMMENTS",
+          postId,
+          comments,
+          authorsById,
+          hasMore: page.has_more,
+        });
+
+        hasMore = page.has_more;
+        offset += page.items.length;
+        isFirstPage = false;
+      }
+    } catch {
+      // keep cached comments
+    } finally {
+      dispatch({ type: "SET_COMMENTS_LOADING", postId, loading: false });
+    }
+  }, [
+    state.commentsById,
+    state.commentsHasMoreByPostId,
+    state.commentsLoadedByPostId,
+    state.commentsLoadingByPostId,
+    state.posts,
+  ]);
 
   const addPost = useCallback((post: CommunityPost, author?: CommunityUser) => {
     dispatch({ type: "ADD_POST", post, author });
@@ -906,13 +1208,22 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "CLEAR_PRESENCE" });
   }, []);
 
+  const resetCommunity = useCallback(() => {
+    dispatch({ type: "RESET" });
+  }, []);
+
   const value = useMemo<CommunityContextValue>(
     () => ({
       state,
       votePost,
       share,
       addComment,
+      voteComment,
+      updateComment,
+      deleteComment,
       loadPostComments,
+      loadMorePostComments,
+      loadAllPostComments,
       addPost,
       setPosts,
       appendPosts,
@@ -932,13 +1243,19 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       markThreadRead,
       receiveChatMessage,
       setMessagesSeen,
+      resetCommunity,
     }),
     [
       state,
       votePost,
       share,
       addComment,
+      voteComment,
+      updateComment,
+      deleteComment,
       loadPostComments,
+      loadMorePostComments,
+      loadAllPostComments,
       addPost,
       setPosts,
       appendPosts,
@@ -958,6 +1275,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       markThreadRead,
       receiveChatMessage,
       setMessagesSeen,
+      resetCommunity,
     ],
   );
 

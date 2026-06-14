@@ -8,12 +8,14 @@ export function buildFeedItems(
   currentUserImageUrl?: string,
   onlineByUserId?: Record<number, boolean>,
   presenceReady = false,
+  currentAccountUserId?: number | null,
 ): FeedItem[] {
   return posts
     .map<FeedItem | null>((post) => {
       const author = resolveCommunityAuthor(post.authorId, {
         authorsById,
         currentUserImageUrl,
+        currentAccountUserId,
         onlineByUserId,
         presenceReady,
       });

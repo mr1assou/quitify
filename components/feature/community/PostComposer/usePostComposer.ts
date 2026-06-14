@@ -172,7 +172,11 @@ export function usePostComposer() {
       const post = mapBackendPostToCommunityPost(created);
       addPost(
         post,
-        buildCurrentUserCommunityAuthor(appState.profile, appState.account?.name),
+        buildCurrentUserCommunityAuthor(
+          appState.profile,
+          appState.account?.name,
+          appState.account?.userId,
+        ),
       );
       setDraft(EMPTY_POST_DRAFT);
       router.back();

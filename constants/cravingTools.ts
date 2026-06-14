@@ -4,8 +4,7 @@ import type { Href } from "expo-router";
 export type CravingToolId =
   | "breathing"
   | "games"
-  | "motivation-cards"
-  | "motivation-videos";
+  | "motivation-cards";
 
 export type CravingToolColors = {
   /** Card background on the craving session grid. */
@@ -79,23 +78,6 @@ export const CRAVING_TOOLS: readonly CravingTool[] = [
       iconColor: "#E8B27B",
     },
     href: "/craving-tools/motivation-cards",
-  },
-  {
-    id: "motivation-videos",
-    label: "Videos",
-    description: "Watch & breathe",
-    icon: "play-circle-outline",
-    colors: {
-      background: "#FCE8E8",
-      iconBackground: "#FFFFFFB3",
-      iconColor: "#B33A3A",
-    },
-    darkColors: {
-      background: "#332220",
-      iconBackground: "#FFFFFF1A",
-      iconColor: "#F09090",
-    },
-    href: "/craving-tools/motivation-videos",
   },
 ] as const;
 
