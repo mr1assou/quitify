@@ -1,6 +1,7 @@
 import { io, type Socket } from "socket.io-client";
 
 import { API_URL } from "@/config/api";
+import { reportPresenceOffline } from "@/services/presence/presenceApi";
 
 let socket: Socket | null = null;
 
@@ -70,7 +71,24 @@ export function getPresenceSocket(): Socket | null {
 
 export function disconnectPresenceSocket(): void {
   if (!socket) return;
+  socket.io.opts.reconnection = false;
   socket.removeAllListeners();
   socket.disconnect();
   socket = null;
+}
+
+/** Gracefully go offline: socket leave + disconnect, then HTTP fallback. */
+export async function goPresenceOffline(accessToken?: string | null): Promise<void> {
+  if (socket?.connected) {
+    socket.emit("presence:leave");
+  }
+  disconnectPresenceSocket();
+
+  if (!accessToken) return;
+
+  try {
+    await reportPresenceOffline(accessToken);
+  } catch {
+    // Local cleanup still proceeds if the API is unreachable.
+  }
 }

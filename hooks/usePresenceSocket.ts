@@ -6,6 +6,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import {
   connectPresenceSocket,
   disconnectPresenceSocket,
+  goPresenceOffline,
 } from "@/services/realtime/presenceSocket";
 import { dbAuthorId } from "@/utils/community/presence";
 import { getAccessToken } from "@/utils/authStorage";
@@ -46,7 +47,10 @@ export function usePresenceSocket() {
 
     return () => {
       cancelled = true;
-      disconnectPresenceSocket();
+      void (async () => {
+        const token = await getAccessToken();
+        await goPresenceOffline(token);
+      })();
     };
   }, [
     clearPresence,
@@ -83,7 +87,10 @@ export function usePresenceSocket() {
       }
 
       if (nextState === "background" || nextState === "inactive") {
-        disconnectPresenceSocket();
+        void (async () => {
+          const token = await getAccessToken();
+          await goPresenceOffline(token);
+        })();
       }
     });
 
