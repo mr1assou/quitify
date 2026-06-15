@@ -39,7 +39,10 @@ export default function AchievementScreen() {
             )
           ) : (
             <>
-              <NextBadgeCard badge={progress.nextBadge} />
+              <NextBadgeCard
+                badge={progress.currentBadge}
+                progress={progress.currentBadgeProgress}
+              />
               <BadgesGallery badges={progress.badges} />
             </>
           )}

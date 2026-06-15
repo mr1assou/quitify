@@ -19,6 +19,8 @@ export async function loadUserSessionFromApi(
     email: me.email,
     name: me.name,
     createdAt: Date.now(),
+    earnedBadgeIds: me.earnedBadgeIds ?? [],
+    freedomPoints: me.freedomPoints ?? 0,
   };
 
   if (!me.hasCompletedOnboarding) {

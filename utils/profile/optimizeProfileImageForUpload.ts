@@ -4,10 +4,10 @@ import {
   PROFILE_UPLOAD_MAX_LONG_EDGE,
 } from "@/constants/profileImage";
 import type { PostImageCrop } from "@/types/community";
-import { optimizePostImageForUpload } from "@/utils/posts/optimizePostImage";
+import { optimizePostImageWithCropForUpload } from "@/utils/posts/optimizePostImage";
 
 export function optimizeProfileImageForUpload(uri: string, crop: PostImageCrop) {
-  return optimizePostImageForUpload(
+  return optimizePostImageWithCropForUpload(
     uri,
     PROFILE_IMAGE_FRAME,
     crop,

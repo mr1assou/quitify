@@ -2,7 +2,7 @@ import type { ProgressSummary } from "@/types/progress";
 import { resolveHighestUnlockedBadgeId } from "@/utils/badges";
 
 export type AchievementBadgeMetric = {
-  /** 0..1 progress toward the next badge */
+  /** 0..1 progress toward the next badge tier */
   progress: number;
   label: string;
   caption: string;
@@ -24,22 +24,19 @@ export function computeAchievementBadgeSummary(
   summary: ProgressSummary,
   isPremium = false,
 ): AchievementBadgeSummary {
-  const unlocked = summary.unlockedBadges.length;
-  const total = summary.badges.length;
   const badgeProgress = summary.nextBadge?.progress ?? 1;
   const currentBadgeId =
     resolveHighestUnlockedBadgeId(summary.badges, isPremium) ?? "first-step";
-  const currentBadge = summary.badges.find((b) => b.id === currentBadgeId);
+  const currentBadge =
+    summary.currentBadge ??
+    summary.badges.find((b) => b.id === currentBadgeId) ??
+    null;
 
   return {
     badge: {
       progress: badgeProgress,
-      label: "Badges",
-      caption: summary.nextBadge
-        ? `Next: ${summary.nextBadge.name}`
-        : currentBadge
-          ? `Current: ${currentBadge.name}`
-          : `${unlocked} of ${total} earned`,
+      label: "Current badge",
+      caption: currentBadge?.name ?? "First Step",
     },
     freedomPoints: summary.xp,
     currentBadgeId,

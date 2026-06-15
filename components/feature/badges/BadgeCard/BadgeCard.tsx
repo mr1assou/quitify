@@ -5,6 +5,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
 import type { Badge } from "@/types";
+import { formatNumber } from "@/utils/format";
 
 type Props = {
   badge: Badge;
@@ -40,7 +41,7 @@ export function BadgeCard({ badge, unlocked, delay = 0 }: Props) {
         </Text>
         <View className="mt-3 flex-row items-center justify-between">
           <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-            Day {badge.daysRequired}
+            Day {badge.daysRequired} · {formatNumber(badge.fpRequired)} FP
           </Text>
           {badge.premium ? (
             <View className="rounded-full bg-primary px-2 py-0.5">

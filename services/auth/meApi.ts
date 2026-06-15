@@ -21,6 +21,8 @@ export type AuthMeResponse = {
   timezone?: string;
   slipCigarettesTotal?: number;
   currentAttemptNumber?: number;
+  freedomPoints?: number;
+  earnedBadgeIds?: string[];
 };
 
 export async function fetchAuthMe(accessToken: string): Promise<AuthMeResponse> {

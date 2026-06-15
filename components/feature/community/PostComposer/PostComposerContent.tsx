@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, type RefObject } from "react";
 import { ScrollView } from "react-native";
 
 import type { PostTagId } from "@/constants/postTags";
 import type { PostImageCrop, PostMediaFrame } from "@/types/community";
 import type { PostDraft } from "@/utils/community/postDraft";
 
+import type { PostImageCropEditorHandle } from "./PostImageCropEditor";
 import { PostBodyEditor } from "./PostBodyEditor";
 import { PostImageSection } from "./PostImageSection";
 import { PostTagPickerModal } from "./PostTagPickerModal";
@@ -13,6 +14,7 @@ import { PostTitleField } from "./PostTitleField";
 
 type Props = {
   draft: PostDraft;
+  cropEditorRef?: RefObject<PostImageCropEditorHandle | null>;
   onUpdate: (patch: Partial<PostDraft>) => void;
   onPickImages: () => void;
   onRemoveImage: (id: string) => void;
@@ -22,6 +24,7 @@ type Props = {
 
 export function PostComposerContent({
   draft,
+  cropEditorRef,
   onUpdate,
   onPickImages,
   onRemoveImage,
@@ -59,6 +62,7 @@ export function PostComposerContent({
         />
         <PostImageSection
           images={draft.images}
+          cropEditorRef={cropEditorRef}
           onRemoveImage={onRemoveImage}
           onFrameChange={onFrameChange}
           onCropChange={onCropChange}

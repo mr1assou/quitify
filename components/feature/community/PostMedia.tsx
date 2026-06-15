@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image, Text, View } from "react-native";
+import { Image } from "expo-image";
+import { Text, View } from "react-native";
 
 import { CroppedPostImage } from "@/components/feature/community/CroppedPostImage";
 import type { PostMedia as PostMediaType } from "@/types/community";
 import { resolvePostMediaAspectRatio } from "@/utils/community/postMediaFrame";
 import { resolvePostMediaSource } from "@/utils/community/postMediaSource";
+import { shouldApplyPostMediaCrop } from "@/utils/community/postMediaDisplay";
 
 type Props = {
   media: PostMediaType;
@@ -44,7 +46,7 @@ function MediaImage({
   roundedClassName: string;
 }) {
   const source = resolvePostMediaSource(media);
-  const hasCrop = Boolean(media.localUri && media.crop);
+  const hasCrop = shouldApplyPostMediaCrop(media);
 
   if (hasCrop) {
     return (
@@ -53,22 +55,29 @@ function MediaImage({
         aspectRatio={fill ? undefined : aspectRatio}
         crop={media.crop}
         fill={fill}
-        className={fill ? "flex-1 bg-black" : `w-full overflow-hidden ${roundedClassName} bg-black`}
+        className={
+          fill
+            ? "flex-1 bg-section dark:bg-d-surface"
+            : `w-full overflow-hidden ${roundedClassName} bg-section dark:bg-d-surface`
+        }
       />
     );
   }
 
   if (fill) {
     return (
-      <View className="flex-1 overflow-hidden bg-black">
-        <Image source={source} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
+      <View className="flex-1 overflow-hidden bg-section dark:bg-d-surface">
+        <Image source={source} style={{ width: "100%", height: "100%" }} contentFit="cover" />
       </View>
     );
   }
 
   return (
-    <View className={`w-full overflow-hidden ${roundedClassName}`} style={{ aspectRatio }}>
-      <Image source={source} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
+    <View
+      className={`w-full overflow-hidden ${roundedClassName} bg-section dark:bg-d-surface`}
+      style={{ aspectRatio }}
+    >
+      <Image source={source} style={{ width: "100%", height: "100%" }} contentFit="cover" />
     </View>
   );
 }
@@ -87,7 +96,7 @@ export function PostMedia({
     <View
       className={
         fill
-          ? `relative flex-1 overflow-hidden bg-black ${className ?? ""}`
+          ? `relative flex-1 overflow-hidden ${className ?? ""}`
           : `relative w-full ${className ?? ""}`
       }
     >

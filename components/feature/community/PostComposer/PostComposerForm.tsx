@@ -17,6 +17,7 @@ export function PostComposerForm() {
     isPosting,
     isEditing,
     onPost,
+    cropEditorRef,
   } = usePostComposer();
 
   return (
@@ -28,6 +29,7 @@ export function PostComposerForm() {
       <PostComposerHeader isEditing={isEditing} />
       <PostComposerContent
         draft={draft}
+        cropEditorRef={cropEditorRef}
         onUpdate={updateDraft}
         onPickImages={addImages}
         onRemoveImage={removeImage}

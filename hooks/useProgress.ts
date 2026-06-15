@@ -21,6 +21,15 @@ export function useProgress(): ProgressSummary | null {
       isPremium: state.isPremium,
       resistedCravings: cravingSummary.resisted,
       completedMissions: missionsCompleted,
+      earnedBadgeIds: state.account?.earnedBadgeIds ?? [],
+      freedomPoints: state.account?.freedomPoints,
     });
-  }, [stats, state.isPremium, cravingSummary.resisted, missionsCompleted]);
+  }, [
+    stats,
+    state.isPremium,
+    state.account?.earnedBadgeIds,
+    state.account?.freedomPoints,
+    cravingSummary.resisted,
+    missionsCompleted,
+  ]);
 }

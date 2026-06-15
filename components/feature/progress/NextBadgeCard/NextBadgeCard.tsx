@@ -7,13 +7,14 @@ import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
 import type { BadgeWithStatus } from "@/types/progress";
-import { pluralize } from "@/utils/format";
+import { progressToPercent } from "@/utils/achievementProgress";
 
 type Props = {
   badge: BadgeWithStatus | null;
+  progress: number;
 };
 
-export function NextBadgeCard({ badge }: Props) {
+export function NextBadgeCard({ badge, progress }: Props) {
   const { colors } = useTheme();
 
   if (!badge) {
@@ -31,6 +32,8 @@ export function NextBadgeCard({ badge }: Props) {
     );
   }
 
+  const pct = progressToPercent(progress);
+
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
       <Card variant="section">
@@ -40,23 +43,20 @@ export function NextBadgeCard({ badge }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Next badge
+              Current badge
             </Text>
             <Text className="mt-0.5 text-base font-bold text-foreground dark:text-d-text">
               {badge.name}
             </Text>
           </View>
           <Text className="text-xs font-semibold text-muted-foreground dark:text-d-muted">
-            {badge.daysLeft} {pluralize(badge.daysLeft, "day")} left
+            {pct}%
           </Text>
         </View>
 
         <View className="mt-3">
-          <ProgressBar progress={badge.progress} fillClassName="bg-accent" />
+          <ProgressBar progress={progress} fillClassName="bg-accent" />
         </View>
-        <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-          {badge.description}
-        </Text>
       </Card>
     </Animated.View>
   );

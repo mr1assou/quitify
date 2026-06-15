@@ -41,10 +41,16 @@ export type GlobalRank = {
 
 export type BadgeWithStatus = Badge & {
   unlocked: boolean;
-  /** 0..1 progress toward unlock (1 if unlocked). */
+  /** 0..1 overall progress — minimum of streak and FP progress. */
   progress: number;
-  /** Days remaining; 0 if unlocked. */
+  /** Days remaining on streak requirement; 0 if met. */
   daysLeft: number;
+  /** Freedom Points remaining; 0 if met. */
+  fpLeft: number;
+  /** 0..1 progress on smoke-free streak. */
+  streakProgress: number;
+  /** 0..1 progress on Freedom Points. */
+  fpProgress: number;
 };
 
 export type ProgressSummary = {
@@ -52,5 +58,9 @@ export type ProgressSummary = {
   rank: GlobalRank;
   badges: BadgeWithStatus[];
   unlockedBadges: BadgeWithStatus[];
+  /** Highest badge the user has earned. */
+  currentBadge: BadgeWithStatus | null;
   nextBadge: BadgeWithStatus | null;
+  /** 0..1 progress from current badge toward the next one. */
+  currentBadgeProgress: number;
 };

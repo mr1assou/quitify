@@ -1,5 +1,6 @@
+import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { Image, type ImageSourcePropType, type StyleProp, type ViewStyle, View } from "react-native";
+import { Image as RNImage, type ImageSourcePropType, type StyleProp, type ViewStyle, View } from "react-native";
 
 import type { PostImageCrop } from "@/types/community";
 import {
@@ -37,7 +38,7 @@ export function CroppedPostImage({
       return;
     }
 
-    Image.getSize(
+    RNImage.getSize(
       uri,
       (width, height) => setImageSize({ width, height }),
       () => setImageSize({ width: 1, height: 1 }),
@@ -61,7 +62,7 @@ export function CroppedPostImage({
 
   return (
     <View
-      className={className ?? (fill ? "bg-black" : "w-full overflow-hidden rounded-xl bg-black")}
+      className={className ?? (fill ? "bg-section dark:bg-d-surface" : "w-full overflow-hidden rounded-xl bg-section dark:bg-d-surface")}
       style={[
         fill ? { flex: 1, overflow: "hidden" } : aspectRatio ? { aspectRatio } : undefined,
         style,
@@ -82,9 +83,10 @@ export function CroppedPostImage({
             left: layout.left,
             top: layout.top,
           }}
+          contentFit="cover"
         />
       ) : (
-        <Image source={source} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
+        <Image source={source} style={{ width: "100%", height: "100%" }} contentFit="cover" />
       )}
     </View>
   );

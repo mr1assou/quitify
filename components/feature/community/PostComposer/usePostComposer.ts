@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-native";
 
 import { useApp } from "@/context/AppContext";
@@ -22,6 +22,7 @@ import { optimizePostImageForUpload } from "@/utils/posts/optimizePostImage";
 import { buildCurrentUserCommunityAuthor } from "@/utils/community/resolveCommunityAuthor";
 
 import { usePickPostImage } from "./usePickPostImage";
+import type { PostImageCropEditorHandle } from "./PostImageCropEditor";
 
 function isRemoteUri(uri: string): boolean {
   return /^https?:\/\//i.test(uri);
@@ -35,6 +36,7 @@ export function usePostComposer() {
   const [draft, setDraft] = useState<PostDraft>(EMPTY_POST_DRAFT);
   const [isPosting, setIsPosting] = useState(false);
   const { pickImages } = usePickPostImage();
+  const cropEditorRef = useRef<PostImageCropEditorHandle | null>(null);
 
   useEffect(() => {
     if (!editingPostId) {
@@ -102,8 +104,15 @@ export function usePostComposer() {
 
     const title = draft.title.trim();
     const description = draft.body.trim();
-    const image = draft.images[0];
+    let image = draft.images[0];
     const tagId = draft.tagId;
+
+    if (image) {
+      const flushedCrop = cropEditorRef.current?.flush();
+      if (flushedCrop) {
+        image = { ...image, crop: flushedCrop };
+      }
+    }
 
     const originalPost = editingPostId
       ? state.posts.find((item) => item.id === editingPostId)
@@ -123,11 +132,7 @@ export function usePostComposer() {
           imageFrame = image.frame;
           imageCrop = image.crop;
         } else {
-          const optimized = await optimizePostImageForUpload(
-            image.uri,
-            image.frame,
-            image.crop,
-          );
+          const optimized = await optimizePostImageForUpload(image.uri);
           const { uploadUrl, imageUrl: uploadedUrl } = await requestPostUploadUrl(
             optimized.contentType,
           );
@@ -153,7 +158,7 @@ export function usePostComposer() {
         } else if (imageUrl) {
           payload.image_url = imageUrl;
           payload.image_frame = imageFrame;
-          payload.image_crop = imageCrop;
+          payload.image_crop = imageCrop ?? null;
         }
         await updatePost(editingPostId, payload);
         router.back();
@@ -169,7 +174,19 @@ export function usePostComposer() {
         image_crop: imageCrop,
       });
 
-      const post = mapBackendPostToCommunityPost(created);
+      let post = mapBackendPostToCommunityPost(created);
+      if (image && post.media?.[0]) {
+        post = {
+          ...post,
+          media: [
+            {
+              ...post.media[0],
+              frame: post.media[0].frame ?? image.frame,
+              crop: post.media[0].crop ?? image.crop,
+            },
+          ],
+        };
+      }
       addPost(
         post,
         buildCurrentUserCommunityAuthor(
@@ -199,5 +216,6 @@ export function usePostComposer() {
     isPosting,
     isEditing,
     onPost,
+    cropEditorRef,
   };
 }

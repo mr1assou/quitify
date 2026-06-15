@@ -8,6 +8,22 @@ type BadgeLike = {
   premium?: boolean;
 };
 
+/** Highest unlocked badge by milestone, or null if none yet. */
+export function resolveHighestUnlockedBadge<T extends BadgeLike>(
+  badges: T[],
+): T | null {
+  let best: T | null = null;
+
+  for (const badge of badges) {
+    if (!badge.unlocked) continue;
+    if (!best || badge.daysRequired > best.daysRequired) {
+      best = badge;
+    }
+  }
+
+  return best;
+}
+
 /** Highest earned badge id (by `daysRequired`), or null if none unlocked. */
 export function resolveHighestUnlockedBadgeId(
   badges: BadgeLike[],

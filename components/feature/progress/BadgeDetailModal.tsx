@@ -5,31 +5,64 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Button } from "@/components/ui/Button";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import {
+  FIRST_STEP_REQUIREMENTS,
+  isBadgeGalleryAvailable,
+  isFirstStepBadge,
+} from "@/constants/badges";
 import { useTheme } from "@/context/ThemeContext";
 import type { BadgeWithStatus } from "@/types/progress";
-import { pluralize } from "@/utils/format";
+import { formatNumber, pluralize } from "@/utils/format";
 
 type Props = {
   badge: BadgeWithStatus | null;
+  isRegistered: boolean;
   onClose: () => void;
 };
 
-function requirementText(badge: BadgeWithStatus): string {
-  if (badge.unlocked) {
-    return "You've earned this badge. Nice work — keep your streak going.";
-  }
+function RequirementRow({
+  label,
+  valueLabel,
+  progress,
+  met,
+  showProgress = true,
+}: {
+  label: string;
+  valueLabel: string;
+  progress: number;
+  met: boolean;
+  showProgress?: boolean;
+}) {
+  const { colors } = useTheme();
 
-  const days = badge.daysRequired;
-  const dayLabel = `${days} ${pluralize(days, "smoke-free day")}`;
+  return (
+    <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
+      <View className="flex-row items-center gap-2">
+        <Ionicons
+          name={met ? "checkmark-circle" : "close-circle"}
+          size={20}
+          color={met ? colors.accent : colors.alert}
+        />
+        <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+          {label}
+        </Text>
+      </View>
 
-  if (badge.premium) {
-    return `To unlock this badge, stay smoke-free for ${dayLabel}. This is a Premium badge.`;
-  }
+      <Text className="mt-2 pl-7 text-sm font-semibold text-foreground dark:text-d-text">
+        {valueLabel}
+      </Text>
 
-  return `To get this badge, stay smoke-free for ${dayLabel}.`;
+      {showProgress && !met ? (
+        <View className="mt-2 pl-7">
+          <ProgressBar progress={progress} fillClassName="bg-primary" />
+        </View>
+      ) : null}
+    </View>
+  );
 }
 
-export function BadgeDetailModal({ badge, onClose }: Props) {
+export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -37,6 +70,24 @@ export function BadgeDetailModal({ badge, onClose }: Props) {
     Haptics.selectionAsync().catch(() => {});
     onClose();
   };
+
+  const earnable = badge ? isBadgeGalleryAvailable(badge.id) : false;
+  const isFirstStep = badge ? isFirstStepBadge(badge.id) : false;
+
+  const displayStreakMet =
+    earnable && !isFirstStep && (badge?.unlocked || (badge?.streakProgress ?? 0) >= 1);
+  const displayFpMet =
+    earnable && !isFirstStep && (badge?.unlocked || (badge?.fpProgress ?? 0) >= 1);
+  const displayStreakProgress = earnable && !isFirstStep ? (badge?.streakProgress ?? 0) : 0;
+  const displayFpProgress = earnable && !isFirstStep ? (badge?.fpProgress ?? 0) : 0;
+
+  const statusLabel = !earnable
+    ? "Locked"
+    : badge?.unlocked
+      ? "Earned"
+      : isFirstStep
+        ? "Available"
+        : "In progress";
 
   return (
     <Modal visible={badge !== null} transparent animationType="fade" onRequestClose={handleClose}>
@@ -53,16 +104,22 @@ export function BadgeDetailModal({ badge, onClose }: Props) {
                   <BadgeArt badgeId={badge.id} size={96} />
                   <View
                     className={`absolute -right-1 -top-1 h-6 w-6 items-center justify-center rounded-full ${
-                      badge.unlocked ? "bg-accent" : "bg-section dark:bg-d-surface"
+                      badge.unlocked && earnable ? "bg-accent" : "bg-section dark:bg-d-surface"
                     }`}
                     style={
-                      badge.unlocked
+                      badge.unlocked && earnable
                         ? undefined
                         : { borderWidth: 1, borderColor: colors.border }
                     }
                   >
                     <Ionicons
-                      name={badge.unlocked ? "checkmark" : "lock-closed"}
+                      name={
+                        badge.unlocked && earnable
+                          ? "checkmark"
+                          : earnable
+                            ? "ellipse-outline"
+                            : "lock-closed"
+                      }
                       size={badge.unlocked ? 14 : 12}
                       color={badge.unlocked ? colors.white : colors.mutedForeground}
                     />
@@ -75,35 +132,75 @@ export function BadgeDetailModal({ badge, onClose }: Props) {
 
                 <View
                   className={`mt-2 rounded-full px-3 py-1 ${
-                    badge.unlocked ? "bg-accent/20" : "bg-section dark:bg-d-surface"
+                    badge.unlocked && earnable ? "bg-accent/20" : "bg-section dark:bg-d-surface"
                   }`}
                 >
                   <Text
                     className={`text-xs font-bold uppercase tracking-wider ${
-                      badge.unlocked ? "text-accent" : "text-muted-foreground dark:text-d-muted"
+                      badge.unlocked && earnable
+                        ? "text-accent"
+                        : earnable
+                          ? "text-primary"
+                          : "text-muted-foreground dark:text-d-muted"
                     }`}
                   >
-                    {badge.unlocked ? "Earned" : "Locked"}
+                    {statusLabel}
                   </Text>
                 </View>
               </View>
 
-              <Text className="text-center text-sm leading-6 text-muted-foreground dark:text-d-muted">
-                {badge.description}
-              </Text>
+              {isFirstStep ? (
+                <Text className="mb-3 text-center text-sm leading-6 text-muted-foreground dark:text-d-muted">
+                  This badge celebrates your decision to quit
+                </Text>
+              ) : null}
 
-              <View className="mt-4 rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
+              <View className="gap-2">
                 <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                  How to get it
+                  Requirements
                 </Text>
-                <Text className="mt-1 text-sm leading-5 text-foreground dark:text-d-text">
-                  {requirementText(badge)}
-                </Text>
+
+                {isFirstStep ? (
+                  FIRST_STEP_REQUIREMENTS.map((requirement) => (
+                    <RequirementRow
+                      key={requirement.id}
+                      label={requirement.label}
+                      valueLabel={requirement.valueLabel}
+                      progress={isRegistered ? 1 : 0}
+                      met={isRegistered}
+                      showProgress={false}
+                    />
+                  ))
+                ) : (
+                  <>
+                    <RequirementRow
+                      label="Smoke-free streak"
+                      valueLabel={`${badge.daysRequired} ${pluralize(badge.daysRequired, "day")}`}
+                      progress={displayStreakProgress}
+                      met={displayStreakMet}
+                    />
+
+                    <RequirementRow
+                      label="Freedom Points"
+                      valueLabel={`${formatNumber(badge.fpRequired)} FP`}
+                      progress={displayFpProgress}
+                      met={displayFpMet}
+                    />
+                  </>
+                )}
               </View>
 
-              {!badge.unlocked && badge.daysLeft > 0 ? (
+              {!badge.unlocked && !earnable ? (
                 <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
-                  {badge.daysLeft} {pluralize(badge.daysLeft, "day")} to go
+                  This badge is locked for now. Complete earlier badges to unlock it.
+                </Text>
+              ) : !badge.unlocked && isFirstStep ? (
+                <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
+                  Register and open Quitify to claim your first badge.
+                </Text>
+              ) : !badge.unlocked ? (
+                <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
+                  You need both requirements to earn this badge.
                 </Text>
               ) : null}
 

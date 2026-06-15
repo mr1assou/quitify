@@ -15,7 +15,7 @@ import { resolvePostMediaAspectRatio } from "@/utils/community/postMediaFrame";
 /** Max long edge for uploaded post images (keeps files small and fast in feed). */
 export const POST_UPLOAD_MAX_LONG_EDGE = 1920;
 
-/** JPEG quality after crop/resize — balances size vs clarity. */
+/** JPEG quality after resize — balances size vs clarity. */
 export const POST_UPLOAD_JPEG_QUALITY = 0.82;
 
 export type OptimizedPostImage = {
@@ -44,7 +44,7 @@ function computeSourceCropRect(
   const container = containerForAspect(aspectRatio, 100);
   const normalizedCrop = normalizePostImageCrop(crop);
   const layout = getCroppedImageLayout(container, imageSize, normalizedCrop);
-  const { scale } = resolvePixelOffsets(container, imageSize, normalizedCrop);
+  const { scale } = resolvePixelOffsets(container, imageSize, normalizedCrop);  
   const coverScale = getCoverScale(container, imageSize);
   const factor = coverScale * scale;
 
@@ -71,10 +71,43 @@ function resizeDimensions(
 }
 
 /**
- * Applies the user's frame + crop, then downscales and compresses for upload.
- * Output is always JPEG to keep large gallery photos under control.
+ * Downscales and compresses for upload. Framing (ratio + pan/zoom) is stored as
+ * metadata and applied in the feed via the same crop math as the composer.
  */
 export async function optimizePostImageForUpload(
+  uri: string,
+  maxLongEdge: number = POST_UPLOAD_MAX_LONG_EDGE,
+  jpegQuality: number = POST_UPLOAD_JPEG_QUALITY,
+): Promise<OptimizedPostImage> {
+  const imageSize = await getImageSize(uri);
+  const resize = resizeDimensions(imageSize.width, imageSize.height, maxLongEdge);
+
+  const actions: ImageManipulator.Action[] = [];
+  if (resize) {
+    actions.push({ resize });
+  }
+
+  const result =
+    actions.length > 0
+      ? await ImageManipulator.manipulateAsync(uri, actions, {
+          compress: jpegQuality,
+          format: ImageManipulator.SaveFormat.JPEG,
+        })
+      : await ImageManipulator.manipulateAsync(uri, [], {
+          compress: jpegQuality,
+          format: ImageManipulator.SaveFormat.JPEG,
+        });
+
+  return {
+    uri: result.uri,
+    contentType: "image/jpeg",
+    width: result.width,
+    height: result.height,
+  };
+}
+
+/** Bakes frame + crop into the file (used for profile photos). */
+export async function optimizePostImageWithCropForUpload(
   uri: string,
   frame: PostMediaFrame,
   crop: PostImageCrop,
