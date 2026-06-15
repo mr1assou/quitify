@@ -7,11 +7,11 @@ export function AppBrandMark() {
     <View className="-ml-2 flex-row items-center">
       <Image
         source={APP_LOGO_IMAGE}
-        className="h-14 w-14"
+        className="h-10 w-10"
         resizeMode="contain"
         accessibilityLabel="Quitify app logo"
       />
-      <Text className="text-2xl font-bold text-foreground dark:text-d-text">Quitify</Text>
+      <Text className="text-xl font-bold text-foreground dark:text-d-text">Quitify</Text>
     </View>
   );
 }
