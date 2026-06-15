@@ -13,13 +13,12 @@ import { ChatImageLightbox } from "./ChatImageLightbox";
 
 type Props = {
   message: ChatMessage;
-  fromMe: boolean;
 };
 
 const MEDIA_WIDTH = 220;
 const MEDIA_HEIGHT = 160;
 
-export function ChatMessageMedia({ message, fromMe }: Props) {
+export function ChatMessageMedia({ message }: Props) {
   if (message.kind === "image" && message.mediaUrl) {
     return (
       <ChatImageMessage
@@ -38,7 +37,6 @@ export function ChatMessageMedia({ message, fromMe }: Props) {
       <ChatAudioMessage
         uri={message.mediaUrl}
         durationMs={message.mediaDurationMs}
-        fromMe={fromMe}
       />
     );
   }
@@ -151,11 +149,9 @@ function ChatVideoMessage({ uri, durationMs }: { uri: string; durationMs?: numbe
 function ChatAudioMessage({
   uri,
   durationMs,
-  fromMe,
 }: {
   uri: string;
   durationMs?: number;
-  fromMe: boolean;
 }) {
   const { colors } = useTheme();
   const soundRef = useRef<Audio.Sound | null>(null);
@@ -222,12 +218,12 @@ function ChatAudioMessage({
     >
       <View
         className="h-9 w-9 items-center justify-center rounded-full"
-        style={{ backgroundColor: fromMe ? "rgba(255,255,255,0.2)" : `${colors.primary}20` }}
+        style={{ backgroundColor: `${colors.primary}20` }}
       >
         <Ionicons
           name={playing ? "pause" : "play"}
           size={18}
-          color={fromMe ? colors.white : colors.primary}
+          color={colors.primary}
         />
       </View>
       <View className="flex-1 flex-row items-center gap-1">
@@ -238,15 +234,13 @@ function ChatAudioMessage({
             style={{
               width: 3,
               height: 8 + (i % 3) * 6,
-              backgroundColor: fromMe ? "rgba(255,255,255,0.85)" : colors.primary,
+              backgroundColor: colors.primary,
               opacity: playing ? 1 : 0.65,
             }}
           />
         ))}
       </View>
-      <Text
-        className={`text-xs font-medium ${fromMe ? "text-white/90" : "text-muted-foreground dark:text-d-muted"}`}
-      >
+      <Text className="text-xs font-medium text-muted-foreground dark:text-d-muted">
         {label}
       </Text>
     </Pressable>

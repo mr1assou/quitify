@@ -20,8 +20,8 @@ type Props = {
 };
 
 export function TrashBin({ active, pulseTick }: Props) {
-  const { resolved } = useTheme();
-  const accent = "#E0825A";
+  const { resolved, colors } = useTheme();
+  const accent = colors.primary;
 
   const scale = useSharedValue(1);
   const glow = useSharedValue(0);

@@ -17,6 +17,6 @@ export const RECOVERY_RINGS: readonly RecoveryRingDefinition[] = [
     id: "heart",
     icon: { family: "ionicons", name: "heart" },
     label: "Heart Health",
-    accent: "alert",
+    accent: "primary",
   },
 ];

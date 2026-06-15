@@ -9,6 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
+import { BRAND_ORANGE, darkColors, lightColors } from "@/constants/theme";
 import { type ThemePreference, useTheme } from "@/context/ThemeContext";
 
 const OPTIONS: {
@@ -22,19 +23,34 @@ const OPTIONS: {
     id: "light",
     label: "Light",
     icon: "sunny",
-    preview: { bg: "#FFFFFF", card: "#F8F5F2", accent: "#795548", dot: "#2A1A12" },
+    preview: {
+      bg: lightColors.background,
+      card: lightColors.section,
+      accent: BRAND_ORANGE,
+      dot: lightColors.foreground,
+    },
   },
   {
     id: "dark",
     label: "Dark",
     icon: "moon",
-    preview: { bg: "#100D0B", card: "#1B1613", accent: "#E0825A", dot: "#F5EFE9" },
+    preview: {
+      bg: darkColors.background,
+      card: darkColors.section,
+      accent: BRAND_ORANGE,
+      dot: darkColors.foreground,
+    },
   },
   {
     id: "system",
     label: "Auto",
     icon: "phone-portrait",
-    preview: { bg: "#FFFFFF", card: "#100D0B", accent: "#E0825A", dot: "#795548" },
+    preview: {
+      bg: lightColors.background,
+      card: darkColors.background,
+      accent: BRAND_ORANGE,
+      dot: lightColors.foreground,
+    },
   },
 ];
 
@@ -111,7 +127,7 @@ function ThemeOption({ active, onPress, label, icon, preview, splitPreview }: Op
           {splitPreview ? (
             <View className="h-full w-full flex-row">
               <View style={{ flex: 1, backgroundColor: "#FFFFFF" }} />
-              <View style={{ flex: 1, backgroundColor: "#100D0B" }} />
+              <View style={{ flex: 1, backgroundColor: darkColors.background }} />
             </View>
           ) : (
             <View className="h-full w-full p-1.5">
@@ -137,7 +153,7 @@ function ThemeOption({ active, onPress, label, icon, preview, splitPreview }: Op
           <Ionicons
             name={icon}
             size={14}
-            color={active ? "#E0825A" : undefined}
+            color={active ? BRAND_ORANGE : undefined}
           />
           <Text
             className={[

@@ -7,12 +7,14 @@ export type MemorySymbol = {
   color: { light: string; dark: string };
 };
 
+import { BRAND_ORANGE } from "@/constants/theme";
+
 /** Six healthy, motivational symbols → six matching pairs (12 cards). */
 export const MEMORY_SYMBOLS: readonly MemorySymbol[] = [
   {
     id: "heart",
     icon: "heart",
-    color: { light: "#E0825A", dark: "#F09775" },
+    color: { light: BRAND_ORANGE, dark: "#FF9933" },
   },
   {
     id: "star",

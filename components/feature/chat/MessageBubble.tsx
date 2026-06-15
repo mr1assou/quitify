@@ -41,30 +41,24 @@ export function MessageBubble({
       <View
         className={[
           hasMedia ? "max-w-[82%] overflow-hidden p-1.5" : "max-w-[78%] px-4 py-2.5",
-          "rounded-3xl",
-          fromMe
-            ? "bg-primary rounded-tr-md"
-            : "bg-section rounded-tl-md dark:bg-d-surface",
+          "rounded-3xl bg-section dark:bg-d-surface",
+          fromMe ? "rounded-tr-md" : "rounded-tl-md",
         ].join(" ")}
       >
-        {hasMedia ? <ChatMessageMedia message={message} fromMe={fromMe} /> : null}
+        {hasMedia ? <ChatMessageMedia message={message} /> : null}
 
         {message.text ? (
           <Text
-            className={`text-base leading-5 ${
+            className={`text-base leading-5 text-foreground dark:text-d-text ${
               hasMedia ? "px-2 pb-1 pt-2" : ""
-            } ${fromMe ? "text-white" : "text-foreground dark:text-d-text"}`}
+            }`}
           >
             {message.text}
           </Text>
         ) : null}
 
         {!hasMedia && !message.text ? (
-          <Text
-            className={`text-base leading-5 ${
-              fromMe ? "text-white" : "text-foreground dark:text-d-text"
-            }`}
-          >
+          <Text className="text-base leading-5 text-foreground dark:text-d-text">
             {message.kind === "image"
               ? "📷 Photo"
               : message.kind === "video"
@@ -75,8 +69,8 @@ export function MessageBubble({
 
         {fromMe && status ? (
           <View className={`flex-row items-center justify-end gap-1 ${hasMedia ? "px-2 pb-1" : "mt-1"}`}>
-            <Text className="text-[10px] text-white/70">{time}</Text>
-            <MessageReadTicks status={status} onPrimary />
+            <Text className="text-[10px] text-muted-foreground dark:text-d-muted">{time}</Text>
+            <MessageReadTicks status={status} />
           </View>
         ) : null}
       </View>

@@ -1,39 +1,39 @@
+/** Core brand orange — used for primary actions, links, and highlights. */
+export const BRAND_ORANGE = "#FF7A00";
+
 /**
  * Runtime color palettes for SVG / Ionicons / native props.
  * Tailwind `className` uses `dark:` variants separately (see tailwind.config.js).
- *
- * Brand palette is warm brown + cream. The `accent` slot is a coral terracotta
- * used for "win / unlocked / resisted" — intentionally NOT green.
  */
 export const lightColors = {
   background: "#FFFFFF",
-  primary: "#795548",
-  primaryDark: "#3E2723",
-  primaryLight: "#A1887F",
-  secondary: "#BC9C88",
-  foreground: "#2A1A12",
-  mutedForeground: "#7A6E66",
-  accent: "#E0825A",
-  accentSoft: "#F4D6C5",
+  primary: BRAND_ORANGE,
+  primaryDark: "#CC6200",
+  primaryLight: "#FF9933",
+  secondary: "#FFB366",
+  foreground: "#171717",
+  mutedForeground: "#737373",
+  accent: BRAND_ORANGE,
+  accentSoft: "#FFF0E0",
   alert: "#DC3545",
-  section: "#F8F5F2",
-  border: "#EFE6DF",
+  section: "#FFFBF7",
+  border: "#FFE8D1",
   white: "#FFFFFF",
 } as const;
 
 export const darkColors = {
-  background: "#100D0B",
-  primary: "#D7B8A3",
-  primaryDark: "#F5E9DF",
-  primaryLight: "#EDD9C8",
-  secondary: "#8D735F",
-  foreground: "#F5EFE9",
-  mutedForeground: "#A89F97",
-  accent: "#F09775",
-  accentSoft: "#3A2A21",
+  background: "#121212",
+  primary: BRAND_ORANGE,
+  primaryDark: "#FF9933",
+  primaryLight: "#FFB366",
+  secondary: "#CC6200",
+  foreground: "#F5F5F5",
+  mutedForeground: "#A3A3A3",
+  accent: BRAND_ORANGE,
+  accentSoft: "#261A0F",
   alert: "#EF5350",
-  section: "#1B1613",
-  border: "#2E2622",
+  section: "#1E1E1E",
+  border: "#333333",
   white: "#FFFFFF",
 } as const;
 
