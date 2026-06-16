@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { GREETING_IMAGE } from "@/constants/assets";
+import { GREETING_IMAGE } from "@/constants/app/assets";
 
 const IMAGE_SIZE = 240;
 const FLOAT_DISTANCE = 8;

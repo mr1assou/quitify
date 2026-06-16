@@ -1,7 +1,7 @@
 import { CravingToolScreen } from "@/components/feature/craving/CravingToolScreen";
 import { MotivationCardsIdleView } from "@/components/feature/craving/motivation-cards/MotivationCardsIdleView";
 import { MotivationCardsSession } from "@/components/feature/craving/motivation-cards/MotivationCardsSession";
-import { useMotivationCardsSession } from "@/hooks/useMotivationCardsSession";
+import { useMotivationCardsSession } from "@/hooks/craving/useMotivationCardsSession";
 
 export function MotivationCardsScreen() {
   const {

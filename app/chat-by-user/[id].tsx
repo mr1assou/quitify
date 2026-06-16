@@ -6,7 +6,7 @@ import { openChatAndNavigate } from "@/utils/chat/openChatNavigation";
 import { resolveChatParticipant } from "@/utils/chat/resolveChatParticipant";
 import { parseDbUserId } from "@/utils/community/presence";
 import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 function resolveRouteParam(raw: string | string[] | undefined): string | null {
   if (typeof raw === "string" && raw.trim()) return raw.trim();

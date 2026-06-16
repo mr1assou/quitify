@@ -6,8 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CravingOutcomePhase } from "@/components/feature/craving/CravingOutcomePhase";
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
 import { SlipSubmittingOverlay } from "@/components/feature/craving/SlipSubmittingOverlay";
-import { useOutcomeBackHandler } from "@/hooks/useOutcomeBackHandler";
-import { useSlipSubmit } from "@/hooks/useSlipSubmit";
+import { useOutcomeBackHandler } from "@/hooks/app/useOutcomeBackHandler";
+import { useSlipSubmit } from "@/hooks/stats/useSlipSubmit";
 
 export function SlipSupportFlow() {
   const { submit, undo, isSubmitting } = useSlipSubmit();

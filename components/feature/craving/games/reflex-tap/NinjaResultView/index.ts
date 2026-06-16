@@ -1,0 +1,1 @@
+export { NinjaResultView } from "./NinjaResultView";

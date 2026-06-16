@@ -1,8 +1,8 @@
 import { View } from "react-native";
 
 import { useCommunity } from "@/context/CommunityContext";
-import type { FeedItem } from "@/types/community";
-import { safeRouter } from "@/utils/safeRouter";
+import type { FeedItem } from "@/types/community/community";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { resolveCommentCount } from "@/utils/community/postEngagement";
 
 import { PostActions } from "./PostActions";

@@ -1,6 +1,6 @@
 import type { OnboardingDraft, UserAccount, UserProfile } from "@/types";
 import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
-import { saveAuthTokens } from "@/utils/authStorage";
+import { saveAuthTokens } from "@/utils/auth/authStorage";
 import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayload";
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 

@@ -5,12 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PostImageCropEditor, type PostImageCropEditorHandle } from "@/components/feature/community/PostComposer/PostImageCropEditor";
 import { usePickPostImage } from "@/components/feature/community/PostComposer/usePickPostImage";
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { updateProfileImage, uploadProfileImage } from "@/services/profile/profileImageApi";
-import type { PostImageCrop } from "@/types/community";
+import type { PostImageCrop } from "@/types/community/community";
 import { dbAuthorId } from "@/utils/community/presence";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
 import { optimizeProfileImageForUpload } from "@/utils/profile/optimizeProfileImageForUpload";

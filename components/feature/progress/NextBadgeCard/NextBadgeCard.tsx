@@ -6,8 +6,8 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
-import type { BadgeWithStatus } from "@/types/progress";
-import { progressToPercent } from "@/utils/achievementProgress";
+import type { BadgeWithStatus } from "@/types/progress/progress";
+import { progressToPercent } from "@/utils/progress/achievementProgress";
 
 type Props = {
   currentBadge: BadgeWithStatus | null;

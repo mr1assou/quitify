@@ -4,8 +4,8 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { GlobalRank } from "@/types/progress";
-import { formatNumber } from "@/utils/format";
+import type { GlobalRank } from "@/types/progress/progress";
+import { formatNumber } from "@/utils/shared/format";
 
 type Props = {
   rank: GlobalRank;

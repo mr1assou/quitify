@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
-import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
+import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 
 import { CommunityToolbar } from "./CommunityToolbar";
 

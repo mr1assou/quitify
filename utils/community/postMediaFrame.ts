@@ -1,4 +1,4 @@
-import type { PostMedia, PostMediaFrame } from "@/types/community";
+import type { PostMedia, PostMediaFrame } from "@/types/community/community";
 
 export const POST_MEDIA_PORTRAIT_RATIO = 4 / 6;
 

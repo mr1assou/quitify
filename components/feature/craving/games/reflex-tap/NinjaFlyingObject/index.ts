@@ -1,0 +1,1 @@
+export { NinjaFlyingObjectSprite } from "./NinjaFlyingObject";

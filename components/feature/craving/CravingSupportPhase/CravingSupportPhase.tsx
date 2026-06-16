@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/Button";
 import {
   CRAVING_TAP_TARGET,
   CRAVING_TIMER_SECONDS,
-} from "@/constants/cravingSession";
-import { useCravingCountdown } from "@/hooks/useCravingCountdown";
-import { useCravingTipCycle } from "@/hooks/useCravingTipCycle";
+} from "@/constants/craving/cravingSession";
+import { useCravingCountdown } from "@/hooks/craving/useCravingCountdown";
+import { useCravingTipCycle } from "@/hooks/craving/useCravingTipCycle";
 
 import { CravingSupportIntro } from "./CravingSupportIntro";
 import { CravingTipSection } from "./CravingTipSection";

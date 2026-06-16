@@ -1,4 +1,4 @@
-import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
+import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 
 export function listLeaderboardEntries(snapshot: LeaderboardSnapshot): LeaderboardEntry[] {
   const byKey = new Map<string, LeaderboardEntry>();

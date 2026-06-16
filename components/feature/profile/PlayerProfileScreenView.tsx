@@ -2,12 +2,12 @@ import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { usePlayerProfileStreak } from "@/hooks/usePlayerProfileStreak";
+import { usePlayerProfileStreak } from "@/hooks/profile/usePlayerProfileStreak";
 import { ProfileImageEditorModal } from "@/components/feature/profile/ProfileImageEditorModal";
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
 import { UserProfileContent } from "@/components/feature/profile/UserProfileContent";
-import type { PlayerProfile } from "@/types/playerProfile";
-import { safeRouter } from "@/utils/safeRouter";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   profile: PlayerProfile | null;

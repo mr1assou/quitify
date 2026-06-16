@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { RangeTabs } from "@/components/feature/stats/RangeTabs";
-import { rangeWindowLabel } from "@/constants/statsRanges";
+import { rangeWindowLabel } from "@/constants/stats/statsRanges";
 import { Card } from "@/components/ui/Card";
 import { LineChart } from "@/components/ui/LineChart";
 import { useTheme } from "@/context/ThemeContext";
-import type { SeriesPoint, StatsRange } from "@/types/statsDashboard";
-import { formatCurrency } from "@/utils/format";
+import type { SeriesPoint, StatsRange } from "@/types/stats/statsDashboard";
+import { formatCurrency } from "@/utils/shared/format";
 
 type Props = {
   range: StatsRange;

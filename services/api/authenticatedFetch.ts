@@ -1,5 +1,5 @@
 import { API_URL } from "@/config/api";
-import { getAccessToken } from "@/utils/authStorage";
+import { getAccessToken } from "@/utils/auth/authStorage";
 
 type AuthenticatedFetchInit = Omit<RequestInit, "headers"> & {
   headers?: Record<string, string>;

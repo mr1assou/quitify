@@ -8,7 +8,7 @@ import {
   type NativeSyntheticEvent,
 } from "react-native";
 
-import type { PostMedia } from "@/types/community";
+import type { PostMedia } from "@/types/community/community";
 import { postMediaKey } from "@/utils/community/postMediaDisplay";
 
 import { PostMedia as PostMediaItem } from "./PostMedia";

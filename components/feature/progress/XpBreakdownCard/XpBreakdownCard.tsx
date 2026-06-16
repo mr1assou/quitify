@@ -6,10 +6,10 @@ import {
   XP_PER_COMPLETED_MISSION,
   XP_PER_RESISTED_CRAVING,
   XP_PER_SMOKE_FREE_DAY,
-} from "@/constants/levels";
+} from "@/constants/progress/levels";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import { formatNumber } from "@/utils/format";
+import { formatNumber } from "@/utils/shared/format";
 
 type Props = {
   smokeFreeDays: number;

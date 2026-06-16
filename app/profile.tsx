@@ -5,11 +5,11 @@ import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenH
 import { SelfProfileSettings } from "@/components/feature/profile/SelfProfileSettings";
 import { UserProfileContent } from "@/components/feature/profile/UserProfileContent";
 import { useApp } from "@/context/AppContext";
-import { useLogout } from "@/hooks/useLogout";
-import { useSelfPlayerProfile } from "@/hooks/useSelfPlayerProfile";
-import { useStats } from "@/hooks/useStats";
+import { useLogout } from "@/hooks/auth/useLogout";
+import { useSelfPlayerProfile } from "@/hooks/community/useSelfPlayerProfile";
+import { useStats } from "@/hooks/stats/useStats";
 import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function ProfileModal() {
   const { state, setPremium } = useApp();

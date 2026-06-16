@@ -4,11 +4,11 @@ import { Pressable, Text, View } from "react-native";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { useTheme } from "@/context/ThemeContext";
-import type { LeaderboardEntry } from "@/types/leaderboard";
-import { getBadgeName } from "@/utils/badges";
-import { formatNumber } from "@/utils/format";
+import type { LeaderboardEntry } from "@/types/leaderboard/leaderboard";
+import { getBadgeName } from "@/utils/progress/badges";
+import { formatNumber } from "@/utils/shared/format";
 import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   entry: LeaderboardEntry;

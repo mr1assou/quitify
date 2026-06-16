@@ -1,6 +1,6 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
-import type { StatsAttemptsResponse } from "@/types/statsAttempts";
-import type { StatsOverviewResponse } from "@/types/statsOverview";
+import type { StatsAttemptsResponse } from "@/types/stats/statsAttempts";
+import type { StatsOverviewResponse } from "@/types/stats/statsOverview";
 
 export async function fetchStatsOverview(): Promise<StatsOverviewResponse> {
   const res = await authenticatedFetch("/auth/me/stats/overview");

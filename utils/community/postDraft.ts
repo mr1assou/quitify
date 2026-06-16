@@ -1,5 +1,5 @@
-import type { PostTagId } from "@/constants/postTags";
-import type { CommunityPost, PostImageCrop, PostMedia, PostMediaFrame } from "@/types/community";
+import type { PostTagId } from "@/constants/community/postTags";
+import type { CommunityPost, PostImageCrop, PostMedia, PostMediaFrame } from "@/types/community/community";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
 
 export type PostDraftImage = {

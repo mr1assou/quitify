@@ -4,10 +4,10 @@ import { AskStage } from "@/components/feature/craving/CravingResult/stages/AskS
 import { ResistedSuccessStage } from "@/components/feature/craving/CravingResult/stages/ResistedSuccessStage";
 import { SmokedChoiceStage } from "@/components/feature/craving/CravingResult/stages/SmokedChoiceStage";
 import { useSmokedHeroSize } from "@/components/feature/craving/CravingResult/useSmokedHeroSize";
-import { LAPSE_CIGARETTE_COUNT } from "@/constants/slipCigaretteCounts";
-import { LAPSE_OUTCOME_COPY, RELAPSE_OUTCOME_COPY } from "@/constants/slipOutcomeCopy";
-import { useCravingResultFlow } from "@/hooks/useCravingResultFlow";
-import type { CravingResultInitialStage, CravingResultSubmitInput } from "@/types/slipFlow";
+import { LAPSE_CIGARETTE_COUNT } from "@/constants/stats/slipCigaretteCounts";
+import { LAPSE_OUTCOME_COPY, RELAPSE_OUTCOME_COPY } from "@/constants/stats/slipOutcomeCopy";
+import { useCravingResultFlow } from "@/hooks/craving/useCravingResultFlow";
+import type { CravingResultInitialStage, CravingResultSubmitInput } from "@/types/stats/slipFlow";
 
 export type CravingResultProps = {
   onSubmit: (input: CravingResultSubmitInput) => void | Promise<void>;

@@ -2,10 +2,10 @@ import { useState } from "react";
 import { View, type LayoutChangeEvent } from "react-native";
 
 import { MemoryCard } from "@/components/feature/craving/games/memory-match/MemoryCard";
-import type { MemoryCard as MemoryCardType } from "@/hooks/useMemoryMatchGame";
+import type { MemoryCard as MemoryCardType } from "@/hooks/craving/games/useMemoryMatchGame";
 
-const COLUMNS = 3;
-const GAP = 12;
+const COLUMNS = 4;
+const GAP = 10;
 
 type Props = {
   cards: readonly MemoryCardType[];

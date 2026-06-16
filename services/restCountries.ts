@@ -1,4 +1,4 @@
-import type { RestCountryDto } from "@/types/country";
+import type { RestCountryDto } from "@/types/app/country";
 
 const REST_COUNTRIES_FIELDS = "name,flags,currencies,cca2";
 const REST_COUNTRIES_URL = `https://restcountries.com/v3.1/all?fields=${REST_COUNTRIES_FIELDS}`;

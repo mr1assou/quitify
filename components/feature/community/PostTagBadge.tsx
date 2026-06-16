@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-import { getPostTag, type PostTagId } from "@/constants/postTags";
+import { getPostTag, type PostTagId } from "@/constants/community/postTags";
 
 type Props = {
   tagId: PostTagId;

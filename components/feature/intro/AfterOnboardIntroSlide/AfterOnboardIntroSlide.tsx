@@ -1,7 +1,7 @@
 import { Image, useWindowDimensions, View } from "react-native";
 
 import { IntroSlide } from "@/components/feature/intro/IntroSlide";
-import { introHeroImageHeight, type IntroSlideContent } from "@/constants/intro";
+import { introHeroImageHeight, type IntroSlideContent } from "@/constants/app/intro";
 
 type Props = {
   slide: IntroSlideContent;

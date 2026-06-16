@@ -4,7 +4,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { CravingTip } from "@/constants/cravingTips";
+import type { CravingTip } from "@/constants/craving/cravingTips";
 
 type Props = {
   tip: CravingTip;

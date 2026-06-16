@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { useAppHydration } from "@/hooks/useAppHydration";
+import { useAppHydration } from "@/hooks/auth/useAppHydration";
 import type {
   AppFlags,
   AppState,
@@ -18,7 +18,7 @@ import type {
   UserProfile,
 } from "@/types";
 import { clearStoredAuth } from "@/utils/auth/clearStoredAuth";
-import { dayKey } from "@/utils/dates";
+import { dayKey } from "@/utils/shared/dates";
 type Action =
   | {
       type: "RESTORE_SESSION";
@@ -41,6 +41,7 @@ type Action =
   | { type: "COMPLETE_MISSION"; missionDay: number }
   | { type: "SET_PREMIUM"; value: boolean }
   | { type: "SET_ACCOUNT"; account: UserAccount | null }
+  | { type: "ADD_LOCAL_FREEDOM_POINTS"; amount: number }
   | { type: "SET_FLAG"; key: keyof AppFlags; value: boolean }
   | { type: "RESET" };
 
@@ -57,6 +58,7 @@ const initialState: AppState = {
   missionLogs: {},
   isPremium: false,
   account: null,
+  localFreedomPoints: 0,
   flags: initialFlags,
 };
 
@@ -154,6 +156,7 @@ type AppContextValue = {
   completeMission: (missionDay: number) => void;
   setPremium: (value: boolean) => void;
   setAccount: (account: UserAccount | null) => void;
+  addLocalFreedomPoints: (amount: number) => void;
   logout: () => Promise<void>;
   setFlag: (key: keyof AppFlags, value: boolean) => void;
   reset: () => void;
@@ -211,6 +214,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (account: UserAccount | null) => dispatch({ type: "SET_ACCOUNT", account }),
     [],
   );
+  const addLocalFreedomPoints = useCallback(
+    (amount: number) => dispatch({ type: "ADD_LOCAL_FREEDOM_POINTS", amount }),
+    [],
+  );
 
   const logout = useCallback(async () => {
     await clearStoredAuth();
@@ -235,6 +242,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeMission,
       setPremium,
       setAccount,
+      addLocalFreedomPoints,
       logout,
       setFlag,
       reset,
@@ -250,6 +258,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       completeMission,
       setPremium,
       setAccount,
+      addLocalFreedomPoints,
       logout,
       setFlag,
       reset,

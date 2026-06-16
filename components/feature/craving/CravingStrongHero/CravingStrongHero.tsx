@@ -2,8 +2,8 @@ import { Image, View, useWindowDimensions } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { MangaSpeechBubble } from "@/components/feature/craving/MangaSpeechBubble";
-import { CRAVING_STRONG_IMAGE } from "@/constants/assets";
-import { useCravingMotivationMessage } from "@/hooks/useCravingMotivationMessage";
+import { CRAVING_STRONG_IMAGE } from "@/constants/app/assets";
+import { useCravingMotivationMessage } from "@/hooks/craving/useCravingMotivationMessage";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 

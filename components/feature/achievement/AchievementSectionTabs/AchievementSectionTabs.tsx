@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 
-import { ACHIEVEMENT_SECTIONS } from "@/constants/achievementSections";
-import type { AchievementSection } from "@/constants/achievementSections";
+import { ACHIEVEMENT_SECTIONS } from "@/constants/progress/achievementSections";
+import type { AchievementSection } from "@/constants/progress/achievementSections";
 
 type Props = {
   value: AchievementSection;

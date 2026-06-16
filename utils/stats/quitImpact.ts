@@ -1,7 +1,7 @@
 import {
   MINUTES_LIFE_PER_CIGARETTE_AVOIDED,
   MINUTES_RECLAIMED_PER_CIGARETTE,
-} from "@/constants/health";
+} from "@/constants/progress/health";
 import type { UserProfile } from "@/types";
 import { MS_DAY } from "@/utils/time/ms";
 

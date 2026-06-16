@@ -1,4 +1,4 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useEffect, useMemo } from "react";
 import {
   KeyboardAvoidingView,
@@ -9,10 +9,10 @@ import {
 
 import { NicotineConsumptionFields } from "@/components/feature/onboarding/NicotineConsumptionFields";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
-import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboardingNicotineForm";
-import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
+import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboarding/onboardingNicotineForm";
+import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { isNicotineConsumptionStepComplete } from "@/utils/nicotineOnboarding";
+import { isNicotineConsumptionStepComplete } from "@/utils/onboarding/nicotineOnboarding";
 
 export default function NicotineConsumptionOnboarding() {
   const { draft, patch } = useOnboarding();

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { CommentReplyTarget } from "@/types/community";
+import type { CommentReplyTarget } from "@/types/community/community";
 
 type Props = {
   placeholder?: string;

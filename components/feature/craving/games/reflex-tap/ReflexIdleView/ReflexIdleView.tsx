@@ -2,8 +2,11 @@ import { Image, Text, View, useWindowDimensions } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
-import { REFLEX_TAP_LOGO_IMAGE } from "@/constants/cravingGameAssets";
-import { REFLEX_DURATION_SEC } from "@/constants/reflexTap";
+import {
+  CIGARETTE_NINJA_DURATION_LABEL,
+  CIGARETTE_NINJA_TARGET_SCORE,
+} from "@/constants/craving/games/cigaretteNinja";
+import { REFLEX_TAP_LOGO_IMAGE } from "@/constants/craving/games/cravingGameAssets";
 
 type Props = {
   onStart: () => void;
@@ -21,11 +24,11 @@ export function ReflexIdleView({ onStart }: Props) {
         className="items-center gap-3 px-4"
       >
         <Text className="text-center text-2xl font-bold text-foreground dark:text-d-text">
-          Reflex tap
+          Cigarette Ninja
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          Tap the good icons. Avoid the bad ones. {REFLEX_DURATION_SEC}{" "}
-          seconds of focused fun.
+          {CIGARETTE_NINJA_DURATION_LABEL} battle — swipe to slice cigarettes, vapes, and smoke clouds. Reach{" "}
+          {CIGARETTE_NINJA_TARGET_SCORE} points to win.
         </Text>
       </Animated.View>
 
@@ -40,7 +43,7 @@ export function ReflexIdleView({ onStart }: Props) {
           source={REFLEX_TAP_LOGO_IMAGE}
           style={{ width: logoWidth, height: logoHeight }}
           resizeMode="contain"
-          accessibilityLabel="Reflex tap game"
+          accessibilityLabel="Cigarette Ninja game"
         />
       </Animated.View>
 
@@ -48,7 +51,7 @@ export function ReflexIdleView({ onStart }: Props) {
         entering={FadeInUp.delay(300).duration(400)}
         className="w-full"
       >
-        <Button label="Start game" size="lg" fullWidth onPress={onStart} />
+        <Button label="Start battle" size="lg" fullWidth onPress={onStart} />
       </Animated.View>
     </View>
   );

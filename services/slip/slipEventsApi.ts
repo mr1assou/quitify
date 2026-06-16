@@ -1,5 +1,5 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
-import type { SlipEventResponse, SlipSubmitPayload, SlipUndoResponse } from "@/types/slip";
+import type { SlipEventResponse, SlipSubmitPayload, SlipUndoResponse } from "@/types/stats/slip";
 
 export async function createSlipEvent(payload: SlipSubmitPayload): Promise<SlipEventResponse> {
   const res = await authenticatedFetch("/auth/me/slip-events", {

@@ -1,4 +1,4 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useMemo } from "react";
 import {
   KeyboardAvoidingView,
@@ -12,11 +12,11 @@ import { CreateProfileStep } from "@/components/feature/onboarding/CreateProfile
 import { QuitDateFields } from "@/components/feature/onboarding/QuitDateFields";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
 import { OnboardingSectionDivider } from "@/components/feature/onboarding/shared/OnboardingSectionDivider";
-import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
+import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { useQuitPlanHandlers } from "@/hooks/useQuitPlanHandlers";
-import { isCreateProfileStepComplete } from "@/utils/createProfileOnboarding";
+import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
+import { isCreateProfileStepComplete } from "@/utils/onboarding/createProfileOnboarding";
 
 export default function OnboardingCreateProfile() {
   const { draft, patch } = useOnboarding();

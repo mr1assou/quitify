@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { CravingGame } from "@/constants/cravingGames";
+import type { CravingGame } from "@/constants/craving/games/cravingGames";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

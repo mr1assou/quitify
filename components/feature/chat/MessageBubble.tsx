@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 
 import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
-import type { ChatMessage, MessageReadStatus } from "@/types/chat";
+import type { ChatMessage, MessageReadStatus } from "@/types/chat/chat";
 import { formatMessageClockTime } from "@/utils/chat/formatMessageTime";
 
 type Props = {

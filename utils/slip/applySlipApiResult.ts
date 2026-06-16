@@ -1,4 +1,4 @@
-import type { SlipEventResponse, SlipUndoResponse } from "@/types/slip";
+import type { SlipEventResponse, SlipUndoResponse } from "@/types/stats/slip";
 import type { UserProfile } from "@/types";
 
 export function profilePatchFromSlipCreate(

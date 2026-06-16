@@ -4,12 +4,12 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import { PostCard } from "@/components/feature/community/PostCard";
 import { useTheme } from "@/context/ThemeContext";
-import { useProfileActivity } from "@/hooks/useProfileActivity";
-import type { FeedItem } from "@/types/community";
-import type { PlayerProfile } from "@/types/playerProfile";
-import type { ProfileActivityTab } from "@/types/profileActivity";
+import { useProfileActivity } from "@/hooks/community/useProfileActivity";
+import type { FeedItem } from "@/types/community/community";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import type { ProfileActivityTab } from "@/types/profile/profileActivity";
 import { formatRelativeTime } from "@/utils/community";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserProfileActivityTabs } from "./UserProfileActivityTabsPanel";
 

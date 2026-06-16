@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 
-import { PROFILE_ACTIVITY_TABS } from "@/constants/profileActivityTabs";
-import type { ProfileActivityTab } from "@/types/profileActivity";
+import { PROFILE_ACTIVITY_TABS } from "@/constants/community/profileActivityTabs";
+import type { ProfileActivityTab } from "@/types/profile/profileActivity";
 
 type Props = {
   value: ProfileActivityTab;

@@ -1,7 +1,7 @@
-import { countryLabelForLocation } from "@/constants/communityUsers";
-import { XP_PER_SMOKE_FREE_DAY } from "@/constants/levels";
-import type { CommunityUser } from "@/types/community";
-import type { PlayerProfile } from "@/types/playerProfile";
+import { countryLabelForLocation } from "@/constants/community/communityUsers";
+import { XP_PER_SMOKE_FREE_DAY } from "@/constants/progress/levels";
+import type { CommunityUser } from "@/types/community/community";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import {
   bestSmokeFreeDaysForRank,

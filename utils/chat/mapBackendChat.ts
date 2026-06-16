@@ -1,10 +1,10 @@
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
-import type { ChatMessage, ChatThread } from "@/types/chat";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
+import type { ChatMessage, ChatThread } from "@/types/chat/chat";
 import type {
   BackendChatMessage,
   BackendChatThreadSummary,
-} from "@/types/chatApi";
-import type { CommunityUser } from "@/types/community";
+} from "@/types/chat/chatApi";
+import type { CommunityUser } from "@/types/community/community";
 import { dbAuthorId } from "@/utils/community/presence";
 
 export function senderIdFromBackend(

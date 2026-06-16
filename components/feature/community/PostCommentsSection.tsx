@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommentReplyTarget, PostComment } from "@/types/community";
+import type { CommentReplyTarget, PostComment } from "@/types/community/community";
 
 import { CommentComposer } from "./CommentComposer";
 import { CommentThreadList } from "./CommentThreadList";

@@ -1,9 +1,8 @@
-import { Image, Text, View, useWindowDimensions } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
+import { ColorSwitchLogo } from "@/components/feature/craving/games/drag-cigarettes/ColorSwitchLogo";
 import { Button } from "@/components/ui/Button";
-import { DRAG_CIGARETTES_TRASH_LOGO_IMAGE } from "@/constants/cravingGameAssets";
-import { DRAG_CIGARETTES_DURATION_SEC } from "@/constants/dragCigarettes";
 
 type Props = {
   onStart: () => void;
@@ -11,8 +10,7 @@ type Props = {
 
 export function DragIdleView({ onStart }: Props) {
   const { width } = useWindowDimensions();
-  const logoWidth = Math.min(width - 60, 320);
-  const logoHeight = logoWidth * 0.82;
+  const logoSize = Math.min(width - 80, 220);
 
   return (
     <View className="flex-1 items-center justify-between px-6 pb-6 pt-4">
@@ -21,27 +19,16 @@ export function DragIdleView({ onStart }: Props) {
         className="items-center gap-3 px-4"
       >
         <Text className="text-center text-2xl font-bold text-foreground dark:text-d-text">
-          Drag to trash
+          Color Switch
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          Drag every cigarette into the trash. {DRAG_CIGARETTES_DURATION_SEC}{" "}
-          seconds of pure control.
+          Tap to fly up. Pass only through obstacles that match your ball color.
+          Grab stars and color orbs along the way.
         </Text>
       </Animated.View>
 
-      <Animated.View
-        entering={FadeInUp.delay(150)
-          .duration(500)
-          .springify()
-          .damping(14)
-          .stiffness(140)}
-      >
-        <Image
-          source={DRAG_CIGARETTES_TRASH_LOGO_IMAGE}
-          style={{ width: logoWidth, height: logoHeight }}
-          resizeMode="contain"
-          accessibilityLabel="Drag cigarettes to trash game"
-        />
+      <Animated.View entering={FadeInUp.delay(150).duration(500).springify()}>
+        <ColorSwitchLogo size={logoSize} />
       </Animated.View>
 
       <Animated.View

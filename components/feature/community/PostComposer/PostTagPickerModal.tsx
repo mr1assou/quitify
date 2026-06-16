@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { POST_TAGS, type PostTagId } from "@/constants/postTags";
+import { POST_TAGS, type PostTagId } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
 
 import { PostTagOption } from "./PostTagOption";

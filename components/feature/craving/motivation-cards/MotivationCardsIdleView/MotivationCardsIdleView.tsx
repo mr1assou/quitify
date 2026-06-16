@@ -4,7 +4,7 @@ import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 import { MotivationQuoteCard } from "@/components/feature/craving/motivation-cards/MotivationQuoteCard";
 import { Button } from "@/components/ui/Button";
-import { MOTIVATION_QUOTES } from "@/constants/motivationQuotes";
+import { MOTIVATION_QUOTES } from "@/constants/craving/motivationQuotes";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {

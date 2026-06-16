@@ -1,6 +1,6 @@
 import { Image, View } from "react-native";
 
-import { getBadgeImage } from "@/constants/badgeImages";
+import { getBadgeImage } from "@/constants/progress/badgeImages";
 
 type Props = {
   badgeId: string;

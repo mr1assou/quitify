@@ -1,6 +1,6 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import { uploadImageToPresignedUrl } from "@/services/posts/postsApi";
-import type { AllowedImageContentType, PresignedUploadResponse } from "@/types/postsApi";
+import type { AllowedImageContentType, PresignedUploadResponse } from "@/types/community/postsApi";
 
 async function parseErrorMessage(res: Response, fallback: string): Promise<string> {
   try {

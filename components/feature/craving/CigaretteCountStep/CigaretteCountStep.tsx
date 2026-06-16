@@ -3,13 +3,13 @@ import { Text, View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
-import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboardingFlow";
+import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import {
   SLIP_CIGARETTE_DROPDOWN_OPTIONS,
   isSlipCigaretteBand,
   slipCigarettesCountForBand,
   type SlipCigaretteBandId,
-} from "@/constants/slipCigaretteCounts";
+} from "@/constants/stats/slipCigaretteCounts";
 
 type Props = {
   onSelect: (count: number) => void;

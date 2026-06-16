@@ -5,12 +5,12 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { ChatLastSeenSuffix } from "@/components/feature/chat/ChatLastSeenSuffix";
 import { useTheme } from "@/context/ThemeContext";
-import { useChatParticipantPresence } from "@/hooks/useChatParticipantPresence";
-import type { CallKind } from "@/types/chat";
-import type { CommunityUser } from "@/types/community";
-import { getBadgeName } from "@/utils/badges";
+import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
+import type { CallKind } from "@/types/chat/chat";
+import type { CommunityUser } from "@/types/community/community";
+import { getBadgeName } from "@/utils/progress/badges";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 const ONLINE_COLOR = "#22C55E";
 

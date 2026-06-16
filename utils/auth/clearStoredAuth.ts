@@ -1,7 +1,7 @@
 import { fetchLogout } from "@/services/auth";
 import { disconnectPresenceSocket } from "@/services/realtime/presenceSocket";
-import { clearAuthTokens, getAccessToken } from "@/utils/authStorage";
-import { clearAppSession } from "@/utils/sessionStorage";
+import { clearAuthTokens, getAccessToken } from "@/utils/auth/authStorage";
+import { clearAppSession } from "@/utils/auth/sessionStorage";
 
 /** Clears tokens, persisted session, and invalidates the server refresh token. */
 export async function clearStoredAuth(): Promise<void> {

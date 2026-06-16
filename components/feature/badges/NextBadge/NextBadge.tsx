@@ -5,8 +5,8 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
-import type { BadgeProgress } from "@/utils/calculations";
-import { pluralize } from "@/utils/format";
+import type { BadgeProgress } from "@/utils/progress/calculations";
+import { pluralize } from "@/utils/shared/format";
 
 type Props = {
   badgeProgress: BadgeProgress;

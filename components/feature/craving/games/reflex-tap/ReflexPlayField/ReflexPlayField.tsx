@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from "react";
 import { View, type LayoutChangeEvent } from "react-native";
 
 import { ReflexTarget } from "@/components/feature/craving/games/reflex-tap/ReflexTarget";
-import type { ReflexTarget as ReflexTargetType } from "@/hooks/useReflexTapGame";
+import type { ReflexTarget as ReflexTargetType } from "@/hooks/craving/games/useReflexTapGame";
 
 type Props = {
   targets: readonly ReflexTargetType[];

@@ -1,4 +1,4 @@
-import type { CommunityPost, PostComment } from "@/types/community";
+import type { CommunityPost, PostComment } from "@/types/community/community";
 
 export function buildCommentThread(
   comments: PostComment[],

@@ -11,7 +11,7 @@ import {
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityUser, PostComment, PostVote } from "@/types/community";
+import type { CommunityUser, PostComment, PostVote } from "@/types/community/community";
 import { formatRelativeTime } from "@/utils/community";
 import {
   navigateToSelfPlayerProfile,

@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { useTheme } from "@/context/ThemeContext";
-import type { Country } from "@/types/country";
+import type { Country } from "@/types/app/country";
 
 type Props = {
   countries: readonly Country[];

@@ -4,7 +4,7 @@ import {
   TAP_DESTROY_CIGARETTE_HEIGHT,
   TAP_DESTROY_CIGARETTE_IMAGE,
   TAP_DESTROY_CIGARETTE_WIDTH,
-} from "@/constants/cravingGameAssets";
+} from "@/constants/craving/games/cravingGameAssets";
 
 type Props = {
   /** Multiplier on the base display size. */

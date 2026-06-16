@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
 import { StatBlock } from "@/components/feature/stats/StatBlock";
-import { formatCurrency, formatDuration, formatNumber } from "@/utils/format";
+import { formatCurrency, formatDuration, formatNumber } from "@/utils/shared/format";
 
 type Props = {
   moneySaved: number;
@@ -38,7 +38,7 @@ export function StatsSummaryGrid({
           value={cigarettesAvoided}
           display={formatNumber(cigarettesAvoided)}
           icon="ban"
-          accent="alert"
+          accent="secondary"
           delay={60}
         />
       </View>

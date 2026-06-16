@@ -21,13 +21,13 @@ import { MessageBubble } from "@/components/feature/chat/MessageBubble";
 import { MessageComposer } from "@/components/feature/chat/MessageComposer";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useChatThread } from "@/hooks/useChat";
-import { useChatThreadRealtime } from "@/hooks/useChatThreadRealtime";
-import { useUserTimezone } from "@/hooks/useUserTimezone";
-import type { CallKind, ChatMessage } from "@/types/chat";
+import { useChatThread } from "@/hooks/chat/useChat";
+import { useChatThreadRealtime } from "@/hooks/chat/useChatThreadRealtime";
+import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
+import type { CallKind, ChatMessage } from "@/types/chat/chat";
 import { joinChatThread, leaveChatThread } from "@/services/realtime/chatSocket";
 import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);

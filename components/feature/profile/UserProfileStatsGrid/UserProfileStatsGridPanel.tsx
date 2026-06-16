@@ -3,9 +3,9 @@ import { useMemo } from "react";
 import { Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { PlayerProfile } from "@/types/playerProfile";
-import type { ProfileStreak } from "@/types/profileStreak";
-import { formatNumber } from "@/utils/format";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import type { ProfileStreak } from "@/types/profile/profileStreak";
+import { formatNumber } from "@/utils/shared/format";
 import { formatCurrentStreak, formatStreakDuration, getStreakElapsedMs } from "@/utils/streak";
 
 type Props = {

@@ -1,8 +1,8 @@
-import { flagUrlForCode } from "@/constants/leaderboardCountries";
-import type { PostTagId } from "@/constants/postTags";
-import type { CommunityPost, CommunityUser, PostImageCrop, PostMediaFrame } from "@/types/community";
-import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/postsApi";
-import { resolveBadgeIdForSmokeFreeDays } from "@/utils/badges";
+import { flagUrlForCode } from "@/constants/leaderboard/leaderboardCountries";
+import type { PostTagId } from "@/constants/community/postTags";
+import type { CommunityPost, CommunityUser, PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/community/postsApi";
+import { resolveBadgeIdForSmokeFreeDays } from "@/utils/progress/badges";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import { dbAuthorId } from "@/utils/community/presence";
 

@@ -7,7 +7,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
 import type { RecoveryRingAccent, RecoveryRingIcon, ThemeColors } from "@/types";
-import { progressToPercent } from "@/utils/recoveryProgress";
+import { progressToPercent } from "@/utils/progress/achievementProgress";
 
 type IonName = ComponentProps<typeof Ionicons>["name"];
 type MciName = ComponentProps<typeof MaterialCommunityIcons>["name"];

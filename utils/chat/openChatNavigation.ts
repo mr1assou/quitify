@@ -1,4 +1,4 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 export async function navigateToChatThread(
   threadId: string,

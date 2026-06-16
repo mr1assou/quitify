@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 
-import type { MessageReadStatus } from "@/types/chat";
+import type { MessageReadStatus } from "@/types/chat/chat";
 
 type Props = {
   status: MessageReadStatus;

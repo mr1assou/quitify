@@ -2,7 +2,7 @@ import type { StreakStats, UserProfile } from "@/types";
 import { computeQuitImpact, elapsedMsSince } from "@/utils/stats/quitImpact";
 import { MS_DAY, MS_HOUR } from "@/utils/time/ms";
 
-import { daysBetween } from "../dates";
+import { daysBetween } from "@/utils/shared/dates";
 
 export function computeStreak(profile: UserProfile, now = Date.now()): StreakStats {
   const sinceStreak = elapsedMsSince(profile.streakStart, now);

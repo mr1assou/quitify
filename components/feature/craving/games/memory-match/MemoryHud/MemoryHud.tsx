@@ -1,34 +1,43 @@
 import { Text, View } from "react-native";
 
-import { ProgressBar } from "@/components/ui/ProgressBar";
-
 type Props = {
-  secondsLeft: number;
-  totalSeconds: number;
   matchedPairs: number;
   totalPairs: number;
+  moves: number;
+  secondsLeft: number;
 };
 
+function formatCountdown(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 export function MemoryHud({
-  secondsLeft,
-  totalSeconds,
   matchedPairs,
   totalPairs,
+  moves,
+  secondsLeft,
 }: Props) {
-  const progress = totalSeconds > 0 ? secondsLeft / totalSeconds : 0;
+  const urgent = secondsLeft <= 30;
 
   return (
     <View className="px-6 pb-2 pt-1">
+      <View className="mb-3">
+        <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+          Time
+        </Text>
+        <Text
+          className={`font-mono text-2xl font-bold tabular-nums ${
+            urgent ? "text-accent" : "text-foreground dark:text-d-text"
+          }`}
+        >
+          {formatCountdown(secondsLeft)}
+        </Text>
+      </View>
+
       <View className="flex-row items-end justify-between">
         <View>
-          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Time
-          </Text>
-          <Text className="font-mono text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
-            {String(secondsLeft).padStart(2, "0")}s
-          </Text>
-        </View>
-        <View className="items-end">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
             Pairs
           </Text>
@@ -36,9 +45,14 @@ export function MemoryHud({
             {matchedPairs}/{totalPairs}
           </Text>
         </View>
-      </View>
-      <View className="mt-3">
-        <ProgressBar progress={progress} />
+        <View className="items-end">
+          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+            Moves
+          </Text>
+          <Text className="font-mono text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
+            {moves}
+          </Text>
+        </View>
       </View>
     </View>
   );

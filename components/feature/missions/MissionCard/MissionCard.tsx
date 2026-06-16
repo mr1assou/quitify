@@ -6,7 +6,7 @@ import { TaskRow } from "@/components/feature/missions/TaskRow";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
-import type { TodayMission } from "@/hooks/useTodayMission";
+import type { TodayMission } from "@/hooks/progress/useTodayMission";
 
 type Props = {
   mission: TodayMission;

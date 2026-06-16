@@ -1,4 +1,4 @@
-import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboardingNicotineBands";
+import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
 import type { AuthMeResponse } from "@/services/auth/meApi";
 import type { UserProfile } from "@/types";
 

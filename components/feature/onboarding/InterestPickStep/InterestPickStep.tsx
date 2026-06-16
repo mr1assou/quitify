@@ -4,7 +4,7 @@ import { Chip } from "@/components/ui/Chip";
 import {
   PRIMARY_INTEREST_OPTIONS,
   type PrimaryInterestId,
-} from "@/constants/onboardingPrimaryInterest";
+} from "@/constants/onboarding/onboardingPrimaryInterest";
 
 type Props = {
   selectedIds: readonly PrimaryInterestId[];

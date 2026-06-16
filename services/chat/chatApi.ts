@@ -1,5 +1,5 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
-import { CHAT_MESSAGES_PAGE_SIZE } from "@/constants/chatMessages";
+import { CHAT_MESSAGES_PAGE_SIZE } from "@/constants/chat/chatMessages";
 import type {
   BackendChatMessagesPage,
   BackendChatThreadSummary,
@@ -7,7 +7,7 @@ import type {
   BackendMessagesSeenPayload,
   BackendChatMessage,
   SendChatMessagePayload,
-} from "@/types/chatApi";
+} from "@/types/chat/chatApi";
 
 async function parseError(res: Response, fallback: string): Promise<never> {
   try {

@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 
 import { DownvoteIcon, UpvoteIcon } from "@/components/feature/community/VoteIcons";
 import { useTheme } from "@/context/ThemeContext";
-import type { PostVote } from "@/types/community";
+import type { PostVote } from "@/types/community/community";
 import { formatCountCompact } from "@/utils/community";
 
 type Props = {

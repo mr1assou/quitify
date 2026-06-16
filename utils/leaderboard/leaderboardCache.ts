@@ -1,4 +1,4 @@
-import type { LeaderboardSnapshot } from "@/types/leaderboard";
+import type { LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 
 let leaderboardCache: LeaderboardSnapshot | null = null;
 

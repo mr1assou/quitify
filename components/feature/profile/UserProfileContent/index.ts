@@ -1,2 +1,2 @@
 export { UserProfileContent } from "./UserProfileContentPanel";
-export type { ProfileStreak } from "@/types/profileStreak";
+export type { ProfileStreak } from "@/types/profile/profileStreak";

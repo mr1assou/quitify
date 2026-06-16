@@ -1,4 +1,4 @@
-import { pluralize } from "@/utils/format";
+import { pluralize } from "@/utils/shared/format";
 
 import { getCalendarStreakParts, type CalendarStreakParts } from "./calendarBreakdown";
 import {

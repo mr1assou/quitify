@@ -1,6 +1,6 @@
 import { API_URL } from "@/config/api";
-import type { OnboardingPayload } from "@/types/onboardingPayload";
-import { getAccessToken } from "@/utils/authStorage";
+import type { OnboardingPayload } from "@/types/onboarding/onboardingPayload";
+import { getAccessToken } from "@/utils/auth/authStorage";
 
 export async function syncOnboardingToBackend(
   payload: OnboardingPayload,

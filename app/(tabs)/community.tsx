@@ -5,7 +5,7 @@ import { CommunityScrollHeader } from "@/components/feature/community/CommunityS
 import { FeedPostSeparator } from "@/components/feature/community/FeedPostSeparator";
 import { PostCard } from "@/components/feature/community/PostCard";
 import { useTheme } from "@/context/ThemeContext";
-import { useCommunityFeed } from "@/hooks/useCommunityFeed";
+import { useCommunityFeed } from "@/hooks/community/useCommunityFeed";
 
 export default function CommunityScreen() {
   const { colors } = useTheme();

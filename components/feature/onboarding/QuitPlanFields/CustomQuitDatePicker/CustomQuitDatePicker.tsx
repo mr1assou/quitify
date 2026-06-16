@@ -5,14 +5,14 @@ import { SelectField } from "@/components/ui/SelectField";
 import {
   QUIT_DATE_CONTROL_HEIGHT,
   quitStartYearOptions,
-} from "@/constants/onboardingQuitPlan";
-import { MONTH_OPTIONS } from "@/constants/onboardingSex";
+} from "@/constants/onboarding/onboardingQuitPlan";
+import { MONTH_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import type { OnboardingDraft } from "@/types";
-import { ymdDayDropdownOptions } from "@/utils/dates";
+import { ymdDayDropdownOptions } from "@/utils/shared/dates";
 import {
   customQuitTimestampFromDraft,
   hasFullCustomQuitYmd,
-} from "@/utils/quitPlan";
+} from "@/utils/onboarding/quitPlan";
 
 type Props = {
   draft: OnboardingDraft;

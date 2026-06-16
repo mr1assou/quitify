@@ -1,4 +1,4 @@
-import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
+import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 
 export type PostsQueryPagination = {
   offset?: number;

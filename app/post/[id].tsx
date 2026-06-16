@@ -20,8 +20,8 @@ import { PostContent } from "@/components/feature/community/PostContent";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useCommunityPost } from "@/hooks/useCommunityPost";
-import type { CommentReplyTarget } from "@/types/community";
+import { useCommunityPost } from "@/hooks/community/useCommunityPost";
+import type { CommentReplyTarget } from "@/types/community/community";
 import { resolveCommentCount } from "@/utils/community/postEngagement";
 
 const HEADER_HEIGHT = 52;

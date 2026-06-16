@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";

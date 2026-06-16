@@ -1,8 +1,8 @@
 import { useState, type RefObject } from "react";
 import { ScrollView } from "react-native";
 
-import type { PostTagId } from "@/constants/postTags";
-import type { PostImageCrop, PostMediaFrame } from "@/types/community";
+import type { PostTagId } from "@/constants/community/postTags";
+import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
 import type { PostDraft } from "@/utils/community/postDraft";
 
 import type { PostImageCropEditorHandle } from "./PostImageCropEditor";

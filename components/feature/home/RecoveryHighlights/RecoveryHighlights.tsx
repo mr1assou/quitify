@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 
-import { RECOVERY_RINGS } from "@/constants/recoveryRings";
-import { useRecoveryProgress } from "@/hooks/useRecoveryProgress";
+import { RECOVERY_RINGS } from "@/constants/progress/recoveryRings";
+import { useRecoveryProgress } from "@/hooks/progress/useRecoveryProgress";
 
 import { RecoveryRingCard } from "./RecoveryRingCard";
 

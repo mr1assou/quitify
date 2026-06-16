@@ -1,4 +1,4 @@
-import { pluralize } from "@/utils/format";
+import { pluralize } from "@/utils/shared/format";
 
 import { formatCurrentStreak } from "./formatStreakLabel";
 

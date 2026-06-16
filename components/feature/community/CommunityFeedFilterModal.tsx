@@ -6,10 +6,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   COMMUNITY_FEED_SORT_OPTIONS,
   DEFAULT_COMMUNITY_FEED_FILTER,
-} from "@/constants/communityFeedFilter";
-import { POST_TAGS } from "@/constants/postTags";
+} from "@/constants/community/communityFeedFilter";
+import { POST_TAGS } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityFeedFilter, PostFeedSort } from "@/types/communityFeedFilter";
+import type { CommunityFeedFilter, PostFeedSort } from "@/types/community/communityFeedFilter";
 
 type Props = {
   visible: boolean;

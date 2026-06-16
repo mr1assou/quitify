@@ -1,4 +1,4 @@
-import type { AllowedImageContentType } from "@/types/postsApi";
+import type { AllowedImageContentType } from "@/types/community/postsApi";
 
 const ALLOWED: AllowedImageContentType[] = [
   "image/jpeg",

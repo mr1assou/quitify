@@ -1,6 +1,6 @@
-import type { PostTagId } from "@/constants/postTags";
-import type { CommunityPost, PostImageCrop, PostMediaFrame } from "@/types/community";
-import type { BackendPostResponse } from "@/types/postsApi";
+import type { PostTagId } from "@/constants/community/postTags";
+import type { CommunityPost, PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { BackendPostResponse } from "@/types/community/postsApi";
 
 /** Merge API update response into an existing community post (keeps engagement fields). */
 export function mergeUpdatedPost(

@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 
-import type { PostTag, PostTagId } from "@/constants/postTags";
+import type { PostTag, PostTagId } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {

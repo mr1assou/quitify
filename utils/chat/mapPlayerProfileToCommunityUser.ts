@@ -1,5 +1,5 @@
-import type { CommunityUser } from "@/types/community";
-import type { PlayerProfile } from "@/types/playerProfile";
+import type { CommunityUser } from "@/types/community/community";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
 
 export function mapPlayerProfileToCommunityUser(
   profile: PlayerProfile,

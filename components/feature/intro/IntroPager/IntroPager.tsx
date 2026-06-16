@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -24,7 +24,7 @@ import {
   INTRO_SLIDES,
   introUsesUnifiedGradient,
   type IntroSlideContent,
-} from "@/constants/intro";
+} from "@/constants/app/intro";
 import { useTheme } from "@/context/ThemeContext";
 
 const NEXT_ROUTE = "/onboarding/reasons";

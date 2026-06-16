@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { View } from "react-native";
 
 import { OnlineStatusDot } from "@/components/ui/OnlineStatusDot";
-import { profileImageForRank } from "@/constants/leaderboardProfiles";
+import { profileImageForRank } from "@/constants/leaderboard/leaderboardProfiles";
 
 const DEFAULT_SIZE = 52;
 

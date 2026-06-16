@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { StringDropdownOption } from "@/types/ui";
+import type { StringDropdownOption } from "@/types/shared/ui";
 
 type Props = {
   fieldLabel: string;

@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text } from "react-native";
 
-import { getPostTag, type PostTagId } from "@/constants/postTags";
+import { getPostTag, type PostTagId } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {

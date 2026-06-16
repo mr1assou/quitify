@@ -4,13 +4,11 @@ import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
-import { CalmFocusPuzzleGame } from "@/components/feature/craving/games/calm-focus-puzzle/CalmFocusPuzzleGame";
 import { DragCigarettesGame } from "@/components/feature/craving/games/drag-cigarettes/DragCigarettesGame";
-import { HoldToControlGame } from "@/components/feature/craving/games/hold-to-control/HoldToControlGame";
 import { MemoryMatchGame } from "@/components/feature/craving/games/memory-match/MemoryMatchGame";
 import { ReflexTapGame } from "@/components/feature/craving/games/reflex-tap/ReflexTapGame";
 import { TapDestroyGame } from "@/components/feature/craving/games/tap-destroy/TapDestroyGame";
-import { getCravingGame } from "@/constants/cravingGames";
+import { getCravingGame } from "@/constants/craving/games/cravingGames";
 
 /** Router for a single craving game — picks the right gameplay screen by id. */
 export function GamePlayScreen() {
@@ -50,10 +48,6 @@ export function GamePlayScreen() {
         <ReflexTapGame />
       ) : game.id === "drag-cigarettes-trash" ? (
         <DragCigarettesGame />
-      ) : game.id === "calm-focus-puzzle" ? (
-        <CalmFocusPuzzleGame />
-      ) : game.id === "hold-to-control" ? (
-        <HoldToControlGame />
       ) : (
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">

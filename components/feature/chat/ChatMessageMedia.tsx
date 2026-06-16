@@ -6,7 +6,7 @@ import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { ChatMessage } from "@/types/chat";
+import type { ChatMessage } from "@/types/chat/chat";
 import { formatMediaDuration } from "@/utils/chat/formatMediaDuration";
 
 import { ChatImageLightbox } from "./ChatImageLightbox";

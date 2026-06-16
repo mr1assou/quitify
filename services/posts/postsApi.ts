@@ -1,6 +1,6 @@
-import { POST_COMMENTS_PAGE_SIZE } from "@/constants/postCommentsPagination";
+import { POST_COMMENTS_PAGE_SIZE } from "@/constants/community/postCommentsPagination";
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
-import type { PostVote } from "@/types/community";
+import type { PostVote } from "@/types/community/community";
 import type {
   AllowedImageContentType,
   BackendFeedPageResponse,
@@ -12,10 +12,10 @@ import type {
   BackendPostResponse,
   CreatePostPayload,
   PresignedUploadResponse,
-} from "@/types/postsApi";
-import type { UpdatePostPayload } from "@/types/updatePost";
-import { DEFAULT_COMMUNITY_FEED_FILTER, COMMUNITY_FEED_PAGE_SIZE } from "@/constants/communityFeedFilter";
-import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
+} from "@/types/community/postsApi";
+import type { UpdatePostPayload } from "@/types/community/updatePost";
+import { DEFAULT_COMMUNITY_FEED_FILTER, COMMUNITY_FEED_PAGE_SIZE } from "@/constants/community/communityFeedFilter";
+import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 import { buildPostsQueryString } from "@/utils/community/buildPostsQueryString";
 import type { PostsQueryPagination } from "@/utils/community/buildPostsQueryString";
 

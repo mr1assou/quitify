@@ -1,4 +1,4 @@
-import type { AttemptStatsRow } from "@/types/userStats";
+import type { AttemptStatsRow } from "@/types/stats/userStats";
 
 export function maxStreakDurationMs(attempts: AttemptStatsRow[]): number {
   if (attempts.length === 0) return 0;

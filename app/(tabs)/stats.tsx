@@ -10,11 +10,11 @@ import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useProgress } from "@/hooks/useProgress";
-import { useRefreshAccount } from "@/hooks/useRefreshAccount";
-import { useStatsAttempts } from "@/hooks/useStatsAttempts";
-import { useStatsOverview } from "@/hooks/useStatsOverview";
-import { computeAchievementBadgeSummary } from "@/utils/achievementProgress";
+import { useProgress } from "@/hooks/progress/useProgress";
+import { useRefreshAccount } from "@/hooks/auth/useRefreshAccount";
+import { useStatsAttempts } from "@/hooks/stats/useStatsAttempts";
+import { useStatsOverview } from "@/hooks/stats/useStatsOverview";
+import { computeAchievementBadgeSummary } from "@/utils/progress/achievementProgress";
 import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
 
 function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {

@@ -4,8 +4,8 @@ import { Pressable, Text, View } from "react-native";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityUser } from "@/types/community";
-import { getBadgeName } from "@/utils/badges";
+import type { CommunityUser } from "@/types/community/community";
+import { getBadgeName } from "@/utils/progress/badges";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
 type Props = {

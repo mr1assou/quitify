@@ -1,9 +1,9 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { View } from "react-native";
 
 import { InterestPickStep } from "@/components/feature/onboarding/InterestPickStep";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
-import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
+import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { PrimaryInterestId } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
 

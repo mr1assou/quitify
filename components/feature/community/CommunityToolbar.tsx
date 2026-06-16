@@ -5,10 +5,10 @@ import { Pressable, Text, View } from "react-native";
 import {
   communityFeedFilterSummary,
   isDefaultCommunityFeedFilter,
-} from "@/constants/communityFeedFilter";
+} from "@/constants/community/communityFeedFilter";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityFeedFilter } from "@/types/communityFeedFilter";
-import { safeRouter } from "@/utils/safeRouter";
+import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { CommunityFeedFilterModal } from "./CommunityFeedFilterModal";
 

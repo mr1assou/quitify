@@ -1,4 +1,4 @@
-import type { PostMedia } from "@/types/community";
+import type { PostMedia } from "@/types/community/community";
 
 import { PostMedia as PostMediaItem } from "./PostMedia";
 import { PostMediaCarousel } from "./PostMediaCarousel";

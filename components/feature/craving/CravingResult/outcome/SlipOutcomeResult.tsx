@@ -3,8 +3,8 @@ import Animated, { FadeInUp, ZoomIn } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
 import { SlipKeepsRow } from "@/components/feature/craving/CravingResult/outcome/SlipKeepsRow";
-import { SMOKED_RESULT_IMAGE } from "@/constants/assets";
-import type { SlipOutcomeCopy } from "@/constants/slipOutcomeCopy";
+import { SMOKED_RESULT_IMAGE } from "@/constants/app/assets";
+import type { SlipOutcomeCopy } from "@/constants/stats/slipOutcomeCopy";
 import { useTheme } from "@/context/ThemeContext";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);

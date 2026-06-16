@@ -1,4 +1,4 @@
-import type { CommunityPost, PostComment } from "@/types/community";
+import type { CommunityPost, PostComment } from "@/types/community/community";
 
 type CommentState = {
   posts: CommunityPost[];

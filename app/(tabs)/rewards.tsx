@@ -9,11 +9,11 @@ import { NextBadgeCard } from "@/components/feature/progress/NextBadgeCard";
 import { RankLeaderboard } from "@/components/feature/progress/RankLeaderboard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
-import type { AchievementSection } from "@/constants/achievementSections";
+import type { AchievementSection } from "@/constants/progress/achievementSections";
 import { useTheme } from "@/context/ThemeContext";
-import { useLeaderboard } from "@/hooks/useLeaderboard";
-import { useProgress } from "@/hooks/useProgress";
-import { useRefreshAccount } from "@/hooks/useRefreshAccount";
+import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
+import { useProgress } from "@/hooks/progress/useProgress";
+import { useRefreshAccount } from "@/hooks/auth/useRefreshAccount";
 
 export default function AchievementScreen() {
   const { colors } = useTheme();

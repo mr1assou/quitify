@@ -1,4 +1,4 @@
-import type { PostMedia } from "@/types/community";
+import type { PostMedia } from "@/types/community/community";
 
 export const FEED_GRID_HEIGHT = 280;
 export const FEED_GRID_GAP = 2;

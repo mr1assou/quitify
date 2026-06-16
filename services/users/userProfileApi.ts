@@ -4,7 +4,7 @@ import type {
   BackendUserPresenceResponse,
   BackendUserProfileCommentsPage,
   BackendUserStreakResponse,
-} from "@/types/userProfileApi";
+} from "@/types/profile/userProfileApi";
 
 async function parseError(res: Response, fallback: string): Promise<never> {
   try {

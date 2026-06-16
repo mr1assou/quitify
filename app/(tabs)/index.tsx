@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,9 +10,9 @@ import { StreakHero } from "@/components/feature/home/StreakHero";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
-import { useGates } from "@/hooks/useGates";
-import { useStats } from "@/hooks/useStats";
-import { currencySymbol } from "@/utils/format";
+import { useGates } from "@/hooks/app/useGates";
+import { useStats } from "@/hooks/stats/useStats";
+import { currencySymbol } from "@/utils/shared/format";
 
 export default function Home() {
   const stats = useStats(1_000);

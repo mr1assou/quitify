@@ -1,11 +1,11 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { GameList } from "@/components/feature/craving/games/GameList";
-import { CRAVING_GAMES } from "@/constants/cravingGames";
-import type { CravingGame } from "@/constants/cravingGames";
+import { CRAVING_GAMES } from "@/constants/craving/games/cravingGames";
+import type { CravingGame } from "@/constants/craving/games/cravingGames";
 
 export function GamesHub() {
   const handleGamePress = useCallback((game: CravingGame) => {
@@ -16,7 +16,7 @@ export function GamesHub() {
     <View className="flex-1 px-6 pb-6 pt-2">
       <Animated.View entering={FadeInDown.duration(400)} className="mb-4 items-center">
         <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-          Choose a game — then start your session
+          Choose a game then start your session
         </Text>
       </Animated.View>
 

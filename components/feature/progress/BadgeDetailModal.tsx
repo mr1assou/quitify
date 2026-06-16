@@ -10,11 +10,11 @@ import {
   FIRST_STEP_REQUIREMENTS,
   isBadgeGalleryAvailable,
   isFirstStepBadge,
-} from "@/constants/badges";
+} from "@/constants/progress/badges";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import type { BadgeWithStatus } from "@/types/progress";
-import { formatNumber, pluralize } from "@/utils/format";
+import type { BadgeWithStatus } from "@/types/progress/progress";
+import { formatNumber, pluralize } from "@/utils/shared/format";
 
 type Props = {
   badge: BadgeWithStatus | null;

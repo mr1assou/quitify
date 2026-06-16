@@ -7,10 +7,10 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { BadgeDetailModal } from "@/components/feature/progress/BadgeDetailModal";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
-import { isFirstStepBadge } from "@/constants/badges";
+import { isFirstStepBadge } from "@/constants/progress/badges";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import type { BadgeWithStatus } from "@/types/progress";
+import type { BadgeWithStatus } from "@/types/progress/progress";
 
 type Props = {
   badges: BadgeWithStatus[];

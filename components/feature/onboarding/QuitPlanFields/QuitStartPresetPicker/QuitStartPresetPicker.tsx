@@ -8,9 +8,9 @@ import {
   QUIT_DATE_PRESET_WIDTH_WHEN_CUSTOM,
   QUIT_START_DROPDOWN_OPTIONS,
   quitStartPresetHint,
-} from "@/constants/onboardingQuitPlan";
+} from "@/constants/onboarding/onboardingQuitPlan";
 import type { OnboardingDraft } from "@/types";
-import type { QuitStartPreset } from "@/types/onboarding";
+import type { QuitStartPreset } from "@/types/onboarding/onboarding";
 
 type Props = {
   draft: OnboardingDraft;

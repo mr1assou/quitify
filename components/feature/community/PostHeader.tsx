@@ -4,13 +4,13 @@ import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
-import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
+import { resolveCountryFlagUrl } from "@/constants/leaderboard/leaderboardCountries";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useLeaderboard } from "@/hooks/useLeaderboard";
-import { useProgress } from "@/hooks/useProgress";
-import type { CommunityUser } from "@/types/community";
-import { getBadgeName, resolveHighestUnlockedBadgeId } from "@/utils/badges";
+import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
+import { useProgress } from "@/hooks/progress/useProgress";
+import type { CommunityUser } from "@/types/community/community";
+import { getBadgeName, resolveHighestUnlockedBadgeId } from "@/utils/progress/badges";
 import { formatRelativeTime } from "@/utils/community";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 

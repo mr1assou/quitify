@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { Image as RNImage, type ImageSourcePropType, type StyleProp, type ViewStyle, View } from "react-native";
 
-import type { PostImageCrop } from "@/types/community";
+import type { PostImageCrop } from "@/types/community/community";
 import {
   getCroppedImageLayout,
   normalizePostImageCrop,

@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { Modal, Pressable, Text, View } from "react-native";
 
-import { COMMUNITY_ALERT_IMAGE } from "@/constants/assets";
+import { COMMUNITY_ALERT_IMAGE } from "@/constants/app/assets";
 
 type Props = {
   visible: boolean;

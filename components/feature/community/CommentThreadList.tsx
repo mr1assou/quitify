@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommentReplyTarget, CommunityUser, PostComment, PostVote } from "@/types/community";
+import type { CommentReplyTarget, CommunityUser, PostComment, PostVote } from "@/types/community/community";
 import { resolveCommentPermissions } from "@/utils/community/resolveCommentPermissions";
 import { resolveCommunityAuthor } from "@/utils/community/resolveCommunityAuthor";
 

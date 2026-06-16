@@ -5,7 +5,7 @@ import type {
   BackendChatMessage,
   BackendChatTypingPayload,
   BackendMessagesSeenPayload,
-} from "@/types/chatApi";
+} from "@/types/chat/chatApi";
 
 let socket: Socket | null = null;
 let wired = false;

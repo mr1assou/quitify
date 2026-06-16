@@ -1,6 +1,6 @@
-import { countryFlagForRank, resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
-import type { BackendLeaderboardEntry, BackendLeaderboardResponse } from "@/types/leaderboardApi";
-import type { LeaderboardEntry, LeaderboardRow, LeaderboardSnapshot } from "@/types/leaderboard";
+import { countryFlagForRank, resolveCountryFlagUrl } from "@/constants/leaderboard/leaderboardCountries";
+import type { BackendLeaderboardEntry, BackendLeaderboardResponse } from "@/types/leaderboard/leaderboardApi";
+import type { LeaderboardEntry, LeaderboardRow, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 
 function mapEntry(row: BackendLeaderboardEntry): LeaderboardEntry {
   const countryFlag =

@@ -5,7 +5,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
+import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
 
 type Props = {

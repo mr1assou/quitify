@@ -4,7 +4,7 @@ import { Alert, Pressable, Share, Text, View } from "react-native";
 
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
-import type { PlayerProfile } from "@/types/playerProfile";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { mapPlayerProfileToCommunityUser } from "@/utils/chat/mapPlayerProfileToCommunityUser";
 import { navigateToChatThread, openChatAndNavigate } from "@/utils/chat/openChatNavigation";
 import { dbAuthorId } from "@/utils/community/presence";

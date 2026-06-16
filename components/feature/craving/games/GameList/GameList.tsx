@@ -2,7 +2,7 @@ import { FlatList, View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { GameCard } from "@/components/feature/craving/games/GameCard";
-import type { CravingGame } from "@/constants/cravingGames";
+import type { CravingGame } from "@/constants/craving/games/cravingGames";
 
 const COLUMN_GAP = 12;
 const ROW_GAP = 12;

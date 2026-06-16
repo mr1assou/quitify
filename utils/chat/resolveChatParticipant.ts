@@ -1,6 +1,6 @@
-import { getCommunityUser } from "@/constants/communityUsers";
-import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
-import type { CommunityUser } from "@/types/community";
+import { getCommunityUser } from "@/constants/community/communityUsers";
+import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
+import type { CommunityUser } from "@/types/community/community";
 import { dbAuthorId, parseDbUserId } from "@/utils/community/presence";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import { findLeaderboardEntryByUserId } from "@/utils/leaderboard/findLeaderboardEntry";

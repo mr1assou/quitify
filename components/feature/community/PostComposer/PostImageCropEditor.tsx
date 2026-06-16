@@ -8,7 +8,7 @@ import Animated, {
   type SharedValue,
 } from "react-native-reanimated";
 
-import type { PostImageCrop } from "@/types/community";
+import type { PostImageCrop } from "@/types/community/community";
 import {
   cropFromPixelOffsets,
   getCoverScale,

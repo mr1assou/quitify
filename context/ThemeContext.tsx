@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { getThemeColors } from "@/constants/theme";
+import { getThemeColors } from "@/constants/app/theme";
 import type { ThemeColors, ThemePreference, ThemeResolved } from "@/types";
 
 export type { ThemePreference } from "@/types";

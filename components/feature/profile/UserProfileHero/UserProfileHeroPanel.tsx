@@ -4,8 +4,8 @@ import { Pressable, Text, View } from "react-native";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { useTheme } from "@/context/ThemeContext";
-import type { PlayerProfile } from "@/types/playerProfile";
-import { getBadgeName } from "@/utils/badges";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import { getBadgeName } from "@/utils/progress/badges";
 
 const ONLINE_COLOR = "#22C55E";
 

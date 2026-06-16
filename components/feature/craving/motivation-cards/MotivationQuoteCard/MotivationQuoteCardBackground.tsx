@@ -6,7 +6,7 @@ import {
   Svg,
 } from "react-native-svg";
 
-import type { MotivationCardPalette } from "@/constants/motivationQuotes";
+import type { MotivationCardPalette } from "@/constants/craving/motivationQuotes";
 
 type Props = {
   width: number;

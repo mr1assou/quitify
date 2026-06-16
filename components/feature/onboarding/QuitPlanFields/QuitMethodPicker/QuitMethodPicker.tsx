@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
-import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboardingFlow";
+import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import {
   QUIT_METHOD_DROPDOWN_OPTIONS,
   quitMethodHint,
-} from "@/constants/onboardingQuitPlan";
-import type { QuitMethod } from "@/types/onboarding";
+} from "@/constants/onboarding/onboardingQuitPlan";
+import type { QuitMethod } from "@/types/onboarding/onboarding";
 
 type Props = {
   selected?: QuitMethod;

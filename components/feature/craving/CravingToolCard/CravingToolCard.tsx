@@ -7,7 +7,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-import type { CravingToolColors } from "@/constants/cravingTools";
+import type { CravingToolVariant } from "@/constants/craving/cravingTools";
+import { useTheme } from "@/context/ThemeContext";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -15,21 +16,52 @@ type Props = {
   label: string;
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
-  colors: CravingToolColors;
+  variant: CravingToolVariant;
   onPress: () => void;
+};
+
+const CARD_VARIANT: Record<
+  CravingToolVariant,
+  { card: string; iconWrap: string; iconUsesPrimary: boolean }
+> = {
+  soft: {
+    card: "bg-accent-soft dark:bg-d-accent-soft",
+    iconWrap: "bg-primary",
+    iconUsesPrimary: false,
+  },
+  warm: {
+    card: "bg-section dark:bg-d-surface",
+    iconWrap: "bg-secondary dark:bg-primary-light",
+    iconUsesPrimary: false,
+  },
+  bold: {
+    card: "bg-primary/10 dark:bg-primary/20",
+    iconWrap: "bg-primary",
+    iconUsesPrimary: false,
+  },
+  outline: {
+    card: "border border-border bg-white dark:border-d-border dark:bg-d-surface",
+    iconWrap: "bg-accent-soft dark:bg-d-accent-soft",
+    iconUsesPrimary: true,
+  },
 };
 
 export function CravingToolCard({
   label,
   description,
   icon,
-  colors,
+  variant,
   onPress,
 }: Props) {
+  const { colors } = useTheme();
   const scale = useSharedValue(1);
+  const styles = CARD_VARIANT[variant];
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+
+  const iconColor = styles.iconUsesPrimary ? colors.primary : colors.white;
 
   return (
     <AnimatedPressable
@@ -45,39 +77,19 @@ export function CravingToolCard({
         Haptics.selectionAsync().catch(() => {});
         onPress();
       }}
-      style={[
-        {
-          flexBasis: "48%",
-          backgroundColor: colors.background,
-          borderRadius: 24,
-          padding: 16,
-        },
-        animatedStyle,
-      ]}
+      style={[{ flexBasis: "48%" }, animatedStyle]}
+      className={`rounded-3xl p-4 ${styles.card}`}
     >
       <View
-        style={{
-          width: 48,
-          height: 48,
-          borderRadius: 16,
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: colors.iconBackground,
-        }}
+        className={`h-12 w-12 items-center justify-center rounded-2xl ${styles.iconWrap}`}
       >
-        <Ionicons name={icon} size={24} color={colors.iconColor} />
+        <Ionicons name={icon} size={24} color={iconColor} />
       </View>
 
-      <Text
-        style={{ color: colors.iconColor }}
-        className="mt-3 text-base font-bold"
-      >
+      <Text className="mt-3 text-base font-bold text-foreground dark:text-d-text">
         {label}
       </Text>
-      <Text
-        style={{ color: colors.iconColor, opacity: 0.75 }}
-        className="mt-0.5 text-xs"
-      >
+      <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
         {description}
       </Text>
     </AnimatedPressable>

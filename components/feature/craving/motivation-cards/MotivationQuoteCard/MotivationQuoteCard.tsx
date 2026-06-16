@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "react-native";
 
-import type { MotivationQuote } from "@/constants/motivationQuotes";
+import type { MotivationQuote } from "@/constants/craving/motivationQuotes";
 
 import { MotivationQuoteCardBackground } from "./MotivationQuoteCardBackground";
 

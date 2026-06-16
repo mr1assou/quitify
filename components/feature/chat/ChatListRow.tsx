@@ -5,10 +5,10 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import { useTheme } from "@/context/ThemeContext";
-import type { ChatThreadPreview } from "@/hooks/useChat";
-import { useChatParticipantPresence } from "@/hooks/useChatParticipantPresence";
-import { useUserTimezone } from "@/hooks/useUserTimezone";
-import { getBadgeName } from "@/utils/badges";
+import type { ChatThreadPreview } from "@/hooks/chat/useChat";
+import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
+import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
+import { getBadgeName } from "@/utils/progress/badges";
 import { formatMessageListTime } from "@/utils/chat/formatMessageTime";
 
 type Props = {

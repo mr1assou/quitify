@@ -4,8 +4,8 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { JourneyMilestone } from "@/types/statsDashboard";
-import { formatDate } from "@/utils/format";
+import type { JourneyMilestone } from "@/types/stats/statsDashboard";
+import { formatDate } from "@/utils/shared/format";
 
 type Props = {
   milestones: JourneyMilestone[];

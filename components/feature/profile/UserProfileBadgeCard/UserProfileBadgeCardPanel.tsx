@@ -2,8 +2,8 @@ import { Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
-import type { PlayerProfile } from "@/types/playerProfile";
-import { getBadgeName } from "@/utils/badges";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import { getBadgeName } from "@/utils/progress/badges";
 
 type Props = {
   profile: PlayerProfile;

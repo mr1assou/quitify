@@ -1,8 +1,8 @@
-import { resolveCountryLabel } from "@/constants/leaderboardCountries";
-import type { LeaderboardEntry } from "@/types/leaderboard";
-import type { PlayerProfile } from "@/types/playerProfile";
+import { resolveCountryLabel } from "@/constants/leaderboard/leaderboardCountries";
+import type { LeaderboardEntry } from "@/types/leaderboard/leaderboard";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { dbAuthorId } from "@/utils/community/presence";
-import { estimateSmokeFreeDaysFromXp } from "@/utils/badges";
+import { estimateSmokeFreeDaysFromXp } from "@/utils/progress/badges";
 
 const MEMBER_SINCE = [
   "Jan 2024",

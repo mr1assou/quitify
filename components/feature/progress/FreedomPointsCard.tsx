@@ -4,7 +4,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import { formatNumber } from "@/utils/format";
+import { formatNumber } from "@/utils/shared/format";
 
 type Props = {
   xp: number;

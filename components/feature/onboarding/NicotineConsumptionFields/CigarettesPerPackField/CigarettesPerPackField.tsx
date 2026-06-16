@@ -1,6 +1,6 @@
 import { Platform, TextInput, View } from "react-native";
 
-import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboardingFlow";
+import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {

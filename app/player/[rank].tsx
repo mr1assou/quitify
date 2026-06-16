@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 
 import { PlayerProfileScreen } from "@/components/feature/profile/PlayerProfileScreenView";
-import { useLeaderboardPlayer } from "@/hooks/useLeaderboardPlayer";
+import { useLeaderboardPlayer } from "@/hooks/leaderboard/useLeaderboardPlayer";
 
 export default function LeaderboardPlayerProfileScreen() {
   const { rank: rankParam } = useLocalSearchParams<{ rank: string }>();

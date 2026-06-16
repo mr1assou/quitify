@@ -1,6 +1,6 @@
-import { LEADERBOARD_PAGE_SIZE } from "@/constants/leaderboardPagination";
+import { LEADERBOARD_PAGE_SIZE } from "@/constants/leaderboard/leaderboardPagination";
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
-import type { BackendLeaderboardResponse } from "@/types/leaderboardApi";
+import type { BackendLeaderboardResponse } from "@/types/leaderboard/leaderboardApi";
 
 export type FetchLeaderboardOptions = {
   offset?: number;

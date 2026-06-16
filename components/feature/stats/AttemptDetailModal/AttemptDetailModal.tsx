@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
-import type { AttemptStatsRow } from "@/types/userStats";
+import type { AttemptStatsRow } from "@/types/stats/userStats";
 import {
   attemptOutcomeLabel,
   buildAttemptDetailRows,

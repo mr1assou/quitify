@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
-import { BRAND_ORANGE, darkColors, lightColors } from "@/constants/theme";
+import { BRAND_ORANGE, darkColors, lightColors } from "@/constants/app/theme";
 import { type ThemePreference, useTheme } from "@/context/ThemeContext";
 
 const OPTIONS: {

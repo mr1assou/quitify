@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MissionCard } from "@/components/feature/missions/MissionCard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
-import { useTodayMission } from "@/hooks/useTodayMission";
+import { useTodayMission } from "@/hooks/progress/useTodayMission";
 
 export default function Missions() {
   const mission = useTodayMission();

@@ -2,7 +2,7 @@ import { Image, Text, View } from "react-native";
 import Animated, { FadeInUp, ZoomIn } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
-import { SMOKED_QUESTION_IMAGE } from "@/constants/assets";
+import { SMOKED_QUESTION_IMAGE } from "@/constants/app/assets";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 

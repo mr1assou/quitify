@@ -5,11 +5,11 @@ import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/Onb
 import {
   COUNTRY_CURRENCY_CONTROL_HEIGHT,
   COUNTRY_CURRENCY_CURRENCY_WIDTH,
-} from "@/constants/onboardingCountryRow";
-import { useCountries } from "@/hooks/useCountries";
-import { useCountrySelection } from "@/hooks/useCountrySelection";
+} from "@/constants/onboarding/onboardingCountryRow";
+import { useCountries } from "@/hooks/onboarding/useCountries";
+import { useCountrySelection } from "@/hooks/onboarding/useCountrySelection";
 import type { OnboardingDraft } from "@/types";
-import { currencySymbol } from "@/utils/format";
+import { currencySymbol } from "@/utils/shared/format";
 
 type Props = {
   draft: OnboardingDraft;

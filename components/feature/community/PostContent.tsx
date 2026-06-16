@@ -1,6 +1,6 @@
 import { Pressable, View } from "react-native";
 
-import type { CommunityPost } from "@/types/community";
+import type { CommunityPost } from "@/types/community/community";
 
 import { PostMediaGallery, type PostMediaGalleryVariant } from "./PostMediaGallery";
 import { PostTagBadge } from "./PostTagBadge";

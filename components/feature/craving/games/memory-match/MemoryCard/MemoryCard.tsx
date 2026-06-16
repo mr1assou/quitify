@@ -14,8 +14,8 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import { MEMORY_SYMBOLS, type MemorySymbol } from "@/constants/memoryMatch";
-import type { MemoryCard as MemoryCardType } from "@/hooks/useMemoryMatchGame";
+import { MEMORY_SYMBOLS, type MemorySymbol } from "@/constants/craving/games/memoryMatch";
+import type { MemoryCard as MemoryCardType } from "@/hooks/craving/games/useMemoryMatchGame";
 
 type Props = {
   card: MemoryCardType;
@@ -24,7 +24,8 @@ type Props = {
   onPress: () => void;
 };
 
-const FLIP_DURATION_MS = 320;
+const FLIP_OPEN_MS = 140;
+const FLIP_CLOSE_MS = 120;
 
 function findSymbol(symbolId: string): MemorySymbol {
   return (
@@ -43,8 +44,8 @@ export function MemoryCard({ card, size, disabled = false, onPress }: Props) {
 
   useEffect(() => {
     flip.value = withTiming(isRevealed ? 1 : 0, {
-      duration: FLIP_DURATION_MS,
-      easing: Easing.inOut(Easing.cubic),
+      duration: isRevealed ? FLIP_OPEN_MS : FLIP_CLOSE_MS,
+      easing: Easing.out(Easing.cubic),
     });
   }, [isRevealed, flip]);
 
@@ -88,6 +89,10 @@ export function MemoryCard({ card, size, disabled = false, onPress }: Props) {
   const handlePress = () => {
     if (disabled || card.isFlipped || card.isMatched) return;
     Haptics.selectionAsync().catch(() => {});
+    flip.value = withTiming(1, {
+      duration: FLIP_OPEN_MS,
+      easing: Easing.out(Easing.cubic),
+    });
     onPress();
   };
 

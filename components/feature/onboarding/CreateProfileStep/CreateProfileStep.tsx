@@ -2,7 +2,7 @@ import { Text, TextInput, View } from "react-native";
 
 import { Chip } from "@/components/ui/Chip";
 import type { ProfileSex } from "@/types";
-import { PROFILE_SEX_OPTIONS } from "@/constants/onboardingSex";
+import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {

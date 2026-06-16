@@ -6,8 +6,8 @@ import { ChatListRow } from "@/components/feature/chat/ChatListRow";
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useChatThreads } from "@/hooks/useChat";
-import { safeRouter } from "@/utils/safeRouter";
+import { useChatThreads } from "@/hooks/chat/useChat";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 

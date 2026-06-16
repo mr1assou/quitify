@@ -1,16 +1,16 @@
 import {
   CIGARETTES_PER_DAY_BANDS,
   NICOTINE_HABIT_YEARS_BANDS,
-} from "@/constants/onboardingNicotineBands";
-import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboardingMotivation";
-import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboardingPrimaryInterest";
-import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboardingPriorQuitAttempts";
-import { QUIT_REASON_OPTIONS } from "@/constants/onboardingReasons";
-import { QUIT_START_PRESET_OPTIONS } from "@/constants/onboardingQuitPlan";
-import { PROFILE_SEX_OPTIONS } from "@/constants/onboardingSex";
+} from "@/constants/onboarding/onboardingNicotineBands";
+import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotivation";
+import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboarding/onboardingPrimaryInterest";
+import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboarding/onboardingPriorQuitAttempts";
+import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
+import { QUIT_START_PRESET_OPTIONS } from "@/constants/onboarding/onboardingQuitPlan";
+import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import type { OnboardingDraft } from "@/types";
-import type { OnboardingPayload } from "@/types/onboardingPayload";
-import { currencySymbol } from "@/utils/format";
+import type { OnboardingPayload } from "@/types/onboarding/onboardingPayload";
+import { currencySymbol } from "@/utils/shared/format";
 import { resolveQuitDateForApi } from "@/utils/onboarding/resolveQuitDateForApi";
 
 type LabeledOption = { id: string; label: string };

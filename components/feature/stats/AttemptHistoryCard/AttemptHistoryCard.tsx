@@ -8,8 +8,8 @@ import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import { usePaginatedList } from "@/hooks/usePaginatedList";
-import type { AttemptStatsRow, StatsEconomics, StatsFilterRange } from "@/types/userStats";
+import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
+import type { AttemptStatsRow, StatsEconomics, StatsFilterRange } from "@/types/stats/userStats";
 import {
   attemptOutcomeLabel,
   formatAttemptDateRange,

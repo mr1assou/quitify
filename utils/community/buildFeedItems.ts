@@ -1,4 +1,4 @@
-import type { CommunityPost, CommunityUser, FeedItem } from "@/types/community";
+import type { CommunityPost, CommunityUser, FeedItem } from "@/types/community/community";
 
 import { resolveCommunityAuthor } from "./resolveCommunityAuthor";
 

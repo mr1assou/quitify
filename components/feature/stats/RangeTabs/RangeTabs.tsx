@@ -1,8 +1,8 @@
 import { Pressable, Text, View } from "react-native";
 
-import { RANGE_OPTIONS, STATS_FILTER_OPTIONS } from "@/constants/statsRanges";
-import type { StatsRange } from "@/types/statsDashboard";
-import type { StatsFilterRange } from "@/types/userStats";
+import { RANGE_OPTIONS, STATS_FILTER_OPTIONS } from "@/constants/stats/statsRanges";
+import type { StatsRange } from "@/types/stats/statsDashboard";
+import type { StatsFilterRange } from "@/types/stats/userStats";
 
 type FilterProps = {
   variant: "filter";

@@ -4,8 +4,8 @@ import { HamburgerButton } from "@/components/layout/HamburgerButton";
 import { HeaderIconButton } from "@/components/layout/HeaderIconButton";
 import { PremiumHeaderButton } from "@/components/layout/PremiumHeaderButton";
 import { useApp } from "@/context/AppContext";
-import { useChatUnreadTotal } from "@/hooks/useChat";
-import { safeRouter } from "@/utils/safeRouter";
+import { useChatUnreadTotal } from "@/hooks/chat/useChat";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 export function ScreenHeaderActions() {
   const { state } = useApp();

@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 
 import { PlayerProfileScreen } from "@/components/feature/profile/PlayerProfileScreenView";
-import { useCommunityPlayerProfile } from "@/hooks/useCommunityPlayerProfile";
+import { useCommunityPlayerProfile } from "@/hooks/community/useCommunityPlayerProfile";
 
 export default function CommunityPlayerProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -1,4 +1,4 @@
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 
 export function dbAuthorId(userId: number): string {
   return `db-${userId}`;

@@ -1,0 +1,80 @@
+import { useEffect, useRef } from "react";
+import { AppState, type AppStateStatus } from "react-native";
+
+import { useApp } from "@/context/AppContext";
+import { useCommunity } from "@/context/CommunityContext";
+import {
+  connectChatSocket,
+  disconnectChatSocket,
+  subscribeChatSocket,
+} from "@/services/realtime/chatSocket";
+import { mapBackendMessage } from "@/utils/chat/mapBackendChat";
+import { getAccessToken } from "@/utils/auth/authStorage";
+
+/** Keeps the chat WebSocket alive while the user is signed in. */
+export function useChatSocket() {
+  const { isHydrated, state } = useApp();
+  const { loadChatThreads, receiveChatMessage, setMessagesSeen } = useCommunity();
+  const appState = useRef<AppStateStatus>(AppState.currentState);
+  const signedIn = isHydrated && Boolean(state.account);
+  const userId = state.account?.userId ?? null;
+
+  useEffect(() => {
+    if (!signedIn || !userId) {
+      disconnectChatSocket();
+      return;
+    }
+
+    let cancelled = false;
+    let unsubscribe = () => undefined;
+
+    const connect = async () => {
+      const token = await getAccessToken();
+      if (!token || cancelled) return;
+
+      unsubscribe = subscribeChatSocket({
+        onMessage: (payload) => {
+          if (payload.sender_id === userId) return;
+          receiveChatMessage(mapBackendMessage(payload, userId));
+        },
+        onMessagesSeen: (payload) => {
+          setMessagesSeen(
+            String(payload.thread_id),
+            Date.parse(payload.last_read_at),
+            payload.reader_user_id,
+          );
+        },
+      });
+
+      connectChatSocket(token);
+      await loadChatThreads();
+    };
+
+    void connect();
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+      disconnectChatSocket();
+    };
+  }, [loadChatThreads, receiveChatMessage, setMessagesSeen, signedIn, userId]);
+
+  useEffect(() => {
+    if (!signedIn || !userId) return;
+
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      appState.current = nextState;
+
+      if (nextState !== "active") return;
+
+      void (async () => {
+        const token = await getAccessToken();
+        if (!token) return;
+        connectChatSocket(token);
+        await loadChatThreads();
+      })();
+    });
+
+    return () => subscription.remove();
+  }, [loadChatThreads, signedIn, userId]);
+}

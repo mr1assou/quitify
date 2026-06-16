@@ -2,8 +2,8 @@ import { Image } from "expo-image";
 import { Image as RNImage, View } from "react-native";
 
 import { OnlineStatusDot } from "@/components/ui/OnlineStatusDot";
-import { COMMUNITY_AVATAR_IMAGE, USER_AVATAR_IMAGE } from "@/constants/assets";
-import type { CommunityUser } from "@/types/community";
+import { COMMUNITY_AVATAR_IMAGE, USER_AVATAR_IMAGE } from "@/constants/app/assets";
+import type { CommunityUser } from "@/types/community/community";
 
 type Props = {
   user: Pick<CommunityUser, "isCurrentUser" | "name" | "avatarUrl" | "isOnline">;

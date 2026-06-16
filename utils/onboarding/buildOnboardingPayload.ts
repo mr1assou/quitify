@@ -1,5 +1,5 @@
 import type { OnboardingDraft } from "@/types";
-import type { OnboardingPayload } from "@/types/onboardingPayload";
+import type { OnboardingPayload } from "@/types/onboarding/onboardingPayload";
 
 import { resolveOnboardingPayloadText } from "./resolveOnboardingPayloadText";
 

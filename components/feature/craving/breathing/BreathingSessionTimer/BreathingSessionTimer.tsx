@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-import { formatDurationMs } from "@/utils/formatDuration";
+import { formatDurationMs } from "@/utils/shared/formatDuration";
 
 type Props = {
   elapsedMs: number;

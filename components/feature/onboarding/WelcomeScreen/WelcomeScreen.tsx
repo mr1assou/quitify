@@ -1,4 +1,4 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";

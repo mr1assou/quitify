@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { View, type LayoutChangeEvent } from "react-native";
 
 import { TapDestroyCigarette } from "@/components/feature/craving/games/tap-destroy/TapDestroyCigarette";
-import type { TapDestroyCigarette as Cigarette } from "@/hooks/useTapDestroyGame";
+import { TapDestroyHitPopup } from "@/components/feature/craving/games/tap-destroy/TapDestroyHitPopup";
+import type {
+  TapDestroyCigarette as Cigarette,
+  TapDestroyDestroyResult,
+} from "@/hooks/craving/games/useTapDestroyGame";
+
+type HitEffect = TapDestroyDestroyResult & {
+  id: string;
+  x: number;
+  y: number;
+};
 
 type Props = {
   cigarettes: readonly Cigarette[];
-  onDestroy: (id: string) => void;
+  onDestroy: (id: string) => TapDestroyDestroyResult | null;
 };
 
 export function TapDestroyPlayField({ cigarettes, onDestroy }: Props) {
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const [hitEffects, setHitEffects] = useState<HitEffect[]>([]);
 
   const handleLayout = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
@@ -18,6 +29,22 @@ export function TapDestroyPlayField({ cigarettes, onDestroy }: Props) {
       setSize({ width, height });
     }
   };
+
+  const handleDestroy = useCallback(
+    (id: string, position: { x: number; y: number }) => {
+      const result = onDestroy(id);
+      if (!result) return;
+      setHitEffects((prev) => [
+        ...prev,
+        { id: `hit-${id}`, x: position.x, y: position.y, ...result },
+      ]);
+    },
+    [onDestroy],
+  );
+
+  const removeHitEffect = useCallback((id: string) => {
+    setHitEffects((prev) => prev.filter((effect) => effect.id !== id));
+  }, []);
 
   return (
     <View
@@ -31,10 +58,21 @@ export function TapDestroyPlayField({ cigarettes, onDestroy }: Props) {
               cigarette={c}
               areaWidth={size.width}
               areaHeight={size.height}
-              onDestroy={onDestroy}
+              onDestroy={handleDestroy}
             />
           ))
         : null}
+      {hitEffects.map((effect) => (
+        <TapDestroyHitPopup
+          key={effect.id}
+          id={effect.id}
+          x={effect.x}
+          y={effect.y}
+          scoreGain={effect.scoreGain}
+          combo={effect.combo}
+          onDone={removeHitEffect}
+        />
+      ))}
     </View>
   );
 }

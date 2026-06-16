@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { Text, View } from "react-native";
 
 import { CroppedPostImage } from "@/components/feature/community/CroppedPostImage";
-import type { PostMedia as PostMediaType } from "@/types/community";
+import type { PostMedia as PostMediaType } from "@/types/community/community";
 import { resolvePostMediaAspectRatio } from "@/utils/community/postMediaFrame";
 import { resolvePostMediaSource } from "@/utils/community/postMediaSource";
 import { shouldApplyPostMediaCrop } from "@/utils/community/postMediaDisplay";

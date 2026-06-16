@@ -4,8 +4,8 @@ import { UserProfileActions } from "@/components/feature/profile/UserProfileActi
 import { UserProfileActivity } from "@/components/feature/profile/UserProfileActivity";
 import { UserProfileHero } from "@/components/feature/profile/UserProfileHero";
 import { UserProfileStatsGrid } from "@/components/feature/profile/UserProfileStatsGrid";
-import type { PlayerProfile } from "@/types/playerProfile";
-import type { ProfileStreak } from "@/types/profileStreak";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import type { ProfileStreak } from "@/types/profile/profileStreak";
 
 type Props = {
   profile: PlayerProfile;

@@ -6,10 +6,10 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
-import type { GlobalRank } from "@/types/progress";
-import type { AchievementBadgeMetric } from "@/utils/achievementProgress";
-import { progressToPercent } from "@/utils/achievementProgress";
-import { formatNumber } from "@/utils/format";
+import type { GlobalRank } from "@/types/progress/progress";
+import type { AchievementBadgeMetric } from "@/utils/progress/achievementProgress";
+import { progressToPercent } from "@/utils/progress/achievementProgress";
+import { formatNumber } from "@/utils/shared/format";
 
 const RING = { size: 156, stroke: 10 } as const;
 const RING_BADGE_SIZE = 96;

@@ -1,6 +1,6 @@
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
-import type { ThemeColors } from "@/constants/theme";
+import type { ThemeColors } from "@/constants/app/theme";
 
 type Props = {
   width: number;

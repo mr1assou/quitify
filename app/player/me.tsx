@@ -1,5 +1,5 @@
 import { PlayerProfileScreen } from "@/components/feature/profile/PlayerProfileScreenView";
-import { useSelfPlayerProfile } from "@/hooks/useSelfPlayerProfile";
+import { useSelfPlayerProfile } from "@/hooks/community/useSelfPlayerProfile";
 
 /** Signed-in user's public player profile (no leaderboard refetch flash). */
 export default function SelfPlayerProfileScreen() {

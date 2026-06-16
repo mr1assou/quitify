@@ -12,9 +12,9 @@ import type {
   OnboardingDraft,
   UserProfile,
 } from "@/types";
-import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboardingNicotineBands";
-import { parseBirthYmd } from "@/utils/birthdate";
-import { startOfLocalDay } from "@/utils/dates";
+import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
+import { parseBirthYmd } from "@/utils/profile/birthdate";
+import { startOfLocalDay } from "@/utils/shared/dates";
 
 export type { OnboardingDraft, OnboardingContextValue } from "@/types";
 

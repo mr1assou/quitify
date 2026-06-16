@@ -1,10 +1,10 @@
-import { MINUTES_LIFE_PER_CIGARETTE_AVOIDED } from "@/constants/health";
+import { MINUTES_LIFE_PER_CIGARETTE_AVOIDED } from "@/constants/progress/health";
 import type {
   AttemptStatsRow,
   StatsEconomics,
   StatsFilterRange,
   StatsImpact,
-} from "@/types/userStats";
+} from "@/types/stats/userStats";
 import { MS_DAY } from "@/utils/time/ms";
 
 function windowStartMs(range: StatsFilterRange, now: number): number | null {

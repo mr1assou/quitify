@@ -1,5 +1,5 @@
-import { CURRENT_USER_ID, getCommunityUser } from "@/constants/communityUsers";
-import type { CommunityUser } from "@/types/community";
+import { CURRENT_USER_ID, getCommunityUser } from "@/constants/community/communityUsers";
+import type { CommunityUser } from "@/types/community/community";
 import { parseDbUserId, resolveOnlineFromMap } from "@/utils/community/presence";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 

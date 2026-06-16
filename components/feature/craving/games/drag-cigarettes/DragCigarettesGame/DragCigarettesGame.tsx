@@ -1,26 +1,38 @@
 import { router } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { View } from "react-native";
+import * as Haptics from "expo-haptics";
 
-import { DragHud } from "@/components/feature/craving/games/drag-cigarettes/DragHud";
+import { ColorSwitchHud } from "@/components/feature/craving/games/drag-cigarettes/ColorSwitchHud";
+import { ColorSwitchPlayField } from "@/components/feature/craving/games/drag-cigarettes/ColorSwitchPlayField";
 import { DragIdleView } from "@/components/feature/craving/games/drag-cigarettes/DragIdleView";
-import { DragPlayField } from "@/components/feature/craving/games/drag-cigarettes/DragPlayField";
 import { DragResultView } from "@/components/feature/craving/games/drag-cigarettes/DragResultView";
-import { useDragCigarettesGame } from "@/hooks/useDragCigarettesGame";
+import { GameDoneBar } from "@/components/feature/craving/games/GameDoneBar";
+import { useColorSwitchGame } from "@/hooks/craving/games/useColorSwitchGame";
 
 export function DragCigarettesGame() {
-  const game = useDragCigarettesGame();
+  const game = useColorSwitchGame();
   const handleDone = useCallback(() => router.back(), []);
+  const lastStatus = useRef(game.status);
+
+  useEffect(() => {
+    if (lastStatus.current === "playing" && game.status === "dead") {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(
+        () => {},
+      );
+    }
+    lastStatus.current = game.status;
+  }, [game.status]);
 
   if (game.status === "idle") {
     return <DragIdleView onStart={game.start} />;
   }
 
-  if (game.status === "finished") {
+  if (game.status === "dead" || game.status === "finished") {
     return (
       <DragResultView
-        trashed={game.trashed}
-        bestCombo={game.bestCombo}
+        score={game.score}
+        deathReason={game.deathReason}
         onPlayAgain={game.start}
         onDone={handleDone}
       />
@@ -29,17 +41,17 @@ export function DragCigarettesGame() {
 
   return (
     <View className="flex-1">
-      <DragHud
-        secondsLeft={game.secondsLeft}
-        totalSeconds={game.totalSeconds}
-        trashed={game.trashed}
-        combo={game.combo}
+      <ColorSwitchHud score={game.score} ballColor={game.ballColor} />
+      <ColorSwitchPlayField
+        ballWorldY={game.ballWorldY}
+        cameraWorldY={game.cameraWorldY}
+        ballColor={game.ballColor}
+        obstacles={game.obstacles}
+        orbs={game.orbs}
+        onLayoutField={game.setFieldSize}
+        onTap={game.jump}
       />
-      <DragPlayField
-        cigarettes={game.cigarettes}
-        trashed={game.trashed}
-        onTrash={game.trash}
-      />
+      <GameDoneBar onPress={game.finish} />
     </View>
   );
 }

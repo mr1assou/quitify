@@ -1,4 +1,4 @@
-import type { PostImageCrop } from "@/types/community";
+import type { PostImageCrop } from "@/types/community/community";
 
 export const DEFAULT_POST_IMAGE_CROP: PostImageCrop = {
   scale: 1,

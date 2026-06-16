@@ -1,6 +1,6 @@
 import { OnboardingChipGroup } from "@/components/feature/onboarding/shared/OnboardingChipGroup";
-import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboardingMotivation";
-import type { MotivationLevel } from "@/types/onboarding";
+import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotivation";
+import type { MotivationLevel } from "@/types/onboarding/onboarding";
 
 type Props = {
   selected?: MotivationLevel;

@@ -3,7 +3,7 @@ import { useCallback, type ReactNode } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
-import { getCravingTool, type CravingToolId } from "@/constants/cravingTools";
+import { getCravingTool, type CravingToolId } from "@/constants/craving/cravingTools";
 
 type Props = {
   toolId: CravingToolId;

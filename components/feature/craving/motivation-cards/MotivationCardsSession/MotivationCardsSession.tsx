@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { MotivationCardStack } from "@/components/feature/craving/motivation-cards/MotivationCardStack";
 import { MotivationCardsSessionTimer } from "@/components/feature/craving/motivation-cards/MotivationCardsSessionTimer";
 import { Button } from "@/components/ui/Button";
-import type { MotivationQuote } from "@/constants/motivationQuotes";
+import type { MotivationQuote } from "@/constants/craving/motivationQuotes";
 
 type Props = {
   elapsedMs: number;

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { View } from "react-native";
 
-import type { PostMedia } from "@/types/community";
+import type { PostMedia } from "@/types/community/community";
 import {
   FEED_GRID_GAP,
   FEED_GRID_HEIGHT,

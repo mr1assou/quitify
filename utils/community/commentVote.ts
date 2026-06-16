@@ -1,6 +1,6 @@
-import type { PostVote } from "@/types/community";
-import type { BackendPostCommentEngagement } from "@/types/postsApi";
-import type { PostComment } from "@/types/community";
+import type { PostVote } from "@/types/community/community";
+import type { BackendPostCommentEngagement } from "@/types/community/postsApi";
+import type { PostComment } from "@/types/community/community";
 
 export function applyCommentVote(
   comment: PostComment,

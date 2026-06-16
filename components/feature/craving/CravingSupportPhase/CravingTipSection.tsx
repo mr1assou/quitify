@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "react-native";
 
 import { CravingTipCard } from "@/components/feature/craving/CravingTipCard";
 import { useTheme } from "@/context/ThemeContext";
-import type { CravingTip } from "@/types/craving";
+import type { CravingTip } from "@/types/craving/craving";
 
 type Props = {
   tip: CravingTip;

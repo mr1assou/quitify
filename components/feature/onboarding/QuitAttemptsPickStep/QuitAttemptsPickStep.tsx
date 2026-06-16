@@ -4,7 +4,7 @@ import { Chip } from "@/components/ui/Chip";
 import {
   PRIOR_QUIT_ATTEMPT_OPTIONS,
   type PriorQuitAttempts,
-} from "@/constants/onboardingPriorQuitAttempts";
+} from "@/constants/onboarding/onboardingPriorQuitAttempts";
 
 type Props = {
   selected?: PriorQuitAttempts;

@@ -10,16 +10,16 @@ import {
   cigarettesPerDayBandHint,
   type CigarettesPerDayBandId,
   type NicotineHabitYearsBandId,
-} from "@/constants/onboardingNicotineBands";
-import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboardingFlow";
+} from "@/constants/onboarding/onboardingNicotineBands";
+import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import type { OnboardingDraft } from "@/types";
 import {
   patchForCigarettesPerDayBand,
   patchForCigarettesPerPackInput,
   patchForNicotineHabitYearsBand,
   patchForPackCostInput,
-} from "@/utils/nicotineBands";
-import { hasInvalidCigarettesPerPackInput } from "@/utils/nicotineOnboarding";
+} from "@/utils/onboarding/nicotineBands";
+import { hasInvalidCigarettesPerPackInput } from "@/utils/onboarding/nicotineOnboarding";
 
 type Props = {
   draft: OnboardingDraft;

@@ -1,10 +1,10 @@
-import type { AttemptStatsRow } from "@/types/userStats";
+import type { AttemptStatsRow } from "@/types/stats/userStats";
 import {
   formatCurrency,
   formatDuration,
   formatLifeGained,
   formatNumber,
-} from "@/utils/format";
+} from "@/utils/shared/format";
 import { formatUtcIsoInTimezone } from "@/utils/time/formatInTimezone";
 
 export type AttemptDetailRow = {

@@ -1,4 +1,4 @@
-import type { CommunityPost, PostVote } from "@/types/community";
+import type { CommunityPost, PostVote } from "@/types/community/community";
 
 export function applyPostVote(post: CommunityPost, vote: PostVote): CommunityPost {
   if (post.myVote === vote) {

@@ -2,8 +2,7 @@ import { Image, Text, View, useWindowDimensions } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
-import { TAP_DESTROY_LOGO_IMAGE } from "@/constants/cravingGameAssets";
-import { TAP_DESTROY_DURATION_SEC } from "@/hooks/useTapDestroyGame";
+import { TAP_DESTROY_LOGO_IMAGE } from "@/constants/craving/games/cravingGameAssets";
 
 type Props = {
   onStart: () => void;
@@ -24,8 +23,7 @@ export function TapDestroyIdleView({ onStart }: Props) {
           Smash the cigarettes
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          Tap every cigarette you see. You have {TAP_DESTROY_DURATION_SEC}{" "}
-          seconds.
+          5-minute rush — tap fast, trigger explosions, and chain combos.
         </Text>
       </Animated.View>
 

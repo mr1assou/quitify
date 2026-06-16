@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { View } from "react-native";
 
-import type { PostImageCrop, PostMediaFrame } from "@/types/community";
+import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
 import type { PostDraftImage } from "@/utils/community/postDraft";
 
 import type { PostImageCropEditorHandle } from "./PostImageCropEditor";

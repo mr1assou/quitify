@@ -1,6 +1,6 @@
 import { Image, Text, View } from "react-native";
 
-import { APP_LOGO_IMAGE } from "@/constants/assets";
+import { APP_LOGO_IMAGE } from "@/constants/app/assets";
 
 export function AppBrandMark() {
   return (

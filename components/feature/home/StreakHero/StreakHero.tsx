@@ -4,9 +4,9 @@ import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import { useNow } from "@/hooks/useNow";
+import { useNow } from "@/hooks/shared/useNow";
 import { formatCurrentStreak } from "@/utils/streak";
-import { formatDate, formatLifeGained, formatNumber } from "@/utils/format";
+import { formatDate, formatLifeGained, formatNumber } from "@/utils/shared/format";
 
 type Props = {
   streakStart: number;
@@ -72,7 +72,7 @@ export function StreakHero({
           />
           <StatPill
             icon="ban"
-            tint={colors.alert}
+            tint={colors.secondary}
             value={formatNumber(cigarettesAvoided)}
             label="cigs avoided"
           />

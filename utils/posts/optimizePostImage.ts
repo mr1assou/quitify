@@ -1,8 +1,8 @@
 import { Image } from "react-native";
 import * as ImageManipulator from "expo-image-manipulator";
 
-import type { PostImageCrop, PostMediaFrame } from "@/types/community";
-import type { AllowedImageContentType } from "@/types/postsApi";
+import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { AllowedImageContentType } from "@/types/community/postsApi";
 import {
   containerForAspect,
   getCoverScale,

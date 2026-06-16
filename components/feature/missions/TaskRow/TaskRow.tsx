@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { ResolvedTask } from "@/hooks/useTodayMission";
+import type { ResolvedTask } from "@/hooks/progress/useTodayMission";
 
 type Props = {
   task: ResolvedTask;

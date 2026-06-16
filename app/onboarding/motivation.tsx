@@ -1,9 +1,9 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { View } from "react-native";
 
 import { MotivationStep } from "@/components/feature/onboarding/MotivationStep";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
-import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
+import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
 
 export default function Motivation() {

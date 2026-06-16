@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 import { Pressable } from "react-native";
 
-import { VIP_IMAGE } from "@/constants/assets";
+import { VIP_IMAGE } from "@/constants/app/assets";
 
 type Props = {
   isPremium: boolean;

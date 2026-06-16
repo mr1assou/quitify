@@ -5,9 +5,9 @@ import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
-import { getCommunityUser } from "@/constants/communityUsers";
+import { getCommunityUser } from "@/constants/community/communityUsers";
 import { useTheme } from "@/context/ThemeContext";
-import type { CallKind } from "@/types/chat";
+import type { CallKind } from "@/types/chat/chat";
 
 function formatDuration(ms: number): string {
   const total = Math.floor(ms / 1000);

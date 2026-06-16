@@ -1,4 +1,4 @@
-import type { PostMediaFrame } from "@/types/community";
+import type { PostMediaFrame } from "@/types/community/community";
 
 export const POST_TITLE_MAX = 300;
 

@@ -1,6 +1,6 @@
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
-import type { CommunityUser } from "@/types/community";
-import { safeRouter } from "@/utils/safeRouter";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
+import type { CommunityUser } from "@/types/community/community";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 type ProfileTarget = Pick<CommunityUser, "id" | "isCurrentUser">;
 

@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { MotivationQuoteCard } from "@/components/feature/craving/motivation-cards/MotivationQuoteCard";
-import type { MotivationQuote } from "@/constants/motivationQuotes";
+import type { MotivationQuote } from "@/constants/craving/motivationQuotes";
 
 const SWIPE_THRESHOLD_RATIO = 0.25;
 const CARD_HEIGHT_RATIO = 0.62;

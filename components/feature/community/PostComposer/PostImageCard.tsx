@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { forwardRef } from "react";
 import { Pressable, View } from "react-native";
 
-import type { PostImageCrop, PostMediaFrame } from "@/types/community";
+import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
 import type { PostDraftImage } from "@/utils/community/postDraft";
 import { resolvePostMediaAspectRatio } from "@/utils/community/postMediaFrame";
 

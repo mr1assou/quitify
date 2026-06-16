@@ -4,7 +4,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { CravingTimeBucket } from "@/types/statsDashboard";
+import type { CravingTimeBucket } from "@/types/stats/statsDashboard";
 
 type Props = {
   buckets: CravingTimeBucket[];

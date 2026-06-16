@@ -5,10 +5,10 @@ import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { UnlockSuccessCard } from "@/components/feature/profile/UnlockSuccessCard";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
-import type { UserProfile } from "@/types/profile";
-import { formatDate } from "@/utils/format";
-import { habitQuantityLabel } from "@/utils/profileConsumptionLabel";
-import { safeRouter } from "@/utils/safeRouter";
+import type { UserProfile } from "@/types/profile/profile";
+import { formatDate } from "@/utils/shared/format";
+import { habitQuantityLabel } from "@/utils/profile/profileConsumptionLabel";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   profile: UserProfile;

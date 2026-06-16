@@ -1,5 +1,5 @@
-import type { BackendPostEngagement } from "@/types/postsApi";
-import type { CommunityPost } from "@/types/community";
+import type { BackendPostEngagement } from "@/types/community/postsApi";
+import type { CommunityPost } from "@/types/community/community";
 
 export function applyEngagementToPost(
   post: CommunityPost,

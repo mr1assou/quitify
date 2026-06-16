@@ -1,10 +1,10 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { View } from "react-native";
 
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
 import { ReasonsPickStep } from "@/components/feature/onboarding/ReasonsPickStep";
-import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboardingFlow";
-import { QUIT_REASON_OPTIONS } from "@/constants/onboardingReasons";
+import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
+import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
 import { useOnboarding } from "@/context/OnboardingContext";
 
 export default function Reasons() {

@@ -8,7 +8,7 @@ import {
 } from "react";
 
 import { useApp } from "@/context/AppContext";
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import {
   fetchChatMessages,
   fetchChatThreads,
@@ -27,9 +27,9 @@ import {
   voteOnComment,
   voteOnPost,
 } from "@/services/posts/postsApi";
-import type { ChatMessage, ChatThread } from "@/types/chat";
-import type { CommunityPost, CommunityUser, PostComment, PostVote } from "@/types/community";
-import type { BackendPostCommentEngagement, BackendPostEngagement } from "@/types/postsApi";
+import type { ChatMessage, ChatThread } from "@/types/chat/chat";
+import type { CommunityPost, CommunityUser, PostComment, PostVote } from "@/types/community/community";
+import type { BackendPostCommentEngagement, BackendPostEngagement } from "@/types/community/postsApi";
 import {
   mapBackendComment,
   mapCommentAuthorToCommunityUser,
@@ -45,9 +45,9 @@ import {
 import type { ChatMediaPick } from "@/components/feature/chat/usePickChatMedia";
 import { parseDbUserId } from "@/utils/community/presence";
 import { applyCommentEngagement, applyCommentVote } from "@/utils/community/commentVote";
-import type { CommentReplyTarget } from "@/types/community";
+import type { CommentReplyTarget } from "@/types/community/community";
 import { hasLoadedPostComments, countLoadedPostComments } from "@/utils/community/resolvePostCommentIds";
-import type { UpdatePostPayload } from "@/types/updatePost";
+import type { UpdatePostPayload } from "@/types/community/updatePost";
 
 type State = {
   posts: CommunityPost[];

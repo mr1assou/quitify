@@ -1,4 +1,4 @@
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { View } from "react-native";
 
 import { CravingCTA } from "@/components/feature/home/CravingCTA";

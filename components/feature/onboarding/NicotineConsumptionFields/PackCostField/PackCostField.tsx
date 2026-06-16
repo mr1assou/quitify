@@ -1,8 +1,8 @@
 import { Platform, Text, TextInput, View } from "react-native";
 
-import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboardingFlow";
+import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import { useTheme } from "@/context/ThemeContext";
-import { currencySymbol } from "@/utils/format";
+import { currencySymbol } from "@/utils/shared/format";
 
 type Props = {
   currency: string;

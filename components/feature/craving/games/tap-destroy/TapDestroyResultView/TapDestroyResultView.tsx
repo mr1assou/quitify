@@ -7,11 +7,17 @@ import { useTheme } from "@/context/ThemeContext";
 
 type Props = {
   score: number;
+  bestCombo: number;
   onPlayAgain: () => void;
   onDone: () => void;
 };
 
-export function TapDestroyResultView({ score, onPlayAgain, onDone }: Props) {
+export function TapDestroyResultView({
+  score,
+  bestCombo,
+  onPlayAgain,
+  onDone,
+}: Props) {
   const { colors } = useTheme();
 
   return (
@@ -25,20 +31,31 @@ export function TapDestroyResultView({ score, onPlayAgain, onDone }: Props) {
           Craving weakened
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          You protected your streak.
+          You smashed through the rush. Nice work.
         </Text>
       </Animated.View>
 
       <Animated.View
         entering={FadeIn.delay(220).duration(500)}
-        className="items-center"
+        className="w-full items-center gap-5"
       >
-        <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Cigarettes smashed
-        </Text>
-        <Text className="mt-2 font-mono text-6xl font-bold tabular-nums text-foreground dark:text-d-text">
-          {score}
-        </Text>
+        <View className="items-center">
+          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+            Final score
+          </Text>
+          <Text className="mt-2 font-mono text-6xl font-bold tabular-nums text-foreground dark:text-d-text">
+            {score}
+          </Text>
+        </View>
+
+        <View className="items-center">
+          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+            Best combo
+          </Text>
+          <Text className="mt-1 font-mono text-3xl font-bold tabular-nums text-accent">
+            x{bestCombo}
+          </Text>
+        </View>
       </Animated.View>
 
       <Animated.View

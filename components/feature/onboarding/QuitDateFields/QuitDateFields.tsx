@@ -1,6 +1,6 @@
 import { QuitStartPresetPicker } from "@/components/feature/onboarding/QuitPlanFields/QuitStartPresetPicker";
 import type { OnboardingDraft } from "@/types";
-import type { QuitStartPreset } from "@/types/onboarding";
+import type { QuitStartPreset } from "@/types/onboarding/onboarding";
 
 type Props = {
   draft: OnboardingDraft;

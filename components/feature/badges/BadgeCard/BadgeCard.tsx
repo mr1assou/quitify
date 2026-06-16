@@ -5,7 +5,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
 import type { Badge } from "@/types";
-import { formatNumber } from "@/utils/format";
+import { formatNumber } from "@/utils/shared/format";
 
 type Props = {
   badge: Badge;

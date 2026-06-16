@@ -6,19 +6,21 @@ import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {
-  trashed: number;
-  bestCombo: number;
+  score: number;
+  deathReason: "collision" | "fall" | null;
   onPlayAgain: () => void;
   onDone: () => void;
 };
 
 export function DragResultView({
-  trashed,
-  bestCombo,
+  score,
+  deathReason,
   onPlayAgain,
   onDone,
 }: Props) {
   const { colors } = useTheme();
+  const wrongColor = deathReason === "collision";
+  const fell = deathReason === "fall";
 
   return (
     <View className="flex-1 items-center justify-between px-6 pb-6 pt-4">
@@ -26,35 +28,33 @@ export function DragResultView({
         entering={FadeInUp.duration(450)}
         className="items-center gap-3 px-4 pt-4"
       >
-        <Ionicons name="shield-checkmark" size={36} color={colors.accent} />
+        <Ionicons
+          name={wrongColor ? "skull-outline" : fell ? "arrow-down-circle-outline" : "flag-outline"}
+          size={36}
+          color={colors.accent}
+        />
         <Text className="text-center text-2xl font-bold text-foreground dark:text-d-text">
-          You stayed in control
+          {wrongColor ? "Wrong color!" : fell ? "Fell down" : "Nice run"}
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          Every cigarette trashed is one you didn&apos;t smoke.
+          {wrongColor
+            ? "Match your ball to the obstacle color next time."
+            : fell
+              ? "Keep tapping to stay in the air."
+              : "You stopped on your terms. Every round builds focus."}
         </Text>
       </Animated.View>
 
       <Animated.View
         entering={FadeIn.delay(220).duration(500)}
-        className="w-full flex-row items-stretch justify-center gap-6"
+        className="w-full items-center"
       >
-        <View className="items-center">
-          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Trashed
-          </Text>
-          <Text className="mt-2 font-mono text-5xl font-bold tabular-nums text-foreground dark:text-d-text">
-            {trashed}
-          </Text>
-        </View>
-        <View className="items-center">
-          <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Best combo
-          </Text>
-          <Text className="mt-2 font-mono text-5xl font-bold tabular-nums text-accent">
-            x{Math.max(bestCombo, 1)}
-          </Text>
-        </View>
+        <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+          Final score
+        </Text>
+        <Text className="mt-2 font-mono text-6xl font-bold tabular-nums text-foreground dark:text-d-text">
+          {score}
+        </Text>
       </Animated.View>
 
       <Animated.View

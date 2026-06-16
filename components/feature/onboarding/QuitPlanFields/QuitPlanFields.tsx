@@ -2,7 +2,7 @@ import { View } from "react-native";
 
 import { QuitMethodPicker } from "@/components/feature/onboarding/QuitPlanFields/QuitMethodPicker";
 import type { OnboardingDraft } from "@/types";
-import type { QuitMethod } from "@/types/onboarding";
+import type { QuitMethod } from "@/types/onboarding/onboarding";
 
 type Props = {
   draft: OnboardingDraft;

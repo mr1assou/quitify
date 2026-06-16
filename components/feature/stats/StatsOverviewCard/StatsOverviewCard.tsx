@@ -7,9 +7,9 @@ import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { StatBlock } from "@/components/feature/stats/StatBlock";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { StatsFilterRange } from "@/types/userStats";
-import type { StatsOverviewByRange } from "@/types/statsOverview";
-import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/format";
+import type { StatsFilterRange } from "@/types/stats/userStats";
+import type { StatsOverviewByRange } from "@/types/stats/statsOverview";
+import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/shared/format";
 
 type Props = {
   currency: string;
@@ -57,7 +57,7 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               value={impact.cigarettesAvoided}
               display={formatNumber(impact.cigarettesAvoided)}
               icon="ban"
-              accent="alert"
+              accent="secondary"
               delay={40}
             />
           </View>

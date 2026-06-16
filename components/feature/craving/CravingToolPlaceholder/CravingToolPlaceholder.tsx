@@ -1,7 +1,7 @@
 import { View } from "react-native";
 
 import { CravingToolScreen } from "@/components/feature/craving/CravingToolScreen";
-import type { CravingToolId } from "@/constants/cravingTools";
+import type { CravingToolId } from "@/constants/craving/cravingTools";
 
 type Props = {
   toolId: CravingToolId;

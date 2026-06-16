@@ -3,9 +3,9 @@ import { useMemo, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 import { UserResultRow } from "@/components/feature/community/UserResultRow";
-import { COMMUNITY_USERS } from "@/constants/communityUsers";
+import { COMMUNITY_USERS } from "@/constants/community/communityUsers";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityUser } from "@/types/community";
+import type { CommunityUser } from "@/types/community/community";
 import { normalizeSearch } from "@/utils/community";
 
 /**

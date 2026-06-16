@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { safeRouter } from "@/utils/safeRouter";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback, useState } from "react";
 import {
   Image,
@@ -15,11 +15,11 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { IntroPagerGradient } from "@/components/feature/intro/IntroPagerGradient";
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { OnboardingSocialAuth } from "@/components/feature/onboarding/OnboardingSocialAuth";
-import { introHeroImageHeight } from "@/constants/intro";
+import { introHeroImageHeight } from "@/constants/app/intro";
 import { useApp } from "@/context/AppContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useGoogleSignIn } from "@/hooks/useGoogleSignIn";
+import { useGoogleSignIn } from "@/hooks/auth/useGoogleSignIn";
 import { finalizeGoogleAuth } from "@/services/auth/finalizeGoogleAuth";
 
 const CELEBRATION_TITLE = "Your smoke-free story starts here";

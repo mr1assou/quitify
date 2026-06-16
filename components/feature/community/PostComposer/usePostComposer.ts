@@ -10,8 +10,8 @@ import {
   uploadImageToPresignedUrl,
 } from "@/services/posts/postsApi";
 import { mapBackendPostToCommunityPost } from "@/utils/community/mapBackendPost";
-import type { PostImageCrop, PostMediaFrame } from "@/types/community";
-import type { UpdatePostPayload } from "@/types/updatePost";
+import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { UpdatePostPayload } from "@/types/community/updatePost";
 import {
   createDraftImage,
   EMPTY_POST_DRAFT,

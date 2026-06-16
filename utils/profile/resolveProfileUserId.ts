@@ -1,5 +1,5 @@
-import { CURRENT_USER_ID } from "@/constants/communityUsers";
-import type { PlayerProfile } from "@/types/playerProfile";
+import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { parseDbUserId } from "@/utils/community/presence";
 
 export function resolveProfileUserId(

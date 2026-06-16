@@ -7,7 +7,7 @@ import { BreathingFinishButton } from "@/components/feature/craving/breathing/Br
 import { BreathingIdleView } from "@/components/feature/craving/breathing/BreathingIdleView";
 import { BreathingPhaseLabel } from "@/components/feature/craving/breathing/BreathingPhaseLabel";
 import { BreathingSessionTimer } from "@/components/feature/craving/breathing/BreathingSessionTimer";
-import { useBreathingSession } from "@/hooks/useBreathingSession";
+import { useBreathingSession } from "@/hooks/craving/breathing/useBreathingSession";
 
 export function BreathingExercise() {
   const { width } = useWindowDimensions();

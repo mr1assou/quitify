@@ -1,8 +1,8 @@
-import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
-import type { CommunityUser } from "@/types/community";
-import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
-import type { PlayerProfile } from "@/types/playerProfile";
-import type { UserProfile } from "@/types/profile";
+import { resolveCountryFlagUrl } from "@/constants/leaderboard/leaderboardCountries";
+import type { CommunityUser } from "@/types/community/community";
+import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
+import type { PlayerProfile } from "@/types/profile/playerProfile";
+import type { UserProfile } from "@/types/profile/profile";
 import { buildPlayerProfile } from "@/utils/leaderboard/playerProfilePresentation";
 
 type BuildOptions = {

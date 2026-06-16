@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { ReflexTarget as ReflexTargetType } from "@/hooks/useReflexTapGame";
+import type { ReflexTarget as ReflexTargetType } from "@/hooks/craving/games/useReflexTapGame";
 
 const IS_ANDROID = Platform.OS === "android";
 

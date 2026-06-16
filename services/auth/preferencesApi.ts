@@ -1,5 +1,5 @@
 import { API_URL } from "@/config/api";
-import { getAccessToken } from "@/utils/authStorage";
+import { getAccessToken } from "@/utils/auth/authStorage";
 
 export type UpdateUserPreferencesPayload = {
   timezone?: string;

@@ -5,8 +5,8 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
-import type { Level } from "@/types/progress";
-import { formatNumber } from "@/utils/format";
+import type { Level } from "@/types/progress/progress";
+import { formatNumber } from "@/utils/shared/format";
 
 type Props = {
   xp: number;

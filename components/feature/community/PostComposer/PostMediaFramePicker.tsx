@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { PostMediaFrame } from "@/types/community";
+import type { PostMediaFrame } from "@/types/community/community";
 
 import { POST_IMAGE_FRAMES } from "./constants";
 

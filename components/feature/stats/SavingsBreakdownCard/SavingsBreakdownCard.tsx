@@ -4,8 +4,8 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { SavingsBreakdown } from "@/types/statsDashboard";
-import { formatCurrency } from "@/utils/format";
+import type { SavingsBreakdown } from "@/types/stats/statsDashboard";
+import { formatCurrency } from "@/utils/shared/format";
 
 type Props = {
   breakdown: SavingsBreakdown;

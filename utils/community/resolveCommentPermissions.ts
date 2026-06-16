@@ -1,4 +1,4 @@
-import type { PostComment } from "@/types/community";
+import type { PostComment } from "@/types/community/community";
 import { parseDbUserId } from "@/utils/community/presence";
 
 export function resolveCommentPermissions(

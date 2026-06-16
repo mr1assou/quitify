@@ -2,11 +2,12 @@ import { Image, Text, View, useWindowDimensions } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
-import { MEMORY_MATCH_LOGO_IMAGE } from "@/constants/cravingGameAssets";
+import { MEMORY_MATCH_LOGO_IMAGE } from "@/constants/craving/games/cravingGameAssets";
 import {
   MEMORY_MATCH_DURATION_SEC,
   MEMORY_MATCH_PAIR_COUNT,
-} from "@/constants/memoryMatch";
+  MEMORY_MATCH_PREVIEW_SEC,
+} from "@/constants/craving/games/memoryMatch";
 
 type Props = {
   onStart: () => void;
@@ -27,8 +28,9 @@ export function MemoryIdleView({ onStart }: Props) {
           Memory match
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          Find all {MEMORY_MATCH_PAIR_COUNT} pairs in{" "}
-          {MEMORY_MATCH_DURATION_SEC} seconds. Calm, focused, and rewarding.
+          All cards are shown for {MEMORY_MATCH_PREVIEW_SEC} seconds first. Then
+          match all {MEMORY_MATCH_PAIR_COUNT} pairs in{" "}
+          {MEMORY_MATCH_DURATION_SEC / 60} minutes.
         </Text>
       </Animated.View>
 
