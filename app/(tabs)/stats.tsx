@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AchievementProgressRings } from "@/components/feature/progress/AchievementProgressRings";
@@ -10,6 +11,7 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useProgress } from "@/hooks/useProgress";
+import { useRefreshAccount } from "@/hooks/useRefreshAccount";
 import { useStatsAttempts } from "@/hooks/useStatsAttempts";
 import { useStatsOverview } from "@/hooks/useStatsOverview";
 import { computeAchievementBadgeSummary } from "@/utils/achievementProgress";
@@ -30,9 +32,16 @@ export default function Stats() {
   const { colors } = useTheme();
   const { state } = useApp();
   const progress = useProgress();
+  const refreshAccount = useRefreshAccount();
   const overview = useStatsOverview();
   const attempts = useStatsAttempts();
   const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      void refreshAccount();
+    }, [refreshAccount]),
+  );
 
   const badgeSummary = progress
     ? computeAchievementBadgeSummary(progress, state.isPremium)
@@ -43,7 +52,7 @@ export default function Stats() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([overview.refresh(), attempts.refresh()]);
+    await Promise.all([refreshAccount(), overview.refresh(), attempts.refresh()]);
     setRefreshing(false);
   };
 

@@ -21,9 +21,15 @@ type Props = {
   rank: GlobalRank;
 };
 
-export function AchievementProgressRings({ badge, freedomPoints, currentBadgeId, rank }: Props) {
+export function AchievementProgressRings({
+  badge,
+  freedomPoints,
+  currentBadgeId,
+  rank,
+}: Props) {
   const { colors } = useTheme();
   const pct = progressToPercent(badge.progress);
+  const hasEarnedBadge = badge.caption !== "—";
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
@@ -47,7 +53,13 @@ export function AchievementProgressRings({ badge, freedomPoints, currentBadgeId,
           color={colors.primary}
           trackColor={colors.border}
         >
-          <BadgeArt badgeId={currentBadgeId} size={RING_BADGE_SIZE} />
+          {hasEarnedBadge ? (
+            <BadgeArt badgeId={currentBadgeId} size={RING_BADGE_SIZE} />
+          ) : (
+            <View className="h-24 w-24 items-center justify-center rounded-full bg-section dark:bg-d-surface">
+              <Ionicons name="ribbon-outline" size={40} color={colors.mutedForeground} />
+            </View>
+          )}
         </ProgressRing>
 
         <Text className="mt-2 text-xl font-bold tabular-nums text-foreground dark:text-d-text">

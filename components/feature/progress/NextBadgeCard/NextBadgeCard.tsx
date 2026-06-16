@@ -10,14 +10,16 @@ import type { BadgeWithStatus } from "@/types/progress";
 import { progressToPercent } from "@/utils/achievementProgress";
 
 type Props = {
-  badge: BadgeWithStatus | null;
+  currentBadge: BadgeWithStatus | null;
   progress: number;
+  hasNextTarget: boolean;
 };
 
-export function NextBadgeCard({ badge, progress }: Props) {
+export function NextBadgeCard({ currentBadge, progress, hasNextTarget }: Props) {
   const { colors } = useTheme();
+  const pct = progressToPercent(progress);
 
-  if (!badge) {
+  if (!currentBadge && !hasNextTarget) {
     return (
       <Animated.View entering={FadeInDown.duration(420)}>
         <Card variant="section" className="flex-row items-center">
@@ -32,31 +34,47 @@ export function NextBadgeCard({ badge, progress }: Props) {
     );
   }
 
-  const pct = progressToPercent(progress);
-
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
       <Card variant="section">
         <View className="flex-row items-center">
-          <View className="mr-3">
-            <BadgeArt badgeId={badge.id} size={48} />
+          <View className="relative mr-3">
+            {currentBadge ? (
+              <BadgeArt badgeId={currentBadge.id} size={48} />
+            ) : (
+              <View
+                className="h-12 w-12 items-center justify-center rounded-full bg-section dark:bg-d-surface"
+                style={{ borderWidth: 1, borderColor: colors.border }}
+              >
+                <Ionicons name="ribbon-outline" size={22} color={colors.mutedForeground} />
+              </View>
+            )}
+            {currentBadge?.unlocked ? (
+              <View className="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-accent">
+                <Ionicons name="checkmark" size={12} color={colors.white} />
+              </View>
+            ) : null}
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
               Current badge
             </Text>
             <Text className="mt-0.5 text-base font-bold text-foreground dark:text-d-text">
-              {badge.name}
+              {currentBadge?.name ?? "—"}
             </Text>
           </View>
-          <Text className="text-xs font-semibold text-muted-foreground dark:text-d-muted">
-            {pct}%
-          </Text>
+          {hasNextTarget ? (
+            <Text className="text-xs font-semibold text-muted-foreground dark:text-d-muted">
+              {pct}%
+            </Text>
+          ) : null}
         </View>
 
-        <View className="mt-3">
-          <ProgressBar progress={progress} fillClassName="bg-accent" />
-        </View>
+        {hasNextTarget ? (
+          <View className="mt-3">
+            <ProgressBar progress={progress} fillClassName="bg-accent" />
+          </View>
+        ) : null}
       </Card>
     </Animated.View>
   );

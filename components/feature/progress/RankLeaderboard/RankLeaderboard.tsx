@@ -1,35 +1,48 @@
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
+import { formatNumber } from "@/utils/format";
+import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
 
 type Props = {
   leaderboard: LeaderboardSnapshot;
+  hasMore: boolean;
+  loadingMore: boolean;
+  onLoadMore: () => void;
 };
 
-function allLeaderboardEntries(leaderboard: LeaderboardSnapshot): LeaderboardEntry[] {
-  const byKey = new Map<string, LeaderboardEntry>();
+function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
+  pinnedViewer: LeaderboardEntry | null;
+  pageRows: LeaderboardEntry[];
+} {
+  const entries = listLeaderboardEntries(leaderboard);
+  const viewer = leaderboard.currentUser;
+  const viewerOnPage = entries.some(
+    (entry) => entry.userId != null && entry.userId === viewer.userId,
+  );
 
-  for (const row of leaderboard.others) {
-    if (row.kind !== "entry") continue;
-    const key = row.entry.userId != null ? `u-${row.entry.userId}` : `r-${row.entry.rank}`;
-    byKey.set(key, row.entry);
-  }
+  const pageRows = entries.filter(
+    (entry) => !(viewerOnPage && entry.userId != null && entry.userId === viewer.userId),
+  );
 
-  const currentKey =
-    leaderboard.currentUser.userId != null
-      ? `u-${leaderboard.currentUser.userId}`
-      : `r-${leaderboard.currentUser.rank}`;
-  byKey.set(currentKey, leaderboard.currentUser);
-
-  return [...byKey.values()].sort((a, b) => a.rank - b.rank);
+  return {
+    pinnedViewer: viewerOnPage ? null : viewer,
+    pageRows: viewerOnPage ? entries : pageRows,
+  };
 }
 
-export function RankLeaderboard({ leaderboard }: Props) {
-  const visibleRows = useMemo(() => allLeaderboardEntries(leaderboard), [leaderboard]);
+export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore }: Props) {
+  const { pinnedViewer, pageRows } = useMemo(
+    () => buildVisibleRows(leaderboard),
+    [leaderboard],
+  );
+
+  const loadedCount = pageRows.length + (pinnedViewer ? 1 : 0);
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
@@ -41,18 +54,40 @@ export function RankLeaderboard({ leaderboard }: Props) {
         </View>
 
         <View className="px-2 pb-2 pt-2">
-          {visibleRows.map((entry, index) => (
+          {pinnedViewer ? (
+            <>
+              <LeaderboardRow entry={pinnedViewer} />
+              {pageRows.length > 0 ? (
+                <View className="mx-3 my-1 h-px bg-background dark:bg-d-border" />
+              ) : null}
+            </>
+          ) : null}
+
+          {pageRows.map((entry, index) => (
             <LeaderboardRow
               key={entry.userId ?? `${entry.rank}-${entry.name}`}
               entry={entry}
-              showDivider={index > 0}
+              showDivider={index > 0 || pinnedViewer !== null}
             />
           ))}
-          {visibleRows.length === 0 ? (
+
+          {pageRows.length === 0 && !pinnedViewer ? (
             <View className="px-4 py-6">
               <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                 No players on the leaderboard yet.
               </Text>
+            </View>
+          ) : null}
+
+          {hasMore ? (
+            <View className="px-3 pt-3">
+              {loadingMore ? (
+                <View className="items-center py-2">
+                  <ActivityIndicator />
+                </View>
+              ) : (
+                <Button label="Load more" variant="secondary" fullWidth onPress={onLoadMore} />
+              )}
             </View>
           ) : null}
         </View>

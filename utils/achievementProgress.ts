@@ -11,7 +11,7 @@ export type AchievementBadgeMetric = {
 export type AchievementBadgeSummary = {
   badge: AchievementBadgeMetric;
   freedomPoints: number;
-  /** Latest badge the user has earned (shown in the rank-tab ring). */
+  /** Latest earned badge art in the progress ring. */
   currentBadgeId: string;
 };
 
@@ -25,18 +25,15 @@ export function computeAchievementBadgeSummary(
   isPremium = false,
 ): AchievementBadgeSummary {
   const badgeProgress = summary.nextBadge?.progress ?? 1;
-  const currentBadgeId =
-    resolveHighestUnlockedBadgeId(summary.badges, isPremium) ?? "first-step";
-  const currentBadge =
-    summary.currentBadge ??
-    summary.badges.find((b) => b.id === currentBadgeId) ??
-    null;
+  const earnedBadgeId = resolveHighestUnlockedBadgeId(summary.badges, isPremium);
+  const currentBadge = summary.currentBadge;
+  const currentBadgeId = earnedBadgeId ?? "first-step";
 
   return {
     badge: {
       progress: badgeProgress,
       label: "Current badge",
-      caption: currentBadge?.name ?? "First Step",
+      caption: currentBadge?.name ?? "—",
     },
     freedomPoints: summary.xp,
     currentBadgeId,

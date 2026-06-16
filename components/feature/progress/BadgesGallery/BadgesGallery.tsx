@@ -7,7 +7,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { BadgeDetailModal } from "@/components/feature/progress/BadgeDetailModal";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
-import { isBadgeGalleryAvailable } from "@/constants/badges";
+import { isFirstStepBadge } from "@/constants/badges";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { BadgeWithStatus } from "@/types/progress";
@@ -19,15 +19,16 @@ type Props = {
 export function BadgesGallery({ badges }: Props) {
   const [selectedBadge, setSelectedBadge] = useState<BadgeWithStatus | null>(null);
   const { state } = useApp();
-  const earnedBadgeIds = state.account?.earnedBadgeIds ?? [];
-  const hasFirstStepBadge = earnedBadgeIds.includes("first-step");
+  const hasAccount = Boolean(state.account);
+  const hasCommittedToQuit = Boolean(state.isOnboarded && state.profile?.quitDate);
   const unlockedCount = badges.filter((b) => b.unlocked).length;
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
       <BadgeDetailModal
         badge={selectedBadge}
-        isRegistered={hasFirstStepBadge}
+        hasAccount={hasAccount}
+        hasCommittedToQuit={hasCommittedToQuit}
         onClose={() => setSelectedBadge(null)}
       />
       <Card variant="section">
@@ -42,13 +43,14 @@ export function BadgesGallery({ badges }: Props) {
 
         <View className="flex-row flex-wrap" style={{ marginHorizontal: -4 }}>
           {badges.map((badge, idx) => {
-            const available = isBadgeGalleryAvailable(badge.id);
+            // Earned badges + First Step (until earned) are open; next tier stays locked in the grid.
+            const openInGrid = badge.unlocked || isFirstStepBadge(badge.id);
 
             return (
               <View key={badge.id} className="w-1/3 px-1 py-1" style={{ height: BADGE_TILE_HEIGHT }}>
                 <BadgeTile
                   badge={badge}
-                  available={available}
+                  openInGrid={openInGrid}
                   delay={idx * 40}
                   onPress={() => {
                     Haptics.selectionAsync().catch(() => {});
@@ -70,15 +72,15 @@ const BADGE_ART_SIZE = 72;
 const BADGE_TILE_HEIGHT = 124;
 
 function BadgeStatusIcon({
-  available,
+  openInGrid,
   unlocked,
 }: {
-  available: boolean;
+  openInGrid: boolean;
   unlocked: boolean;
 }) {
   const { colors } = useTheme();
 
-  if (!available) {
+  if (!openInGrid) {
     return (
       <View
         className="absolute -right-0.5 -top-0.5 h-5 w-5 items-center justify-center rounded-full bg-section dark:bg-d-surface"
@@ -100,12 +102,12 @@ function BadgeStatusIcon({
 
 function BadgeTile({
   badge,
-  available,
+  openInGrid,
   delay,
   onPress,
 }: {
   badge: BadgeWithStatus;
-  available: boolean;
+  openInGrid: boolean;
   delay: number;
   onPress: () => void;
 }) {
@@ -119,17 +121,17 @@ function BadgeTile({
         accessibilityRole="button"
         accessibilityLabel={`${badge.name} badge details`}
         className={`h-full items-center justify-center gap-1.5 rounded-2xl bg-background px-1.5 py-2 active:opacity-80 dark:bg-d-elevated ${
-          available ? "" : "opacity-45"
+          openInGrid ? "" : "opacity-45"
         }`}
       >
         <View>
           <BadgeArt badgeId={badge.id} size={BADGE_ART_SIZE} />
-          <BadgeStatusIcon available={available} unlocked={badge.unlocked} />
+          <BadgeStatusIcon openInGrid={openInGrid} unlocked={badge.unlocked} />
         </View>
         <View className="h-8 w-full justify-center px-0.5">
           <Text
             className={`text-center text-[10px] font-semibold leading-tight ${
-              available
+              openInGrid
                 ? "text-foreground dark:text-d-text"
                 : "text-muted-foreground dark:text-d-muted"
             }`}

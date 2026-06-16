@@ -23,9 +23,18 @@ export function isFirstStepBadge(badgeId: string): boolean {
   return badgeId === FIRST_STEP_BADGE_ID;
 }
 
-/** Only First Step is open in the gallery; other tiers stay locked for now. */
-export function isBadgeGalleryAvailable(badgeId: string): boolean {
-  return isFirstStepBadge(badgeId);
+/** Whether a badge can show requirements / progress (earned, First Step, or immediate next tier). */
+export function isBadgeGalleryAvailable(
+  badgeId: string,
+  earnedBadgeIds: readonly string[] = [],
+): boolean {
+  const index = BADGES.findIndex((badge) => badge.id === badgeId);
+  if (index < 0) return false;
+
+  if (earnedBadgeIds.includes(badgeId)) return true;
+  if (index === 0) return true;
+
+  return BADGES.slice(0, index).every((badge) => earnedBadgeIds.includes(badge.id));
 }
 
 export const BADGES: Badge[] = [

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AchievementSectionTabs } from "@/components/feature/achievement/AchievementSectionTabs";
@@ -12,12 +13,20 @@ import type { AchievementSection } from "@/constants/achievementSections";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useProgress } from "@/hooks/useProgress";
+import { useRefreshAccount } from "@/hooks/useRefreshAccount";
 
 export default function AchievementScreen() {
   const { colors } = useTheme();
   const progress = useProgress();
-  const leaderboard = useLeaderboard();
+  const refreshAccount = useRefreshAccount();
+  const { snapshot: leaderboard, loading, hasMore, loadingMore, loadMore } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
+
+  useFocusEffect(
+    useCallback(() => {
+      void refreshAccount();
+    }, [refreshAccount]),
+  );
 
   if (!progress) return null;
 
@@ -30,8 +39,17 @@ export default function AchievementScreen() {
           <AchievementSectionTabs value={section} onChange={setSection} />
 
           {section === "rank" ? (
-            leaderboard ? (
-              <RankLeaderboard leaderboard={leaderboard} />
+            loading && !leaderboard ? (
+              <View className="items-center py-16">
+                <ActivityIndicator size="large" color={colors.primary} />
+              </View>
+            ) : leaderboard ? (
+              <RankLeaderboard
+                leaderboard={leaderboard}
+                hasMore={hasMore}
+                loadingMore={loadingMore}
+                onLoadMore={loadMore}
+              />
             ) : (
               <View className="items-center py-16">
                 <ActivityIndicator size="large" color={colors.primary} />
@@ -40,8 +58,9 @@ export default function AchievementScreen() {
           ) : (
             <>
               <NextBadgeCard
-                badge={progress.currentBadge}
+                currentBadge={progress.currentBadge}
                 progress={progress.currentBadgeProgress}
+                hasNextTarget={Boolean(progress.nextBadge)}
               />
               <BadgesGallery badges={progress.badges} />
             </>

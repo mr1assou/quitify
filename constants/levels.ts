@@ -17,8 +17,8 @@ export const LEVELS: readonly LevelDefinition[] = [
   { level: 10, xpRequired: 9_000, title: "Icon", tier: "legend" },
 ];
 
-/** XP awarded per smoke-free day. */
-export const XP_PER_SMOKE_FREE_DAY = 25;
+/** FP awarded per smoke-free day. */
+export const XP_PER_SMOKE_FREE_DAY = 10;
 
 /** XP awarded per craving the user resists. */
 export const XP_PER_RESISTED_CRAVING = 10;

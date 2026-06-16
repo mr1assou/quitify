@@ -24,7 +24,7 @@ type Props = {
 export function PostHeader({ author, createdAt, onMore }: Props) {
   const { colors } = useTheme();
   const { state } = useApp();
-  const leaderboard = useLeaderboard();
+  const { snapshot: leaderboard } = useLeaderboard();
   const progress = useProgress();
 
   const badgeId =

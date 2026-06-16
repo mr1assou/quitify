@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { resolveCountryFlagUrl } from "@/constants/leaderboardCountries";
 import {
   LEADERBOARD_STATIC_BADGE_ID,
-  LEADERBOARD_STATIC_FREEDOM_POINTS,
 } from "@/constants/leaderboardPlaceholders";
 import { useApp } from "@/context/AppContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
@@ -13,7 +12,7 @@ import { buildPlayerProfile } from "@/utils/leaderboard/playerProfilePresentatio
 
 export function useSelfPlayerProfile(): PlayerProfile | null {
   const { state } = useApp();
-  const leaderboard = useLeaderboard();
+  const { snapshot: leaderboard } = useLeaderboard();
 
   return useMemo(() => {
     const profile = state.profile;
@@ -39,7 +38,7 @@ export function useSelfPlayerProfile(): PlayerProfile | null {
         userId: state.account?.userId,
         rank: 1,
         name,
-        xp: LEADERBOARD_STATIC_FREEDOM_POINTS,
+        xp: state.account?.freedomPoints ?? 0,
         isCurrentUser: true,
         badgeId: LEADERBOARD_STATIC_BADGE_ID,
         countryFlag: countryFlag ?? "",
@@ -54,5 +53,5 @@ export function useSelfPlayerProfile(): PlayerProfile | null {
         avatarUrl: profile.imageUrl,
       },
     );
-  }, [leaderboard, state.account?.name, state.account?.userId, state.profile]);
+  }, [leaderboard, state.account?.name, state.account?.userId, state.account?.freedomPoints, state.profile]);
 }

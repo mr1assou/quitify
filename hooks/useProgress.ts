@@ -16,6 +16,7 @@ export function useProgress(): ProgressSummary | null {
 
   return useMemo(() => {
     if (!stats) return null;
+    const hasCommittedToQuit = Boolean(state.isOnboarded && state.profile?.quitDate);
     return buildProgressSummary({
       daysQuit: stats.streakDays,
       isPremium: state.isPremium,
@@ -23,10 +24,15 @@ export function useProgress(): ProgressSummary | null {
       completedMissions: missionsCompleted,
       earnedBadgeIds: state.account?.earnedBadgeIds ?? [],
       freedomPoints: state.account?.freedomPoints,
+      hasAccount: Boolean(state.account),
+      hasCommittedToQuit,
     });
   }, [
     stats,
     state.isPremium,
+    state.isOnboarded,
+    state.profile?.quitDate,
+    state.account,
     state.account?.earnedBadgeIds,
     state.account?.freedomPoints,
     cravingSummary.resisted,

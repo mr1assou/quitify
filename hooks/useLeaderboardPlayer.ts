@@ -10,7 +10,7 @@ import { findLeaderboardEntryByRank } from "@/utils/leaderboard/findLeaderboardE
 import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
 
 export function useLeaderboardPlayer(rank: number): PlayerProfile | null {
-  const leaderboard = useLeaderboard();
+  const { snapshot: leaderboard } = useLeaderboard();
   const { state } = useApp();
   const { state: communityState } = useCommunity();
 

@@ -85,42 +85,34 @@ export function resolveGlobalRank(xp: number): GlobalRank {
   return { xp, band, position, total: SYNTHETIC_COMMUNITY_SIZE };
 }
 
-/** Lock every badge except First Step (which keeps its own unlock rules). */
-function applyGalleryBadgeRules(badges: BadgeWithStatus[]): BadgeWithStatus[] {
-  return badges.map((badge) => {
-    if (isBadgeGalleryAvailable(badge.id)) {
-      return badge;
-    }
-
-    return {
-      ...badge,
-      unlocked: false,
-      progress: 0,
-      daysLeft: badge.daysRequired,
-      fpLeft: badge.fpRequired,
-      streakProgress: 0,
-      fpProgress: 0,
-    };
-  });
-}
-
-function finalizeBadgeSummary(summary: ProgressSummary): ProgressSummary {
-  const badges = applyGalleryBadgeRules(summary.badges);
-  const unlockedBadges = badges.filter((b) => b.unlocked);
-  const nextBadge = badges.find((b) => !b.unlocked) ?? null;
-  const currentBadge = resolveHighestUnlockedBadge(badges) ?? badges[0] ?? null;
+function finalizeBadgeSummary(
+  summary: ProgressSummary,
+  earnedBadgeIds: string[],
+): ProgressSummary {
+  const unlockedBadges = summary.badges.filter((b) => b.unlocked);
+  const nextBadge =
+    summary.badges.find(
+      (b) => isBadgeGalleryAvailable(b.id, earnedBadgeIds) && !b.unlocked,
+    ) ?? null;
+  const currentBadge = resolveHighestUnlockedBadge(summary.badges);
   const currentBadgeProgress = nextBadge
     ? Math.min(nextBadge.streakProgress, nextBadge.fpProgress)
     : 1;
 
   return {
     ...summary,
-    badges,
     unlockedBadges,
     currentBadge,
     nextBadge,
     currentBadgeProgress,
   };
+}
+
+function firstStepProgress(hasAccount: boolean, hasCommittedToQuit: boolean): number {
+  let progress = 0;
+  if (hasAccount) progress += 0.5;
+  if (hasCommittedToQuit) progress += 0.5;
+  return progress;
 }
 
 function badgeStatus(
@@ -129,8 +121,12 @@ function badgeStatus(
   fp: number,
   isPremium: boolean,
   earnedBadgeIds: string[],
+  hasAccount: boolean,
+  hasCommittedToQuit: boolean,
 ): BadgeWithStatus {
-  if (earnedBadgeIds.includes(badge.id)) {
+  const unlocked = earnedBadgeIds.includes(badge.id);
+
+  if (unlocked) {
     return {
       ...badge,
       unlocked: true,
@@ -142,37 +138,44 @@ function badgeStatus(
     };
   }
 
+  const galleryOpen = isBadgeGalleryAvailable(badge.id, earnedBadgeIds);
+
   if (isFirstStepBadge(badge.id)) {
+    const progress = firstStepProgress(hasAccount, hasCommittedToQuit);
+    return {
+      ...badge,
+      unlocked: false,
+      progress,
+      daysLeft: 0,
+      fpLeft: 0,
+      streakProgress: hasCommittedToQuit ? 1 : 0,
+      fpProgress: hasAccount ? 1 : 0,
+    };
+  }
+
+  if (!galleryOpen || (!isPremium && badge.premium)) {
     return {
       ...badge,
       unlocked: false,
       progress: 0,
-      daysLeft: 0,
-      fpLeft: 0,
+      daysLeft: badge.daysRequired,
+      fpLeft: badge.fpRequired,
       streakProgress: 0,
       fpProgress: 0,
     };
   }
 
-  const visible = isPremium || !badge.premium;
-  const streakMet = visible && daysQuit >= badge.daysRequired;
-  const fpMet = visible && fp >= badge.fpRequired;
-  const unlocked = streakMet && fpMet;
-
-  const streakProgress = visible
-    ? Math.min(1, Math.max(0, daysQuit / Math.max(1, badge.daysRequired)))
-    : 0;
-  const fpProgress = visible
-    ? Math.min(1, Math.max(0, fp / Math.max(1, badge.fpRequired)))
-    : 0;
-  const progress = unlocked ? 1 : Math.min(streakProgress, fpProgress);
-
+  const streakMet = daysQuit >= badge.daysRequired;
+  const fpMet = fp >= badge.fpRequired;
+  const streakProgress = Math.min(1, Math.max(0, daysQuit / Math.max(1, badge.daysRequired)));
+  const fpProgress = Math.min(1, Math.max(0, fp / Math.max(1, badge.fpRequired)));
+  const progress = Math.min(streakProgress, fpProgress);
   const daysLeft = streakMet ? 0 : Math.max(0, Math.ceil(badge.daysRequired - daysQuit));
   const fpLeft = fpMet ? 0 : Math.max(0, badge.fpRequired - fp);
 
   return {
     ...badge,
-    unlocked,
+    unlocked: false,
     progress,
     daysLeft,
     fpLeft,
@@ -188,6 +191,8 @@ export function buildProgressSummary({
   completedMissions,
   earnedBadgeIds,
   freedomPoints,
+  hasAccount = false,
+  hasCommittedToQuit = false,
 }: {
   daysQuit: number;
   isPremium: boolean;
@@ -195,25 +200,26 @@ export function buildProgressSummary({
   completedMissions: number;
   earnedBadgeIds: string[];
   freedomPoints?: number;
+  hasAccount?: boolean;
+  hasCommittedToQuit?: boolean;
 }): ProgressSummary {
   const computedXp = computeXp({ smokeFreeDays: daysQuit, resistedCravings, completedMissions });
   const xp = freedomPoints ?? computedXp;
   const rank = resolveGlobalRank(xp);
-  const badges = BADGES.map((b) => badgeStatus(b, daysQuit, xp, isPremium, earnedBadgeIds));
-  const unlocked = badges.filter((b) => b.unlocked);
-  const nextBadge = badges.find((b) => !b.unlocked) ?? null;
-  const currentBadge = resolveHighestUnlockedBadge(badges) ?? badges[0] ?? null;
-  const currentBadgeProgress = nextBadge
-    ? Math.min(nextBadge.streakProgress, nextBadge.fpProgress)
-    : 1;
+  const badges = BADGES.map((b) =>
+    badgeStatus(b, daysQuit, xp, isPremium, earnedBadgeIds, hasAccount, hasCommittedToQuit),
+  );
 
-  return finalizeBadgeSummary({
-    xp,
-    rank,
-    badges,
-    unlockedBadges: unlocked,
-    currentBadge,
-    nextBadge,
-    currentBadgeProgress,
-  });
+  return finalizeBadgeSummary(
+    {
+      xp,
+      rank,
+      badges,
+      unlockedBadges: badges.filter((b) => b.unlocked),
+      currentBadge: null,
+      nextBadge: null,
+      currentBadgeProgress: 0,
+    },
+    earnedBadgeIds,
+  );
 }

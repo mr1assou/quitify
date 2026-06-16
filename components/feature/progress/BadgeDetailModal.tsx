@@ -11,13 +11,15 @@ import {
   isBadgeGalleryAvailable,
   isFirstStepBadge,
 } from "@/constants/badges";
+import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { BadgeWithStatus } from "@/types/progress";
 import { formatNumber, pluralize } from "@/utils/format";
 
 type Props = {
   badge: BadgeWithStatus | null;
-  isRegistered: boolean;
+  hasAccount: boolean;
+  hasCommittedToQuit: boolean;
   onClose: () => void;
 };
 
@@ -62,8 +64,10 @@ function RequirementRow({
   );
 }
 
-export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
+export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClose }: Props) {
   const { colors } = useTheme();
+  const { state } = useApp();
+  const earnedBadgeIds = state.account?.earnedBadgeIds ?? [];
   const insets = useSafeAreaInsets();
 
   const handleClose = () => {
@@ -71,7 +75,7 @@ export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
     onClose();
   };
 
-  const earnable = badge ? isBadgeGalleryAvailable(badge.id) : false;
+  const earnable = badge ? isBadgeGalleryAvailable(badge.id, earnedBadgeIds) : false;
   const isFirstStep = badge ? isFirstStepBadge(badge.id) : false;
 
   const displayStreakMet =
@@ -86,7 +90,9 @@ export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
     : badge?.unlocked
       ? "Earned"
       : isFirstStep
-        ? "Available"
+        ? hasCommittedToQuit
+          ? "In progress"
+          : "Available"
         : "In progress";
 
   return (
@@ -161,16 +167,21 @@ export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
                 </Text>
 
                 {isFirstStep ? (
-                  FIRST_STEP_REQUIREMENTS.map((requirement) => (
-                    <RequirementRow
-                      key={requirement.id}
-                      label={requirement.label}
-                      valueLabel={requirement.valueLabel}
-                      progress={isRegistered ? 1 : 0}
-                      met={isRegistered}
-                      showProgress={false}
-                    />
-                  ))
+                  FIRST_STEP_REQUIREMENTS.map((requirement) => {
+                    const met =
+                      requirement.id === "register" ? hasAccount : hasCommittedToQuit;
+
+                    return (
+                      <RequirementRow
+                        key={requirement.id}
+                        label={requirement.label}
+                        valueLabel={requirement.valueLabel}
+                        progress={met ? 1 : 0}
+                        met={met}
+                        showProgress={false}
+                      />
+                    );
+                  })
                 ) : (
                   <>
                     <RequirementRow
@@ -196,7 +207,9 @@ export function BadgeDetailModal({ badge, isRegistered, onClose }: Props) {
                 </Text>
               ) : !badge.unlocked && isFirstStep ? (
                 <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
-                  Register and open Quitify to claim your first badge.
+                  {hasCommittedToQuit
+                    ? "Requirements complete — your badge unlocks on the next sync."
+                    : "Register and choose to quit to earn this badge."}
                 </Text>
               ) : !badge.unlocked ? (
                 <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">

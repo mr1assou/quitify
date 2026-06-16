@@ -14,7 +14,7 @@ const DEFAULT_TOTAL_PLAYERS = 100_000;
 
 export function useCommunityPlayerProfile(communityUserId: string): PlayerProfile | null {
   const { state } = useCommunity();
-  const leaderboard = useLeaderboard();
+  const { snapshot: leaderboard } = useLeaderboard();
 
   return useMemo(() => {
     const snapshot = leaderboard ?? getLeaderboardCache();
