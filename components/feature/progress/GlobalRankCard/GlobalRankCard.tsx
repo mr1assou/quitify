@@ -37,7 +37,7 @@ export function GlobalRankCard({ rank }: Props) {
         </View>
 
         <Text className="mt-3 text-xs leading-5 text-muted-foreground dark:text-d-muted">
-          {rank.band.hint} You're ahead of an estimated {formatNumber(rank.total - rank.position)}{" "}
+          {rank.band.hint} You&apos;re ahead of an estimated {formatNumber(rank.total - rank.position)}{" "}
           of {totalDisplay} people on the same journey.
         </Text>
       </Card>

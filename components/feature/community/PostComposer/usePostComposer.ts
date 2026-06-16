@@ -203,7 +203,18 @@ export function usePostComposer() {
     } finally {
       setIsPosting(false);
     }
-  }, [addPost, appState.account?.name, appState.profile, canPost, draft, editingPostId, isEditing, updatePost]);
+  }, [
+    addPost,
+    appState.account?.name,
+    appState.account?.userId,
+    appState.profile,
+    canPost,
+    draft,
+    editingPostId,
+    isEditing,
+    state.posts,
+    updatePost,
+  ]);
 
   return {
     draft,

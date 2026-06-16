@@ -40,7 +40,7 @@ export function CommentComposer({
 
     setText(`@${replyTo.handle} `);
     inputRef.current?.focus();
-  }, [replyTo?.commentId, replyTo?.handle]);
+  }, [replyTo]);
 
   const submit = async () => {
     const trimmed = text.trim();

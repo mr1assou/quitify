@@ -50,7 +50,6 @@ export function UserProfileHero({
   onProfilePress,
   onEditAvatarPress,
 }: Props) {
-  const { colors } = useTheme();
   const badgeName = getBadgeName(profile.badgeId);
   const avatarRank = profile.rank > 0 ? profile.rank : 1;
   const canEditAvatar = profile.isCurrentUser && Boolean(onEditAvatarPress);

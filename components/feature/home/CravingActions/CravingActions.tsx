@@ -1,5 +1,5 @@
 import { safeRouter } from "@/utils/safeRouter";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { CravingCTA } from "@/components/feature/home/CravingCTA";
 import { SlipCTA } from "@/components/feature/home/SlipCTA";

@@ -6,7 +6,6 @@ import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard";
-import { formatNumber } from "@/utils/format";
 import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
 
 type Props = {
@@ -41,8 +40,6 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
     () => buildVisibleRows(leaderboard),
     [leaderboard],
   );
-
-  const loadedCount = pageRows.length + (pinnedViewer ? 1 : 0);
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>

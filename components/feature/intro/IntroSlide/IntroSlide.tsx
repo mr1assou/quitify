@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 
 type Props = {

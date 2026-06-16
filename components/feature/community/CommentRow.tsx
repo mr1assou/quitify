@@ -61,11 +61,11 @@ export function CommentRow({
   const showMenu = (canEdit || canDelete) && !isEditing;
 
   const openMenu = () => {
-    const options: Array<{
+    const options: {
       text: string;
       style?: "destructive" | "cancel";
       onPress?: () => void;
-    }> = [];
+    }[] = [];
 
     if (canEdit && onEdit) {
       options.push({

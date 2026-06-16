@@ -53,7 +53,7 @@ export function ChatEmptyGreeting({ participantName }: Props) {
         Say hi to {firstName}
       </Text>
       <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-        Be respectful and supportive to each other. We're all here to quit smoking together.
+        Be respectful and supportive to each other. We&apos;re all here to quit smoking together.
       </Text>
     </View>
   );

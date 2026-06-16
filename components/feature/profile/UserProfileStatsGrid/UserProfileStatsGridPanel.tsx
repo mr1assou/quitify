@@ -17,10 +17,7 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { colors } = useTheme();
 
   /** Fixed snapshot — profile streak tiles should not tick live. */
-  const snapshotNow = useMemo(
-    () => Date.now(),
-    [streak?.streakStart, streak?.attemptNumber, streak?.maxDurationMs],
-  );
+  const snapshotNow = useMemo(() => Date.now(), []);
 
   const currentStreakLabel = useMemo(() => {
     if (streak) {

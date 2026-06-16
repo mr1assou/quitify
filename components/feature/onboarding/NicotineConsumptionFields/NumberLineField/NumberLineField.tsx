@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { useTheme } from "@/context/ThemeContext";

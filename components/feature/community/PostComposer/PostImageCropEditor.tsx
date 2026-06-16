@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { Image, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -120,18 +120,21 @@ export const PostImageCropEditor = forwardRef<PostImageCropEditorHandle, Props>(
     [containerHeight, containerWidth],
   );
 
-  const syncPixelOffsetsFromCrop = (nextCrop: PostImageCrop) => {
-    if (containerWidth <= 0 || imageSize.width <= 0) return;
+  const syncPixelOffsetsFromCrop = useCallback(
+    (nextCrop: PostImageCrop) => {
+      if (containerWidth <= 0 || imageSize.width <= 0) return;
 
-    const pixels = resolvePixelOffsets(container, imageSize, nextCrop);
-    scale.value = pixels.scale;
-    offsetX.value = pixels.offsetX;
-    offsetY.value = pixels.offsetY;
-  };
+      const pixels = resolvePixelOffsets(container, imageSize, nextCrop);
+      scale.value = pixels.scale;
+      offsetX.value = pixels.offsetX;
+      offsetY.value = pixels.offsetY;
+    },
+    [container, containerWidth, imageSize, offsetX, offsetY, scale],
+  );
 
   useEffect(() => {
     syncPixelOffsetsFromCrop(normalizedCrop);
-  }, [container, containerWidth, crop, imageSize, normalizedCrop]);
+  }, [normalizedCrop, syncPixelOffsetsFromCrop]);
 
   useEffect(() => {
     Image.getSize(
@@ -155,7 +158,7 @@ export const PostImageCropEditor = forwardRef<PostImageCropEditorHandle, Props>(
     prevAspectRatio.current = aspectRatio;
     syncPixelOffsetsFromCrop(migrated);
     onCropChange(migrated);
-  }, [aspectRatio, imageSize, normalizedCrop, onCropChange]);
+  }, [aspectRatio, imageSize, normalizedCrop, onCropChange, syncPixelOffsetsFromCrop]);
 
   useEffect(() => {
     containerW.value = containerWidth;
@@ -176,27 +179,31 @@ export const PostImageCropEditor = forwardRef<PostImageCropEditorHandle, Props>(
     imageH,
     imageW,
     normalizedCrop,
+    syncPixelOffsetsFromCrop,
   ]);
 
-  const commitCrop = (nextScale: number, nextX: number, nextY: number) => {
-    if (containerWidth <= 0 || imageSize.width <= 0) return crop;
+  const commitCrop = useCallback(
+    (nextScale: number, nextX: number, nextY: number) => {
+      if (containerWidth <= 0 || imageSize.width <= 0) return crop;
 
-    const nextCrop = cropFromPixelOffsets(container, imageSize, nextScale, nextX, nextY);
-    const pixels = resolvePixelOffsets(container, imageSize, nextCrop);
+      const nextCrop = cropFromPixelOffsets(container, imageSize, nextScale, nextX, nextY);
+      const pixels = resolvePixelOffsets(container, imageSize, nextCrop);
 
-    scale.value = pixels.scale;
-    offsetX.value = pixels.offsetX;
-    offsetY.value = pixels.offsetY;
-    onCropChange(nextCrop);
-    return nextCrop;
-  };
+      scale.value = pixels.scale;
+      offsetX.value = pixels.offsetX;
+      offsetY.value = pixels.offsetY;
+      onCropChange(nextCrop);
+      return nextCrop;
+    },
+    [container, containerWidth, crop, imageSize, offsetX, offsetY, onCropChange, scale],
+  );
 
   useImperativeHandle(
     ref,
     () => ({
       flush: () => commitCrop(scale.value, offsetX.value, offsetY.value),
     }),
-    [container, containerWidth, crop, imageSize, onCropChange, scale, offsetX, offsetY],
+    [commitCrop, offsetX, offsetY, scale],
   );
 
   const pinch = Gesture.Pinch()
