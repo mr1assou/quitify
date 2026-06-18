@@ -18,7 +18,8 @@ type Props = {
   badge: AchievementBadgeMetric;
   freedomPoints: number;
   currentBadgeId: string;
-  rank: GlobalRank;
+  /** Omit until real leaderboard rank is available. */
+  rank?: GlobalRank | null;
 };
 
 export function AchievementProgressRings({
@@ -82,13 +83,16 @@ export function AchievementProgressRings({
               <View className="h-8 w-8 items-center justify-center rounded-full bg-accent">
                 <Ionicons name="globe" size={16} color={colors.white} />
               </View>
-              <Text className="text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
-                #{formatNumber(rank.position)}
-              </Text>
+              {rank != null ? (
+                <Text className="text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
+                  #{formatNumber(rank.position)}
+                </Text>
+              ) : (
+                <Text className="text-3xl font-bold tabular-nums text-muted-foreground dark:text-d-muted">
+                  —
+                </Text>
+              )}
             </View>
-            <Text className="mt-1 text-center text-xs text-muted-foreground dark:text-d-muted">
-              among {formatNumber(rank.total)} people
-            </Text>
           </View>
 
           <View className="flex-1 items-center pl-3">

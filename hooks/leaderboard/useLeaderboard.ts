@@ -19,6 +19,7 @@ export type UseLeaderboardResult = {
   loadingMore: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  refresh: () => Promise<void>;
 };
 
 function applyLivePresence(
@@ -115,9 +116,7 @@ export function useLeaderboard(): UseLeaderboardResult {
     [appState.account],
   );
 
-  const refresh = useCallback(() => {
-    void loadPage(0, false);
-  }, [loadPage]);
+  const refresh = useCallback(() => loadPage(0, false), [loadPage]);
 
   const loadMore = useCallback(() => {
     setSnapshot((current) => {
@@ -153,5 +152,6 @@ export function useLeaderboard(): UseLeaderboardResult {
     loadingMore,
     hasMore,
     loadMore,
+    refresh,
   };
 }

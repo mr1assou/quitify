@@ -1,9 +1,10 @@
 import { useFocusEffect } from "expo-router";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { HomeGoalsSection } from "@/components/feature/home/HomeGoalsSection";
 import { CravingActions } from "@/components/feature/home/CravingActions";
 import { RecoveryHighlights } from "@/components/feature/home/RecoveryHighlights";
 import { StreakHero } from "@/components/feature/home/StreakHero";
@@ -11,6 +12,7 @@ import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
 import { useGates } from "@/hooks/app/useGates";
+import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { useStats } from "@/hooks/stats/useStats";
 import { currencySymbol } from "@/utils/shared/format";
 
@@ -18,6 +20,22 @@ export default function Home() {
   const stats = useStats(1_000);
   const { state, setFlag } = useApp();
   const gates = useGates();
+  const { goals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
+
+  const openGoals = useCallback(() => safeRouter.push("/goals"), []);
+
+  const goalProgress = useMemo(
+    () =>
+      goalsReady
+        ? progress
+        : {
+            moneySaved: stats?.moneySaved ?? 0,
+            smokeFreeDays: stats?.streakDays ?? 0,
+            cigarettesAvoided: stats?.cigarettesAvoided ?? 0,
+          },
+    [goalsReady, progress, stats],
+  );
+
   useFocusEffect(
     useCallback(() => {
       if (!state.account && gates.shouldShowSignup) {
@@ -53,12 +71,23 @@ export default function Home() {
           />
         </View>
 
-        <View className="mt-10 px-6">
+        <View className="mt-8 px-6">
           <RecoveryHighlights />
         </View>
 
-        <View className="mt-8 px-6">
+        <View className="mt-10 px-6">
           <CravingActions />
+        </View>
+
+        <View className="mt-10 px-6">
+          <HomeGoalsSection
+            goals={goals}
+            progress={goalProgress}
+            currencySymbol={symbol}
+            hasOpenGoalSlot={hasOpenGoalSlot}
+            isLoadingGoals={!goalsReady}
+            onPress={openGoals}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

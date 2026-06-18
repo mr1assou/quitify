@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AppProvider } from "@/context/AppContext";
 import { CommunityProvider } from "@/context/CommunityContext";
+import { GoalsProvider } from "@/context/GoalsContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
@@ -25,9 +26,7 @@ export default function RootLayout() {
             <AppProvider>
               <OnboardingProvider>
                 <CommunityProvider>
-                  <PresenceSocketBridge />
-                  <ChatSocketBridge />
-                  <ThemedRoot />
+                  <GoalsProviderWrapper />
                 </CommunityProvider>
               </OnboardingProvider>
             </AppProvider>
@@ -35,6 +34,16 @@ export default function RootLayout() {
         </ThemeProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
+  );
+}
+
+function GoalsProviderWrapper() {
+  return (
+    <GoalsProvider>
+      <PresenceSocketBridge />
+      <ChatSocketBridge />
+      <ThemedRoot />
+    </GoalsProvider>
   );
 }
 
@@ -60,6 +69,7 @@ function ThemedRoot() {
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
         <Stack.Screen name="craving-tools" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="goals" options={{ animation: "slide_from_right" }} />
         <Stack.Screen
           name="signup"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}

@@ -1,0 +1,1 @@
+export { GoalHistoryCard } from "./GoalHistoryCard";

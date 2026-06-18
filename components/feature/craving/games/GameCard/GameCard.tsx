@@ -49,7 +49,7 @@ export function GameCard({ game, onPress }: Props) {
       }}
       style={[
         {
-          flex: 1,
+          width: "100%",
           aspectRatio: 1,
           borderRadius: 22,
           padding: 10,
@@ -70,12 +70,12 @@ export function GameCard({ game, onPress }: Props) {
         animatedStyle,
       ]}
     >
-      <View className="w-full flex-1 items-center justify-center">
+      <View className="w-full flex-1 items-center justify-center overflow-hidden rounded-[18px]">
         {hasLogo ? (
           <Image
             source={game.logoImage}
             style={{ width: "108%", height: "108%" }}
-            resizeMode="contain"
+            resizeMode={game.logoCardFit ?? "contain"}
           />
         ) : (
           <View

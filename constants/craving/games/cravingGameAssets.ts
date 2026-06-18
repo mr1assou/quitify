@@ -20,6 +20,11 @@ export const DRAG_CIGARETTES_TRASH_LOGO_IMAGE: ImageSourcePropType = require(
   "../../../assets/images/games/4/logo.png",
 );
 
+/** Game 5 — Bubble Shooter */
+export const BUBBLE_SHOOTER_LOGO_IMAGE: ImageSourcePropType = require(
+  "../../../assets/images/games/5/logo.png",
+);
+
 export const TAP_DESTROY_CIGARETTE_IMAGE: ImageSourcePropType = require(
   "../../../assets/images/games/1/cigarette.png",
 );

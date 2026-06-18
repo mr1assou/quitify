@@ -48,7 +48,7 @@ export function CravingCTA({ onPress }: Props) {
         <Animated.View
           pointerEvents="none"
           style={haloStyle}
-          className="absolute h-44 w-44 rounded-full bg-primary-dark"
+          className="absolute h-44 w-44 rounded-full bg-primary"
         />
         <AnimatedPressable
           onPressIn={() => {
@@ -62,7 +62,7 @@ export function CravingCTA({ onPress }: Props) {
             onPress();
           }}
           style={pressStyle}
-          className="h-40 w-40 items-center justify-center rounded-full bg-primary-dark"
+          className="h-40 w-40 items-center justify-center rounded-full bg-primary"
         >
           <Ionicons name="flash" size={36} color={colors.white} />
           <Text className="mt-2 px-4 text-center text-base font-bold text-white">

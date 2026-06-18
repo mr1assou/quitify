@@ -3,6 +3,7 @@ import type { Href } from "expo-router";
 import type { ImageSourcePropType } from "react-native";
 
 import {
+  BUBBLE_SHOOTER_LOGO_IMAGE,
   DRAG_CIGARETTES_TRASH_LOGO_IMAGE,
   MEMORY_MATCH_LOGO_IMAGE,
   REFLEX_TAP_LOGO_IMAGE,
@@ -13,7 +14,8 @@ export type CravingGameId =
   | "tap-destroy-cigarettes"
   | "memory-match"
   | "reflex-tap"
-  | "drag-cigarettes-trash";
+  | "drag-cigarettes-trash"
+  | "bubble-shooter";
 
 export type CravingGamePalette = {
   light: { background: string; iconColor: string };
@@ -29,6 +31,8 @@ export type CravingGame = {
   icon: keyof typeof Ionicons.glyphMap;
   /** Optional artwork for list cards (falls back to icon). */
   logoImage?: ImageSourcePropType;
+  /** How the hub card fills its logo area. Use `cover` for tall assets. */
+  logoCardFit?: "contain" | "cover";
   href: Href;
   /** When false, card is visible but not tappable yet. */
   available: boolean;
@@ -90,6 +94,21 @@ export const CRAVING_GAMES: readonly CravingGame[] = [
     palette: {
       light: { background: "#FFE0E0", iconColor: "#B23A3A" },
       dark: { background: "#3A1818", iconColor: "#F09090" },
+    },
+  },
+  {
+    id: "bubble-shooter",
+    title: "Bubble Shooter",
+    description: "Pop 2,000 bubbles in batches before they reach the line.",
+    duration: "Open play",
+    icon: "ellipse-outline",
+    logoImage: BUBBLE_SHOOTER_LOGO_IMAGE,
+    logoCardFit: "cover",
+    href: "/craving-tools/games/bubble-shooter",
+    available: true,
+    palette: {
+      light: { background: "#E8F4FF", iconColor: "#2B7FD4" },
+      dark: { background: "#142433", iconColor: "#8FC4F5" },
     },
   },
 ] as const;

@@ -1,23 +1,18 @@
-import { ScrollView, Text } from "react-native";
-
 import { CravingToolScreen } from "@/components/feature/craving/CravingToolScreen";
-import { CravingTipSection } from "@/components/feature/craving/CravingSupportPhase/CravingTipSection";
-import { useCravingTipCycle } from "@/hooks/craving/useCravingTipCycle";
+import { MotivationCardsSession } from "@/components/feature/craving/motivation-cards/MotivationCardsSession";
+import { useTipsCardsSession } from "@/hooks/craving/useTipsCardsSession";
 
 export function TipsScreen() {
-  const { tip, shuffle } = useCravingTipCycle();
+  const { quotes, currentIndex, goToIndex } = useTipsCardsSession();
 
   return (
     <CravingToolScreen toolId="tips">
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 32 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text className="mb-6 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-          Short, practical ideas to help you ride out the urge.
-        </Text>
-        <CravingTipSection tip={tip} onShuffle={shuffle} />
-      </ScrollView>
+      <MotivationCardsSession
+        quotes={quotes}
+        currentIndex={currentIndex}
+        onIndexChange={goToIndex}
+        hintText="Swipe for another tip"
+      />
     </CravingToolScreen>
   );
 }

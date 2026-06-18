@@ -3,6 +3,8 @@ import { getAccessToken } from "@/utils/auth/authStorage";
 
 export type UpdateUserPreferencesPayload = {
   timezone?: string;
+  motivationCardIndex?: number;
+  tipsCardIndex?: number;
 };
 
 export async function updateUserPreferences(

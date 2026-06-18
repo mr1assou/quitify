@@ -19,6 +19,8 @@ export type AuthMeResponse = {
   packPrice?: string;
   imageUrl?: string;
   timezone?: string;
+  motivationCardIndex?: number;
+  tipsCardIndex?: number;
   slipCigarettesTotal?: number;
   currentAttemptNumber?: number;
   freedomPoints?: number;

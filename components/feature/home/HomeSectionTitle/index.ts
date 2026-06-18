@@ -1,0 +1,1 @@
+export { HomeSectionTitle } from "./HomeSectionTitle";

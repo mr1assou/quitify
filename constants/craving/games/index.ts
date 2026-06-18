@@ -1,3 +1,4 @@
+export * from "./bubbleShooter";
 export * from "./cravingGameAssets";
 export * from "./cravingGames";
 export * from "./colorSwitch";

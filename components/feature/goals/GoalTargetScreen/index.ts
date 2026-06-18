@@ -1,0 +1,1 @@
+export { GoalTargetScreen } from "./GoalTargetScreen";

@@ -1,0 +1,1 @@
+export { HomeGoalsSection } from "./HomeGoalsSection";
