@@ -5,10 +5,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
 import { BubbleShooterGame } from "@/components/feature/craving/games/bubble-shooter/BubbleShooterGame";
-import { DragCigarettesGame } from "@/components/feature/craving/games/drag-cigarettes/DragCigarettesGame";
+import { BreathingExercise } from "@/components/feature/craving/breathing/BreathingExercise";
 import { MemoryMatchGame } from "@/components/feature/craving/games/memory-match/MemoryMatchGame";
 import { ReflexTapGame } from "@/components/feature/craving/games/reflex-tap/ReflexTapGame";
-import { TapDestroyGame } from "@/components/feature/craving/games/tap-destroy/TapDestroyGame";
 import { getCravingGame } from "@/constants/craving/games/cravingGames";
 
 /** Router for a single craving game — picks the right gameplay screen by id. */
@@ -41,14 +40,12 @@ export function GamePlayScreen() {
         onBack={close}
         onClose={close}
       />
-      {game.id === "tap-destroy-cigarettes" ? (
-        <TapDestroyGame />
+      {game.id === "breathing" ? (
+        <BreathingExercise />
       ) : game.id === "memory-match" ? (
         <MemoryMatchGame />
       ) : game.id === "reflex-tap" ? (
         <ReflexTapGame />
-      ) : game.id === "drag-cigarettes-trash" ? (
-        <DragCigarettesGame />
       ) : game.id === "bubble-shooter" ? (
         <BubbleShooterGame />
       ) : (

@@ -3,18 +3,16 @@ import type { Href } from "expo-router";
 import type { ImageSourcePropType } from "react-native";
 
 import {
+  BREATHING_LOGO_IMAGE,
   BUBBLE_SHOOTER_LOGO_IMAGE,
-  DRAG_CIGARETTES_TRASH_LOGO_IMAGE,
   MEMORY_MATCH_LOGO_IMAGE,
   REFLEX_TAP_LOGO_IMAGE,
-  TAP_DESTROY_LOGO_IMAGE,
 } from "@/constants/craving/games/cravingGameAssets";
 
 export type CravingGameId =
-  | "tap-destroy-cigarettes"
+  | "breathing"
   | "memory-match"
   | "reflex-tap"
-  | "drag-cigarettes-trash"
   | "bubble-shooter";
 
 export type CravingGamePalette = {
@@ -41,17 +39,17 @@ export type CravingGame = {
 
 export const CRAVING_GAMES: readonly CravingGame[] = [
   {
-    id: "tap-destroy-cigarettes",
-    title: "Tap to Destroy Cigarettes",
-    description: "Smash cigarettes fast and chain combos.",
-    duration: "5 min",
-    icon: "flame-outline",
-    logoImage: TAP_DESTROY_LOGO_IMAGE,
-    href: "/craving-tools/games/tap-destroy-cigarettes",
+    id: "breathing",
+    title: "Breathing Exercise",
+    description: "Calm your body with guided breathing.",
+    duration: "2–5 min",
+    icon: "leaf-outline",
+    logoImage: BREATHING_LOGO_IMAGE,
+    href: "/craving-tools/games/breathing",
     available: true,
     palette: {
-      light: { background: "#FFE2D4", iconColor: "#C25525" },
-      dark: { background: "#3A1E12", iconColor: "#F0A57E" },
+      light: { background: "#E8F5EC", iconColor: "#2E7D4E" },
+      dark: { background: "#1A2E22", iconColor: "#7BC99A" },
     },
   },
   {
@@ -80,20 +78,6 @@ export const CRAVING_GAMES: readonly CravingGame[] = [
     palette: {
       light: { background: "#FFF1D6", iconColor: "#B07A1E" },
       dark: { background: "#3A2E14", iconColor: "#E8C57A" },
-    },
-  },
-  {
-    id: "drag-cigarettes-trash",
-    title: "Color Switch",
-    description: "Tap to fly through matching colors. Avoid the wrong shade.",
-    duration: "Endless",
-    icon: "color-palette-outline",
-    logoImage: DRAG_CIGARETTES_TRASH_LOGO_IMAGE,
-    href: "/craving-tools/games/drag-cigarettes-trash",
-    available: true,
-    palette: {
-      light: { background: "#FFE0E0", iconColor: "#B23A3A" },
-      dark: { background: "#3A1818", iconColor: "#F09090" },
     },
   },
   {

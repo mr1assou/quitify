@@ -1,27 +1,29 @@
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useFocusEffect, Redirect } from "expo-router";
+import { useCallback, useMemo } from "react";
+import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { GoalTargetPicker } from "@/components/feature/goals/GoalsPicker";
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
-import { getGoalTypeConfig } from "@/constants/goals/goals";
 import { useApp } from "@/context/AppContext";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
-import type { GoalType } from "@/types/goals/goal";
+import { useNow } from "@/hooks/shared/useNow";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { parseGoalTargetInput } from "@/utils/goals/goalTargetInput";
-import { currencySymbol } from "@/utils/shared/format";
+import { minSmokeFreeDayGoalTargetFromStreakStart } from "@/utils/goals/goalStreakProgress";
+
+const GOAL_TYPE = "smoke_free_days" as const;
 
 type Props = {
-  type: GoalType;
+  mode?: "create" | "edit";
+  goalId?: number;
 };
 
-export function GoalTargetScreen({ type }: Props) {
+export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   const { state } = useApp();
-  const { minTargets, strictMinTargets, setGoal, refresh, isReady } = useUserGoals();
-  const [input, setInput] = useState("");
+  const { goals, minTargets, progress, setGoal, refresh, isReady } = useUserGoals();
+  const now = useNow(1000);
+  const isEdit = mode === "edit";
 
   useFocusEffect(
     useCallback(() => {
@@ -31,24 +33,56 @@ export function GoalTargetScreen({ type }: Props) {
 
   const close = useCallback(() => safeRouter.back(), []);
 
-  const handleConfirm = useCallback(async () => {
-    const target = parseGoalTargetInput(type, input);
-    if (target == null) return;
+  const goal = useMemo(
+    () => (goalId != null ? goals.find((item) => item.id === goalId) : undefined),
+    [goalId, goals],
+  );
 
-    await setGoal(type, target);
-    safeRouter.back();
-  }, [input, setGoal, type]);
+  const handleConfirm = useCallback(
+    async (days: number) => {
+      try {
+        await setGoal(GOAL_TYPE, days);
+        safeRouter.back();
+      } catch {
+        Alert.alert("Could not save goal", "Please try again.");
+      }
+    },
+    [setGoal],
+  );
+
+  const minTarget = useMemo(() => {
+    if (!state.profile) return minTargets.smoke_free_days;
+
+    const fromStreak = minSmokeFreeDayGoalTargetFromStreakStart(
+      state.profile.streakStart,
+      now,
+    );
+    return Math.max(fromStreak, minTargets.smoke_free_days);
+  }, [state.profile, now, minTargets.smoke_free_days]);
 
   if (!state.profile) return null;
   if (!isReady) return <ThemedLoadingScreen />;
 
-  const symbol = currencySymbol(state.profile.currency);
-  const minTarget = minTargets[type];
-  const title = getGoalTypeConfig(type).title;
+  if (isEdit && (!goal || goal.status !== "active")) {
+    return <Redirect href="/(tabs)" />;
+  }
+
+  const economics = {
+    cigarettesPerDay: state.profile.cigarettesPerDay,
+    cigarettesPerPack: state.profile.cigarettesPerPack,
+    packPrice: state.profile.packCost,
+  };
+
+  const initialDays = isEdit && goal ? Math.round(goal.target) : undefined;
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
-      <CravingSessionHeader title={title} showBack onBack={close} onClose={close} />
+      <CravingSessionHeader
+        title={isEdit ? "Edit goal" : "Create a goal"}
+        showBack
+        onBack={close}
+        onClose={close}
+      />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -61,12 +95,12 @@ export function GoalTargetScreen({ type }: Props) {
           keyboardShouldPersistTaps="always"
         >
           <GoalTargetPicker
-            type={type}
             minTarget={minTarget}
-            strictMinTargets={strictMinTargets}
-            value={input}
-            currencySymbol={symbol}
-            onChangeValue={setInput}
+            baselineSmokeFreeDays={progress.smokeFreeDays}
+            currency={state.profile.currency}
+            economics={economics}
+            initialDays={initialDays}
+            confirmLabel={isEdit ? "Save changes" : "Set goal"}
             onConfirm={handleConfirm}
           />
         </ScrollView>

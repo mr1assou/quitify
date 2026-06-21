@@ -1,0 +1,1 @@
+export { GoalManageScreen } from "./GoalManageScreen";

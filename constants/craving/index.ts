@@ -5,3 +5,5 @@ export * from "./cravingTips";
 export * from "./cravingTools";
 export * from "./games";
 export * from "./motivationQuotes";
+export * from "./relaxSoundCoverAssets";
+export * from "./relaxSounds";

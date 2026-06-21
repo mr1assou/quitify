@@ -1,1 +1,0 @@
-export { TapDestroyGame } from "./TapDestroyGame";

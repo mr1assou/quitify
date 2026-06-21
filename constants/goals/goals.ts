@@ -1,19 +1,13 @@
-import type { GoalType } from "@/types/goals/goal";
+import type { ActiveGoalType } from "@/types/goals/goal";
 
 export type GoalTypeConfig = {
-  id: GoalType;
+  id: ActiveGoalType;
   title: string;
-  icon: "cash" | "flame" | "ban";
+  icon: "flame" | "ban";
   presets: readonly number[];
 };
 
 export const GOAL_TYPES: readonly GoalTypeConfig[] = [
-  {
-    id: "money_saved",
-    title: "Money saved",
-    icon: "cash",
-    presets: [25, 50, 100, 200],
-  },
   {
     id: "smoke_free_days",
     title: "Smoke-free days",
@@ -28,7 +22,7 @@ export const GOAL_TYPES: readonly GoalTypeConfig[] = [
   },
 ] as const;
 
-export function getGoalTypeConfig(type: GoalType): GoalTypeConfig {
+export function getGoalTypeConfig(type: ActiveGoalType): GoalTypeConfig {
   const config = GOAL_TYPES.find((g) => g.id === type);
   if (!config) throw new Error(`Unknown goal type: ${type}`);
   return config;

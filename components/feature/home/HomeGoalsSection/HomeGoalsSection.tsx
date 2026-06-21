@@ -12,7 +12,8 @@ type Props = {
   currencySymbol: string;
   hasOpenGoalSlot: boolean;
   isLoadingGoals?: boolean;
-  onPress: () => void;
+  onCreateGoal: () => void;
+  onGoalPress: (goal: UserGoal) => void;
 };
 
 export function HomeGoalsSection({
@@ -21,7 +22,8 @@ export function HomeGoalsSection({
   currencySymbol,
   hasOpenGoalSlot,
   isLoadingGoals = false,
-  onPress,
+  onCreateGoal,
+  onGoalPress,
 }: Props) {
   const showGoalCards = !isLoadingGoals && goals.length > 0;
 
@@ -36,14 +38,14 @@ export function HomeGoalsSection({
               goal={goal}
               progress={computeGoalProgress(goal, progress)}
               currencySymbol={currencySymbol}
-              onPress={onPress}
+              onPress={() => onGoalPress(goal)}
             />
           ))}
         </View>
       ) : null}
       {hasOpenGoalSlot ? (
         <View className={showGoalCards ? "mt-3" : undefined}>
-          <CreateGoalButton onPress={onPress} />
+          <CreateGoalButton onPress={onCreateGoal} />
         </View>
       ) : null}
     </View>

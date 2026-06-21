@@ -2,10 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { getGoalTypeConfig } from "@/constants/goals/goals";
 import { useTheme } from "@/context/ThemeContext";
 import type { UserGoal } from "@/types/goals/goal";
-import { formatGoalProgressLabel, formatGoalTitle } from "@/utils/goals/goalLabels";
+import { formatGoalProgressLabel, formatGoalTitle, goalTypeIcon } from "@/utils/goals/goalLabels";
 import type { GoalProgress } from "@/utils/goals/goalProgress";
 
 type Props = {
@@ -22,7 +21,7 @@ export function ActiveGoalCard({
   onPress,
 }: Props) {
   const { colors } = useTheme();
-  const config = getGoalTypeConfig(goal.type);
+  const icon = goalTypeIcon(goal.type);
 
   const content = (
     <>
@@ -31,7 +30,7 @@ export function ActiveGoalCard({
           style={{ backgroundColor: colors.primary }}
           className="h-11 w-11 items-center justify-center rounded-2xl"
         >
-          <Ionicons name={config.icon} size={22} color="#fff" />
+          <Ionicons name={icon} size={22} color="#fff" />
         </View>
         <View className="min-w-0 flex-1">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">

@@ -5,13 +5,12 @@ export const EMPTY_GOALS_STATE: GoalsStateResponse = {
   progress: {
     moneySaved: 0,
     smokeFreeDays: 0,
+    smokeFreeDaysInProgress: 0,
     cigarettesAvoided: 0,
   },
   goals: [],
   minTargets: {
-    money_saved: 1,
-    smoke_free_days: 1,
+    smoke_free_days: 2,
     cigarettes_avoided: 1,
   },
-  strictMinTargets: false,
 };

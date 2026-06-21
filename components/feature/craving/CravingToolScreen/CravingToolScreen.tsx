@@ -7,11 +7,12 @@ import { getCravingTool, type CravingToolId } from "@/constants/craving/cravingT
 
 type Props = {
   toolId: CravingToolId;
+  title?: string;
   children: ReactNode;
 };
 
 /** Full-screen shell for a craving tool (standard app background). */
-export function CravingToolScreen({ toolId, children }: Props) {
+export function CravingToolScreen({ toolId, title, children }: Props) {
   const tool = getCravingTool(toolId);
   const close = useCallback(() => router.back(), []);
 
@@ -21,7 +22,7 @@ export function CravingToolScreen({ toolId, children }: Props) {
       edges={["top", "bottom"]}
     >
       <CravingSessionHeader
-        title={tool.label}
+        title={title ?? tool.label}
         showBack
         onBack={close}
         onClose={close}

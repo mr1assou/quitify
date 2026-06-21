@@ -10,19 +10,19 @@ import {
 
 import { EMPTY_GOALS_STATE } from "@/constants/goals/emptyGoalsState";
 import { useApp } from "@/context/AppContext";
-import { fetchGoalsState, setUserGoal } from "@/services/goals/goalsApi";
-import type { GoalType, GoalsStateResponse, UserGoal } from "@/types/goals/goal";
+import { fetchGoalsState, setUserGoal, deleteUserGoal } from "@/services/goals/goalsApi";
+import type { ActiveGoalType, GoalsStateResponse, UserGoal } from "@/types/goals/goal";
 
 type GoalsContextValue = {
   goals: UserGoal[];
   activeGoals: UserGoal[];
   progress: GoalsStateResponse["progress"];
   minTargets: GoalsStateResponse["minTargets"];
-  strictMinTargets: boolean;
   isReady: boolean;
   hasOpenGoalSlot: boolean;
   refresh: () => Promise<GoalsStateResponse>;
-  setGoal: (type: GoalType, target: number) => Promise<GoalsStateResponse>;
+  setGoal: (type: ActiveGoalType, target: number) => Promise<GoalsStateResponse>;
+  deleteGoal: (goalId: number) => Promise<GoalsStateResponse>;
 };
 
 const GoalsContext = createContext<GoalsContextValue | null>(null);
@@ -79,8 +79,15 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
     };
   }, [canLoadGoals]);
 
-  const setGoal = useCallback(async (type: GoalType, target: number) => {
+  const setGoal = useCallback(async (type: ActiveGoalType, target: number) => {
     const next = await setUserGoal(type, target);
+    setGoalsState(next);
+    setIsReady(true);
+    return next;
+  }, []);
+
+  const deleteGoal = useCallback(async (goalId: number) => {
+    const next = await deleteUserGoal(goalId);
     setGoalsState(next);
     setIsReady(true);
     return next;
@@ -105,13 +112,14 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
       activeGoals,
       progress: goalsState?.progress ?? EMPTY_GOALS_STATE.progress,
       minTargets: goalsState?.minTargets ?? EMPTY_GOALS_STATE.minTargets,
-      strictMinTargets: goalsState?.strictMinTargets ?? EMPTY_GOALS_STATE.strictMinTargets,
       isReady,
-      hasOpenGoalSlot: !isReady || activeGoals.length < 3,
+      hasOpenGoalSlot:
+        !isReady || !activeGoals.some((goal) => goal.type === "smoke_free_days"),
       refresh,
       setGoal,
+      deleteGoal,
     }),
-    [visibleGoals, activeGoals, goalsState, isReady, refresh, setGoal],
+    [visibleGoals, activeGoals, goalsState, isReady, refresh, setGoal, deleteGoal],
   );
 
   return <GoalsContext.Provider value={value}>{children}</GoalsContext.Provider>;

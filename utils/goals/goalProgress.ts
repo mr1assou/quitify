@@ -31,12 +31,16 @@ export function computeGoalProgressFromStats(
   return computeGoalProgress(goal, {
     moneySaved: stats.moneySaved,
     smokeFreeDays: stats.streakDays,
+    smokeFreeDaysInProgress: stats.streakDays > 0 ? stats.streakDays + 1 : 0,
     cigarettesAvoided: stats.cigarettesAvoided,
   });
 }
 
-function currentValueForGoal(goal: UserGoal, snapshot: GoalProgressSnapshot): number {
-  switch (goal.type) {
+export function currentValueForGoalType(
+  type: UserGoal["type"],
+  snapshot: GoalProgressSnapshot,
+): number {
+  switch (type) {
     case "money_saved":
       return snapshot.moneySaved;
     case "smoke_free_days":
@@ -44,4 +48,8 @@ function currentValueForGoal(goal: UserGoal, snapshot: GoalProgressSnapshot): nu
     case "cigarettes_avoided":
       return snapshot.cigarettesAvoided;
   }
+}
+
+function currentValueForGoal(goal: UserGoal, snapshot: GoalProgressSnapshot): number {
+  return currentValueForGoalType(goal.type, snapshot);
 }

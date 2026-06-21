@@ -1,1 +1,0 @@
-export { TapDestroyPlayField } from "./TapDestroyPlayField";

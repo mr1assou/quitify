@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -17,6 +17,7 @@ type Props = {
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
   variant: CravingToolVariant;
+  loading?: boolean;
   onPress: () => void;
 };
 
@@ -51,6 +52,7 @@ export function CravingToolCard({
   description,
   icon,
   variant,
+  loading = false,
   onPress,
 }: Props) {
   const { colors } = useTheme();
@@ -62,11 +64,14 @@ export function CravingToolCard({
   }));
 
   const iconColor = styles.iconUsesPrimary ? colors.primary : colors.white;
+  const loadingColor = styles.iconUsesPrimary ? colors.primary : colors.white;
 
   return (
     <AnimatedPressable
       accessibilityRole="button"
       accessibilityLabel={`${label}. ${description}`}
+      accessibilityState={{ busy: loading }}
+      disabled={loading}
       onPressIn={() => {
         scale.value = withSpring(0.96, { damping: 16, stiffness: 320 });
       }}
@@ -83,7 +88,11 @@ export function CravingToolCard({
       <View
         className={`h-12 w-12 items-center justify-center rounded-2xl ${styles.iconWrap}`}
       >
-        <Ionicons name={icon} size={24} color={iconColor} />
+        {loading ? (
+          <ActivityIndicator size="small" color={loadingColor} />
+        ) : (
+          <Ionicons name={icon} size={24} color={iconColor} />
+        )}
       </View>
 
       <Text className="mt-3 text-base font-bold text-foreground dark:text-d-text">

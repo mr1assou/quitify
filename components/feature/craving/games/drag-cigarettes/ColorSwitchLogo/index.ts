@@ -1,1 +1,0 @@
-export { ColorSwitchLogo } from "./ColorSwitchLogo";

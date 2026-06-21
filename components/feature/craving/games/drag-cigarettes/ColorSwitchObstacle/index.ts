@@ -1,1 +1,0 @@
-export { ColorSwitchObstacleSprite } from "./ColorSwitchObstacle";

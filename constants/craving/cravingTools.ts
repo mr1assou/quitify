@@ -2,10 +2,10 @@ import type { Ionicons } from "@expo/vector-icons";
 import type { Href } from "expo-router";
 
 export type CravingToolId =
-  | "breathing"
-  | "games"
+  | "tips"
   | "motivation-cards"
-  | "tips";
+  | "relax-sound"
+  | "games";
 
 /** Visual style for craving tool cards — mapped to app theme in CravingToolCard. */
 export type CravingToolVariant = "soft" | "warm" | "bold" | "outline";
@@ -21,20 +21,12 @@ export type CravingTool = {
 
 export const CRAVING_TOOLS: readonly CravingTool[] = [
   {
-    id: "breathing",
-    label: "Breathing",
-    description: "Calm your body",
-    icon: "leaf-outline",
-    variant: "soft",
-    href: "/craving-tools/breathing",
-  },
-  {
-    id: "games",
-    label: "Games",
-    description: "Distract your mind",
-    icon: "game-controller-outline",
-    variant: "warm",
-    href: "/craving-tools/games",
+    id: "tips",
+    label: "Tips",
+    description: "Practical advice",
+    icon: "bulb-outline",
+    variant: "outline",
+    href: "/craving-tools/tips",
   },
   {
     id: "motivation-cards",
@@ -45,12 +37,20 @@ export const CRAVING_TOOLS: readonly CravingTool[] = [
     href: "/craving-tools/motivation-cards",
   },
   {
-    id: "tips",
-    label: "Tips",
-    description: "Practical advice",
-    icon: "bulb-outline",
-    variant: "outline",
-    href: "/craving-tools/tips",
+    id: "relax-sound",
+    label: "Relax sound",
+    description: "Soothing ambient sounds",
+    icon: "musical-notes-outline",
+    variant: "soft",
+    href: "/craving-tools/relax-sound",
+  },
+  {
+    id: "games",
+    label: "Games",
+    description: "Distract your mind",
+    icon: "game-controller-outline",
+    variant: "warm",
+    href: "/craving-tools/games",
   },
 ] as const;
 

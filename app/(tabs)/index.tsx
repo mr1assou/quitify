@@ -1,4 +1,5 @@
 import { useFocusEffect } from "expo-router";
+import type { UserGoal } from "@/types/goals/goal";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback, useMemo } from "react";
 import { ScrollView, View } from "react-native";
@@ -14,15 +15,23 @@ import { useApp } from "@/context/AppContext";
 import { useGates } from "@/hooks/app/useGates";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { useStats } from "@/hooks/stats/useStats";
+import { smokeFreeDaysInProgressFromStreakStart } from "@/utils/goals/goalStreakProgress";
 import { currencySymbol } from "@/utils/shared/format";
 
 export default function Home() {
   const stats = useStats(1_000);
   const { state, setFlag } = useApp();
   const gates = useGates();
-  const { goals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
+  const { activeGoals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
 
-  const openGoals = useCallback(() => safeRouter.push("/goals"), []);
+  const openCreateGoal = useCallback(() => safeRouter.push("/goals"), []);
+
+  const openManageGoal = useCallback((goal: UserGoal) => {
+    safeRouter.pushStack({
+      pathname: "/goals/[id]",
+      params: { id: String(goal.id) },
+    });
+  }, []);
 
   const goalProgress = useMemo(
     () =>
@@ -31,9 +40,12 @@ export default function Home() {
         : {
             moneySaved: stats?.moneySaved ?? 0,
             smokeFreeDays: stats?.streakDays ?? 0,
+            smokeFreeDaysInProgress: state.profile?.streakStart
+              ? smokeFreeDaysInProgressFromStreakStart(state.profile.streakStart)
+              : 0,
             cigarettesAvoided: stats?.cigarettesAvoided ?? 0,
           },
-    [goalsReady, progress, stats],
+    [goalsReady, progress, stats, state.profile?.streakStart],
   );
 
   useFocusEffect(
@@ -81,12 +93,13 @@ export default function Home() {
 
         <View className="mt-10 px-6">
           <HomeGoalsSection
-            goals={goals}
+            goals={activeGoals}
             progress={goalProgress}
             currencySymbol={symbol}
             hasOpenGoalSlot={hasOpenGoalSlot}
             isLoadingGoals={!goalsReady}
-            onPress={openGoals}
+            onCreateGoal={openCreateGoal}
+            onGoalPress={openManageGoal}
           />
         </View>
       </ScrollView>

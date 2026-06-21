@@ -1,5 +1,5 @@
-import { GoalsScreen } from "@/components/feature/goals/GoalsScreen/GoalsScreen";
+import { GoalTargetScreen } from "@/components/feature/goals/GoalTargetScreen/GoalTargetScreen";
 
-export default function GoalsIndexRoute() {
-  return <GoalsScreen />;
+export default function GoalsRoute() {
+  return <GoalTargetScreen />;
 }

@@ -1,1 +1,0 @@
-export { CigaretteSprite } from "./CigaretteSprite";
