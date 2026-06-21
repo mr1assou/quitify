@@ -123,7 +123,6 @@ export default function Stats() {
           ) : attempts.data && profile ? (
             <AttemptHistoryCard
               attempts={attempts.data.attempts}
-              economics={attempts.data.economics}
               currency={attempts.data.currency}
               timeZone={timeZone}
             />

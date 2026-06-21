@@ -293,7 +293,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-/** Bubble Shooter craving mini-game — clear 2000 bubbles in batches. */
+/** Bubble Shooter craving mini-game — clear bubbles in batches. */
 export function useBubbleShooterGame() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
   const rafRef = useRef<number | null>(null);

@@ -1,46 +1,34 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { AttemptDetailModal } from "@/components/feature/stats/AttemptDetailModal";
-import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
+import { STATS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
 import { useTheme } from "@/context/ThemeContext";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
-import type { AttemptStatsRow, StatsEconomics, StatsFilterRange } from "@/types/stats/userStats";
+import type { AttemptStatsRow } from "@/types/stats/userStats";
 import {
   attemptOutcomeLabel,
   formatAttemptDateRange,
 } from "@/utils/stats/attemptPresentation";
-import { filterAttemptsByRange } from "@/utils/stats/filterStatsByRange";
 
 type Props = {
   attempts: AttemptStatsRow[];
-  economics: StatsEconomics;
   currency: string;
   timeZone: string;
 };
 
-export function AttemptHistoryCard({
-  attempts,
-  economics,
-  currency,
-  timeZone,
-}: Props) {
+export function AttemptHistoryCard({ attempts, currency, timeZone }: Props) {
   const { colors } = useTheme();
-  const [range, setRange] = useState<StatsFilterRange>("lifetime");
   const [selectedAttempt, setSelectedAttempt] = useState<AttemptStatsRow | null>(null);
 
-  const filteredAttempts = useMemo(
-    () => filterAttemptsByRange(attempts, economics, range),
-    [attempts, economics, range],
-  );
-
   const { page, totalPages, setPage, paginatedItems: visibleAttempts } = usePaginatedList(
-    filteredAttempts,
-    range,
+    attempts,
+    "attempts",
+    STATS_LIST_PAGE_SIZE,
   );
 
   return (
@@ -56,23 +44,17 @@ export function AttemptHistoryCard({
                 Your attempts
               </Text>
               <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
-                {filteredAttempts.length === 0
-                  ? "No attempts in this period."
-                  : `${filteredAttempts.length} attempt${filteredAttempts.length === 1 ? "" : "s"}`}
+                {attempts.length === 0
+                  ? "No attempts yet."
+                  : `${attempts.length} attempt${attempts.length === 1 ? "" : "s"}`}
               </Text>
             </View>
           </View>
 
-          <View className="mt-4">
-            <RangeTabs variant="filter" value={range} onChange={setRange} />
-          </View>
-
-          {filteredAttempts.length === 0 ? (
+          {attempts.length === 0 ? (
             <View className="mt-4 rounded-2xl bg-background px-4 py-4 dark:bg-d-elevated">
               <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                {attempts.length === 0
-                  ? "No quit attempts yet."
-                  : "No quit attempts overlap this period."}
+                No quit attempts yet.
               </Text>
             </View>
           ) : (

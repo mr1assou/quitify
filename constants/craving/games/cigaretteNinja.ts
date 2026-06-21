@@ -29,22 +29,25 @@ export const CIGARETTE_NINJA_COMBO_WINDOW_MS = 850;
 
 export const CIGARETTE_NINJA_MIN_SLICE_PX = 20;
 
-/** Gentle fall — keeps targets on screen long enough to slice. */
-export const CIGARETTE_NINJA_GRAVITY = 0.08;
+/** Fall acceleration (px per 16ms frame, per frame). */
+export const CIGARETTE_NINJA_GRAVITY = 0.28;
 
-/** Initial downward speed range when objects spawn. */
-export const CIGARETTE_NINJA_INITIAL_VY_MIN = 0.18;
-export const CIGARETTE_NINJA_INITIAL_VY_MAX = 0.42;
+/** Initial downward speed when objects spawn (px per 16ms frame). */
+export const CIGARETTE_NINJA_INITIAL_VY_MIN = 1.15;
+export const CIGARETTE_NINJA_INITIAL_VY_MAX = 2.0;
 
-export const CIGARETTE_NINJA_SPAWN_INTERVAL_START_MS = 1_150;
-export const CIGARETTE_NINJA_SPAWN_INTERVAL_MIN_MS = 520;
+/** Max downward speed (px per 16ms frame) — ~390 px/s at 60fps. */
+export const CIGARETTE_NINJA_TERMINAL_VY = 6.5;
+
+export const CIGARETTE_NINJA_SPAWN_INTERVAL_START_MS = 980;
+export const CIGARETTE_NINJA_SPAWN_INTERVAL_MIN_MS = 420;
 
 /** Objects dropped together each spawn wave. */
 export const CIGARETTE_NINJA_SPAWN_BATCH_MIN = 2;
 export const CIGARETTE_NINJA_SPAWN_BATCH_MAX = 3;
 
 export const CIGARETTE_NINJA_MAX_OBJECTS_START = 3;
-export const CIGARETTE_NINJA_MAX_OBJECTS_MAX = 8;
+export const CIGARETTE_NINJA_MAX_OBJECTS_MAX = 10;
 
 export const CIGARETTE_NINJA_GOLDEN_CHANCE = 0.09;
 /** Boss appears ~70% through the session. */

@@ -54,9 +54,7 @@ export function BubbleShooterGame() {
     <View className="flex-1">
       <BubbleShooterHud
         poppedTotal={game.poppedTotal}
-        bubblesInPool={game.bubblesInPool}
         clearProgress={game.clearProgress}
-        shotsLanded={game.shotsLanded}
       />
       <BubbleShooterPlayField
         grid={game.grid}

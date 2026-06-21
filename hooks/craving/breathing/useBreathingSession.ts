@@ -23,7 +23,7 @@ export function useBreathingSession() {
     resetBreathing();
     resetTimer();
     setIsStarted(false);
-    router.replace("/(tabs)");
+    router.replace("/craving-tools/games");
   }, [resetBreathing, resetTimer]);
 
   return {

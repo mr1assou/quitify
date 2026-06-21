@@ -243,7 +243,7 @@ export function useCigaretteNinjaGame() {
     lastFrameRef.current = performance.now();
 
     const loop = (now: number) => {
-      const dt = Math.min(48, now - lastFrameRef.current);
+      const dt = Math.min(32, now - lastFrameRef.current);
       lastFrameRef.current = now;
       const field = fieldRef.current;
 

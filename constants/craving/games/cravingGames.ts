@@ -83,7 +83,7 @@ export const CRAVING_GAMES: readonly CravingGame[] = [
   {
     id: "bubble-shooter",
     title: "Bubble Shooter",
-    description: "Pop 2,000 bubbles in batches before they reach the line.",
+    description: "Pop 4,000 bubbles in batches before they reach the line.",
     duration: "Open play",
     icon: "ellipse-outline",
     logoImage: BUBBLE_SHOOTER_LOGO_IMAGE,

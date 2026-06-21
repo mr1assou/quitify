@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
 
 import { BUBBLE_SHOOTER_PALETTE } from "@/constants/craving/games/bubbleShooter";
@@ -10,7 +11,7 @@ type Props = {
   color: BubbleColor;
 };
 
-export function BubbleShooterBubble({ x, y, radius, color }: Props) {
+function BubbleShooterBubbleImpl({ x, y, radius, color }: Props) {
   const palette = BUBBLE_SHOOTER_PALETTE[color];
   const gradientId = `bubble-gradient-${color}`;
   const size = radius * 2;
@@ -64,3 +65,5 @@ export function BubbleShooterBubble({ x, y, radius, color }: Props) {
     </Svg>
   );
 }
+
+export const BubbleShooterBubble = memo(BubbleShooterBubbleImpl);

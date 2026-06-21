@@ -9,6 +9,7 @@ import {
   CIGARETTE_NINJA_OBJECT_CONFIG,
   CIGARETTE_NINJA_SPAWN_INTERVAL_MIN_MS,
   CIGARETTE_NINJA_SPAWN_INTERVAL_START_MS,
+  CIGARETTE_NINJA_TERMINAL_VY,
   type CigaretteNinjaObjectKind,
 } from "@/constants/craving/games/cigaretteNinja";
 
@@ -106,12 +107,20 @@ export function advanceFlyingObject(
   field: FieldSize,
   dt: number,
 ): NinjaFlyingObject {
-  const scale = dt / 16;
+  // Clamp integration step to avoid sudden speed jumps on dropped frames.
+  const step = Math.min(dt, 32);
+  const scale = step / 16;
+  const nextVy = Math.min(
+    CIGARETTE_NINJA_TERMINAL_VY,
+    object.vy + CIGARETTE_NINJA_GRAVITY * scale,
+  );
   return {
     ...object,
     x: object.x + object.vx * scale,
+    // Move by current velocity first; then apply capped acceleration.
+    // This avoids a perceived "speed jump" on each frame.
     y: object.y + object.vy * scale,
-    vy: object.vy + CIGARETTE_NINJA_GRAVITY * scale,
+    vy: nextVy,
     rotation: object.rotation + object.rotationSpeed * scale,
   };
 }

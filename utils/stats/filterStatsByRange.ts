@@ -75,7 +75,7 @@ function computeSegmentImpact(
   const durationMs = Math.max(0, segmentEndMs - segmentStartMs);
   const durationSeconds = Math.floor(durationMs / 1000);
   const gross = (Math.max(0, economics.cigarettesPerDay) * durationMs) / MS_DAY;
-  const avoided = Math.max(0, Math.floor(gross) - Math.max(0, slipCigarettes));
+  const avoided = Math.max(0, gross - Math.max(0, slipCigarettes));
   const perPack = Math.max(1, economics.cigarettesPerPack);
 
   return {

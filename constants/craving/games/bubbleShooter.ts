@@ -25,7 +25,7 @@ export const BUBBLE_SHOOTER_COLS_EVEN = 8;
 export const BUBBLE_SHOOTER_INITIAL_ROWS = 5;
 
 /** Total bubbles to pop across the whole session. */
-export const BUBBLE_SHOOTER_TOTAL_BUBBLES = 2000;
+export const BUBBLE_SHOOTER_TOTAL_BUBBLES = 4000;
 
 /** Visible rows spawned per batch while bubbles remain in the pool. */
 export const BUBBLE_SHOOTER_BATCH_ROWS = 5;
