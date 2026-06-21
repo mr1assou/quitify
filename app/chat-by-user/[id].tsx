@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef } from "react";
 
+import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { useCommunity } from "@/context/CommunityContext";
 import { openChatAndNavigate } from "@/utils/chat/openChatNavigation";
 import { resolveChatParticipant } from "@/utils/chat/resolveChatParticipant";
@@ -59,5 +60,5 @@ export default function ChatByUserScreen() {
     });
   }, [peerUserId, openChatThreadWithPeer, state.authorsById, upsertAuthor]);
 
-  return null;
+  return <ThemedLoadingScreen />;
 }

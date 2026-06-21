@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
@@ -32,6 +32,12 @@ const EMPTY_ACTIVITY: ProfileActivityState = {
   upvotedFeed: [],
   communityUserId: "",
   loading: false,
+};
+
+type RawProfileActivity = {
+  postsMapped: ReturnType<typeof mapFeedPostsFromApi>;
+  commentsItems: Awaited<ReturnType<typeof fetchUserComments>>["items"];
+  upvotedMapped: ReturnType<typeof mapFeedPostsFromApi>;
 };
 
 function mapProfileComments(
@@ -74,20 +80,18 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
   const userId = resolveProfileUserId(profile, appState.account?.userId);
   const currentUserImageUrl = appState.profile?.imageUrl;
 
-  const [activity, setActivity] = useState<ProfileActivityState>({
-    ...EMPTY_ACTIVITY,
-    communityUserId,
-    loading: Boolean(userId),
-  });
+  const [rawActivity, setRawActivity] = useState<RawProfileActivity | null>(null);
+  const [loading, setLoading] = useState(Boolean(userId));
 
   useEffect(() => {
     if (!userId) {
-      setActivity({ ...EMPTY_ACTIVITY, communityUserId });
+      setRawActivity(null);
+      setLoading(false);
       return;
     }
 
     let cancelled = false;
-    setActivity((prev) => ({ ...prev, loading: true, communityUserId }));
+    setLoading(true);
 
     void (async () => {
       try {
@@ -99,44 +103,62 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
 
         if (cancelled) return;
 
-        const postsMapped = mapFeedPostsFromApi(postsPage.items);
-        const upvotedMapped = mapFeedPostsFromApi(upvotedPage.items);
-        const authorsById = {
-          ...postsMapped.authorsById,
-          ...upvotedMapped.authorsById,
-          ...communityState.authorsById,
-        };
-
-        setActivity({
-          communityUserId,
-          loading: false,
-          postFeed: buildFeedItems(
-            postsMapped.posts,
-            authorsById,
-            currentUserImageUrl,
-            communityState.onlineByUserId,
-            communityState.presenceReady,
-            userId,
-          ),
-          comments: mapProfileComments(commentsPage.items, communityUserId),
-          upvotedFeed: buildFeedItems(
-            upvotedMapped.posts,
-            authorsById,
-            currentUserImageUrl,
-            communityState.onlineByUserId,
-            communityState.presenceReady,
-            userId,
-          ),
+        setRawActivity({
+          postsMapped: mapFeedPostsFromApi(postsPage.items),
+          commentsItems: commentsPage.items,
+          upvotedMapped: mapFeedPostsFromApi(upvotedPage.items),
         });
       } catch {
-        if (!cancelled) {
-          setActivity({ ...EMPTY_ACTIVITY, communityUserId, loading: false });
-        }
+        if (!cancelled) setRawActivity(null);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     })();
 
     return () => {
       cancelled = true;
+    };
+  }, [userId]);
+
+  return useMemo(() => {
+    if (!userId) {
+      return { ...EMPTY_ACTIVITY, communityUserId };
+    }
+
+    if (loading) {
+      return { ...EMPTY_ACTIVITY, communityUserId, loading: true };
+    }
+
+    if (!rawActivity) {
+      return { ...EMPTY_ACTIVITY, communityUserId, loading: false };
+    }
+
+    const authorsById = {
+      ...rawActivity.postsMapped.authorsById,
+      ...rawActivity.upvotedMapped.authorsById,
+      ...communityState.authorsById,
+    };
+
+    return {
+      communityUserId,
+      loading: false,
+      postFeed: buildFeedItems(
+        rawActivity.postsMapped.posts,
+        authorsById,
+        currentUserImageUrl,
+        communityState.onlineByUserId,
+        communityState.presenceReady,
+        userId,
+      ),
+      comments: mapProfileComments(rawActivity.commentsItems, communityUserId),
+      upvotedFeed: buildFeedItems(
+        rawActivity.upvotedMapped.posts,
+        authorsById,
+        currentUserImageUrl,
+        communityState.onlineByUserId,
+        communityState.presenceReady,
+        userId,
+      ),
     };
   }, [
     communityState.authorsById,
@@ -144,8 +166,8 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
     communityState.presenceReady,
     communityUserId,
     currentUserImageUrl,
+    loading,
+    rawActivity,
     userId,
   ]);
-
-  return activity;
 }
