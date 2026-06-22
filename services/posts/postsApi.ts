@@ -4,6 +4,7 @@ import type { PostVote } from "@/types/community/community";
 import type {
   AllowedImageContentType,
   BackendFeedPageResponse,
+  BackendFeedPostResponse,
   BackendPostCommentEngagement,
   BackendPostCommentResponse,
   BackendPostCommentsPageResponse,
@@ -79,6 +80,18 @@ export async function fetchPosts(
   }
 
   return res.json() as Promise<BackendFeedPageResponse>;
+}
+
+export async function fetchPostById(
+  postId: string,
+): Promise<BackendFeedPostResponse> {
+  const res = await authenticatedFetch(`/posts/${postId}`);
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not load post"));
+  }
+
+  return res.json() as Promise<BackendFeedPostResponse>;
 }
 
 export async function createPost(payload: CreatePostPayload): Promise<BackendPostResponse> {

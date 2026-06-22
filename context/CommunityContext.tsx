@@ -20,6 +20,7 @@ import { uploadChatMediaToR2 } from "@/services/chat/uploadChatMedia";
 import {
   createPostComment,
   deletePostComment,
+  fetchPostById,
   fetchPostComments,
   sharePost as sharePostApi,
   updatePost as updatePostApi,
@@ -35,6 +36,7 @@ import {
   mapCommentAuthorToCommunityUser,
   mapCommentsFromApi,
 } from "@/utils/community/mapBackendComment";
+import { mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
 import { applyEngagementToPost } from "@/utils/community/postEngagement";
 import { applyPostVote } from "@/utils/community/postVote";
 import { mergeUpdatedPost } from "@/utils/community/mergeUpdatedPost";
@@ -703,7 +705,11 @@ type CommunityContextValue = {
   deleteComment: (postId: string, commentId: string) => Promise<boolean>;
   loadPostComments: (postId: string) => Promise<void>;
   loadMorePostComments: (postId: string) => Promise<void>;
-  loadAllPostComments: (postId: string) => Promise<void>;
+  loadAllPostComments: (
+    postId: string,
+    options?: { force?: boolean },
+  ) => Promise<void>;
+  loadPostById: (postId: string) => Promise<void>;
   addPost: (post: CommunityPost, author?: CommunityUser) => void;
   setPosts: (posts: CommunityPost[], authorsById: Record<string, CommunityUser>) => void;
   appendPosts: (posts: CommunityPost[], authorsById: Record<string, CommunityUser>) => void;
@@ -877,24 +883,30 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     state.commentsLoadingMoreByPostId,
   ]);
 
-  const loadAllPostComments = useCallback(async (postId: string) => {
+  const loadAllPostComments = useCallback(async (
+    postId: string,
+    options?: { force?: boolean },
+  ) => {
+    const force = options?.force ?? false;
     const fullyLoaded =
       state.commentsLoadedByPostId[postId] === true &&
       state.commentsHasMoreByPostId[postId] !== true;
-    if (fullyLoaded) return;
+    if (!force && fullyLoaded) return;
     if (state.commentsLoadingByPostId[postId]) return;
 
     dispatch({ type: "SET_COMMENTS_LOADING", postId, loading: true });
 
     try {
-      let offset = hasLoadedPostComments(postId, {
-        posts: state.posts,
-        commentsById: state.commentsById,
-        commentsLoadedByPostId: state.commentsLoadedByPostId,
-      })
-        ? countLoadedPostComments(postId, state.commentsById)
-        : 0;
-      let hasMore = state.commentsHasMoreByPostId[postId] ?? true;
+      let offset =
+        !force &&
+        hasLoadedPostComments(postId, {
+          posts: state.posts,
+          commentsById: state.commentsById,
+          commentsLoadedByPostId: state.commentsLoadedByPostId,
+        })
+          ? countLoadedPostComments(postId, state.commentsById)
+          : 0;
+      let hasMore = force ? true : state.commentsHasMoreByPostId[postId] ?? true;
       let isFirstPage = offset === 0;
 
       while (hasMore) {
@@ -925,6 +937,16 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     state.commentsLoadingByPostId,
     state.posts,
   ]);
+
+  const loadPostById = useCallback(async (postId: string) => {
+    try {
+      const post = await fetchPostById(postId);
+      const { posts, authorsById } = mapFeedPostsFromApi([post]);
+      dispatch({ type: "APPEND_POSTS", posts, authorsById });
+    } catch {
+      // Post may have been removed; leave state untouched.
+    }
+  }, []);
 
   const addPost = useCallback((post: CommunityPost, author?: CommunityUser) => {
     dispatch({ type: "ADD_POST", post, author });
@@ -1224,6 +1246,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       loadPostComments,
       loadMorePostComments,
       loadAllPostComments,
+      loadPostById,
       addPost,
       setPosts,
       appendPosts,
@@ -1256,6 +1279,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       loadPostComments,
       loadMorePostComments,
       loadAllPostComments,
+      loadPostById,
       addPost,
       setPosts,
       appendPosts,

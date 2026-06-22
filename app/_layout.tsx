@@ -8,10 +8,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AppProvider } from "@/context/AppContext";
 import { CommunityProvider } from "@/context/CommunityContext";
 import { GoalsProvider } from "@/context/GoalsContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
 import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
+import { NotificationSocketBridge } from "@/components/realtime/NotificationSocketBridge";
 import "@/global.css";
 
 export default function RootLayout() {
@@ -26,7 +28,9 @@ export default function RootLayout() {
             <AppProvider>
               <OnboardingProvider>
                 <CommunityProvider>
-                  <GoalsProviderWrapper />
+                  <NotificationProvider>
+                    <GoalsProviderWrapper />
+                  </NotificationProvider>
                 </CommunityProvider>
               </OnboardingProvider>
             </AppProvider>
@@ -42,6 +46,7 @@ function GoalsProviderWrapper() {
     <GoalsProvider>
       <PresenceSocketBridge />
       <ChatSocketBridge />
+      <NotificationSocketBridge />
       <ThemedRoot />
     </GoalsProvider>
   );

@@ -102,11 +102,12 @@ export function useCommunityFeed() {
     void loadPosts(filter, "replace", 0);
   }, [accountUserId, filter, loadPosts]);
 
+  // Refresh the feed every time the Community tab gains focus. First load shows
+  // the spinner; subsequent focuses refresh silently over the existing list.
   useFocusEffect(
     useCallback(() => {
-      if (state.posts.length === 0) {
-        void loadPosts(filter, "replace", 0);
-      }
+      const silent = state.posts.length > 0;
+      void loadPosts(filter, "replace", 0, { silent });
     }, [filter, loadPosts, state.posts.length]),
   );
 

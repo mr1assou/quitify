@@ -27,10 +27,12 @@ import { resolveCommentCount } from "@/utils/community/postEngagement";
 const HEADER_HEIGHT = 52;
 
 export default function PostDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, commentId } = useLocalSearchParams<{ id: string; commentId?: string }>();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const detail = useCommunityPost(id ?? "");
+  const { detail, loading: postLoading } = useCommunityPost(id ?? "", {
+    forceCommentsReload: Boolean(commentId),
+  });
   const { state: appState } = useApp();
   const { state, votePost, share, addComment, voteComment, updateComment, deleteComment } =
     useCommunity();
@@ -42,6 +44,16 @@ export default function PostDetailScreen() {
   };
 
   if (!detail) {
+    if (postLoading) {
+      return (
+        <View className="flex-1 bg-background dark:bg-d-bg" style={screenStyle}>
+          <View className="flex-1 items-center justify-center px-6">
+            <ActivityIndicator color={colors.primary} />
+          </View>
+        </View>
+      );
+    }
+
     return (
       <View className="flex-1 bg-background dark:bg-d-bg" style={screenStyle}>
         <View className="flex-1 items-center justify-center px-6">

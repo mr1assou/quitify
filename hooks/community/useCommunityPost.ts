@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
@@ -14,18 +14,54 @@ export type CommunityPostDetail = {
   commentsLoading: boolean;
 };
 
-export function useCommunityPost(postId: string): CommunityPostDetail | null {
-  const { state, loadAllPostComments } = useCommunity();
+export type UseCommunityPostResult = {
+  detail: CommunityPostDetail | null;
+  /** True while the post itself is being fetched (e.g. opened from a notification). */
+  loading: boolean;
+};
+
+export function useCommunityPost(
+  postId: string,
+  options?: { forceCommentsReload?: boolean },
+): UseCommunityPostResult {
+  const { state, loadAllPostComments, loadPostById } = useCommunity();
   const { state: appState } = useApp();
+  const forceCommentsReload = options?.forceCommentsReload ?? false;
+
+  const [postFetching, setPostFetching] = useState(false);
+  const fetchedRef = useRef<string | null>(null);
+  const forcedCommentsRef = useRef<string | null>(null);
+
+  const postInState = state.posts.some((p) => p.id === postId);
+
+  // Fetch the post on demand when it isn't already in the feed cache
+  // (e.g. when opening a post screen straight from a notification / cold start).
+  useEffect(() => {
+    if (!postId || postInState) return;
+    if (fetchedRef.current === postId) return;
+    fetchedRef.current = postId;
+
+    let cancelled = false;
+    setPostFetching(true);
+    void loadPostById(postId).finally(() => {
+      if (!cancelled) setPostFetching(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [postId, postInState, loadPostById]);
 
   useFocusEffect(
     useCallback(() => {
       if (!postId) return;
-      void loadAllPostComments(postId);
-    }, [loadAllPostComments, postId]),
+      const force =
+        forceCommentsReload && forcedCommentsRef.current !== postId;
+      if (force) forcedCommentsRef.current = postId;
+      void loadAllPostComments(postId, { force });
+    }, [loadAllPostComments, postId, forceCommentsReload]),
   );
 
-  return useMemo(() => {
+  const detail = useMemo(() => {
     const post = state.posts.find((p) => p.id === postId);
     if (!post) return null;
 
@@ -65,4 +101,6 @@ export function useCommunityPost(postId: string): CommunityPostDetail | null {
     state.presenceReady,
     state.posts,
   ]);
+
+  return { detail, loading: postFetching && !detail };
 }
