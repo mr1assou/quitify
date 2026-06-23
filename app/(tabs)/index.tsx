@@ -15,6 +15,7 @@ import { useApp } from "@/context/AppContext";
 import { useGates } from "@/hooks/app/useGates";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { useStats } from "@/hooks/stats/useStats";
+import { getStreakElapsedMs } from "@/utils/streak/elapsedBreakdown";
 import { smokeFreeDaysInProgressFromStreakStart } from "@/utils/goals/goalStreakProgress";
 import { currencySymbol } from "@/utils/shared/format";
 
@@ -44,6 +45,9 @@ export default function Home() {
               ? smokeFreeDaysInProgressFromStreakStart(state.profile.streakStart)
               : 0,
             cigarettesAvoided: stats?.cigarettesAvoided ?? 0,
+            elapsedSmokeFreeMs: state.profile?.streakStart
+              ? getStreakElapsedMs(state.profile.streakStart)
+              : 0,
           },
     [goalsReady, progress, stats, state.profile?.streakStart],
   );

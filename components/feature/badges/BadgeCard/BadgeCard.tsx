@@ -41,7 +41,7 @@ export function BadgeCard({ badge, unlocked, delay = 0 }: Props) {
         </Text>
         <View className="mt-3 flex-row items-center justify-between">
           <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-            Day {badge.daysRequired} · {formatNumber(badge.fpRequired)} FP
+            Day {badge.daysRequired} · {formatNumber(badge.goalsCompletedRequired)} goals · {formatNumber(badge.fpRequired)} FP
           </Text>
           {badge.premium ? (
             <View className="rounded-full bg-primary px-2 py-0.5">

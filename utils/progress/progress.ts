@@ -96,7 +96,7 @@ function finalizeBadgeSummary(
     ) ?? null;
   const currentBadge = resolveHighestUnlockedBadge(summary.badges);
   const currentBadgeProgress = nextBadge
-    ? Math.min(nextBadge.streakProgress, nextBadge.fpProgress)
+    ? Math.min(nextBadge.streakProgress, nextBadge.fpProgress, nextBadge.goalsProgress)
     : 1;
 
   return {
@@ -119,6 +119,7 @@ function badgeStatus(
   badge: Badge,
   daysQuit: number,
   fp: number,
+  goalsCompleted: number,
   isPremium: boolean,
   earnedBadgeIds: string[],
   hasAccount: boolean,
@@ -133,8 +134,10 @@ function badgeStatus(
       progress: 1,
       daysLeft: 0,
       fpLeft: 0,
+      goalsLeft: 0,
       streakProgress: 1,
       fpProgress: 1,
+      goalsProgress: 1,
     };
   }
 
@@ -148,8 +151,10 @@ function badgeStatus(
       progress,
       daysLeft: 0,
       fpLeft: 0,
+      goalsLeft: 0,
       streakProgress: hasCommittedToQuit ? 1 : 0,
       fpProgress: hasAccount ? 1 : 0,
+      goalsProgress: 1,
     };
   }
 
@@ -160,18 +165,28 @@ function badgeStatus(
       progress: 0,
       daysLeft: badge.daysRequired,
       fpLeft: badge.fpRequired,
+      goalsLeft: badge.goalsCompletedRequired,
       streakProgress: 0,
       fpProgress: 0,
+      goalsProgress: 0,
     };
   }
 
   const streakMet = daysQuit >= badge.daysRequired;
   const fpMet = fp >= badge.fpRequired;
+  const goalsMet = goalsCompleted >= badge.goalsCompletedRequired;
   const streakProgress = Math.min(1, Math.max(0, daysQuit / Math.max(1, badge.daysRequired)));
   const fpProgress = Math.min(1, Math.max(0, fp / Math.max(1, badge.fpRequired)));
-  const progress = Math.min(streakProgress, fpProgress);
+  const goalsProgress = Math.min(
+    1,
+    Math.max(0, goalsCompleted / Math.max(1, badge.goalsCompletedRequired)),
+  );
+  const progress = Math.min(streakProgress, fpProgress, goalsProgress);
   const daysLeft = streakMet ? 0 : Math.max(0, Math.ceil(badge.daysRequired - daysQuit));
   const fpLeft = fpMet ? 0 : Math.max(0, badge.fpRequired - fp);
+  const goalsLeft = goalsMet
+    ? 0
+    : Math.max(0, badge.goalsCompletedRequired - goalsCompleted);
 
   return {
     ...badge,
@@ -179,8 +194,10 @@ function badgeStatus(
     progress,
     daysLeft,
     fpLeft,
+    goalsLeft,
     streakProgress,
     fpProgress,
+    goalsProgress,
   };
 }
 
@@ -191,6 +208,7 @@ export function buildProgressSummary({
   completedMissions,
   earnedBadgeIds,
   freedomPoints,
+  goalsCompleted = 0,
   hasAccount = false,
   hasCommittedToQuit = false,
 }: {
@@ -200,6 +218,7 @@ export function buildProgressSummary({
   completedMissions: number;
   earnedBadgeIds: string[];
   freedomPoints?: number;
+  goalsCompleted?: number;
   hasAccount?: boolean;
   hasCommittedToQuit?: boolean;
 }): ProgressSummary {
@@ -207,7 +226,16 @@ export function buildProgressSummary({
   const xp = freedomPoints ?? computedXp;
   const rank = resolveGlobalRank(xp);
   const badges = BADGES.map((b) =>
-    badgeStatus(b, daysQuit, xp, isPremium, earnedBadgeIds, hasAccount, hasCommittedToQuit),
+    badgeStatus(
+      b,
+      daysQuit,
+      xp,
+      goalsCompleted,
+      isPremium,
+      earnedBadgeIds,
+      hasAccount,
+      hasCommittedToQuit,
+    ),
   );
 
   return finalizeBadgeSummary(

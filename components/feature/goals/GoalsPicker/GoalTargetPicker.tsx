@@ -1,15 +1,22 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
-import { formatMinTargetError, formatMinTargetLabel } from "@/utils/goals/goalLabels";
+import { formatMinTargetError } from "@/utils/goals/goalLabels";
 import { formatGoalCompletionBonusLabel } from "@/utils/goals/goalCompletionBonus";
 import {
   cigarettesAvoidedAtSmokeFreeDays,
   moneySavedAtSmokeFreeDays,
   type GoalEconomics,
 } from "@/utils/goals/goalEconomics";
+import {
+  formatDaysAheadGoalDeadline,
+  formatMinDaysAheadBanner,
+  minDaysAheadFromStreakStart,
+  smokeFreeDaysFromStreakStart,
+  totalSmokeFreeDaysAtGoalDeadline,
+} from "@/utils/goals/goalStreakProgress";
 import {
   isGoalTargetValid,
   parseGoalTargetInput,
@@ -18,10 +25,12 @@ import {
 import { currencySymbol, formatNumber } from "@/utils/shared/format";
 
 type Props = {
-  minTarget: number;
-  baselineSmokeFreeDays: number;
+  streakStart: number;
+  now: number;
   currency: string;
   economics: GoalEconomics;
+  /** Server-computed minimum; falls back to client streak tiers when omitted. */
+  minDaysAheadFromServer?: number;
   initialDays?: number;
   confirmLabel?: string;
   onConfirm: (days: number) => void | Promise<void>;
@@ -90,10 +99,11 @@ function ReadOnlyField({
 }
 
 export function GoalTargetPicker({
-  minTarget,
-  baselineSmokeFreeDays,
+  streakStart,
+  now,
   currency,
   economics,
+  minDaysAheadFromServer,
   initialDays,
   confirmLabel = "Set goal",
   onConfirm,
@@ -104,9 +114,20 @@ export function GoalTargetPicker({
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const streakDays = useMemo(
+    () => smokeFreeDaysFromStreakStart(streakStart, now),
+    [streakStart, now],
+  );
+
+  const minDaysAhead = useMemo(() => {
+    const fromStreak = minDaysAheadFromStreakStart(streakStart, now);
+    if (minDaysAheadFromServer == null) return fromStreak;
+    return Math.max(fromStreak, minDaysAheadFromServer);
+  }, [streakStart, now, minDaysAheadFromServer]);
+
   const parsedDays = parseGoalTargetInput(GOAL_TYPE, daysInput);
   const isValid =
-    parsedDays != null && isGoalTargetValid(GOAL_TYPE, parsedDays, minTarget);
+    parsedDays != null && isGoalTargetValid(GOAL_TYPE, parsedDays, minDaysAhead);
   const symbol = currencySymbol(currency);
 
   const handleDaysChange = useCallback((text: string) => {
@@ -124,31 +145,35 @@ export function GoalTargetPicker({
     }
   }, [isSubmitting, onConfirm, parsedDays]);
 
-  const cigarettesDisplay =
-    parsedDays != null && parsedDays > 0
-      ? formatNumber(cigarettesAvoidedAtSmokeFreeDays(parsedDays, economics))
-      : "";
+  const showGoalPreview = parsedDays != null && parsedDays > 0 && isValid;
 
-  const savingsDisplay =
-    parsedDays != null && parsedDays > 0
-      ? formatSavingsAmount(moneySavedAtSmokeFreeDays(parsedDays, economics))
-      : "";
+  const totalDaysAtGoal = showGoalPreview
+    ? totalSmokeFreeDaysAtGoalDeadline(streakStart, now, parsedDays)
+    : 0;
+
+  const cigarettesDisplay = showGoalPreview
+    ? formatNumber(cigarettesAvoidedAtSmokeFreeDays(totalDaysAtGoal, economics))
+    : "";
+
+  const savingsDisplay = showGoalPreview
+    ? formatSavingsAmount(moneySavedAtSmokeFreeDays(totalDaysAtGoal, economics))
+    : "";
+
+  const deadlineLabel = showGoalPreview
+    ? formatDaysAheadGoalDeadline(streakStart, now, parsedDays)
+    : null;
 
   return (
     <View className="gap-5">
-      <Text className="text-center text-base leading-6 text-muted-foreground dark:text-d-muted">
-        How many smoke-free days do you want to reach?
-      </Text>
-
       <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
         <Text className="text-sm font-semibold text-primary">
-          {formatMinTargetLabel(GOAL_TYPE, minTarget)}
+          {formatMinDaysAheadBanner(minDaysAhead, streakDays)}
         </Text>
       </View>
 
       <View className="gap-2">
         <Text className="px-1 text-sm font-semibold text-foreground dark:text-d-text">
-          Smoke-free days
+          Days ahead
         </Text>
         <View
           className="flex-row items-center overflow-hidden rounded-2xl bg-section dark:bg-d-surface"
@@ -157,7 +182,7 @@ export function GoalTargetPicker({
           <TextInput
             value={daysInput}
             onChangeText={handleDaysChange}
-            placeholder={String(minTarget)}
+            placeholder={String(minDaysAhead)}
             placeholderTextColor={colors.mutedForeground}
             keyboardType="number-pad"
             autoCorrect={false}
@@ -168,41 +193,42 @@ export function GoalTargetPicker({
         </View>
       </View>
 
-      <ReadOnlyField
-        label="Cigarettes avoided"
-        value={cigarettesDisplay}
-        placeholder="0"
-      />
+      {parsedDays != null && !isValid ? (
+        <Text className="px-1 text-sm font-medium text-alert">
+          {formatMinTargetError(GOAL_TYPE, minDaysAhead)}
+        </Text>
+      ) : null}
 
-      <ReadOnlyField
-        label="Money saved"
-        value={savingsDisplay}
-        placeholder="0"
-        prefix={symbol}
-      />
-
-      {parsedDays != null && isValid ? (
+      {deadlineLabel ? (
         <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
           <Text className="text-sm font-semibold text-primary">
-            {formatGoalCompletionBonusLabel(
-              GOAL_TYPE,
-              parsedDays,
-              baselineSmokeFreeDays,
-              economics,
-            )}
+            Goal completes at {deadlineLabel} smoke-free
           </Text>
         </View>
       ) : null}
 
-      {parsedDays != null && !isValid ? (
-        <Text className="px-1 text-sm font-medium text-alert">
-          {formatMinTargetError(GOAL_TYPE, minTarget)}
-        </Text>
-      ) : null}
+      {showGoalPreview ? (
+        <>
+          <ReadOnlyField
+            label="Cigarettes avoided"
+            value={cigarettesDisplay}
+            placeholder="0"
+          />
 
-      <Text className="px-1 text-xs leading-4 text-muted-foreground dark:text-d-muted">
-        Cigarettes avoided and money saved update automatically from your goal.
-      </Text>
+          <ReadOnlyField
+            label="Money saved"
+            value={savingsDisplay}
+            placeholder="0"
+            prefix={symbol}
+          />
+
+          <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
+            <Text className="text-sm font-semibold text-primary">
+              {formatGoalCompletionBonusLabel(GOAL_TYPE, parsedDays, 0, economics)}
+            </Text>
+          </View>
+        </>
+      ) : null}
 
       <Button
         label={confirmLabel}

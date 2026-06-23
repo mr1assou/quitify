@@ -5,6 +5,7 @@ export type Badge = {
   daysRequired: number;
   /** Total Freedom Points required alongside the streak milestone. */
   fpRequired: number;
+  goalsCompletedRequired: number;
   accent: string;
   premium?: boolean;
 };

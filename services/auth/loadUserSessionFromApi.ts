@@ -21,6 +21,7 @@ export async function loadUserSessionFromApi(
     createdAt: Date.now(),
     earnedBadgeIds: me.earnedBadgeIds ?? [],
     freedomPoints: me.freedomPoints ?? 0,
+    goalsCompleted: me.goalsCompleted ?? 0,
     motivationCardIndex: me.motivationCardIndex ?? 0,
     tipsCardIndex: me.tipsCardIndex ?? 0,
   };

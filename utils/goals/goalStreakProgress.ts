@@ -1,8 +1,25 @@
 import { getStreakElapsedMs, MS_DAY } from "@/utils/streak/elapsedBreakdown";
+import { formatStreakDuration } from "@/utils/streak/formatStreakLabel";
+
+/** Floor for days-ahead goals. */
+export const MIN_DAYS_AHEAD = 1;
+
+/** Values below this in `baselineProgress` are legacy completed-day counts. */
+const BASELINE_LEGACY_DAY_MAX = 1000;
 
 function streakStartMs(streakStart: string | Date | number): number {
   if (typeof streakStart === "number") return streakStart;
   return typeof streakStart === "string" ? Date.parse(streakStart) : streakStart.getTime();
+}
+
+/** Min days-ahead for goals, based on completed streak days on the current attempt. */
+export function minDaysAheadFromStreakDays(streakDays: number): number {
+  if (streakDays < 3) return 1;
+  if (streakDays < 14) return 2;
+  if (streakDays < 30) return 3;
+  if (streakDays < 40) return 4;
+  if (streakDays < 50) return 5;
+  return 6;
 }
 
 export function smokeFreeDaysFromStreakStart(
@@ -10,6 +27,13 @@ export function smokeFreeDaysFromStreakStart(
   now = Date.now(),
 ): number {
   return Math.floor(getStreakElapsedMs(streakStartMs(streakStart), now) / MS_DAY);
+}
+
+export function minDaysAheadFromStreakStart(
+  streakStart: string | Date | number,
+  now = Date.now(),
+): number {
+  return minDaysAheadFromStreakDays(smokeFreeDaysFromStreakStart(streakStart, now));
 }
 
 export function smokeFreeDaysInProgressFromStreakStart(
@@ -21,9 +45,67 @@ export function smokeFreeDaysInProgressFromStreakStart(
   return Math.ceil(elapsed / MS_DAY);
 }
 
-export function minSmokeFreeDayGoalTargetFromStreakStart(
+export function baselineElapsedMsFromStorage(baselineProgress: number): number {
+  if (baselineProgress < BASELINE_LEGACY_DAY_MAX) {
+    return baselineProgress * MS_DAY;
+  }
+  return baselineProgress;
+}
+
+export function goalDeadlineElapsedMs(
+  streakStart: string | Date | number,
+  now: number,
+  daysAhead: number,
+): number {
+  const elapsedMs = getStreakElapsedMs(streakStartMs(streakStart), now);
+  return elapsedMs + daysAhead * MS_DAY;
+}
+
+export function minGoalElapsedMsFromStreakStart(
   streakStart: string | Date | number,
   now = Date.now(),
 ): number {
-  return smokeFreeDaysFromStreakStart(streakStart, now) + 2;
+  const minAhead = minDaysAheadFromStreakStart(streakStart, now);
+  return goalDeadlineElapsedMs(streakStart, now, minAhead);
+}
+
+export function isSmokeFreeDaysAheadGoalMet(
+  baselineElapsedMs: number,
+  daysAhead: number,
+  elapsedMs: number,
+): boolean {
+  return elapsedMs >= baselineElapsedMs + daysAhead * MS_DAY;
+}
+
+export function formatDaysAheadGoalDeadline(
+  streakStart: string | Date | number,
+  now: number,
+  daysAhead: number,
+): string {
+  const deadlineMs = goalDeadlineElapsedMs(streakStart, now, daysAhead);
+  return formatStreakDuration(deadlineMs, now, { includeSeconds: true });
+}
+
+export function totalSmokeFreeDaysAtGoalDeadline(
+  streakStart: string | Date | number,
+  now: number,
+  daysAhead: number,
+): number {
+  return goalDeadlineElapsedMs(streakStart, now, daysAhead) / MS_DAY;
+}
+
+export function formatMinDaysAheadBanner(
+  minDaysAhead: number,
+  streakDays: number,
+): string {
+  const minLabel =
+    minDaysAhead <= 1
+      ? "Choose at least 1 day ahead."
+      : `Choose at least ${minDaysAhead} days ahead.`;
+
+  if (streakDays < 3) {
+    return minLabel;
+  }
+
+  return `Based on your ${streakDays}-day smoke-free streak, ${minLabel.charAt(0).toLowerCase()}${minLabel.slice(1)}`;
 }

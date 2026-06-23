@@ -47,10 +47,10 @@ export type BadgeWithStatus = Badge & {
   daysLeft: number;
   /** Freedom Points remaining; 0 if met. */
   fpLeft: number;
-  /** 0..1 progress on smoke-free streak. */
+  goalsLeft: number;
   streakProgress: number;
-  /** 0..1 progress on Freedom Points. */
   fpProgress: number;
+  goalsProgress: number;
 };
 
 export type ProgressSummary = {

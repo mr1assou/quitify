@@ -8,13 +8,12 @@ function headroomDays(
   baselineProgress: number,
   economics?: GoalEconomics,
 ): number {
-  const headroom = Math.max(0, target - baselineProgress);
-  if (headroom <= 0) return 0;
-
   switch (type) {
     case "smoke_free_days":
-      return Math.floor(headroom);
+      return Math.max(0, Math.floor(target));
     case "cigarettes_avoided": {
+      const headroom = Math.max(0, target - baselineProgress);
+      if (headroom <= 0) return 0;
       const perDay = Math.max(0, economics?.cigarettesPerDay ?? 0);
       if (perDay <= 0) return 0;
       return Math.floor(headroom / perDay);

@@ -82,8 +82,11 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
     earnable && !isFirstStep && (badge?.unlocked || (badge?.streakProgress ?? 0) >= 1);
   const displayFpMet =
     earnable && !isFirstStep && (badge?.unlocked || (badge?.fpProgress ?? 0) >= 1);
+  const displayGoalsMet =
+    earnable && !isFirstStep && (badge?.unlocked || (badge?.goalsProgress ?? 0) >= 1);
   const displayStreakProgress = earnable && !isFirstStep ? (badge?.streakProgress ?? 0) : 0;
   const displayFpProgress = earnable && !isFirstStep ? (badge?.fpProgress ?? 0) : 0;
+  const displayGoalsProgress = earnable && !isFirstStep ? (badge?.goalsProgress ?? 0) : 0;
 
   const statusLabel = !earnable
     ? "Locked"
@@ -197,6 +200,13 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
                       progress={displayFpProgress}
                       met={displayFpMet}
                     />
+
+                    <RequirementRow
+                      label="Goals completed"
+                      valueLabel={`${formatNumber(badge.goalsCompletedRequired)} ${pluralize(badge.goalsCompletedRequired, "goal")}`}
+                      progress={displayGoalsProgress}
+                      met={displayGoalsMet}
+                    />
                   </>
                 )}
               </View>
@@ -213,7 +223,7 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
                 </Text>
               ) : !badge.unlocked ? (
                 <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
-                  You need both requirements to earn this badge.
+                  You need all three requirements to earn this badge.
                 </Text>
               ) : null}
 

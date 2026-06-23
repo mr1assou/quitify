@@ -24,6 +24,7 @@ export type AuthMeResponse = {
   slipCigarettesTotal?: number;
   currentAttemptNumber?: number;
   freedomPoints?: number;
+  goalsCompleted?: number;
   earnedBadgeIds?: string[];
 };
 

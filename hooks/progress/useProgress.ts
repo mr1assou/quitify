@@ -25,6 +25,7 @@ export function useProgress(): ProgressSummary | null {
       completedMissions: missionsCompleted,
       earnedBadgeIds: state.account?.earnedBadgeIds ?? [],
       freedomPoints: baseFp + state.localFreedomPoints,
+      goalsCompleted: state.account?.goalsCompleted ?? 0,
       hasAccount: Boolean(state.account),
       hasCommittedToQuit,
     });
@@ -37,6 +38,7 @@ export function useProgress(): ProgressSummary | null {
     state.account?.earnedBadgeIds,
     state.account?.freedomPoints,
     state.localFreedomPoints,
+    state.account?.goalsCompleted,
     cravingSummary.resisted,
     missionsCompleted,
   ]);

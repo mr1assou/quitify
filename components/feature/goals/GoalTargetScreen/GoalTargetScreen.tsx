@@ -1,5 +1,5 @@
 import { useFocusEffect, Redirect } from "expo-router";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,7 +10,6 @@ import { useApp } from "@/context/AppContext";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { useNow } from "@/hooks/shared/useNow";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { minSmokeFreeDayGoalTargetFromStreakStart } from "@/utils/goals/goalStreakProgress";
 
 const GOAL_TYPE = "smoke_free_days" as const;
 
@@ -21,7 +20,7 @@ type Props = {
 
 export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   const { state } = useApp();
-  const { goals, minTargets, progress, setGoal, refresh, isReady } = useUserGoals();
+  const { goals, minTargets, setGoal, refresh, isReady } = useUserGoals();
   const now = useNow(1000);
   const isEdit = mode === "edit";
 
@@ -33,10 +32,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
 
   const close = useCallback(() => safeRouter.back(), []);
 
-  const goal = useMemo(
-    () => (goalId != null ? goals.find((item) => item.id === goalId) : undefined),
-    [goalId, goals],
-  );
+  const goal = goalId != null ? goals.find((item) => item.id === goalId) : undefined;
 
   const handleConfirm = useCallback(
     async (days: number) => {
@@ -49,16 +45,6 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
     },
     [setGoal],
   );
-
-  const minTarget = useMemo(() => {
-    if (!state.profile) return minTargets.smoke_free_days;
-
-    const fromStreak = minSmokeFreeDayGoalTargetFromStreakStart(
-      state.profile.streakStart,
-      now,
-    );
-    return Math.max(fromStreak, minTargets.smoke_free_days);
-  }, [state.profile, now, minTargets.smoke_free_days]);
 
   if (!state.profile) return null;
   if (!isReady) return <ThemedLoadingScreen />;
@@ -95,10 +81,11 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
           keyboardShouldPersistTaps="always"
         >
           <GoalTargetPicker
-            minTarget={minTarget}
-            baselineSmokeFreeDays={progress.smokeFreeDays}
+            streakStart={state.profile.streakStart}
+            now={now}
             currency={state.profile.currency}
             economics={economics}
+            minDaysAheadFromServer={minTargets.smoke_free_days}
             initialDays={initialDays}
             confirmLabel={isEdit ? "Save changes" : "Set goal"}
             onConfirm={handleConfirm}

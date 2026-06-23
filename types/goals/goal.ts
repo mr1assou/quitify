@@ -26,7 +26,9 @@ export type UserGoal = {
   id: number;
   attemptId: number;
   type: GoalType;
+  /** Smoke-free days: days ahead from baseline. Cigarettes: total count. */
   target: number;
+  baselineProgress?: number;
   status: GoalStatus;
   startedAt: string;
   completedAt?: string | null;
@@ -38,6 +40,7 @@ export type GoalProgressSnapshot = {
   smokeFreeDays: number;
   smokeFreeDaysInProgress: number;
   cigarettesAvoided: number;
+  elapsedSmokeFreeMs?: number;
 };
 
 export type GoalsStateResponse = {

@@ -7,7 +7,7 @@ export function formatGoalTitle(goal: UserGoal, currencySymbol = "$"): string {
     case "money_saved":
       return `Save ${currencySymbol}${formatNumber(goal.target)}`;
     case "smoke_free_days":
-      return `Stay smoke-free for ${goal.target} days`;
+      return `Add ${goal.target} more smoke-free ${goal.target === 1 ? "day" : "days"}`;
     case "cigarettes_avoided":
       return `Avoid ${formatNumber(goal.target)} cigarettes`;
   }
@@ -25,7 +25,7 @@ export function formatGoalProgressLabel(
         maximumFractionDigits: 2,
       })} / ${currencySymbol}${formatNumber(goal.target)}`;
     case "smoke_free_days":
-      return `${current} / ${goal.target} days`;
+      return `${current} / ${goal.target} days ahead`;
     case "cigarettes_avoided":
       return `${formatNumber(current)} / ${formatNumber(goal.target)} cigarettes`;
   }
@@ -42,8 +42,23 @@ export function goalTargetHint(type: ActiveGoalType): string {
 
 export function formatMinTargetError(type: ActiveGoalType, minTarget: number): string {
   switch (type) {
-    case "smoke_free_days":
-      return `Choose at least ${minTarget} days`;
+    case "smoke_free_days": {
+      const dayWord =
+        minTarget === 1
+          ? "one day"
+          : minTarget === 2
+            ? "two days"
+            : minTarget === 3
+              ? "three days"
+              : minTarget === 4
+                ? "four days"
+                : minTarget === 5
+                  ? "five days"
+                  : minTarget === 6
+                    ? "six days"
+                    : `${minTarget} days`;
+      return `Choose at least ${dayWord} ahead`;
+    }
     case "cigarettes_avoided":
       return `Enter at least ${formatNumber(minTarget)} cigarettes`;
   }

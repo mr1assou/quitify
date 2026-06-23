@@ -10,7 +10,7 @@ export const EMPTY_GOALS_STATE: GoalsStateResponse = {
   },
   goals: [],
   minTargets: {
-    smoke_free_days: 2,
+    smoke_free_days: 1,
     cigarettes_avoided: 1,
   },
 };
