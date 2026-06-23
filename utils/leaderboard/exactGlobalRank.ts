@@ -6,6 +6,8 @@ export function exactGlobalRankFromLeaderboard(
   snapshot: LeaderboardSnapshot,
   fallback: GlobalRank,
 ): GlobalRank {
+  if (!snapshot.currentUser) return fallback;
+
   return {
     ...fallback,
     xp: snapshot.currentUser.xp,

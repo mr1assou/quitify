@@ -5,7 +5,8 @@ export type CravingToolId =
   | "tips"
   | "motivation-cards"
   | "relax-sound"
-  | "games";
+  | "games"
+  | "saved";
 
 /** Visual style for craving tool cards — mapped to app theme in CravingToolCard. */
 export type CravingToolVariant = "soft" | "warm" | "bold" | "outline";
@@ -51,6 +52,14 @@ export const CRAVING_TOOLS: readonly CravingTool[] = [
     icon: "game-controller-outline",
     variant: "warm",
     href: "/craving-tools/games",
+  },
+  {
+    id: "saved",
+    label: "Saved",
+    description: "Your bookmarks",
+    icon: "bookmark-outline",
+    variant: "outline",
+    href: "/craving-tools/saved",
   },
 ] as const;
 

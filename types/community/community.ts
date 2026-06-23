@@ -1,5 +1,8 @@
 import type { PostTagId } from "@/constants/community/postTags";
 
+import type { UserRole } from "@/constants/auth/userRoles";
+import { DEFAULT_USER_ROLE } from "@/constants/auth/userRoles";
+
 export type CommunityUser = {
   id: string;
   name: string;
@@ -13,6 +16,7 @@ export type CommunityUser = {
   /** Display rank on the player profile screen. */
   leaderboardRank: number;
   isCurrentUser?: boolean;
+  role?: UserRole;
   location?: string;
   /** Custom avatar from API (R2 profile folder). */
   avatarUrl?: string;

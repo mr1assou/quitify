@@ -51,7 +51,9 @@ function withLivePresence(
 ): LeaderboardSnapshot {
   return {
     ...snapshot,
-    currentUser: applyLivePresence(snapshot.currentUser, onlineByUserId, presenceReady),
+    currentUser: snapshot.currentUser
+      ? applyLivePresence(snapshot.currentUser, onlineByUserId, presenceReady)
+      : null,
     others: snapshot.others.map((row) =>
       row.kind === "entry"
         ? {

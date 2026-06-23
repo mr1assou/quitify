@@ -4,6 +4,10 @@ import { Pressable, Text, View } from "react-native";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
+import {
+  isSupportStaffUser,
+  SUPPORT_STAFF_SUBTITLE,
+} from "@/constants/auth/userRoles";
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatThreadPreview } from "@/hooks/chat/useChat";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
@@ -22,6 +26,7 @@ export function ChatListRow({ preview }: Props) {
   const timeZone = useUserTimezone();
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
+  const isSupportPeer = isSupportStaffUser(participant);
 
   const lastText = lastMessage?.text ?? "Say hi 👋";
   const lastFromMe = lastMessage?.senderId === "me";
@@ -55,20 +60,40 @@ export function ChatListRow({ preview }: Props) {
         </View>
 
         <View className="mt-1 flex-row items-center gap-1.5">
-          <BadgeArt badgeId={participant.badgeId} size={18} />
-          <Text
-            numberOfLines={1}
-            className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
-          >
-            {badgeName}
-            {" · "}
+          {isSupportPeer ? (
             <Text
-              style={unreadCount > 0 ? { color: colors.foreground, fontWeight: "600" } : undefined}
+              numberOfLines={1}
+              className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
             >
-              {lastFromMe ? "You: " : ""}
-              {lastText}
+              <Text className="text-muted-foreground dark:text-d-muted">
+                {SUPPORT_STAFF_SUBTITLE}
+                {" · "}
+              </Text>
+              <Text
+                style={unreadCount > 0 ? { color: colors.foreground, fontWeight: "600" } : undefined}
+              >
+                {lastFromMe ? "You: " : ""}
+                {lastText}
+              </Text>
             </Text>
-          </Text>
+          ) : (
+            <>
+              <BadgeArt badgeId={participant.badgeId} size={18} />
+              <Text
+                numberOfLines={1}
+                className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+              >
+                {badgeName}
+                {" · "}
+                <Text
+                  style={unreadCount > 0 ? { color: colors.foreground, fontWeight: "600" } : undefined}
+                >
+                  {lastFromMe ? "You: " : ""}
+                  {lastText}
+                </Text>
+              </Text>
+            </>
+          )}
           {lastFromMe && lastOutgoingReadStatus ? (
             <MessageReadTicks status={lastOutgoingReadStatus} />
           ) : null}

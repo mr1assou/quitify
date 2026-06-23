@@ -12,6 +12,7 @@ export function TipsScreen() {
         currentIndex={currentIndex}
         onIndexChange={goToIndex}
         hintText="Swipe for another tip"
+        saveSection="tips"
       />
     </CravingToolScreen>
   );

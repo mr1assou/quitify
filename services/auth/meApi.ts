@@ -1,4 +1,5 @@
 import { API_URL } from "@/config/api";
+import type { UserRole } from "@/constants/auth/userRoles";
 
 /** Profile fields from `GET /auth/me` — source of truth for the mobile app. */
 export type AuthMeResponse = {
@@ -6,6 +7,7 @@ export type AuthMeResponse = {
   email: string;
   name?: string;
   hasCompletedOnboarding: boolean;
+  role?: UserRole;
   sex?: string;
   country?: string;
   countryFlag?: string;
@@ -21,6 +23,8 @@ export type AuthMeResponse = {
   timezone?: string;
   motivationCardIndex?: number;
   tipsCardIndex?: number;
+  savedTipCardIds?: string[];
+  savedMotivationCardIds?: string[];
   slipCigarettesTotal?: number;
   currentAttemptNumber?: number;
   freedomPoints?: number;

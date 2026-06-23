@@ -1,8 +1,10 @@
+import { DEFAULT_USER_ROLE, type UserRole } from "@/constants/auth/userRoles";
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import type { ChatMessage, ChatThread } from "@/types/chat/chat";
 import type {
   BackendChatMessage,
   BackendChatThreadSummary,
+  BackendSupportUser,
 } from "@/types/chat/chatApi";
 import type { CommunityUser } from "@/types/community/community";
 import { dbAuthorId } from "@/utils/community/presence";
@@ -35,10 +37,12 @@ export function mapPeerToCommunityUser(
   summary: BackendChatThreadSummary,
 ): CommunityUser {
   const id = dbAuthorId(summary.peer_user_id);
+  const handle = summary.peer_username?.trim() || "user";
+  const role = (summary.peer_role ?? DEFAULT_USER_ROLE) as UserRole;
   return {
     id,
-    name: summary.peer_username?.trim() || "User",
-    handle: summary.peer_username?.trim() || "user",
+    name: handle,
+    handle,
     bio: "",
     smokeFreeDays: 0,
     badgeId: "first-step",
@@ -46,6 +50,26 @@ export function mapPeerToCommunityUser(
     avatarRank: 1,
     leaderboardRank: 0,
     avatarUrl: summary.peer_image_url ?? undefined,
+    role,
+  };
+}
+
+export function mapSupportUserToCommunityUser(user: BackendSupportUser): CommunityUser {
+  const id = dbAuthorId(user.user_id);
+  const handle = user.username?.trim() || "user";
+  const role = (user.role ?? DEFAULT_USER_ROLE) as UserRole;
+  return {
+    id,
+    name: handle,
+    handle,
+    bio: "",
+    smokeFreeDays: 0,
+    badgeId: "first-step",
+    countryFlag: user.country_flag ?? "🌍",
+    avatarRank: 1,
+    leaderboardRank: 0,
+    avatarUrl: user.image_url ?? undefined,
+    role,
   };
 }
 

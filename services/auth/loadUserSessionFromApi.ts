@@ -1,4 +1,5 @@
 import type { UserAccount, UserProfile } from "@/types";
+import { DEFAULT_USER_ROLE } from "@/constants/auth/userRoles";
 import { buildProfileFromMe } from "@/utils/auth/buildProfileFromMe";
 
 import { fetchAuthMe } from "./meApi";
@@ -19,11 +20,14 @@ export async function loadUserSessionFromApi(
     email: me.email,
     name: me.name,
     createdAt: Date.now(),
+    role: me.role ?? DEFAULT_USER_ROLE,
     earnedBadgeIds: me.earnedBadgeIds ?? [],
     freedomPoints: me.freedomPoints ?? 0,
     goalsCompleted: me.goalsCompleted ?? 0,
     motivationCardIndex: me.motivationCardIndex ?? 0,
     tipsCardIndex: me.tipsCardIndex ?? 0,
+    savedTipCardIds: me.savedTipCardIds ?? [],
+    savedMotivationCardIds: me.savedMotivationCardIds ?? [],
   };
 
   if (!me.hasCompletedOnboarding) {

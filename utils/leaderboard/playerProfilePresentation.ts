@@ -17,7 +17,7 @@ const MEMBER_SINCE = [
   "Aug 2025",
 ];
 
-function memberSinceLabelForRank(rank: number): string {
+export function memberSinceLabelForRank(rank: number): string {
   return MEMBER_SINCE[Math.abs(rank - 1) % MEMBER_SINCE.length];
 }
 

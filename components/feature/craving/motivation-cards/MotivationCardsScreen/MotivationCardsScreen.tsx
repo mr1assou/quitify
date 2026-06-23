@@ -11,6 +11,7 @@ export function MotivationCardsScreen() {
         quotes={quotes}
         currentIndex={currentIndex}
         onIndexChange={goToIndex}
+        saveSection="motivation"
       />
     </CravingToolScreen>
   );

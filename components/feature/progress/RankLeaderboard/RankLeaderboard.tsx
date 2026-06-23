@@ -21,6 +21,10 @@ function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
 } {
   const entries = listLeaderboardEntries(leaderboard);
   const viewer = leaderboard.currentUser;
+  if (!viewer) {
+    return { pinnedViewer: null, pageRows: entries };
+  }
+
   const viewerOnPage = entries.some(
     (entry) => entry.userId != null && entry.userId === viewer.userId,
   );

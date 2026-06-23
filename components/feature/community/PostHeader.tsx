@@ -35,7 +35,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
   const badgeName = getBadgeName(badgeId);
 
   const avatarRank = useMemo(() => {
-    if (author.isCurrentUser && leaderboard) return leaderboard.currentUser.rank;
+    if (author.isCurrentUser && leaderboard?.currentUser) return leaderboard.currentUser.rank;
     return author.leaderboardRank;
   }, [author.isCurrentUser, author.leaderboardRank, leaderboard]);
 

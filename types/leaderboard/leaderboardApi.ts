@@ -13,7 +13,7 @@ export type BackendLeaderboardEntry = {
 
 export type BackendLeaderboardResponse = {
   items: BackendLeaderboardEntry[];
-  viewer: BackendLeaderboardEntry;
+  viewer: BackendLeaderboardEntry | null;
   total_users: number;
   has_more: boolean;
   offset: number;

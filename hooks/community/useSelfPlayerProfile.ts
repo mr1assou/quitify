@@ -22,9 +22,9 @@ export function useSelfPlayerProfile(): PlayerProfile | null {
     const name = state.account?.name?.trim() || profile.name?.trim() || "You";
     const countryFlag =
       resolveCountryFlagUrl(profile.countryFlag, profile.countryCode) ??
-      snapshot?.currentUser.countryFlag;
+      snapshot?.currentUser?.countryFlag;
 
-    if (snapshot) {
+    if (snapshot?.currentUser) {
       return buildPlayerProfile(snapshot.currentUser, snapshot.totalUsers, {
         name,
         countryFlag,

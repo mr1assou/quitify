@@ -1,32 +1,72 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
-import { COMMUNITY_USERS } from "@/constants/community/communityUsers";
+import {
+  USERNAME_SEARCH_DEBOUNCE_MS,
+  USERNAME_SEARCH_MIN_LENGTH,
+} from "@/utils/community/usernameSearch";
+import { useDebouncedValue } from "@/hooks/shared/useDebouncedValue";
+import { searchUsersByUsername } from "@/services/users/searchUsersApi";
 import type { CommunityUser } from "@/types/community/community";
-import { normalizeSearch } from "@/utils/community";
+import { mapSearchUserToCommunityUser } from "@/utils/community/mapSearchUser";
+import { normalizeUsernameSearchQuery } from "@/utils/community/usernameSearch";
 
 export type UserSearchResult = {
   query: string;
+  debouncedQuery: string;
   users: CommunityUser[];
+  loading: boolean;
+  error: string | null;
+  isQueryTooShort: boolean;
 };
 
-/** Simple in-memory user search (name, handle, location, bio). */
+/** Debounced username search against onboarded normal-role users. */
 export function useUserSearch(query: string): UserSearchResult {
-  return useMemo(() => {
-    const needle = normalizeSearch(query);
-    if (!needle) {
-      return {
-        query,
-        users: COMMUNITY_USERS.filter((u) => !u.isCurrentUser),
-      };
+  const normalizedQuery = normalizeUsernameSearchQuery(query);
+  const debouncedQuery = useDebouncedValue(normalizedQuery, USERNAME_SEARCH_DEBOUNCE_MS);
+  const [users, setUsers] = useState<CommunityUser[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isQueryTooShort =
+    debouncedQuery.length > 0 && debouncedQuery.length < USERNAME_SEARCH_MIN_LENGTH;
+
+  useEffect(() => {
+    if (!debouncedQuery || isQueryTooShort) {
+      setUsers([]);
+      setLoading(false);
+      setError(null);
+      return;
     }
 
-    const users = COMMUNITY_USERS.filter((u) => {
-      if (u.isCurrentUser) return false;
-      return [u.name, u.handle, u.bio, u.location ?? ""]
-        .map(normalizeSearch)
-        .some((field) => field.includes(needle));
-    });
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
 
-    return { query, users };
-  }, [query]);
+    searchUsersByUsername(debouncedQuery)
+      .then((response) => {
+        if (cancelled) return;
+        setUsers(response.items.map(mapSearchUserToCommunityUser));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setUsers([]);
+        setError("Could not search users");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, isQueryTooShort]);
+
+  return {
+    query,
+    debouncedQuery,
+    users,
+    loading,
+    error,
+    isQueryTooShort,
+  };
 }

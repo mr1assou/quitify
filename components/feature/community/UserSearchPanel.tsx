@@ -1,41 +1,34 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useMemo, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
 
-import { UserResultRow } from "@/components/feature/community/UserResultRow";
-import { COMMUNITY_USERS } from "@/constants/community/communityUsers";
+import { SearchUserResultRow } from "@/components/feature/community/SearchUserResultRow";
 import { useTheme } from "@/context/ThemeContext";
-import type { CommunityUser } from "@/types/community/community";
-import { normalizeSearch } from "@/utils/community";
-
-/**
- * Match community users by username (@handle), display name, or internal id.
- */
-function searchUsersByUsername(rawQuery: string): CommunityUser[] {
-  const needle = normalizeSearch(rawQuery.replace(/^@/, ""));
-  if (!needle) return [];
-
-  return COMMUNITY_USERS.filter((u) => {
-    if (u.isCurrentUser) return false;
-    return [u.handle, u.id, u.name]
-      .map(normalizeSearch)
-      .some((field) => field.includes(needle));
-  });
-}
+import { useUserSearch } from "@/hooks/community/useUserSearch";
+import {
+  sanitizeUsernameSearchInput,
+  USERNAME_SEARCH_MIN_LENGTH,
+} from "@/utils/community/usernameSearch";
 
 export function UserSearchPanel() {
-  const [query, setQuery] = useState("");
   const { colors } = useTheme();
-  const trimmed = query.trim();
+  const [query, setQuery] = useState("");
+  const { debouncedQuery, users, loading, error, isQueryTooShort } = useUserSearch(query);
 
-  const results = useMemo(() => searchUsersByUsername(trimmed), [trimmed]);
+  const showHint = debouncedQuery.length === 0;
+  const showTooShort = isQueryTooShort;
+  const showLoading = !showHint && !showTooShort && loading;
+  const showResults = !showHint && !showTooShort && !loading && !error && users.length > 0;
+  const showEmpty =
+    !showHint && !showTooShort && !loading && !error && users.length === 0;
+  const showError = !showHint && !showTooShort && !loading && Boolean(error);
 
   return (
     <View className="px-6 pt-2">
       <View className="flex-row items-center rounded-xl bg-section px-3 py-2 dark:bg-d-surface">
         <TextInput
           value={query}
-          onChangeText={setQuery}
+          onChangeText={(text) => setQuery(sanitizeUsernameSearchInput(text))}
           placeholder="Enter username"
           placeholderTextColor={colors.mutedForeground}
           autoCapitalize="none"
@@ -44,30 +37,49 @@ export function UserSearchPanel() {
           returnKeyType="search"
         />
         {query.length > 0 ? (
-          <Ionicons
-            name="close-circle"
-            size={16}
-            color={colors.mutedForeground}
-            onPress={() => setQuery("")}
-          />
+          <Pressable onPress={() => setQuery("")} hitSlop={8}>
+            <Ionicons name="close-circle" size={16} color={colors.mutedForeground} />
+          </Pressable>
         ) : null}
       </View>
 
-      {!trimmed ? (
+      {showHint ? (
         <EmptyState icon="search" title="Find someone by username" />
-      ) : results.length === 0 ? (
+      ) : null}
+
+      {showTooShort ? (
+        <EmptyState
+          icon="text-outline"
+          title={`Type at least ${USERNAME_SEARCH_MIN_LENGTH} characters`}
+          subtitle="Usernames are lowercase."
+        />
+      ) : null}
+
+      {showLoading ? (
+        <View className="mt-10 items-center">
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      ) : null}
+
+      {showError ? (
+        <EmptyState icon="alert-circle-outline" title="Search failed" subtitle={error ?? undefined} />
+      ) : null}
+
+      {showEmpty ? (
         <EmptyState
           icon="alert-circle-outline"
           title="No user found"
-          subtitle={`Nothing matches “${trimmed}”. Double-check the username.`}
+          subtitle={`Nothing matches “${debouncedQuery}”. Double-check the username.`}
         />
-      ) : (
+      ) : null}
+
+      {showResults ? (
         <View className="mt-4 gap-2">
-          {results.map((user) => (
-            <UserResultRow key={user.id} user={user} trailing="message" />
+          {users.map((user) => (
+            <SearchUserResultRow key={user.id} user={user} />
           ))}
         </View>
-      )}
+      ) : null}
     </View>
   );
 }

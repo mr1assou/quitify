@@ -5,6 +5,8 @@ export type UpdateUserPreferencesPayload = {
   timezone?: string;
   motivationCardIndex?: number;
   tipsCardIndex?: number;
+  savedTipCardIds?: string[];
+  savedMotivationCardIds?: string[];
 };
 
 export async function updateUserPreferences(

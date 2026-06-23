@@ -22,7 +22,7 @@ function mapEntry(row: BackendLeaderboardEntry): LeaderboardEntry {
 }
 
 export function mapLeaderboardFromApi(response: BackendLeaderboardResponse): LeaderboardSnapshot {
-  const currentUser = mapEntry(response.viewer);
+  const currentUser = response.viewer ? mapEntry(response.viewer) : null;
   const others: LeaderboardRow[] = response.items
     .filter((row) => !row.is_current_user)
     .map((row) => ({ kind: "entry" as const, entry: mapEntry(row) }));

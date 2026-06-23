@@ -10,8 +10,10 @@ export function listLeaderboardEntries(snapshot: LeaderboardSnapshot): Leaderboa
   }
 
   const current = snapshot.currentUser;
-  const currentKey = current.userId != null ? `u-${current.userId}` : `r-${current.rank}`;
-  byKey.set(currentKey, current);
+  if (current) {
+    const currentKey = current.userId != null ? `u-${current.userId}` : `r-${current.rank}`;
+    byKey.set(currentKey, current);
+  }
 
   return [...byKey.values()].sort((a, b) => a.rank - b.rank);
 }

@@ -1,27 +1,73 @@
 import { Ionicons } from "@expo/vector-icons";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ChatListRow } from "@/components/feature/chat/ChatListRow";
+import {
+  ChatsSectionTabs,
+  type ChatsSection,
+} from "@/components/feature/chat/ChatsSectionTabs";
+import { SupportStaffRow } from "@/components/feature/chat/SupportStaffRow";
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
+import { isSupportRole } from "@/constants/auth/userRoles";
+import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/chat/useChat";
+import { fetchSupportUsers } from "@/services/chat/chatApi";
+import type { CommunityUser } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
+import { mapSupportUserToCommunityUser } from "@/utils/chat/mapBackendChat";
 
 export default function ChatsScreen() {
   const { colors } = useTheme();
+  const { state } = useApp();
   const insets = useSafeAreaInsets();
   const { loadChatThreads } = useCommunity();
   const threads = useChatThreads();
   const listBottom = Math.max(insets.bottom, 16) + 16;
 
+  const isSupportStaff = isSupportRole(state.account?.role);
+  const [section, setSection] = useState<ChatsSection>("chats");
+  const [supportList, setSupportList] = useState<CommunityUser[]>([]);
+  const [isLoadingSupport, setIsLoadingSupport] = useState(false);
+  const [supportError, setSupportError] = useState<string | null>(null);
+
+  const loadSupportList = useCallback(async () => {
+    setIsLoadingSupport(true);
+    setSupportError(null);
+    try {
+      const page = await fetchSupportUsers();
+      setSupportList(page.items.map(mapSupportUserToCommunityUser));
+    } catch {
+      setSupportError(
+        isSupportStaff ? "Could not load users" : "Could not load support",
+      );
+      setSupportList([]);
+    } finally {
+      setIsLoadingSupport(false);
+    }
+  }, [isSupportStaff]);
+
   useFocusEffect(
     useCallback(() => {
       void loadChatThreads();
-    }, [loadChatThreads]),
+      if (section === "support") {
+        void loadSupportList();
+      }
+    }, [loadChatThreads, section, loadSupportList]),
+  );
+
+  const handleSectionChange = useCallback(
+    (next: ChatsSection) => {
+      setSection(next);
+      if (next === "support") {
+        void loadSupportList();
+      }
+    },
+    [loadSupportList],
   );
 
   return (
@@ -29,36 +75,80 @@ export default function ChatsScreen() {
       <StackScreenHeader
         title="Chats"
         rightAction={
-          <Pressable
-            onPress={() => safeRouter.push("/community-search")}
-            hitSlop={8}
-            accessibilityLabel="Find user"
-          >
-            <Ionicons name="search-outline" size={22} color={colors.primary} />
-          </Pressable>
+          section === "chats" ? (
+            <Pressable
+              onPress={() => safeRouter.push("/community-search")}
+              hitSlop={8}
+              accessibilityLabel="Find user"
+            >
+              <Ionicons name="search-outline" size={22} color={colors.primary} />
+            </Pressable>
+          ) : null
         }
       />
 
-      <FlatList
-        data={threads}
-        keyExtractor={(t) => t.threadId}
-        ItemSeparatorComponent={() => (
-          <View className="mx-6 h-px bg-section dark:bg-d-border" />
-        )}
-        renderItem={({ item }) => <ChatListRow preview={item} />}
-        ListEmptyComponent={
-          <View className="items-center px-6 pt-16">
-            <Ionicons name="chatbubbles-outline" size={48} color={colors.mutedForeground} />
-            <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
-              No chats yet
-            </Text>
-            <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
-              Search a profile from the Community tab to start a chat.
-            </Text>
-          </View>
-        }
-        contentContainerStyle={{ paddingBottom: listBottom }}
-      />
+      <ChatsSectionTabs value={section} onChange={handleSectionChange} />
+
+      {section === "chats" ? (
+        <FlatList
+          data={threads}
+          keyExtractor={(t) => t.threadId}
+          ItemSeparatorComponent={() => (
+            <View className="mx-6 h-px bg-section dark:bg-d-border" />
+          )}
+          renderItem={({ item }) => <ChatListRow preview={item} />}
+          ListEmptyComponent={
+            <View className="items-center px-6 pt-16">
+              <Ionicons name="chatbubbles-outline" size={48} color={colors.mutedForeground} />
+              <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
+                No chats yet
+              </Text>
+              <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
+                {isSupportStaff
+                  ? "Open the Support tab to message other support team members."
+                  : "Open the Support tab to reach our team, or search Community to chat."}
+              </Text>
+            </View>
+          }
+          contentContainerStyle={{ paddingBottom: listBottom }}
+        />
+      ) : isLoadingSupport ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={supportList}
+          keyExtractor={(user) => user.id}
+          ItemSeparatorComponent={() => <View className="h-2" />}
+          renderItem={({ item }) => (
+            <View className="px-6">
+              <SupportStaffRow user={item} />
+            </View>
+          )}
+          ListEmptyComponent={
+            <View className="items-center px-6 pt-16">
+              <Ionicons
+                name={isSupportStaff ? "people-outline" : "headset-outline"}
+                size={48}
+                color={colors.mutedForeground}
+              />
+              <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
+                {supportError ??
+                  (isSupportStaff ? "No support teammates found" : "No support available")}
+              </Text>
+              {!supportError ? (
+                <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
+                  {isSupportStaff
+                    ? "Other support team members will appear here."
+                    : "Our support team will appear here when available."}
+                </Text>
+              ) : null}
+            </View>
+          }
+          contentContainerStyle={{ paddingBottom: listBottom, paddingTop: 4 }}
+        />
+      )}
     </SafeAreaView>
   );
 }

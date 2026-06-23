@@ -27,7 +27,7 @@ export type LeaderboardRowItem = {
 export type LeaderboardRow = LeaderboardGap | LeaderboardRowItem;
 
 export type LeaderboardSnapshot = {
-  currentUser: LeaderboardEntry;
+  currentUser: LeaderboardEntry | null;
   /** Everyone else on loaded pages, sorted by rank (current user excluded). */
   others: LeaderboardRow[];
   totalUsers: number;

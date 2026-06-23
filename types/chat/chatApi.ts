@@ -19,6 +19,7 @@ export type BackendChatThreadSummary = {
   peer_username: string | null;
   peer_image_url: string | null;
   peer_country_flag: string | null;
+  peer_role?: string;
   last_message: BackendChatMessage | null;
   unread_count: number;
   peer_last_read_at: string | null;
@@ -48,6 +49,19 @@ export type BackendChatUploadUrl = {
   imageUrl: string;
   key: string;
   expiresIn: number;
+};
+
+export type BackendSupportUser = {
+  user_id: number;
+  username: string | null;
+  image_url: string | null;
+  country_flag: string | null;
+  role?: string;
+};
+
+export type BackendSupportUsersPage = {
+  items: BackendSupportUser[];
+  has_more: boolean;
 };
 
 export type SendChatMessagePayload = {

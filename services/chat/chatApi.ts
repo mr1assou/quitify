@@ -6,6 +6,7 @@ import type {
   BackendChatUploadUrl,
   BackendMessagesSeenPayload,
   BackendChatMessage,
+  BackendSupportUsersPage,
   SendChatMessagePayload,
 } from "@/types/chat/chatApi";
 
@@ -23,6 +24,19 @@ export async function fetchChatThreads(): Promise<BackendChatThreadSummary[]> {
   const res = await authenticatedFetch("/chat/threads");
   if (!res.ok) return parseError(res, "Could not load chats");
   return res.json() as Promise<BackendChatThreadSummary[]>;
+}
+
+export async function fetchSupportUsers(
+  offset = 0,
+  limit = 30,
+): Promise<BackendSupportUsersPage> {
+  const params = new URLSearchParams({
+    offset: String(offset),
+    limit: String(limit),
+  });
+  const res = await authenticatedFetch(`/chat/support/users?${params.toString()}`);
+  if (!res.ok) return parseError(res, "Could not load users");
+  return res.json() as Promise<BackendSupportUsersPage>;
 }
 
 export async function openChatThread(

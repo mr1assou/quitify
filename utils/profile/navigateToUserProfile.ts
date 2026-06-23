@@ -1,8 +1,9 @@
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
+import { isSupportStaffUser } from "@/constants/auth/userRoles";
 import type { CommunityUser } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
 
-type ProfileTarget = Pick<CommunityUser, "id" | "isCurrentUser">;
+type ProfileTarget = Pick<CommunityUser, "id" | "isCurrentUser" | "role">;
 
 type NavigateToUserProfileOptions = {
   /** Leaderboard rank for the signed-in user (required to open their player profile). */
@@ -17,6 +18,8 @@ export function navigateToUserProfile(
   user: ProfileTarget,
   options?: NavigateToUserProfileOptions,
 ) {
+  if (isSupportStaffUser(user)) return;
+
   if (user.isCurrentUser || user.id === CURRENT_USER_ID) {
     const rank = options?.currentUserRank;
     if (rank != null && rank >= 1) {

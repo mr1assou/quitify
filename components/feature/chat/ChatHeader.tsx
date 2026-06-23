@@ -4,6 +4,10 @@ import { Pressable, Text, View } from "react-native";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { ChatLastSeenSuffix } from "@/components/feature/chat/ChatLastSeenSuffix";
+import {
+  isSupportStaffUser,
+  SUPPORT_STAFF_SUBTITLE,
+} from "@/constants/auth/userRoles";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
 import type { CallKind } from "@/types/chat/chat";
@@ -26,6 +30,57 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
   const { isOnline, lastSeenAt } = useChatParticipantPresence(participant);
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
+  const isSupportPeer = isSupportStaffUser(participant);
+
+  const identity = (
+    <>
+      <LeaderboardAvatar
+        name={participant.name}
+        isCurrentUser={!!participant.isCurrentUser}
+        rank={avatarRank}
+        countryFlag={participant.countryFlag}
+        imageUrl={participant.avatarUrl}
+        size={40}
+        isOnline={isOnline}
+      />
+
+      <View className="ml-2.5 min-w-0 flex-1">
+        <View className="min-w-0 flex-row items-center">
+          <Text
+            className="shrink text-base font-bold text-foreground dark:text-d-text"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {participant.name}
+          </Text>
+          <ChatPresenceSuffix isOnline={isOnline} lastSeenAt={lastSeenAt} />
+        </View>
+
+        <View className="mt-0.5 flex-row items-center gap-1.5">
+          {isTyping ? (
+            <Text className="text-xs font-medium text-primary">typing…</Text>
+          ) : isSupportPeer ? (
+            <Text
+              className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+              numberOfLines={1}
+            >
+              {SUPPORT_STAFF_SUBTITLE}
+            </Text>
+          ) : (
+            <>
+              <BadgeArt badgeId={participant.badgeId} size={18} />
+              <Text
+                className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
+                numberOfLines={1}
+              >
+                {badgeName}
+              </Text>
+            </>
+          )}
+        </View>
+      </View>
+    </>
+  );
 
   return (
     <View className="flex-row items-center border-b border-section py-3 pl-1 pr-4 dark:border-d-border">
@@ -37,49 +92,16 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
         <Ionicons name="chevron-back" size={20} color={colors.foreground} />
       </Pressable>
 
-      <Pressable
-        onPress={() => navigateToUserProfile(participant)}
-        className="min-w-0 flex-1 flex-row items-center"
-      >
-        <LeaderboardAvatar
-          name={participant.name}
-          isCurrentUser={!!participant.isCurrentUser}
-          rank={avatarRank}
-          countryFlag={participant.countryFlag}
-          imageUrl={participant.avatarUrl}
-          size={40}
-          isOnline={isOnline}
-        />
-
-        <View className="ml-2.5 min-w-0 flex-1">
-          <View className="min-w-0 flex-row items-center">
-            <Text
-              className="shrink text-base font-bold text-foreground dark:text-d-text"
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {participant.name}
-            </Text>
-            <ChatPresenceSuffix isOnline={isOnline} lastSeenAt={lastSeenAt} />
-          </View>
-
-          <View className="mt-0.5 flex-row items-center gap-1.5">
-            {isTyping ? (
-              <Text className="text-xs font-medium text-primary">typing…</Text>
-            ) : (
-              <>
-                <BadgeArt badgeId={participant.badgeId} size={18} />
-                <Text
-                  className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
-                  numberOfLines={1}
-                >
-                  {badgeName}
-                </Text>
-              </>
-            )}
-          </View>
-        </View>
-      </Pressable>
+      {isSupportPeer ? (
+        <View className="min-w-0 flex-1 flex-row items-center">{identity}</View>
+      ) : (
+        <Pressable
+          onPress={() => navigateToUserProfile(participant)}
+          className="min-w-0 flex-1 flex-row items-center"
+        >
+          {identity}
+        </Pressable>
+      )}
 
       <View className="flex-row items-center gap-2">
         <CallIconButton
