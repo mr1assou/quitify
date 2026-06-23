@@ -11,6 +11,8 @@ let socket: Socket | null = null;
 let wired = false;
 
 const messageListeners = new Set<(payload: BackendChatMessage) => void>();
+const messageUpdatedListeners = new Set<(payload: BackendChatMessage) => void>();
+const messageDeletedListeners = new Set<(payload: BackendChatMessage) => void>();
 const seenListeners = new Set<(payload: BackendMessagesSeenPayload) => void>();
 const typingListeners = new Set<(payload: BackendChatTypingPayload) => void>();
 
@@ -20,6 +22,14 @@ function wireSocket(sock: Socket) {
 
   sock.on("chat:message", (payload: BackendChatMessage) => {
     messageListeners.forEach((listener) => listener(payload));
+  });
+
+  sock.on("chat:message_updated", (payload: BackendChatMessage) => {
+    messageUpdatedListeners.forEach((listener) => listener(payload));
+  });
+
+  sock.on("chat:message_deleted", (payload: BackendChatMessage) => {
+    messageDeletedListeners.forEach((listener) => listener(payload));
   });
 
   sock.on("messages_seen", (payload: BackendMessagesSeenPayload) => {
@@ -33,6 +43,8 @@ function wireSocket(sock: Socket) {
 
 export type ChatSocketHandlers = {
   onMessage?: (message: BackendChatMessage) => void;
+  onMessageUpdated?: (message: BackendChatMessage) => void;
+  onMessageDeleted?: (message: BackendChatMessage) => void;
   onMessagesSeen?: (payload: BackendMessagesSeenPayload) => void;
   onTyping?: (payload: BackendChatTypingPayload) => void;
 };
@@ -43,6 +55,14 @@ export function subscribeChatSocket(handlers: ChatSocketHandlers): () => void {
   if (handlers.onMessage) {
     messageListeners.add(handlers.onMessage);
     cleanups.push(() => messageListeners.delete(handlers.onMessage!));
+  }
+  if (handlers.onMessageUpdated) {
+    messageUpdatedListeners.add(handlers.onMessageUpdated);
+    cleanups.push(() => messageUpdatedListeners.delete(handlers.onMessageUpdated!));
+  }
+  if (handlers.onMessageDeleted) {
+    messageDeletedListeners.add(handlers.onMessageDeleted);
+    cleanups.push(() => messageDeletedListeners.delete(handlers.onMessageDeleted!));
   }
   if (handlers.onMessagesSeen) {
     seenListeners.add(handlers.onMessagesSeen);
@@ -101,6 +121,8 @@ export function emitChatTyping(threadId: number, isTyping: boolean): void {
 export function disconnectChatSocket(): void {
   if (!socket) return;
   messageListeners.clear();
+  messageUpdatedListeners.clear();
+  messageDeletedListeners.clear();
   seenListeners.clear();
   typingListeners.clear();
   socket.removeAllListeners();

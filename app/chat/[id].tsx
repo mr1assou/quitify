@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Platform,
   Pressable,
@@ -18,7 +19,7 @@ import { ChatHeader } from "@/components/feature/chat/ChatHeader";
 import { ChatEmptyGreeting } from "@/components/feature/chat/ChatEmptyGreeting";
 import { ChatTypingIndicator } from "@/components/feature/chat/ChatTypingIndicator";
 import { MessageBubble } from "@/components/feature/chat/MessageBubble";
-import { MessageComposer } from "@/components/feature/chat/MessageComposer";
+import { MessageComposer, type MessageComposerEditState } from "@/components/feature/chat/MessageComposer";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThread } from "@/hooks/chat/useChat";
@@ -27,6 +28,11 @@ import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import type { CallKind, ChatMessage } from "@/types/chat/chat";
 import { joinChatThread, leaveChatThread } from "@/services/realtime/chatSocket";
 import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
+import {
+  canDeleteChatMessage,
+  canEditChatMessage,
+  canShowChatMessageActions,
+} from "@/utils/chat/chatMessageMutation";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -53,6 +59,8 @@ export default function ChatThreadScreen() {
     loadChatMessages,
     loadMoreChatMessages,
     loadChatThreads,
+    editChatMessage,
+    deleteChatMessage,
   } = useCommunity();
   const { peerTyping, onComposerTypingChange, stopTyping, markSeenNow } =
     useChatThreadRealtime(threadId);
@@ -61,6 +69,7 @@ export default function ChatThreadScreen() {
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [sendingMedia, setSendingMedia] = useState(false);
+  const [editingMessage, setEditingMessage] = useState<MessageComposerEditState | null>(null);
   const loadingMoreRef = useRef(false);
   const messagesLoadedForRef = useRef<string | null>(null);
 
@@ -160,6 +169,69 @@ export default function ChatThreadScreen() {
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
 
+  const openMessageActions = useCallback(
+    (message: ChatMessage) => {
+      if (!canShowChatMessageActions(message)) return;
+
+      const options: {
+        text: string;
+        style?: "destructive" | "cancel";
+        onPress?: () => void;
+      }[] = [];
+
+      if (canEditChatMessage(message)) {
+        options.push({
+          text: "Edit",
+          onPress: () => {
+            setEditingMessage({
+              messageId: message.id,
+              initialText: message.text,
+            });
+          },
+        });
+      }
+
+      if (canDeleteChatMessage(message)) {
+        options.push({
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            Alert.alert("Delete message?", "This cannot be undone.", [
+              { text: "Cancel", style: "cancel" },
+              {
+                text: "Delete",
+                style: "destructive",
+                onPress: () => {
+                  void deleteChatMessage(threadId, message.id).then((ok) => {
+                    if (!ok) {
+                      Alert.alert(
+                        "Could not delete message",
+                        "This message may no longer be deletable.",
+                      );
+                    }
+                  });
+                },
+              },
+            ]);
+          },
+        });
+      }
+
+      options.push({ text: "Cancel", style: "cancel" });
+      Alert.alert("Message options", undefined, options);
+    },
+    [deleteChatMessage, threadId],
+  );
+
+  const onSaveEdit = async (messageId: string, text: string) => {
+    const ok = await editChatMessage(threadId, messageId, text);
+    if (!ok) {
+      Alert.alert("Could not edit message", "This message may no longer be editable.");
+      return;
+    }
+    setEditingMessage(null);
+  };
+
   const onSendMedia = async (items: Parameters<typeof sendMediaMessages>[1]) => {
     if (!detail) return;
     stopTyping();
@@ -222,6 +294,8 @@ export default function ChatThreadScreen() {
                     showTimestamp={item.showTimestamp}
                     readStatus={item.readStatus}
                     timeZone={timeZone}
+                    showActions={item.fromMe && canShowChatMessageActions(item.message)}
+                    onPressActions={() => openMessageActions(item.message)}
                   />
                 )}
                 onEndReached={() => void loadOlder()}
@@ -249,6 +323,9 @@ export default function ChatThreadScreen() {
           onSendMedia={onSendMedia}
           isSendingMedia={sendingMedia}
           disabled={!detail}
+          editState={editingMessage}
+          onSaveEdit={onSaveEdit}
+          onCancelEdit={() => setEditingMessage(null)}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

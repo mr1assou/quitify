@@ -30,7 +30,29 @@ async function fetchJson<T>(
     );
   }
 
-  const body = (await res.json().catch(() => null)) as T | null;
+  const raw = await res.text();
+  let body: T | null = null;
+  try {
+    body = raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    if (raw.includes("ERR_NGROK_727") || raw.includes("HTTP requests limit")) {
+      throw new Error(
+        "ngrok monthly request limit reached. Restart with a new tunnel or upgrade ngrok, then update API_URL.",
+      );
+    }
+    if (raw.includes("ngrok") && !res.ok) {
+      throw new Error(
+        `ngrok blocked the request (HTTP ${res.status}). Check that ngrok http 3000 is running.`,
+      );
+    }
+  }
+
+  if (!res.ok && body == null) {
+    throw new Error(
+      `Backend error (HTTP ${res.status}). Check ngrok and npm run start:dev.`,
+    );
+  }
+
   return { ok: res.ok, body };
 }
 

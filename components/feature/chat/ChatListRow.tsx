@@ -14,6 +14,7 @@ import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPrese
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import { getBadgeName } from "@/utils/progress/badges";
 import { formatMessageListTime } from "@/utils/chat/formatMessageTime";
+import { formatChatMessagePreview } from "@/utils/chat/chatMessageMutation";
 
 type Props = {
   preview: ChatThreadPreview;
@@ -28,7 +29,7 @@ export function ChatListRow({ preview }: Props) {
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
   const isSupportPeer = isSupportStaffUser(participant);
 
-  const lastText = lastMessage?.text ?? "Say hi 👋";
+  const lastText = lastMessage ? formatChatMessagePreview(lastMessage) : "Say hi 👋";
   const lastFromMe = lastMessage?.senderId === "me";
 
   return (

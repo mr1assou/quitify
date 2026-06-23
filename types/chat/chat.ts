@@ -14,6 +14,8 @@ export type ChatMessage = {
   mediaMimeType?: string;
   mediaDurationMs?: number;
   readStatus?: MessageReadStatus;
+  isDeleted?: boolean;
+  editedAt?: number;
 };
 
 export type ChatThread = {

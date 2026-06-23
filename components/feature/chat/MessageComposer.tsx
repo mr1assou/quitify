@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -11,6 +11,11 @@ import { useRecordChatAudio } from "./useRecordChatAudio";
 const CONTROL = 40;
 const INPUT_MAX_HEIGHT = 72;
 
+export type MessageComposerEditState = {
+  messageId: string;
+  initialText: string;
+};
+
 type Props = {
   onSend: (text: string) => void;
   onSendMedia?: (items: ChatMediaPick[]) => void | Promise<void>;
@@ -18,6 +23,9 @@ type Props = {
   placeholder?: string;
   isSendingMedia?: boolean;
   disabled?: boolean;
+  editState?: MessageComposerEditState | null;
+  onSaveEdit?: (messageId: string, text: string) => void | Promise<void>;
+  onCancelEdit?: () => void;
 };
 
 export function MessageComposer({
@@ -27,12 +35,24 @@ export function MessageComposer({
   placeholder = "Message…",
   isSendingMedia = false,
   disabled = false,
+  editState = null,
+  onSaveEdit,
+  onCancelEdit,
 }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const { pickFromGallery } = usePickChatMedia();
   const { isRecording, startRecording, stopRecording, cancelRecording } = useRecordChatAudio();
   const [text, setText] = useState("");
+  const isEditing = Boolean(editState);
+
+  useEffect(() => {
+    if (editState) {
+      setText(editState.initialText);
+      return;
+    }
+    setText("");
+  }, [editState]);
 
   const hasText = text.trim().length > 0;
   const busy = disabled || isSendingMedia || isRecording;
@@ -41,12 +61,18 @@ export function MessageComposer({
     const trimmed = text.trim();
     if (!trimmed || busy) return;
     onTypingChange?.(false);
+
+    if (isEditing && editState && onSaveEdit) {
+      void onSaveEdit(editState.messageId, trimmed);
+      return;
+    }
+
     onSend(trimmed);
     setText("");
   };
 
   const onMicPressIn = async () => {
-    if (busy || hasText) return;
+    if (busy || hasText || isEditing) return;
     await startRecording();
   };
 
@@ -58,7 +84,7 @@ export function MessageComposer({
   };
 
   const onGalleryPress = async () => {
-    if (busy) return;
+    if (busy || isEditing) return;
     const items = await pickFromGallery();
     if (items.length === 0) return;
 
@@ -75,6 +101,17 @@ export function MessageComposer({
       className="border-t border-section bg-background dark:border-d-border dark:bg-d-bg"
       style={{ paddingBottom: Math.max(insets.bottom, 12) }}
     >
+      {isEditing ? (
+        <View className="flex-row items-center justify-between px-4 pb-2 pt-3">
+          <Text className="text-sm font-semibold text-foreground dark:text-d-text">
+            Edit message
+          </Text>
+          <Pressable onPress={onCancelEdit} hitSlop={8}>
+            <Text className="text-sm font-semibold text-primary">Cancel</Text>
+          </Pressable>
+        </View>
+      ) : null}
+
       {isRecording ? (
         <View className="flex-row items-center justify-center gap-2 px-4 py-2">
           <View className="h-2 w-2 rounded-full bg-red-500" />
@@ -95,14 +132,16 @@ export function MessageComposer({
       ) : null}
 
       <View className="flex-row items-center gap-2 px-3 pt-3">
-        <ComposerIconButton
-          icon="images"
-          color={colors.accent}
-          backgroundColor={`${colors.accent}18`}
-          onPress={() => void onGalleryPress()}
-          disabled={busy}
-          accessibilityLabel="Send photo or video"
-        />
+        {!isEditing ? (
+          <ComposerIconButton
+            icon="images"
+            color={colors.accent}
+            backgroundColor={`${colors.accent}18`}
+            onPress={() => void onGalleryPress()}
+            disabled={busy}
+            accessibilityLabel="Send photo or video"
+          />
+        ) : null}
 
         <View
           className="min-w-0 flex-1 justify-center rounded-full bg-section px-4 dark:bg-d-surface"
@@ -113,9 +152,11 @@ export function MessageComposer({
             editable={!busy}
             onChangeText={(value) => {
               setText(value);
-              onTypingChange?.(value.trim().length > 0);
+              if (!isEditing) {
+                onTypingChange?.(value.trim().length > 0);
+              }
             }}
-            placeholder={placeholder}
+            placeholder={isEditing ? "Edit your message…" : placeholder}
             placeholderTextColor={colors.mutedForeground}
             multiline
             textAlignVertical="center"
@@ -136,10 +177,12 @@ export function MessageComposer({
             disabled={busy}
             className="items-center justify-center rounded-full bg-primary"
             style={{ width: CONTROL, height: CONTROL, opacity: busy ? 0.5 : 1 }}
-            accessibilityLabel="Send message"
+            accessibilityLabel={isEditing ? "Save edited message" : "Send message"}
           >
-            <Ionicons name="send" size={18} color={colors.white} />
+            <Ionicons name={isEditing ? "checkmark" : "send"} size={18} color={colors.white} />
           </Pressable>
+        ) : isEditing ? (
+          <View style={{ width: CONTROL, height: CONTROL }} />
         ) : (
           <Pressable
             onPressIn={() => void onMicPressIn()}

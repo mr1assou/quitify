@@ -10,6 +10,8 @@ import {
 import { useApp } from "@/context/AppContext";
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import {
+  deleteChatMessage as deleteChatMessageApi,
+  editChatMessage as editChatMessageApi,
   fetchChatMessages,
   fetchChatThreads,
   markChatThreadRead,
@@ -148,6 +150,7 @@ type Action =
       tempId: string;
       message: ChatMessage;
     }
+  | { type: "PATCH_CHAT_MESSAGE"; message: ChatMessage }
   | { type: "PATCH_COMMENT_VOTE"; commentId: string; vote: PostVote }
   | { type: "SYNC_COMMENT_ENGAGEMENT"; commentId: string; engagement: BackendPostCommentEngagement }
   | { type: "SET_MESSAGES_SEEN"; threadId: string; lastReadAt: number }
@@ -663,6 +666,20 @@ function reducer(state: State, action: Action): State {
       return { ...state, threads, messagesById };
     }
 
+    case "PATCH_CHAT_MESSAGE": {
+      const existing = state.messagesById[action.message.id];
+      if (!existing) return state;
+      const messagesById = {
+        ...state.messagesById,
+        [action.message.id]: {
+          ...existing,
+          ...action.message,
+          readStatus: existing.readStatus,
+        },
+      };
+      return { ...state, messagesById };
+    }
+
     case "SET_MESSAGES_SEEN": {
       const threads = state.threads.map((thread) => {
         if (thread.id !== action.threadId) return thread;
@@ -731,7 +748,10 @@ type CommunityContextValue = {
     threadId?: string,
   ) => Promise<void>;
   markThreadRead: (threadId: string) => Promise<void>;
+  editChatMessage: (threadId: string, messageId: string, text: string) => Promise<boolean>;
+  deleteChatMessage: (threadId: string, messageId: string) => Promise<boolean>;
   receiveChatMessage: (message: ChatMessage, participant?: CommunityUser) => void;
+  applyChatMessageUpdate: (message: ChatMessage) => void;
   setMessagesSeen: (threadId: string, lastReadAt: number, readerUserId: number) => void;
   resetCommunity: () => void;
 };
@@ -1094,6 +1114,54 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const applyChatMessageUpdate = useCallback((message: ChatMessage) => {
+    dispatch({ type: "PATCH_CHAT_MESSAGE", message });
+  }, []);
+
+  const editChatMessage = useCallback(
+    async (threadId: string, messageId: string, text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed || !currentUserId) return false;
+
+      try {
+        const updated = await editChatMessageApi(
+          Number(threadId),
+          Number(messageId),
+          { text: trimmed },
+        );
+        dispatch({
+          type: "PATCH_CHAT_MESSAGE",
+          message: mapBackendMessage(updated, currentUserId),
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [currentUserId],
+  );
+
+  const deleteChatMessage = useCallback(
+    async (threadId: string, messageId: string) => {
+      if (!currentUserId) return false;
+
+      try {
+        const deleted = await deleteChatMessageApi(
+          Number(threadId),
+          Number(messageId),
+        );
+        dispatch({
+          type: "PATCH_CHAT_MESSAGE",
+          message: mapBackendMessage(deleted, currentUserId),
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [currentUserId],
+  );
+
   const setMessagesSeen = useCallback(
     (threadId: string, lastReadAt: number, readerUserId: number) => {
       if (!currentUserId || Number(readerUserId) === Number(currentUserId)) return;
@@ -1264,7 +1332,10 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       sendMessage,
       sendMediaMessages,
       markThreadRead,
+      editChatMessage,
+      deleteChatMessage,
       receiveChatMessage,
+      applyChatMessageUpdate,
       setMessagesSeen,
       resetCommunity,
     }),
@@ -1297,7 +1368,10 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       sendMessage,
       sendMediaMessages,
       markThreadRead,
+      editChatMessage,
+      deleteChatMessage,
       receiveChatMessage,
+      applyChatMessageUpdate,
       setMessagesSeen,
       resetCommunity,
     ],

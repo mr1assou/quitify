@@ -30,6 +30,8 @@ export function mapBackendMessage(
     mediaUrl: message.media_url ?? undefined,
     mediaMimeType: message.media_mime_type ?? undefined,
     mediaDurationMs: message.media_duration_ms ?? undefined,
+    isDeleted: message.is_deleted,
+    editedAt: message.edited_at ? Date.parse(message.edited_at) : undefined,
   };
 }
 

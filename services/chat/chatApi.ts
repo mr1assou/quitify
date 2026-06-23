@@ -8,6 +8,7 @@ import type {
   BackendChatMessage,
   BackendSupportUsersPage,
   SendChatMessagePayload,
+  EditChatMessagePayload,
 } from "@/types/chat/chatApi";
 
 async function parseError(res: Response, fallback: string): Promise<never> {
@@ -73,6 +74,36 @@ export async function sendChatMessage(
     body: JSON.stringify(payload),
   });
   if (!res.ok) return parseError(res, "Could not send message");
+  return res.json() as Promise<BackendChatMessage>;
+}
+
+export async function editChatMessage(
+  threadId: number,
+  messageId: number,
+  payload: EditChatMessagePayload,
+): Promise<BackendChatMessage> {
+  const res = await authenticatedFetch(
+    `/chat/threads/${threadId}/messages/${messageId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    },
+  );
+  if (!res.ok) return parseError(res, "Could not edit message");
+  return res.json() as Promise<BackendChatMessage>;
+}
+
+export async function deleteChatMessage(
+  threadId: number,
+  messageId: number,
+): Promise<BackendChatMessage> {
+  const res = await authenticatedFetch(
+    `/chat/threads/${threadId}/messages/${messageId}`,
+    {
+      method: "DELETE",
+    },
+  );
+  if (!res.ok) return parseError(res, "Could not delete message");
   return res.json() as Promise<BackendChatMessage>;
 }
 

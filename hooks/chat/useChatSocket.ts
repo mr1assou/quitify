@@ -14,7 +14,8 @@ import { getAccessToken } from "@/utils/auth/authStorage";
 /** Keeps the chat WebSocket alive while the user is signed in. */
 export function useChatSocket() {
   const { isHydrated, state } = useApp();
-  const { loadChatThreads, receiveChatMessage, setMessagesSeen } = useCommunity();
+  const { loadChatThreads, receiveChatMessage, applyChatMessageUpdate, setMessagesSeen } =
+    useCommunity();
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const signedIn = isHydrated && Boolean(state.account);
   const userId = state.account?.userId ?? null;
@@ -37,6 +38,12 @@ export function useChatSocket() {
           if (payload.sender_id === userId) return;
           receiveChatMessage(mapBackendMessage(payload, userId));
         },
+        onMessageUpdated: (payload) => {
+          applyChatMessageUpdate(mapBackendMessage(payload, userId));
+        },
+        onMessageDeleted: (payload) => {
+          applyChatMessageUpdate(mapBackendMessage(payload, userId));
+        },
         onMessagesSeen: (payload) => {
           setMessagesSeen(
             String(payload.thread_id),
@@ -57,7 +64,7 @@ export function useChatSocket() {
       unsubscribe();
       disconnectChatSocket();
     };
-  }, [loadChatThreads, receiveChatMessage, setMessagesSeen, signedIn, userId]);
+  }, [applyChatMessageUpdate, loadChatThreads, receiveChatMessage, setMessagesSeen, signedIn, userId]);
 
   useEffect(() => {
     if (!signedIn || !userId) return;

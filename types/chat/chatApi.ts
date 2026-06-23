@@ -10,6 +10,8 @@ export type BackendChatMessage = {
   media_mime_type: string | null;
   media_duration_ms: number | null;
   media_size_bytes: number | null;
+  is_deleted: boolean;
+  edited_at: string | null;
   created_at: string;
 };
 
@@ -71,4 +73,8 @@ export type SendChatMessagePayload = {
   media_mime_type?: string;
   media_duration_ms?: number;
   media_size_bytes?: number;
+};
+
+export type EditChatMessagePayload = {
+  text: string;
 };
