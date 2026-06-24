@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MissionTaskCardStack } from "@/components/feature/missions/MissionTaskCardStack";
@@ -29,6 +29,16 @@ export function MissionDayTasksScreen({ missionDay }: Props) {
           <Pressable onPress={() => safeRouter.back()} className="mt-6 active:opacity-70">
             <Text className="text-base font-semibold text-primary">Go back</Text>
           </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (session.planLoading && !session.isTasksReady) {
+    return (
+      <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       </SafeAreaView>
     );

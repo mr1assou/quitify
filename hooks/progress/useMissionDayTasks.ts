@@ -11,6 +11,8 @@ export function useMissionDayTasks(missionDay: number) {
     unlockedThroughDay,
     resolveTasksForDay,
     toggleTask: togglePlanTask,
+    planLoading,
+    planState,
   } = usePlanProgress();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [togglingTaskId, setTogglingTaskId] = useState<string | null>(null);
@@ -52,6 +54,8 @@ export function useMissionDayTasks(missionDay: number) {
 
   const completedCount = tasks.filter((task) => task.done).length;
 
+  const isTasksReady = PLAN_PREVIEW_UNLOCK_ALL || planState != null;
+
   return {
     dayPlan,
     tasks,
@@ -62,6 +66,8 @@ export function useMissionDayTasks(missionDay: number) {
     unlockedThroughDay,
     toggleTask,
     togglingTaskId,
+    planLoading,
+    isTasksReady,
     completedCount,
     totalCount: tasks.length,
   };
