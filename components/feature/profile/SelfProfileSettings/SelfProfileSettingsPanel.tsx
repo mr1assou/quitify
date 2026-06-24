@@ -1,18 +1,22 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
 
+import {
+  ResetJourneyModals,
+  type ResetJourneyModalState,
+} from "@/components/feature/profile/ResetJourneyModals";
 import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
-import { UnlockSuccessCard } from "@/components/feature/profile/UnlockSuccessCard";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
+import { useResetJourney } from "@/hooks/auth/useResetJourney";
 import type { UserProfile } from "@/types/profile/profile";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { formatDate } from "@/utils/shared/format";
 import { habitQuantityLabel } from "@/utils/profile/profileConsumptionLabel";
-import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   profile: UserProfile;
-  streakDays: number;
   isPremium: boolean;
   accountEmail?: string;
   isSignedIn: boolean;
@@ -22,7 +26,6 @@ type Props = {
 
 export function SelfProfileSettings({
   profile,
-  streakDays,
   isPremium,
   accountEmail,
   isSignedIn,
@@ -30,6 +33,8 @@ export function SelfProfileSettings({
   onPremiumChange,
 }: Props) {
   const { colors } = useTheme();
+  const resetJourney = useResetJourney();
+  const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
 
   const accountRows: ListRow[] = isSignedIn
     ? [
@@ -39,11 +44,10 @@ export function SelfProfileSettings({
           label: accountEmail ?? "Signed in",
         },
         {
-          id: "logout",
-          icon: "log-out-outline",
-          label: "Log out",
-          destructive: true,
-          onPress: onSignOut,
+          id: "reset-journey",
+          icon: "refresh-outline",
+          label: "Reset my journey",
+          onPress: () => setResetModal({ type: "confirm" }),
         },
       ]
     : [
@@ -69,12 +73,40 @@ export function SelfProfileSettings({
     },
   ];
 
+  const handleConfirmReset = () => {
+    setResetModal({ type: "resetting" });
+    void resetJourney()
+      .then(() => setResetModal(null))
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error ? error.message : "Please try again in a moment.";
+        setResetModal({
+          type: "error",
+          title: "Could not reset journey",
+          message,
+        });
+      });
+  };
+
   return (
     <View className="gap-4">
       <ThemeSwitcher />
-      <UnlockSuccessCard daysQuit={streakDays} />
       <ListGroup rows={accountRows} />
       <ListGroup rows={programRows} />
+
+      {isSignedIn ? (
+        <ListGroup
+          rows={[
+            {
+              id: "logout",
+              icon: "log-out-outline",
+              label: "Log out",
+              destructive: true,
+              onPress: onSignOut,
+            },
+          ]}
+        />
+      ) : null}
 
       <View className="rounded-3xl bg-section p-4 dark:bg-d-surface">
         <View className="flex-row items-center justify-between">
@@ -106,6 +138,12 @@ export function SelfProfileSettings({
           </View>
         </Pressable>
       ) : null}
+
+      <ResetJourneyModals
+        state={resetModal}
+        onClose={() => setResetModal(null)}
+        onConfirm={handleConfirmReset}
+      />
     </View>
   );
 }

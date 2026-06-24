@@ -13,6 +13,7 @@ type Props = {
   profile: PlayerProfile;
   isPremium?: boolean;
   variant?: "full" | "menu";
+  memberSinceLabel?: string;
   onProfilePress?: () => void;
   onEditAvatarPress?: () => void;
 };
@@ -47,6 +48,7 @@ export function UserProfileHero({
   profile,
   isPremium = false,
   variant = "full",
+  memberSinceLabel,
   onProfilePress,
   onEditAvatarPress,
 }: Props) {
@@ -54,6 +56,7 @@ export function UserProfileHero({
   const avatarRank = profile.rank > 0 ? profile.rank : 1;
   const canEditAvatar = profile.isCurrentUser && Boolean(onEditAvatarPress);
   const showOnlineDot = typeof profile.isOnline === "boolean" && !canEditAvatar;
+  const memberSince = memberSinceLabel?.trim() || profile.memberSinceLabel?.trim();
 
   const avatar = (
     <View>
@@ -130,7 +133,7 @@ export function UserProfileHero({
                 {badgeName}
               </Text>
               <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
-                Member since {profile.memberSinceLabel}
+                {memberSince ? `Member since ${memberSince}` : "Member"}
               </Text>
             </View>
           </View>

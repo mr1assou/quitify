@@ -4,6 +4,7 @@ export type BackendUserStreakResponse = {
   streak_start: string | null;
   attempt_number: number;
   max_duration_ms: number;
+  member_since: string;
 };
 
 export type BackendUserPresenceResponse = {

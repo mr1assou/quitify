@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import { useAppHydration } from "@/hooks/auth/useAppHydration";
+import type { UserSessionFromApi } from "@/services/auth/loadUserSessionFromApi";
 import type {
   AppFlags,
   AppState,
@@ -43,6 +44,11 @@ type Action =
   | { type: "SET_ACCOUNT"; account: UserAccount | null }
   | { type: "ADD_LOCAL_FREEDOM_POINTS"; amount: number }
   | { type: "SET_FLAG"; key: keyof AppFlags; value: boolean }
+  | {
+      type: "RESET_JOURNEY";
+      profile: UserProfile;
+      account: UserAccount;
+    }
   | { type: "RESET" };
 
 const initialFlags: AppFlags = {
@@ -132,6 +138,17 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, account: action.account };
     case "SET_FLAG":
       return { ...state, flags: { ...state.flags, [action.key]: action.value } };
+    case "RESET_JOURNEY":
+      return {
+        ...state,
+        isOnboarded: true,
+        profile: action.profile,
+        account: action.account,
+        cravings: [],
+        missionLogs: {},
+        localFreedomPoints: 0,
+        flags: initialFlags,
+      };
     case "RESET":
       return initialState;
     default:
@@ -158,6 +175,7 @@ type AppContextValue = {
   setAccount: (account: UserAccount | null) => void;
   addLocalFreedomPoints: (amount: number) => void;
   logout: () => Promise<void>;
+  applyJourneyReset: (session: UserSessionFromApi) => void;
   setFlag: (key: keyof AppFlags, value: boolean) => void;
   reset: () => void;
 };
@@ -224,6 +242,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "RESET" });
   }, []);
 
+  const applyJourneyReset = useCallback((session: UserSessionFromApi) => {
+    if (!session.profile || !session.account) return;
+    dispatch({
+      type: "RESET_JOURNEY",
+      profile: session.profile,
+      account: session.account,
+    });
+  }, []);
+
   const setFlag = useCallback(
     (key: keyof AppFlags, value: boolean) => dispatch({ type: "SET_FLAG", key, value }),
     [],
@@ -244,6 +271,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setAccount,
       addLocalFreedomPoints,
       logout,
+      applyJourneyReset,
       setFlag,
       reset,
     }),
@@ -260,6 +288,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setAccount,
       addLocalFreedomPoints,
       logout,
+      applyJourneyReset,
       setFlag,
       reset,
     ],

@@ -14,6 +14,7 @@ type Props = {
   showStats?: boolean;
   showActivity?: boolean;
   heroVariant?: "full" | "menu";
+  memberSinceLabel?: string;
   onHeroPress?: () => void;
   onEditAvatarPress?: () => void;
   streak?: ProfileStreak;
@@ -26,6 +27,7 @@ export function UserProfileContent({
   showStats = true,
   showActivity = true,
   heroVariant = "full",
+  memberSinceLabel,
   onHeroPress,
   onEditAvatarPress,
   streak,
@@ -36,6 +38,7 @@ export function UserProfileContent({
         profile={profile}
         isPremium={isPremium}
         variant={heroVariant}
+        memberSinceLabel={memberSinceLabel}
         onProfilePress={onHeroPress}
         onEditAvatarPress={onEditAvatarPress}
       />

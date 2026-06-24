@@ -3,6 +3,7 @@ import { DEFAULT_USER_ROLE } from "@/constants/auth/userRoles";
 import { buildProfileFromMe } from "@/utils/auth/buildProfileFromMe";
 
 import { fetchAuthMe } from "./meApi";
+import type { AuthMeResponse } from "./meApi";
 
 export type UserSessionFromApi = {
   isOnboarded: boolean;
@@ -10,16 +11,16 @@ export type UserSessionFromApi = {
   account: UserAccount | null;
 };
 
-/** Loads onboarded state + profile from `GET /auth/me` (no local profile cache). */
-export async function loadUserSessionFromApi(
-  accessToken: string,
-): Promise<UserSessionFromApi> {
-  const me = await fetchAuthMe(accessToken);
+/** Maps `/auth/me` (or reset-journey) payload into app session state. */
+export function mapAuthMeToSession(
+  me: AuthMeResponse,
+  previousAccount?: UserAccount | null,
+): UserSessionFromApi {
   const account: UserAccount = {
     userId: me.userId,
     email: me.email,
     name: me.name,
-    createdAt: Date.now(),
+    createdAt: previousAccount?.createdAt ?? Date.now(),
     role: me.role ?? DEFAULT_USER_ROLE,
     earnedBadgeIds: me.earnedBadgeIds ?? [],
     freedomPoints: me.freedomPoints ?? 0,
@@ -39,4 +40,12 @@ export async function loadUserSessionFromApi(
     profile: buildProfileFromMe(me),
     account,
   };
+}
+
+/** Loads onboarded state + profile from `GET /auth/me` (no local profile cache). */
+export async function loadUserSessionFromApi(
+  accessToken: string,
+): Promise<UserSessionFromApi> {
+  const me = await fetchAuthMe(accessToken);
+  return mapAuthMeToSession(me);
 }

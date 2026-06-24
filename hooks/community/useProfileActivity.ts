@@ -40,6 +40,64 @@ type RawProfileActivity = {
   upvotedMapped: ReturnType<typeof mapFeedPostsFromApi>;
 };
 
+function postsContentEqual(a: CommunityPost, b: CommunityPost): boolean {
+  return (
+    a.id === b.id &&
+    a.title === b.title &&
+    a.text === b.text &&
+    a.tagId === b.tagId &&
+    a.createdAt === b.createdAt &&
+    JSON.stringify(a.media) === JSON.stringify(b.media)
+  );
+}
+
+function postListsEqual(a: CommunityPost[], b: CommunityPost[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((post, index) => postsContentEqual(post, b[index]));
+}
+
+function syncProfilePosts(
+  posts: CommunityPost[],
+  communityPostsById: Map<string, CommunityPost>,
+  deletedPostIds: Set<string>,
+): CommunityPost[] {
+  return posts
+    .filter((post) => !deletedPostIds.has(post.id))
+    .map((post) => communityPostsById.get(post.id) ?? post);
+}
+
+function applyCommunityPostSync(
+  current: RawProfileActivity,
+  communityPosts: CommunityPost[],
+  deletedPostIds: string[],
+): RawProfileActivity {
+  const deleted = new Set(deletedPostIds);
+  const communityPostsById = new Map(communityPosts.map((post) => [post.id, post]));
+  const nextUserPosts = syncProfilePosts(
+    current.postsMapped.posts,
+    communityPostsById,
+    deleted,
+  );
+  const nextUpvotedPosts = syncProfilePosts(
+    current.upvotedMapped.posts,
+    communityPostsById,
+    deleted,
+  );
+
+  if (
+    postListsEqual(nextUserPosts, current.postsMapped.posts) &&
+    postListsEqual(nextUpvotedPosts, current.upvotedMapped.posts)
+  ) {
+    return current;
+  }
+
+  return {
+    ...current,
+    postsMapped: { ...current.postsMapped, posts: nextUserPosts },
+    upvotedMapped: { ...current.upvotedMapped, posts: nextUpvotedPosts },
+  };
+}
+
 function mapProfileComments(
   items: Awaited<ReturnType<typeof fetchUserComments>>["items"],
   communityUserId: string,
@@ -75,7 +133,7 @@ function mapProfileComments(
 
 export function useProfileActivity(profile: PlayerProfile): ProfileActivityState {
   const { state: appState } = useApp();
-  const { state: communityState } = useCommunity();
+  const { state: communityState, appendPosts } = useCommunity();
   const communityUserId = resolveProfileCommunityUserId(profile);
   const userId = resolveProfileUserId(profile, appState.account?.userId);
   const currentUserImageUrl = appState.profile?.imageUrl;
@@ -103,10 +161,16 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
 
         if (cancelled) return;
 
+        const postsMapped = mapFeedPostsFromApi(postsPage.items);
+        const upvotedMapped = mapFeedPostsFromApi(upvotedPage.items);
+
+        appendPosts(postsMapped.posts, postsMapped.authorsById);
+        appendPosts(upvotedMapped.posts, upvotedMapped.authorsById);
+
         setRawActivity({
-          postsMapped: mapFeedPostsFromApi(postsPage.items),
+          postsMapped,
           commentsItems: commentsPage.items,
-          upvotedMapped: mapFeedPostsFromApi(upvotedPage.items),
+          upvotedMapped,
         });
       } catch {
         if (!cancelled) setRawActivity(null);
@@ -118,7 +182,18 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
     return () => {
       cancelled = true;
     };
-  }, [userId]);
+  }, [appendPosts, userId]);
+
+  useEffect(() => {
+    setRawActivity((current) => {
+      if (!current) return current;
+      return applyCommunityPostSync(
+        current,
+        communityState.posts,
+        communityState.deletedPostIds,
+      );
+    });
+  }, [communityState.deletedPostIds, communityState.posts]);
 
   return useMemo(() => {
     if (!userId) {

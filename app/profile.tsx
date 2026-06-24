@@ -7,14 +7,12 @@ import { UserProfileContent } from "@/components/feature/profile/UserProfileCont
 import { useApp } from "@/context/AppContext";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useSelfPlayerProfile } from "@/hooks/community/useSelfPlayerProfile";
-import { useStats } from "@/hooks/stats/useStats";
 import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function ProfileModal() {
   const { state, setPremium } = useApp();
   const signOut = useLogout();
-  const stats = useStats();
   const playerProfile = useSelfPlayerProfile();
   const profile = state.profile;
 
@@ -44,7 +42,6 @@ export default function ProfileModal() {
         <View className="mt-8 gap-4 px-6">
           <SelfProfileSettings
             profile={profile}
-            streakDays={stats?.streakDays ?? 0}
             isPremium={state.isPremium}
             accountEmail={state.account?.email}
             isSignedIn={!!state.account}

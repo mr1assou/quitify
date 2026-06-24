@@ -38,7 +38,7 @@ import {
   mapCommentAuthorToCommunityUser,
   mapCommentsFromApi,
 } from "@/utils/community/mapBackendComment";
-import { mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
+import { mapBackendPostToCommunityPost, mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
 import { applyEngagementToPost } from "@/utils/community/postEngagement";
 import { applyPostVote } from "@/utils/community/postVote";
 import { mergeUpdatedPost } from "@/utils/community/mergeUpdatedPost";
@@ -67,6 +67,8 @@ type State = {
   commentsHasMoreByPostId: Record<string, boolean>;
   commentsLoadingMoreByPostId: Record<string, boolean>;
   commentsLoadingByPostId: Record<string, boolean>;
+  /** Post ids removed locally (profile + feed stay in sync). */
+  deletedPostIds: string[];
 };
 
 type Action =
@@ -169,6 +171,7 @@ const initialState: State = {
   commentsHasMoreByPostId: {},
   commentsLoadingMoreByPostId: {},
   commentsLoadingByPostId: {},
+  deletedPostIds: [],
 };
 
 function mergeCommunityUser(
@@ -439,15 +442,20 @@ function reducer(state: State, action: Action): State {
     }
 
     case "UPDATE_POST": {
-      const posts = state.posts.map((post) =>
-        post.id === action.post.id ? action.post : post,
-      );
+      const index = state.posts.findIndex((post) => post.id === action.post.id);
+      const posts =
+        index >= 0
+          ? state.posts.map((post) => (post.id === action.post.id ? action.post : post))
+          : [...state.posts, action.post];
       return { ...state, posts };
     }
 
     case "DELETE_POST": {
       const posts = state.posts.filter((post) => post.id !== action.postId);
-      return { ...state, posts };
+      const deletedPostIds = state.deletedPostIds.includes(action.postId)
+        ? state.deletedPostIds
+        : [...state.deletedPostIds, action.postId];
+      return { ...state, posts, deletedPostIds };
     }
 
     case "PATCH_AUTHOR": {
@@ -988,10 +996,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
 
   const updatePost = useCallback(async (postId: string, payload: UpdatePostPayload) => {
     const existing = state.posts.find((post) => post.id === postId);
-    if (!existing) return;
-
     const updated = await updatePostApi(postId, payload);
-    dispatch({ type: "UPDATE_POST", post: mergeUpdatedPost(existing, updated) });
+    const base = existing ?? mapBackendPostToCommunityPost(updated);
+    dispatch({ type: "UPDATE_POST", post: mergeUpdatedPost(base, updated) });
   }, [state.posts]);
 
   const deletePost = useCallback((postId: string) => {

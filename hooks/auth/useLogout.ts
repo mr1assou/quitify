@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 import { WELCOME_ROUTE } from "@/constants/app/routes";
 import { useApp } from "@/context/AppContext";
@@ -11,11 +11,19 @@ export function useLogout() {
   const { logout } = useApp();
   const { resetCommunity } = useCommunity();
   const { reset: resetOnboardingDraft } = useOnboarding();
+  const loggingOutRef = useRef(false);
 
   return useCallback(async () => {
-    await logout();
-    resetCommunity();
-    resetOnboardingDraft();
-    safeRouter.replace(WELCOME_ROUTE);
+    if (loggingOutRef.current) return;
+    loggingOutRef.current = true;
+
+    try {
+      await logout();
+      resetCommunity();
+      resetOnboardingDraft();
+      safeRouter.replace(WELCOME_ROUTE);
+    } catch {
+      loggingOutRef.current = false;
+    }
   }, [logout, resetCommunity, resetOnboardingDraft]);
 }

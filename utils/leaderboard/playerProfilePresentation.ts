@@ -65,10 +65,10 @@ export function buildPlayerProfile(
       resolveCountryLabel(overrides?.countryCode ?? entry.countryCode, entry.rank),
     isOnline: entry.isOnline ?? entry.isCurrentUser,
     smokeFreeDays,
-    bestSmokeFreeDays: bestSmokeFreeDaysForRank(smokeFreeDays, entry.rank),
+    bestSmokeFreeDays: smokeFreeDays,
     isCurrentUser: entry.isCurrentUser,
     bio: overrides?.bio ?? "",
-    memberSinceLabel: memberSinceLabelForRank(entry.rank),
+    memberSinceLabel: "",
     avatarUrl: overrides?.avatarUrl,
   };
 }

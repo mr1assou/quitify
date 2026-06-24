@@ -1,7 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Alert, Pressable } from "react-native";
+import { useState } from "react";
+import { Pressable } from "react-native";
 
+import {
+  PostActionModals,
+  type PostModalState,
+} from "@/components/feature/community/PostActionModals";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { deletePost as deletePostApi } from "@/services/posts/postsApi";
@@ -13,39 +18,48 @@ type Props = {
 export function PostOwnerMenu({ postId }: Props) {
   const { colors } = useTheme();
   const { deletePost } = useCommunity();
+  const [modal, setModal] = useState<PostModalState | null>(null);
+
+  const closeModal = () => setModal(null);
 
   const onEdit = () => {
+    closeModal();
     router.push(`/post-composer?editId=${postId}`);
   };
 
-  const onDelete = () => {
-    Alert.alert("Delete post?", "This cannot be undone.", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          void deletePostApi(postId)
-            .then(() => deletePost(postId))
-            .catch(() => Alert.alert("Could not delete post", "Please try again."));
-        },
-      },
-    ]);
+  const onConfirmDelete = () => {
+    setModal({ type: "deleting" });
+    void deletePostApi(postId)
+      .then(() => {
+        deletePost(postId);
+        closeModal();
+      })
+      .catch(() => {
+        setModal({
+          type: "error",
+          title: "Could not delete post",
+          message: "Please try again.",
+        });
+      });
   };
 
   return (
-    <Pressable
-      hitSlop={8}
-      onPress={() =>
-        Alert.alert("Post options", undefined, [
-          { text: "Edit", onPress: onEdit },
-          { text: "Delete", style: "destructive", onPress: onDelete },
-          { text: "Cancel", style: "cancel" },
-        ])
-      }
-      className="ml-2 h-9 w-9 items-center justify-center rounded-full"
-    >
-      <Ionicons name="ellipsis-horizontal" size={20} color={colors.mutedForeground} />
-    </Pressable>
+    <>
+      <Pressable
+        hitSlop={8}
+        onPress={() => setModal({ type: "options" })}
+        className="ml-2 h-9 w-9 items-center justify-center rounded-full"
+      >
+        <Ionicons name="ellipsis-horizontal" size={20} color={colors.mutedForeground} />
+      </Pressable>
+
+      <PostActionModals
+        state={modal}
+        onClose={closeModal}
+        onEdit={onEdit}
+        onRequestDelete={() => setModal({ type: "confirmDelete" })}
+        onConfirmDelete={onConfirmDelete}
+      />
+    </>
   );
 }
