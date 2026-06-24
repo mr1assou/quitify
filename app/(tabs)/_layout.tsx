@@ -6,8 +6,8 @@ export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }} tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen name="index" options={{ title: "Home" }} />
-      <Tabs.Screen name="missions" options={{ title: "Your missions" }} />
       <Tabs.Screen name="community" options={{ title: "Community" }} />
+      <Tabs.Screen name="missions" options={{ title: "Your missions" }} />
       <Tabs.Screen name="stats" options={{ title: "Stats" }} />
       <Tabs.Screen name="rewards" options={{ title: "Achievement" }} />
     </Tabs>

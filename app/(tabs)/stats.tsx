@@ -59,8 +59,7 @@ export default function Stats() {
   }, [leaderboard, progress]);
 
   const profile = state.profile;
-  const timeZone =
-    attempts.data?.timezone || goals.data?.timezone || getDeviceTimezone();
+  const timeZone = getDeviceTimezone();
 
   const onRefresh = async () => {
     setRefreshing(true);

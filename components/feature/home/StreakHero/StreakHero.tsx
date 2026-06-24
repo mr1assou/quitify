@@ -72,7 +72,7 @@ export function StreakHero({
           />
           <StatPill
             icon="ban"
-            tint={colors.secondary}
+            tint={colors.primary}
             value={formatNumber(cigarettesAvoided)}
             label="cigs avoided"
           />

@@ -13,7 +13,7 @@ import { useTheme } from "@/context/ThemeContext";
 
 const ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   index: "home",
-  missions: "flag",
+  missions: "map",
   community: "people",
   stats: "stats-chart",
   rewards: "trophy",

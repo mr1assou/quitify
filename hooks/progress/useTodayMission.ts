@@ -1,102 +1,35 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
-import { getMissionForDay } from "@/constants/progress/missions";
-import { useApp } from "@/context/AppContext";
-import { useNow } from "@/hooks/shared/useNow";
-import type { ResolvedTask, TodayMission } from "@/types";
-import { dayKey } from "@/utils/shared/dates";
-import { currentMissionDay } from "@/utils/streak";
+import { arePlanTasksComplete, getDayPlan } from "@/constants/progress/plan";
+import { usePlanProgress } from "@/hooks/progress/usePlanProgress";
+import type { ResolvedPlanTask, TodayMission } from "@/types";
 
-import { useTodayCravings } from "@/hooks/stats/useStats";
-
-export type { ResolvedTask, TodayMission } from "@/types";
+export type { ResolvedPlanTask, TodayMission } from "@/types";
 
 export function useTodayMission(): TodayMission | null {
-  const { state, toggleMissionTask, completeMission } = useApp();
-  const now = useNow(60_000);
-  const todayCravings = useTodayCravings();
-
-  const computed = useMemo(() => {
-    if (!state.profile) return null;
-    const day = currentMissionDay(state.profile, now);
-    const mission = getMissionForDay(day);
-    const key = dayKey(now);
-    const log = state.missionLogs[key];
-
-    const handledToday = todayCravings.some((c) => c.outcome === "resisted");
-    const sessionLoggedToday = todayCravings.length > 0;
-    const noSmokeToday = !todayCravings.some(
-      (c) => c.outcome === "lapse" || c.outcome === "relapse",
-    );
-
-    const tasks: ResolvedTask[] = mission.tasks.map((t) => {
-      let done = false;
-      switch (t.type) {
-        case "no-smoke-today":
-          done = noSmokeToday;
-          break;
-        case "handle-craving-today":
-          done = handledToday;
-          break;
-        case "log-craving-session":
-          done = sessionLoggedToday;
-          break;
-        case "manual":
-          done = log?.taskStates?.[t.id] ?? false;
-          break;
-      }
-      return { ...t, done };
-    });
-
-    const completedCount = tasks.filter((t) => t.done).length;
-    const totalCount = tasks.length;
-    const progress = totalCount === 0 ? 0 : completedCount / totalCount;
-    const isComplete = completedCount === totalCount && totalCount > 0;
-
-    return {
-      day,
-      mission,
-      tasks,
-      completedCount,
-      totalCount,
-      progress,
-      isComplete,
-      alreadyMarkedComplete: !!log?.completedAt,
-    };
-  }, [state.profile, state.missionLogs, todayCravings, now]);
-
-  useEffect(() => {
-    if (computed?.isComplete && !computed.alreadyMarkedComplete) {
-      completeMission(computed.day);
-    }
-  }, [computed?.isComplete, computed?.alreadyMarkedComplete, computed?.day, completeMission]);
-
-  const toggleTask = useCallback(
-    (taskId: string, value: boolean) => {
-      if (!computed) return;
-      toggleMissionTask(computed.day, taskId, value);
-    },
-    [computed, toggleMissionTask],
-  );
+  const { profile, currentDay, todayTasks, toggleTask } = usePlanProgress();
 
   return useMemo(() => {
-    if (!computed) return null;
-    const {
-      mission,
-      tasks,
-      completedCount,
-      totalCount,
-      progress,
-      isComplete,
-    } = computed;
+    if (!profile) return null;
+
+    const dayPlan = getDayPlan(currentDay);
+    if (!dayPlan) return null;
+
+    const completedCount = todayTasks.filter((task) => task.done).length;
+    const totalCount = todayTasks.length;
+    const progress = totalCount === 0 ? 0 : completedCount / totalCount;
+
     return {
-      mission,
-      tasks,
+      day: currentDay,
+      title: dayPlan.title,
+      intro: dayPlan.intro,
+      tasks: todayTasks,
       completedCount,
       totalCount,
       progress,
-      isComplete,
-      toggleTask,
+      isComplete: arePlanTasksComplete(todayTasks),
+      toggleTask: (taskId: string, value: boolean) =>
+        toggleTask(currentDay, taskId, value),
     };
-  }, [computed, toggleTask]);
+  }, [profile, currentDay, todayTasks, toggleTask]);
 }

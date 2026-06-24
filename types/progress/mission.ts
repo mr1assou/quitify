@@ -8,6 +8,8 @@ export type MissionTask = {
   id: string;
   label: string;
   type: MissionTaskType;
+  /** Longer guidance shown on the plan task swipe card. */
+  detail?: string;
 };
 
 export type Mission = {
@@ -26,9 +28,13 @@ export type MissionLog = {
 
 export type ResolvedTask = MissionTask & { done: boolean };
 
+import type { ResolvedPlanTask } from "./quitPlan";
+
 export type TodayMission = {
-  mission: Mission;
-  tasks: ResolvedTask[];
+  day: number;
+  title: string;
+  intro: string;
+  tasks: ResolvedPlanTask[];
   completedCount: number;
   totalCount: number;
   progress: number;

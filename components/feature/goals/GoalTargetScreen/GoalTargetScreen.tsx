@@ -1,9 +1,10 @@
 import { useFocusEffect, Redirect } from "expo-router";
-import { useCallback } from "react";
-import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useCallback, useState } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { GoalTargetPicker } from "@/components/feature/goals/GoalsPicker";
+import { GoalActionModals, type GoalModalState } from "@/components/feature/goals/GoalActionModals";
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { useApp } from "@/context/AppContext";
@@ -23,6 +24,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   const { goals, minTargets, setGoal, refresh, isReady } = useUserGoals();
   const now = useNow(1000);
   const isEdit = mode === "edit";
+  const [goalModal, setGoalModal] = useState<GoalModalState | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -40,7 +42,11 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
         await setGoal(GOAL_TYPE, days);
         safeRouter.back();
       } catch {
-        Alert.alert("Could not save goal", "Please try again.");
+        setGoalModal({
+          type: "error",
+          title: "Could not save goal",
+          message: "Please try again.",
+        });
       }
     },
     [setGoal],
@@ -92,6 +98,11 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
           />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <GoalActionModals
+        state={goalModal}
+        onClose={() => setGoalModal(null)}
+      />
     </SafeAreaView>
   );
 }

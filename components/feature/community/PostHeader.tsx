@@ -83,7 +83,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
               {author.name}
             </Text>
             <Text className="ml-1.5 shrink-0 text-xs text-muted-foreground dark:text-d-muted">
-              · {formatRelativeTime(createdAt)}
+              · {formatRelativeTime(createdAt)} 
             </Text>
           </View>
 

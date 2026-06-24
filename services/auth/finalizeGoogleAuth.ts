@@ -1,12 +1,10 @@
 import type { OnboardingDraft, UserAccount, UserProfile } from "@/types";
-import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
 import { saveAuthTokens } from "@/utils/auth/authStorage";
 import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayload";
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import { syncOnboardingToBackend } from "./syncOnboardingApi";
-import { updateUserPreferences } from "./preferencesApi";
 import type { GoogleAuthResponse } from "./types";
 
 type CompleteHandlers = {
@@ -26,7 +24,6 @@ export async function finalizeGoogleAuth(
 
   finishPromise = (async () => {
     await saveAuthTokens(auth.accessToken, auth.refreshToken);
-    await updateUserPreferences({ timezone: getDeviceTimezone() });
 
     if (auth.isNewUser) {
       if (!isOnboardingDraftComplete(draft)) {

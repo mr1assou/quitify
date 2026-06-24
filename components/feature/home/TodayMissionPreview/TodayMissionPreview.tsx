@@ -14,7 +14,7 @@ type Props = {
 
 export function TodayMissionPreview({ mission, onPress }: Props) {
   const { colors } = useTheme();
-  const { mission: m, completedCount, totalCount, progress, isComplete } = mission;
+  const { day, title, completedCount, totalCount, progress, isComplete } = mission;
 
   return (
     <Animated.View entering={FadeIn.duration(450)}>
@@ -35,10 +35,10 @@ export function TodayMissionPreview({ mission, onPress }: Props) {
               </View>
               <View>
                 <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-                  Today&apos;s mission · Day {m.day}
+                  Today&apos;s mission · Day {day}
                 </Text>
                 <Text className="text-base font-bold text-foreground dark:text-d-text">
-                  {m.title}
+                  {title}
                 </Text>
               </View>
             </View>

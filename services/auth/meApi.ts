@@ -20,7 +20,6 @@ export type AuthMeResponse = {
   cigarettesPerPack?: number;
   packPrice?: string;
   imageUrl?: string;
-  timezone?: string;
   motivationCardIndex?: number;
   tipsCardIndex?: number;
   savedTipCardIds?: string[];

@@ -6,9 +6,41 @@ export const MISSIONS: Mission[] = [
     title: "Make it through Day 1",
     description: "The first day is the hardest. Stay close to the app.",
     tasks: [
-      { id: "no-smoke", label: "Stay smoke-free today", type: "no-smoke-today" },
-      { id: "handle-craving", label: "Handle 1 craving", type: "handle-craving-today" },
-      { id: "water", label: "Drink 2 glasses of water", type: "manual" },
+      {
+        id: "no-smoke",
+        label: "Stay smoke-free today",
+        type: "no-smoke-today",
+        detail:
+          "Every hour without a cigarette is a real win. Your body already starts healing within minutes of your last smoke.",
+      },
+      {
+        id: "handle-craving",
+        label: "Handle 1 craving",
+        type: "handle-craving-today",
+        detail:
+          "When an urge hits, open a craving session and ride it out. One resisted craving proves you can do this.",
+      },
+      {
+        id: "water",
+        label: "Drink 2 glasses of water",
+        type: "manual",
+        detail:
+          "Cold water resets your mouth and throat. Sip slowly instead of reaching for a cigarette.",
+      },
+      {
+        id: "triggers",
+        label: "Avoid your top trigger once",
+        type: "manual",
+        detail:
+          "Skip the smoke break, change seats, or step away from anyone lighting up. Break the pattern once today.",
+      },
+      {
+        id: "breath",
+        label: "Take 5 slow breaths",
+        type: "manual",
+        detail:
+          "Breathe in for four counts, hold briefly, and breathe out for six. Long exhales calm the nicotine urge.",
+      },
     ],
   },
   {
@@ -148,4 +180,8 @@ export function getMissionForDay(day: number): Mission {
   if (day <= MISSIONS.length) return MISSIONS[day - 1];
   const idx = ((day - 1) % MISSIONS.length + MISSIONS.length) % MISSIONS.length;
   return { ...MISSIONS[idx], day };
+}
+
+export function missionPlanLabel(day: number): string {
+  return `Your plan for Day ${day}`;
 }

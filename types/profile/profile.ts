@@ -27,8 +27,6 @@ export type UserProfile = {
   /** User-uploaded profile photo URL (R2). */
   imageUrl?: string;
   currency: string;
-  /** IANA timezone from profile, e.g. "Europe/Paris". */
-  timezone?: string;
   quitReasonIds?: string[];
   motivationLevel?: MotivationLevel;
   priorQuitAttempts?: PriorQuitAttempts;

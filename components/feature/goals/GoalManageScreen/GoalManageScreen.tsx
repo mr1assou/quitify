@@ -1,15 +1,15 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
-import { Alert, View } from "react-native";
+import { useCallback, useState } from "react";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ActiveGoalCard } from "@/components/feature/goals/ActiveGoalCard";
+import { GoalActionModals, type GoalModalState } from "@/components/feature/goals/GoalActionModals";
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
 import { Button } from "@/components/ui/Button";
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { useApp } from "@/context/AppContext";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
-import type { UserGoal } from "@/types/goals/goal";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { computeGoalProgress } from "@/utils/goals/goalProgress";
 import { currencySymbol } from "@/utils/shared/format";
@@ -21,6 +21,7 @@ type Props = {
 export function GoalManageScreen({ goalId }: Props) {
   const { state } = useApp();
   const { goals, progress, deleteGoal, refresh, isReady } = useUserGoals();
+  const [goalModal, setGoalModal] = useState<GoalModalState | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -33,6 +34,10 @@ export function GoalManageScreen({ goalId }: Props) {
   const goal = goals.find((item) => item.id === goalId);
   const isActive = goal?.status === "active";
 
+  const closeGoalModal = useCallback(() => {
+    setGoalModal(null);
+  }, []);
+
   const handleEdit = useCallback(() => {
     safeRouter.pushStack({
       pathname: "/goals/edit",
@@ -40,19 +45,24 @@ export function GoalManageScreen({ goalId }: Props) {
     });
   }, [goalId]);
 
-  const handleDelete = useCallback(() => {
-    Alert.alert("Delete goal?", "This will remove your current goal.", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          deleteGoal(goalId)
-            .then(() => safeRouter.back())
-            .catch(() => Alert.alert("Could not delete goal", "Please try again."));
-        },
-      },
-    ]);
+  const handleDeletePress = useCallback(() => {
+    setGoalModal({ type: "confirmDelete" });
+  }, []);
+
+  const handleConfirmDelete = useCallback(() => {
+    setGoalModal({ type: "deleting" });
+    deleteGoal(goalId)
+      .then(() => {
+        setGoalModal(null);
+        safeRouter.back();
+      })
+      .catch(() => {
+        setGoalModal({
+          type: "error",
+          title: "Could not delete goal",
+          message: "Please try again.",
+        });
+      });
   }, [deleteGoal, goalId]);
 
   if (!state.profile) return null;
@@ -91,11 +101,17 @@ export function GoalManageScreen({ goalId }: Props) {
               size="lg"
               fullWidth
               variant="danger"
-              onPress={handleDelete}
+              onPress={handleDeletePress}
             />
           </View>
         ) : null}
       </View>
+
+      <GoalActionModals
+        state={goalModal}
+        onClose={closeGoalModal}
+        onConfirmDelete={handleConfirmDelete}
+      />
     </SafeAreaView>
   );
 }

@@ -4,19 +4,17 @@ import { Pressable, Text, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
-import type { ResolvedTask } from "@/hooks/progress/useTodayMission";
+import type { ResolvedPlanTask } from "@/types";
 
 type Props = {
-  task: ResolvedTask;
+  task: ResolvedPlanTask;
   onToggle: (taskId: string, value: boolean) => void;
 };
 
 export function TaskRow({ task, onToggle }: Props) {
   const { colors } = useTheme();
-  const interactive = task.type === "manual";
 
   const onPress = () => {
-    if (!interactive) return;
     Haptics.selectionAsync().catch(() => {});
     onToggle(task.id, !task.done);
   };
@@ -25,10 +23,7 @@ export function TaskRow({ task, onToggle }: Props) {
     <Animated.View layout={LinearTransition.springify().damping(18)}>
       <Pressable
         onPress={onPress}
-        disabled={!interactive}
-        className={`flex-row items-center rounded-2xl bg-background p-3 dark:bg-d-elevated ${
-          interactive ? "active:opacity-70" : ""
-        }`}
+        className="flex-row items-center rounded-2xl bg-background p-3 active:opacity-70 dark:bg-d-elevated"
       >
         <View
           className={`mr-3 h-7 w-7 items-center justify-center rounded-full ${
@@ -46,13 +41,8 @@ export function TaskRow({ task, onToggle }: Props) {
               : "text-foreground dark:text-d-text"
           }`}
         >
-          {task.label}
+          {task.title}
         </Text>
-        {!interactive ? (
-          <Text className="ml-2 text-[10px] uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-            auto
-          </Text>
-        ) : null}
       </Pressable>
     </Animated.View>
   );

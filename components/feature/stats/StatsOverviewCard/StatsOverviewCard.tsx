@@ -57,7 +57,7 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               value={impact.cigarettesAvoided}
               display={formatNumber(impact.cigarettesAvoided)}
               icon="ban"
-              accent="secondary"
+              accent="primary"
               delay={40}
             />
           </View>
@@ -76,7 +76,7 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               value={smokeFreeHours}
               display={formatDuration(smokeFreeHours)}
               icon="time"
-              accent="secondary"
+              accent="primary"
               delay={120}
             />
           </View>

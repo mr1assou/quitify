@@ -14,7 +14,7 @@ type Props = {
 
 export function MissionCard({ mission }: Props) {
   const { colors } = useTheme();
-  const { mission: m, tasks, completedCount, totalCount, progress, isComplete, toggleTask } =
+  const { day, title, intro, tasks, completedCount, totalCount, progress, isComplete, toggleTask } =
     mission;
 
   return (
@@ -34,17 +34,15 @@ export function MissionCard({ mission }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-              Day {m.day} · {isComplete ? "Mission complete" : "Mission of the day"}
+              Day {day} · {isComplete ? "Mission complete" : "Mission of the day"}
             </Text>
             <Text className="mt-0.5 text-lg font-bold text-foreground dark:text-d-text">
-              {m.title}
+              {title}
             </Text>
           </View>
         </View>
 
-        <Text className="mt-3 text-sm text-muted-foreground dark:text-d-muted">
-          {m.description}
-        </Text>
+        <Text className="mt-3 text-sm text-muted-foreground dark:text-d-muted">{intro}</Text>
 
         <View className="mt-4">
           <ProgressBar
