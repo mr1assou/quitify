@@ -6,12 +6,11 @@ import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotiv
 import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboarding/onboardingPrimaryInterest";
 import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboarding/onboardingPriorQuitAttempts";
 import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
-import { QUIT_START_PRESET_OPTIONS } from "@/constants/onboarding/onboardingQuitPlan";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import type { OnboardingDraft } from "@/types";
 import type { OnboardingPayload } from "@/types/onboarding/onboardingPayload";
 import { currencySymbol } from "@/utils/shared/format";
-import { resolveQuitDateForApi } from "@/utils/onboarding/resolveQuitDateForApi";
+import { resolveQuitDatePayload } from "@/utils/onboarding/resolveQuitDatePayload";
 
 type LabeledOption = { id: string; label: string };
 
@@ -30,13 +29,6 @@ function labelsForIds(
   return ids
     .map((id) => labelForId(options, id))
     .filter((label): label is string => label != null);
-}
-
-function resolveCurrencyDisplay(currency: string): string {
-  const symbol = currencySymbol(currency);
-  const trimmed = symbol.trim();
-  if (trimmed.length > 0 && trimmed !== currency) return trimmed;
-  return currency;
 }
 
 function resolvePackPriceText(draft: OnboardingDraft): string | undefined {
@@ -59,6 +51,7 @@ export function resolveOnboardingPayloadText(
   const yearsBand = NICOTINE_HABIT_YEARS_BANDS.find(
     (b) => b.id === draft.nicotineHabitYearsBand,
   );
+  const quitPayload = resolveQuitDatePayload(draft, syncedAt);
 
   return {
     step1: {
@@ -84,9 +77,9 @@ export function resolveOnboardingPayloadText(
       sex: labelForId(PROFILE_SEX_OPTIONS, draft.sex),
       country: draft.countryName,
       countryFlag: draft.countryFlag,
-      currency: resolveCurrencyDisplay(draft.currency),
-      quitDatePreset: labelForId(QUIT_START_PRESET_OPTIONS, draft.quitStartPreset),
-      quitDate: resolveQuitDateForApi(draft, syncedAt),
+      currency: draft.currency,
+      quitDatePreset: quitPayload?.quitDatePreset,
+      quitDate: quitPayload?.quitDate,
     },
     step6: {
       cigarettesPerDay:

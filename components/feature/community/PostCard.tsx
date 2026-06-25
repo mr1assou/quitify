@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function PostCard({ item, showOwnerActions = false }: Props) {
-  const { votePost, share } = useCommunity();
+  const { votePost } = useCommunity();
   const { post, author } = item;
 
   const openPost = () => safeRouter.push(`/post/${post.id}`);
@@ -41,7 +41,9 @@ export function PostCard({ item, showOwnerActions = false }: Props) {
           shareCount={post.shareCount}
           onVote={(vote) => votePost(post.id, vote)}
           onComment={openPost}
-          onShare={() => share(post.id)}
+          onShare={() =>
+            safeRouter.pushStack({ pathname: "/share-post/[id]", params: { id: post.id } })
+          }
         />
       </View>
     </View>

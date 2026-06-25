@@ -3,6 +3,7 @@ import { CHAT_MESSAGES_PAGE_SIZE } from "@/constants/chat/chatMessages";
 import type {
   BackendChatMessagesPage,
   BackendChatThreadSummary,
+  BackendChatThreadsPage,
   BackendChatUploadUrl,
   BackendMessagesSeenPayload,
   BackendChatMessage,
@@ -21,10 +22,32 @@ async function parseError(res: Response, fallback: string): Promise<never> {
   }
 }
 
-export async function fetchChatThreads(): Promise<BackendChatThreadSummary[]> {
-  const res = await authenticatedFetch("/chat/threads");
+export async function fetchChatThreadsPage(
+  offset = 0,
+  limit = 10,
+): Promise<BackendChatThreadsPage> {
+  const params = new URLSearchParams({
+    offset: String(offset),
+    limit: String(limit),
+  });
+  const res = await authenticatedFetch(`/chat/threads?${params.toString()}`);
   if (!res.ok) return parseError(res, "Could not load chats");
-  return res.json() as Promise<BackendChatThreadSummary[]>;
+  return res.json() as Promise<BackendChatThreadsPage>;
+}
+
+export async function fetchChatThreads(): Promise<BackendChatThreadSummary[]> {
+  const all: BackendChatThreadSummary[] = [];
+  let offset = 0;
+  const limit = 50;
+
+  while (true) {
+    const page = await fetchChatThreadsPage(offset, limit);
+    all.push(...page.items);
+    if (!page.has_more) break;
+    offset += limit;
+  }
+
+  return all;
 }
 
 export async function fetchSupportUsers(

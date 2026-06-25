@@ -3,9 +3,11 @@ import { Pressable, Text, View } from "react-native";
 
 import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
+import { SharedPostMessageCard } from "@/components/feature/chat/SharedPostMessageCard";
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatMessage, MessageReadStatus } from "@/types/chat/chat";
 import { formatMessageClockTime } from "@/utils/chat/formatMessageTime";
+import { parseSharedPostChatMessage } from "@/utils/chat/sharedPostMessage";
 
 type Props = {
   message: ChatMessage;
@@ -44,6 +46,10 @@ export function MessageBubble({
   const isMedia = message.kind === "image" || message.kind === "video" || message.kind === "audio";
   const hasMedia = isMedia && Boolean(message.mediaUrl) && !message.isDeleted;
   const canShowActions = fromMe && showActions && Boolean(onPressActions) && !message.isDeleted;
+  const sharedPost =
+    message.kind === "text" && message.text
+      ? parseSharedPostChatMessage(message.text)
+      : null;
 
   if (message.isDeleted) {
     return (
@@ -89,14 +95,25 @@ export function MessageBubble({
 
         <View
           className={[
-            hasMedia ? "max-w-[82%] overflow-hidden p-1.5" : "max-w-[78%] px-4 py-2.5",
+            sharedPost
+              ? "max-w-[82%]"
+              : hasMedia
+                ? "max-w-[82%] overflow-hidden p-1.5"
+                : "max-w-[78%] px-4 py-2.5",
             "rounded-3xl bg-section dark:bg-d-surface",
             fromMe ? "rounded-tr-md" : "rounded-tl-md",
           ].join(" ")}
         >
-          {hasMedia ? <ChatMessageMedia message={message} /> : null}
+          {sharedPost ? (
+            <SharedPostMessageCard
+              postId={sharedPost.postId}
+              previewText={sharedPost.previewText}
+            />
+          ) : null}
 
-          {message.text ? (
+          {!sharedPost && hasMedia ? <ChatMessageMedia message={message} /> : null}
+
+          {!sharedPost && message.text ? (
             <Text
               className={`text-base leading-5 text-foreground dark:text-d-text ${
                 hasMedia ? "px-2 pb-1 pt-2" : ""
@@ -106,7 +123,7 @@ export function MessageBubble({
             </Text>
           ) : null}
 
-          {!hasMedia && !message.text ? (
+          {!sharedPost && !hasMedia && !message.text ? (
             <Text className="text-base leading-5 text-foreground dark:text-d-text">
               {message.kind === "image"
                 ? "📷 Photo"

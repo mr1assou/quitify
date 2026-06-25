@@ -6,6 +6,7 @@ import { useGoals } from "@/context/GoalsContext";
 import { usePlanContext } from "@/context/PlanContext";
 import { mapAuthMeToSession } from "@/services/auth/loadUserSessionFromApi";
 import { resetJourneyOnServer } from "@/services/auth/resetJourneyApi";
+import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 /** Wipes server + local quit progress while keeping the signed-in account. */
@@ -16,12 +17,12 @@ export function useResetJourney() {
   const { refresh: refreshPlan } = usePlanContext();
   const resettingRef = useRef(false);
 
-  return useCallback(async () => {
+  return useCallback(async (quitDate: QuitDateApiPayload) => {
     if (resettingRef.current) return;
     resettingRef.current = true;
 
     try {
-      const me = await resetJourneyOnServer();
+      const me = await resetJourneyOnServer(quitDate);
       const session = mapAuthMeToSession(me, state.account);
 
       if (!session.profile || !session.account) {

@@ -46,8 +46,15 @@ export function formatLifeGained(totalMinutes: number): string {
 
 export function formatDuration(hours: number): string {
   if (hours < 1) {
-    const minutes = Math.max(1, Math.round(hours * 60));
-    return `${minutes}m`;
+    const totalSeconds = Math.floor(hours * 3600);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    if (minutes > 0) {
+      return seconds > 0
+        ? `${minutes}min ${String(seconds).padStart(2, "0")}s`
+        : `${minutes}min`;
+    }
+    return totalSeconds > 0 ? `${totalSeconds}s` : "0s";
   }
   if (hours < 24) {
     const h = Math.floor(hours);

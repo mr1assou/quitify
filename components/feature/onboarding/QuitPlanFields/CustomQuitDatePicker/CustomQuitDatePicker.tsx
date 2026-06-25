@@ -7,7 +7,7 @@ import {
   quitStartYearOptions,
 } from "@/constants/onboarding/onboardingQuitPlan";
 import { MONTH_OPTIONS } from "@/constants/onboarding/onboardingSex";
-import type { OnboardingDraft } from "@/types";
+import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
 import { ymdDayDropdownOptions } from "@/utils/shared/dates";
 import {
   customQuitTimestampFromDraft,
@@ -15,7 +15,7 @@ import {
 } from "@/utils/onboarding/quitPlan";
 
 type Props = {
-  draft: OnboardingDraft;
+  draft: QuitStartDateDraft;
   onMonthChange: (month: number | undefined) => void;
   onDayChange: (day: number | undefined) => void;
   onYearChange: (year: number | undefined) => void;
@@ -44,7 +44,7 @@ export function CustomQuitDatePicker({
           <SelectField
             fieldLabel="Month"
             value={draft.quitStartMonth}
-            placeholder="Mo"
+            placeholder="Month"
             options={MONTH_OPTIONS}
             onChange={onMonthChange}
             hideLabel
@@ -66,7 +66,7 @@ export function CustomQuitDatePicker({
           <SelectField
             fieldLabel="Year"
             value={draft.quitStartYear}
-            placeholder="Yr"
+            placeholder="Year"
             options={yearOptions}
             onChange={onYearChange}
             hideLabel
@@ -75,7 +75,9 @@ export function CustomQuitDatePicker({
         </View>
       </View>
       {showError ? (
-        <Text className="text-xs text-alert">Pick today or a future date.</Text>
+        <Text className="text-xs text-alert">
+          Pick today or a future date in your timezone.
+        </Text>
       ) : null}
     </View>
   );

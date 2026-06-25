@@ -1,6 +1,7 @@
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import { CHAT_MESSAGE_EDIT_WINDOW_MS } from "@/constants/chat/chatMessageMutation";
 import type { ChatMessage } from "@/types/chat/chat";
+import { parseSharedPostChatMessage } from "@/utils/chat/sharedPostMessage";
 
 function isOwnActiveMessage(message: ChatMessage): boolean {
   if (message.senderId !== CURRENT_USER_ID) return false;
@@ -27,7 +28,10 @@ export function canShowChatMessageActions(message: ChatMessage): boolean {
 
 export function formatChatMessagePreview(message: ChatMessage): string {
   if (message.isDeleted) return "Message deleted";
-  if (message.text.trim()) return message.text;
+  if (message.text.trim()) {
+    if (parseSharedPostChatMessage(message.text)) return "Shared a community post";
+    return message.text;
+  }
   if (message.kind === "image") return "📷 Photo";
   if (message.kind === "video") return "🎥 Video";
   if (message.kind === "audio") return "🎤 Voice message";

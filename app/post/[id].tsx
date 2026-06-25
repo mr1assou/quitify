@@ -22,6 +22,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityPost } from "@/hooks/community/useCommunityPost";
 import type { CommentReplyTarget } from "@/types/community/community";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { resolveCommentCount } from "@/utils/community/postEngagement";
 
 const HEADER_HEIGHT = 52;
@@ -34,7 +35,7 @@ export default function PostDetailScreen() {
     forceCommentsReload: Boolean(commentId),
   });
   const { state: appState } = useApp();
-  const { state, votePost, share, addComment, voteComment, updateComment, deleteComment } =
+  const { state, votePost, addComment, voteComment, updateComment, deleteComment } =
     useCommunity();
   const [replyTarget, setReplyTarget] = useState<CommentReplyTarget | null>(null);
 
@@ -111,7 +112,9 @@ export default function PostDetailScreen() {
               shareCount={post.shareCount}
               onVote={(vote) => votePost(post.id, vote)}
               onComment={() => {}}
-              onShare={() => share(post.id)}
+              onShare={() =>
+                safeRouter.pushStack({ pathname: "/share-post/[id]", params: { id: post.id } })
+              }
             />
           </View>
 

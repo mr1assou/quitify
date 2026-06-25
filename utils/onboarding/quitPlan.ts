@@ -1,4 +1,5 @@
 import type { OnboardingDraft } from "@/types";
+import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
 import type { QuitStartPreset } from "@/types/onboarding/onboarding";
 import { clampDayToMonth, startOfLocalDay } from "@/utils/shared/dates";
 
@@ -41,7 +42,7 @@ export function quitStartTimestampForNow(now = Date.now()): number {
   return now;
 }
 
-export function hasFullCustomQuitYmd(draft: OnboardingDraft): boolean {
+export function hasFullCustomQuitYmd(draft: QuitStartDateDraft): boolean {
   return (
     draft.quitStartMonth != null &&
     draft.quitStartDay != null &&
@@ -50,7 +51,7 @@ export function hasFullCustomQuitYmd(draft: OnboardingDraft): boolean {
 }
 
 export function customQuitTimestampFromDraft(
-  draft: OnboardingDraft,
+  draft: QuitStartDateDraft,
 ): number | null {
   if (!hasFullCustomQuitYmd(draft)) return null;
   return parseQuitStartYmd(
@@ -63,7 +64,7 @@ export function customQuitTimestampFromDraft(
 /** Draft patch when the user picks Now or Custom preset. */
 export function quitStartPatchForPreset(
   preset: QuitStartPreset,
-): Partial<OnboardingDraft> {
+): Partial<QuitStartDateDraft> {
   if (preset === "now") {
     return {
       quitStartPreset: preset,
@@ -79,15 +80,15 @@ export function quitStartPatchForPreset(
 /** Merge YMD parts with optional `startTimestamp` when the date is valid. */
 export function quitStartPatchForCustomYmd(
   ymd: Partial<QuitStartYmd>,
-  current: OnboardingDraft,
-): Partial<OnboardingDraft> {
+  current: QuitStartDateDraft,
+): Partial<QuitStartDateDraft> {
   const month = ymd.month ?? current.quitStartMonth;
   const year = ymd.year ?? current.quitStartYear;
   let day = ymd.day ?? current.quitStartDay;
   if (month != null && day != null) {
     day = clampDayToMonth(day, month, year);
   }
-  const patch: Partial<OnboardingDraft> = {
+  const patch: Partial<QuitStartDateDraft> = {
     quitStartMonth: month,
     quitStartDay: day,
     quitStartYear: year,
@@ -99,11 +100,16 @@ export function quitStartPatchForCustomYmd(
   return patch;
 }
 
-/** Step 5 — quit start date (now or custom). */
-export function isQuitDateComplete(draft: OnboardingDraft): boolean {
+/** Quit start date (now or custom, device local calendar day). */
+export function isQuitStartDateComplete(draft: QuitStartDateDraft): boolean {
   if (!draft.quitStartPreset) return false;
   if (draft.quitStartPreset === "now") {
     return Number.isFinite(draft.startTimestamp);
   }
   return customQuitTimestampFromDraft(draft) != null;
+}
+
+/** @deprecated Use `isQuitStartDateComplete`. */
+export function isQuitDateComplete(draft: OnboardingDraft): boolean {
+  return isQuitStartDateComplete(draft);
 }

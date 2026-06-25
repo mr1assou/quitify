@@ -26,5 +26,6 @@ export function buildProfileFromMe(me: AuthMeResponse): UserProfile {
     countryFlag: me.countryFlag,
     imageUrl: me.imageUrl,
     currency: me.currency ?? "USD",
+    economicsSegments: me.economicsSegments,
   };
 }

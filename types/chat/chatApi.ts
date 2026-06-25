@@ -28,6 +28,11 @@ export type BackendChatThreadSummary = {
   updated_at: string;
 };
 
+export type BackendChatThreadsPage = {
+  items: BackendChatThreadSummary[];
+  has_more: boolean;
+};
+
 export type BackendChatMessagesPage = {
   items: BackendChatMessage[];
   has_more: boolean;

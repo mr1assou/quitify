@@ -1,4 +1,4 @@
-import type { OnboardingDraft } from "@/types";
+import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
 
 /**
  * UTC quit instant sent to the API.
@@ -6,7 +6,7 @@ import type { OnboardingDraft } from "@/types";
  * - `custom` preset → local midnight of the chosen calendar day as ISO UTC
  */
 export function resolveQuitDateForApi(
-  draft: OnboardingDraft,
+  draft: QuitStartDateDraft,
   syncedAt = Date.now(),
 ): string | undefined {
   if (draft.quitStartPreset === "now") {

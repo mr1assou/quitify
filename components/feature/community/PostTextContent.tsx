@@ -15,15 +15,15 @@ export function PostTextContent({ title, text, className }: Props) {
   if (!title && !text) return null;
 
   const titleStyle = {
-    fontSize: 18,
-    fontWeight: "700" as const,
-    lineHeight: 28,
+    fontSize: 20,
+    fontWeight: "800" as const,
+    lineHeight: 26,
     color: colors.foreground,
   };
 
   const bodyStyle = {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 14,
+    lineHeight: 20,
     color: colors.foreground,
   };
 

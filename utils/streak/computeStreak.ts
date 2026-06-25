@@ -1,5 +1,6 @@
 import type { StreakStats, UserProfile } from "@/types";
 import { computeQuitImpact, elapsedMsSince } from "@/utils/stats/quitImpact";
+import { computeSegmentedQuitImpact } from "@/utils/stats/segmentedQuitImpact";
 import { MS_DAY, MS_HOUR } from "@/utils/time/ms";
 
 import { daysBetween } from "@/utils/shared/dates";
@@ -7,7 +8,15 @@ import { daysBetween } from "@/utils/shared/dates";
 export function computeStreak(profile: UserProfile, now = Date.now()): StreakStats {
   const sinceStreak = elapsedMsSince(profile.streakStart, now);
   const sinceQuit = elapsedMsSince(profile.quitDate, now);
-  const impact = computeQuitImpact(profile, sinceQuit);
+  const impact =
+    profile.economicsSegments && profile.economicsSegments.length > 0
+      ? computeSegmentedQuitImpact({
+          segments: profile.economicsSegments,
+          timelineStartMs: profile.streakStart,
+          timelineEndMs: now,
+          slipCigarettesTotal: profile.slipCigarettesTotal,
+        })
+      : computeQuitImpact(profile, sinceQuit);
 
   return {
     streakDays: sinceStreak / MS_DAY,

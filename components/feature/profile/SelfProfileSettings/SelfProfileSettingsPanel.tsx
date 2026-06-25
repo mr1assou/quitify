@@ -6,14 +6,15 @@ import {
   ResetJourneyModals,
   type ResetJourneyModalState,
 } from "@/components/feature/profile/ResetJourneyModals";
+import { HabitSettingsModal } from "@/components/feature/profile/HabitSettingsModal";
 import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
 import { useResetJourney } from "@/hooks/auth/useResetJourney";
+import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
 import type { UserProfile } from "@/types/profile/profile";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { formatDate } from "@/utils/shared/format";
-import { habitQuantityLabel } from "@/utils/profile/profileConsumptionLabel";
 
 type Props = {
   profile: UserProfile;
@@ -35,6 +36,7 @@ export function SelfProfileSettings({
   const { colors } = useTheme();
   const resetJourney = useResetJourney();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
+  const [habitModalOpen, setHabitModalOpen] = useState(false);
 
   const accountRows: ListRow[] = isSignedIn
     ? [
@@ -67,15 +69,16 @@ export function SelfProfileSettings({
       value: formatDate(profile.quitDate),
     },
     {
-      id: "smoke",
+      id: "habits",
       icon: "logo-no-smoking",
-      label: habitQuantityLabel(profile),
+      label: "Smoking settings",
+      onPress: isSignedIn ? () => setHabitModalOpen(true) : undefined,
     },
   ];
 
-  const handleConfirmReset = () => {
+  const handleConfirmReset = (quitDate: QuitDateApiPayload) => {
     setResetModal({ type: "resetting" });
-    void resetJourney()
+    void resetJourney(quitDate)
       .then(() => setResetModal(null))
       .catch((error: unknown) => {
         const message =
@@ -143,6 +146,12 @@ export function SelfProfileSettings({
         state={resetModal}
         onClose={() => setResetModal(null)}
         onConfirm={handleConfirmReset}
+      />
+
+      <HabitSettingsModal
+        visible={habitModalOpen}
+        profile={profile}
+        onClose={() => setHabitModalOpen(false)}
       />
     </View>
   );

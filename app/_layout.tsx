@@ -91,6 +91,14 @@ function ThemedRoot() {
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
         <Stack.Screen
+          name="paywall-comparison"
+          options={{
+            presentation: "transparentModal",
+            animation: "slide_from_bottom",
+            contentStyle: { backgroundColor: "transparent" },
+          }}
+        />
+        <Stack.Screen
           name="profile"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
@@ -101,6 +109,10 @@ function ThemedRoot() {
         />
         <Stack.Screen
           name="terms"
+          options={{ presentation: "modal", animation: "slide_from_bottom" }}
+        />
+        <Stack.Screen
+          name="privacy"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
 
@@ -114,6 +126,7 @@ function ThemedRoot() {
           }}
         />
         <Stack.Screen name="post-composer" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="share-post/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chats" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="community-search" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />

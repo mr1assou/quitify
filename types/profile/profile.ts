@@ -1,3 +1,4 @@
+import type { HabitEconomicsSegment } from "@/types/profile/habitEconomics";
 import type {
   MotivationLevel,
   NicotineConsumptionFormId,
@@ -21,6 +22,8 @@ export type UserProfile = {
   cigarettesPerDay: number;
   cigarettesPerPack: number;
   packCost: number;
+  /** Active attempt habit windows — older segments stay frozen for stats. */
+  economicsSegments?: HabitEconomicsSegment[];
   countryCode?: string;
   /** PNG flag URL from onboarding / profile. */
   countryFlag?: string;

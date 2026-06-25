@@ -29,6 +29,12 @@ export type AuthMeResponse = {
   freedomPoints?: number;
   goalsCompleted?: number;
   earnedBadgeIds?: string[];
+  economicsSegments?: {
+    effectiveFrom: string;
+    cigarettesPerDay: number;
+    cigarettesPerPack: number;
+    packPrice?: string;
+  }[];
 };
 
 export async function fetchAuthMe(accessToken: string): Promise<AuthMeResponse> {

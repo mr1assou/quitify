@@ -1,15 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
-import { RangeTabs } from "@/components/feature/stats/RangeTabs";
 import { StatBlock } from "@/components/feature/stats/StatBlock";
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
-import type { StatsFilterRange } from "@/types/stats/userStats";
 import type { StatsOverviewByRange } from "@/types/stats/statsOverview";
 import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/shared/format";
+import { formatStreakDuration } from "@/utils/streak";
 
 type Props = {
   currency: string;
@@ -18,11 +16,13 @@ type Props = {
 
 export function StatsOverviewCard({ currency, byRange }: Props) {
   const { colors } = useTheme();
-  const [range, setRange] = useState<StatsFilterRange>("lifetime");
-
-  const impact = byRange[range];
+  const impact = byRange.lifetime;
 
   const smokeFreeHours = impact.durationSeconds / 3600;
+  const smokeFreeDisplay =
+    impact.durationSeconds < 3600
+      ? formatStreakDuration(impact.durationSeconds * 1000)
+      : formatDuration(smokeFreeHours);
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
@@ -35,14 +35,13 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
               Overview
             </Text>
+            <Text className="mt-0.5 text-sm text-muted-foreground dark:text-d-muted">
+              Stats of all attempts
+            </Text>
           </View>
         </View>
 
-        <View className="mt-4">
-          <RangeTabs variant="filter" value={range} onChange={setRange} />
-        </View>
-
-        <View key={range} className="mt-4 gap-3">
+        <View className="mt-4 gap-3">
           <View className="flex-row gap-3">
             <StatBlock
               label="Money saved"
@@ -74,7 +73,7 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
             <StatBlock
               label="Smoke-free time"
               value={smokeFreeHours}
-              display={formatDuration(smokeFreeHours)}
+              display={smokeFreeDisplay}
               icon="time"
               accent="primary"
               delay={120}

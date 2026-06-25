@@ -5,6 +5,7 @@ import {
   formatLifeGained,
   formatNumber,
 } from "@/utils/shared/format";
+import { formatStreakDuration } from "@/utils/streak";
 import { formatUtcIsoInTimezone } from "@/utils/time/formatInTimezone";
 
 export type AttemptDetailRow = {
@@ -32,6 +33,10 @@ export function buildAttemptDetailRows(
   timeZone: string,
 ): AttemptDetailRow[] {
   const smokeFreeHours = row.durationSeconds / 3600;
+  const smokeFreeDisplay =
+    row.durationSeconds < 3600
+      ? formatStreakDuration(row.durationSeconds * 1000)
+      : formatDuration(smokeFreeHours);
 
   const rows: AttemptDetailRow[] = [
     {
@@ -46,7 +51,7 @@ export function buildAttemptDetailRows(
     },
     {
       label: "Smoke-free time",
-      value: formatDuration(smokeFreeHours),
+      value: smokeFreeDisplay,
     },
     {
       label: "Cigarettes avoided",

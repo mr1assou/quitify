@@ -1,8 +1,25 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
+import { QuitStartPresetPicker } from "@/components/feature/onboarding/QuitPlanFields/QuitStartPresetPicker";
 import { useTheme } from "@/context/ThemeContext";
+import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
+import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
+import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
+import {
+  initialQuitStartDateDraft,
+  isQuitStartDateComplete,
+  resolveQuitDatePayload,
+} from "@/utils/onboarding/resolveQuitDatePayload";
 
 const LOSS_ITEMS = [
   "All badges earned",
@@ -20,11 +37,28 @@ export type ResetJourneyModalState =
 type Props = {
   state: ResetJourneyModalState | null;
   onClose: () => void;
-  onConfirm?: () => void;
+  onConfirm?: (quitDate: QuitDateApiPayload) => void;
 };
 
 export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
   const { colors } = useTheme();
+  const [quitDraft, setQuitDraft] = useState<QuitStartDateDraft>(() =>
+    initialQuitStartDateDraft(),
+  );
+
+  useEffect(() => {
+    if (state?.type === "confirm") {
+      setQuitDraft(initialQuitStartDateDraft());
+    }
+  }, [state?.type]);
+
+  const patchQuitDraft = (next: Partial<QuitStartDateDraft>) => {
+    setQuitDraft((current) => ({ ...current, ...next }));
+  };
+
+  const quitHandlers = useQuitPlanHandlers(quitDraft, patchQuitDraft);
+  const canConfirm = useMemo(() => isQuitStartDateComplete(quitDraft), [quitDraft]);
+
   if (!state) return null;
 
   const canDismiss = state.type !== "resetting";
@@ -36,8 +70,10 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
   };
 
   const handleConfirm = () => {
+    const payload = resolveQuitDatePayload(quitDraft);
+    if (!payload) return;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-    onConfirm?.();
+    onConfirm?.(payload);
   };
 
   return (
@@ -59,9 +95,10 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
           <View className="absolute inset-0 bg-black/50" />
         )}
 
-        <View className="w-full max-w-sm overflow-hidden rounded-3xl bg-background px-6 py-7 dark:bg-d-bg">
+        <View className="max-h-[90%] w-full max-w-sm overflow-hidden rounded-3xl bg-background dark:bg-d-bg">
           {state.type === "confirm" ? (
-            <>
+            <ScrollView keyboardShouldPersistTaps="handled">
+              <View className="px-6 py-7">
               <View className="items-center">
                 <View
                   className="h-24 w-24 items-center justify-center rounded-full"
@@ -75,9 +112,17 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                 <Text className="mt-5 text-center text-xl font-bold text-foreground dark:text-d-text">
                   Reset my journey?
                 </Text>
-                <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-                  You will start over as if you just joined. This cannot be undone.
-                </Text>
+              </View>
+
+              <View className="mt-5">
+                <QuitStartPresetPicker
+                  variant="stacked"
+                  draft={quitDraft}
+                  onSelectPreset={quitHandlers.selectPreset}
+                  onMonthChange={quitHandlers.updateCustomMonth}
+                  onDayChange={quitHandlers.updateCustomDay}
+                  onYearChange={quitHandlers.updateCustomYear}
+                />
               </View>
 
               <View className="mt-5 rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
@@ -99,24 +144,32 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
               <View className="mt-7 items-center gap-3">
                 <Pressable
                   accessibilityRole="button"
+                  disabled={!canConfirm}
                   onPress={handleConfirm}
-                  className="w-full rounded-2xl bg-alert px-10 py-3.5"
+                  className={`w-full rounded-2xl px-10 py-3.5 ${
+                    canConfirm ? "bg-alert" : "bg-muted opacity-60"
+                  }`}
                 >
                   <Text className="text-center text-base font-bold text-white">
                     Reset my journey
                   </Text>
                 </Pressable>
-                <Pressable accessibilityRole="button" onPress={handleClose} className="items-center py-2">
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={handleClose}
+                  className="items-center py-2"
+                >
                   <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
                     Cancel
                   </Text>
                 </Pressable>
               </View>
-            </>
+              </View>
+            </ScrollView>
           ) : null}
 
           {state.type === "resetting" ? (
-            <View className="items-center py-4">
+            <View className="items-center px-6 py-7">
               <ActivityIndicator size="large" color={colors.primary} />
               <Text className="mt-5 text-center text-base font-semibold text-foreground dark:text-d-text">
                 Resetting your journey…
@@ -128,7 +181,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
           ) : null}
 
           {state.type === "error" ? (
-            <>
+            <View className="px-6 py-7">
               <View className="items-center">
                 <View
                   className="h-24 w-24 items-center justify-center rounded-full"
@@ -156,7 +209,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                   <Text className="text-center text-base font-bold text-white">Got it</Text>
                 </Pressable>
               </View>
-            </>
+            </View>
           ) : null}
         </View>
       </View>
