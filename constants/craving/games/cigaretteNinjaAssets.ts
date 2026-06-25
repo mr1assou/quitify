@@ -4,32 +4,32 @@ import type { CigaretteNinjaObjectKind } from "@/constants/craving/games/cigaret
 
 /** Game 3 — Cigarette Ninja */
 export const CIGARETTE_NINJA_LOGO_IMAGE: ImageSourcePropType = require(
-  "../../../assets/images/games/3/logo.png",
+  "../../../assets/images/games/3/logo.webp",
 );
 
 export const CIGARETTE_NINJA_CIGARETTE_IMAGES: readonly ImageSourcePropType[] = [
-  require("../../../assets/images/games/3/cigarette1.png"),
-  require("../../../assets/images/games/3/pack1.png"),
-  require("../../../assets/images/games/3/pack2.png"),
+  require("../../../assets/images/games/3/cigarette1.webp"),
+  require("../../../assets/images/games/3/pack1.webp"),
+  require("../../../assets/images/games/3/pack2.webp"),
 ];
 
 export const CIGARETTE_NINJA_VAPE_IMAGES: readonly ImageSourcePropType[] = [
-  require("../../../assets/images/games/3/vape1.png"),
-  require("../../../assets/images/games/3/vape2.png"),
+  require("../../../assets/images/games/3/vape1.webp"),
+  require("../../../assets/images/games/3/vape2.webp"),
 ];
 
 /** Smoke targets alternate between cigar and lighter art. */
 export const CIGARETTE_NINJA_SMOKE_IMAGES: readonly ImageSourcePropType[] = [
-  require("../../../assets/images/games/3/cigar.png"),
-  require("../../../assets/images/games/3/lighter.png"),
+  require("../../../assets/images/games/3/cigar.webp"),
+  require("../../../assets/images/games/3/lighter.webp"),
 ];
 
 export const CIGARETTE_NINJA_GOLDEN_IMAGE: ImageSourcePropType = require(
-  "../../../assets/images/games/3/gold.png",
+  "../../../assets/images/games/3/gold.webp",
 );
 
 export const CIGARETTE_NINJA_BOSS_IMAGE: ImageSourcePropType = require(
-  "../../../assets/images/games/3/boss.png",
+  "../../../assets/images/games/3/boss.webp",
 );
 
 export function getCigaretteNinjaObjectImage(

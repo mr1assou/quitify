@@ -4,22 +4,22 @@ import type { ImageSourcePropType } from "react-native";
 export type RelaxSoundCoverSlug = keyof typeof RELAX_SOUND_COVERS;
 
 export const RELAX_SOUND_COVERS = {
-  parallelUniverse: require("../../assets/images/music/images/paralell_universe.png"),
-  surea: require("../../assets/images/music/images/surea.png"),
-  forestRoad: require("../../assets/images/music/images/road_forest.png"),
-  cyberpunk: require("../../assets/images/music/images/cyberpunk.png"),
-  relax: require("../../assets/images/music/images/relax_music.png"),
-  birds: require("../../assets/images/music/images/birds.png"),
-  calmGame: require("../../assets/images/music/images/game.png"),
-  chill: require("../../assets/images/music/images/chill.png"),
-  deathSound: require("../../assets/images/music/images/death.png"),
-  desertDunes: require("../../assets/images/music/images/desert_atmosphere.png"),
-  filmScore: require("../../assets/images/music/images/film_movie.png"),
-  listen: require("../../assets/images/music/images/listen_wave.png"),
-  lostDiary: require("../../assets/images/music/images/lost_diary.png"),
-  midi: require("../../assets/images/music/images/midi_sound.png"),
-  surrealism: require("../../assets/images/music/images/surialism.png"),
-  wandering: require("../../assets/images/music/images/wandering.png"),
+  parallelUniverse: require("../../assets/images/music/images/paralell_universe.webp"),
+  surea: require("../../assets/images/music/images/surea.webp"),
+  forestRoad: require("../../assets/images/music/images/road_forest.webp"),
+  cyberpunk: require("../../assets/images/music/images/cyberpunk.webp"),
+  relax: require("../../assets/images/music/images/relax_music.webp"),
+  birds: require("../../assets/images/music/images/birds.webp"),
+  calmGame: require("../../assets/images/music/images/game.webp"),
+  chill: require("../../assets/images/music/images/chill.webp"),
+  deathSound: require("../../assets/images/music/images/death.webp"),
+  desertDunes: require("../../assets/images/music/images/desert_atmosphere.webp"),
+  filmScore: require("../../assets/images/music/images/film_movie.webp"),
+  listen: require("../../assets/images/music/images/listen_wave.webp"),
+  lostDiary: require("../../assets/images/music/images/lost_diary.webp"),
+  midi: require("../../assets/images/music/images/midi_sound.webp"),
+  surrealism: require("../../assets/images/music/images/surialism.webp"),
+  wandering: require("../../assets/images/music/images/wandering.webp"),
 } as const satisfies Record<string, ImageSourcePropType>;
 
 export function relaxSoundCoverForSlug(slug: string): ImageSourcePropType {

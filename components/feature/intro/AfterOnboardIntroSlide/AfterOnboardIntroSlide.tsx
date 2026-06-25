@@ -14,7 +14,7 @@ export function AfterOnboardIntroSlide({ slide }: Props) {
   const visual = (
     <View className="w-full flex-1 items-center justify-center px-1">
       <Image
-        source={require("../../../../assets/images/after_onboard.png")}
+        source={require("../../../../assets/images/after_onboard.webp")}
         style={{ width: "100%", height: imageHeight }}
         resizeMode="contain"
         accessibilityLabel="Welcome illustration"

@@ -1,7 +1,7 @@
 import type { ImageSourcePropType } from "react-native";
 
 /** Shared placeholder media for community posts until per-post art exists. */
-export const DEFAULT_POST_IMAGE = require("../../assets/images/posts/post.png");
+export const DEFAULT_POST_IMAGE = require("../../assets/images/logo.webp");
 
 const POST_IMAGES: Partial<Record<string, ImageSourcePropType>> = {
   default: DEFAULT_POST_IMAGE,

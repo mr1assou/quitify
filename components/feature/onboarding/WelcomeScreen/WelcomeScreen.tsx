@@ -29,7 +29,7 @@ export function WelcomeScreen() {
             className="h-44 w-44 items-center justify-center rounded-3xl bg-section p-3 dark:bg-d-surface"
           >
             <Image
-              source={require("../../../../assets/images/logo.png")}
+              source={require("../../../../assets/images/logo.webp")}
               className="h-full w-full"
               resizeMode="contain"
               accessibilityLabel="Quitify app logo"

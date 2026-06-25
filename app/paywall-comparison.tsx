@@ -22,7 +22,7 @@ import { formatCurrency } from "@/utils/shared/format";
 
 const SHEET_HEIGHT_RATIO = 0.7;
 
-const QUITIFY_LOGO = require("../assets/images/logo.png") as ImageSourcePropType;
+const QUITIFY_LOGO = require("../assets/images/logo.webp") as ImageSourcePropType;
 
 const QUITIFY_MONTHLY_USD =
   PAYWALL_PLANS_USD.find((plan) => plan.id === "yearly")?.rightAmountUsd ?? 4.99;

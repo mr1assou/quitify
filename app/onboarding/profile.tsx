@@ -117,7 +117,7 @@ export default function OnboardingProfile() {
               {CELEBRATION_TITLE}
             </Text>
             <Image
-              source={require("../../assets/images/yes.png")}
+              source={require("../../assets/images/yes.webp")}
               style={{ width: "100%", height: imageHeight, marginTop: 24 }}
               resizeMode="contain"
               accessibilityLabel="Celebration illustration"

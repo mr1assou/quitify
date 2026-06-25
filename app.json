@@ -4,7 +4,7 @@
     "slug": "quit-smoking",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
+    "icon": "./assets/images/logo1.png",
     "scheme": "quitsmoking",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,17 +13,20 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF",
-        "foregroundImage": "./assets/images/logo.png"
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/images/logo1.png"
       },
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.quitsmoking"
+      "package": "com.anonymous.quitsmoking",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/logo.png"
+      "favicon": "./assets/images/logo1.png"
     },
     "plugins": [
       [
@@ -36,12 +39,23 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo.png",
+          "image": "./assets/images/splash-icon.png",
           "imageWidth": 220,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#000000",
           "dark": {
+            "image": "./assets/images/splash-icon.png",
             "backgroundColor": "#000000"
+          },
+          "android": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#000000",
+            "imageWidth": 220
+          },
+          "ios": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#000000",
+            "imageWidth": 220
           }
         }
       ]

@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-const HEADPHONE_IMAGE = require("../../../../../assets/images/headphones/headphone.png");
+const HEADPHONE_IMAGE = require("../../../../../assets/images/headphones/headphone.webp");
 
 type Props = {
   visible: boolean;

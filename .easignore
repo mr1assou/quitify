@@ -1,0 +1,56 @@
+# EAS upload ignore list.
+# When this file exists, EAS uses it instead of .gitignore — keep both in sync.
+
+# Dependencies (reinstalled on EAS servers)
+node_modules/
+
+# Git / version control
+.git/
+.gitignore
+.gitattributes
+
+# Expo local state and generated output
+.expo/
+.expo-shared/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native folders (EAS generates these during the build)
+/ios/
+/android/
+.kotlin/
+
+# Metro
+.metro-health-check*
+
+# Debug logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+*.pem
+
+# Local env files
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Example / scratch app
+app-example/
+
+# Signing keys (never upload)
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Editor / IDE
+.idea/
+.vscode/
