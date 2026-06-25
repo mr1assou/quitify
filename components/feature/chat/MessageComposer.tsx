@@ -1,6 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from "react-native";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -41,7 +43,15 @@ export function MessageComposer({
 }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const { progress } = useReanimatedKeyboardAnimation();
   const { pickFromGallery } = usePickChatMedia();
+
+  const MIN_BOTTOM_PADDING = 12;
+  const containerStyle = useAnimatedStyle(() => ({
+    paddingBottom:
+      MIN_BOTTOM_PADDING +
+      (1 - progress.value) * Math.max(insets.bottom - MIN_BOTTOM_PADDING, 0),
+  }));
   const { isRecording, startRecording, stopRecording, cancelRecording } = useRecordChatAudio();
   const [text, setText] = useState("");
   const isEditing = Boolean(editState);
@@ -97,9 +107,9 @@ export function MessageComposer({
   };
 
   return (
-    <View
+    <Animated.View
       className="border-t border-section bg-background dark:border-d-border dark:bg-d-bg"
-      style={{ paddingBottom: Math.max(insets.bottom, 12) }}
+      style={containerStyle}
     >
       {isEditing ? (
         <View className="flex-row items-center justify-between px-4 pb-2 pt-3">
@@ -201,7 +211,7 @@ export function MessageComposer({
           </Pressable>
         )}
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
