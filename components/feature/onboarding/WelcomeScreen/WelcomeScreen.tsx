@@ -58,7 +58,12 @@ export function WelcomeScreen() {
             onPress={() => safeRouter.push("/intro")}
           />
           <Pressable
-            onPress={() => safeRouter.push("/onboarding/profile")}
+            onPress={() =>
+              safeRouter.push({
+                pathname: "/onboarding/profile",
+                params: { flow: "login" },
+              })
+            }
             className="items-center py-2 active:opacity-70"
             accessibilityRole="button"
             accessibilityLabel="I already have an account"

@@ -9,6 +9,7 @@ import { AppProvider } from "@/context/AppContext";
 import { CommunityProvider } from "@/context/CommunityContext";
 import { GoalsProvider } from "@/context/GoalsContext";
 import { PlanProvider } from "@/context/PlanContext";
+import { RelaxSoundPlayerProvider } from "@/context/RelaxSoundPlayerContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
@@ -46,10 +47,12 @@ function GoalsProviderWrapper() {
   return (
     <GoalsProvider>
       <PlanProvider>
-        <PresenceSocketBridge />
-        <ChatSocketBridge />
-        <NotificationSocketBridge />
-        <ThemedRoot />
+        <RelaxSoundPlayerProvider>
+          <PresenceSocketBridge />
+          <ChatSocketBridge />
+          <NotificationSocketBridge />
+          <ThemedRoot />
+        </RelaxSoundPlayerProvider>
       </PlanProvider>
     </GoalsProvider>
   );

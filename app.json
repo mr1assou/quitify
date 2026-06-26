@@ -1,15 +1,20 @@
 {
   "expo": {
-    "name": "quit-smoking",
-    "slug": "quit-smoking",
+    "name": "Quitify",
+    "slug": "quitify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo1.png",
-    "scheme": "quitsmoking",
+    "scheme": "quitify",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,9 +24,12 @@
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.quitsmoking",
+      "package": "com.quitify.app",
       "permissions": [
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.WAKE_LOCK"
       ]
     },
     "web": {
@@ -36,6 +44,12 @@
         }
       ],
       "expo-router",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.669098937218-4aift7qa4hld3n11kplvuliq65vr97vs"
+        }
+      ],
       [
         "expo-splash-screen",
         {

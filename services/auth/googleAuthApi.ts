@@ -26,7 +26,7 @@ async function fetchJson<T>(
   } catch {
     throw new Error(
       `Cannot reach the backend at ${API_URL}. ` +
-        `Ensure npm run start:dev and ngrok http 3000 are both running.`,
+        `Ensure npm run start:dev is running and your phone is on the same Wi‑Fi.`,
     );
   }
 
@@ -35,21 +35,11 @@ async function fetchJson<T>(
   try {
     body = raw ? (JSON.parse(raw) as T) : null;
   } catch {
-    if (raw.includes("ERR_NGROK_727") || raw.includes("HTTP requests limit")) {
-      throw new Error(
-        "ngrok monthly request limit reached. Restart with a new tunnel or upgrade ngrok, then update API_URL.",
-      );
-    }
-    if (raw.includes("ngrok") && !res.ok) {
-      throw new Error(
-        `ngrok blocked the request (HTTP ${res.status}). Check that ngrok http 3000 is running.`,
-      );
-    }
   }
 
   if (!res.ok && body == null) {
     throw new Error(
-      `Backend error (HTTP ${res.status}). Check ngrok and npm run start:dev.`,
+      `Backend error (HTTP ${res.status}). Check npm run start:dev at ${API_URL}.`,
     );
   }
 

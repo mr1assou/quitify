@@ -1,44 +1,75 @@
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
 import { useCallback, useEffect, useState } from "react";
-
 import {
-  getGoogleAuthUrl,
-  parseGoogleAuthRedirect,
-} from "@/services/auth";
+  GoogleSignin,
+  isErrorWithCode,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
+import { GOOGLE_WEB_CLIENT_ID } from "@/config/google";
+import { signInWithGoogleIdToken } from "@/services/auth/googleNativeAuthApi";
+import { clearGoogleSignInSession } from "@/utils/auth/clearGoogleSignInSession";
 import { saveAuthTokens } from "@/utils/auth/authStorage";
 
-WebBrowser.maybeCompleteAuthSession();
+let configured = false;
 
-/** Web OAuth via backend (uses web client_id + client_secret on server only). */
+function ensureGoogleSignInConfigured() {
+  if (configured) return;
+  GoogleSignin.configure({
+    webClientId: GOOGLE_WEB_CLIENT_ID,
+    offlineAccess: false,
+  });
+  configured = true;
+}
+
+/** Native Google Sign-In → backend `POST /auth/google` with id_token. */
 export function useGoogleSignIn() {
-  const [isReady, setIsReady] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Optional Android perf hint — fails harmlessly if Chrome Custom Tabs isn't available.
-    void WebBrowser.warmUpAsync().catch(() => {});
-    return () => {
-      void WebBrowser.coolDownAsync().catch(() => {});
-    };
+    try {
+      ensureGoogleSignInConfigured();
+      setIsReady(true);
+    } catch {
+      setIsReady(false);
+    }
   }, []);
 
-  const signInWithGoogle = useCallback(async () => {
-    const returnUrl = Linking.createURL("oauth/google");
-    const authUrl = await getGoogleAuthUrl(returnUrl);
+  const signInWithGoogle = useCallback(
+    async (options?: { loginOnly?: boolean; signupOnly?: boolean }) => {
+    ensureGoogleSignInConfigured();
 
-    const result = await WebBrowser.openAuthSessionAsync(authUrl, returnUrl);
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
-    if (result.type === "cancel" || result.type === "dismiss") {
-      throw new Error("Google sign-in was cancelled");
+    try {
+      await clearGoogleSignInSession();
+      const response = await GoogleSignin.signIn();
+
+      if (response.type === "cancelled") {
+        throw new Error("Google sign-in was cancelled");
+      }
+
+      const idToken = response.data.idToken;
+      if (!idToken) {
+        throw new Error("Google did not return an id token");
+      }
+
+      const auth = await signInWithGoogleIdToken(idToken, options);
+      await saveAuthTokens(auth.accessToken, auth.refreshToken);
+      return auth;
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          throw new Error("Google sign-in was cancelled");
+        }
+        if (error.code === statusCodes.IN_PROGRESS) {
+          throw new Error("Google sign-in is already in progress");
+        }
+        if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          throw new Error("Google Play Services is not available on this device");
+        }
+      }
+      throw error;
     }
-
-    if (result.type !== "success") {
-      throw new Error("Google sign-in failed");
-    }
-
-    const auth = parseGoogleAuthRedirect(result.url);
-    await saveAuthTokens(auth.accessToken, auth.refreshToken);
-    return auth;
   }, []);
 
   return { signInWithGoogle, isReady };

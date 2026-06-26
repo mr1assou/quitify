@@ -1,9 +1,9 @@
 /**
- * Local backend URL for API calls (no ngrok — saves request quota).
- * localhost only works on iOS simulator. On a real phone use your PC's Wi‑Fi IP.
+ * Backend URL for all app API calls (REST + WebSockets).
+ * Use your PC's Wi‑Fi IP so a physical phone on the same network can reach the server.
  * Android emulator: http://10.0.2.2:3000
  *
- * Google OAuth callback uses ngrok — see backend-smoking/.env → GOOGLE_REDIRECT_URI
- * (Google Cloud Console redirect URI: https://unsightly-preoccupy-parlor.ngrok-free.dev/auth/google/callback)
+ * Do NOT use ngrok here — ngrok is only for Google OAuth redirect (HTTPS callback).
+ * See backend-smoking/.env → GOOGLE_REDIRECT_URI and Google Cloud Console redirect URI.
  */
 export const API_URL = "http://192.168.100.162:3000";

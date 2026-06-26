@@ -21,12 +21,7 @@ export function RelaxSoundScreen() {
   return (
     <CravingToolScreen toolId="relax-sound">
       <View className="flex-1 px-6 pb-6 pt-2">
-        <Animated.View entering={FadeInDown.duration(400)} className="mb-4">
-          <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-            Tap a cover to open the player and adjust progress.
-          </Text>
-        </Animated.View>
-
+        
         {isLoading ? (
           <ThemedLoadingScreen message="Loading sounds…" />
         ) : error ? (

@@ -1,11 +1,11 @@
 {
-  "name": "quitify",
-  "description": "go = Expo Go | dev = dev build | android = install dev build on phone (USB)",
+  "name": "quit-smoking",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "go": "expo start --go",
-    "dev": "expo start",
+    "start": "expo start",
+    "start:go": "expo start --go",
+    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -14,10 +14,10 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "@react-native-google-signin/google-signin": "^14.0.1",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "babel-preset-expo": "~54.0.10",
     "expo": "~54.0.33",
     "expo-av": "~16.0.8",
     "expo-constants": "~18.0.13",
@@ -41,7 +41,6 @@
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
     "react-native-keyboard-controller": "1.18.5",
-    "react-native-purchases": "^10.4.0",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
@@ -54,7 +53,6 @@
   "devDependencies": {
     "@types/luxon": "^3.7.1",
     "@types/react": "~19.1.0",
-    "babel-preset-expo": "~54.0.11",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"

@@ -52,20 +52,6 @@ export default function Missions() {
               </View>
             ) : null}
 
-            {plan.planError ? (
-              <View className="mx-6 mt-4 items-center rounded-2xl bg-section px-4 py-4 dark:bg-d-surface">
-                <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                  {plan.planError}
-                </Text>
-                <Pressable
-                  onPress={() => void plan.refreshPlan()}
-                  className="mt-3 rounded-2xl bg-primary px-5 py-2.5"
-                >
-                  <Text className="text-sm font-semibold text-white">Try again</Text>
-                </Pressable>
-              </View>
-            ) : null}
-
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}

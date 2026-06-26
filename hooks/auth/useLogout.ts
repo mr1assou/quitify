@@ -5,6 +5,7 @@ import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { safeRouter } from "@/utils/app/safeRouter";
+import { clearGoogleSignInSession } from "@/utils/auth/clearGoogleSignInSession";
 
 /** Signs out, wipes local app state, and returns the user to the welcome screen. */
 export function useLogout() {
@@ -19,6 +20,7 @@ export function useLogout() {
 
     try {
       await logout();
+      await clearGoogleSignInSession();
       resetCommunity();
       resetOnboardingDraft();
       safeRouter.replace(WELCOME_ROUTE);

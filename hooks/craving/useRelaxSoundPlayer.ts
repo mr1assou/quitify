@@ -1,4 +1,10 @@
-import { Audio, type AVPlaybackSource, type AVPlaybackStatus } from "expo-av";
+import {
+  Audio,
+  InterruptionModeAndroid,
+  InterruptionModeIOS,
+  type AVPlaybackSource,
+  type AVPlaybackStatus,
+} from "expo-av";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export type RelaxSoundProgress = {
@@ -44,7 +50,10 @@ export function useRelaxSoundPlayer() {
   useEffect(() => {
     void Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
-      staysActiveInBackground: false,
+      staysActiveInBackground: true,
+      shouldDuckAndroid: false,
+      interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+      interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
     });
 
     return () => {

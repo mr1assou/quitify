@@ -28,7 +28,7 @@ export async function finalizeGoogleAuth(
     if (auth.isNewUser) {
       if (!isOnboardingDraftComplete(draft)) {
         throw new Error(
-          "Complete the setup steps first, or sign in with the Google account you already used.",
+          "Complete the setup steps first before signing up with Google.",
         );
       }
       const syncedAt = Date.now();

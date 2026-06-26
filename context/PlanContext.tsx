@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { useApp } from "@/context/AppContext";
 import { useNow } from "@/hooks/shared/useNow";
 import { fetchPlanState, togglePlanTask } from "@/services/plan/planApi";
 import type { PlanState } from "@/types/plan/planState";
@@ -23,26 +24,45 @@ type PlanContextValue = {
 const PlanContext = createContext<PlanContextValue | null>(null);
 
 export function PlanProvider({ children }: { children: ReactNode }) {
+  const { state, isHydrated } = useApp();
   const now = useNow(60_000);
   const [planState, setPlanState] = useState<PlanState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const canLoadPlan = isHydrated && state.isOnboarded && Boolean(state.account);
+
   const refresh = useCallback(async () => {
+    if (!canLoadPlan) {
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const state = await fetchPlanState();
-      setPlanState(state);
+      const next = await fetchPlanState();
+      setPlanState(next);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not load plan");
+      const message = err instanceof Error ? err.message : "Could not load plan";
+      if (message !== "Not authenticated") {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [canLoadPlan]);
 
   useEffect(() => {
+    if (!canLoadPlan) {
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
     void refresh();
-  }, [refresh, now]);
+  }, [canLoadPlan, refresh, now]);
 
   const toggleTaskOnServer = useCallback(
     async (planDay: number, taskId: string, done: boolean) => {
