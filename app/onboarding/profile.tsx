@@ -22,6 +22,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useGoogleSignIn } from "@/hooks/auth/useGoogleSignIn";
 import { finalizeGoogleAuth } from "@/services/auth/finalizeGoogleAuth";
 import { finalizeGoogleLogin } from "@/services/auth/finalizeGoogleLogin";
+import { markSignupPushPromptPending } from "@/utils/push/signupPushPromptStorage";
 import {
   GoogleAccountAlreadyExistsError,
   GoogleAccountNotFoundError,
@@ -74,6 +75,7 @@ export default function OnboardingProfile() {
         }
       } else {
         await finalizeGoogleAuth(auth, draft, { setAccount, completeOnboarding });
+        await markSignupPushPromptPending();
       }
 
       safeRouter.replace("/(tabs)");

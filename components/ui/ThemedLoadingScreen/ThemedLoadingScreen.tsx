@@ -1,5 +1,6 @@
 import { ActivityIndicator, Text, View, type ActivityIndicatorProps } from "react-native";
 
+import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { useTheme } from "@/context/ThemeContext";
 
 type Props = {
@@ -7,19 +8,20 @@ type Props = {
   message?: string;
 };
 
-/** Full-screen loader with background and spinner colors from the active theme. */
+/** Full-screen loader on the app gradient canvas. */
 export function ThemedLoadingScreen({ size = "large", message }: Props) {
-  const { colors } = useTheme();
+  const { colors, resolved } = useTheme();
+  const isDark = resolved === "dark";
 
   return (
-    <View
-      className="flex-1 items-center justify-center gap-3"
-      style={{ backgroundColor: colors.background }}
-    >
-      <ActivityIndicator size={size} color={colors.primary} />
-      {message ? (
-        <Text className="text-sm text-muted-foreground dark:text-d-muted">{message}</Text>
-      ) : null}
+    <View className="flex-1">
+      <AppScreenBackground isDark={isDark} showOrbs={false} />
+      <View className="flex-1 items-center justify-center gap-3 bg-transparent">
+        <ActivityIndicator size={size} color={colors.primary} />
+        {message ? (
+          <Text className="text-sm text-muted-foreground dark:text-d-muted">{message}</Text>
+        ) : null}
+      </View>
     </View>
   );
 }

@@ -13,6 +13,7 @@ import {
 
 import { getThemeColors } from "@/constants/app/theme";
 import type { ThemeColors, ThemePreference, ThemeResolved } from "@/types";
+import { BootstrapSplash } from "@/components/layout/BootstrapSplash";
 
 export type { ThemePreference } from "@/types";
 
@@ -75,8 +76,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     [preference, setPreference, resolved, colors],
   );
 
-  // Avoid one-frame flash with the wrong palette before AsyncStorage resolves.
-  if (!hydrated) return null;
+  // Warm gradient splash until AsyncStorage resolves the theme preference.
+  if (!hydrated) return <BootstrapSplash />;
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

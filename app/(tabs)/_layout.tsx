@@ -4,7 +4,13 @@ import { TabBar } from "@/components/layout/TabBar";
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }} tabBar={(props) => <TabBar {...props} />}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        sceneStyle: { backgroundColor: "transparent" },
+      }}
+      tabBar={(props) => <TabBar {...props} />}
+    >
       <Tabs.Screen name="index" options={{ title: "Home" }} />
       <Tabs.Screen name="community" options={{ title: "Community" }} />
       <Tabs.Screen name="missions" options={{ title: "Your missions" }} />

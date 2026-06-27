@@ -1,8 +1,7 @@
 import { safeRouter } from "@/utils/app/safeRouter";
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
 
@@ -14,10 +13,7 @@ const TERMS_INTRO =
 
 export function WelcomeScreen() {
   return (
-    <SafeAreaView
-      className="flex-1 bg-background dark:bg-d-bg"
-      edges={["top", "bottom"]}
-    >
+    <ScreenCanvas edges={["top", "bottom"]}>
       <View className="flex-row items-center justify-end px-6 pt-3">
         <ThemeToggleButton />
       </View>
@@ -26,7 +22,7 @@ export function WelcomeScreen() {
         <View className="flex-1 items-center justify-center">
           <Animated.View
             entering={FadeIn.duration(700)}
-            className="h-44 w-44 items-center justify-center rounded-3xl bg-section p-3 dark:bg-d-surface"
+            className="h-44 w-44 items-center justify-center rounded-3xl border border-border/50 bg-white/90 p-3 dark:border-d-border dark:bg-d-surface/95"
           >
             <Image
               source={require("../../../../assets/images/logo.webp")}
@@ -88,6 +84,6 @@ export function WelcomeScreen() {
           </View>
         </Animated.View>
       </View>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

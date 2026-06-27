@@ -8,3 +8,4 @@ export * from "./onboardingPriorQuitAttempts";
 export * from "./onboardingQuitPlan";
 export * from "./onboardingReasons";
 export * from "./onboardingSex";
+export * from "./onboardingUsername";

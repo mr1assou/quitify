@@ -16,7 +16,7 @@ type Props = {
   draft: PostDraft;
   cropEditorRef?: RefObject<PostImageCropEditorHandle | null>;
   onUpdate: (patch: Partial<PostDraft>) => void;
-  onPickImages: () => void;
+  onPickMedia: () => void;
   onRemoveImage: (id: string) => void;
   onFrameChange: (id: string, frame: PostMediaFrame) => void;
   onCropChange: (id: string, crop: PostImageCrop) => void;
@@ -26,7 +26,7 @@ export function PostComposerContent({
   draft,
   cropEditorRef,
   onUpdate,
-  onPickImages,
+  onPickMedia,
   onRemoveImage,
   onFrameChange,
   onCropChange,
@@ -57,8 +57,8 @@ export function PostComposerContent({
         <PostBodyEditor
           value={draft.body}
           onChangeText={(body) => onUpdate({ body })}
-          onPickImages={onPickImages}
-          showAddPhoto={draft.images.length === 0}
+          onPickMedia={onPickMedia}
+          showAddMedia={draft.images.length === 0}
         />
         <PostImageSection
           images={draft.images}

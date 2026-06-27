@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { useTheme } from "@/context/ThemeContext";
 
@@ -9,10 +9,7 @@ export default function Privacy() {
   const { colors } = useTheme();
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-background dark:bg-d-bg"
-      edges={["top", "bottom"]}
-    >
+    <ScreenCanvas edges={["top", "bottom"]}>
       <View className="flex-row items-center justify-between px-4 pt-2">
         <View className="w-10" />
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
@@ -37,6 +34,6 @@ export default function Privacy() {
           This is a placeholder. Replace with your final legal text before release.
         </Text>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

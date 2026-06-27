@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { AchievementProgressRings } from "@/components/feature/progress/AchievementProgressRings";
 import { AttemptHistoryCard } from "@/components/feature/stats/AttemptHistoryCard";
+import { FreedomPointHistoryCard } from "@/components/feature/stats/FreedomPointHistoryCard";
 import { GoalHistoryCard } from "@/components/feature/stats/GoalHistoryCard";
 import { StatsOverviewCard } from "@/components/feature/stats/StatsOverviewCard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
@@ -15,6 +16,7 @@ import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
 import { useProgress } from "@/hooks/progress/useProgress";
 import { useRefreshAccount } from "@/hooks/auth/useRefreshAccount";
 import { useStatsAttempts } from "@/hooks/stats/useStatsAttempts";
+import { useStatsFreedomPoints } from "@/hooks/stats/useStatsFreedomPoints";
 import { useStatsGoals } from "@/hooks/stats/useStatsGoals";
 import { useStatsOverview } from "@/hooks/stats/useStatsOverview";
 import { computeAchievementBadgeSummary } from "@/utils/progress/achievementProgress";
@@ -39,6 +41,7 @@ export default function Stats() {
   const { snapshot: leaderboard, refresh: refreshLeaderboard } = useLeaderboard();
   const refreshAccount = useRefreshAccount();
   const overview = useStatsOverview();
+  const freedomPoints = useStatsFreedomPoints();
   const attempts = useStatsAttempts();
   const goals = useStatsGoals();
   const [refreshing, setRefreshing] = useState(false);
@@ -67,6 +70,7 @@ export default function Stats() {
       refreshAccount(),
       refreshLeaderboard(),
       overview.refresh(),
+      freedomPoints.refresh(),
       attempts.refresh(),
       goals.refresh(),
     ]);
@@ -74,7 +78,7 @@ export default function Stats() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120, flexGrow: 1 }}
         refreshControl={
@@ -140,8 +144,22 @@ export default function Stats() {
               timeZone={timeZone}
             />
           ) : null}
+
+          {freedomPoints.loading && !freedomPoints.data ? (
+            <View className="items-center py-10">
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : freedomPoints.error && !freedomPoints.data ? (
+            <SectionError message={freedomPoints.error} onRetry={() => void freedomPoints.refresh()} />
+          ) : freedomPoints.data ? (
+            <FreedomPointHistoryCard
+              entries={freedomPoints.data.entries}
+              totalFreedomPoints={freedomPoints.data.totalFreedomPoints}
+              timeZone={timeZone}
+            />
+          ) : null}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

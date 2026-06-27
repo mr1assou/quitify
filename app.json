@@ -17,9 +17,10 @@
       }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "backgroundColor": "#000000",
-        "foregroundImage": "./assets/images/logo1.png"
+        "backgroundColor": "#1A1410",
+        "foregroundImage": "./assets/images/logo-foreground.png"
       },
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
@@ -40,7 +41,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow Quitify to access your photos to attach images to posts."
+          "photosPermission": "Allow Quitify to access your photos and videos to attach media to posts."
         }
       ],
       "expo-router",
@@ -53,24 +54,21 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 220,
+          "image": "./assets/images/logo-splash.png",
+          "imageWidth": 145,
           "resizeMode": "contain",
-          "backgroundColor": "#000000",
+          "backgroundColor": "#FFFBF7",
           "dark": {
-            "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#000000"
-          },
-          "android": {
-            "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#000000",
-            "imageWidth": 220
-          },
-          "ios": {
-            "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#000000",
-            "imageWidth": 220
+            "image": "./assets/images/logo-splash.png",
+            "backgroundColor": "#1A1410"
           }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/logo1.png",
+          "color": "#1A1410"
         }
       ]
     ],
@@ -81,7 +79,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "389bd619-a2f5-4309-9e7d-fecf81192db8"
+        "projectId": "eeede361-3315-4679-aa70-180559080a86"
       }
     }
   }

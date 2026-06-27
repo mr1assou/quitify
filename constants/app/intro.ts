@@ -28,7 +28,7 @@ export const INTRO_SLIDES: readonly IntroSlideContent[] = [
   {
     id: "short-time",
     title: "The hardest part is temporary",
-    body: "Quitify helps you get through it—and beyond that, it gets easier.",
+    body: "Quitify helps you get through it and beyond that, it gets easier.",
   },
   {
     id: "transformation",
@@ -38,11 +38,11 @@ export const INTRO_SLIDES: readonly IntroSlideContent[] = [
   {
     id: "chance",
     title: "Your moment is now",
-    body: "Start today and take back control of your life—one step at a time.",
+    body: "Start today and take back control of your life one step at a time.",
   },
   {
     id: "after-onboard",
     title: "Join those who chose to quit",
-    body: "Join people who have successfully broken the habit with Quitify—real progress, real support, and a path that actually works.",
+    body: "Join people who have successfully broken the habit with Quitify real progress, real support, and a path that actually works.",
   },
 ] as const;

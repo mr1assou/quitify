@@ -1,10 +1,18 @@
-import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { PostImageCrop, PostMediaFrame, PostMediaKind } from "@/types/community/community";
 
-export type AllowedImageContentType =
+export type AllowedPostContentType =
   | "image/jpeg"
   | "image/png"
   | "image/webp"
-  | "image/gif";
+  | "image/gif"
+  | "video/mp4"
+  | "video/quicktime";
+
+/** @deprecated Use AllowedPostContentType */
+export type AllowedImageContentType = Extract<
+  AllowedPostContentType,
+  "image/jpeg" | "image/png" | "image/webp" | "image/gif"
+>;
 
 export type PresignedUploadResponse = {
   uploadUrl: string;
@@ -20,6 +28,8 @@ export type CreatePostPayload = {
   image_url?: string;
   image_frame?: PostMediaFrame;
   image_crop?: PostImageCrop;
+  media_kind?: PostMediaKind;
+  media_duration_ms?: number;
 };
 
 export type BackendPostResponse = {
@@ -31,6 +41,8 @@ export type BackendPostResponse = {
   image_url: string | null;
   image_frame: string | null;
   image_crop: PostImageCrop | null;
+  media_kind: PostMediaKind | null;
+  media_duration_ms: number | null;
   upvote_count: number;
   downvote_count: number;
   share_count: number;

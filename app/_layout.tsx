@@ -13,9 +13,13 @@ import { RelaxSoundPlayerProvider } from "@/context/RelaxSoundPlayerContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
+import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
+import { SignupPushPromptBridge } from "@/components/push/SignupPushPromptBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
 import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
 import { NotificationSocketBridge } from "@/components/realtime/NotificationSocketBridge";
+import "@/bootstrap/splashScreen";
 import "@/global.css";
 
 export default function RootLayout() {
@@ -48,10 +52,13 @@ function GoalsProviderWrapper() {
     <GoalsProvider>
       <PlanProvider>
         <RelaxSoundPlayerProvider>
-          <PresenceSocketBridge />
-          <ChatSocketBridge />
-          <NotificationSocketBridge />
-          <ThemedRoot />
+          <WifiRequiredGate>
+            <PresenceSocketBridge />
+            <ChatSocketBridge />
+            <NotificationSocketBridge />
+            <SignupPushPromptBridge />
+            <ThemedRoot />
+          </WifiRequiredGate>
         </RelaxSoundPlayerProvider>
       </PlanProvider>
     </GoalsProvider>
@@ -59,16 +66,17 @@ function GoalsProviderWrapper() {
 }
 
 function ThemedRoot() {
-  const { resolved, colors } = useTheme();
+  const { resolved } = useTheme();
   const isDark = resolved === "dark";
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={{ flex: 1 }}>
+      <AppScreenBackground isDark={isDark} showOrbs={false} />
       <StatusBar style={isDark ? "light" : "dark"} />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: colors.background },
+          contentStyle: { backgroundColor: "transparent" },
         }}
       >
         <Stack.Screen name="index" />

@@ -3,7 +3,7 @@ import type { UserGoal } from "@/types/goals/goal";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback, useMemo } from "react";
 import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { HomeGoalsSection } from "@/components/feature/home/HomeGoalsSection";
 import { CravingActions } from "@/components/feature/home/CravingActions";
@@ -72,7 +72,7 @@ export default function Home() {
   const symbol = currencySymbol(state.profile.currency);
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <ScreenHeader leading={<AppBrandMark />} />
 
@@ -107,6 +107,6 @@ export default function Home() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

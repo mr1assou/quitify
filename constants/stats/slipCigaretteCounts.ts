@@ -1,20 +1,26 @@
-import {
-  CIGARETTES_PER_DAY_BANDS,
-  CIGARETTES_PER_DAY_DROPDOWN_OPTIONS,
-  type CigarettesPerDayBandId,
-} from "@/constants/onboarding/onboardingNicotineBands";
-
 /** A lapse is always logged as a single cigarette. */
 export const LAPSE_CIGARETTE_COUNT = 1;
 
-export type SlipCigaretteBandId = CigarettesPerDayBandId;
+/** Relapse requires an approximate count — at least two cigarettes. */
+export const RELAPSE_MIN_CIGARETTE_COUNT = 2;
 
-export const SLIP_CIGARETTE_DROPDOWN_OPTIONS = CIGARETTES_PER_DAY_DROPDOWN_OPTIONS;
+export const RELAPSE_MAX_CIGARETTE_COUNT = 100;
 
-export function isSlipCigaretteBand(value: string): value is SlipCigaretteBandId {
-  return SLIP_CIGARETTE_DROPDOWN_OPTIONS.some((option) => option.value === value);
+export function parseRelapseCigaretteCount(raw: string): number | null {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+
+  const value = Number.parseInt(trimmed, 10);
+  if (!Number.isFinite(value)) return null;
+
+  return value;
 }
 
-export function slipCigarettesCountForBand(bandId: SlipCigaretteBandId): number {
-  return CIGARETTES_PER_DAY_BANDS.find((band) => band.id === bandId)?.cigarettesPerDay ?? 1;
+export function isValidRelapseCigaretteCount(count: number | null): count is number {
+  return (
+    count != null &&
+    Number.isInteger(count) &&
+    count >= RELAPSE_MIN_CIGARETTE_COUNT &&
+    count <= RELAPSE_MAX_CIGARETTE_COUNT
+  );
 }

@@ -47,7 +47,7 @@ export default function PostDetailScreen() {
   if (!detail) {
     if (postLoading) {
       return (
-        <View className="flex-1 bg-background dark:bg-d-bg" style={screenStyle}>
+        <View className="flex-1 bg-transparent" style={screenStyle}>
           <View className="flex-1 items-center justify-center px-6">
             <ActivityIndicator color={colors.primary} />
           </View>
@@ -56,7 +56,7 @@ export default function PostDetailScreen() {
     }
 
     return (
-      <View className="flex-1 bg-background dark:bg-d-bg" style={screenStyle}>
+      <View className="flex-1 bg-transparent" style={screenStyle}>
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
             This post is no longer available.
@@ -77,7 +77,7 @@ export default function PostDetailScreen() {
     Platform.OS === "ios" ? insets.top + HEADER_HEIGHT : 0;
 
   return (
-    <View className="flex-1 bg-background dark:bg-d-bg" style={{ paddingTop: insets.top }}>
+    <View className="flex-1 bg-transparent" style={{ paddingTop: insets.top }}>
       <View
         className="flex-row items-center justify-between px-4"
         style={{ height: HEADER_HEIGHT }}

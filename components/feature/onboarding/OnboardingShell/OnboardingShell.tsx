@@ -3,8 +3,7 @@ import { safeRouter } from "@/utils/app/safeRouter";
 import { type ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -36,10 +35,7 @@ export function OnboardingShell({
   const { colors } = useTheme();
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-background dark:bg-d-bg"
-      edges={["top", "bottom"]}
-    >
+    <ScreenCanvas edges={["top", "bottom"]}>
       <View className="min-h-0 flex-1 px-6 pt-2">
         <View className="flex-row items-center justify-between">
           {showBack ? (
@@ -58,7 +54,7 @@ export function OnboardingShell({
           <View className="h-10 w-10" />
         </View>
 
-        <View className="mt-2 h-1 w-full overflow-hidden rounded-full bg-section dark:bg-d-surface">
+        <View className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/60 dark:bg-d-surface/80">
           <Animated.View
             entering={FadeIn.duration(300)}
             className="h-full rounded-full bg-primary"
@@ -93,6 +89,6 @@ export function OnboardingShell({
           />
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

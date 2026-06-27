@@ -10,7 +10,7 @@ type Props = {
   embedded?: boolean;
 };
 
-export function PostAddPhotosChip({ onPress, className, embedded = false }: Props) {
+export function PostAddMediaChip({ onPress, className, embedded = false }: Props) {
   const { colors } = useTheme();
 
   return (
@@ -20,9 +20,9 @@ export function PostAddPhotosChip({ onPress, className, embedded = false }: Prop
         embedded ? "" : "mx-5"
       } ${className ?? ""}`}
     >
-      <Ionicons name="add" size={16} color={colors.mutedForeground} />
+      <Ionicons name="images-outline" size={16} color={colors.mutedForeground} />
       <Text className="ml-1.5 text-sm font-semibold" style={{ color: colors.mutedForeground }}>
-        Add photo
+        Add media
       </Text>
     </Pressable>
   );

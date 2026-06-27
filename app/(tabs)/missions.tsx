@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { MissionPlanModuleSection } from "@/components/feature/missions/MissionPlanModuleSection";
 import { PlanDayLockedModal } from "@/components/feature/missions/PlanDayLockedModal";
@@ -27,7 +27,7 @@ export default function Missions() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <ScreenHeader leading={<AppBrandMark />} />
 
@@ -38,13 +38,13 @@ export default function Missions() {
         ) : (
           <>
             {!plan.hasQuitStreak ? (
-              <View className="mx-6 mt-4 rounded-2xl bg-section px-4 py-4 dark:bg-d-surface">
+              <View className="mx-6 mt-4 rounded-2xl border border-border/50 bg-white/88 px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                   Set your quit date during onboarding to unlock your 180-day plan.
                 </Text>
               </View>
             ) : plan.unlockedThroughDay <= 0 ? (
-              <View className="mx-6 mt-4 rounded-2xl bg-section px-4 py-4 dark:bg-d-surface">
+              <View className="mx-6 mt-4 rounded-2xl border border-border/50 bg-white/88 px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                   Your plan unlocks when your quit day begins. Day 2 and later unlock at 7 AM in
                   your local time after you finish the previous day.
@@ -92,6 +92,6 @@ export default function Missions() {
         content={plan.lockedDayModal}
         onClose={plan.closeLockedDayModal}
       />
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

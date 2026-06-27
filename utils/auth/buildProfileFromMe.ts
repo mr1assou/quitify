@@ -1,6 +1,8 @@
 import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
 import type { AuthMeResponse } from "@/services/auth/meApi";
 import type { UserProfile } from "@/types";
+import { mapSexFromApi } from "@/utils/profile/mapSexFromApi";
+import { resolveProfileImageUrl } from "@/utils/profile/resolveProfileImageUrl";
 
 import { parsePackPrice } from "./parsePackPrice";
 
@@ -14,8 +16,11 @@ export function buildProfileFromMe(me: AuthMeResponse): UserProfile {
   const quitDate = parseUtcMs(me.quitDate) ?? Date.now();
   const streakStart = parseUtcMs(me.streakStart) ?? quitDate;
 
+  const sex = mapSexFromApi(me.sex);
+
   return {
     name: me.name,
+    sex,
     quitDate,
     streakStart,
     currentAttemptNumber: me.currentAttemptNumber ?? 1,
@@ -24,7 +29,7 @@ export function buildProfileFromMe(me: AuthMeResponse): UserProfile {
     cigarettesPerPack: me.cigarettesPerPack ?? DEFAULT_CIGARETTES_PER_PACK,
     packCost: parsePackPrice(me.packPrice),
     countryFlag: me.countryFlag,
-    imageUrl: me.imageUrl,
+    imageUrl: resolveProfileImageUrl(me.imageUrl, sex),
     currency: me.currency ?? "USD",
     economicsSegments: me.economicsSegments,
   };

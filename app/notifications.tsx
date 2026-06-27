@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
@@ -49,7 +49,7 @@ export default function NotificationsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
+    <ScreenCanvas edges={["top", "bottom"]}>
       <StackScreenHeader title="Notifications" />
 
       <FlatList
@@ -102,7 +102,7 @@ export default function NotificationsScreen() {
         }
         contentContainerStyle={{ flexGrow: 1, paddingVertical: 8 }}
       />
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }
 

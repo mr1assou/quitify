@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
 import { ChatEmptyGreeting } from "@/components/feature/chat/ChatEmptyGreeting";
@@ -146,13 +146,13 @@ export default function ChatThreadScreen() {
 
   if (showNotFound) {
     return (
-      <SafeAreaView className="flex-1 bg-background dark:bg-d-bg">
+      <ScreenCanvas>
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
             Conversation not found.
           </Text>
         </View>
-      </SafeAreaView>
+      </ScreenCanvas>
     );
   }
 
@@ -234,15 +234,15 @@ export default function ChatThreadScreen() {
     : "";
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       {detail ? (
         <ChatHeader participant={detail.participant} onCall={onCall} isTyping={peerTyping} />
       ) : (
         <ChatHeaderPlaceholder />
       )}
 
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: "transparent" }}>
+        <View style={{ flex: 1, backgroundColor: "transparent" }}>
           {showMessagesLoader ? (
             <View className="flex-1 items-center justify-center gap-3">
               <ActivityIndicator size="large" color={colors.primary} />
@@ -251,7 +251,7 @@ export default function ChatThreadScreen() {
               </Text>
             </View>
           ) : (
-            <Animated.View entering={FadeInDown.duration(360)} style={{ flex: 1 }}>
+            <Animated.View entering={FadeInDown.duration(360)} style={{ flex: 1, backgroundColor: "transparent" }}>
               {rows.length === 0 && detail ? (
                 <View className="absolute left-0 right-0 top-4 z-10" pointerEvents="none">
                   <ChatEmptyGreeting participantName={detail.participant.name} />
@@ -261,7 +261,7 @@ export default function ChatThreadScreen() {
               <FlatList
                 ref={listRef}
                 inverted
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: "transparent" }}
                 data={rows}
                 extraData={rows.length}
                 removeClippedSubviews={false}
@@ -320,7 +320,7 @@ export default function ChatThreadScreen() {
         onEdit={handleEditMessage}
         onDelete={handleDeleteMessage}
       />
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }
 

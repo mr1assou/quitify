@@ -28,7 +28,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
   return (
     <View
-      className="flex-row items-center justify-around border-t border-section bg-background px-2 pt-2 dark:border-d-border dark:bg-d-bg"
+      className="flex-row items-center justify-around border-t border-border/70 bg-white/80 px-2 pt-2 dark:border-d-border/80 dark:bg-d-surface/90"
       style={{ paddingBottom: Math.max(insets.bottom, 8) }}
     >
       {state.routes.map((route, index) => {

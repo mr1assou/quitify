@@ -1,3 +1,5 @@
+import { SCREEN_GRADIENT } from "./screenBackground";
+
 /** Core brand orange — used for primary actions, links, and highlights. */
 export const BRAND_ORANGE = "#FF7A00";
 
@@ -6,34 +8,34 @@ export const BRAND_ORANGE = "#FF7A00";
  * Tailwind `className` uses `dark:` variants separately (see tailwind.config.js).
  */
 export const lightColors = {
-  background: "#FFFFFF",
+  background: SCREEN_GRADIENT.light.top,
   primary: BRAND_ORANGE,
   primaryDark: "#CC6200",
   primaryLight: "#FF9933",
   secondary: "#FFB366",
-  foreground: "#171717",
-  mutedForeground: "#737373",
+  foreground: "#3A322C",
+  mutedForeground: "#8A7B6E",
   accent: BRAND_ORANGE,
   accentSoft: "#FFF0E0",
   alert: "#DC3545",
-  section: "#FFFBF7",
-  border: "#FFE8D1",
+  section: "#FFFFFF",
+  border: "#F0DFCC",
   white: "#FFFFFF",
 } as const;
 
 export const darkColors = {
-  background: "#121212",
+  background: SCREEN_GRADIENT.dark.mid,
   primary: BRAND_ORANGE,
   primaryDark: "#FF9933",
   primaryLight: "#FFB366",
   secondary: "#CC6200",
-  foreground: "#F5F5F5",
-  mutedForeground: "#A3A3A3",
+  foreground: "#F7F0E8",
+  mutedForeground: "#B8A99A",
   accent: BRAND_ORANGE,
-  accentSoft: "#261A0F",
+  accentSoft: "#2E2218",
   alert: "#EF5350",
-  section: "#1E1E1E",
-  border: "#333333",
+  section: "#252018",
+  border: "#3D3228",
   white: "#FFFFFF",
 } as const;
 

@@ -41,7 +41,8 @@ export function MessageComposer({
   onSaveEdit,
   onCancelEdit,
 }: Props) {
-  const { colors } = useTheme();
+  const { colors, resolved } = useTheme();
+  const isDark = resolved === "dark";
   const insets = useSafeAreaInsets();
   const { progress } = useReanimatedKeyboardAnimation();
   const { pickFromGallery } = usePickChatMedia();
@@ -51,6 +52,7 @@ export function MessageComposer({
     paddingBottom:
       MIN_BOTTOM_PADDING +
       (1 - progress.value) * Math.max(insets.bottom - MIN_BOTTOM_PADDING, 0),
+    backgroundColor: "transparent",
   }));
   const { isRecording, startRecording, stopRecording, cancelRecording } = useRecordChatAudio();
   const [text, setText] = useState("");
@@ -108,7 +110,7 @@ export function MessageComposer({
 
   return (
     <Animated.View
-      className="border-t border-section bg-background dark:border-d-border dark:bg-d-bg"
+      className={`border-t ${isDark ? "border-d-border/60" : "border-border/70"}`}
       style={containerStyle}
     >
       {isEditing ? (
@@ -154,7 +156,9 @@ export function MessageComposer({
         ) : null}
 
         <View
-          className="min-w-0 flex-1 justify-center rounded-full bg-section px-4 dark:bg-d-surface"
+          className={`min-w-0 flex-1 justify-center rounded-full px-4 ${
+            isDark ? "bg-d-elevated/90" : "bg-section/95"
+          }`}
           style={{ minHeight: CONTROL, maxHeight: INPUT_MAX_HEIGHT }}
         >
           <TextInput

@@ -11,10 +11,12 @@ type CardProps = ViewProps & {
 };
 
 const variants: Record<Variant, string> = {
-  section: "bg-section dark:bg-d-surface",
-  surface: "bg-background dark:bg-d-elevated",
+  section:
+    "bg-white/92 dark:bg-d-surface/95 border border-border/50 dark:border-d-border/70",
+  surface:
+    "bg-white/95 dark:bg-d-elevated/95 border border-border/40 dark:border-d-border/60",
   outline:
-    "bg-background dark:bg-d-elevated border border-secondary dark:border-d-border",
+    "bg-white/90 dark:bg-d-elevated/90 border border-border dark:border-d-border",
   primary: "bg-primary",
   secondary: "bg-secondary dark:bg-primary",
 };

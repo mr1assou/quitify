@@ -6,6 +6,7 @@ import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotiv
 import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboarding/onboardingPrimaryInterest";
 import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboarding/onboardingPriorQuitAttempts";
 import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
+import { normalizeOnboardingUsername } from "@/constants/onboarding/onboardingUsername";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import type { OnboardingDraft } from "@/types";
 import type { OnboardingPayload } from "@/types/onboarding/onboardingPayload";
@@ -73,7 +74,7 @@ export function resolveOnboardingPayloadText(
       ),
     },
     step5: {
-      username: draft.username.trim(),
+      username: normalizeOnboardingUsername(draft.username),
       sex: labelForId(PROFILE_SEX_OPTIONS, draft.sex),
       country: draft.countryName,
       countryFlag: draft.countryFlag,

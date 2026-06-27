@@ -7,9 +7,9 @@ export function isRemotePostMediaUri(uri: string): boolean {
   return /^https?:\/\//i.test(uri);
 }
 
-/** Apply the same crop framing as the composer whenever the post has a remote/local URI. */
+/** Apply crop framing for image posts with a URI. Videos use the native player instead. */
 export function shouldApplyPostMediaCrop(media: PostMedia): boolean {
-  return Boolean(media.localUri);
+  return media.kind === "image" && Boolean(media.localUri);
 }
 
 /** Stable list keys for post media items. */

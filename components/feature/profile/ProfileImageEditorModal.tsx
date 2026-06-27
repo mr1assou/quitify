@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PostImageCropEditor, type PostImageCropEditorHandle } from "@/components/feature/community/PostComposer/PostImageCropEditor";
-import { usePickPostImage } from "@/components/feature/community/PostComposer/usePickPostImage";
+import { usePickProfileImage } from "@/components/feature/profile/usePickProfileImage";
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
@@ -24,7 +24,7 @@ export function ProfileImageEditorModal({ visible, onClose }: Props) {
   const { colors } = useTheme();
   const { updateProfile, state: appState } = useApp();
   const { patchAuthor } = useCommunity();
-  const { pickImages } = usePickPostImage();
+  const { pickImages } = usePickProfileImage();
   const cropEditorRef = useRef<PostImageCropEditorHandle>(null);
   const [uri, setUri] = useState<string | null>(null);
   const [crop, setCrop] = useState<PostImageCrop>(DEFAULT_POST_IMAGE_CROP);

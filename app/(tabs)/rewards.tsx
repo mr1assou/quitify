@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { AchievementSectionTabs } from "@/components/feature/achievement/AchievementSectionTabs";
 import { BadgesGallery } from "@/components/feature/progress/BadgesGallery";
@@ -31,7 +31,7 @@ export default function AchievementScreen() {
   if (!progress) return null;
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <ScreenHeader leading={<AppBrandMark />} />
 
@@ -67,6 +67,6 @@ export default function AchievementScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

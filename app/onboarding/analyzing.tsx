@@ -1,7 +1,7 @@
 import { safeRouter } from "@/utils/app/safeRouter";
 import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import {
   AnalyzingProgress,
@@ -35,10 +35,7 @@ export default function OnboardingAnalyzing() {
   }, []);
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-background dark:bg-d-bg"
-      edges={["top", "bottom"]}
-    >
+    <ScreenCanvas edges={["top", "bottom"]}>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ flexGrow: 1 }}
@@ -48,6 +45,6 @@ export default function OnboardingAnalyzing() {
           <AnalyzingProgress tasks={TASKS} onComplete={onComplete} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

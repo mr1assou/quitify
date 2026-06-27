@@ -41,7 +41,8 @@ export function LinkifiedTextInput({
             right: 0,
             top: 0,
             zIndex: 1,
-            minHeight: mergedStyle.height,
+            height: mergedStyle.height,
+            minHeight: mergedStyle.height ?? mergedStyle.minHeight,
           }}
         >
           <LinkifiedText style={displayStyle}>{value}</LinkifiedText>

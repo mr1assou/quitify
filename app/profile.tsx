@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
 import { SelfProfileSettings } from "@/components/feature/profile/SelfProfileSettings";
@@ -11,7 +11,7 @@ import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfi
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function ProfileModal() {
-  const { state, setPremium } = useApp();
+  const { state } = useApp();
   const signOut = useLogout();
   const playerProfile = useSelfPlayerProfile();
   const profile = state.profile;
@@ -19,7 +19,7 @@ export default function ProfileModal() {
   if (!profile || !playerProfile) return null;
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
+    <ScreenCanvas edges={["top", "bottom"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
         <ProfileScreenHeader
           title="Settings"
@@ -46,7 +46,6 @@ export default function ProfileModal() {
             accountEmail={state.account?.email}
             isSignedIn={!!state.account}
             onSignOut={() => void signOut()}
-            onPremiumChange={setPremium}
           />
         </View>
 
@@ -54,6 +53,6 @@ export default function ProfileModal() {
           Quit Smoking · v1.0
         </Text>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

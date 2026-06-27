@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, RefreshControl, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { CommunityScrollHeader } from "@/components/feature/community/CommunityScrollHeader";
 import { FeedPostSeparator } from "@/components/feature/community/FeedPostSeparator";
@@ -14,7 +14,7 @@ export default function CommunityScreen() {
   const isEmpty = !loading && feed.length === 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top"]}>
+    <ScreenCanvas edges={["top"]}>
       <FlatList
         data={feed}
         keyExtractor={(item) => item.post.id}
@@ -64,6 +64,6 @@ export default function CommunityScreen() {
         contentContainerStyle={{ paddingBottom: 120, flexGrow: isEmpty ? 1 : undefined }}
         showsVerticalScrollIndicator={false}
       />
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

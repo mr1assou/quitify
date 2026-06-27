@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
@@ -147,7 +147,7 @@ export default function SharePostScreen() {
   const listBottomPadding = selectedUserIds.length > 0 ? 120 : 32;
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
+    <ScreenCanvas edges={["top", "bottom"]}>
       <StackScreenHeader title="Send post" />
 
       <View className="px-6 pt-2 pb-1">
@@ -221,7 +221,7 @@ export default function SharePostScreen() {
           </Pressable>
         </View>
       ) : null}
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }
 

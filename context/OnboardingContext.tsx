@@ -13,6 +13,7 @@ import type {
   UserProfile,
 } from "@/types";
 import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
+import { normalizeOnboardingUsername } from "@/constants/onboarding/onboardingUsername";
 import { parseBirthYmd } from "@/utils/profile/birthdate";
 import { resolveDefaultProfileImageUri } from "@/utils/onboarding/resolveDefaultProfileImageUri";
 import { startOfLocalDay } from "@/utils/shared/dates";
@@ -62,7 +63,7 @@ export function useOnboarding(): OnboardingContextValue {
  */
 export function buildProfile(draft: OnboardingDraft): UserProfile {
   const reasonIds = draft.quitReasonIds;
-  const name = draft.username.trim();
+  const name = normalizeOnboardingUsername(draft.username);
   const birthDate =
     draft.birthYear != null && draft.birthMonth != null && draft.birthDay != null
       ? parseBirthYmd(draft.birthYear, draft.birthMonth, draft.birthDay)

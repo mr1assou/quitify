@@ -1,6 +1,6 @@
 import type { PostMediaFrame } from "@/types/community/community";
 
-export const POST_TITLE_MAX = 300;
+export const POST_TITLE_MAX = 200;
 
 export const POST_IMAGE_FRAMES: { id: PostMediaFrame; label: string; hint: string }[] = [
   { id: "square", label: "Square", hint: "1:1" },

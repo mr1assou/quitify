@@ -9,7 +9,7 @@ export function PostComposerForm() {
   const {
     draft,
     updateDraft,
-    addImages,
+    addMedia,
     removeImage,
     updateImageFrame,
     updateImageCrop,
@@ -31,7 +31,7 @@ export function PostComposerForm() {
         draft={draft}
         cropEditorRef={cropEditorRef}
         onUpdate={updateDraft}
-        onPickImages={addImages}
+        onPickMedia={addMedia}
         onRemoveImage={removeImage}
         onFrameChange={updateImageFrame}
         onCropChange={updateImageCrop}

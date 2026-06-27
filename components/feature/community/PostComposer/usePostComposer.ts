@@ -4,11 +4,8 @@ import { Alert } from "react-native";
 
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
-import {
-  createPost,
-  requestPostUploadUrl,
-  uploadImageToPresignedUrl,
-} from "@/services/posts/postsApi";
+import { createPost } from "@/services/posts/postsApi";
+import { uploadPostMediaToR2 } from "@/services/posts/uploadPostMedia";
 import { mapBackendPostToCommunityPost } from "@/utils/community/mapBackendPost";
 import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
 import type { UpdatePostPayload } from "@/types/community/updatePost";
@@ -18,10 +15,9 @@ import {
   postDraftFromCommunityPost,
   type PostDraft,
 } from "@/utils/community/postDraft";
-import { optimizePostImageForUpload } from "@/utils/posts/optimizePostImage";
 import { buildCurrentUserCommunityAuthor } from "@/utils/community/resolveCommunityAuthor";
 
-import { usePickPostImage } from "./usePickPostImage";
+import { usePickPostMedia } from "./usePickPostMedia";
 import type { PostImageCropEditorHandle } from "./PostImageCropEditor";
 
 function isRemoteUri(uri: string): boolean {
@@ -35,7 +31,7 @@ export function usePostComposer() {
   const { state: appState } = useApp();
   const [draft, setDraft] = useState<PostDraft>(EMPTY_POST_DRAFT);
   const [isPosting, setIsPosting] = useState(false);
-  const { pickImages } = usePickPostImage();
+  const { pickMedia } = usePickPostMedia();
   const cropEditorRef = useRef<PostImageCropEditorHandle | null>(null);
 
   useEffect(() => {
@@ -60,19 +56,26 @@ export function usePostComposer() {
     setDraft((current) => ({ ...current, ...patch }));
   }, []);
 
-  const addImages = useCallback(async () => {
-    const picked = await pickImages();
+  const addMedia = useCallback(async () => {
+    const picked = await pickMedia();
     if (picked.length === 0) return;
 
     setDraft((current) => {
       if (current.images.length >= 1) return current;
-      const { uri, mimeType } = picked[0];
+      const item = picked[0];
       return {
         ...current,
-        images: [createDraftImage(uri, mimeType)],
+        images: [
+          createDraftImage(
+            item.uri,
+            item.mimeType,
+            item.kind,
+            item.durationMs,
+          ),
+        ],
       };
     });
-  }, [pickImages]);
+  }, [pickMedia]);
 
   const removeImage = useCallback((id: string) => {
     setDraft((current) => ({
@@ -94,7 +97,7 @@ export function usePostComposer() {
     setDraft((current) => ({
       ...current,
       images: current.images.map((image) =>
-        image.id === id ? { ...image, crop } : image,
+        image.id === id && image.kind === "image" ? { ...image, crop } : image,
       ),
     }));
   }, []);
@@ -104,44 +107,52 @@ export function usePostComposer() {
 
     const title = draft.title.trim();
     const description = draft.body.trim();
-    let image = draft.images[0];
+    let media = draft.images[0];
     const tagId = draft.tagId;
 
-    if (image) {
+    if (media?.kind === "image") {
       const flushedCrop = cropEditorRef.current?.flush();
       if (flushedCrop) {
-        image = { ...image, crop: flushedCrop };
+        media = { ...media, crop: flushedCrop };
       }
     }
 
     const originalPost = editingPostId
       ? state.posts.find((item) => item.id === editingPostId)
       : undefined;
-    const hadImage = Boolean(originalPost?.media?.length);
+    const hadMedia = Boolean(originalPost?.media?.length);
 
     setIsPosting(true);
     try {
       let imageUrl: string | undefined;
       let imageFrame: PostMediaFrame | undefined;
       let imageCrop: PostImageCrop | undefined;
+      let mediaKind: "image" | "video" | undefined;
+      let mediaDurationMs: number | undefined;
       let clearImage = false;
 
-      if (image) {
-        if (isRemoteUri(image.uri)) {
-          imageUrl = image.uri;
-          imageFrame = image.frame;
-          imageCrop = image.crop;
+      if (media) {
+        mediaKind = media.kind;
+        imageFrame = media.frame;
+        mediaDurationMs = media.durationMs;
+
+        if (isRemoteUri(media.uri)) {
+          imageUrl = media.uri;
+          if (media.kind === "image") {
+            imageCrop = media.crop;
+          }
         } else {
-          const optimized = await optimizePostImageForUpload(image.uri);
-          const { uploadUrl, imageUrl: uploadedUrl } = await requestPostUploadUrl(
-            optimized.contentType,
-          );
-          await uploadImageToPresignedUrl(uploadUrl, optimized.uri, optimized.contentType);
-          imageUrl = uploadedUrl;
-          imageFrame = image.frame;
-          imageCrop = image.crop;
+          const uploaded = await uploadPostMediaToR2({
+            uri: media.uri,
+            kind: media.kind,
+            mimeType: media.mimeType,
+          });
+          imageUrl = uploaded.publicUrl;
+          if (media.kind === "image") {
+            imageCrop = media.crop;
+          }
         }
-      } else if (isEditing && hadImage) {
+      } else if (isEditing && hadMedia) {
         clearImage = true;
       }
 
@@ -155,10 +166,14 @@ export function usePostComposer() {
           payload.image_url = null;
           payload.image_frame = null;
           payload.image_crop = null;
+          payload.media_kind = null;
+          payload.media_duration_ms = null;
         } else if (imageUrl) {
           payload.image_url = imageUrl;
           payload.image_frame = imageFrame;
-          payload.image_crop = imageCrop ?? null;
+          payload.image_crop = mediaKind === "image" ? (imageCrop ?? null) : null;
+          payload.media_kind = mediaKind;
+          payload.media_duration_ms = mediaDurationMs ?? null;
         }
         await updatePost(editingPostId, payload);
         router.back();
@@ -171,18 +186,21 @@ export function usePostComposer() {
         tag_id: tagId,
         image_url: imageUrl,
         image_frame: imageFrame,
-        image_crop: imageCrop,
+        image_crop: mediaKind === "image" ? imageCrop : undefined,
+        media_kind: mediaKind,
+        media_duration_ms: mediaDurationMs,
       });
 
       let post = mapBackendPostToCommunityPost(created);
-      if (image && post.media?.[0]) {
+      if (media && post.media?.[0]) {
         post = {
           ...post,
           media: [
             {
               ...post.media[0],
-              frame: post.media[0].frame ?? image.frame,
-              crop: post.media[0].crop ?? image.crop,
+              frame: post.media[0].frame ?? media.frame,
+              crop: media.kind === "image" ? (post.media[0].crop ?? media.crop) : undefined,
+              durationLabel: post.media[0].durationLabel,
             },
           ],
         };
@@ -219,7 +237,7 @@ export function usePostComposer() {
   return {
     draft,
     updateDraft,
-    addImages,
+    addMedia,
     removeImage,
     updateImageFrame,
     updateImageCrop,

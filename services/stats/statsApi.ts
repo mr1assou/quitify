@@ -1,5 +1,6 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import type { StatsAttemptsResponse } from "@/types/stats/statsAttempts";
+import type { StatsFreedomPointsResponse } from "@/types/stats/statsFreedomPoints";
 import type { StatsGoalsResponse } from "@/types/stats/statsGoals";
 import type { StatsOverviewResponse } from "@/types/stats/statsOverview";
 
@@ -31,4 +32,14 @@ export async function fetchStatsGoals(): Promise<StatsGoalsResponse> {
   }
 
   return res.json() as Promise<StatsGoalsResponse>;
+}
+
+export async function fetchStatsFreedomPoints(): Promise<StatsFreedomPointsResponse> {
+  const res = await authenticatedFetch("/auth/me/stats/freedom-points");
+
+  if (!res.ok) {
+    throw new Error("Could not load freedom points history");
+  }
+
+  return res.json() as Promise<StatsFreedomPointsResponse>;
 }

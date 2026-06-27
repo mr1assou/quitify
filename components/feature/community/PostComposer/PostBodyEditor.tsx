@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { LinkifiedTextInput } from "@/components/ui/LinkifiedTextInput";
 import { useTheme } from "@/context/ThemeContext";
 
-import { PostAddPhotosChip } from "./PostAddPhotosChip";
+import { PostAddMediaChip } from "./PostAddMediaChip";
 
 const BODY_FONT_SIZE = 15;
 const BODY_LINE_HEIGHT = 22;
@@ -13,15 +13,15 @@ const BODY_MIN_HEIGHT = BODY_LINE_HEIGHT * 2;
 type Props = {
   value: string;
   onChangeText: (text: string) => void;
-  onPickImages: () => void;
-  showAddPhoto?: boolean;
+  onPickMedia: () => void;
+  showAddMedia?: boolean;
 };
 
 export function PostBodyEditor({
   value,
   onChangeText,
-  onPickImages,
-  showAddPhoto = true,
+  onPickMedia,
+  showAddMedia = true,
 }: Props) {
   const { colors } = useTheme();
   const [inputHeight, setInputHeight] = useState(BODY_MIN_HEIGHT);
@@ -57,8 +57,8 @@ export function PostBodyEditor({
         }}
       />
 
-      {showAddPhoto ? (
-        <PostAddPhotosChip onPress={onPickImages} className="mt-3" embedded />
+      {showAddMedia ? (
+        <PostAddMediaChip onPress={onPickMedia} className="mt-3" embedded />
       ) : null}
     </View>
   );

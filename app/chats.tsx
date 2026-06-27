@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, Text, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { ChatListRow } from "@/components/feature/chat/ChatListRow";
 import {
@@ -21,8 +23,14 @@ import type { CommunityUser } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { mapSupportUserToCommunityUser } from "@/utils/chat/mapBackendChat";
 
+function parseChatsSection(value: string | string[] | undefined): ChatsSection {
+  const raw = Array.isArray(value) ? value[0] : value;
+  return raw === "support" ? "support" : "chats";
+}
+
 export default function ChatsScreen() {
   const { colors } = useTheme();
+  const { section: sectionParam } = useLocalSearchParams<{ section?: string | string[] }>();
   const { state } = useApp();
   const insets = useSafeAreaInsets();
   const { loadChatThreads } = useCommunity();
@@ -30,7 +38,9 @@ export default function ChatsScreen() {
   const listBottom = Math.max(insets.bottom, 16) + 16;
 
   const isSupportStaff = isSupportRole(state.account?.role);
-  const [section, setSection] = useState<ChatsSection>("chats");
+  const [section, setSection] = useState<ChatsSection>(() =>
+    parseChatsSection(sectionParam),
+  );
   const [supportList, setSupportList] = useState<CommunityUser[]>([]);
   const [isLoadingSupport, setIsLoadingSupport] = useState(false);
   const [supportError, setSupportError] = useState<string | null>(null);
@@ -50,6 +60,13 @@ export default function ChatsScreen() {
       setIsLoadingSupport(false);
     }
   }, [isSupportStaff]);
+
+  useEffect(() => {
+    if (parseChatsSection(sectionParam) === "support") {
+      setSection("support");
+      void loadSupportList();
+    }
+  }, [sectionParam, loadSupportList]);
 
   useFocusEffect(
     useCallback(() => {
@@ -71,7 +88,7 @@ export default function ChatsScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
+    <ScreenCanvas edges={["top", "bottom"]}>
       <StackScreenHeader
         title="Chats"
         rightAction={
@@ -129,7 +146,7 @@ export default function ChatsScreen() {
           ListEmptyComponent={
             <View className="items-center px-6 pt-16">
               <Ionicons
-                name={isSupportStaff ? "people-outline" : "headset-outline"}
+                name={isSupportStaff ? "people-outline" : "chatbubbles-outline"}
                 size={48}
                 color={colors.mutedForeground}
               />
@@ -149,6 +166,6 @@ export default function ChatsScreen() {
           contentContainerStyle={{ paddingBottom: listBottom, paddingTop: 4 }}
         />
       )}
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }

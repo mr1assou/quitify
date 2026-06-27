@@ -2,7 +2,7 @@ import { POST_COMMENTS_PAGE_SIZE } from "@/constants/community/postCommentsPagin
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import type { PostVote } from "@/types/community/community";
 import type {
-  AllowedImageContentType,
+  AllowedPostContentType,
   BackendFeedPageResponse,
   BackendFeedPostResponse,
   BackendPostCommentEngagement,
@@ -32,7 +32,7 @@ async function parseErrorMessage(res: Response, fallback: string): Promise<strin
 }
 
 export async function requestPostUploadUrl(
-  contentType: AllowedImageContentType,
+  contentType: AllowedPostContentType,
 ): Promise<PresignedUploadResponse> {
   const res = await authenticatedFetch("/upload-url", {
     method: "POST",
@@ -40,7 +40,7 @@ export async function requestPostUploadUrl(
   });
 
   if (!res.ok) {
-    throw new Error(await parseErrorMessage(res, "Could not prepare image upload"));
+    throw new Error(await parseErrorMessage(res, "Could not prepare media upload"));
   }
 
   return res.json() as Promise<PresignedUploadResponse>;
@@ -49,7 +49,7 @@ export async function requestPostUploadUrl(
 export async function uploadImageToPresignedUrl(
   uploadUrl: string,
   localUri: string,
-  contentType: AllowedImageContentType,
+  contentType: AllowedPostContentType,
 ): Promise<void> {
   const fileResponse = await fetch(localUri);
   const blob = await fileResponse.blob();
@@ -61,7 +61,7 @@ export async function uploadImageToPresignedUrl(
   });
 
   if (!res.ok) {
-    throw new Error("Image upload failed");
+    throw new Error("Media upload failed");
   }
 }
 

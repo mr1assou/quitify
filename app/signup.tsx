@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { Button } from "@/components/ui/Button";
 import { useApp } from "@/context/AppContext";
@@ -56,10 +56,7 @@ export default function Signup() {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-background dark:bg-d-bg"
-      edges={["top", "bottom"]}
-    >
+    <ScreenCanvas edges={["top", "bottom"]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
@@ -122,7 +119,7 @@ export default function Signup() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenCanvas>
   );
 }
 

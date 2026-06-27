@@ -1,10 +1,11 @@
 import { flagUrlForCode } from "@/constants/leaderboard/leaderboardCountries";
 import type { PostTagId } from "@/constants/community/postTags";
-import type { CommunityPost, CommunityUser, PostImageCrop, PostMediaFrame } from "@/types/community/community";
+import type { CommunityPost, CommunityUser, PostImageCrop, PostMedia, PostMediaFrame, PostMediaKind } from "@/types/community/community";
 import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/community/postsApi";
 import { resolveBadgeIdForSmokeFreeDays } from "@/utils/progress/badges";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import { dbAuthorId } from "@/utils/community/presence";
+import { formatMediaDuration } from "@/utils/chat/formatMediaDuration";
 
 export function authorIdFromFeedPost(post: BackendFeedPostResponse): string {
   return dbAuthorId(post.author.user_id);
@@ -33,6 +34,30 @@ export function mapBackendAuthorToCommunityUser(
   });
 }
 
+function mapBackendPostMedia(
+  post: BackendPostResponse | BackendFeedPostResponse,
+): PostMedia[] | undefined {
+  if (!post.image_url) return undefined;
+
+  const kind: PostMediaKind = post.media_kind === "video" ? "video" : "image";
+
+  return [
+    {
+      kind,
+      localUri: post.image_url,
+      frame: (post.image_frame as PostMediaFrame | null) ?? undefined,
+      crop:
+        kind === "image"
+          ? ((post.image_crop as PostImageCrop | null) ?? undefined)
+          : undefined,
+      durationLabel:
+        kind === "video" && post.media_duration_ms
+          ? formatMediaDuration(post.media_duration_ms)
+          : undefined,
+    },
+  ];
+}
+
 function mapPostFields(
   post: BackendPostResponse | BackendFeedPostResponse,
   authorId: string,
@@ -47,16 +72,7 @@ function mapPostFields(
     tagId: post.tag_id as PostTagId,
     text: post.description,
     createdAt: new Date(post.created_at).getTime(),
-    media: post.image_url
-      ? [
-          {
-            kind: "image",
-            localUri: post.image_url,
-            frame: (post.image_frame as PostMediaFrame | null) ?? undefined,
-            crop: (post.image_crop as PostImageCrop | null) ?? undefined,
-          },
-        ]
-      : undefined,
+    media: mapBackendPostMedia(post),
     upvoteCount: post.upvote_count,
     downvoteCount: post.downvote_count,
     myVote,
