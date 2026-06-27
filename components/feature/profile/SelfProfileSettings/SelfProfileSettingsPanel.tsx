@@ -100,6 +100,7 @@ export function SelfProfileSettings({
         <PushNotificationsToggle
           enabled={pushSettings.enabled}
           disabled={pushSettings.busy}
+          loading={!pushSettings.ready}
           onValueChange={(value) => void pushSettings.setNotificationsEnabled(value)}
         />
       ) : null}

@@ -17,12 +17,15 @@ import { useTheme } from "@/context/ThemeContext";
 type Props = {
   enabled: boolean;
   disabled?: boolean;
+  /** Hide switch until the first status load to avoid an off→on flash. */
+  loading?: boolean;
   onValueChange: (value: boolean) => void;
 };
 
 export function PushNotificationsToggle({
   enabled,
   disabled = false,
+  loading = false,
   onValueChange,
 }: Props) {
   const { colors, resolved } = useTheme();
@@ -68,7 +71,7 @@ export function PushNotificationsToggle({
     <Animated.View
       entering={FadeInDown.duration(480).springify().damping(18).stiffness(140)}
       layout={LinearTransition.springify().damping(18)}
-      style={cardStyle}
+      style={[cardStyle, loading ? { opacity: 0 } : undefined]}
       className="overflow-hidden rounded-3xl bg-section dark:bg-d-surface"
     >
       <View className="flex-row items-center px-4 py-4">
@@ -91,7 +94,7 @@ export function PushNotificationsToggle({
 
         <Switch
           value={enabled}
-          disabled={disabled}
+          disabled={disabled || loading}
           onValueChange={handleChange}
           trackColor={{ false: colors.muted, true: colors.primary }}
           thumbColor={colors.white}

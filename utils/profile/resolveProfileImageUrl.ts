@@ -1,9 +1,12 @@
-import { resolveDefaultProfileImageUri } from "@/utils/onboarding/resolveDefaultProfileImageUri";
+import {
+  defaultProfileImagePath,
+  isDefaultProfileImagePath,
+} from "@/utils/profile/resolveAvatarImageSource";
 import type { ProfileSex } from "@/types/onboarding/onboarding";
 
 /**
- * User-uploaded avatars use the server URL (R2). Default avatars are bundled in
- * `assets/images/profiles/` and are not copied to R2 on signup.
+ * User-uploaded avatars use the server URL (R2).
+ * Default avatars use `profile1.webp` / `profile2.webp` in the DB.
  */
 export function resolveProfileImageUrl(
   serverImageUrl: string | undefined | null,
@@ -13,5 +16,7 @@ export function resolveProfileImageUrl(
   if (trimmed) return trimmed;
 
   if (!sex) return undefined;
-  return resolveDefaultProfileImageUri(sex);
+  return defaultProfileImagePath(sex);
 }
+
+export { isDefaultProfileImagePath };

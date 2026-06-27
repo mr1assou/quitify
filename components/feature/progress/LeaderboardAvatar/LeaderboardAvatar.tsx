@@ -3,6 +3,10 @@ import { View } from "react-native";
 
 import { OnlineStatusDot } from "@/components/ui/OnlineStatusDot";
 import { profileImageForRank } from "@/constants/leaderboard/leaderboardProfiles";
+import {
+  isDefaultProfileImagePath,
+  resolveAvatarImageSource,
+} from "@/utils/profile/resolveAvatarImageSource";
 
 const DEFAULT_SIZE = 52;
 
@@ -62,7 +66,11 @@ export function LeaderboardAvatar({
   flagLeft = -1,
   isOnline,
 }: Props) {
-  const source = imageUrl ? { uri: imageUrl } : profileImageForRank(rank);
+  const avatarSource = resolveAvatarImageSource(imageUrl);
+  const source = avatarSource ?? profileImageForRank(rank);
+  const usesRemoteImage = Boolean(
+    imageUrl?.trim() && !isDefaultProfileImagePath(imageUrl),
+  );
   const label = isCurrentUser ? "Your profile photo" : `${name} profile photo`;
   const flagSize = Math.round(size * 0.38);
   const statusDotSize = Math.max(9, Math.round(size * 0.26));
@@ -81,7 +89,7 @@ export function LeaderboardAvatar({
           source={source}
           style={{ width: size, height: size }}
           contentFit="cover"
-          contentPosition={imageUrl ? "center" : "top"}
+          contentPosition={usesRemoteImage ? "center" : "top"}
           accessibilityLabel={label}
         />
       </View>

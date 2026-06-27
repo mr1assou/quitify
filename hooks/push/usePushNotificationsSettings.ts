@@ -6,21 +6,45 @@ import {
   clearPushTokensOnBackend,
   fetchPushTokenStatus,
 } from "@/services/push/pushTokenApi";
-import { requestPushPermissionAndSaveToken } from "@/services/push/registerPushToken";
+import {
+  getCachedPushTokenStatus,
+  setCachedPushTokenStatus,
+} from "@/services/push/pushSettingsCache";
+import {
+  requestPushPermissionAndSaveToken,
+  syncPushTokenWithBackend,
+} from "@/services/push/registerPushToken";
 
 /** In-app push toggle — on = token in DB, off = token deleted (not OS settings). */
 export function usePushNotificationsSettings() {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(
+    () => getCachedPushTokenStatus() ?? false,
+  );
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState(() => getCachedPushTokenStatus() !== null);
+
+  const applyStatus = useCallback((hasToken: boolean) => {
+    setCachedPushTokenStatus(hasToken);
+    setEnabled(hasToken);
+    setReady(true);
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
       const hasToken = await fetchPushTokenStatus();
-      setEnabled(hasToken);
+      applyStatus(hasToken);
+
+      void syncPushTokenWithBackend()
+        .then(() => fetchPushTokenStatus())
+        .then(applyStatus)
+        .catch(() => {});
     } catch {
-      // Keep current toggle state if the API is unreachable.
+      // Keep cached toggle state if the API is unreachable.
+      if (getCachedPushTokenStatus() !== null) {
+        setReady(true);
+      }
     }
-  }, []);
+  }, [applyStatus]);
 
   useFocusEffect(
     useCallback(() => {
@@ -37,15 +61,15 @@ export function usePushNotificationsSettings() {
         if (next) {
           const saved = await requestPushPermissionAndSaveToken();
           if (!saved) {
-            setEnabled(false);
+            applyStatus(false);
             return;
           }
-          setEnabled(true);
+          applyStatus(true);
           return;
         }
 
         await clearPushTokensOnBackend();
-        setEnabled(false);
+        applyStatus(false);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Could not update notifications.";
@@ -55,12 +79,13 @@ export function usePushNotificationsSettings() {
         setBusy(false);
       }
     },
-    [busy, refresh],
+    [applyStatus, busy, refresh],
   );
 
   return {
     enabled,
     busy,
+    ready,
     setNotificationsEnabled,
     refresh,
   };

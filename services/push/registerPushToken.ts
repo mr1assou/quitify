@@ -3,7 +3,12 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
-import { registerPushTokenOnBackend, type PushPlatform } from "@/services/push/pushTokenApi";
+import {
+  clearPushTokensOnBackend,
+  fetchPushTokenStatus,
+  registerPushTokenOnBackend,
+  type PushPlatform,
+} from "@/services/push/pushTokenApi";
 
 function getEasProjectId(): string {
   const projectId =
@@ -61,4 +66,43 @@ export async function requestPushPermissionAndSaveToken(): Promise<boolean> {
 
   await registerPushTokenOnBackend({ token, platform });
   return true;
+}
+
+/**
+ * Keeps the DB in sync with the device after reinstall or permission changes.
+ * - Notifications ON in app + OS allowed → save a fresh push token
+ * - Notifications ON in app + OS denied → clear stale token from DB
+ * - Notifications OFF in app → do nothing (respect user choice)
+ */
+export async function syncPushTokenWithBackend(): Promise<void> {
+  if (!Device.isDevice) return;
+
+  const platform = resolvePushPlatform();
+  if (!platform) return;
+
+  let hasTokenInDb = false;
+  try {
+    hasTokenInDb = await fetchPushTokenStatus();
+  } catch {
+    return;
+  }
+
+  if (!hasTokenInDb) return;
+
+  const { status } = await Notifications.getPermissionsAsync();
+
+  if (status !== "granted") {
+    await clearPushTokensOnBackend();
+    return;
+  }
+
+  await ensureAndroidNotificationChannel();
+
+  const { data: token } = await Notifications.getExpoPushTokenAsync({
+    projectId: getEasProjectId(),
+  });
+
+  if (!token) return;
+
+  await registerPushTokenOnBackend({ token, platform });
 }

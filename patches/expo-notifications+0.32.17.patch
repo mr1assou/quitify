@@ -1,0 +1,46 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
+index 610d303..9078049 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
+@@ -104,9 +104,25 @@ open class ExpoNotificationBuilder(
+     builder.setContentTitle(content.title)
+     builder.setContentText(content.text)
+     builder.setSubText(content.subText)
+-    // Sets the text/contentText as the bigText to allow the notification to be expanded and the
+-    // entire text to be viewed.
+-    builder.setStyle(NotificationCompat.BigTextStyle().bigText(content.text))
++
++    if (notificationContent.containsImage()) {
++      val bitmap = notificationContent.getImage(context)
++      if (bitmap != null) {
++        builder.setLargeIcon(bitmap)
++        builder.setStyle(
++          NotificationCompat.BigPictureStyle()
++            .bigPicture(bitmap)
++            .bigLargeIcon(null as Bitmap?)
++            .setSummaryText(content.text)
++        )
++      } else {
++        builder.setStyle(NotificationCompat.BigTextStyle().bigText(content.text))
++        builder.setLargeIcon(largeIcon)
++      }
++    } else {
++      builder.setStyle(NotificationCompat.BigTextStyle().bigText(content.text))
++      builder.setLargeIcon(largeIcon)
++    }
+ 
+     color?.let { builder.color = it.toInt() }
+     notificationContent.badgeCount?.toInt()?.let { builder.setNumber(it) }
+@@ -147,12 +163,6 @@ open class ExpoNotificationBuilder(
+       )
+     )
+ 
+-    if (notificationContent.containsImage()) {
+-      val bitmap = notificationContent.getImage(context)
+-      bitmap?.let { builder.setLargeIcon(it) }
+-    } else {
+-      builder.setLargeIcon(largeIcon)
+-    }
+     return builder.build()
+   }
+ 

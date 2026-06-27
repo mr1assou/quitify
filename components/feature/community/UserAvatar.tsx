@@ -4,6 +4,7 @@ import { Image as RNImage, View } from "react-native";
 import { OnlineStatusDot } from "@/components/ui/OnlineStatusDot";
 import { COMMUNITY_AVATAR_IMAGE, USER_AVATAR_IMAGE } from "@/constants/app/assets";
 import type { CommunityUser } from "@/types/community/community";
+import { resolveAvatarImageSource } from "@/utils/profile/resolveAvatarImageSource";
 
 type Props = {
   user: Pick<CommunityUser, "isCurrentUser" | "name" | "avatarUrl" | "isOnline">;
@@ -27,6 +28,7 @@ export function UserAvatar({ user, size = 44, ringed = false }: Props) {
   } as const;
 
   const placeholderSource = user.isCurrentUser ? USER_AVATAR_IMAGE : COMMUNITY_AVATAR_IMAGE;
+  const avatarSource = resolveAvatarImageSource(user.avatarUrl);
 
   return (
     <View style={{ width: size, height: size }}>
@@ -40,9 +42,9 @@ export function UserAvatar({ user, size = 44, ringed = false }: Props) {
         }}
         className={ringed ? "bg-primary" : ""}
       >
-        {user.avatarUrl ? (
+        {avatarSource ? (
           <Image
-            source={{ uri: user.avatarUrl }}
+            source={avatarSource}
             accessibilityLabel={`${user.name} avatar`}
             style={imageStyle}
             contentFit="cover"
