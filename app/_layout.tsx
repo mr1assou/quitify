@@ -105,7 +105,7 @@ function ThemedRoot() {
           name="paywall-comparison"
           options={{
             presentation: "transparentModal",
-            animation: "slide_from_bottom",
+            animation: "fade",
             contentStyle: { backgroundColor: "transparent" },
           }}
         />

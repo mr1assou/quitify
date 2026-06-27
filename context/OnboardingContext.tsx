@@ -15,7 +15,7 @@ import type {
 import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
 import { normalizeOnboardingUsername } from "@/constants/onboarding/onboardingUsername";
 import { parseBirthYmd } from "@/utils/profile/birthdate";
-import { defaultProfileImagePath } from "@/utils/profile/resolveAvatarImageSource";
+import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 import { startOfLocalDay } from "@/utils/shared/dates";
 
 export type { OnboardingDraft, OnboardingContextValue } from "@/types";
@@ -86,7 +86,8 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
     countryCode: draft.countryCode,
     countryFlag: draft.countryFlag,
     currency: draft.currency,
-    imageUrl: defaultProfileImagePath(draft.sex),
+    imageUrl:
+      draft.defaultProfileImage ?? pickDefaultProfileImageForSex(draft.sex),
     quitReasonIds: reasonIds.length > 0 ? [...reasonIds] : undefined,
     motivationLevel: draft.motivationLevel,
     priorQuitAttempts: draft.priorQuitAttempts,

@@ -7,6 +7,7 @@ import {
   type ResetJourneyModalState,
 } from "@/components/feature/profile/ResetJourneyModals";
 import { HabitSettingsModal } from "@/components/feature/profile/HabitSettingsModal";
+import { UsernameEditModal } from "@/components/feature/profile/UsernameEditModal";
 import { PushNotificationsToggle } from "@/components/feature/profile/PushNotificationsToggle";
 import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
@@ -38,9 +39,19 @@ export function SelfProfileSettings({
   const pushSettings = usePushNotificationsSettings();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
   const [habitModalOpen, setHabitModalOpen] = useState(false);
+  const [usernameModalOpen, setUsernameModalOpen] = useState(false);
+
+  const displayUsername = profile.name?.trim() || "Not set";
 
   const accountRows: ListRow[] = isSignedIn
     ? [
+        {
+          id: "username",
+          icon: "at-outline",
+          label: "Username",
+          value: displayUsername,
+          onPress: () => setUsernameModalOpen(true),
+        },
         {
           id: "signed-in",
           icon: "person-circle-outline",
@@ -153,6 +164,12 @@ export function SelfProfileSettings({
         visible={habitModalOpen}
         profile={profile}
         onClose={() => setHabitModalOpen(false)}
+      />
+
+      <UsernameEditModal
+        visible={usernameModalOpen}
+        profile={profile}
+        onClose={() => setUsernameModalOpen(false)}
       />
     </View>
   );

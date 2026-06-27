@@ -5,7 +5,6 @@ import { useApp } from "@/context/AppContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { finalizeGoogleAuth } from "@/services/auth/finalizeGoogleAuth";
 import type { GoogleAuthResponse } from "@/services/auth/types";
-import { markSignupPushPromptPending } from "@/utils/push/signupPushPromptStorage";
 
 function queryParam(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) return value[0];
@@ -59,9 +58,6 @@ export default function GoogleOAuthRedirect() {
     void (async () => {
       try {
         await finalizeGoogleAuth(auth, draft, { setAccount, completeOnboarding });
-        if (auth.isNewUser) {
-          await markSignupPushPromptPending();
-        }
         router.replace("/(tabs)");
       } catch {
         router.replace({

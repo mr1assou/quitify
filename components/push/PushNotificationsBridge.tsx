@@ -1,9 +1,7 @@
-import { usePushTokenSync } from "@/hooks/push/usePushTokenSync";
-import { useSignupPushPrompt } from "@/hooks/push/useSignupPushPrompt";
+import { usePushNotificationsOnAuth } from "@/hooks/push/usePushNotificationsOnAuth";
 
-/** Post-sign-up permission prompt + push token sync after reinstall. */
+/** Sign-up / re-login push permission prompt + token sync. */
 export function PushNotificationsBridge() {
-  useSignupPushPrompt();
-  usePushTokenSync();
+  usePushNotificationsOnAuth();
   return null;
 }

@@ -1,13 +1,43 @@
 import type { ImageSourcePropType } from "react-native";
 
+import {
+  DEFAULT_PROFILE_IMAGE_PATHS,
+  type DefaultProfileImagePath,
+} from "@/constants/profile/defaultProfileImagePaths";
 import type { ProfileSex } from "@/types/onboarding/onboarding";
+import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 
-export const DEFAULT_PROFILE_IMAGE_MALE = require("../../assets/images/profiles/profile1.webp") as ImageSourcePropType;
-export const DEFAULT_PROFILE_IMAGE_FEMALE = require("../../assets/images/profiles/profile2.webp") as ImageSourcePropType;
+const PROFILE_IMAGE_SOURCES: Record<DefaultProfileImagePath, ImageSourcePropType> = {
+  "profile1.webp": require("../../assets/images/profiles/profile1.webp"),
+  "profile2.webp": require("../../assets/images/profiles/profile2.webp"),
+  "profile3.webp": require("../../assets/images/profiles/profile3.webp"),
+  "profile4.webp": require("../../assets/images/profiles/profile4.webp"),
+  "profile5.webp": require("../../assets/images/profiles/profile5.webp"),
+  "profile6.webp": require("../../assets/images/profiles/profile6.webp"),
+  "profile7.webp": require("../../assets/images/profiles/profile7.webp"),
+};
 
-/** Bundled default avatar for onboarding (male → profile1, female / prefer not to say → profile2). */
-export function defaultProfileImageSource(
-  sex: ProfileSex | undefined,
+export function bundledProfileImageSource(
+  imagePath: DefaultProfileImagePath,
 ): ImageSourcePropType {
-  return sex === "male" ? DEFAULT_PROFILE_IMAGE_MALE : DEFAULT_PROFILE_IMAGE_FEMALE;
+  return PROFILE_IMAGE_SOURCES[imagePath];
+}
+
+export function isBundledProfileImagePath(
+  filename: string,
+): filename is DefaultProfileImagePath {
+  return (DEFAULT_PROFILE_IMAGE_PATHS as readonly string[]).includes(filename);
+}
+
+/** Bundled default avatar for display (uses a stable path when provided). */
+export function defaultProfileImageSource(
+  sex?: ProfileSex,
+  imagePath?: string,
+): ImageSourcePropType {
+  const filename = imagePath?.trim().split("/").pop()?.split("?")[0];
+  if (filename && isBundledProfileImagePath(filename)) {
+    return PROFILE_IMAGE_SOURCES[filename];
+  }
+
+  return PROFILE_IMAGE_SOURCES[pickDefaultProfileImageForSex(sex)];
 }

@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { router } from "expo-router";
 import { useMemo } from "react";
 import {
   Pressable,
@@ -18,6 +17,7 @@ import { getThemeColors } from "@/constants/app/theme";
 import { PAYWALL_PLANS_USD } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
 import { computeMonthlyCigaretteSpend } from "@/utils/paywall/monthlyCigaretteSpend";
+import { safeRouter } from "@/utils/app/safeRouter";
 import { formatCurrency } from "@/utils/shared/format";
 
 const SHEET_HEIGHT_RATIO = 0.7;
@@ -91,7 +91,7 @@ export default function PaywallComparison() {
   const quitifyDisplay = formatCurrency(QUITIFY_MONTHLY_USD, "USD");
 
   const dismiss = () => {
-    router.back();
+    safeRouter.back();
   };
 
   return (

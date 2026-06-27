@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -25,22 +25,39 @@ const BENEFITS = [
 /** Paywall is always presented in the premium dark palette. */
 const PAYWALL_COLORS = getThemeColors("dark");
 
+/** Wait for the modal slide-down before pushing the comparison sheet. */
+const PAYWALL_MODAL_DISMISS_MS = 420;
+
 export default function Paywall() {
   const { setFlag, setPremium } = useApp();
   const insets = useSafeAreaInsets();
   const plans = usePaywallPlans();
   const [selectedPlan, setSelectedPlan] = useState<PaywallPlanId>("yearly");
+  const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const primaryCtaLabel = selectedPlan === "yearly" ? "Try free" : "Continue";
 
   const finishPaywall = () => {
+    if (comparisonTimerRef.current) {
+      clearTimeout(comparisonTimerRef.current);
+      comparisonTimerRef.current = null;
+    }
     setFlag("hasSeenPaywall", true);
-    router.back();
+    safeRouter.back();
   };
 
-  const closePaywallToComparison = () => {
+  const openComparisonAfterDismiss = () => {
     setFlag("hasSeenPaywall", true);
-    router.replace("/paywall-comparison");
+    if (!router.canGoBack()) {
+      safeRouter.replace("/paywall-comparison");
+      return;
+    }
+
+    safeRouter.back();
+    comparisonTimerRef.current = setTimeout(() => {
+      comparisonTimerRef.current = null;
+      safeRouter.pushStack("/paywall-comparison");
+    }, PAYWALL_MODAL_DISMISS_MS);
   };
 
   const handlePrimaryCta = () => {
@@ -64,7 +81,7 @@ export default function Paywall() {
       <SafeAreaView className="flex-1 bg-transparent" edges={["top"]}>
         <View className="flex-row items-center justify-end px-4 pt-2">
           <Pressable
-            onPress={closePaywallToComparison}
+            onPress={openComparisonAfterDismiss}
             className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
           >
             <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
@@ -174,7 +191,7 @@ export default function Paywall() {
               <Button label={primaryCtaLabel} size="md" fullWidth onPress={handlePrimaryCta} />
             </View>
 
-            <Pressable onPress={closePaywallToComparison} className="mt-3 items-center py-2 active:opacity-70">
+            <Pressable onPress={openComparisonAfterDismiss} className="mt-3 items-center py-2 active:opacity-70">
               <Text className="text-sm font-semibold text-d-muted">
                 Continue with the free version
               </Text>

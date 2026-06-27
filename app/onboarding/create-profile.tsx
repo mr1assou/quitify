@@ -17,6 +17,7 @@ import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
 import { isCreateProfileStepComplete } from "@/utils/onboarding/createProfileOnboarding";
+import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 
 export default function OnboardingCreateProfile() {
   const { draft, patch } = useOnboarding();
@@ -52,7 +53,12 @@ export default function OnboardingCreateProfile() {
               username={draft.username}
               onUsernameChange={(username) => patch({ username })}
               sex={draft.sex}
-              onSexChange={(sex: ProfileSex) => patch({ sex })}
+              onSexChange={(sex: ProfileSex) =>
+                patch({
+                  sex,
+                  defaultProfileImage: pickDefaultProfileImageForSex(sex),
+                })
+              }
             />
             <OnboardingSectionDivider />
             <CountryFields draft={draft} patch={patch} />

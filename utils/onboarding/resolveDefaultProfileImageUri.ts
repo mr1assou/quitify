@@ -6,8 +6,9 @@ import type { ProfileSex } from "@/types/onboarding/onboarding";
 /** Local file URI for the bundled default avatar (offline / pre-upload display). */
 export function resolveDefaultProfileImageUri(
   sex: ProfileSex | undefined,
+  imagePath?: string,
 ): string {
-  const source = defaultProfileImageSource(sex);
+  const source = defaultProfileImageSource(sex, imagePath);
   const resolved = Image.resolveAssetSource(source);
   return resolved.uri;
 }

@@ -1,12 +1,12 @@
+import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 import {
-  defaultProfileImagePath,
   isDefaultProfileImagePath,
 } from "@/utils/profile/resolveAvatarImageSource";
 import type { ProfileSex } from "@/types/onboarding/onboarding";
 
 /**
  * User-uploaded avatars use the server URL (R2).
- * Default avatars use `profile1.webp` / `profile2.webp` in the DB.
+ * Default avatars use bundled `profile*.webp` filenames in the DB.
  */
 export function resolveProfileImageUrl(
   serverImageUrl: string | undefined | null,
@@ -16,7 +16,7 @@ export function resolveProfileImageUrl(
   if (trimmed) return trimmed;
 
   if (!sex) return undefined;
-  return defaultProfileImagePath(sex);
+  return pickDefaultProfileImageForSex(sex);
 }
 
 export { isDefaultProfileImagePath };
