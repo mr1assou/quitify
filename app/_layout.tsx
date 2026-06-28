@@ -91,6 +91,7 @@ function ThemedRoot() {
           name="plan-day/[day]"
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
+        <Stack.Screen name="plan-notes" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="craving-tools" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="goals" options={{ animation: "slide_from_right" }} />
         <Stack.Screen

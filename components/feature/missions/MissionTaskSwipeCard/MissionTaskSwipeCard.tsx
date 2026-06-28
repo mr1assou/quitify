@@ -24,7 +24,9 @@ type Props = {
   footer?: string;
   interactive: boolean;
   isToggling?: boolean;
+  canSaveNotes?: boolean;
   onToggle: (taskId: string, value: boolean) => void;
+  onOpenNote?: () => void;
 };
 
 const RADIUS = 28;
@@ -36,7 +38,9 @@ export function MissionTaskSwipeCard({
   footer,
   interactive,
   isToggling = false,
+  canSaveNotes = false,
   onToggle,
+  onOpenNote,
 }: Props) {
   const { colors } = useTheme();
   const icon = TASK_ICONS[task.type] ?? "ellipse-outline";
@@ -86,9 +90,31 @@ export function MissionTaskSwipeCard({
             {task.title}
           </Text>
           <Text className="mt-4 text-base leading-6 text-white/85">{task.text}</Text>
+          {task.note ? (
+            <View className="mt-4 rounded-2xl bg-white/15 px-3 py-2">
+              <Text className="text-xs font-semibold uppercase tracking-wide text-white/70">
+                Your note
+              </Text>
+              <Text className="mt-1 text-sm leading-5 text-white/90" numberOfLines={3}>
+                {task.note}
+              </Text>
+            </View>
+          ) : null}
         </View>
 
         <View>
+          {canSaveNotes && onOpenNote ? (
+            <Pressable
+              onPress={onOpenNote}
+              className="mb-3 flex-row items-center justify-center gap-2 rounded-2xl border border-white/30 py-2.5 active:opacity-80"
+            >
+              <Ionicons name="create-outline" size={16} color={colors.white} />
+              <Text className="text-sm font-semibold text-white">
+                {task.note ? "Edit note" : "Add note"}
+              </Text>
+            </Pressable>
+          ) : null}
+
           {interactive && !task.done ? (
             <Pressable
               onPress={markDone}

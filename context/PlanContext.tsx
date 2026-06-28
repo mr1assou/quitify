@@ -10,7 +10,7 @@ import {
 
 import { useApp } from "@/context/AppContext";
 import { useNow } from "@/hooks/shared/useNow";
-import { fetchPlanState, togglePlanTask } from "@/services/plan/planApi";
+import { fetchPlanState, savePlanTaskNote, togglePlanTask } from "@/services/plan/planApi";
 import type { PlanState } from "@/types/plan/planState";
 
 type PlanContextValue = {
@@ -19,6 +19,7 @@ type PlanContextValue = {
   error: string | null;
   refresh: () => Promise<void>;
   toggleTaskOnServer: (planDay: number, taskId: string, done: boolean) => Promise<PlanState>;
+  saveTaskNoteOnServer: (planDay: number, taskId: string, note: string) => Promise<PlanState>;
 };
 
 const PlanContext = createContext<PlanContextValue | null>(null);
@@ -73,6 +74,15 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const saveTaskNoteOnServer = useCallback(
+    async (planDay: number, taskId: string, note: string) => {
+      const state = await savePlanTaskNote(planDay, taskId, note);
+      setPlanState(state);
+      return state;
+    },
+    [],
+  );
+
   const value = useMemo(
     () => ({
       planState,
@@ -80,8 +90,9 @@ export function PlanProvider({ children }: { children: ReactNode }) {
       error,
       refresh,
       toggleTaskOnServer,
+      saveTaskNoteOnServer,
     }),
-    [planState, loading, error, refresh, toggleTaskOnServer],
+    [planState, loading, error, refresh, toggleTaskOnServer, saveTaskNoteOnServer],
   );
 
   return <PlanContext.Provider value={value}>{children}</PlanContext.Provider>;

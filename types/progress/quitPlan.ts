@@ -39,4 +39,4 @@ export type QuitPlan = {
   chapters: QuitPlanChapter[];
 };
 
-export type ResolvedPlanTask = QuitPlanTask & { done: boolean };
+export type ResolvedPlanTask = QuitPlanTask & { done: boolean; note?: string };

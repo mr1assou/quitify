@@ -13,7 +13,8 @@ import { currentMissionDay } from "@/utils/streak";
 
 export function usePlanProgress() {
   const { state } = useApp();
-  const { planState, loading, error, refresh, toggleTaskOnServer } = usePlanState();
+  const { planState, loading, error, refresh, toggleTaskOnServer, saveTaskNoteOnServer } =
+    usePlanState();
 
   const fallbackDay = useMemo(() => {
     if (!state.profile?.streakStart && !state.profile?.quitDate) return 0;
@@ -43,11 +44,16 @@ export function usePlanProgress() {
   const progressByDay = useMemo(() => {
     const map = new Map<
       number,
-      { taskStates: Record<string, boolean>; completedAt: string | null }
+      {
+        taskStates: Record<string, boolean>;
+        taskNotes: Record<string, string>;
+        completedAt: string | null;
+      }
     >();
     for (const day of planState?.days ?? []) {
       map.set(day.planDay, {
         taskStates: day.taskStates,
+        taskNotes: day.taskNotes ?? {},
         completedAt: day.completedAt,
       });
     }
@@ -68,6 +74,7 @@ export function usePlanProgress() {
       return planDay.tasks.map((task) => ({
         ...task,
         done: isCompleteDay ? true : (taskStates[task.id] ?? false),
+        note: saved?.taskNotes?.[task.id],
       }));
     },
     [progressByDay, currentDay],
@@ -79,6 +86,14 @@ export function usePlanProgress() {
       await toggleTaskOnServer(missionDay, taskId, value);
     },
     [toggleTaskOnServer],
+  );
+
+  const saveTaskNote = useCallback(
+    async (missionDay: number, taskId: string, note: string) => {
+      if (PLAN_PREVIEW_UNLOCK_ALL) return;
+      await saveTaskNoteOnServer(missionDay, taskId, note);
+    },
+    [saveTaskNoteOnServer],
   );
 
   const todayTasks = useMemo(
@@ -95,6 +110,7 @@ export function usePlanProgress() {
     currentChapter,
     resolveTasksForDay,
     toggleTask,
+    saveTaskNote,
     todayTasks,
     todayComplete,
     planLoading: loading,

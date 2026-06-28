@@ -36,3 +36,24 @@ export async function togglePlanTask(
 
   return (await res.json()) as PlanState;
 }
+
+export async function savePlanTaskNote(
+  planDay: number,
+  taskId: string,
+  note: string,
+): Promise<PlanState> {
+  const res = await authenticatedFetch(
+    `/auth/me/plan/days/${planDay}/tasks/${encodeURIComponent(taskId)}/note`,
+    {
+      method: "PATCH",
+      headers: planRequestHeaders(),
+      body: JSON.stringify({ note }),
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Could not save task note");
+  }
+
+  return (await res.json()) as PlanState;
+}

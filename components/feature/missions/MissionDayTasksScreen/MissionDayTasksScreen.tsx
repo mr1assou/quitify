@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useMemo, useState } from "react";
 
 import { MissionTaskCardStack } from "@/components/feature/missions/MissionTaskCardStack";
+import { MissionTaskNoteModal } from "@/components/feature/missions/MissionTaskNoteModal";
 import { missionPlanLabel } from "@/constants/progress/plan";
 import { useTheme } from "@/context/ThemeContext";
 import { useMissionDayTasks } from "@/hooks/progress/useMissionDayTasks";
@@ -15,6 +17,12 @@ type Props = {
 export function MissionDayTasksScreen({ missionDay }: Props) {
   const { colors } = useTheme();
   const session = useMissionDayTasks(missionDay);
+  const [noteTaskId, setNoteTaskId] = useState<string | null>(null);
+
+  const noteTask = useMemo(
+    () => session.tasks.find((task) => task.id === noteTaskId) ?? null,
+    [noteTaskId, session.tasks],
+  );
 
   if (session.isLocked || !session.dayPlan) {
     return (
@@ -69,10 +77,20 @@ export function MissionDayTasksScreen({ missionDay }: Props) {
           currentIndex={session.currentIndex}
           onIndexChange={session.goToIndex}
           interactive={session.canToggleTasks}
+          canSaveNotes={session.canSaveNotes}
           onToggle={session.toggleTask}
+          onOpenNote={setNoteTaskId}
           togglingTaskId={session.togglingTaskId}
         />
       </View>
+
+      <MissionTaskNoteModal
+        visible={noteTaskId != null}
+        task={noteTask}
+        saving={session.savingNoteTaskId === noteTaskId}
+        onClose={() => setNoteTaskId(null)}
+        onSave={(taskId, note) => session.saveTaskNote(taskId, note)}
+      />
     </SafeAreaView>
   );
 }

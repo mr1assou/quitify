@@ -26,7 +26,9 @@ type Props = {
   currentIndex: number;
   onIndexChange: (next: number) => void;
   interactive: boolean;
+  canSaveNotes?: boolean;
   onToggle: (taskId: string, value: boolean) => void;
+  onOpenNote?: (taskId: string) => void;
   togglingTaskId?: string | null;
 };
 
@@ -38,7 +40,9 @@ export function MissionTaskCardStack({
   currentIndex,
   onIndexChange,
   interactive,
+  canSaveNotes = false,
   onToggle,
+  onOpenNote,
   togglingTaskId = null,
 }: Props) {
   const { width, height } = useWindowDimensions();
@@ -134,8 +138,10 @@ export function MissionTaskCardStack({
             height={cardHeight}
             footer={footer}
             interactive={interactive}
+            canSaveNotes={canSaveNotes}
             isToggling={togglingTaskId === currentTask.id}
             onToggle={onToggle}
+            onOpenNote={onOpenNote ? () => onOpenNote(currentTask.id) : undefined}
           />
         </Animated.View>
       </GestureDetector>

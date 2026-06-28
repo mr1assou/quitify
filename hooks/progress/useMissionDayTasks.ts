@@ -11,11 +11,13 @@ export function useMissionDayTasks(missionDay: number) {
     unlockedThroughDay,
     resolveTasksForDay,
     toggleTask: togglePlanTask,
+    saveTaskNote: savePlanTaskNote,
     planLoading,
     planState,
   } = usePlanProgress();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [togglingTaskId, setTogglingTaskId] = useState<string | null>(null);
+  const [savingNoteTaskId, setSavingNoteTaskId] = useState<string | null>(null);
 
   const dayPlan = useMemo((): QuitPlanDay | null => {
     return getDayPlan(missionDay);
@@ -28,6 +30,8 @@ export function useMissionDayTasks(missionDay: number) {
 
   const canToggleTasks =
     PLAN_PREVIEW_UNLOCK_ALL || (missionDay === currentDay && currentDay > 0);
+  const canSaveNotes =
+    PLAN_PREVIEW_UNLOCK_ALL || (missionDay <= unlockedThroughDay && missionDay > 0);
   const isLocked = !PLAN_PREVIEW_UNLOCK_ALL && missionDay > unlockedThroughDay;
 
   const toggleTask = useCallback(
@@ -41,6 +45,19 @@ export function useMissionDayTasks(missionDay: number) {
       }
     },
     [canToggleTasks, togglePlanTask, missionDay, togglingTaskId],
+  );
+
+  const saveTaskNote = useCallback(
+    async (taskId: string, note: string) => {
+      if (!canSaveNotes || savingNoteTaskId) return;
+      setSavingNoteTaskId(taskId);
+      try {
+        await savePlanTaskNote(missionDay, taskId, note);
+      } finally {
+        setSavingNoteTaskId(null);
+      }
+    },
+    [canSaveNotes, savePlanTaskNote, missionDay, savingNoteTaskId],
   );
 
   const goToIndex = useCallback(
@@ -62,10 +79,13 @@ export function useMissionDayTasks(missionDay: number) {
     currentIndex,
     goToIndex,
     canToggleTasks,
+    canSaveNotes,
     isLocked,
     unlockedThroughDay,
     toggleTask,
+    saveTaskNote,
     togglingTaskId,
+    savingNoteTaskId,
     planLoading,
     isTasksReady,
     completedCount,
