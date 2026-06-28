@@ -15,7 +15,8 @@
           "audio",
           "voip"
         ],
-        "NSMicrophoneUsageDescription": "Quitify needs microphone access so you can make voice calls."
+        "NSMicrophoneUsageDescription": "Quitify needs microphone access so you can make voice calls.",
+        "NSCameraUsageDescription": "Quitify needs camera access so you can make video calls."
       }
     },
     "android": {
@@ -29,6 +30,7 @@
       "predictiveBackGestureEnabled": false,
       "package": "com.quitify.app",
       "permissions": [
+        "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.FOREGROUND_SERVICE",
@@ -77,7 +79,8 @@
       [
         "@config-plugins/react-native-webrtc",
         {
-          "microphonePermission": "Quitify needs microphone access so you can make voice calls."
+          "microphonePermission": "Quitify needs microphone access so you can make voice calls.",
+          "cameraPermission": "Quitify needs camera access so you can make video calls."
         }
       ]
     ],

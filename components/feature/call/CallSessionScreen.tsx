@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Pressable, Text, useWindowDimensions, View } from "react-native";
 import Animated, {
   Easing,
@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { CallParticipantAvatar } from "@/components/feature/call/CallParticipantAvatar";
+import { VideoCallStage } from "@/components/feature/call/VideoCallStage";
 import { useWebRTCCall, type CallStatus } from "@/hooks/call/useWebRTCCall";
 import type { CallKind, CallRole } from "@/types/call/signaling";
 import type { CommunityUser } from "@/types/community/community";
@@ -64,12 +65,15 @@ export function CallSessionScreen({
     status,
     muted,
     speaker,
+    cameraOn,
+    localStream,
+    remoteStream,
     durationMs,
     toggleMute,
     toggleSpeaker,
+    toggleCamera,
     hangUp,
   } = useWebRTCCall({ callId, peerUserId, role, kind });
-  const [cameraOn, setCameraOn] = useState(kind === "video");
 
   const pulse = useSharedValue(1);
   const isConnected = status === "connected";
@@ -134,7 +138,10 @@ export function CallSessionScreen({
               peer={peer}
               self={self}
               label={label}
+              status={status}
               cameraOn={cameraOn}
+              localStream={localStream}
+              remoteStream={remoteStream}
               peerPulseStyle={peerPulseStyle}
               stageHeight={height * 0.68}
               stageWidth={width}
@@ -181,7 +188,7 @@ export function CallSessionScreen({
                   icon={cameraOn ? "videocam" : "videocam-off"}
                   label={cameraOn ? "Camera" : "Camera off"}
                   active={cameraOn}
-                  onPress={() => setCameraOn((value) => !value)}
+                  onPress={toggleCamera}
                 />
               ) : (
                 <CallControlButton
@@ -239,87 +246,6 @@ function VoiceCallStage({
           showFlag
         />
         <Text className="mt-3 text-base font-semibold text-d-text">You</Text>
-      </View>
-    </View>
-  );
-}
-
-function VideoCallStage({
-  peer,
-  self,
-  label,
-  cameraOn,
-  peerPulseStyle,
-  stageHeight,
-  stageWidth,
-}: {
-  peer: CommunityUser;
-  self: CommunityUser;
-  label: string;
-  cameraOn: boolean;
-  peerPulseStyle: ReturnType<typeof useAnimatedStyle>;
-  stageHeight: number;
-  stageWidth: number;
-}) {
-  const panelWidth = stageWidth - 32;
-  const peerPanelHeight = stageHeight * 0.64;
-  const selfPanelHeight = stageHeight * 0.36;
-
-  return (
-    <View className="flex-1 px-4 pt-4">
-      <View style={{ height: stageHeight }} className="gap-3">
-        <View
-          className="relative overflow-hidden rounded-3xl border border-d-border/80 bg-d-surface/40"
-          style={{ height: peerPanelHeight }}
-        >
-          <Animated.View
-            style={[
-              peerPulseStyle,
-              {
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              },
-            ]}
-          >
-            <CallParticipantAvatar
-              user={peer}
-              size={Math.min(panelWidth * 0.38, 168)}
-            />
-          </Animated.View>
-
-          <View className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-6">
-            <Text className="text-xl font-bold text-d-text" numberOfLines={1}>
-              {peer.name}
-            </Text>
-            <Text className="mt-1 text-sm tabular-nums text-d-muted">{label}</Text>
-          </View>
-        </View>
-
-        <View
-          className="relative overflow-hidden rounded-3xl border border-d-border/80 bg-d-surface/50"
-          style={{ height: selfPanelHeight }}
-        >
-          {cameraOn ? (
-            <View className="flex-1 items-center justify-center">
-              <CallParticipantAvatar
-                user={self}
-                size={Math.min(panelWidth * 0.26, 108)}
-                ringColor="rgba(255,255,255,0.18)"
-              />
-              <Text className="absolute bottom-3 text-xs font-semibold text-d-muted">
-                You
-              </Text>
-            </View>
-          ) : (
-            <View className="flex-1 items-center justify-center bg-black/60">
-              <Ionicons name="videocam-off" size={32} color="rgba(255,255,255,0.8)" />
-              <Text className="mt-2 text-xs font-semibold text-white/70">
-                Camera off
-              </Text>
-            </View>
-          )}
-        </View>
       </View>
     </View>
   );
