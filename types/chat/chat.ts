@@ -1,4 +1,4 @@
-export type ChatMessageKind = "text" | "image" | "video" | "audio" | "system";
+export type ChatMessageKind = "text" | "image" | "video" | "audio" | "call" | "system";
 
 /** Read receipt for outgoing messages (from peer's last_read_at). */
 export type MessageReadStatus = "seen" | "unseen";

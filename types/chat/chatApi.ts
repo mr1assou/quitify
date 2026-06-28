@@ -1,4 +1,4 @@
-export type BackendChatMessageType = "text" | "image" | "video" | "audio";
+export type BackendChatMessageType = "text" | "image" | "video" | "audio" | "call";
 
 export type BackendChatMessage = {
   message_id: number;

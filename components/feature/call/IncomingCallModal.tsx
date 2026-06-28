@@ -11,6 +11,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { mapIncomingCallToCommunityUser } from "@/utils/call/mapIncomingCall";
 import { dbAuthorId } from "@/utils/community/presence";
 import { emitCallReject } from "@/services/realtime/callSocket";
+import { reportCallHistory } from "@/services/call/callHistoryApi";
 
 /** Full-screen prompt shown whenever someone is calling the signed-in user. */
 export function IncomingCallModal() {
@@ -55,6 +56,12 @@ export function IncomingCallModal() {
   };
 
   const decline = () => {
+    void reportCallHistory({
+      peerUserId: incomingCall.fromUserId,
+      callId: incomingCall.callId,
+      callKind: incomingCall.kind,
+      status: "declined",
+    });
     emitCallReject(incomingCall.fromUserId, incomingCall.callId);
     clearIncomingCall();
   };

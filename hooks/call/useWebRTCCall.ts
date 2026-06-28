@@ -9,6 +9,7 @@ import {
 } from "react-native-webrtc";
 
 import { CALL_RING_TIMEOUT_MS, getIceServers } from "@/config/webrtc";
+import { reportCallHistory } from "@/services/call/callHistoryApi";
 import {
   emitCallAccept,
   emitCallCancel,
@@ -18,6 +19,7 @@ import {
   subscribeCallSocket,
 } from "@/services/realtime/callSocket";
 import type { CallKind, CallRole, CallSignal } from "@/types/call/signaling";
+import type { CallHistoryStatus } from "@/utils/call/callHistoryMessage";
 
 export type CallStatus =
   | "initializing"
@@ -99,6 +101,7 @@ export function useWebRTCCall({
   const connectedAtRef = useRef<number | null>(null);
   const statusRef = useRef<CallStatus>("initializing");
   const cleanedUp = useRef(false);
+  const historyReported = useRef(false);
 
   const setCallStatus = useCallback((next: CallStatus) => {
     statusRef.current = next;
@@ -127,11 +130,32 @@ export function useWebRTCCall({
     }
   }, []);
 
+  const logCallHistory = useCallback(
+    (status: CallHistoryStatus, durationMs?: number) => {
+      if (historyReported.current) return;
+      historyReported.current = true;
+      void reportCallHistory({
+        peerUserId,
+        callId,
+        callKind: kind,
+        status,
+        durationMs,
+      });
+    },
+    [callId, kind, peerUserId],
+  );
+
   const endCall = useCallback(
     (notifyPeer: boolean) => {
       if (statusRef.current === "ended") return;
 
       if (notifyPeer) {
+        if (statusRef.current === "connected" && connectedAtRef.current != null) {
+          logCallHistory("completed", Date.now() - connectedAtRef.current);
+        } else if (statusRef.current === "calling" && role === "caller") {
+          logCallHistory("missed");
+        }
+
         if (role === "caller" && statusRef.current === "calling") {
           emitCallCancel(peerUserId, callId);
         } else {
@@ -142,7 +166,7 @@ export function useWebRTCCall({
       teardown();
       setCallStatus("ended");
     },
-    [callId, peerUserId, role, setCallStatus, teardown],
+    [callId, logCallHistory, peerUserId, role, setCallStatus, teardown],
   );
 
   const flushPendingCandidates = useCallback(async () => {
