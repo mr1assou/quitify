@@ -6,6 +6,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AppProvider } from "@/context/AppContext";
+import { CallProvider } from "@/context/CallContext";
 import { CommunityProvider } from "@/context/CommunityContext";
 import { GoalsProvider } from "@/context/GoalsContext";
 import { PlanProvider } from "@/context/PlanContext";
@@ -15,6 +16,7 @@ import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
+import { IncomingCallModal } from "@/components/feature/call/IncomingCallModal";
 import { PushNotificationsBridge } from "@/components/push/PushNotificationsBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
 import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
@@ -52,13 +54,16 @@ function GoalsProviderWrapper() {
     <GoalsProvider>
       <PlanProvider>
         <RelaxSoundPlayerProvider>
-          <WifiRequiredGate>
-            <PresenceSocketBridge />
-            <ChatSocketBridge />
-            <NotificationSocketBridge />
-            <PushNotificationsBridge />
-            <ThemedRoot />
-          </WifiRequiredGate>
+          <CallProvider>
+            <WifiRequiredGate>
+              <PresenceSocketBridge />
+              <ChatSocketBridge />
+              <NotificationSocketBridge />
+              <PushNotificationsBridge />
+              <ThemedRoot />
+              <IncomingCallModal />
+            </WifiRequiredGate>
+          </CallProvider>
         </RelaxSoundPlayerProvider>
       </PlanProvider>
     </GoalsProvider>

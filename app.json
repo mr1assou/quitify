@@ -12,8 +12,10 @@
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [
-          "audio"
-        ]
+          "audio",
+          "voip"
+        ],
+        "NSMicrophoneUsageDescription": "Quitify needs microphone access so you can make voice calls."
       }
     },
     "android": {
@@ -28,6 +30,7 @@
       "package": "com.quitify.app",
       "permissions": [
         "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
         "android.permission.WAKE_LOCK"
@@ -69,6 +72,12 @@
         {
           "icon": "./assets/images/logo1.png",
           "color": "#1A1410"
+        }
+      ],
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "microphonePermission": "Quitify needs microphone access so you can make voice calls."
         }
       ]
     ],

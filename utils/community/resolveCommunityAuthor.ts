@@ -1,4 +1,8 @@
 import { CURRENT_USER_ID, getCommunityUser } from "@/constants/community/communityUsers";
+import {
+  countryFlagForRank,
+  resolveCountryFlagUrl,
+} from "@/constants/leaderboard/leaderboardCountries";
 import type { CommunityUser } from "@/types/community/community";
 import { parseDbUserId, resolveOnlineFromMap } from "@/utils/community/presence";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
@@ -83,7 +87,15 @@ export function resolveCommunityAuthor(
 }
 
 export function buildCurrentUserCommunityAuthor(
-  profile: { name?: string; imageUrl?: string } | null | undefined,
+  profile:
+    | {
+        name?: string;
+        imageUrl?: string;
+        countryFlag?: string;
+        countryCode?: string;
+      }
+    | null
+    | undefined,
   accountName?: string,
   accountUserId?: number | null,
 ): CommunityUser {
@@ -91,11 +103,18 @@ export function buildCurrentUserCommunityAuthor(
   const id =
     accountUserId != null && accountUserId > 0 ? `db-${accountUserId}` : CURRENT_USER_ID;
 
+  const countryFlag =
+    resolveCountryFlagUrl(profile?.countryFlag, profile?.countryCode) ??
+    resolveCountryFlagUrl(seed.countryFlag, seed.location) ??
+    countryFlagForRank(seed.avatarRank);
+
   return withMockOnlineStatus({
     ...seed,
     id,
     name: accountName?.trim() || profile?.name?.trim() || seed.name,
     avatarUrl: profile?.imageUrl ?? seed.avatarUrl,
+    countryFlag,
+    location: profile?.countryCode ?? seed.location,
     isCurrentUser: true,
     isOnline: true,
   });

@@ -16,15 +16,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { CallParticipantAvatar } from "@/components/feature/call/CallParticipantAvatar";
-import type { CallKind } from "@/types/chat/chat";
+import { useWebRTCCall, type CallStatus } from "@/hooks/call/useWebRTCCall";
+import type { CallKind, CallRole } from "@/types/call/signaling";
 import type { CommunityUser } from "@/types/community/community";
-
-type CallStatus = "calling" | "ringing" | "connected";
 
 type Props = {
   peer: CommunityUser;
   self: CommunityUser;
   kind: CallKind;
+  callId: string;
+  role: CallRole;
+  peerUserId: number;
 };
 
 function formatDuration(ms: number): string {
@@ -36,38 +38,51 @@ function formatDuration(ms: number): string {
   return `${mm}:${ss}`;
 }
 
-function statusLabel(status: CallStatus, elapsedMs: number | null): string {
-  if (status === "calling") return "Calling…";
-  if (status === "ringing") return "Ringing…";
-  if (elapsedMs != null) return formatDuration(elapsedMs);
-  return "Connected";
+function statusLabel(status: CallStatus, durationMs: number): string {
+  switch (status) {
+    case "calling":
+      return "Calling…";
+    case "connected":
+      return formatDuration(durationMs);
+    case "ended":
+      return "Call ended";
+    default:
+      return "Connecting…";
+  }
 }
 
-export function CallSessionScreen({ peer, self, kind }: Props) {
+export function CallSessionScreen({
+  peer,
+  self,
+  kind,
+  callId,
+  role,
+  peerUserId,
+}: Props) {
   const { width, height } = useWindowDimensions();
-  const [status, setStatus] = useState<CallStatus>("calling");
-  const [muted, setMuted] = useState(false);
-  const [speaker, setSpeaker] = useState(kind === "video");
+  const {
+    status,
+    muted,
+    speaker,
+    durationMs,
+    toggleMute,
+    toggleSpeaker,
+    hangUp,
+  } = useWebRTCCall({ callId, peerUserId, role, kind });
   const [cameraOn, setCameraOn] = useState(kind === "video");
-  const [startedAt, setStartedAt] = useState<number | null>(null);
-  const [now, setNow] = useState(Date.now());
 
   const pulse = useSharedValue(1);
+  const isConnected = status === "connected";
 
   useEffect(() => {
-    const ringTimer = setTimeout(() => setStatus("ringing"), 900);
-    const connectTimer = setTimeout(() => {
-      setStatus("connected");
-      setStartedAt(Date.now());
-    }, 2600);
-    return () => {
-      clearTimeout(ringTimer);
-      clearTimeout(connectTimer);
-    };
-  }, []);
+    if (status === "ended") {
+      const timer = setTimeout(() => router.back(), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   useEffect(() => {
-    if (status === "connected") return;
+    if (isConnected) return;
     pulse.value = withRepeat(
       withSequence(
         withTiming(1.06, { duration: 900, easing: Easing.inOut(Easing.ease) }),
@@ -76,23 +91,16 @@ export function CallSessionScreen({ peer, self, kind }: Props) {
       -1,
       false,
     );
-  }, [pulse, status]);
+  }, [pulse, isConnected]);
 
-  useEffect(() => {
-    if (status !== "connected") return;
-    const interval = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(interval);
-  }, [status]);
-
-  const elapsedMs = startedAt != null ? now - startedAt : null;
-  const label = statusLabel(status, elapsedMs);
+  const label = statusLabel(status, durationMs);
   const isVideo = kind === "video";
 
   const peerPulseStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: status === "connected" ? 1 : pulse.value }],
+    transform: [{ scale: isConnected ? 1 : pulse.value }],
   }));
 
-  const endCall = () => router.back();
+  const endCall = () => hangUp();
 
   return (
     <View className="flex-1">
@@ -149,7 +157,7 @@ export function CallSessionScreen({ peer, self, kind }: Props) {
                 icon={muted ? "mic-off" : "mic"}
                 label={muted ? "Unmute" : "Mute"}
                 active={!muted}
-                onPress={() => setMuted((value) => !value)}
+                onPress={toggleMute}
               />
 
               <Pressable
@@ -180,7 +188,7 @@ export function CallSessionScreen({ peer, self, kind }: Props) {
                   icon={speaker ? "volume-high" : "volume-mute"}
                   label="Speaker"
                   active={speaker}
-                  onPress={() => setSpeaker((value) => !value)}
+                  onPress={toggleSpeaker}
                 />
               )}
             </View>
@@ -206,7 +214,7 @@ function VoiceCallStage({
     <View className="flex-1 items-center justify-between px-6 py-6">
       <View className="items-center pt-4">
         <Animated.View style={peerPulseStyle}>
-          <CallParticipantAvatar user={peer} size={132} />
+          <CallParticipantAvatar user={peer} size={132} showFlag />
         </Animated.View>
         <Text
           className="mt-4 max-w-[220px] text-center text-xl font-bold text-d-text"
@@ -228,6 +236,7 @@ function VoiceCallStage({
           user={self}
           size={104}
           ringColor="rgba(255,255,255,0.18)"
+          showFlag
         />
         <Text className="mt-3 text-base font-semibold text-d-text">You</Text>
       </View>
