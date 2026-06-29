@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { isSupportStaffUser } from "@/constants/auth/userRoles";
 import { useCommunity } from "@/context/CommunityContext";
 import { fetchUserPresence } from "@/services/users/userProfileApi";
 import type { CommunityUser } from "@/types/community/community";
@@ -14,6 +15,7 @@ function parseLastOfflineAt(iso: string | null | undefined): number | undefined 
 /** Live online status + last seen for a chat participant (DB users fetch from API). */
 export function useChatParticipantPresence(participant: CommunityUser) {
   const { state } = useCommunity();
+  const isSupportStaff = isSupportStaffUser(participant);
   const userId = parseDbUserId(participant.id);
   const [lastSeenAt, setLastSeenAt] = useState<number | undefined>(participant.lastSeenAt);
 
@@ -35,6 +37,11 @@ export function useChatParticipantPresence(participant: CommunityUser) {
   ]);
 
   useEffect(() => {
+    if (isSupportStaff) {
+      setLastSeenAt(undefined);
+      return;
+    }
+
     if (!userId) {
       setLastSeenAt(participant.lastSeenAt);
       return;
@@ -59,7 +66,11 @@ export function useChatParticipantPresence(participant: CommunityUser) {
     return () => {
       cancelled = true;
     };
-  }, [userId, isOnline, participant.lastSeenAt]);
+  }, [userId, isOnline, participant.lastSeenAt, isSupportStaff]);
+
+  if (isSupportStaff) {
+    return { isOnline: true, lastSeenAt: undefined };
+  }
 
   return { isOnline, lastSeenAt };
 }

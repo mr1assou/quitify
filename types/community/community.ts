@@ -64,6 +64,8 @@ export type CommunityPost = {
   commentIds: string[];
   /** Total comments from API when thread ids are not loaded yet. */
   commentCount?: number;
+  /** Removed by support moderation — shown as a tombstone on the author's profile. */
+  moderated?: boolean;
 };
 
 export type PostComment = {

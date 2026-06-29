@@ -1,4 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import type { ComponentProps } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -7,6 +9,8 @@ import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
 
 type Accent = "primary" | "accent" | "alert" | "secondary";
+type IonName = ComponentProps<typeof Ionicons>["name"];
+type MciName = ComponentProps<typeof MaterialCommunityIcons>["name"];
 
 type Props = {
   label: string;
@@ -15,7 +19,8 @@ type Props = {
   decimals?: number;
   prefix?: string;
   suffix?: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IonName | MciName;
+  iconSet?: "ionicons" | "materialCommunity";
   accent?: Accent;
   delay?: number;
 };
@@ -35,6 +40,7 @@ export function StatBlock({
   prefix,
   suffix,
   icon,
+  iconSet = "ionicons",
   accent = "primary",
   delay = 0,
 }: Props) {
@@ -50,7 +56,11 @@ export function StatBlock({
         <View
           className={`h-10 w-10 items-center justify-center rounded-2xl ${accentBg[accent]}`}
         >
-          <Ionicons name={icon} size={20} color={iconColor} />
+          {iconSet === "materialCommunity" ? (
+            <MaterialCommunityIcons name={icon as MciName} size={20} color={iconColor} />
+          ) : (
+            <Ionicons name={icon as IonName} size={20} color={iconColor} />
+          )}
         </View>
         {display !== undefined ? (
           <Text className="mt-3 text-2xl font-bold text-foreground dark:text-d-text">

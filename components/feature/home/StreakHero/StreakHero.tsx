@@ -1,4 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import type { ComponentProps } from "react";
 import { useMemo } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -71,7 +73,8 @@ export function StreakHero({
             label="saved"
           />
           <StatPill
-            icon="ban"
+            icon="smoking"
+            iconSet="materialCommunity"
             tint={colors.primary}
             value={formatNumber(cigarettesAvoided)}
             label="cigs avoided"
@@ -89,14 +92,19 @@ export function StreakHero({
   );
 }
 
+type IonName = ComponentProps<typeof Ionicons>["name"];
+type MciName = ComponentProps<typeof MaterialCommunityIcons>["name"];
+
 function StatPill({
   icon,
+  iconSet = "ionicons",
   tint,
   value,
   label,
   fullWidth = false,
 }: {
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IonName | MciName;
+  iconSet?: "ionicons" | "materialCommunity";
   tint: string;
   value: string;
   label: string;
@@ -112,7 +120,11 @@ function StatPill({
         style={{ backgroundColor: tint }}
         className="mr-3 h-11 w-11 items-center justify-center rounded-2xl"
       >
-        <Ionicons name={icon} size={22} color="#fff" />
+        {iconSet === "materialCommunity" ? (
+          <MaterialCommunityIcons name={icon as MciName} size={22} color="#fff" />
+        ) : (
+          <Ionicons name={icon as IonName} size={22} color="#fff" />
+        )}
       </View>
       <View className="min-w-0 flex-1">
         <Text

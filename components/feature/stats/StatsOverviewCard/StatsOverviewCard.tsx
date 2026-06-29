@@ -55,7 +55,8 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               label="Cigarettes avoided"
               value={impact.cigarettesAvoided}
               display={formatNumber(impact.cigarettesAvoided)}
-              icon="ban"
+              icon="smoking"
+              iconSet="materialCommunity"
               accent="primary"
               delay={40}
             />

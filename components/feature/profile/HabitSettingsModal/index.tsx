@@ -5,10 +5,16 @@ import {
   ActivityIndicator,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   TextInput,
   View,
 } from "react-native";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 import { CigarettesPerPackField } from "@/components/feature/onboarding/NicotineConsumptionFields/CigarettesPerPackField";
 import { PackCostField } from "@/components/feature/onboarding/NicotineConsumptionFields/PackCostField";
@@ -98,10 +104,79 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View className="flex-1 justify-end bg-black/50">
-        <Pressable accessibilityRole="button" className="flex-1" onPress={onClose} />
-        <View className="max-h-[90%] rounded-t-3xl bg-background px-6 pb-8 pt-5 dark:bg-d-bg">
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      statusBarTranslucent
+      onRequestClose={onClose}
+    >
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <HabitSettingsSheet
+          colors={colors}
+          cigarettesPerDay={cigarettesPerDay}
+          cigarettesPerPack={cigarettesPerPack}
+          packCostInput={packCostInput}
+          profile={profile}
+          canSave={canSave}
+          saving={saving}
+          error={error}
+          onClose={onClose}
+          onCigarettesPerDayChange={setCigarettesPerDay}
+          onCigarettesPerPackChange={setCigarettesPerPack}
+          onPackCostInputChange={setPackCostInput}
+          onSave={handleSave}
+        />
+      </SafeAreaProvider>
+    </Modal>
+  );
+}
+
+type SheetProps = {
+  colors: ReturnType<typeof useTheme>["colors"];
+  cigarettesPerDay: string;
+  cigarettesPerPack: string;
+  packCostInput: string;
+  profile: UserProfile;
+  canSave: boolean;
+  saving: boolean;
+  error: string | null;
+  onClose: () => void;
+  onCigarettesPerDayChange: (value: string) => void;
+  onCigarettesPerPackChange: (value: string) => void;
+  onPackCostInputChange: (value: string) => void;
+  onSave: () => void;
+};
+
+function HabitSettingsSheet({
+  colors,
+  cigarettesPerDay,
+  cigarettesPerPack,
+  packCostInput,
+  profile,
+  canSave,
+  saving,
+  error,
+  onClose,
+  onCigarettesPerDayChange,
+  onCigarettesPerPackChange,
+  onPackCostInputChange,
+  onSave,
+}: SheetProps) {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View className="flex-1 justify-end bg-black/50">
+      <Pressable accessibilityRole="button" className="flex-1" onPress={onClose} />
+      <View
+        className="max-h-[90%] rounded-t-3xl bg-background dark:bg-d-bg"
+        style={{ paddingBottom: Math.max(insets.bottom, 16) }}
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="px-6 pb-2 pt-5">
           <View className="mb-5 flex-row items-center justify-between">
             <Text className="text-xl font-bold text-foreground dark:text-d-text">
               Smoking settings
@@ -127,7 +202,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
               </Text>
               <TextInput
                 value={cigarettesPerDay}
-                onChangeText={setCigarettesPerDay}
+                onChangeText={onCigarettesPerDayChange}
                 keyboardType="number-pad"
                 placeholder="e.g. 20"
                 placeholderTextColor={colors.mutedForeground}
@@ -141,7 +216,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
               </Text>
               <CigarettesPerPackField
                 value={cigarettesPerPack}
-                onChangeText={setCigarettesPerPack}
+                onChangeText={onCigarettesPerPackChange}
               />
             </View>
 
@@ -152,7 +227,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
               <PackCostField
                 currency={profile.currency}
                 value={packCostInput}
-                onChangeText={setPackCostInput}
+                onChangeText={onPackCostInputChange}
               />
             </View>
           </View>
@@ -164,7 +239,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
           <Pressable
             accessibilityRole="button"
             disabled={!canSave || saving}
-            onPress={handleSave}
+            onPress={onSave}
             className={`mt-6 items-center rounded-2xl py-3.5 ${
               canSave && !saving ? "bg-primary" : "bg-muted opacity-60"
             }`}
@@ -175,8 +250,9 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
               <Text className="text-base font-bold text-white">Save changes</Text>
             )}
           </Pressable>
-        </View>
+          </View>
+        </ScrollView>
       </View>
-    </Modal>
+    </View>
   );
 }

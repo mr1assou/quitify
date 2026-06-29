@@ -103,20 +103,22 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
         </Pressable>
       )}
 
-      <View className="flex-row items-center gap-2">
-        <CallIconButton
-          icon="call"
-          color={colors.primary}
-          onPress={() => onCall("audio")}
-          accessibilityLabel="Start audio call"
-        />
-        <CallIconButton
-          icon="videocam"
-          color={colors.accent}
-          onPress={() => onCall("video")}
-          accessibilityLabel="Start video call"
-        />
-      </View>
+      {!isSupportPeer ? (
+        <View className="flex-row items-center gap-2">
+          <CallIconButton
+            icon="call"
+            color={colors.primary}
+            onPress={() => onCall("audio")}
+            accessibilityLabel="Start audio call"
+          />
+          <CallIconButton
+            icon="videocam"
+            color={colors.accent}
+            onPress={() => onCall("video")}
+            accessibilityLabel="Start video call"
+          />
+        </View>
+      ) : null}
     </View>
   );
 }

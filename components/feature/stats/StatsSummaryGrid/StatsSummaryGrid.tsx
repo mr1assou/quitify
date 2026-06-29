@@ -37,7 +37,8 @@ export function StatsSummaryGrid({
           label="Cigarettes avoided"
           value={cigarettesAvoided}
           display={formatNumber(cigarettesAvoided)}
-          icon="ban"
+          icon="smoking"
+          iconSet="materialCommunity"
           accent="primary"
           delay={60}
         />

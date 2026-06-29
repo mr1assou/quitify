@@ -135,6 +135,20 @@ export async function deletePost(postId: string): Promise<{ post_id: number }> {
   return res.json() as Promise<{ post_id: number }>;
 }
 
+export async function moderatePost(
+  postId: string,
+): Promise<{ post_id: number; author_id: number }> {
+  const res = await authenticatedFetch(`/posts/${postId}/moderate`, {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not remove post"));
+  }
+
+  return res.json() as Promise<{ post_id: number; author_id: number }>;
+}
+
 export async function voteOnPost(
   postId: string,
   vote: PostVote,

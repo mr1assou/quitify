@@ -79,6 +79,7 @@ function mapPostFields(
     shareCount: post.share_count,
     commentIds,
     commentCount,
+    moderated: "is_moderated" in post ? Boolean(post.is_moderated) : false,
   };
 }
 

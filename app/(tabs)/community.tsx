@@ -4,11 +4,19 @@ import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { CommunityScrollHeader } from "@/components/feature/community/CommunityScrollHeader";
 import { FeedPostSeparator } from "@/components/feature/community/FeedPostSeparator";
 import { PostCard } from "@/components/feature/community/PostCard";
+import { isSupportRole } from "@/constants/auth/userRoles";
+import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityFeed } from "@/hooks/community/useCommunityFeed";
+import { dbAuthorId } from "@/utils/community/presence";
 
 export default function CommunityScreen() {
   const { colors } = useTheme();
+  const { state } = useApp();
+  const isSupportStaff = isSupportRole(state.account?.role);
+  const currentUserCommunityId = state.account?.userId
+    ? dbAuthorId(state.account.userId)
+    : null;
   const { feed, loading, refreshing, loadingMore, error, refresh, loadMore, filter, applyFilter, hasActiveFilter } =
     useCommunityFeed();
   const isEmpty = !loading && feed.length === 0;
@@ -24,7 +32,12 @@ export default function CommunityScreen() {
         ItemSeparatorComponent={FeedPostSeparator}
         renderItem={({ item }) => (
           <View className="px-6 py-4">
-            <PostCard item={item} />
+            <PostCard
+              item={item}
+              showModeratorActions={
+                isSupportStaff && item.post.authorId !== currentUserCommunityId
+              }
+            />
           </View>
         )}
         refreshControl={

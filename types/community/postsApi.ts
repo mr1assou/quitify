@@ -62,6 +62,7 @@ export type BackendFeedPostAuthor = {
 
 export type BackendFeedPostResponse = BackendPostResponse & {
   is_mine: boolean;
+  is_moderated?: boolean;
   comment_count: number;
   my_vote: "up" | "down" | null;
   author: BackendFeedPostAuthor;

@@ -65,7 +65,7 @@ export function SlipCTA({ onPress }: Props) {
           style={pressStyle}
           className="h-40 w-40 items-center justify-center rounded-full bg-primary"
         >
-          <MaterialCommunityIcons name="smoking-off" size={40} color={colors.white} />
+          <MaterialCommunityIcons name="smoking" size={40} color={colors.white} />
           <Text className="mt-2 px-4 text-center text-base font-bold text-white">
             Smoked again?
           </Text>

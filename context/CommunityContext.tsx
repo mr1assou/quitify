@@ -112,6 +112,7 @@ type Action =
     }
   | { type: "UPDATE_POST"; post: CommunityPost }
   | { type: "DELETE_POST"; postId: string }
+  | { type: "MODERATE_POST"; postId: string }
   | { type: "PATCH_AUTHOR"; authorId: string; patch: Partial<CommunityUser> }
   | { type: "SET_PRESENCE_SNAPSHOT"; onlineUserIds: number[] }
   | { type: "PATCH_PRESENCE"; userId: number; isOnline: boolean }
@@ -458,6 +459,13 @@ function reducer(state: State, action: Action): State {
       return { ...state, posts, deletedPostIds };
     }
 
+    case "MODERATE_POST": {
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post.id !== action.postId),
+      };
+    }
+
     case "PATCH_AUTHOR": {
       const existing = state.authorsById[action.authorId];
       const authorsById = existing
@@ -740,6 +748,7 @@ type CommunityContextValue = {
   appendPosts: (posts: CommunityPost[], authorsById: Record<string, CommunityUser>) => void;
   updatePost: (postId: string, payload: UpdatePostPayload) => Promise<void>;
   deletePost: (postId: string) => void;
+  moderatePost: (postId: string) => void;
   patchAuthor: (authorId: string, patch: Partial<CommunityUser>) => void;
   upsertAuthor: (author: CommunityUser) => void;
   setPresenceSnapshot: (onlineUserIds: number[]) => void;
@@ -1003,6 +1012,10 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
 
   const deletePost = useCallback((postId: string) => {
     dispatch({ type: "DELETE_POST", postId });
+  }, []);
+
+  const moderatePost = useCallback((postId: string) => {
+    dispatch({ type: "MODERATE_POST", postId });
   }, []);
 
   const patchAuthor = useCallback((authorId: string, patch: Partial<CommunityUser>) => {
@@ -1327,6 +1340,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       appendPosts,
       updatePost,
       deletePost,
+      moderatePost,
       patchAuthor,
       upsertAuthor,
       setPresenceSnapshot,
@@ -1363,6 +1377,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       appendPosts,
       updatePost,
       deletePost,
+      moderatePost,
       patchAuthor,
       upsertAuthor,
       setPresenceSnapshot,
