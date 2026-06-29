@@ -1,4 +1,4 @@
-import { MOTIVATIONAL_CARDS } from "./motivationalCards";
+import { ALL_MOTIVATIONAL_CARDS } from "./motivationalCards";
 import {
   MOTIVATION_CATEGORY_PALETTES,
   type MotivationCardCategory,
@@ -18,7 +18,7 @@ function paletteForCategory(category: string) {
 }
 
 function toMotivationQuote(
-  card: (typeof MOTIVATIONAL_CARDS)[number],
+  card: (typeof ALL_MOTIVATIONAL_CARDS)[number],
 ): MotivationQuote {
   return {
     id: String(card.id),
@@ -28,4 +28,4 @@ function toMotivationQuote(
 }
 
 export const MOTIVATION_QUOTES: readonly MotivationQuote[] =
-  MOTIVATIONAL_CARDS.map(toMotivationQuote);
+  ALL_MOTIVATIONAL_CARDS.map(toMotivationQuote);

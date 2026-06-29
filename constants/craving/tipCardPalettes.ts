@@ -1,6 +1,6 @@
 import type { MotivationCardPalette } from "./motivationCardTypes";
 
-/** Gradient palette per tip category (15 themes). */
+/** Gradient palette per tip category (20 themes). */
 export const TIP_CATEGORY_PALETTES = {
   "Beat the Craving": {
     gradientTop: "#FFBCA8",
@@ -105,6 +105,41 @@ export const TIP_CATEGORY_PALETTES = {
     gradientBottom: "#E09050",
     text: "#281808",
     muted: "#28180899",
+    accent: "#FFFFFF66",
+  },
+  "Tracking & Tools": {
+    gradientTop: "#9CE6E6",
+    gradientBottom: "#3C9D9D",
+    text: "#062323",
+    muted: "#06232399",
+    accent: "#FFFFFF66",
+  },
+  "Relapse Recovery": {
+    gradientTop: "#7EB8E8",
+    gradientBottom: "#3A7AB8",
+    text: "#081828",
+    muted: "#08182899",
+    accent: "#FFFFFF66",
+  },
+  "Travel & Disruption": {
+    gradientTop: "#A8C4FF",
+    gradientBottom: "#5A7FD4",
+    text: "#0D1A3D",
+    muted: "#0D1A3D99",
+    accent: "#FFFFFF66",
+  },
+  "Talking to Others": {
+    gradientTop: "#FFC8D6",
+    gradientBottom: "#E55C82",
+    text: "#240914",
+    muted: "#24091499",
+    accent: "#FFFFFF66",
+  },
+  "Vaping & Alternatives": {
+    gradientTop: "#D0D0D8",
+    gradientBottom: "#686878",
+    text: "#141418",
+    muted: "#14141899",
     accent: "#FFFFFF66",
   },
 } as const satisfies Record<string, MotivationCardPalette>;

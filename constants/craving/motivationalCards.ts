@@ -1,9 +1,14 @@
 import type { MotivationCardCategory } from "./motivationCardPalettes";
+import { NEW_MOTIVATIONAL_CARDS } from "./newMotivationalCards";
+
+export type MotivationCardTone = "calm" | "punchy";
 
 export type MotivationCard = {
   id: number;
   category: MotivationCardCategory;
   text: string;
+  /** Original cards (1–500) default to calm when omitted. */
+  tone?: MotivationCardTone;
 };
 
 export const MOTIVATIONAL_CARDS: readonly MotivationCard[] = [
@@ -2507,4 +2512,12 @@ export const MOTIVATIONAL_CARDS: readonly MotivationCard[] = [
     category: "Reflection & Gratitude",
     text: "Close your eyes, breathe, and thank yourself for one more smoke free hour.",
   },
+] as const;
+
+// MOTIVATIONAL_CARDS — full set of 1500 cards
+// ids 1-500 (and legacy 101-500 style ids): original cards, tone defaulted to "calm" since they match that voice
+// ids 501-1500: new cards generated to expand the set, alternating "calm" and "punchy" tone, 21 categories total
+export const ALL_MOTIVATIONAL_CARDS: readonly MotivationCard[] = [
+  ...MOTIVATIONAL_CARDS,
+  ...NEW_MOTIVATIONAL_CARDS,
 ] as const;

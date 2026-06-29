@@ -8,15 +8,13 @@ import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useOpenPlanDay } from "@/hooks/progress/useOpenPlanDay";
-import { useMissionPlan } from "@/hooks/progress/useMissionPlan";
 import { usePlanTaskNotes } from "@/hooks/progress/usePlanTaskNotes";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function Missions() {
   const { colors } = useTheme();
-  const plan = useMissionPlan();
+  const { plan, openDay, lockedDayModal, closeLockedDayModal } = useOpenPlanDay();
   const { noteCount } = usePlanTaskNotes();
-  const { openDay, lockedDayModal, closeLockedDayModal } = useOpenPlanDay();
 
   return (
     <ScreenCanvas edges={["top"]}>
@@ -44,12 +42,18 @@ export default function Missions() {
               </View>
             ) : null}
 
-            <View className="flex-row items-center pt-4">
+            <View className="pt-4">
+              <View className="mb-3 flex-row justify-end px-6">
+                <MissionPlanNotesButton
+                  noteCount={noteCount}
+                  onPress={() => safeRouter.push("/plan-notes")}
+                />
+              </View>
+
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                className="flex-1"
-                contentContainerStyle={{ paddingLeft: 24, paddingRight: 8, paddingBottom: 4 }}
+                contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 4 }}
               >
                 {plan.modules.map((module) => {
                   const selected = module.chapterNumber === plan.selectedModule;
@@ -76,13 +80,6 @@ export default function Missions() {
                   );
                 })}
               </ScrollView>
-
-              <View className="pr-6">
-                <MissionPlanNotesButton
-                  noteCount={noteCount}
-                  onPress={() => safeRouter.push("/plan-notes")}
-                />
-              </View>
             </View>
 
             <MissionPlanModuleSection plan={plan} onSelectDay={openDay} />

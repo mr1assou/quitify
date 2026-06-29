@@ -178,13 +178,10 @@ export function useMissionPlan(): MissionPlan {
 
   const showLockedDayMessage = useCallback(
     (day: number) => {
-      const previousDay = day - 1;
-      const previousDayComplete =
-        previousDay >= 1 && arePlanTasksComplete(resolveTasksForDay(previousDay));
-      const copy = getPlanDayLockedCopy(day, previousDayComplete);
+      const copy = getPlanDayLockedCopy(day);
       setLockedDayModal({ day, ...copy });
     },
-    [resolveTasksForDay],
+    [],
   );
 
   const closeLockedDayModal = useCallback(() => {

@@ -1,4 +1,5 @@
 import type { TipCardCategory } from "./tipCardPalettes";
+import { NEW_TIP_CARDS } from "./newTipCards";
 
 export type TipCard = {
   id: number;
@@ -2507,4 +2508,9 @@ export const TIP_CARDS: readonly TipCard[] = [
     category: "Stay on Track",
     text: "Look back at day one you and thank that person for starting. Then look forward and promise that person you will still be smoke free when they arrive.",
   },
+] as const;
+
+export const ALL_TIP_CARDS: readonly TipCard[] = [
+  ...TIP_CARDS,
+  ...NEW_TIP_CARDS,
 ] as const;

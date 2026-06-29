@@ -1,4 +1,4 @@
-import { TIP_CARDS } from "./tipCards";
+import { ALL_TIP_CARDS } from "./tipCards";
 import {
   TIP_CATEGORY_PALETTES,
   type TipCardCategory,
@@ -16,7 +16,7 @@ function paletteForCategory(category: string) {
   );
 }
 
-function toTipQuote(card: (typeof TIP_CARDS)[number]): MotivationQuote {
+function toTipQuote(card: (typeof ALL_TIP_CARDS)[number]): MotivationQuote {
   return {
     id: String(card.id),
     text: card.text,
@@ -24,4 +24,5 @@ function toTipQuote(card: (typeof TIP_CARDS)[number]): MotivationQuote {
   };
 }
 
-export const TIP_QUOTES: readonly MotivationQuote[] = TIP_CARDS.map(toTipQuote);
+export const TIP_QUOTES: readonly MotivationQuote[] =
+  ALL_TIP_CARDS.map(toTipQuote);

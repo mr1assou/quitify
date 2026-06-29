@@ -24,6 +24,7 @@ export function useOpenPlanDay() {
   );
 
   return {
+    plan,
     openDay,
     lockedDayModal: plan.lockedDayModal,
     closeLockedDayModal: plan.closeLockedDayModal,

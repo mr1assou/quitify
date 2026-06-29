@@ -1,6 +1,6 @@
 import type { MotivationCardPalette } from "./motivationCardTypes";
 
-/** Gradient palette per quote category (15 themes). */
+/** Gradient palette per quote category (21 themes). */
 export const MOTIVATION_CATEGORY_PALETTES = {
   "Health & Body": {
     gradientTop: "#B5E8B5",
@@ -105,6 +105,41 @@ export const MOTIVATION_CATEGORY_PALETTES = {
     gradientBottom: "#E09050",
     text: "#281808",
     muted: "#28180899",
+    accent: "#FFFFFF66",
+  },
+  "Anger & Frustration": {
+    gradientTop: "#FFB0A8",
+    gradientBottom: "#D85040",
+    text: "#2A0C08",
+    muted: "#2A0C0899",
+    accent: "#FFFFFF66",
+  },
+  "Social Pressure & Temptation": {
+    gradientTop: "#B8D0FF",
+    gradientBottom: "#5880D0",
+    text: "#0C1830",
+    muted: "#0C183099",
+    accent: "#FFFFFF66",
+  },
+  "Sleep & Mornings": {
+    gradientTop: "#C8D8F8",
+    gradientBottom: "#6888C8",
+    text: "#0A1428",
+    muted: "#0A142899",
+    accent: "#FFFFFF66",
+  },
+  "Anniversary & Big Wins": {
+    gradientTop: "#FFE8A0",
+    gradientBottom: "#D8A030",
+    text: "#281C00",
+    muted: "#281C0099",
+    accent: "#FFFFFF66",
+  },
+  "Real Talk": {
+    gradientTop: "#D0D0D8",
+    gradientBottom: "#686878",
+    text: "#141418",
+    muted: "#14141899",
     accent: "#FFFFFF66",
   },
 } as const satisfies Record<string, MotivationCardPalette>;
