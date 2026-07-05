@@ -22,6 +22,7 @@ import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge
 import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
 import { NotificationSocketBridge } from "@/components/realtime/NotificationSocketBridge";
 import "@/bootstrap/splashScreen";
+import "@/bootstrap/notifications";
 import "@/global.css";
 
 export default function RootLayout() {

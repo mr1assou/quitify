@@ -2,6 +2,7 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Alert } from "react-native";
 
+import { useApp } from "@/context/AppContext";
 import {
   clearPushTokensOnBackend,
   fetchPushTokenStatus,
@@ -11,12 +12,17 @@ import {
   setCachedPushTokenStatus,
 } from "@/services/push/pushSettingsCache";
 import {
+  cancelMotivationLocalNotifications,
+  syncMotivationLocalFromAppState,
+} from "@/services/push/motivationLocalNotifications";
+import {
   requestPushPermissionAndSaveToken,
   syncPushTokenWithBackend,
 } from "@/services/push/registerPushToken";
 
 /** In-app push toggle — on = token in DB, off = token deleted (not OS settings). */
 export function usePushNotificationsSettings() {
+  const { state } = useApp();
   const [enabled, setEnabled] = useState(
     () => getCachedPushTokenStatus() ?? false,
   );
@@ -28,6 +34,18 @@ export function usePushNotificationsSettings() {
     setEnabled(hasToken);
     setReady(true);
   }, []);
+
+  const syncMotivationSchedule = useCallback(
+    async (notificationsEnabled: boolean) => {
+      if (!state.account?.userId) return;
+      if (!notificationsEnabled) {
+        await cancelMotivationLocalNotifications();
+        return;
+      }
+      await syncMotivationLocalFromAppState(state, true);
+    },
+    [state],
+  );
 
   const refresh = useCallback(async () => {
     try {
@@ -62,14 +80,17 @@ export function usePushNotificationsSettings() {
           const saved = await requestPushPermissionAndSaveToken();
           if (!saved) {
             applyStatus(false);
+            await syncMotivationSchedule(false);
             return;
           }
           applyStatus(true);
+          await syncMotivationSchedule(true);
           return;
         }
 
         await clearPushTokensOnBackend();
         applyStatus(false);
+        await syncMotivationSchedule(false);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Could not update notifications.";
@@ -79,7 +100,7 @@ export function usePushNotificationsSettings() {
         setBusy(false);
       }
     },
-    [applyStatus, busy, refresh],
+    [applyStatus, busy, refresh, syncMotivationSchedule],
   );
 
   return {

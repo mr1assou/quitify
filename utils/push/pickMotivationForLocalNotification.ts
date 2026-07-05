@@ -6,9 +6,10 @@ function pickFromList<T>(items: readonly T[], seed: number): T {
 
 export function pickMotivationForLocalNotification(input: {
   userId: number;
-  rotationSlot: number;
   motivationCardIndex: number;
+  /** Monotonic slot index so each scheduled notification gets different copy. */
+  sequenceIndex: number;
 }): string {
-  const seed = input.userId + input.rotationSlot + input.motivationCardIndex;
+  const seed = input.userId + input.motivationCardIndex + input.sequenceIndex;
   return pickFromList(MOTIVATION_QUOTES, seed).text;
 }

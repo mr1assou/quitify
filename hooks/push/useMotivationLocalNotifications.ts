@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { AppState } from "react-native";
 
 import { useApp } from "@/context/AppContext";
 import { fetchPushTokenStatus } from "@/services/push/pushTokenApi";
 import {
   cancelMotivationLocalNotifications,
-  syncMotivationLocalFromAppState,
+  syncMotivationLocalNotifications,
 } from "@/services/push/motivationLocalNotifications";
 import {
   getCachedPushTokenStatus,
@@ -13,17 +13,22 @@ import {
 } from "@/services/push/pushSettingsCache";
 
 /**
- * Schedules midday/evening motivation as local notifications (offline at fire time).
- * Refreshes when the user opens the app and when account/profile data changes.
+ * Schedules motivation as local notifications at 12:30 PM and 8:30 PM US Eastern.
+ * Refreshes on sign-in and when the app returns to foreground.
  */
 export function useMotivationLocalNotifications() {
   const { isHydrated, state } = useApp();
+  const userId = state.account?.userId;
+  const username = state.profile?.name ?? state.account?.name;
+  const motivationCardIndex = state.account?.motivationCardIndex ?? 0;
+  const lastSyncKeyRef = useRef<string | null>(null);
 
   const sync = useCallback(async () => {
     if (!isHydrated) return;
 
-    if (!state.account?.userId) {
+    if (!userId) {
       await cancelMotivationLocalNotifications();
+      lastSyncKeyRef.current = null;
       return;
     }
 
@@ -37,8 +42,23 @@ export function useMotivationLocalNotifications() {
       }
     }
 
-    await syncMotivationLocalFromAppState(state, enabled);
-  }, [isHydrated, state]);
+    if (!enabled) {
+      await cancelMotivationLocalNotifications();
+      lastSyncKeyRef.current = null;
+      return;
+    }
+
+    const syncKey = `${userId}:${motivationCardIndex}:${username ?? ""}`;
+    if (lastSyncKeyRef.current === syncKey) return;
+    lastSyncKeyRef.current = syncKey;
+
+    await syncMotivationLocalNotifications({
+      enabled: true,
+      userId,
+      username,
+      motivationCardIndex,
+    });
+  }, [isHydrated, userId, username, motivationCardIndex]);
 
   useEffect(() => {
     void sync();
@@ -47,6 +67,7 @@ export function useMotivationLocalNotifications() {
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
       if (nextState === "active") {
+        lastSyncKeyRef.current = null;
         void sync();
       }
     });
