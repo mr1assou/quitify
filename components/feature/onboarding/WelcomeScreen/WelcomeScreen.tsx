@@ -1,13 +1,14 @@
-import { safeRouter } from "@/utils/app/safeRouter";
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
+import { WEBSITE_TERMS_URL } from "@/constants/app/website";
+import { openExternalUrl } from "@/utils/app/openExternalUrl";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 const SUBTITLE =
   "Begin your Quitify journey to a smoke-free life and reclaim your time and health";
-
 const TERMS_INTRO =
   "By continuing you agree to how Quitify works and how we handle your data. You can read the full legal wording anytime.";
 
@@ -74,7 +75,7 @@ export function WelcomeScreen() {
               {TERMS_INTRO}
             </Text>
             <Pressable
-              onPress={() => safeRouter.push("/terms")}
+              onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
               className="items-center py-1 active:opacity-70"
             >
               <Text className="text-base font-semibold text-foreground underline dark:text-d-text">

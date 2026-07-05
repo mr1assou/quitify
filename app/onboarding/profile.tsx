@@ -102,8 +102,12 @@ export default function OnboardingProfile() {
   ]);
 
   const continueWithEmail = useCallback(() => {
+    if (isLoginFlow) {
+      safeRouter.push("/login-email");
+      return;
+    }
     safeRouter.push({ pathname: "/signup", params: { fromCelebration: "1" } });
-  }, []);
+  }, [isLoginFlow]);
 
   useFocusEffect(
     useCallback(() => {
@@ -147,7 +151,6 @@ export default function OnboardingProfile() {
           className="z-10 min-h-0 flex-1 px-6"
           style={{ paddingBottom: bottomPad }}
         >
-          {/* Back — fixed header */}
           <View className="shrink-0 justify-center" style={{ height: 48 }}>
             <Pressable
               onPress={() => safeRouter.back()}
@@ -159,7 +162,6 @@ export default function OnboardingProfile() {
             </Pressable>
           </View>
 
-          {/* Hero — title + image */}
           <View className="min-h-0 flex-1 justify-center px-1" style={{ marginTop: 20 }}>
             <Text className="text-center text-3xl font-bold leading-9 text-foreground dark:text-d-text">
               {isLoginFlow ? LOGIN_TITLE : CELEBRATION_TITLE}
@@ -172,7 +174,6 @@ export default function OnboardingProfile() {
             />
           </View>
 
-          {/* Sign-in — above home indicator */}
           <View className="shrink-0 pt-6">
             {error ? (
               <Text className="mb-3 text-center text-sm text-alert">{error}</Text>

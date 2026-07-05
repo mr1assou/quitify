@@ -12,9 +12,11 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
+import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website";
 import { useApp } from "@/context/AppContext";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
+import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 const BENEFITS = [
@@ -198,10 +200,16 @@ export default function Paywall() {
             </Pressable>
 
             <View className="mt-2 flex-row items-center justify-between pb-2">
-              <Pressable onPress={() => safeRouter.push("/privacy")} className="active:opacity-70">
+              <Pressable
+                onPress={() => openExternalUrl(WEBSITE_PRIVACY_URL)}
+                className="active:opacity-70"
+              >
                 <Text className="text-sm text-d-muted">Privacy policy</Text>
               </Pressable>
-              <Pressable onPress={() => safeRouter.push("/terms")} className="active:opacity-70">
+              <Pressable
+                onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
+                className="active:opacity-70"
+              >
                 <Text className="text-sm text-d-muted">Terms of service</Text>
               </Pressable>
             </View>

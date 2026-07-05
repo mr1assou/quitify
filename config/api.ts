@@ -6,4 +6,4 @@
  * Do NOT use ngrok here — ngrok is only for Google OAuth redirect (HTTPS callback).
  * See backend-smoking/.env → GOOGLE_REDIRECT_URI and Google Cloud Console redirect URI.
  */
-export const API_URL = "http://192.168.100.162:3000";
+export const API_URL = "http://192.168.1.18:3000";
