@@ -4,9 +4,11 @@ import Svg, { Circle, Defs, Line, RadialGradient, Stop } from "react-native-svg"
 import * as Haptics from "expo-haptics";
 
 import { BubbleShooterBubble } from "@/components/feature/craving/games/bubble-shooter/BubbleShooterBubble";
-import { BUBBLE_SHOOTER_PALETTE } from "@/constants/craving/games/bubbleShooter";
+import {
+  BUBBLE_SHOOTER_DANGER_ROW,
+  BUBBLE_SHOOTER_PALETTE,
+} from "@/constants/craving/games/bubbleShooter";
 import { useTheme } from "@/context/ThemeContext";
-import { BUBBLE_SHOOTER_DANGER_ROW } from "@/constants/craving/games/bubbleShooter";
 import {
   bubbleCenter,
   dangerLineY,

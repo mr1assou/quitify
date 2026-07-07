@@ -117,7 +117,7 @@ function ThemeOption({ active, onPress, label, icon, preview, splitPreview }: Op
           "items-center gap-2 rounded-2xl border px-2 py-3",
           active
             ? "border-accent bg-accent-soft dark:bg-d-accent-soft"
-            : "border-border bg-background dark:border-d-border dark:bg-d-elevated",
+            : "border-border bg-elevated dark:border-d-border dark:bg-d-elevated",
         ].join(" ")}
       >
         <View
@@ -126,7 +126,7 @@ function ThemeOption({ active, onPress, label, icon, preview, splitPreview }: Op
         >
           {splitPreview ? (
             <View className="h-full w-full flex-row">
-              <View style={{ flex: 1, backgroundColor: "#FFFFFF" }} />
+              <View style={{ flex: 1, backgroundColor: lightColors.section }} />
               <View style={{ flex: 1, backgroundColor: darkColors.background }} />
             </View>
           ) : (

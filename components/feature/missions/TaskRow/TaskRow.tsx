@@ -23,7 +23,7 @@ export function TaskRow({ task, onToggle }: Props) {
     <Animated.View layout={LinearTransition.springify().damping(18)}>
       <Pressable
         onPress={onPress}
-        className="flex-row items-center rounded-2xl bg-background p-3 active:opacity-70 dark:bg-d-elevated"
+        className="flex-row items-center rounded-2xl bg-elevated p-3 active:opacity-70 dark:bg-d-elevated"
       >
         <View
           className={`mr-3 h-7 w-7 items-center justify-center rounded-full ${

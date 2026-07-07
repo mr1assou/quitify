@@ -45,7 +45,7 @@ export function SearchUserResultRow({ user }: Props) {
   return (
     <Pressable
       onPress={openProfile}
-      className="flex-row items-center rounded-2xl bg-background px-3 py-3 dark:bg-d-elevated"
+      className="flex-row items-center rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated"
     >
       <LeaderboardAvatar
         name={user.name}

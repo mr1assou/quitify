@@ -58,8 +58,6 @@ export function MissionTaskCardStack({
   const total = tasks.length;
   const currentTask = tasks[currentIndex];
 
-  if (!currentTask) return null;
-
   const commitIndexChange = (direction: 1 | -1) => {
     Haptics.selectionAsync().catch(() => {});
     const nextIndex =
@@ -118,6 +116,8 @@ export function MissionTaskCardStack({
       transform: [{ translateX: translateX.value }, { rotateZ: `${rotate}deg` }],
     };
   });
+
+  if (!currentTask) return null;
 
   const footer = `Task ${currentIndex + 1} / ${total}`;
 

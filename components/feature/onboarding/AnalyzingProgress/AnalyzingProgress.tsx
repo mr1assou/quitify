@@ -235,7 +235,7 @@ function TaskRow({
   return (
     <Animated.View
       entering={FadeIn.duration(360)}
-      className="w-full overflow-hidden rounded-3xl border border-border bg-white p-4 shadow-sm dark:border-d-border dark:bg-d-surface"
+      className="w-full overflow-hidden rounded-3xl border border-border bg-section p-4 shadow-sm dark:border-d-border dark:bg-d-surface"
       style={{
         shadowColor: "#000",
         shadowOpacity: resolved === "dark" ? 0 : 0.06,

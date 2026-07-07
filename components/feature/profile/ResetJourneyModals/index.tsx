@@ -13,8 +13,10 @@ import {
 import { QuitStartPresetPicker } from "@/components/feature/onboarding/QuitPlanFields/QuitStartPresetPicker";
 import { useTheme } from "@/context/ThemeContext";
 import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
-import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
-import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
+import type {
+  QuitDateApiPayload,
+  QuitStartDateDraft,
+} from "@/types/onboarding/quitStartDate";
 import {
   initialQuitStartDateDraft,
   isQuitStartDateComplete,

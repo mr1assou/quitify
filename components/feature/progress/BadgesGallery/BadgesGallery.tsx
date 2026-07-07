@@ -120,7 +120,7 @@ function BadgeTile({
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={`${badge.name} badge details`}
-        className={`h-full items-center justify-center gap-1.5 rounded-2xl bg-background px-1.5 py-2 active:opacity-80 dark:bg-d-elevated ${
+        className={`h-full items-center justify-center gap-1.5 rounded-2xl bg-elevated px-1.5 py-2 active:opacity-80 dark:bg-d-elevated ${
           openInGrid ? "" : "opacity-45"
         }`}
       >

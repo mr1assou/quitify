@@ -23,7 +23,7 @@ export function SharedPostMessageCard({ postId, previewText }: Props) {
       onPress={openPost}
       className="active:opacity-80"
     >
-      <View className="overflow-hidden rounded-2xl border border-border bg-background dark:border-d-border dark:bg-d-elevated">
+      <View className="overflow-hidden rounded-2xl border border-border bg-section dark:border-d-border dark:bg-d-elevated">
         <View className="flex-row items-center gap-2 border-b border-border px-3 py-2 dark:border-d-border">
           <Ionicons name="newspaper-outline" size={16} color={colors.primary} />
           <Text className="text-xs font-semibold uppercase tracking-wide text-primary">

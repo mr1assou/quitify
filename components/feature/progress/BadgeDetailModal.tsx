@@ -39,7 +39,7 @@ function RequirementRow({
   const { colors } = useTheme();
 
   return (
-    <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
+    <View className="rounded-2xl bg-elevated px-4 py-3 dark:bg-d-surface">
       <View className="flex-row items-center gap-2">
         <Ionicons
           name={met ? "checkmark-circle" : "close-circle"}
@@ -141,7 +141,7 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
 
                 <View
                   className={`mt-2 rounded-full px-3 py-1 ${
-                    badge.unlocked && earnable ? "bg-accent/20" : "bg-section dark:bg-d-surface"
+                    badge.unlocked && earnable ? "bg-accent/12" : "bg-elevated dark:bg-d-surface"
                   }`}
                 >
                   <Text

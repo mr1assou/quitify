@@ -27,7 +27,7 @@ export function ListGroup({ rows, className }: Props) {
         const Inner = (
           <View className="flex-row items-center px-4 py-4">
             <View
-              className="h-9 w-9 items-center justify-center rounded-full bg-background dark:bg-d-elevated"
+              className="h-9 w-9 items-center justify-center rounded-full bg-elevated dark:bg-d-elevated"
               style={{ borderColor: colors.section, borderWidth: 1 }}
             >
               <Ionicons name={row.icon} size={18} color={iconTint} />
@@ -59,7 +59,7 @@ export function ListGroup({ rows, className }: Props) {
         return (
           <View key={row.id}>
             {idx > 0 ? (
-              <View className="ml-16 h-px bg-background dark:bg-d-border" />
+              <View className="ml-16 h-px bg-border/40 dark:bg-d-border" />
             ) : null}
             {row.onPress ? (
               <Pressable

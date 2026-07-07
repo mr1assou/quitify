@@ -4,7 +4,6 @@ import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
-import { BUBBLE_SHOOTER_TOTAL_BUBBLES } from "@/constants/craving/games/bubbleShooter";
 import type { BubbleShooterStatus } from "@/hooks/craving/games/useBubbleShooterGame";
 
 type Props = {

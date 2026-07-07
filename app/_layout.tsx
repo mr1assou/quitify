@@ -17,6 +17,7 @@ import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
 import { IncomingCallModal } from "@/components/feature/call/IncomingCallModal";
+import { RevenueCatBridge } from "@/components/purchases/RevenueCatBridge";
 import { PushNotificationsBridge } from "@/components/push/PushNotificationsBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
 import { ChatSocketBridge } from "@/components/realtime/ChatSocketBridge";
@@ -57,6 +58,7 @@ function GoalsProviderWrapper() {
         <RelaxSoundPlayerProvider>
           <CallProvider>
             <WifiRequiredGate>
+              <RevenueCatBridge />
               <PresenceSocketBridge />
               <ChatSocketBridge />
               <NotificationSocketBridge />

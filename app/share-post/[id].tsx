@@ -60,7 +60,6 @@ export default function SharePostScreen() {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const offsetRef = useRef(0);
   const hasMoreRef = useRef(false);
@@ -73,7 +72,7 @@ export default function SharePostScreen() {
     async (reset: boolean) => {
       if (!currentUserId) {
         setUsers([]);
-        setHasMore(false);
+        hasMoreRef.current = false;
         return;
       }
 
@@ -97,7 +96,6 @@ export default function SharePostScreen() {
 
         setUsers((current) => (reset ? mapped : [...current, ...mapped]));
         hasMoreRef.current = page.has_more;
-        setHasMore(page.has_more);
         offsetRef.current += mapped.length;
       } catch {
         setError("Could not load people you have chatted with.");

@@ -18,7 +18,7 @@ type Props = {
 function RankLabel({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
-      <View className="mr-2 w-7 items-center rounded-full bg-accent/20 py-0.5">
+      <View className="mr-2 w-7 items-center rounded-full bg-accent/12 py-0.5">
         <Text className="text-sm font-bold tabular-nums text-accent">{rank}</Text>
       </View>
     );
@@ -26,7 +26,7 @@ function RankLabel({ rank }: { rank: number }) {
 
   if (rank <= 3) {
     return (
-      <View className="mr-2 w-7 items-center rounded-full bg-primary/15 py-0.5 dark:bg-primary/25">
+      <View className="mr-2 w-7 items-center rounded-full bg-accent/15 py-0.5 dark:bg-primary/25">
         <Text className="text-xs font-bold tabular-nums text-primary dark:text-d-text">
           {rank}
         </Text>
@@ -56,7 +56,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
   return (
     <View>
       {showDivider ? (
-        <View className="ml-28 h-px bg-background dark:bg-d-border" />
+        <View className="ml-28 h-px bg-border/40 dark:bg-d-border" />
       ) : null}
       <Pressable
         onPress={openProfile}

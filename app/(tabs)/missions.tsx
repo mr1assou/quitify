@@ -28,13 +28,13 @@ export default function Missions() {
         ) : (
           <>
             {!plan.hasQuitStreak ? (
-              <View className="mx-6 mt-4 rounded-2xl border border-border/50 bg-white/88 px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
+              <View className="mx-6 mt-4 rounded-2xl border border-border/60 bg-section px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                   Set your quit date during onboarding to unlock your 180-day plan.
                 </Text>
               </View>
             ) : plan.unlockedThroughDay <= 0 ? (
-              <View className="mx-6 mt-4 rounded-2xl border border-border/50 bg-white/88 px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
+              <View className="mx-6 mt-4 rounded-2xl border border-border/60 bg-section px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                   Your plan unlocks when your quit day begins. Day 2 and later unlock at 7 AM in
                   your local time after you finish the previous day.

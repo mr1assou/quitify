@@ -52,7 +52,7 @@ export function AttemptHistoryCard({ attempts, currency, timeZone }: Props) {
           </View>
 
           {attempts.length === 0 ? (
-            <View className="mt-4 rounded-2xl bg-background px-4 py-4 dark:bg-d-elevated">
+            <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
               <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
                 No quit attempts yet.
               </Text>
@@ -97,7 +97,7 @@ function AttemptRow({
   return (
     <Pressable
       onPress={onPress}
-      className="rounded-2xl bg-background px-3 py-3 active:opacity-80 dark:bg-d-elevated"
+      className="rounded-2xl bg-elevated px-3 py-3 active:opacity-80 dark:bg-d-elevated"
       accessibilityRole="button"
       accessibilityLabel={`Attempt ${row.attemptNumber}, ${status}. Tap for details.`}
     >

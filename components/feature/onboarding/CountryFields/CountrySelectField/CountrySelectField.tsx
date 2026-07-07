@@ -3,7 +3,6 @@ import { Image } from "expo-image";
 import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
-  FlatList,
   Modal,
   Platform,
   Pressable,

@@ -22,7 +22,7 @@ export function ChatsSectionTabs({ value, onChange }: Props) {
             key={opt.id}
             onPress={() => onChange(opt.id)}
             className={`flex-1 items-center justify-center rounded-xl py-2.5 ${
-              active ? "bg-background dark:bg-d-elevated" : ""
+              active ? "bg-section dark:bg-d-elevated" : ""
             }`}
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}

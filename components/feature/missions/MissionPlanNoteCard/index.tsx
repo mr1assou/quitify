@@ -16,7 +16,7 @@ export function MissionPlanNoteCard({ entry, onPress }: Props) {
   return (
     <Pressable
       onPress={onPress}
-      className="rounded-2xl border border-border/50 bg-white/88 px-4 py-3 active:opacity-80 dark:border-d-border/60 dark:bg-d-surface/90"
+      className="rounded-2xl border border-border/60 bg-section px-4 py-3 active:opacity-80 dark:border-d-border/60 dark:bg-d-surface/90"
     >
       <View className="flex-row items-center justify-between gap-3">
         <Text className="text-xs font-semibold uppercase tracking-wide text-primary">

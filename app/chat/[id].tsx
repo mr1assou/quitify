@@ -144,18 +144,6 @@ export default function ChatThreadScreen() {
   const showNotFound = !hasThread && !hydrating && !messagesLoading;
   const showMessagesLoader = messagesLoading || hydrating;
 
-  if (showNotFound) {
-    return (
-      <ScreenCanvas>
-        <View className="flex-1 items-center justify-center px-6">
-          <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-            Conversation not found.
-          </Text>
-        </View>
-      </ScreenCanvas>
-    );
-  }
-
   const onCall = (kind: CallKind) => {
     if (!detail) return;
     router.push({
@@ -232,6 +220,18 @@ export default function ChatThreadScreen() {
   const firstName = detail
     ? detail.participant.name.trim().split(/\s+/)[0] || detail.participant.name
     : "";
+
+  if (showNotFound) {
+    return (
+      <ScreenCanvas>
+        <View className="flex-1 items-center justify-center px-6">
+          <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
+            Conversation not found.
+          </Text>
+        </View>
+      </ScreenCanvas>
+    );
+  }
 
   return (
     <ScreenCanvas edges={["top"]}>

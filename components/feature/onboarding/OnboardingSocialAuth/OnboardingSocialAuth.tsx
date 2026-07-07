@@ -31,7 +31,7 @@ function SocialSignInButton({ label, onPress, disabled, icon }: SocialButtonProp
       accessibilityRole="button"
       accessibilityLabel={label}
       className={[
-        "flex-row items-center rounded-2xl bg-white px-4",
+        "flex-row items-center rounded-2xl bg-section px-4",
         disabled ? "opacity-50" : "active:opacity-90",
       ].join(" ")}
       style={{

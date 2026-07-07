@@ -23,7 +23,7 @@ export function WelcomeScreen() {
         <View className="flex-1 items-center justify-center">
           <Animated.View
             entering={FadeIn.duration(700)}
-            className="h-44 w-44 items-center justify-center rounded-3xl border border-border/50 bg-white/90 p-3 dark:border-d-border dark:bg-d-surface/95"
+            className="h-44 w-44 items-center justify-center rounded-3xl border border-border/60 bg-section p-3 dark:border-d-border dark:bg-d-surface/95"
           >
             <Image
               source={require("../../../../assets/images/logo.webp")}

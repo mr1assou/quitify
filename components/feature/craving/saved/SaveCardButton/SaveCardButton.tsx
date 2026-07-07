@@ -31,7 +31,7 @@ export function SaveCardButton({ section, cardId }: Props) {
         setPending(true);
         void toggleSaved(section, cardId).finally(() => setPending(false));
       }}
-      className="mt-5 flex-row items-center gap-2 rounded-full border border-border bg-white px-5 py-2.5 dark:border-d-border dark:bg-d-surface"
+      className="mt-5 flex-row items-center gap-2 rounded-full border border-border bg-section px-5 py-2.5 dark:border-d-border dark:bg-d-surface"
     >
       {pending ? (
         <ActivityIndicator size="small" color={colors.primary} />

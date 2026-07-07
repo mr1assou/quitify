@@ -1,9 +1,9 @@
 /** Full-screen gradient stops — shared with paywall and main app canvas. */
 export const SCREEN_GRADIENT = {
   light: {
-    top: "#FFFBF7",
-    mid: "#FFF4E8",
-    bottom: "#FFE8D1",
+    top: "#F7F4F0",
+    mid: "#F4F0EB",
+    bottom: "#EFE9E3",
   },
   dark: {
     top: "#221810",

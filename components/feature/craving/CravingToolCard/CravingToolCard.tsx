@@ -41,7 +41,7 @@ const CARD_VARIANT: Record<
     iconUsesPrimary: false,
   },
   outline: {
-    card: "border border-border bg-white dark:border-d-border dark:bg-d-surface",
+    card: "border border-border bg-section dark:border-d-border dark:bg-d-surface",
     iconWrap: "bg-accent-soft dark:bg-d-accent-soft",
     iconUsesPrimary: true,
   },

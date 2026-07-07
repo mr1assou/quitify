@@ -54,7 +54,7 @@ export function OnboardingShell({
           <View className="h-10 w-10" />
         </View>
 
-        <View className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/60 dark:bg-d-surface/80">
+        <View className="mt-2 h-1 w-full overflow-hidden rounded-full bg-elevated dark:bg-d-surface/80">
           <Animated.View
             entering={FadeIn.duration(300)}
             className="h-full rounded-full bg-primary"

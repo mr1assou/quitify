@@ -119,7 +119,7 @@ export function MissionTaskSwipeCard({
             <Pressable
               onPress={markDone}
               disabled={isToggling}
-              className="items-center rounded-2xl bg-white py-3.5 active:opacity-90"
+              className="items-center rounded-2xl bg-section py-3.5 active:opacity-90"
             >
               {isToggling ? (
                 <ActivityIndicator color={colors.primary} />

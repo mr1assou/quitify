@@ -33,7 +33,7 @@ export function RangeTabs(props: Props) {
             key={opt.id}
             onPress={() => props.onChange(opt.id as never)}
             className={`flex-1 items-center justify-center rounded-xl py-2 ${
-              active ? "bg-background dark:bg-d-elevated" : ""
+              active ? "bg-section dark:bg-d-elevated" : ""
             }`}
             accessibilityRole="button"
             accessibilityState={{ selected: active }}

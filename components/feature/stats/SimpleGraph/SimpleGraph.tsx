@@ -38,7 +38,7 @@ export function SimpleGraph({ data, title = "Last 7 days", subtitle }: Props) {
           const resistedRatio = total === 0 ? 0 : d.resisted / total;
           return (
             <View key={d.day} className="flex-1 items-center px-1">
-              <View className="w-full flex-1 justify-end overflow-hidden rounded-xl bg-background dark:bg-d-elevated">
+              <View className="w-full flex-1 justify-end overflow-hidden rounded-xl bg-elevated dark:bg-d-elevated">
                 <BarFill ratio={total / max} resistedRatio={resistedRatio} delay={i * 60} />
               </View>
               <Text className="mt-2 text-[10px] text-muted-foreground dark:text-d-muted">

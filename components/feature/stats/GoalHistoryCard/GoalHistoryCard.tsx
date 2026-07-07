@@ -51,7 +51,7 @@ export function GoalHistoryCard({ goals, currency, timeZone }: Props) {
         </View>
 
         {goals.length === 0 ? (
-          <View className="mt-4 rounded-2xl bg-background px-4 py-4 dark:bg-d-elevated">
+          <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
             <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
               Create a goal from the home screen to track it here.
             </Text>
@@ -88,7 +88,7 @@ function GoalRow({
   const isCompleted = row.status === "completed";
 
   return (
-    <View className="rounded-2xl bg-background px-3 py-3 dark:bg-d-elevated">
+    <View className="rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated">
       <View className="flex-row items-center justify-between gap-3">
         <Text className="min-w-0 flex-1 text-sm font-bold text-foreground dark:text-d-text">
           {formatGoalStatsTitle(row, currency)}

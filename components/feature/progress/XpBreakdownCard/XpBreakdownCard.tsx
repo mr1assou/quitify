@@ -68,7 +68,7 @@ export function XpBreakdownCard({
           {rows.map((row) => (
             <View
               key={row.id}
-              className="flex-row items-center rounded-2xl bg-background p-3 dark:bg-d-elevated"
+              className="flex-row items-center rounded-2xl bg-elevated p-3 dark:bg-d-elevated"
             >
               <View className="mr-3 h-9 w-9 items-center justify-center rounded-2xl bg-primary">
                 <Ionicons name={row.icon} size={16} color={colors.white} />

@@ -26,8 +26,8 @@ type ButtonProps = Omit<PressableProps, "children" | "style"> & {
 
 const containerByVariant: Record<Variant, string> = {
   primary: "bg-primary",
-  secondary: "bg-secondary dark:bg-primary",
-  ghost: "bg-transparent border border-secondary dark:border-d-border",
+  secondary: "bg-accent-soft border border-border/60 dark:border-transparent dark:bg-primary",
+  ghost: "bg-transparent border border-border dark:border-d-border",
   danger: "bg-alert",
   accent: "bg-accent",
 };

@@ -48,7 +48,7 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
       <Card variant="section" padded={false}>
-        <View className="border-b border-background px-4 py-3 dark:border-d-border">
+        <View className="border-b border-border/50 px-4 py-3 dark:border-d-border">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
             Global leaderboard
           </Text>
@@ -59,7 +59,7 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
             <>
               <LeaderboardRow entry={pinnedViewer} />
               {pageRows.length > 0 ? (
-                <View className="mx-3 my-1 h-px bg-background dark:bg-d-border" />
+                <View className="mx-3 my-1 h-px bg-border/40 dark:bg-d-border" />
               ) : null}
             </>
           ) : null}

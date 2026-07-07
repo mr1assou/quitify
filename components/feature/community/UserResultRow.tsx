@@ -23,7 +23,7 @@ export function UserResultRow({ user, trailing = "chevron" }: Props) {
   return (
     <Pressable
       onPress={openProfile}
-      className="flex-row items-center rounded-2xl bg-background px-3 py-3 dark:bg-d-elevated"
+      className="flex-row items-center rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated"
     >
       <UserAvatar user={user} size={48} />
       <View className="ml-3 flex-1">

@@ -62,7 +62,7 @@
           "image": "./assets/images/logo-splash.png",
           "imageWidth": 145,
           "resizeMode": "contain",
-          "backgroundColor": "#FFFBF7",
+          "backgroundColor": "#F7F4F0",
           "dark": {
             "image": "./assets/images/logo-splash.png",
             "backgroundColor": "#1A1410"

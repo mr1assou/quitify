@@ -10,7 +10,7 @@ type Props = {
 
 export function AchievementSectionTabs({ value, onChange }: Props) {
   return (
-    <View className="flex-row rounded-2xl bg-section p-1 dark:bg-d-surface">
+    <View className="flex-row rounded-2xl bg-elevated p-1 dark:bg-d-surface">
       {ACHIEVEMENT_SECTIONS.map((opt) => {
         const active = opt.id === value;
         return (
@@ -18,7 +18,7 @@ export function AchievementSectionTabs({ value, onChange }: Props) {
             key={opt.id}
             onPress={() => onChange(opt.id)}
             className={`flex-1 items-center justify-center rounded-xl py-2.5 ${
-              active ? "bg-background dark:bg-d-elevated" : ""
+              active ? "bg-section dark:bg-d-elevated" : ""
             }`}
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}

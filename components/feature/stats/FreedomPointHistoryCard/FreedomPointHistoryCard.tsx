@@ -50,7 +50,7 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
         </View>
 
         {entries.length === 0 ? (
-          <View className="mt-4 rounded-2xl bg-background px-4 py-4 dark:bg-d-elevated">
+          <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
             <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
               Stay smoke-free and complete goals to earn Freedom points.
             </Text>
@@ -74,7 +74,7 @@ function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: st
   const earnedOn = formatUtcDateInTimezone(row.earnedAt, timeZone);
 
   return (
-    <View className="rounded-2xl bg-background px-3 py-3 dark:bg-d-elevated">
+    <View className="rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated">
       <View className="flex-row items-start justify-between gap-3">
         <View className="min-w-0 flex-1">
           <Text className="text-sm font-bold text-foreground dark:text-d-text">{label}</Text>

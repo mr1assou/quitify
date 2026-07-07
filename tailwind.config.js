@@ -9,23 +9,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#FFFBF7",
+        background: "#F7F4F0",
         primary: "#FF7A00",
         "primary-dark": "#CC6200",
         "primary-light": "#FF9933",
-        secondary: "#FFB366",
-        foreground: "#3A322C",
-        "muted-foreground": "#8A7B6E",
+        secondary: "#E8A86A",
+        foreground: "#3D3630",
+        "muted-foreground": "#7A7066",
         accent: "#FF7A00",
-        "accent-soft": "#FFF0E0",
+        "accent-soft": "#EDE4DA",
         alert: "#DC3545",
-        section: "#FFFFFF",
-        border: "#F0DFCC",
-        /** Craving tool card backgrounds (light) */
-        "craving-breathing": "#E3F4EF",
-        "craving-games": "#ECE8F8",
-        "craving-cards": "#FBF0E6",
-        "craving-videos": "#FCE8E8",
+        section: "#FBF8F5",
+        elevated: "#F3EFE9",
+        border: "#E5DDD4",
+        /** Craving tool card backgrounds (light) — softened for less glare */
+        "craving-breathing": "#E8F2EE",
+        "craving-games": "#EEEAF4",
+        "craving-cards": "#F3EBE3",
+        "craving-videos": "#F5E8E8",
         d: {
           bg: "#1A1410",
           surface: "#252018",

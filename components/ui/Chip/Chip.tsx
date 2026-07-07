@@ -36,7 +36,7 @@ export function Chip({
           isLg ? "px-7 py-3.5" : "px-4 py-2",
           selected
             ? "border-primary bg-primary"
-            : "border-secondary dark:border-d-border bg-background dark:bg-d-elevated",
+            : "border-secondary dark:border-d-border bg-elevated dark:bg-d-elevated",
         ].join(" ")}
       >
         {emoji ? (

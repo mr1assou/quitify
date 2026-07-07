@@ -63,7 +63,7 @@ function BucketRow({ bucket, max }: { bucket: CravingTimeBucket; max: number }) 
           {bucket.count}
         </Text>
       </View>
-      <View className="mt-1 h-2 w-full overflow-hidden rounded-full bg-background dark:bg-d-elevated">
+      <View className="mt-1 h-2 w-full overflow-hidden rounded-full bg-elevated dark:bg-d-elevated">
         <View
           className="h-full rounded-full bg-accent"
           style={{ width: `${Math.max(2, ratio * 100)}%` }}

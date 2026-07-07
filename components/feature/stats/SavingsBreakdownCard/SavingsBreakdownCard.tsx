@@ -48,7 +48,7 @@ export function SavingsBreakdownCard({ breakdown, currency }: Props) {
           {ROWS.map((row) => (
             <View
               key={row.id}
-              className="flex-row items-center justify-between rounded-2xl bg-background px-3 py-2 dark:bg-d-elevated"
+              className="flex-row items-center justify-between rounded-2xl bg-elevated px-3 py-2 dark:bg-d-elevated"
             >
               <Text className="text-sm text-muted-foreground dark:text-d-muted">
                 {row.label}

@@ -33,8 +33,8 @@ export function PushNotificationsToggle({
   const progress = useSharedValue(enabled ? 1 : 0);
   const busy = useSharedValue(disabled ? 1 : 0);
 
-  const iconBgOff = isDark ? "#252018" : "#FFFFFF";
-  const iconBgOn = isDark ? "#2E2218" : "#FFF0E0";
+  const iconBgOff = isDark ? "#252018" : colors.section;
+  const iconBgOn = isDark ? "#2E2218" : colors.accentSoft;
   const cardBorderOff = "transparent";
   const cardBorderOn = isDark ? "rgba(255, 122, 0, 0.35)" : "rgba(255, 122, 0, 0.22)";
 

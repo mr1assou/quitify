@@ -46,7 +46,7 @@ export function StreakHero({
         <Text className="text-sm font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
           Current streak
         </Text>
-        <View className="rounded-full bg-section px-2.5 py-0.5 dark:bg-d-surface">
+        <View className="rounded-full bg-elevated px-2.5 py-0.5 dark:bg-d-surface">
           <Text className="text-xs font-semibold text-foreground dark:text-d-text">
             Attempt {attemptNumber}
           </Text>
@@ -112,7 +112,7 @@ function StatPill({
 }) {
   return (
     <View
-      className={`flex-row items-center rounded-3xl bg-section p-4 dark:bg-d-surface ${
+      className={`flex-row items-center rounded-3xl bg-elevated p-4 dark:bg-d-surface ${
         fullWidth ? "w-full" : "flex-1"
       }`}
     >

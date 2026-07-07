@@ -22,7 +22,7 @@ export function StatsListPagination({ page, totalPages, onPageChange }: Props) {
       <Pressable
         onPress={() => canGoBack && onPageChange(page - 1)}
         disabled={!canGoBack}
-        className={`h-9 w-9 items-center justify-center rounded-xl bg-background dark:bg-d-elevated ${
+        className={`h-9 w-9 items-center justify-center rounded-xl bg-elevated dark:bg-d-elevated ${
           canGoBack ? "active:opacity-80" : "opacity-40"
         }`}
         accessibilityRole="button"
@@ -38,7 +38,7 @@ export function StatsListPagination({ page, totalPages, onPageChange }: Props) {
       <Pressable
         onPress={() => canGoForward && onPageChange(page + 1)}
         disabled={!canGoForward}
-        className={`h-9 w-9 items-center justify-center rounded-xl bg-background dark:bg-d-elevated ${
+        className={`h-9 w-9 items-center justify-center rounded-xl bg-elevated dark:bg-d-elevated ${
           canGoForward ? "active:opacity-80" : "opacity-40"
         }`}
         accessibilityRole="button"
