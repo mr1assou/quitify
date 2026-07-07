@@ -1,8 +1,7 @@
 export {
-  ensurePlayBillingConnected,
-  getPlaySubscriptionForPlan,
-  loadPlaySubscriptions,
+  hasPremiumEntitlement,
+  packageForPlan,
   purchasePaywallPlan,
-  restorePlayPurchases,
-  syncPremiumFromPlayStore,
-} from "./playBilling";
+  restoreRevenueCatPurchases,
+  syncPremiumFromRevenueCat,
+} from "./revenueCat";

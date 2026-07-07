@@ -82,12 +82,13 @@ function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: st
             {description}
           </Text>
         </View>
-        <Text className="text-base font-bold tabular-nums text-primary">
-          +{formatNumber(row.amount)} FP
-        </Text>
+        <View className="items-end">
+          <Text className="text-xs text-muted-foreground dark:text-d-muted">{earnedOn}</Text>
+          <Text className="mt-0.5 text-base font-bold tabular-nums text-primary">
+            +{formatNumber(row.amount)} FP
+          </Text>
+        </View>
       </View>
-
-      <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">{earnedOn}</Text>
     </View>
   );
 }

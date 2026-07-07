@@ -16,6 +16,7 @@ import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website"
 import { useApp } from "@/context/AppContext";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
+import { usePaywallPurchase } from "@/hooks/paywall/usePaywallPurchase";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -31,13 +32,18 @@ const PAYWALL_COLORS = getThemeColors("dark");
 const PAYWALL_MODAL_DISMISS_MS = 420;
 
 export default function Paywall() {
-  const { setFlag, setPremium } = useApp();
+  const { setFlag } = useApp();
   const insets = useSafeAreaInsets();
   const plans = usePaywallPlans();
+  const { purchasePlan, restore, busy, purchasing, restoring } = usePaywallPurchase();
   const [selectedPlan, setSelectedPlan] = useState<PaywallPlanId>("yearly");
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const primaryCtaLabel = selectedPlan === "yearly" ? "Try free" : "Continue";
+  const primaryCtaLabel = purchasing
+    ? "Processing..."
+    : selectedPlan === "yearly"
+      ? "Try free"
+      : "Continue";
 
   const finishPaywall = () => {
     if (comparisonTimerRef.current) {
@@ -62,9 +68,14 @@ export default function Paywall() {
     }, PAYWALL_MODAL_DISMISS_MS);
   };
 
-  const handlePrimaryCta = () => {
-    setPremium(true);
-    finishPaywall();
+  const handlePrimaryCta = async () => {
+    const premium = await purchasePlan(selectedPlan);
+    if (premium) finishPaywall();
+  };
+
+  const handleRestore = async () => {
+    const premium = await restore();
+    if (premium) finishPaywall();
   };
 
   return (
@@ -190,8 +201,24 @@ export default function Paywall() {
             </View>
 
             <View className="mt-5">
-              <Button label={primaryCtaLabel} size="md" fullWidth onPress={handlePrimaryCta} />
+              <Button
+                label={primaryCtaLabel}
+                size="md"
+                fullWidth
+                disabled={busy}
+                onPress={() => void handlePrimaryCta()}
+              />
             </View>
+
+            <Pressable
+              onPress={() => void handleRestore()}
+              disabled={busy}
+              className="mt-3 items-center py-2 active:opacity-70"
+            >
+              <Text className="text-sm font-semibold text-d-muted">
+                {restoring ? "Restoring..." : "Restore purchases"}
+              </Text>
+            </Pressable>
 
             <Pressable onPress={openComparisonAfterDismiss} className="mt-3 items-center py-2 active:opacity-70">
               <Text className="text-sm font-semibold text-d-muted">

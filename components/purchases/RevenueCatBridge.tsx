@@ -1,7 +1,9 @@
 import { useRevenueCatConfigure } from "@/hooks/purchases/useRevenueCatConfigure";
+import { useRevenueCatSync } from "@/hooks/purchases/useRevenueCatSync";
 
-/** Initializes RevenueCat once at app startup. */
+/** Initializes RevenueCat and syncs premium entitlement at app startup. */
 export function RevenueCatBridge() {
   useRevenueCatConfigure();
+  useRevenueCatSync();
   return null;
 }

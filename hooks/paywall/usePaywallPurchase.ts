@@ -5,13 +5,13 @@ import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
 import {
   purchasePaywallPlan,
-  restorePlayPurchases,
-  syncPremiumFromPlayStore,
+  restoreRevenueCatPurchases,
+  syncPremiumFromRevenueCat,
 } from "@/services/purchases";
 import {
   isPurchaseCancelledError,
   purchaseErrorMessage,
-} from "@/utils/purchases/purchaseErrors";
+} from "@/utils/purchases/revenueCatErrors";
 
 export function usePaywallPurchase() {
   const { setPremium } = useApp();
@@ -24,8 +24,7 @@ export function usePaywallPurchase() {
 
       setPurchasing(true);
       try {
-        await purchasePaywallPlan(planId);
-        const premium = await syncPremiumFromPlayStore();
+        const premium = await purchasePaywallPlan(planId);
         setPremium(premium);
         return premium;
       } catch (error) {
@@ -51,7 +50,7 @@ export function usePaywallPurchase() {
 
     setRestoring(true);
     try {
-      const premium = await restorePlayPurchases();
+      const premium = await restoreRevenueCatPurchases();
       setPremium(premium);
 
       Alert.alert(
@@ -72,11 +71,22 @@ export function usePaywallPurchase() {
     }
   }, [purchasing, restoring, setPremium]);
 
+  const refreshPremium = useCallback(async (): Promise<boolean> => {
+    try {
+      const premium = await syncPremiumFromRevenueCat();
+      setPremium(premium);
+      return premium;
+    } catch {
+      return false;
+    }
+  }, [setPremium]);
+
   return {
     purchasing,
     restoring,
     busy: purchasing || restoring,
     purchasePlan,
     restore,
+    refreshPremium,
   };
 }
