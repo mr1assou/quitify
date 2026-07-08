@@ -100,7 +100,7 @@ export function UserProfileHero({
 
         <ProfileSubtitle
           isOnline={profile.isOnline}
-          suffix={isPremium ? "Premium member" : "Member"}
+          suffix={isPremium ? "VIP member" : "Member"}
         />
       </View>
     );
@@ -119,7 +119,7 @@ export function UserProfileHero({
           <ProfileSubtitle
             isOnline={profile.isOnline}
             suffix={
-              profile.isCurrentUser ? (isPremium ? "Premium member" : "Member") : undefined
+              profile.isCurrentUser ? (isPremium ? "VIP member" : "Member") : undefined
             }
           />
 

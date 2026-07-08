@@ -5,6 +5,7 @@ import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenH
 import { SelfProfileSettings } from "@/components/feature/profile/SelfProfileSettings";
 import { UserProfileContent } from "@/components/feature/profile/UserProfileContent";
 import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useSelfPlayerProfile } from "@/hooks/community/useSelfPlayerProfile";
 import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
@@ -12,6 +13,7 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function ProfileModal() {
   const { state } = useApp();
+  const isPremium = useIsPremium();
   const signOut = useLogout();
   const playerProfile = useSelfPlayerProfile();
   const profile = state.profile;
@@ -30,7 +32,7 @@ export default function ProfileModal() {
         <View className="mt-2">
           <UserProfileContent
             profile={playerProfile}
-            isPremium={state.isPremium}
+            isPremium={isPremium}
             showActions={false}
             showStats={false}
             showActivity={false}
@@ -42,7 +44,7 @@ export default function ProfileModal() {
         <View className="mt-8 gap-4 px-6">
           <SelfProfileSettings
             profile={profile}
-            isPremium={state.isPremium}
+            isPremium={isPremium}
             accountEmail={state.account?.email}
             isSignedIn={!!state.account}
             onSignOut={() => void signOut()}

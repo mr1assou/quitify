@@ -63,6 +63,7 @@ export type WebRTCCall = {
   muted: boolean;
   speaker: boolean;
   cameraOn: boolean;
+  peerCameraOn: boolean;
   localStream: MediaStream | null;
   remoteStream: MediaStream | null;
   durationMs: number;
@@ -89,6 +90,7 @@ export function useWebRTCCall({
   const [muted, setMuted] = useState(false);
   const [speaker, setSpeaker] = useState(isVideo);
   const [cameraOn, setCameraOn] = useState(isVideo);
+  const [peerCameraOn, setPeerCameraOn] = useState(isVideo);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [durationMs, setDurationMs] = useState(0);
@@ -217,6 +219,8 @@ export function useWebRTCCall({
           } else {
             pendingCandidates.current.push(candidate);
           }
+        } else if (signal.type === "camera") {
+          setPeerCameraOn(signal.enabled);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Signaling failed");
@@ -409,9 +413,10 @@ export function useWebRTCCall({
       localStreamRef.current
         ?.getVideoTracks()
         .forEach((track) => (track.enabled = next));
+      emitCallSignal(peerUserId, callId, { type: "camera", enabled: next });
       return next;
     });
-  }, []);
+  }, [callId, peerUserId]);
 
   const hangUp = useCallback(() => endCall(true), [endCall]);
 
@@ -420,6 +425,7 @@ export function useWebRTCCall({
     muted,
     speaker,
     cameraOn,
+    peerCameraOn,
     localStream,
     remoteStream,
     durationMs,

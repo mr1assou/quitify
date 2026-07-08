@@ -7,6 +7,7 @@ export type AuthMeResponse = {
   email: string;
   name?: string;
   hasCompletedOnboarding: boolean;
+  isPremium?: boolean;
   role?: UserRole;
   sex?: string;
   country?: string;

@@ -4,7 +4,8 @@ export type CallKind = "audio" | "video";
 export type CallSignal =
   | { type: "offer"; sdp: string }
   | { type: "answer"; sdp: string }
-  | { type: "candidate"; candidate: unknown };
+  | { type: "candidate"; candidate: unknown }
+  | { type: "camera"; enabled: boolean };
 
 export type IncomingCallPayload = {
   callId: string;

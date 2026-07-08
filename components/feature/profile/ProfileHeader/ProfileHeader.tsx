@@ -26,7 +26,7 @@ export function ProfileHeader({ name, isPremium }: Props) {
         />
       </View>
       <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-        {isPremium ? "Premium member" : "Guest"}
+        {isPremium ? "VIP member" : "Guest"}
       </Text>
     </View>
   );

@@ -8,7 +8,6 @@ export type AppState = {
   profile: UserProfile | null;
   cravings: CravingLog[];
   missionLogs: Record<string, MissionLog>;
-  isPremium: boolean;
   account: UserAccount | null;
   /** Game-earned FP kept on-device until backend sync exists. */
   localFreedomPoints: number;

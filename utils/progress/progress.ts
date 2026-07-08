@@ -1,4 +1,5 @@
 import { BADGES, isBadgeGalleryAvailable, isFirstStepBadge } from "@/constants/progress/badges";
+import { computeNextBadgeDisplayProgress } from "@/utils/progress/achievementProgress";
 import { resolveHighestUnlockedBadge } from "@/utils/progress/badges";
 import {
   LEVELS,
@@ -95,9 +96,7 @@ function finalizeBadgeSummary(
       (b) => isBadgeGalleryAvailable(b.id, earnedBadgeIds) && !b.unlocked,
     ) ?? null;
   const currentBadge = resolveHighestUnlockedBadge(summary.badges);
-  const currentBadgeProgress = nextBadge
-    ? Math.min(nextBadge.streakProgress, nextBadge.fpProgress, nextBadge.goalsProgress)
-    : 1;
+  const currentBadgeProgress = nextBadge ? computeNextBadgeDisplayProgress(nextBadge) : 1;
 
   return {
     ...summary,

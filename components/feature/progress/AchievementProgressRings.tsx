@@ -1,11 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
+import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import type { GlobalRank } from "@/types/progress/progress";
 import type { AchievementBadgeMetric } from "@/utils/progress/achievementProgress";
 import { progressToPercent } from "@/utils/progress/achievementProgress";
@@ -96,9 +97,24 @@ export function AchievementProgressRings({
           </View>
 
           <View className="flex-1 items-center pl-3">
-            <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Freedom points
-            </Text>
+            <View className="flex-row items-center gap-1">
+              <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+                Freedom points
+              </Text>
+              <Pressable
+                onPress={showFreedomPointsInfo}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel="Learn how Freedom Points work"
+                className="active:opacity-70"
+              >
+                <Ionicons
+                  name="information-circle-outline"
+                  size={14}
+                  color={colors.mutedForeground}
+                />
+              </Pressable>
+            </View>
             <View className="mt-2 flex-row items-center gap-2">
               <View className="h-8 w-8 items-center justify-center rounded-full bg-primary">
                 <Ionicons name="flash" size={16} color={colors.white} />

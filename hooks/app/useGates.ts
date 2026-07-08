@@ -1,4 +1,5 @@
 import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useNow } from "@/hooks/shared/useNow";
 import type { Gates } from "@/types";
 
@@ -9,6 +10,7 @@ const PAYWALL_TRIGGER_DAYS = 5;
 
 export function useGates(): Gates {
   const { state } = useApp();
+  const isPremium = useIsPremium();
   const now = useNow(60_000);
 
   const signedUp = !!state.account;
@@ -22,7 +24,7 @@ export function useGates(): Gates {
     (flags.hasLoggedFirstCraving || dayOne);
 
   const fiveDays = profile ? now - profile.quitDate >= PAYWALL_TRIGGER_DAYS * ONE_DAY : false;
-  const shouldShowPaywall = !state.isPremium && !flags.hasSeenPaywall && fiveDays;
+  const shouldShowPaywall = !isPremium && !flags.hasSeenPaywall && fiveDays;
 
   return { shouldShowSignup, shouldShowPaywall };
 }

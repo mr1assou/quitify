@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
 import { STATS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
+import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import { useTheme } from "@/context/ThemeContext";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
 import type { FreedomPointLedgerRow } from "@/types/stats/statsFreedomPoints";
@@ -38,9 +39,24 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
             <Ionicons name="flash" size={18} color={colors.white} />
           </View>
           <View className="flex-1">
-            <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Freedom points
-            </Text>
+            <View className="flex-row items-center gap-1">
+              <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+                Freedom points
+              </Text>
+              <Pressable
+                onPress={showFreedomPointsInfo}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel="Learn how Freedom Points work"
+                className="active:opacity-70"
+              >
+                <Ionicons
+                  name="information-circle-outline"
+                  size={14}
+                  color={colors.mutedForeground}
+                />
+              </Pressable>
+            </View>
             <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
               {entries.length === 0
                 ? "No rewards yet."

@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, Text, useWindowDimensions, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, {
   Easing,
   FadeIn,
@@ -60,12 +60,12 @@ export function CallSessionScreen({
   role,
   peerUserId,
 }: Props) {
-  const { width, height } = useWindowDimensions();
   const {
     status,
     muted,
     speaker,
     cameraOn,
+    peerCameraOn,
     localStream,
     remoteStream,
     durationMs,
@@ -140,11 +140,10 @@ export function CallSessionScreen({
               label={label}
               status={status}
               cameraOn={cameraOn}
+              peerCameraOn={peerCameraOn}
               localStream={localStream}
               remoteStream={remoteStream}
               peerPulseStyle={peerPulseStyle}
-              stageHeight={height * 0.68}
-              stageWidth={width}
             />
           ) : (
             <VoiceCallStage

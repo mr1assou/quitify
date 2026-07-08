@@ -5,6 +5,8 @@ export type UserAccount = {
   name?: string;
   email: string;
   createdAt: number;
+  /** Synced from the server — not stored in a separate client flag. */
+  isPremium?: boolean;
   role?: UserRole;
   /** Badge ids persisted on the server (e.g. first-step on signup). */
   earnedBadgeIds?: string[];

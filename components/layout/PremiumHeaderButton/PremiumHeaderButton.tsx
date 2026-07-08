@@ -12,7 +12,7 @@ type Props = {
 export function PremiumHeaderButton({ isPremium, onPress }: Props) {
   return (
     <Pressable
-      accessibilityLabel={isPremium ? "Premium member" : "Upgrade to VIP"}
+      accessibilityLabel={isPremium ? "VIP member" : "Upgrade to VIP"}
       onPress={() => {
         Haptics.selectionAsync().catch(() => {});
         onPress();

@@ -3,13 +3,13 @@ import { View } from "react-native";
 import { HamburgerButton } from "@/components/layout/HamburgerButton";
 import { HeaderIconButton } from "@/components/layout/HeaderIconButton";
 import { PremiumHeaderButton } from "@/components/layout/PremiumHeaderButton";
-import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useNotifications } from "@/context/NotificationContext";
 import { useChatUnreadTotal } from "@/hooks/chat/useChat";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export function ScreenHeaderActions() {
-  const { state } = useApp();
+  const isPremium = useIsPremium();
   const unread = useChatUnreadTotal();
   const { unreadCount: notificationsUnread } = useNotifications();
 
@@ -31,8 +31,8 @@ export function ScreenHeaderActions() {
       </View>
       <View className="ml-1">
         <PremiumHeaderButton
-          isPremium={state.isPremium}
-          onPress={() => safeRouter.push(state.isPremium ? "/profile" : "/paywall")}
+          isPremium={isPremium}
+          onPress={() => safeRouter.push(isPremium ? "/profile" : "/paywall")}
         />
       </View>
       <View className="ml-2.5">

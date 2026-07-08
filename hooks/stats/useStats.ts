@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useNow } from "@/hooks/shared/useNow";
 import { dayKey, lastNDayKeys } from "@/utils/shared/dates";
 import { getBadgeProgress, getUnlockedBadges } from "@/utils/progress/calculations";
@@ -17,10 +18,10 @@ export function useStats(intervalMs = 60_000): DerivedStats | null {
 }
 
 export function useBadgeProgress() {
-  const { state } = useApp();
+  const isPremium = useIsPremium();
   const stats = useStats();
   const days = stats?.streakDays ?? 0;
-  return useMemo(() => getBadgeProgress(days, state.isPremium), [days, state.isPremium]);
+  return useMemo(() => getBadgeProgress(days, isPremium), [days, isPremium]);
 }
 
 export function useUnlockedBadges() {

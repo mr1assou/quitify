@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
+import { updatePremiumOnServer } from "@/services/auth/premiumApi";
 import {
   purchasePaywallPlan,
   restoreRevenueCatPurchases,
@@ -13,8 +14,22 @@ import {
   purchaseErrorMessage,
 } from "@/utils/purchases/revenueCatErrors";
 
+async function persistPremiumToDb(
+  setAccount: ReturnType<typeof useApp>["setAccount"],
+  account: ReturnType<typeof useApp>["state"]["account"],
+): Promise<boolean> {
+  const me = await updatePremiumOnServer(true);
+  if (!account) return Boolean(me.isPremium);
+
+  setAccount({
+    ...account,
+    isPremium: Boolean(me.isPremium),
+  });
+  return Boolean(me.isPremium);
+}
+
 export function usePaywallPurchase() {
-  const { setPremium } = useApp();
+  const { state, setAccount } = useApp();
   const [purchasing, setPurchasing] = useState(false);
   const [restoring, setRestoring] = useState(false);
 
@@ -24,9 +39,10 @@ export function usePaywallPurchase() {
 
       setPurchasing(true);
       try {
-        const premium = await purchasePaywallPlan(planId);
-        setPremium(premium);
-        return premium;
+        const entitled = await purchasePaywallPlan(planId);
+        if (!entitled) return false;
+
+        return await persistPremiumToDb(setAccount, state.account);
       } catch (error) {
         if (isPurchaseCancelledError(error)) return false;
 
@@ -42,7 +58,7 @@ export function usePaywallPurchase() {
         setPurchasing(false);
       }
     },
-    [purchasing, restoring, setPremium],
+    [purchasing, restoring, setAccount, state.account],
   );
 
   const restore = useCallback(async (): Promise<boolean> => {
@@ -50,8 +66,10 @@ export function usePaywallPurchase() {
 
     setRestoring(true);
     try {
-      const premium = await restoreRevenueCatPurchases();
-      setPremium(premium);
+      const entitled = await restoreRevenueCatPurchases();
+      const premium = entitled
+        ? await persistPremiumToDb(setAccount, state.account)
+        : false;
 
       Alert.alert(
         premium ? "Restored" : "No subscription found",
@@ -69,17 +87,17 @@ export function usePaywallPurchase() {
     } finally {
       setRestoring(false);
     }
-  }, [purchasing, restoring, setPremium]);
+  }, [purchasing, restoring, setAccount, state.account]);
 
   const refreshPremium = useCallback(async (): Promise<boolean> => {
     try {
-      const premium = await syncPremiumFromRevenueCat();
-      setPremium(premium);
-      return premium;
+      const entitled = await syncPremiumFromRevenueCat();
+      if (!entitled) return false;
+      return await persistPremiumToDb(setAccount, state.account);
     } catch {
       return false;
     }
-  }, [setPremium]);
+  }, [setAccount, state.account]);
 
   return {
     purchasing,

@@ -40,7 +40,6 @@ type Action =
   | { type: "DELETE_CRAVING"; id: string }
   | { type: "TOGGLE_MISSION_TASK"; missionDay: number; taskId: string; value: boolean }
   | { type: "COMPLETE_MISSION"; missionDay: number }
-  | { type: "SET_PREMIUM"; value: boolean }
   | { type: "SET_ACCOUNT"; account: UserAccount | null }
   | { type: "ADD_LOCAL_FREEDOM_POINTS"; amount: number }
   | { type: "SET_FLAG"; key: keyof AppFlags; value: boolean }
@@ -62,7 +61,6 @@ const initialState: AppState = {
   profile: null,
   cravings: [],
   missionLogs: {},
-  isPremium: false,
   account: null,
   localFreedomPoints: 0,
   flags: initialFlags,
@@ -132,8 +130,6 @@ function reducer(state: AppState, action: Action): AppState {
         },
       };
     }
-    case "SET_PREMIUM":
-      return { ...state, isPremium: action.value };
     case "SET_ACCOUNT":
       return { ...state, account: action.account };
     case "SET_FLAG":
@@ -171,7 +167,6 @@ type AppContextValue = {
   deleteCraving: (id: string) => void;
   toggleMissionTask: (missionDay: number, taskId: string, value: boolean) => void;
   completeMission: (missionDay: number) => void;
-  setPremium: (value: boolean) => void;
   setAccount: (account: UserAccount | null) => void;
   addLocalFreedomPoints: (amount: number) => void;
   logout: () => Promise<void>;
@@ -227,7 +222,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (missionDay: number) => dispatch({ type: "COMPLETE_MISSION", missionDay }),
     [],
   );
-  const setPremium = useCallback((value: boolean) => dispatch({ type: "SET_PREMIUM", value }), []);
   const setAccount = useCallback(
     (account: UserAccount | null) => dispatch({ type: "SET_ACCOUNT", account }),
     [],
@@ -267,7 +261,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       deleteCraving,
       toggleMissionTask,
       completeMission,
-      setPremium,
       setAccount,
       addLocalFreedomPoints,
       logout,
@@ -284,7 +277,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
       deleteCraving,
       toggleMissionTask,
       completeMission,
-      setPremium,
       setAccount,
       addLocalFreedomPoints,
       logout,

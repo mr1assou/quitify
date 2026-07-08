@@ -11,6 +11,7 @@ import { StatsOverviewCard } from "@/components/feature/stats/StatsOverviewCard"
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
 import { useProgress } from "@/hooks/progress/useProgress";
@@ -37,6 +38,7 @@ function SectionError({ message, onRetry }: { message: string; onRetry: () => vo
 export default function Stats() {
   const { colors } = useTheme();
   const { state } = useApp();
+  const isPremium = useIsPremium();
   const progress = useProgress();
   const { snapshot: leaderboard, refresh: refreshLeaderboard } = useLeaderboard();
   const refreshAccount = useRefreshAccount();
@@ -53,7 +55,7 @@ export default function Stats() {
   );
 
   const badgeSummary = progress
-    ? computeAchievementBadgeSummary(progress, state.isPremium)
+    ? computeAchievementBadgeSummary(progress, isPremium)
     : null;
 
   const displayRank = useMemo(() => {

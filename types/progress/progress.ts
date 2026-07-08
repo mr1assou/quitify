@@ -41,7 +41,7 @@ export type GlobalRank = {
 
 export type BadgeWithStatus = Badge & {
   unlocked: boolean;
-  /** 0..1 overall progress — minimum of streak and FP progress. */
+  /** 0..1 unlock progress — minimum of streak, FP, and goals (all required). */
   progress: number;
   /** Days remaining on streak requirement; 0 if met. */
   daysLeft: number;
@@ -61,6 +61,6 @@ export type ProgressSummary = {
   /** Highest badge the user has earned. */
   currentBadge: BadgeWithStatus | null;
   nextBadge: BadgeWithStatus | null;
-  /** 0..1 progress from current badge toward the next one. */
+  /** 0..1 display progress toward the next badge (averaged partial credit). */
   currentBadgeProgress: number;
 };

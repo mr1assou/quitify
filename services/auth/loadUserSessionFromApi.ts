@@ -21,6 +21,7 @@ export function mapAuthMeToSession(
     email: me.email,
     name: me.name,
     createdAt: previousAccount?.createdAt ?? Date.now(),
+    isPremium: Boolean(me.isPremium),
     role: me.role ?? DEFAULT_USER_ROLE,
     earnedBadgeIds: me.earnedBadgeIds ?? [],
     freedomPoints: me.freedomPoints ?? 0,

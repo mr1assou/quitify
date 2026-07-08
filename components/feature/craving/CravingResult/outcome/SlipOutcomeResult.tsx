@@ -7,7 +7,7 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Button } from "@/components/ui/Button";
 import { SMOKED_RESULT_IMAGE } from "@/constants/app/assets";
 import type { SlipOutcomeCopy } from "@/constants/stats/slipOutcomeCopy";
-import { useApp } from "@/context/AppContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useTheme } from "@/context/ThemeContext";
 import { useProgress } from "@/hooks/progress/useProgress";
 import { resolveHighestUnlockedBadgeId } from "@/utils/progress/badges";
@@ -47,11 +47,11 @@ export function SlipOutcomeResult({
   onDone,
 }: Props) {
   const { colors } = useTheme();
-  const { state } = useApp();
+  const isPremium = useIsPremium();
   const progress = useProgress();
   const badgeId =
     (progress
-      ? resolveHighestUnlockedBadgeId(progress.badges, state.isPremium)
+      ? resolveHighestUnlockedBadgeId(progress.badges, isPremium)
       : null) ?? "first-step";
 
   return (
