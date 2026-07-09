@@ -12,8 +12,8 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import type { AchievementSection } from "@/constants/progress/achievementSections";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
-import { useProgress } from "@/hooks/progress/useProgress";
 import { useRefreshAccount } from "@/hooks/auth/useRefreshAccount";
+import { useProgress } from "@/hooks/progress/useProgress";
 
 export default function AchievementScreen() {
   const { colors } = useTheme();

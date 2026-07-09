@@ -9,6 +9,7 @@ import { CravingSessionHeader } from "@/components/feature/craving/CravingSessio
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { useApp } from "@/context/AppContext";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useNow } from "@/hooks/shared/useNow";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -22,6 +23,7 @@ type Props = {
 export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   const { state } = useApp();
   const { goals, minTargets, setGoal, refresh, isReady } = useUserGoals();
+  const { requirePremium } = usePremiumGate();
   const now = useNow(1000);
   const isEdit = mode === "edit";
   const [goalModal, setGoalModal] = useState<GoalModalState | null>(null);
@@ -38,6 +40,8 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
 
   const handleConfirm = useCallback(
     async (days: number) => {
+      if (!isEdit && !requirePremium()) return;
+
       try {
         await setGoal(GOAL_TYPE, days);
         safeRouter.back();
@@ -49,7 +53,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
         });
       }
     },
-    [setGoal],
+    [isEdit, requirePremium, setGoal],
   );
 
   if (!state.profile) return null;

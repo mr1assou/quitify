@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Pressable,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -28,6 +29,7 @@ type Props = {
   isPlaying: boolean;
   isLoading: boolean;
   progress: RelaxSoundProgress | null;
+  locked?: boolean;
   onPress: () => void;
 };
 
@@ -37,6 +39,7 @@ export function RelaxSoundCard({
   isPlaying,
   isLoading,
   progress,
+  locked = false,
   onPress,
 }: Props) {
   const scale = useSharedValue(1);
@@ -54,7 +57,7 @@ export function RelaxSoundCard({
     <AnimatedPressable
       accessibilityRole="button"
       accessibilityLabel={`${sound.label}. ${sound.description}`}
-      accessibilityState={{ selected: isActive, busy: isLoading }}
+      accessibilityState={{ selected: isActive, busy: isLoading, disabled: locked }}
       onPressIn={() => {
         scale.value = withSpring(0.97, { damping: 16, stiffness: 320 });
       }}
@@ -82,6 +85,26 @@ export function RelaxSoundCard({
         resizeMode="cover"
         style={{ flex: 1, justifyContent: "flex-end" }}
       >
+        {locked ? (
+          <View
+            pointerEvents="none"
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                backgroundColor: "rgba(0,0,0,0.45)",
+                alignItems: "center",
+                justifyContent: "center",
+              },
+            ]}
+          >
+            <View className="h-11 w-11 items-center justify-center rounded-full bg-primary">
+              <Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+            </View>
+            <Text className="mt-2 text-xs font-bold uppercase tracking-widest text-white">
+              VIP
+            </Text>
+          </View>
+        ) : null}
         <View
           style={{
             backgroundColor: "rgba(0,0,0,0.5)",
@@ -103,7 +126,9 @@ export function RelaxSoundCard({
               </Text>
             </View>
 
-            {isLoading ? (
+            {locked ? (
+              <Ionicons name="lock-closed" size={28} color="#FFFFFF" />
+            ) : isLoading ? (
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <Ionicons

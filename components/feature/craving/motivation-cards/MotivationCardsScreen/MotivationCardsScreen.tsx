@@ -3,7 +3,14 @@ import { MotivationCardsSession } from "@/components/feature/craving/motivation-
 import { useMotivationCardsSession } from "@/hooks/craving/useMotivationCardsSession";
 
 export function MotivationCardsScreen() {
-  const { quotes, currentIndex, goToIndex } = useMotivationCardsSession();
+  const {
+    quotes,
+    currentIndex,
+    goToIndex,
+    canGoToIndex,
+    requirePremium,
+    displayTotal,
+  } = useMotivationCardsSession();
 
   return (
     <CravingToolScreen toolId="motivation-cards">
@@ -11,6 +18,9 @@ export function MotivationCardsScreen() {
         quotes={quotes}
         currentIndex={currentIndex}
         onIndexChange={goToIndex}
+        canGoToIndex={canGoToIndex}
+        onSwipeBlocked={requirePremium}
+        displayTotal={displayTotal}
         saveSection="motivation"
       />
     </CravingToolScreen>

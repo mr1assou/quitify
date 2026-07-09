@@ -1,6 +1,6 @@
-import { useSwipeableCardSession } from "./useSwipeableCardSession";
+import { usePremiumLimitedSwipeableSession } from "./usePremiumLimitedSwipeableSession";
 
 /** Swipeable practical tips for the craving tool. */
 export function useTipsCardsSession() {
-  return useSwipeableCardSession("tips");
+  return usePremiumLimitedSwipeableSession("tips");
 }

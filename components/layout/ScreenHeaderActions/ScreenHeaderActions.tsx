@@ -29,12 +29,14 @@ export function ScreenHeaderActions() {
           onPress={() => safeRouter.push("/notifications")}
         />
       </View>
-      <View className="ml-1">
-        <PremiumHeaderButton
-          isPremium={isPremium}
-          onPress={() => safeRouter.push(isPremium ? "/profile" : "/paywall")}
-        />
-      </View>
+      {isPremium ? null : (
+        <View className="ml-1">
+          <PremiumHeaderButton
+            isPremium={false}
+            onPress={() => safeRouter.push("/paywall")}
+          />
+        </View>
+      )}
       <View className="ml-2.5">
         <HamburgerButton onPress={() => safeRouter.push("/profile")} />
       </View>

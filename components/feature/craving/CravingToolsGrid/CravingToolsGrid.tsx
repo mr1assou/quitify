@@ -7,8 +7,11 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { CravingToolCard } from "@/components/feature/craving/CravingToolCard";
 import { RelaxSoundHeadphonesModal } from "@/components/feature/craving/relax-sound/RelaxSoundHeadphonesModal";
 import { CRAVING_TOOLS, type CravingToolId } from "@/constants/craving/cravingTools";
+import { isPremiumCravingTool } from "@/constants/premium/premiumFeatures";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 
 export function CravingToolsGrid() {
+  const { isPremium, requirePremium } = usePremiumGate();
   const [loadingToolId, setLoadingToolId] = useState<CravingToolId | null>(null);
   const [showRelaxHeadphonesModal, setShowRelaxHeadphonesModal] = useState(false);
 
@@ -18,9 +21,16 @@ export function CravingToolsGrid() {
     }, []),
   );
 
-  const openRelaxSounds = () => {
-    setLoadingToolId("relax-sound");
-    safeRouter.push("/craving-tools/relax-sound");
+  const openTool = (tool: (typeof CRAVING_TOOLS)[number]) => {
+    if (isPremiumCravingTool(tool.id) && !requirePremium()) return;
+
+    if (tool.id === "relax-sound") {
+      setShowRelaxHeadphonesModal(true);
+      return;
+    }
+
+    setLoadingToolId(tool.id);
+    safeRouter.push(tool.href);
   };
 
   return (
@@ -35,15 +45,8 @@ export function CravingToolsGrid() {
               icon={tool.icon}
               variant={tool.variant}
               loading={loadingToolId === tool.id}
-              onPress={() => {
-                if (tool.id === "relax-sound") {
-                  setShowRelaxHeadphonesModal(true);
-                  return;
-                }
-
-                setLoadingToolId(tool.id);
-                safeRouter.push(tool.href);
-              }}
+              locked={!isPremium && isPremiumCravingTool(tool.id)}
+              onPress={() => openTool(tool)}
             />
           ))}
         </View>
@@ -53,7 +56,8 @@ export function CravingToolsGrid() {
         visible={showRelaxHeadphonesModal}
         onContinue={() => {
           setShowRelaxHeadphonesModal(false);
-          openRelaxSounds();
+          setLoadingToolId("relax-sound");
+          safeRouter.push("/craving-tools/relax-sound");
         }}
         onClose={() => setShowRelaxHeadphonesModal(false)}
       />

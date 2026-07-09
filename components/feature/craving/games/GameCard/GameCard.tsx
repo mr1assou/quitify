@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -14,10 +14,11 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type Props = {
   game: CravingGame;
+  locked?: boolean;
   onPress: () => void;
 };
 
-export function GameCard({ game, onPress }: Props) {
+export function GameCard({ game, locked = false, onPress }: Props) {
   const { resolved } = useTheme();
   const palette = resolved === "dark" ? game.palette.dark : game.palette.light;
 
@@ -33,7 +34,7 @@ export function GameCard({ game, onPress }: Props) {
     <AnimatedPressable
       accessibilityRole="button"
       accessibilityLabel={`${game.title}, ${game.duration}. ${game.description}`}
-      accessibilityState={{ disabled }}
+      accessibilityState={{ disabled: disabled && !locked, busy: locked }}
       disabled={disabled}
       onPressIn={() => {
         if (disabled) return;
@@ -91,6 +92,28 @@ export function GameCard({ game, onPress }: Props) {
             <Ionicons name={game.icon} size={30} color={palette.iconColor} />
           </View>
         )}
+
+        {locked ? (
+          <View
+            pointerEvents="none"
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                backgroundColor: "rgba(0,0,0,0.45)",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 18,
+              },
+            ]}
+          >
+            <View className="h-11 w-11 items-center justify-center rounded-full bg-primary">
+              <Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+            </View>
+            <Text className="mt-2 text-xs font-bold uppercase tracking-widest text-white">
+              VIP
+            </Text>
+          </View>
+        ) : null}
       </View>
 
       <View className="w-full items-center pb-1 pt-1">
@@ -115,6 +138,16 @@ export function GameCard({ game, onPress }: Props) {
           >
             Coming soon
           </Text>
+        ) : locked ? (
+          <View className="mt-1 flex-row items-center gap-1">
+            <Ionicons name="lock-closed" size={12} color={palette.iconColor} />
+            <Text
+              style={{ color: palette.iconColor, opacity: 0.85 }}
+              className="text-[10px] font-semibold uppercase tracking-wide"
+            >
+              VIP
+            </Text>
+          </View>
         ) : null}
       </View>
     </AnimatedPressable>

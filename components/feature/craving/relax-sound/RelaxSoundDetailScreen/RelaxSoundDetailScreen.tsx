@@ -21,7 +21,10 @@ import {
 } from "@/constants/craving/relaxSounds";
 import { useRelaxSoundsCatalogContext } from "@/context/RelaxSoundsCatalogContext";
 import { useRelaxSoundPlayerContext } from "@/context/RelaxSoundPlayerContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { formatPlaybackTime } from "@/utils/craving/formatPlaybackTime";
+import { isRelaxSoundUnlocked } from "@/utils/premium/relaxSoundAccess";
+import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   soundId: string;
@@ -148,7 +151,17 @@ export function RelaxSoundDetailScreen({ soundId }: Props) {
 
 export function RelaxSoundDetailScreenFromId({ id }: { id: string }) {
   const { sounds, isLoading } = useRelaxSoundsCatalogContext();
+  const { isPremium, requirePremium } = usePremiumGate();
   const sound = findRelaxSound(sounds, id);
+  const unlocked = sound
+    ? isRelaxSoundUnlocked(sounds, sound.id, isPremium)
+    : false;
+
+  useEffect(() => {
+    if (isLoading || !sound || unlocked) return;
+    requirePremium();
+    safeRouter.back();
+  }, [isLoading, sound, unlocked, requirePremium]);
 
   if (isLoading) {
     return (
@@ -169,6 +182,8 @@ export function RelaxSoundDetailScreenFromId({ id }: { id: string }) {
       </CravingToolScreen>
     );
   }
+
+  if (!unlocked) return null;
 
   return <RelaxSoundDetailScreen soundId={sound.id} />;
 }

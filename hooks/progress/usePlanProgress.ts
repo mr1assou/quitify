@@ -7,12 +7,14 @@ import {
   getDayPlan,
 } from "@/constants/progress/plan";
 import { useApp } from "@/context/AppContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { usePlanState } from "@/hooks/progress/usePlanState";
 import type { ResolvedPlanTask } from "@/types";
 import { currentMissionDay } from "@/utils/streak";
 
 export function usePlanProgress() {
   const { state } = useApp();
+  const { requirePremium } = usePremiumGate();
   const { planState, loading, error, refresh, toggleTaskOnServer, saveTaskNoteOnServer } =
     usePlanState();
 
@@ -83,9 +85,10 @@ export function usePlanProgress() {
   const toggleTask = useCallback(
     async (missionDay: number, taskId: string, value: boolean) => {
       if (PLAN_PREVIEW_UNLOCK_ALL) return;
+      if (value && !requirePremium()) return;
       await toggleTaskOnServer(missionDay, taskId, value);
     },
-    [toggleTaskOnServer],
+    [requirePremium, toggleTaskOnServer],
   );
 
   const saveTaskNote = useCallback(

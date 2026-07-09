@@ -1,12 +1,12 @@
 export type PaywallPlanId = "monthly" | "yearly";
 
-/** Subscription list prices in USD. */
+/** Subscription list prices in USD (fallback when store prices are unavailable). */
 export const PAYWALL_PLANS_USD = [
   {
     id: "monthly" as const,
     label: "Monthly plan",
     rightAmountUsd: 8.99,
-    rightPeriod: "/month",
+    rightPeriod: "/mo",
     subAmountUsd: null,
     subPeriod: null,
     trial: null,
@@ -16,7 +16,7 @@ export const PAYWALL_PLANS_USD = [
     id: "yearly" as const,
     label: "Yearly plan",
     rightAmountUsd: 4.99,
-    rightPeriod: "/month",
+    rightPeriod: "/mo",
     subAmountUsd: 59.99,
     subPeriod: "/year",
     trial: "3 days free trial",

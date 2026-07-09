@@ -11,6 +11,7 @@ import { StatsOverviewCard } from "@/components/feature/stats/StatsOverviewCard"
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
+import { PremiumLockedSection } from "@/components/premium/PremiumLockedSection";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
@@ -125,6 +126,11 @@ export default function Stats() {
             </View>
           ) : attempts.error && !attempts.data ? (
             <SectionError message={attempts.error} onRetry={() => void attempts.refresh()} />
+          ) : !isPremium ? (
+            <PremiumLockedSection
+              title="Attempt history"
+              description="See every quit attempt, slips, and progress over time with VIP."
+            />
           ) : attempts.data && profile ? (
             <AttemptHistoryCard
               attempts={attempts.data.attempts}
@@ -139,6 +145,11 @@ export default function Stats() {
             </View>
           ) : goals.error && !goals.data ? (
             <SectionError message={goals.error} onRetry={() => void goals.refresh()} />
+          ) : !isPremium ? (
+            <PremiumLockedSection
+              title="Goal history"
+              description="Track completed goals and rewards with VIP."
+            />
           ) : goals.data ? (
             <GoalHistoryCard
               goals={goals.data.goals}
@@ -153,6 +164,11 @@ export default function Stats() {
             </View>
           ) : freedomPoints.error && !freedomPoints.data ? (
             <SectionError message={freedomPoints.error} onRetry={() => void freedomPoints.refresh()} />
+          ) : !isPremium ? (
+            <PremiumLockedSection
+              title="Freedom points history"
+              description="Review every FP reward you earned with VIP."
+            />
           ) : freedomPoints.data ? (
             <FreedomPointHistoryCard
               entries={freedomPoints.data.entries}

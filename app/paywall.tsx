@@ -10,6 +10,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
+import { PaywallPlanOption } from "@/components/paywall/PaywallPlanOption";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
 import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website";
@@ -34,7 +35,7 @@ const PAYWALL_MODAL_DISMISS_MS = 420;
 export default function Paywall() {
   const { setFlag } = useApp();
   const insets = useSafeAreaInsets();
-  const plans = usePaywallPlans();
+  const { plans } = usePaywallPlans();
   const { purchasePlan, restore, busy, purchasing, restoring } = usePaywallPurchase();
   const [selectedPlan, setSelectedPlan] = useState<PaywallPlanId>("yearly");
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -133,71 +134,14 @@ export default function Paywall() {
             </Text>
 
             <View className="mt-6 gap-3">
-              {plans.map((plan) => {
-                const selected = selectedPlan === plan.id;
-
-                return (
-                  <View key={plan.id} className={plan.recommended ? "relative mt-4" : undefined}>
-                    {plan.recommended ? (
-                      <View className="absolute -top-3 right-4 z-10">
-                        <View className="rounded-full bg-primary px-3 py-1 shadow-sm">
-                          <Text className="text-[10px] font-bold uppercase text-white">
-                            Recommended
-                          </Text>
-                        </View>
-                      </View>
-                    ) : null}
-
-                    <Pressable
-                      onPress={() => setSelectedPlan(plan.id)}
-                      className={`rounded-2xl border px-5 py-4 shadow-sm ${
-                        selected
-                          ? "border-primary bg-d-elevated/95"
-                          : "border-d-border bg-d-surface/90"
-                      }`}
-                    >
-                      <View>
-                        {plan.subPrice ? (
-                          <>
-                            <Text className="text-base font-bold text-d-text">{plan.label}</Text>
-                            <View className="mt-1 flex-row items-center justify-between">
-                              <View className="flex-row items-center">
-                                <Text className="text-2xl font-bold text-d-text">
-                                  {plan.subPrice}
-                                </Text>
-                                <Text className="ml-1 text-sm text-d-muted">{plan.subPeriod}</Text>
-                              </View>
-                              <View className="flex-row items-center">
-                                <Text className="text-2xl font-bold text-d-text">
-                                  {plan.rightPrice}
-                                </Text>
-                                <Text className="ml-1 text-sm text-d-muted">{plan.rightPeriod}</Text>
-                              </View>
-                            </View>
-                            {plan.trial ? (
-                              <Text className="mt-1 text-sm font-semibold text-primary">
-                                {plan.trial}
-                              </Text>
-                            ) : null}
-                          </>
-                        ) : (
-                          <View className="flex-row items-center justify-between">
-                            <Text className="flex-1 pr-3 text-base font-bold text-d-text">
-                              {plan.label}
-                            </Text>
-                            <View className="flex-row items-center">
-                              <Text className="text-2xl font-bold text-d-text">
-                                {plan.rightPrice}
-                              </Text>
-                              <Text className="ml-1 text-sm text-d-muted">{plan.rightPeriod}</Text>
-                            </View>
-                          </View>
-                        )}
-                      </View>
-                    </Pressable>
-                  </View>
-                );
-              })}
+              {plans.map((plan) => (
+                <PaywallPlanOption
+                  key={plan.id}
+                  plan={plan}
+                  selected={selectedPlan === plan.id}
+                  onSelect={() => setSelectedPlan(plan.id)}
+                />
+              ))}
             </View>
 
             <View className="mt-5">
@@ -217,12 +161,6 @@ export default function Paywall() {
             >
               <Text className="text-sm font-semibold text-d-muted">
                 {restoring ? "Restoring..." : "Restore purchases"}
-              </Text>
-            </Pressable>
-
-            <Pressable onPress={openComparisonAfterDismiss} className="mt-3 items-center py-2 active:opacity-70">
-              <Text className="text-sm font-semibold text-d-muted">
-                Continue with the free version
               </Text>
             </Pressable>
 

@@ -25,9 +25,21 @@ type Props = {
   quotes: readonly MotivationQuote[];
   currentIndex: number;
   onIndexChange: (next: number) => void;
+  /** When set, swipes that would land on a disallowed index are cancelled. */
+  canGoToIndex?: (nextIndex: number) => boolean;
+  onSwipeBlocked?: () => void;
+  /** Footer total override (e.g. show 2 instead of full catalog for free tier). */
+  displayTotal?: number;
 };
 
-export function MotivationCardStack({ quotes, currentIndex, onIndexChange }: Props) {
+export function MotivationCardStack({
+  quotes,
+  currentIndex,
+  onIndexChange,
+  canGoToIndex,
+  onSwipeBlocked,
+  displayTotal,
+}: Props) {
   const { width, height } = useWindowDimensions();
   const cardWidth = Math.min(width - 48, 360);
   const cardHeight = Math.min(height * CARD_HEIGHT_RATIO, 520);
@@ -37,13 +49,26 @@ export function MotivationCardStack({ quotes, currentIndex, onIndexChange }: Pro
 
   const total = quotes.length;
   const currentQuote = quotes[currentIndex];
+  const footerTotal = displayTotal ?? total;
+
+  const nextIndexForDirection = (direction: 1 | -1) =>
+    direction > 0
+      ? (currentIndex + 1) % total
+      : (currentIndex - 1 + total) % total;
+
+  const trySwipe = (direction: 1 | -1) => {
+    const nextIndex = nextIndexForDirection(direction);
+    if (canGoToIndex && !canGoToIndex(nextIndex)) {
+      translateX.value = withSpring(0, SPRING_BACK);
+      onSwipeBlocked?.();
+      return;
+    }
+    animateSwipeOut(direction);
+  };
 
   const commitIndexChange = (direction: 1 | -1) => {
     Haptics.selectionAsync().catch(() => {});
-    const nextIndex =
-      direction > 0
-        ? (currentIndex + 1) % total
-        : (currentIndex - 1 + total) % total;
+    const nextIndex = nextIndexForDirection(direction);
     onIndexChange(nextIndex);
     // Slowly fade the new card in once React has swapped the content.
     opacity.value = withTiming(1, {
@@ -78,9 +103,9 @@ export function MotivationCardStack({ quotes, currentIndex, onIndexChange }: Pro
     .onEnd((event) => {
       const threshold = cardWidth * SWIPE_THRESHOLD_RATIO;
       if (event.translationX < -threshold) {
-        animateSwipeOut(1);
+        runOnJS(trySwipe)(1);
       } else if (event.translationX > threshold) {
-        animateSwipeOut(-1);
+        runOnJS(trySwipe)(-1);
       } else {
         translateX.value = withSpring(0, SPRING_BACK);
       }
@@ -102,7 +127,7 @@ export function MotivationCardStack({ quotes, currentIndex, onIndexChange }: Pro
     };
   });
 
-  const footer = `${currentIndex + 1} / ${total}`;
+  const footer = `${Math.min(currentIndex + 1, footerTotal)} / ${footerTotal}`;
 
   return (
     <View

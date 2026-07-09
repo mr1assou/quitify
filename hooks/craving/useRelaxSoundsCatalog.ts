@@ -15,7 +15,10 @@ export function useRelaxSoundsCatalog() {
   const [error, setError] = useState<string | null>(null);
 
   const applyRecords = useCallback((records: RelaxSoundApiRecord[]) => {
-    setSounds(records.map(mapApiRelaxSound));
+    const sorted = [...records].sort(
+      (a, b) => a.sortOrder - b.sortOrder || a.slug.localeCompare(b.slug),
+    );
+    setSounds(sorted.map(mapApiRelaxSound));
     setError(null);
   }, []);
 

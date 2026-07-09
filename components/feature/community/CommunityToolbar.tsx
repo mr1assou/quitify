@@ -7,6 +7,7 @@ import {
   isDefaultCommunityFeedFilter,
 } from "@/constants/community/communityFeedFilter";
 import { useTheme } from "@/context/ThemeContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -26,6 +27,7 @@ type Props = {
 
 export function CommunityToolbar({ filter, onFilterChange }: Props) {
   const { colors } = useTheme();
+  const { requirePremium } = usePremiumGate();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterActive = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
 
@@ -46,7 +48,10 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
     <>
       <View className="flex-row items-center justify-between px-6 pb-2 pt-3">
         <Pressable
-          onPress={() => setFilterOpen(true)}
+          onPress={() => {
+            if (!requirePremium()) return;
+            setFilterOpen(true);
+          }}
           accessibilityRole="button"
           accessibilityLabel="Filter posts"
           className="h-10 max-w-[52%] flex-row items-center rounded-full bg-section px-3 dark:bg-d-surface"

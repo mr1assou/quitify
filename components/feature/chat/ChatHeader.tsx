@@ -10,6 +10,7 @@ import {
 } from "@/constants/auth/userRoles";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { CallKind } from "@/types/chat/chat";
 import type { CommunityUser } from "@/types/community/community";
 import { getBadgeName } from "@/utils/progress/badges";
@@ -27,6 +28,7 @@ type Props = {
 /** Top bar for the chat thread screen — avatar, name, audio + video call. */
 export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
   const { colors } = useTheme();
+  const { isPremium, requirePremium } = usePremiumGate();
   const { isOnline, lastSeenAt } = useChatParticipantPresence(participant);
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
@@ -82,6 +84,11 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
     </>
   );
 
+  const startCall = (kind: CallKind) => {
+    if (!requirePremium()) return;
+    onCall(kind);
+  };
+
   return (
     <View className="flex-row items-center border-b border-section py-3 pl-1 pr-4 dark:border-d-border">
       <Pressable
@@ -108,13 +115,15 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
           <CallIconButton
             icon="call"
             color={colors.primary}
-            onPress={() => onCall("audio")}
+            locked={!isPremium}
+            onPress={() => startCall("audio")}
             accessibilityLabel="Start audio call"
           />
           <CallIconButton
             icon="videocam"
             color={colors.accent}
-            onPress={() => onCall("video")}
+            locked={!isPremium}
+            onPress={() => startCall("video")}
             accessibilityLabel="Start video call"
           />
         </View>
@@ -155,21 +164,28 @@ function CallIconButton({
   color,
   onPress,
   accessibilityLabel,
+  locked = false,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   onPress: () => void;
   accessibilityLabel: string;
+  locked?: boolean;
 }) {
   return (
     <Pressable
       onPress={onPress}
       hitSlop={6}
       accessibilityLabel={accessibilityLabel}
-      className="h-10 w-10 items-center justify-center rounded-full"
+      className="relative h-10 w-10 items-center justify-center rounded-full"
       style={{ backgroundColor: `${color}20` }}
     >
       <Ionicons name={icon} size={20} color={color} />
+      {locked ? (
+        <View className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-primary">
+          <Ionicons name="lock-closed" size={9} color="#fff" />
+        </View>
+      ) : null}
     </Pressable>
   );
 }

@@ -1,0 +1,1 @@
+export { PremiumLockedSection } from "./PremiumLockedSection";

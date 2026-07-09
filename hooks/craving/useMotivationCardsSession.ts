@@ -1,6 +1,6 @@
-import { useSwipeableCardSession } from "./useSwipeableCardSession";
+import { usePremiumLimitedSwipeableSession } from "./usePremiumLimitedSwipeableSession";
 
 /** Swipeable motivational quotes for the craving tool. */
 export function useMotivationCardsSession() {
-  return useSwipeableCardSession("motivation-cards");
+  return usePremiumLimitedSwipeableSession("motivation-cards");
 }

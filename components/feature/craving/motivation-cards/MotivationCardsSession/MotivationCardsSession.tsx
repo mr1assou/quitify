@@ -11,6 +11,9 @@ type Props = {
   onIndexChange: (next: number) => void;
   hintText?: string;
   saveSection?: SavedCardsSection;
+  canGoToIndex?: (nextIndex: number) => boolean;
+  onSwipeBlocked?: () => void;
+  displayTotal?: number;
 };
 
 export function MotivationCardsSession({
@@ -19,6 +22,9 @@ export function MotivationCardsSession({
   onIndexChange,
   hintText = "Swipe for another message",
   saveSection,
+  canGoToIndex,
+  onSwipeBlocked,
+  displayTotal,
 }: Props) {
   const currentQuote = quotes[currentIndex];
 
@@ -32,6 +38,9 @@ export function MotivationCardsSession({
         quotes={quotes}
         currentIndex={currentIndex}
         onIndexChange={onIndexChange}
+        canGoToIndex={canGoToIndex}
+        onSwipeBlocked={onSwipeBlocked}
+        displayTotal={displayTotal}
       />
 
       {saveSection && currentQuote ? (

@@ -4,6 +4,7 @@ import { Alert } from "react-native";
 
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { createPost } from "@/services/posts/postsApi";
 import { uploadPostMediaToR2 } from "@/services/posts/uploadPostMedia";
 import { mapBackendPostToCommunityPost } from "@/utils/community/mapBackendPost";
@@ -29,6 +30,7 @@ export function usePostComposer() {
   const editingPostId = typeof editId === "string" ? editId : undefined;
   const { addPost, updatePost, state } = useCommunity();
   const { state: appState } = useApp();
+  const { requirePremium } = usePremiumGate();
   const [draft, setDraft] = useState<PostDraft>(EMPTY_POST_DRAFT);
   const [isPosting, setIsPosting] = useState(false);
   const { pickMedia } = usePickPostMedia();
@@ -104,6 +106,7 @@ export function usePostComposer() {
 
   const onPost = useCallback(async () => {
     if (!canPost || !draft.tagId) return;
+    if (!isEditing && !requirePremium()) return;
 
     const title = draft.title.trim();
     const description = draft.body.trim();
@@ -230,6 +233,7 @@ export function usePostComposer() {
     draft,
     editingPostId,
     isEditing,
+    requirePremium,
     state.posts,
     updatePost,
   ]);

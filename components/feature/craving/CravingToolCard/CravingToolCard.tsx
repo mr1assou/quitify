@@ -18,6 +18,7 @@ type Props = {
   icon: keyof typeof Ionicons.glyphMap;
   variant: CravingToolVariant;
   loading?: boolean;
+  locked?: boolean;
   onPress: () => void;
 };
 
@@ -53,6 +54,7 @@ export function CravingToolCard({
   icon,
   variant,
   loading = false,
+  locked = false,
   onPress,
 }: Props) {
   const { colors } = useTheme();
@@ -93,11 +95,21 @@ export function CravingToolCard({
         ) : (
           <Ionicons name={icon} size={24} color={iconColor} />
         )}
+        {locked && !loading ? (
+          <View className="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-primary">
+            <Ionicons name="lock-closed" size={10} color={colors.white} />
+          </View>
+        ) : null}
       </View>
 
-      <Text className="mt-3 text-base font-bold text-foreground dark:text-d-text">
-        {label}
-      </Text>
+      <View className="mt-3 flex-row items-center gap-1.5">
+        <Text className="text-base font-bold text-foreground dark:text-d-text">
+          {label}
+        </Text>
+        {locked ? (
+          <Text className="text-[10px] font-bold uppercase tracking-wide text-primary">VIP</Text>
+        ) : null}
+      </View>
       <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
         {description}
       </Text>

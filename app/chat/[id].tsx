@@ -27,6 +27,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThread } from "@/hooks/chat/useChat";
 import { useChatThreadRealtime } from "@/hooks/chat/useChatThreadRealtime";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import type { CallKind, ChatMessage } from "@/types/chat/chat";
 import { joinChatThread, leaveChatThread } from "@/services/realtime/chatSocket";
@@ -63,6 +64,7 @@ export default function ChatThreadScreen() {
     editChatMessage,
     deleteChatMessage,
   } = useCommunity();
+  const { requirePremium } = usePremiumGate();
   const { peerTyping, onComposerTypingChange, stopTyping, markSeenNow } =
     useChatThreadRealtime(threadId);
   const listRef = useRef<FlatList<Row>>(null);
@@ -146,6 +148,7 @@ export default function ChatThreadScreen() {
 
   const onCall = (kind: CallKind) => {
     if (!detail) return;
+    if (!requirePremium()) return;
     router.push({
       pathname: "/call-by-user/[id]",
       params: { id: detail.participant.id, kind },
@@ -154,6 +157,7 @@ export default function ChatThreadScreen() {
 
   const onSend = (text: string) => {
     if (!detail) return;
+    if (!requirePremium()) return;
     stopTyping();
     void sendMessage(detail.participant.id, text, detail.threadId);
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
@@ -207,6 +211,7 @@ export default function ChatThreadScreen() {
 
   const onSendMedia = async (items: Parameters<typeof sendMediaMessages>[1]) => {
     if (!detail) return;
+    if (items.some((item) => item.kind === "audio") && !requirePremium()) return;
     stopTyping();
     setSendingMedia(true);
     try {

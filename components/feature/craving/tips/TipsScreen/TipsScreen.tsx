@@ -3,7 +3,14 @@ import { MotivationCardsSession } from "@/components/feature/craving/motivation-
 import { useTipsCardsSession } from "@/hooks/craving/useTipsCardsSession";
 
 export function TipsScreen() {
-  const { quotes, currentIndex, goToIndex } = useTipsCardsSession();
+  const {
+    quotes,
+    currentIndex,
+    goToIndex,
+    canGoToIndex,
+    requirePremium,
+    displayTotal,
+  } = useTipsCardsSession();
 
   return (
     <CravingToolScreen toolId="tips">
@@ -11,6 +18,9 @@ export function TipsScreen() {
         quotes={quotes}
         currentIndex={currentIndex}
         onIndexChange={goToIndex}
+        canGoToIndex={canGoToIndex}
+        onSwipeBlocked={requirePremium}
+        displayTotal={displayTotal}
         hintText="Swipe for another tip"
         saveSection="tips"
       />

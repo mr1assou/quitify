@@ -6,11 +6,23 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { GameList } from "@/components/feature/craving/games/GameList";
 import { CRAVING_GAMES } from "@/constants/craving/games/cravingGames";
 import type { CravingGame } from "@/constants/craving/games/cravingGames";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { isGameUnlocked } from "@/utils/premium/gameAccess";
 
 export function GamesHub() {
-  const handleGamePress = useCallback((game: CravingGame) => {
-    if (game.available) safeRouter.push(game.href);
-  }, []);
+  const { isPremium, requirePremium } = usePremiumGate();
+
+  const handleGamePress = useCallback(
+    (game: CravingGame) => {
+      if (!game.available) return;
+      if (!isGameUnlocked(game.id, isPremium)) {
+        requirePremium();
+        return;
+      }
+      safeRouter.push(game.href);
+    },
+    [isPremium, requirePremium],
+  );
 
   return (
     <View className="flex-1 px-6 pb-6 pt-2">
@@ -21,7 +33,11 @@ export function GamesHub() {
       </Animated.View>
 
       <View className="flex-1">
-        <GameList games={CRAVING_GAMES} onGamePress={handleGamePress} />
+        <GameList
+          games={CRAVING_GAMES}
+          isPremium={isPremium}
+          onGamePress={handleGamePress}
+        />
       </View>
     </View>
   );

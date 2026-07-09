@@ -3,6 +3,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { GameCard } from "@/components/feature/craving/games/GameCard";
 import type { CravingGame } from "@/constants/craving/games/cravingGames";
+import { isGameUnlocked } from "@/utils/premium/gameAccess";
 
 const COLUMN_GAP = 12;
 const ROW_GAP = 12;
@@ -11,10 +12,11 @@ const HUB_HORIZONTAL_PADDING = 48;
 
 type Props = {
   games: readonly CravingGame[];
+  isPremium: boolean;
   onGamePress: (game: CravingGame) => void;
 };
 
-export function GameList({ games, onGamePress }: Props) {
+export function GameList({ games, isPremium, onGamePress }: Props) {
   const { width } = useWindowDimensions();
   const cardWidth = (width - HUB_HORIZONTAL_PADDING - COLUMN_GAP) / 2;
 
@@ -27,19 +29,22 @@ export function GameList({ games, onGamePress }: Props) {
       ItemSeparatorComponent={() => <View style={{ height: ROW_GAP }} />}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingVertical: 8 }}
-      renderItem={({ item, index }) => (
-        <Animated.View
-          entering={FadeInUp.delay(50 + index * 45).duration(380)}
-          style={{ width: cardWidth }}
-        >
-          <GameCard
-            game={item}
-            onPress={() => {
-              if (item.available) onGamePress(item);
-            }}
-          />
-        </Animated.View>
-      )}
+      renderItem={({ item, index }) => {
+        const locked = item.available && !isGameUnlocked(item.id, isPremium);
+
+        return (
+          <Animated.View
+            entering={FadeInUp.delay(50 + index * 45).duration(380)}
+            style={{ width: cardWidth }}
+          >
+            <GameCard
+              game={item}
+              locked={locked}
+              onPress={() => onGamePress(item)}
+            />
+          </Animated.View>
+        );
+      }}
     />
   );
 }

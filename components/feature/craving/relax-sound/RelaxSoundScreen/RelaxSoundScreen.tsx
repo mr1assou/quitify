@@ -7,6 +7,8 @@ import { RelaxSoundCard } from "@/components/feature/craving/relax-sound/RelaxSo
 import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { useRelaxSoundsCatalogContext } from "@/context/RelaxSoundsCatalogContext";
 import { useRelaxSoundPlayerContext } from "@/context/RelaxSoundPlayerContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { isRelaxSoundUnlocked } from "@/utils/premium/relaxSoundAccess";
 
 const COLUMN_GAP = 12;
 const ROW_GAP = 12;
@@ -17,6 +19,7 @@ export function RelaxSoundScreen() {
   const cardWidth = (width - HORIZONTAL_PADDING - COLUMN_GAP) / 2;
   const { activeId, loadingId, isPlaying, progress } = useRelaxSoundPlayerContext();
   const { sounds, isLoading, error } = useRelaxSoundsCatalogContext();
+  const { isPremium, requirePremium } = usePremiumGate();
 
   return (
     <CravingToolScreen toolId="relax-sound">
@@ -47,6 +50,7 @@ export function RelaxSoundScreen() {
             contentContainerStyle={{ paddingBottom: 16 }}
             renderItem={({ item, index }) => {
               const isActive = activeId === item.id;
+              const unlocked = isRelaxSoundUnlocked(sounds, item.id, isPremium);
 
               return (
                 <Animated.View
@@ -55,11 +59,16 @@ export function RelaxSoundScreen() {
                 >
                   <RelaxSoundCard
                     sound={item}
-                    isActive={isActive}
-                    isPlaying={isActive && isPlaying}
-                    isLoading={loadingId === item.id}
-                    progress={isActive ? progress : null}
+                    isActive={isActive && unlocked}
+                    isPlaying={isActive && isPlaying && unlocked}
+                    isLoading={loadingId === item.id && unlocked}
+                    progress={isActive && unlocked ? progress : null}
+                    locked={!unlocked}
                     onPress={() => {
+                      if (!unlocked) {
+                        requirePremium();
+                        return;
+                      }
                       safeRouter.push(`/craving-tools/relax-sound/${item.id}`);
                     }}
                   />

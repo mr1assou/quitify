@@ -14,7 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
-import { PAYWALL_PLANS_USD } from "@/constants/paywall/paywallPlans";
+import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { useApp } from "@/context/AppContext";
 import { computeMonthlyCigaretteSpend } from "@/utils/paywall/monthlyCigaretteSpend";
 import { safeRouter } from "@/utils/app/safeRouter";
@@ -23,9 +23,6 @@ import { formatCurrency } from "@/utils/shared/format";
 const SHEET_HEIGHT_RATIO = 0.7;
 
 const QUITIFY_LOGO = require("../assets/images/logo.webp") as ImageSourcePropType;
-
-const QUITIFY_MONTHLY_USD =
-  PAYWALL_PLANS_USD.find((plan) => plan.id === "yearly")?.rightAmountUsd ?? 4.99;
 
 const PAYWALL_COLORS = getThemeColors("dark");
 
@@ -69,6 +66,7 @@ function ComparisonBox({
 
 export default function PaywallComparison() {
   const { state } = useApp();
+  const { plans } = usePaywallPlans();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const profile = state.profile;
@@ -88,7 +86,9 @@ export default function PaywallComparison() {
     monthlyCigaretteSpend,
     profile.currency || "USD",
   );
-  const quitifyDisplay = formatCurrency(QUITIFY_MONTHLY_USD, "USD");
+  const quitifyDisplay =
+    plans.find((plan) => plan.id === "yearly")?.rightPrice ??
+    formatCurrency(4.99, "USD");
 
   const dismiss = () => {
     safeRouter.back();

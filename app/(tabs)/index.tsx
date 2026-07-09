@@ -25,7 +25,9 @@ export default function Home() {
   const gates = useGates();
   const { activeGoals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
 
-  const openCreateGoal = useCallback(() => safeRouter.push("/goals"), []);
+  const openCreateGoal = useCallback(() => {
+    safeRouter.push("/goals");
+  }, []);
 
   const openManageGoal = useCallback((goal: UserGoal) => {
     safeRouter.pushStack({

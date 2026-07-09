@@ -1,7 +1,7 @@
-import { useRevenueCatConfigure } from "@/hooks/purchases/useRevenueCatConfigure";
+import { useRevenueCatBootstrap } from "@/hooks/purchases/useRevenueCatBootstrap";
 
-/** Initializes RevenueCat for checkout and restore flows. */
+/** Initializes RevenueCat and links purchases to the logged-in DB user. */
 export function RevenueCatBridge() {
-  useRevenueCatConfigure();
+  useRevenueCatBootstrap();
   return null;
 }

@@ -5,6 +5,7 @@ import { ActivityIndicator, Pressable, Text } from "react-native";
 
 import type { SavedCardsSection } from "@/constants/craving/savedCardsSections";
 import { useTheme } from "@/context/ThemeContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useSavedCards } from "@/hooks/craving/useSavedCards";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 
 export function SaveCardButton({ section, cardId }: Props) {
   const { colors } = useTheme();
+  const { requirePremium } = usePremiumGate();
   const { isSaved, toggleSaved } = useSavedCards();
   const [pending, setPending] = useState(false);
 
@@ -27,6 +29,7 @@ export function SaveCardButton({ section, cardId }: Props) {
       accessibilityState={{ selected: saved, busy: pending }}
       disabled={pending}
       onPress={() => {
+        if (!requirePremium()) return;
         Haptics.selectionAsync().catch(() => {});
         setPending(true);
         void toggleSaved(section, cardId).finally(() => setPending(false));

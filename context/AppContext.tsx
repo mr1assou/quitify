@@ -185,7 +185,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isOnboarded: boolean;
       profile: UserProfile | null;
       account: UserAccount | null;
-    }) => dispatch({ type: "RESTORE_SESSION", ...payload }),
+    }) => {
+      dispatch({ type: "RESTORE_SESSION", ...payload });
+    },
     [],
   );
 

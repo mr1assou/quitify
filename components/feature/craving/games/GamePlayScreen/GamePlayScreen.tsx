@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,12 +9,23 @@ import { BreathingExercise } from "@/components/feature/craving/breathing/Breath
 import { MemoryMatchGame } from "@/components/feature/craving/games/memory-match/MemoryMatchGame";
 import { ReflexTapGame } from "@/components/feature/craving/games/reflex-tap/ReflexTapGame";
 import { getCravingGame } from "@/constants/craving/games/cravingGames";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { safeRouter } from "@/utils/app/safeRouter";
+import { isGameUnlocked } from "@/utils/premium/gameAccess";
 
 /** Router for a single craving game — picks the right gameplay screen by id. */
 export function GamePlayScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { isPremium, requirePremium } = usePremiumGate();
   const game = id ? getCravingGame(id) : undefined;
+  const unlocked = game ? isGameUnlocked(game.id, isPremium) : false;
   const close = useCallback(() => router.back(), []);
+
+  useEffect(() => {
+    if (!game || unlocked) return;
+    requirePremium();
+    safeRouter.back();
+  }, [game, unlocked, requirePremium]);
 
   if (!game) {
     return (
@@ -28,6 +39,8 @@ export function GamePlayScreen() {
       </SafeAreaView>
     );
   }
+
+  if (!unlocked) return null;
 
   return (
     <SafeAreaView

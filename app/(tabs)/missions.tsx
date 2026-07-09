@@ -9,12 +9,14 @@ import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { useOpenPlanDay } from "@/hooks/progress/useOpenPlanDay";
 import { usePlanTaskNotes } from "@/hooks/progress/usePlanTaskNotes";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function Missions() {
   const { colors } = useTheme();
   const { plan, openDay, lockedDayModal, closeLockedDayModal } = useOpenPlanDay();
   const { noteCount } = usePlanTaskNotes();
+  const { requirePremium } = usePremiumGate();
 
   return (
     <ScreenCanvas edges={["top"]}>
@@ -46,7 +48,10 @@ export default function Missions() {
               <View className="mb-3 flex-row justify-end px-6">
                 <MissionPlanNotesButton
                   noteCount={noteCount}
-                  onPress={() => safeRouter.push("/plan-notes")}
+                  onPress={() => {
+                    if (!requirePremium()) return;
+                    safeRouter.push("/plan-notes");
+                  }}
                 />
               </View>
 
