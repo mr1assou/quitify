@@ -6,12 +6,10 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { resolveCountryFlagUrl } from "@/constants/leaderboard/leaderboardCountries";
 import { useApp } from "@/context/AppContext";
-import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
-import { useProgress } from "@/hooks/progress/useProgress";
 import type { CommunityUser } from "@/types/community/community";
-import { getBadgeName, resolveHighestUnlockedBadgeId } from "@/utils/progress/badges";
+import { getBadgeName } from "@/utils/progress/badges";
 import { formatRelativeTime } from "@/utils/community";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
 
@@ -25,15 +23,9 @@ type Props = {
 export function PostHeader({ author, createdAt, onMore }: Props) {
   const { colors } = useTheme();
   const { state } = useApp();
-  const isPremium = useIsPremium();
   const { snapshot: leaderboard } = useLeaderboard();
-  const progress = useProgress();
 
-  const badgeId =
-    author.isCurrentUser && progress
-      ? (resolveHighestUnlockedBadgeId(progress.badges, isPremium) ?? author.badgeId)
-      : author.badgeId;
-
+  const badgeId = author.badgeId;
   const badgeName = getBadgeName(badgeId);
 
   const avatarRank = useMemo(() => {

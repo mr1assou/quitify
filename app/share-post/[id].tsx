@@ -20,6 +20,7 @@ import {
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { fetchChatThreadsPage } from "@/services/chat/chatApi";
 import type { BackendChatThreadSummary } from "@/types/chat/chatApi";
 import type { CommunityUser } from "@/types/community/community";
@@ -52,6 +53,7 @@ export default function SharePostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
   const { state: appState } = useApp();
+  const { requirePremium } = usePremiumGate();
   const { state, sendMessage, share } = useCommunity();
   const currentUserId = appState.account?.userId ?? null;
 
@@ -128,6 +130,7 @@ export default function SharePostScreen() {
 
   const handleSend = async () => {
     if (!canSend || !id) return;
+    if (!requirePremium()) return;
     setSending(true);
     setError(null);
     const text = buildSharedPostChatMessage(id, post?.title, post?.text);

@@ -10,7 +10,6 @@ import {
 } from "@/constants/auth/userRoles";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
-import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { CallKind } from "@/types/chat/chat";
 import type { CommunityUser } from "@/types/community/community";
 import { getBadgeName } from "@/utils/progress/badges";
@@ -23,12 +22,19 @@ type Props = {
   participant: CommunityUser;
   onCall: (kind: CallKind) => void;
   isTyping?: boolean;
+  canInitiateCall?: boolean;
+  onRequireCallAccess?: () => boolean;
 };
 
 /** Top bar for the chat thread screen — avatar, name, audio + video call. */
-export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
+export function ChatHeader({
+  participant,
+  onCall,
+  isTyping = false,
+  canInitiateCall = true,
+  onRequireCallAccess,
+}: Props) {
   const { colors } = useTheme();
-  const { isPremium, requirePremium } = usePremiumGate();
   const { isOnline, lastSeenAt } = useChatParticipantPresence(participant);
   const badgeName = getBadgeName(participant.badgeId);
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
@@ -85,7 +91,7 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
   );
 
   const startCall = (kind: CallKind) => {
-    if (!requirePremium()) return;
+    if (onRequireCallAccess && !onRequireCallAccess()) return;
     onCall(kind);
   };
 
@@ -115,14 +121,14 @@ export function ChatHeader({ participant, onCall, isTyping = false }: Props) {
           <CallIconButton
             icon="call"
             color={colors.primary}
-            locked={!isPremium}
+            locked={!canInitiateCall}
             onPress={() => startCall("audio")}
             accessibilityLabel="Start audio call"
           />
           <CallIconButton
             icon="videocam"
             color={colors.accent}
-            locked={!isPremium}
+            locked={!canInitiateCall}
             onPress={() => startCall("video")}
             accessibilityLabel="Start video call"
           />

@@ -1,8 +1,7 @@
 import { flagUrlForCode } from "@/constants/leaderboard/leaderboardCountries";
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import type { CommunityUser, PostComment } from "@/types/community/community";
-import type { BackendFeedPostAuthor, BackendPostCommentResponse } from "@/types/community/postsApi";
-import { resolveBadgeIdForSmokeFreeDays } from "@/utils/progress/badges";
+import type { BackendPostCommentResponse } from "@/types/community/postsApi";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import { dbAuthorId } from "@/utils/community/presence";
 
@@ -22,7 +21,7 @@ export function mapCommentAuthorToCommunityUser(
     handle: author.username?.trim().toLowerCase() || `user${author.user_id}`,
     bio: "",
     smokeFreeDays: author.smoke_free_days,
-    badgeId: resolveBadgeIdForSmokeFreeDays(author.smoke_free_days, comment.is_mine),
+    badgeId: author.badge_id,
     avatarUrl: author.image_url ?? undefined,
     countryFlag: author.countryFlag ?? flagUrlForCode("us"),
     avatarRank: (author.user_id % 10) + 1,

@@ -104,7 +104,7 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
         <Pressable className="absolute inset-0 bg-black/50" onPress={handleClose} />
         <View
           className="rounded-t-3xl bg-background px-6 pt-5 dark:bg-d-bg"
-          style={{ paddingBottom: Math.max(insets.bottom, 20) }}
+          style={{ paddingBottom: Math.max(insets.bottom + 12, 32) }}
         >
           {badge ? (
             <>
@@ -211,19 +211,11 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
                 )}
               </View>
 
-              {!badge.unlocked && !earnable ? (
-                <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
-                  This badge is locked for now. Complete earlier badges to unlock it.
-                </Text>
-              ) : !badge.unlocked && isFirstStep ? (
+              {!badge.unlocked && isFirstStep ? (
                 <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
                   {hasCommittedToQuit
                     ? "Requirements complete — your badge unlocks on the next sync."
                     : "Register and choose to quit to earn this badge."}
-                </Text>
-              ) : !badge.unlocked ? (
-                <Text className="mt-3 text-center text-xs text-muted-foreground dark:text-d-muted">
-                  You need all three requirements to earn this badge.
                 </Text>
               ) : null}
 

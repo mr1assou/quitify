@@ -2,7 +2,6 @@ import { flagUrlForCode } from "@/constants/leaderboard/leaderboardCountries";
 import type { PostTagId } from "@/constants/community/postTags";
 import type { CommunityPost, CommunityUser, PostImageCrop, PostMedia, PostMediaFrame, PostMediaKind } from "@/types/community/community";
 import type { BackendFeedPostResponse, BackendPostResponse } from "@/types/community/postsApi";
-import { resolveBadgeIdForSmokeFreeDays } from "@/utils/progress/badges";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
 import { dbAuthorId } from "@/utils/community/presence";
 import { formatMediaDuration } from "@/utils/chat/formatMediaDuration";
@@ -23,7 +22,7 @@ export function mapBackendAuthorToCommunityUser(
     handle: author.username?.trim().toLowerCase() || `user${author.user_id}`,
     bio: "",
     smokeFreeDays: author.smoke_free_days,
-    badgeId: resolveBadgeIdForSmokeFreeDays(author.smoke_free_days, post.is_mine),
+    badgeId: author.badge_id,
     avatarUrl: author.image_url ?? undefined,
     countryFlag: author.countryFlag ?? flagUrlForCode("us"),
     avatarRank: (author.user_id % 10) + 1,

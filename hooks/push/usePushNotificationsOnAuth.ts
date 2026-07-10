@@ -12,6 +12,7 @@ import {
   requestPushPermissionAndSaveToken,
   syncPushTokenWithBackend,
 } from "@/services/push/registerPushToken";
+import { isPushPromptWaitsForPaywall } from "@/utils/onboarding/postSignupFlowStorage";
 import {
   clearPushPermissionPromptPending,
   isPushPermissionPromptPending,
@@ -68,6 +69,10 @@ export function usePushNotificationsOnAuth() {
 
     void (async () => {
       try {
+        if (await isPushPromptWaitsForPaywall()) {
+          return;
+        }
+
         const promptPending = await isPushPermissionPromptPending();
 
         let hadTokenInDb = false;

@@ -33,40 +33,76 @@ function isSyncStale(generation: number): boolean {
   return generation !== syncGeneration;
 }
 
+function revenueCatApiKey(): string | null {
+  return Platform.OS === "ios" ? REVENUECAT_IOS_API_KEY : REVENUECAT_ANDROID_API_KEY;
+}
+
+function isRevenueCatLinked(): boolean {
+  return isRevenueCatConfigured() && linkedAppUserId != null;
+}
+
 async function currentRevenueCatAppUserId(): Promise<string> {
   return Purchases.getAppUserID();
 }
 
-/** Links the RevenueCat customer to your DB user id (avoids anonymous RC ids). */
+/**
+ * Configure RevenueCat only for a known DB user (never anonymous).
+ * Safe to call multiple times; configures once per app session.
+ */
+export function ensureRevenueCatConfigured(appUserId: number): Promise<void> {
+  const existing = getRevenueCatConfigurePromise();
+  if (existing) return existing;
+
+  const apiKey = revenueCatApiKey();
+  if (!apiKey) {
+    if (__DEV__) {
+      console.warn(
+        "[revenuecat] Missing API key. Set REVENUECAT_ANDROID_API_KEY in config/revenuecat.ts",
+      );
+    }
+    return Promise.resolve();
+  }
+
+  const id = String(appUserId);
+  const promise = (async () => {
+    if (__DEV__) {
+      Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
+    }
+    Purchases.configure({ apiKey, appUserID: id });
+    markRevenueCatConfigured();
+    linkedAppUserId = id;
+    if (__DEV__) {
+      console.log(`[revenuecat] configured for user ${id}`);
+    }
+  })();
+
+  setRevenueCatConfigurePromise(promise);
+  return promise;
+}
+
+/**
+ * Links the RevenueCat customer to your DB user id.
+ * Call only on sign-up / log-in. On logout, pass undefined — no RC SDK calls.
+ */
 export async function syncRevenueCatUser(userId: number | undefined): Promise<void> {
+  if (userId == null) {
+    syncGeneration++;
+    linkedAppUserId = null;
+    if (__DEV__) {
+      console.log("[revenuecat] app logged out — skipping RC (no new customer)");
+    }
+    return;
+  }
+
   const generation = ++syncGeneration;
+  const appUserId = String(userId);
 
   return enqueueRevenueCatSync(async () => {
     if (isSyncStale(generation)) return;
 
-    await ensureRevenueCatConfigured();
+    await ensureRevenueCatConfigured(userId);
     if (isSyncStale(generation)) return;
     if (!isRevenueCatConfigured()) return;
-
-    if (userId == null) {
-      // Do not call Purchases.logOut() — it creates a new anonymous RC customer on every
-      // app logout and clutters the dashboard. The device keeps the last identified user
-      // until Purchases.logIn() runs for the next sign-in (same or different account).
-      linkedAppUserId = null;
-      if (__DEV__ && isRevenueCatConfigured()) {
-        try {
-          const rcId = await currentRevenueCatAppUserId();
-          console.log(
-            `[revenuecat] app logged out — RC customer unchanged (${rcId}); no anonymous user created`,
-          );
-        } catch {
-          // ignore
-        }
-      }
-      return;
-    }
-
-    const appUserId = String(userId);
 
     try {
       const rcUserId = await currentRevenueCatAppUserId();
@@ -85,7 +121,7 @@ export async function syncRevenueCatUser(userId: number | undefined): Promise<vo
       linkedAppUserId = appUserId;
       if (__DEV__) {
         console.log(
-          `[revenuecat] linked user ${appUserId} (created=${created}, rcId=${customerInfo.originalAppUserId}, activeId=${await currentRevenueCatAppUserId()})`,
+          `[revenuecat] linked user ${appUserId} (created=${created}, rcId=${customerInfo.originalAppUserId})`,
         );
       }
     } catch (error) {
@@ -94,37 +130,6 @@ export async function syncRevenueCatUser(userId: number | undefined): Promise<vo
       }
     }
   });
-}
-
-function revenueCatApiKey(): string | null {
-  return Platform.OS === "ios" ? REVENUECAT_IOS_API_KEY : REVENUECAT_ANDROID_API_KEY;
-}
-
-/** One-time RevenueCat SDK setup. Safe to call multiple times. */
-export function ensureRevenueCatConfigured(): Promise<void> {
-  const existing = getRevenueCatConfigurePromise();
-  if (existing) return existing;
-
-  const apiKey = revenueCatApiKey();
-  if (!apiKey) {
-    if (__DEV__) {
-      console.warn(
-        "[revenuecat] Missing API key. Set REVENUECAT_ANDROID_API_KEY in config/revenuecat.ts",
-      );
-    }
-    return Promise.resolve();
-  }
-
-  const promise = (async () => {
-    if (__DEV__) {
-      Purchases.setLogLevel(LOG_LEVEL.VERBOSE);
-    }
-    Purchases.configure({ apiKey });
-    markRevenueCatConfigured();
-  })();
-
-  setRevenueCatConfigurePromise(promise);
-  return promise;
 }
 
 export function hasPremiumEntitlement(customerInfo: CustomerInfo): boolean {
@@ -153,13 +158,15 @@ export function packageForPlan(
 }
 
 export async function syncPremiumFromRevenueCat(): Promise<boolean> {
-  await ensureRevenueCatConfigured();
+  if (!isRevenueCatLinked()) return false;
   const customerInfo = await Purchases.getCustomerInfo();
   return hasPremiumEntitlement(customerInfo);
 }
 
 export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolean> {
-  await ensureRevenueCatConfigured();
+  if (!isRevenueCatLinked()) {
+    throw new Error("Sign in to purchase VIP.");
+  }
   const offerings = await Purchases.getOfferings();
   const selectedPackage = packageForPlan(offerings.current, planId);
 
@@ -172,15 +179,14 @@ export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolea
 }
 
 export async function restoreRevenueCatPurchases(): Promise<boolean> {
-  await ensureRevenueCatConfigured();
+  if (!isRevenueCatLinked()) return false;
   const customerInfo = await Purchases.restorePurchases();
   return hasPremiumEntitlement(customerInfo);
 }
 
-/** Current offering with localized store prices for the user's country. */
+/** Current offering with localized store prices (logged-in users only). */
 export async function fetchPaywallOffering(): Promise<PurchasesOffering | null> {
-  await ensureRevenueCatConfigured();
-  if (!isRevenueCatConfigured()) return null;
+  if (!isRevenueCatLinked()) return null;
 
   const offerings = await Purchases.getOfferings();
   return offerings.current ?? null;

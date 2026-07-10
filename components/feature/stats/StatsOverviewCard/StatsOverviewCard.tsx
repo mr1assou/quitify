@@ -4,6 +4,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { StatBlock } from "@/components/feature/stats/StatBlock";
 import { Card } from "@/components/ui/Card";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTheme } from "@/context/ThemeContext";
 import type { StatsOverviewByRange } from "@/types/stats/statsOverview";
 import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/shared/format";
@@ -12,10 +13,12 @@ import { formatStreakDuration } from "@/utils/streak";
 type Props = {
   currency: string;
   byRange: StatsOverviewByRange;
+  isPremium: boolean;
 };
 
-export function StatsOverviewCard({ currency, byRange }: Props) {
+export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
   const { colors } = useTheme();
+  const { requirePremium } = usePremiumGate();
   const impact = byRange.lifetime;
 
   const smokeFreeHours = impact.durationSeconds / 3600;
@@ -59,6 +62,8 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               iconSet="materialCommunity"
               accent="primary"
               delay={40}
+              locked={!isPremium}
+              onLockedPress={requirePremium}
             />
           </View>
 
@@ -70,6 +75,8 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               icon="heart"
               accent="accent"
               delay={80}
+              locked={!isPremium}
+              onLockedPress={requirePremium}
             />
             <StatBlock
               label="Smoke-free time"
@@ -78,6 +85,8 @@ export function StatsOverviewCard({ currency, byRange }: Props) {
               icon="time"
               accent="primary"
               delay={120}
+              locked={!isPremium}
+              onLockedPress={requirePremium}
             />
           </View>
         </View>

@@ -20,6 +20,7 @@ import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { usePaywallPurchase } from "@/hooks/paywall/usePaywallPurchase";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
+import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
 
 const BENEFITS = [
   "Making a payment builds financial accountability and strengthens your chances of achieving your goal.",
@@ -52,6 +53,7 @@ export default function Paywall() {
       comparisonTimerRef.current = null;
     }
     setFlag("hasSeenPaywall", true);
+    void markPostPaywallFlowComplete();
     safeRouter.back();
   };
 

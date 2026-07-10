@@ -18,7 +18,6 @@ import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/chat/useChat";
-import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { fetchSupportUsers } from "@/services/chat/chatApi";
 import type { CommunityUser } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
@@ -36,7 +35,6 @@ export default function ChatsScreen() {
   const insets = useSafeAreaInsets();
   const { loadChatThreads } = useCommunity();
   const threads = useChatThreads();
-  const { requirePremium } = usePremiumGate();
   const listBottom = Math.max(insets.bottom, 16) + 16;
 
   const isSupportStaff = isSupportRole(state.account?.role);
@@ -96,10 +94,7 @@ export default function ChatsScreen() {
         rightAction={
           section === "chats" ? (
             <Pressable
-              onPress={() => {
-                if (!requirePremium()) return;
-                safeRouter.push("/community-search");
-              }}
+              onPress={() => safeRouter.push("/community-search")}
               hitSlop={8}
               accessibilityLabel="Find user"
             >

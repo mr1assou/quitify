@@ -13,7 +13,9 @@ import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { useApp } from "@/context/AppContext";
 import { useGates } from "@/hooks/app/useGates";
+import { usePostSignupPaywall } from "@/hooks/onboarding/usePostSignupPaywall";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
+import { usePostPaywallNotificationPrompt } from "@/hooks/push/usePostPaywallNotificationPrompt";
 import { useStats } from "@/hooks/stats/useStats";
 import { getStreakElapsedMs } from "@/utils/streak/elapsedBreakdown";
 import { smokeFreeDaysInProgressFromStreakStart } from "@/utils/goals/goalStreakProgress";
@@ -24,6 +26,8 @@ export default function Home() {
   const { state, setFlag } = useApp();
   const gates = useGates();
   const { activeGoals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
+  usePostSignupPaywall();
+  const { onHomeInteraction } = usePostPaywallNotificationPrompt();
 
   const openCreateGoal = useCallback(() => {
     safeRouter.push("/goals");
@@ -75,7 +79,11 @@ export default function Home() {
 
   return (
     <ScreenCanvas edges={["top"]}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
+        onScrollBeginDrag={onHomeInteraction}
+        onTouchStart={onHomeInteraction}
+      >
         <ScreenHeader leading={<AppBrandMark />} />
 
         <View className="mt-6 px-6">

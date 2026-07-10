@@ -16,6 +16,6 @@ export function getPlanDayLockedCopy(day: number): LockedDayCopy {
 
   return {
     title: `Day ${day} is locked`,
-    message: `This day will open at the next 7:00 AM in your timezone, after you mark all tasks on Day ${previousDay} as done.`,
+    message: `Mark all tasks on Day ${previousDay} as done to open Day ${day}.`,
   };
 }

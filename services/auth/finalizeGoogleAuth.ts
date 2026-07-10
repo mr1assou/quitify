@@ -2,7 +2,7 @@ import type { OnboardingDraft, UserAccount, UserProfile } from "@/types";
 import { saveAuthTokens } from "@/utils/auth/authStorage";
 import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayload";
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
-import { markPushPermissionPromptPending } from "@/utils/push/signupPushPromptStorage";
+import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import { syncOnboardingToBackend } from "./syncOnboardingApi";
@@ -27,7 +27,7 @@ export async function finalizeGoogleAuth(
     await saveAuthTokens(auth.accessToken, auth.refreshToken);
 
     if (auth.isNewUser) {
-      await markPushPermissionPromptPending();
+      await markPostSignupFlowPending();
 
       if (!isOnboardingDraftComplete(draft)) {
         throw new Error(

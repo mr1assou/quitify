@@ -19,6 +19,7 @@ import { useApp } from "@/context/AppContext";
 import { computeMonthlyCigaretteSpend } from "@/utils/paywall/monthlyCigaretteSpend";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { formatCurrency } from "@/utils/shared/format";
+import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
 
 const SHEET_HEIGHT_RATIO = 0.7;
 
@@ -91,6 +92,7 @@ export default function PaywallComparison() {
     formatCurrency(4.99, "USD");
 
   const dismiss = () => {
+    void markPostPaywallFlowComplete();
     safeRouter.back();
   };
 
@@ -142,7 +144,7 @@ export default function PaywallComparison() {
               />
               <ComparisonBox
                 logoSource={QUITIFY_LOGO}
-                title="Quitify premium"
+                title="Quitify VIP"
                 amount={quitifyDisplay}
                 period="/month"
               />

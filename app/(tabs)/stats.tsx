@@ -117,7 +117,11 @@ export default function Stats() {
           ) : overview.error && !overview.data ? (
             <SectionError message={overview.error} onRetry={() => void overview.refresh()} />
           ) : overview.data ? (
-            <StatsOverviewCard currency={overview.data.currency} byRange={overview.data.byRange} />
+            <StatsOverviewCard
+              currency={overview.data.currency}
+              byRange={overview.data.byRange}
+              isPremium={isPremium}
+            />
           ) : null}
 
           {attempts.loading && !attempts.data ? (

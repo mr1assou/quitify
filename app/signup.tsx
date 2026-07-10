@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/Button";
 import { useApp } from "@/context/AppContext";
 import { buildProfile, useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
+import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
 export default function Signup() {
   const { fromCelebration } = useLocalSearchParams<{ fromCelebration?: string }>();
@@ -43,8 +44,9 @@ export default function Signup() {
       createdAt: Date.now(),
     });
     setFlag("hasSeenSignupPrompt", true);
-    if (fromCelebrationScreen) enterAppFromCelebration();
-    else if (state.isOnboarded) safeRouter.replace("/(tabs)");
+    if (fromCelebrationScreen) {
+      void markPostSignupFlowPending().then(() => enterAppFromCelebration());
+    } else if (state.isOnboarded) safeRouter.replace("/(tabs)");
     else router.back();
   };
 

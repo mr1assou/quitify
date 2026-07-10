@@ -1,10 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useMemo, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 import { formatMinTargetError } from "@/utils/goals/goalLabels";
 import { formatGoalCompletionBonusLabel } from "@/utils/goals/goalCompletionBonus";
+import { showGoalDaysAheadInfo } from "@/utils/goals/showGoalDaysAheadInfo";
 import {
   cigarettesAvoidedAtSmokeFreeDays,
   moneySavedAtSmokeFreeDays,
@@ -166,9 +168,24 @@ export function GoalTargetPicker({
   return (
     <View className="gap-5">
       <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
-        <Text className="text-sm font-semibold text-primary">
-          {formatMinDaysAheadBanner(minDaysAhead, streakDays)}
-        </Text>
+        <View className="flex-row items-start gap-2">
+          <Text className="flex-1 text-sm font-semibold text-primary">
+            {formatMinDaysAheadBanner(minDaysAhead, streakDays)}
+          </Text>
+          <Pressable
+            onPress={() => showGoalDaysAheadInfo(isValid ? parsedDays ?? undefined : undefined)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel="How minimum days ahead works"
+            className="mt-0.5 active:opacity-70"
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={20}
+              color={colors.primary}
+            />
+          </Pressable>
+        </View>
       </View>
 
       <View className="gap-2">

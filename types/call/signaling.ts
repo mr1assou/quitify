@@ -14,6 +14,7 @@ export type IncomingCallPayload = {
   callerName: string | null;
   callerAvatarUrl: string | null;
   callerCountryFlag: string | null;
+  callerBadgeId?: string;
 };
 
 export type CallIdPayload = { callId: string };
