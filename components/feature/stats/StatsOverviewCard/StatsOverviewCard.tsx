@@ -53,6 +53,8 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
               icon="cash"
               accent="primary"
               delay={0}
+              locked={!isPremium}
+              onLockedPress={requirePremium}
             />
             <StatBlock
               label="Cigarettes avoided"

@@ -4,6 +4,8 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 import { PostCard } from "@/components/feature/community/PostCard";
 import { useTheme } from "@/context/ThemeContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useProfileActivity } from "@/hooks/community/useProfileActivity";
 import type { FeedItem } from "@/types/community/community";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
@@ -13,19 +15,39 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserProfileActivityTabs } from "./UserProfileActivityTabsPanel";
 
+const LOCKED_TAB_COPY: Record<
+  ProfileActivityTab,
+  { icon: keyof typeof Ionicons.glyphMap; label: string }
+> = {
+  posts: { icon: "document-text-outline", label: "Posts" },
+  comments: { icon: "chatbubble-outline", label: "Comments" },
+  upvoted: { icon: "caret-up-outline", label: "Upvoted" },
+};
+
 type Props = {
   profile: PlayerProfile;
 };
 
 export function UserProfileActivity({ profile }: Props) {
   const [tab, setTab] = useState<ProfileActivityTab>("posts");
-  const activity = useProfileActivity(profile);
+  const isPremium = useIsPremium();
+  const { requirePremium } = usePremiumGate();
+  const lockActivity = !profile.isCurrentUser && !isPremium;
+  const activity = useProfileActivity(profile, !lockActivity);
 
   return (
     <View className="gap-3">
       <UserProfileActivityTabs value={tab} onChange={setTab} />
 
-      {tab === "posts" ? (
+      {lockActivity ? (
+        <ProfileActivityLocked
+          icon={LOCKED_TAB_COPY[tab].icon}
+          label={LOCKED_TAB_COPY[tab].label}
+          onPress={requirePremium}
+        />
+      ) : null}
+
+      {!lockActivity && tab === "posts" ? (
         <PostFeedList
           items={activity.postFeed}
           loading={activity.loading}
@@ -35,7 +57,7 @@ export function UserProfileActivity({ profile }: Props) {
         />
       ) : null}
 
-      {tab === "comments" ? (
+      {!lockActivity && tab === "comments" ? (
         <ActivityList
           emptyIcon="chatbubble-outline"
           emptyMessage="No comments yet."
@@ -65,7 +87,7 @@ export function UserProfileActivity({ profile }: Props) {
         </ActivityList>
       ) : null}
 
-      {tab === "upvoted" ? (
+      {!lockActivity && tab === "upvoted" ? (
         <PostFeedList
           items={activity.upvotedFeed}
           loading={activity.loading}
@@ -75,6 +97,40 @@ export function UserProfileActivity({ profile }: Props) {
         />
       ) : null}
     </View>
+  );
+}
+
+function ProfileActivityLocked({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  onPress: () => void;
+}) {
+  const { colors } = useTheme();
+
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${label}, VIP feature. Tap to unlock.`}
+      className="items-center rounded-2xl bg-section py-10 dark:bg-d-surface active:opacity-90"
+    >
+      <View className="relative">
+        <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary/15">
+          <Ionicons name={icon} size={22} color={colors.primary} />
+        </View>
+        <View className="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-primary">
+          <Ionicons name="lock-closed" size={10} color="#fff" />
+        </View>
+      </View>
+      <Text className="mt-3 text-sm font-semibold text-foreground dark:text-d-text">
+        {label}
+      </Text>
+      <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">—</Text>
+    </Pressable>
   );
 }
 

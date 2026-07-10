@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTheme } from "@/context/ThemeContext";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import type { ProfileStreak } from "@/types/profile/profileStreak";
@@ -15,6 +17,9 @@ type Props = {
 
 export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { colors } = useTheme();
+  const isPremium = useIsPremium();
+  const { requirePremium } = usePremiumGate();
+  const lockStreakStats = !profile.isCurrentUser && !isPremium;
 
   /** Snapshot at open — streak tiles stay fixed (no live countdown). */
   const snapshotNow = useMemo(() => Date.now(), []);
@@ -69,12 +74,16 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.secondary}
           label="Current streak"
           value={currentStreakLabel}
+          locked={lockStreakStats}
+          onLockedPress={requirePremium}
         />
         <StatTile
           icon="trophy"
           tint={colors.accent}
           label="Best streak"
           value={bestStreakLabel}
+          locked={lockStreakStats}
+          onLockedPress={requirePremium}
         />
       </View>
     </View>
@@ -87,35 +96,65 @@ function StatTile({
   label,
   value,
   hint,
+  locked = false,
+  onLockedPress,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   tint: string;
   label: string;
   value: string;
   hint?: string;
+  locked?: boolean;
+  onLockedPress?: () => void;
 }) {
-  return (
-    <View className="flex-1 rounded-3xl bg-section p-3 dark:bg-d-surface">
-      <View
-        style={{ backgroundColor: tint }}
-        className="mb-2 h-8 w-8 items-center justify-center rounded-xl"
-      >
-        <Ionicons name={icon} size={16} color="#fff" />
+  const card = (
+    <View className="rounded-3xl bg-section p-3 dark:bg-d-surface">
+      <View className="relative">
+        <View
+          style={{ backgroundColor: tint }}
+          className="mb-2 h-8 w-8 items-center justify-center rounded-xl"
+        >
+          <Ionicons name={icon} size={16} color="#fff" />
+        </View>
+        {locked ? (
+          <View className="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-primary">
+            <Ionicons name="lock-closed" size={10} color="#fff" />
+          </View>
+        ) : null}
       </View>
       <Text className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
         {label}
       </Text>
       <Text
-        className="mt-1 text-lg font-bold tabular-nums text-foreground dark:text-d-text"
+        className={`mt-1 text-lg font-bold tabular-nums ${
+          locked ? "text-muted-foreground dark:text-d-muted" : "text-foreground dark:text-d-text"
+        }`}
         numberOfLines={2}
         adjustsFontSizeToFit
         minimumFontScale={0.75}
       >
-        {value}
+        {locked ? "—" : value}
       </Text>
       {hint ? (
         <Text className="mt-0.5 text-[10px] text-muted-foreground dark:text-d-muted">{hint}</Text>
       ) : null}
+    </View>
+  );
+
+  return (
+    <View className="flex-1">
+      {locked ? (
+        <Pressable
+          onPress={onLockedPress}
+          accessibilityRole="button"
+          accessibilityLabel={`${label}, VIP feature. Tap to unlock.`}
+          className="active:opacity-90"
+        >
+          {card}
+        </Pressable>
+      ) : (
+        card
+      )}
     </View>
   );
 }

@@ -131,7 +131,10 @@ function mapProfileComments(
   }));
 }
 
-export function useProfileActivity(profile: PlayerProfile): ProfileActivityState {
+export function useProfileActivity(
+  profile: PlayerProfile,
+  enabled = true,
+): ProfileActivityState {
   const { state: appState } = useApp();
   const { state: communityState, appendPosts } = useCommunity();
   const communityUserId = resolveProfileCommunityUserId(profile);
@@ -142,7 +145,7 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
   const [loading, setLoading] = useState(Boolean(userId));
 
   useEffect(() => {
-    if (!userId) {
+    if (!enabled || !userId) {
       setRawActivity(null);
       setLoading(false);
       return;
@@ -182,7 +185,7 @@ export function useProfileActivity(profile: PlayerProfile): ProfileActivityState
     return () => {
       cancelled = true;
     };
-  }, [appendPosts, userId]);
+  }, [appendPosts, enabled, userId]);
 
   useEffect(() => {
     setRawActivity((current) => {
