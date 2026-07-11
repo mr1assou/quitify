@@ -7,6 +7,7 @@ import { MissionTaskCardStack } from "@/components/feature/missions/MissionTaskC
 import { MissionTaskNoteModal } from "@/components/feature/missions/MissionTaskNoteModal";
 import { missionPlanLabel } from "@/constants/progress/plan";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useMissionDayTasks } from "@/hooks/progress/useMissionDayTasks";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function MissionDayTasksScreen({ missionDay }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const session = useMissionDayTasks(missionDay);
   const [noteTaskId, setNoteTaskId] = useState<string | null>(null);
@@ -31,11 +33,11 @@ export function MissionDayTasksScreen({ missionDay }: Props) {
           <Ionicons name="lock-closed" size={32} color={colors.mutedForeground} />
           <Text className="mt-4 text-center text-base text-muted-foreground dark:text-d-muted">
             {session.unlockedThroughDay <= 0
-              ? "Your plan unlocks when your quit day begins. Finish onboarding with a quit date to start Day 1."
-              : "Complete earlier days to unlock this plan."}
+              ? t("common.planOpensOnQuitDay")
+              : t("missions.dayLockedCompleteEarlier")}
           </Text>
           <Pressable onPress={() => safeRouter.back()} className="mt-6 active:opacity-70">
-            <Text className="text-base font-semibold text-primary">Go back</Text>
+            <Text className="text-base font-semibold text-primary">{t("common.goBack")}</Text>
           </Pressable>
         </View>
       </SafeAreaView>
@@ -64,7 +66,7 @@ export function MissionDayTasksScreen({ missionDay }: Props) {
           <Ionicons name="close" size={24} color={colors.foreground} />
         </Pressable>
         <Text className="ml-2 flex-1 text-lg font-bold text-foreground dark:text-d-text">
-          {missionPlanLabel(missionDay)}
+          {missionPlanLabel(missionDay, t)}
         </Text>
         <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
           {session.completedCount}/{session.totalCount}

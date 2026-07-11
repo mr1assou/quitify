@@ -16,6 +16,7 @@ import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { Button } from "@/components/ui/Button";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   isEmailNotFoundError,
   sendEmailLoginOtp,
@@ -24,15 +25,13 @@ import {
 import { finalizeGoogleLogin } from "@/services/auth/finalizeGoogleLogin";
 import { safeRouter } from "@/utils/app/safeRouter";
 
-const LOGIN_EMAIL_NOT_FOUND =
-  "Your email doesn't exist. Tap Get started on the welcome screen to create an account.";
-
 export default function LoginVerifyOtpScreen() {
   const { email } = useLocalSearchParams<{ email?: string }>();
   const normalizedEmail = email?.trim().toLowerCase() ?? "";
 
   const { setAccount, completeOnboarding } = useApp();
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [resending, setResending] = useState(false);
@@ -61,9 +60,9 @@ export default function LoginVerifyOtpScreen() {
       safeRouter.replace("/(tabs)");
     } catch (e) {
       if (isEmailNotFoundError(e)) {
-        setError(LOGIN_EMAIL_NOT_FOUND);
+        setError(t("auth.emailNotFound"));
       } else {
-        setError(e instanceof Error ? e.message : "Verification failed");
+        setError(e instanceof Error ? e.message : t("auth.verifyFailed"));
       }
       setBusy(false);
     }
@@ -78,9 +77,9 @@ export default function LoginVerifyOtpScreen() {
       await sendEmailLoginOtp(normalizedEmail);
     } catch (e) {
       if (isEmailNotFoundError(e)) {
-        setError(LOGIN_EMAIL_NOT_FOUND);
+        setError(t("auth.emailNotFound"));
       } else {
-        setError(e instanceof Error ? e.message : "Could not resend code");
+        setError(e instanceof Error ? e.message : t("auth.sendCodeFailed"));
       }
     } finally {
       setResending(false);
@@ -92,10 +91,10 @@ export default function LoginVerifyOtpScreen() {
       <ScreenCanvas edges={["top", "bottom"]}>
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-            Missing email address.
+            {t("common.missingEmail")}
           </Text>
           <Pressable onPress={() => router.back()} className="mt-4 active:opacity-70">
-            <Text className="font-semibold text-primary">Go back</Text>
+            <Text className="font-semibold text-primary">{t("common.goBack")}</Text>
           </Pressable>
         </View>
       </ScreenCanvas>
@@ -123,13 +122,10 @@ export default function LoginVerifyOtpScreen() {
 
         <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
           <Text className="text-center text-3xl font-bold text-foreground dark:text-d-text">
-            Check your email
+            {t("auth.otpTitle")}
           </Text>
           <Text className="mt-3 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            Enter the 6-digit code we sent to{"\n"}
-            <Text className="font-semibold text-foreground dark:text-d-text">
-              {normalizedEmail}
-            </Text>
+            {t("auth.otpSubtitle", { email: normalizedEmail })}
           </Text>
 
           {error ? (
@@ -138,7 +134,7 @@ export default function LoginVerifyOtpScreen() {
 
           <View className="mt-10">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Verification code
+              {t("auth.otpLabel")}
             </Text>
             <TextInput
               ref={inputRef}
@@ -156,7 +152,7 @@ export default function LoginVerifyOtpScreen() {
 
           <View className="mt-10">
             <Button
-              label="Sign in"
+              label={t("common.signIn")}
               size="lg"
               fullWidth
               disabled={!canSubmit}
@@ -170,7 +166,7 @@ export default function LoginVerifyOtpScreen() {
             className="mt-4 items-center py-2 active:opacity-70"
           >
             <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
-              {resending ? "Sending..." : "Resend code"}
+              {resending ? t("common.sending") : t("auth.resendCode")}
             </Text>
           </Pressable>
         </ScrollView>

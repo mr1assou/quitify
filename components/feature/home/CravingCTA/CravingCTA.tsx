@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -22,6 +23,7 @@ type Props = {
 
 export function CravingCTA({ onPress }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const press = useSharedValue(1);
   const halo = useSharedValue(0);
 
@@ -66,7 +68,7 @@ export function CravingCTA({ onPress }: Props) {
         >
           <Ionicons name="flash" size={36} color={colors.white} />
           <Text className="mt-2 px-4 text-center text-base font-bold text-white">
-            I have a craving
+            {t("home.cravingCta")}
           </Text>
         </AnimatedPressable>
       </View>

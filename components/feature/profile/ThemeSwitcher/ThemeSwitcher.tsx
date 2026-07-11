@@ -11,51 +11,49 @@ import Animated, {
 import { Card } from "@/components/ui/Card";
 import { BRAND_ORANGE, darkColors, lightColors } from "@/constants/app/theme";
 import { type ThemePreference, useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
-const OPTIONS: {
-  id: ThemePreference;
-  label: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  /** Mini preview palette (bg / card / accent / text dot). */
-  preview: { bg: string; card: string; accent: string; dot: string };
-}[] = [
-  {
-    id: "light",
-    label: "Light",
-    icon: "sunny",
-    preview: {
-      bg: lightColors.background,
-      card: lightColors.section,
-      accent: BRAND_ORANGE,
-      dot: lightColors.foreground,
-    },
+const PREVIEW = {
+  light: {
+    bg: lightColors.background,
+    card: lightColors.section,
+    accent: BRAND_ORANGE,
+    dot: lightColors.foreground,
   },
-  {
-    id: "dark",
-    label: "Dark",
-    icon: "moon",
-    preview: {
-      bg: darkColors.background,
-      card: darkColors.section,
-      accent: BRAND_ORANGE,
-      dot: darkColors.foreground,
-    },
+  dark: {
+    bg: darkColors.background,
+    card: darkColors.section,
+    accent: BRAND_ORANGE,
+    dot: darkColors.foreground,
   },
-  {
-    id: "system",
-    label: "Auto",
-    icon: "phone-portrait",
-    preview: {
-      bg: lightColors.background,
-      card: darkColors.background,
-      accent: BRAND_ORANGE,
-      dot: lightColors.foreground,
-    },
+  system: {
+    bg: lightColors.background,
+    card: darkColors.background,
+    accent: BRAND_ORANGE,
+    dot: lightColors.foreground,
   },
-];
+} as const;
+
+const ICONS: Record<ThemePreference, keyof typeof Ionicons.glyphMap> = {
+  light: "sunny",
+  dark: "moon",
+  system: "phone-portrait",
+};
 
 export function ThemeSwitcher() {
   const { preference, setPreference } = useTheme();
+  const { t } = useTranslation();
+
+  const options: {
+    id: ThemePreference;
+    label: string;
+    icon: keyof typeof Ionicons.glyphMap;
+    preview: (typeof PREVIEW)[ThemePreference];
+  }[] = [
+    { id: "light", label: t("theme.light"), icon: ICONS.light, preview: PREVIEW.light },
+    { id: "dark", label: t("theme.dark"), icon: ICONS.dark, preview: PREVIEW.dark },
+    { id: "system", label: t("theme.auto"), icon: ICONS.system, preview: PREVIEW.system },
+  ];
 
   const choose = (p: ThemePreference) => {
     if (p === preference) return;
@@ -66,12 +64,14 @@ export function ThemeSwitcher() {
   return (
     <Card variant="section">
       <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-        Appearance
+        {t("settings.appearance")}
       </Text>
-      <Text className="mt-1 text-base font-bold text-foreground dark:text-d-text">Theme</Text>
+      <Text className="mt-1 text-base font-bold text-foreground dark:text-d-text">
+        {t("settings.theme")}
+      </Text>
 
       <View className="mt-4 flex-row gap-3">
-        {OPTIONS.map((opt) => (
+        {options.map((opt) => (
           <ThemeOption
             key={opt.id}
             active={preference === opt.id}

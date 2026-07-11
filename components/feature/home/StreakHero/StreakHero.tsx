@@ -6,6 +6,7 @@ import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useNow } from "@/hooks/shared/useNow";
 import { formatCurrentStreak } from "@/utils/streak";
 import { formatDate, formatLifeGained, formatNumber } from "@/utils/shared/format";
@@ -28,6 +29,7 @@ export function StreakHero({
   currencySymbol,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const now = useNow(1000);
   const streakLabel = useMemo(
     () => formatCurrentStreak(streakStart, now),
@@ -44,11 +46,11 @@ export function StreakHero({
     <Animated.View entering={FadeIn.duration(450)} className="items-center">
       <View className="flex-row items-center justify-center gap-2">
         <Text className="text-sm font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Current streak
+          {t("home.streakLabel")}
         </Text>
         <View className="rounded-full bg-elevated px-2.5 py-0.5 dark:bg-d-surface">
           <Text className="text-xs font-semibold text-foreground dark:text-d-text">
-            Attempt {attemptNumber}
+            {t("home.attempt", { n: attemptNumber })}
           </Text>
         </View>
       </View>
@@ -61,7 +63,7 @@ export function StreakHero({
       </Text>
 
       <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
-        Since {streakSinceLabel}
+        {t("home.since", { date: streakSinceLabel })}
       </Text>
 
       <View className="mt-8 w-full gap-3">
@@ -70,21 +72,21 @@ export function StreakHero({
             icon="cash"
             tint={colors.primary}
             value={moneyDisplay}
-            label="saved"
+            label={t("home.saved")}
           />
           <StatPill
             icon="smoking"
             iconSet="materialCommunity"
             tint={colors.primary}
             value={formatNumber(cigarettesAvoided)}
-            label="cigs avoided"
+            label={t("home.cigsAvoided")}
           />
         </View>
         <StatPill
           icon="heart"
           tint={colors.accent}
           value={formatLifeGained(lifeMinutesGained)}
-          label="life gained"
+          label={t("home.lifeGained")}
           fullWidth
         />
       </View>

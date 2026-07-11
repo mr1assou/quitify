@@ -1,5 +1,8 @@
+import { useMemo } from "react";
+
 import { OnboardingChipGroup } from "@/components/feature/onboarding/shared/OnboardingChipGroup";
 import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotivation";
+import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 import type { MotivationLevel } from "@/types/onboarding/onboarding";
 
 type Props = {
@@ -8,9 +11,15 @@ type Props = {
 };
 
 export function MotivationStep({ selected, onSelect }: Props) {
+  const { localize } = useLocalizedCatalog();
+  const options = useMemo(
+    () => localize(MOTIVATION_LEVEL_OPTIONS, "onboarding.motivation", ["label"]),
+    [localize],
+  );
+
   return (
     <OnboardingChipGroup
-      options={MOTIVATION_LEVEL_OPTIONS}
+      options={options}
       selected={selected}
       onSelect={onSelect}
     />

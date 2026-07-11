@@ -1,0 +1,770 @@
+{
+  "name": {
+    "es": "Nueva normalidad",
+    "pt": "Nova normalidade"
+  },
+  "role": {
+    "es": "Días 31-60: situaciones sociales, alcohol, estrés laboral, más tus primeras reducciones de TSN",
+    "pt": "Dias 31-60: situações sociais, álcool, stress no trabalho, mais as tuas primeiras reduções de TSN"
+  },
+  "days[0].title": {
+    "es": "Día 31: Bienvenido al capítulo tres",
+    "pt": "Dia 31: Bem-vindo ao capítulo três"
+  },
+  "days[0].intro": {
+    "es": "La construcción de hábitos terminó. Ahora demuestras que la nueva normalidad aguanta en la calle: fiestas, copas, semanas estresantes y viejos amigos fumadores. Este capítulo también incluye tu primera reducción de TSN.",
+    "pt": "A construção de hábitos acabou. Agora provas que a nova normalidade aguenta na rua: festas, copos, semanas stressantes e velhos amigos fumadores. Este capítulo também inclui a tua primeira redução de TSN."
+  },
+  "days[0].tasks[0].title": {
+    "es": "Lista tus eventos sociales próximos",
+    "pt": "Lista os teus eventos sociais próximos"
+  },
+  "days[0].tasks[0].text": {
+    "es": "Anota cualquier fiesta, cena o reunión en las próximas dos semanas.",
+    "pt": "Anota qualquer festa, jantar ou encontro nas próximas duas semanas."
+  },
+  "days[0].tasks[1].title": {
+    "es": "Prepara un guion social",
+    "pt": "Prepara um guião social"
+  },
+  "days[0].tasks[1].text": {
+    "es": "Escribe una frase corta que puedas decir si alguien te ofrece un cigarrillo, como: no gracias, no fumo. Nota la redacción: no estoy intentando dejarlo, sino no fumo. Las palabras moldean la identidad.",
+    "pt": "Escreve uma frase curta que possas dizer se alguém te oferecer um cigarro, como: não obrigado, não fumo. Repara na formulação: não estou a tentar deixar, mas não fumo. As palavras moldam a identidade."
+  },
+  "days[0].tasks[2].title": {
+    "es": "Fija tu objetivo del capítulo tres",
+    "pt": "Define o teu objectivo do capítulo três"
+  },
+  "days[0].tasks[2].text": {
+    "es": "Elige una situación concreta que quieras manejar libre de humo este mes.",
+    "pt": "Escolhe uma situação concreta que queiras lidar livre de fumo este mês."
+  },
+  "days[1].title": {
+    "es": "Día 32: Decir no sin explicar",
+    "pt": "Dia 32: Dizer não sem explicar"
+  },
+  "days[1].intro": {
+    "es": "No le debes una historia a nadie. Un no breve y alegre es una respuesta completa.",
+    "pt": "Não deves uma história a ninguém. Um não breve e alegre é uma resposta completa."
+  },
+  "days[1].tasks[0].title": {
+    "es": "Practica tu no en voz alta",
+    "pt": "Pratica o teu não em voz alta"
+  },
+  "days[1].tasks[0].text": {
+    "es": "Di tu frase preparada en voz alta una vez hoy para que salga fluida cuando importe.",
+    "pt": "Diz a tua frase preparada em voz alta uma vez hoje para sair fluida quando importar."
+  },
+  "days[1].tasks[1].title": {
+    "es": "No es privación",
+    "pt": "Não é privação"
+  },
+  "days[1].tasks[1].text": {
+    "es": "Cuando rechazas un cigarrillo, no resistes un capricho, rechazas una carga, como rechazarías una deuda. No hay nada de qué envidiar cuando otros encienden.",
+    "pt": "Quando recusas um cigarro, não resistes a um capricho, recusas um fardo, como recusarias uma dívida. Não há nada de que invejar quando outros acendem."
+  },
+  "days[2].title": {
+    "es": "Día 33: Viejos amigos fumadores",
+    "pt": "Dia 33: Velhos amigos fumadores"
+  },
+  "days[2].intro": {
+    "es": "Algunas amistades se construyeron en parte fumando juntos. La amistad permanece; su forma cambia.",
+    "pt": "Algumas amizades construíram-se em parte a fumar juntos. A amizade fica; a forma muda."
+  },
+  "days[2].tasks[0].title": {
+    "es": "Piensa en un amigo concreto",
+    "pt": "Pensa num amigo concreto"
+  },
+  "days[2].tasks[0].text": {
+    "es": "Escribe sobre un amigo con quien solías fumar y cómo podría verse vuestro tiempo juntos ahora.",
+    "pt": "Escreve sobre um amigo com quem costumavas fumar e como o vosso tempo juntos poderia ser agora."
+  },
+  "days[2].tasks[1].title": {
+    "es": "Sugiere un plan distinto",
+    "pt": "Sugere um plano diferente"
+  },
+  "days[2].tasks[1].text": {
+    "es": "Si vas a ver pronto a un amigo fumador, sugiere una actividad que no gire en torno a pausas para fumar: comida, un paseo, un juego.",
+    "pt": "Se vais ver em breve um amigo fumador, sugere uma actividade que não gire em torno de pausas para fumar: comida, um passeio, um jogo."
+  },
+  "days[3].title": {
+    "es": "Día 34: Estrés en el trabajo",
+    "pt": "Dia 34: Stress no trabalho"
+  },
+  "days[3].intro": {
+    "es": "El estrés laboral solía mandarte directo fuera con un paquete. La pausa sigue siendo tuya; solo el cigarrillo quedó despedido.",
+    "pt": "O stress no trabalho costumava mandar-te directo para fora com um maço. A pausa continua a ser tua; só o cigarro foi despedido."
+  },
+  "days[3].tasks[0].title": {
+    "es": "Respiración en el escritorio",
+    "pt": "Respiração na secretária"
+  },
+  "days[3].tasks[0].text": {
+    "es": "En el próximo pico de estrés laboral, aléjate un minuto y usa la herramienta de respiración en lugar de una pausa para fumar.",
+    "pt": "No próximo pico de stress no trabalho, afasta-te um minuto e usa a ferramenta de respiração em vez de uma pausa para fumar."
+  },
+  "days[3].tasks[1].title": {
+    "es": "Toma una pausa de verdad",
+    "pt": "Toma uma pausa a sério"
+  },
+  "days[3].tasks[1].text": {
+    "es": "Da hoy un paseo de dos minutos lejos de tu escritorio como tu nueva versión de pausa. Puedes tomar pausas sin un cigarrillo como excusa.",
+    "pt": "Dá hoje um passeio de dois minutos longe da tua secretária como a tua nova versão de pausa. Podes ter pausas sem um cigarro como desculpa."
+  },
+  "days[3].tasks[2].title": {
+    "es": "Registra el estrés de hoy",
+    "pt": "Regista o stress de hoje"
+  },
+  "days[3].tasks[2].text": {
+    "es": "Evalúa qué tan estresante se sintió el trabajo hoy en una escala simple.",
+    "pt": "Avalia o quão stressante o trabalho pareceu hoje numa escala simples."
+  },
+  "days[4].title": {
+    "es": "Día 35: Cinco semanas libre",
+    "pt": "Dia 35: Cinco semanas livre"
+  },
+  "days[4].intro": {
+    "es": "Cinco semanas dentro, y ya manejaste más detonantes de los que esperabas.",
+    "pt": "Cinco semanas dentro, e já geriste mais detonadores do que esperavas."
+  },
+  "days[4].tasks[0].title": {
+    "es": "Reclama tu insignia de cinco semanas",
+    "pt": "Reclama o teu distintivo de cinco semanas"
+  },
+  "days[4].tasks[0].text": {
+    "es": "Abre la pestaña de insignias y recoge este hito.",
+    "pt": "Abre o separador de distintivos e recolhe este marco."
+  },
+  "days[4].tasks[1].title": {
+    "es": "Anima a alguien más nuevo",
+    "pt": "Encoraja alguém mais novo"
+  },
+  "days[4].tasks[1].text": {
+    "es": "Encuentra a alguien en sus primeras dos semanas y envíale un mensaje de ánimo.",
+    "pt": "Encontra alguém nas primeiras duas semanas e envia uma mensagem de encorajamento."
+  },
+  "days[5].title": {
+    "es": "Día 36: Salir a beber, con plan",
+    "pt": "Dia 36: Sair a beber, com plano"
+  },
+  "days[5].intro": {
+    "es": "Salir a tomar copas es la situación de mayor riesgo que existe. Entras armado.",
+    "pt": "Sair a tomar copos é a situação de maior risco que existe. Entras armado."
+  },
+  "days[5].tasks[0].title": {
+    "es": "Prepara tu kit de noche fuera",
+    "pt": "Prepara o teu kit de noite fora"
+  },
+  "days[5].tasks[0].text": {
+    "es": "Antes de cualquier noche fuera: fija un límite de copas, mete pastillas y mentas en el bolsillo, y decide qué harás durante la reunión de fumadores fuera, como pedir la siguiente ronda o vigilar la mesa.",
+    "pt": "Antes de qualquer noite fora: define um limite de copos, mete pastilhas e mentas no bolso, e decide o que farás durante o grupo de fumadores lá fora, como pedir a próxima ronda ou vigiar a mesa."
+  },
+  "days[5].tasks[1].title": {
+    "es": "Conoce la ventana de riesgo real",
+    "pt": "Conhece a janela de risco real"
+  },
+  "days[5].tasks[1].text": {
+    "es": "El momento peligroso suele no ser la primera copa; es tarde en la noche cuando el cansancio y una guardia baja se encuentran con gente fumando fuera.",
+    "pt": "O momento perigoso costuma não ser a primeira copo; é tarde na noite quando o cansaço e uma guarda baixa se encontram com gente a fumar lá fora."
+  },
+  "days[6].title": {
+    "es": "Día 37: Después de una noche fuera",
+    "pt": "Dia 37: Depois de uma noite fora"
+  },
+  "days[6].intro": {
+    "es": "Si anoche fue una prueba, hoy es el debrief honesto, haya ido perfecto o casi no.",
+    "pt": "Se ontem à noite foi um teste, hoje é o debrief honesto, tenha corrido perfeito ou quase não."
+  },
+  "days[6].tasks[0].title": {
+    "es": "Reflexiona sobre anoche",
+    "pt": "Reflete sobre ontem à noite"
+  },
+  "days[6].tasks[0].text": {
+    "es": "Escribe cómo fue cualquier situación social o de bebida reciente, incluidos sustos.",
+    "pt": "Escreve como correu qualquer situação social ou de bebida recente, incluindo sustos."
+  },
+  "days[6].tasks[1].title": {
+    "es": "Un susto es una victoria",
+    "pt": "Um susto é uma vitória"
+  },
+  "days[6].tasks[1].text": {
+    "es": "Sentir tentación y no fumar no es una debilidad que se mostró, es una fortaleza que se mantuvo. Cada emboscada superada debilita la siguiente.",
+    "pt": "Sentir tentação e não fumar não é uma fraqueza que se mostrou, é uma força que se manteve. Cada emboscada sobrevivida enfraquece a seguinte."
+  },
+  "days[7].title": {
+    "es": "Día 38: Celebraciones y buenas noticias",
+    "pt": "Dia 38: Celebrações e boas notícias"
+  },
+  "days[7].intro": {
+    "es": "Los buenos momentos, no solo los malos, solían ir con un cigarrillo. La alegría merece una mejor puntuación final.",
+    "pt": "Os bons momentos, não só os maus, costumavam ir com um cigarro. A alegria merece uma melhor pontuação final."
+  },
+  "days[7].tasks[0].title": {
+    "es": "Elige un nuevo gesto de celebración",
+    "pt": "Escolhe um novo gesto de celebração"
+  },
+  "days[7].tasks[0].text": {
+    "es": "Elige una forma nueva de marcar buenas noticias: un snack favorito, contárselo a alguien, o destinar cinco dólares ahorrados a algo que quieres.",
+    "pt": "Escolhe uma forma nova de marcar boas notícias: um snack favorito, contar a alguém, ou destinar cinco dólares poupados a algo que queres."
+  },
+  "days[7].tasks[1].title": {
+    "es": "Ambos extremos emocionales detonan",
+    "pt": "Ambos extremos emocionais detonam"
+  },
+  "days[7].tasks[1].text": {
+    "es": "Los hábitos de fumar se activan con emoción fuerte en cualquier dirección, estrés y emoción por igual, así que ambos merecen un plan.",
+    "pt": "Os hábitos de fumar activam-se com emoção forte em qualquer direcção, stress e entusiasmo igualmente, por isso ambos merecem um plano."
+  },
+  "days[8].title": {
+    "es": "Día 39: Reuniones familiares",
+    "pt": "Dia 39: Reuniões familiares"
+  },
+  "days[8].intro": {
+    "es": "Los eventos familiares pueden despertar viejos hábitos rápido, especialmente cerca de familiares que aún fuman.",
+    "pt": "Eventos familiares podem despertar velhos hábitos depressa, especialmente perto de familiares que ainda fumam."
+  },
+  "days[8].tasks[0].title": {
+    "es": "Prepárate para tu próximo evento familiar",
+    "pt": "Prepara-te para o teu próximo evento familiar"
+  },
+  "days[8].tasks[0].text": {
+    "es": "Si se acerca una reunión, decide dónde estarás y qué harás durante las pausas para fumar de otros. Lleva tu kit oral.",
+    "pt": "Se se aproxima um encontro, decide onde estarás e o que farás durante as pausas para fumar dos outros. Leva o teu kit oral."
+  },
+  "days[8].tasks[1].title": {
+    "es": "Evalúa la presión familiar",
+    "pt": "Avalia a pressão familiar"
+  },
+  "days[8].tasks[1].text": {
+    "es": "Evalúa cuánta presión sientes de familia o parientes por dejar de fumar.",
+    "pt": "Avalia quanta pressão sentes da família ou parentes por deixares de fumar."
+  },
+  "days[9].title": {
+    "es": "Día 40: Cuarenta días fuerte",
+    "pt": "Dia 40: Quarenta dias forte"
+  },
+  "days[9].intro": {
+    "es": "Patrones que solían gobernar tu día automáticamente ya no lo hacen. Cuarenta días de prueba.",
+    "pt": "Padrões que costumavam governar o teu dia automaticamente já não o fazem. Quarenta dias de prova."
+  },
+  "days[9].tasks[0].title": {
+    "es": "Siente tus pulmones trabajando",
+    "pt": "Sente os teus pulmões a trabalhar"
+  },
+  "days[9].tasks[0].text": {
+    "es": "En esta etapa muchos ex fumadores notan claramente respiración más fácil en ejercicio ligero mientras las vías respiratorias siguen sanando.",
+    "pt": "Nesta fase muitos ex fumadores notam claramente respiração mais fácil em exercício ligeiro enquanto as vias respiratórias continuam a curar."
+  },
+  "days[9].tasks[1].title": {
+    "es": "Prueba una situación más dura a propósito",
+    "pt": "Testa uma situação mais difícil de propósito"
+  },
+  "days[9].tasks[1].text": {
+    "es": "Ponte hoy en una situación moderadamente detonante, de forma deliberada y preparado, y nota que la superas.",
+    "pt": "Coloca-te hoje numa situação moderadamente detonadora, de forma deliberada e preparado, e repara que a ultrapassas."
+  },
+  "days[10].title": {
+    "es": "Día 41: El mito del solo uno",
+    "pt": "Dia 41: O mito do só um"
+  },
+  "days[10].intro": {
+    "es": "Solo uno no hará daño es la frase más peligrosa al dejar de fumar. Hoy la desmontas para siempre.",
+    "pt": "Só um não faz mal é a frase mais perigosa ao deixar de fumar. Hoje desmontas-a para sempre."
+  },
+  "days[10].tasks[0].title": {
+    "es": "Entiende por qué uno nunca es uno",
+    "pt": "Percebe porque um nunca é um"
+  },
+  "days[10].tasks[0].text": {
+    "es": "Un cigarrillo hace dos cosas: vuelve a alimentar al monstruito para que regrese el antojo físico, y le dice al monstruo grande que el lavado de cerebro tenía razón. No existe un solo cigarrillo; solo el primero de los próximos diez mil, o ninguno.",
+    "pt": "Um cigarro faz duas coisas: volta a alimentar o monstrinho para o desejo físico regressar, e diz ao monstro grande que a lavagem cerebral estava certa. Não existe um único cigarro; só o primeiro dos próximos dez mil, ou nenhum."
+  },
+  "days[10].tasks[1].title": {
+    "es": "Escribe tu propia nota de advertencia",
+    "pt": "Escreve a tua própria nota de aviso"
+  },
+  "days[10].tasks[1].text": {
+    "es": "Escribe una nota breve a tu yo futuro sobre por qué uno no vale la pena, guardada para cualquier momento de tentación.",
+    "pt": "Escreve uma nota breve ao teu eu futuro sobre porque um não vale a pena, guardada para qualquer momento de tentação."
+  },
+  "days[11].title": {
+    "es": "Día 42: Seis semanas libre, punto de reducción",
+    "pt": "Dia 42: Seis semanas livre, ponto de redução"
+  },
+  "days[11].intro": {
+    "es": "Seis semanas: la química corporal, las rutinas y la confianza han cambiado. Este es también el punto estándar para bajar la potencia del parche.",
+    "pt": "Seis semanas: a química corporal, as rotinas e a confiança mudaram. Este é também o ponto padrão para baixar a potência do penso."
+  },
+  "days[11].tasks[0].title": {
+    "es": "Reclama tu insignia de seis semanas",
+    "pt": "Reclama o teu distintivo de seis semanas"
+  },
+  "days[11].tasks[0].text": {
+    "es": "Abre la pestaña de insignias y recoge este hito.",
+    "pt": "Abre o separador de distintivos e recolhe este marco."
+  },
+  "days[11].tasks[1].title": {
+    "es": "Planifica tu primera reducción de parche",
+    "pt": "Planeia a tua primeira redução de penso"
+  },
+  "days[11].tasks[1].text": {
+    "es": "Si empezaste con el parche de mayor potencia, esta semana es el punto estándar para bajar un nivel, normalmente de 21 mg a 14 mg, durante las próximas dos semanas. Confírmalo con tu farmacéutico, y ten pastillas cerca para los primeros dos o tres días de la nueva potencia.",
+    "pt": "Se começaste com o penso de maior potência, esta semana é o ponto padrão para baixar um nível, normalmente de 21 mg para 14 mg, durante as próximas duas semanas. Confirma com o teu farmacêutico, e mantém pastilhas por perto para os primeiros dois ou três dias da nova potência."
+  },
+  "days[11].tasks[2].title": {
+    "es": "Comparte una actualización de seis semanas",
+    "pt": "Partilha uma actualização de seis semanas"
+  },
+  "days[11].tasks[2].text": {
+    "es": "Publica una actualización breve en la comunidad sobre llegar a seis semanas.",
+    "pt": "Publica uma actualização breve na comunidade sobre chegar às seis semanas."
+  },
+  "days[12].title": {
+    "es": "Día 43: Primeros días con parche más ligero",
+    "pt": "Dia 43: Primeiros dias com penso mais leve"
+  },
+  "days[12].intro": {
+    "es": "Una reducción puede traer un día o dos de antojos un poco más fuertes mientras tu cuerpo se ajusta. Es esperado, temporal, y señal de que la salida funciona.",
+    "pt": "Uma redução pode trazer um dia ou dois de desejos um pouco mais fortes enquanto o teu corpo se ajusta. É esperado, temporário, e sinal de que a saída funciona."
+  },
+  "days[12].tasks[0].title": {
+    "es": "Apoya la reducción",
+    "pt": "Apoia a redução"
+  },
+  "days[12].tasks[0].text": {
+    "es": "Durante los próximos dos o tres días, sé un poco más generoso con pastillas, mentas, agua y sesiones de respiración. El bache pasa rápido; no subas de potencia por una tarde difícil.",
+    "pt": "Durante os próximos dois ou três dias, sê um pouco mais generoso com pastilhas, mentas, água e sessões de respiração. O solavanco passa depressa; não subas de potência por uma tarde difícil."
+  },
+  "days[12].tasks[1].title": {
+    "es": "Evalúa el ajuste",
+    "pt": "Avalia o ajuste"
+  },
+  "days[12].tasks[1].text": {
+    "es": "Evalúa cómo se siente el parche más ligero hasta ahora, del uno al cinco.",
+    "pt": "Avalia como o penso mais leve se sente até agora, de um a cinco."
+  },
+  "days[13].title": {
+    "es": "Día 44: Check-in de identidad",
+    "pt": "Dia 44: Check-in de identidade"
+  },
+  "days[13].intro": {
+    "es": "Por ahora, muchas personas dejan de pensar en sí mismas como fumadores que dejaron y empiezan a ser simplemente no fumadores.",
+    "pt": "Por agora, muitas pessoas deixam de pensar em si mesmas como fumadores que deixaram e começam a ser simplesmente não fumadores."
+  },
+  "days[13].tasks[0].title": {
+    "es": "Cómo te describes ahora",
+    "pt": "Como te descreves agora"
+  },
+  "days[13].tasks[0].text": {
+    "es": "Escribe cómo describirías tu relación con fumar hoy comparada con hace dos meses.",
+    "pt": "Escreve como descreverias a tua relação com fumar hoje comparada com há dois meses."
+  },
+  "days[13].tasks[1].title": {
+    "es": "La identidad vence a la fuerza de voluntad",
+    "pt": "A identidade vence a força de vontade"
+  },
+  "days[13].tasks[1].text": {
+    "es": "La fuerza de voluntad es mantener una puerta cerrada contra algo que aún quieres. La identidad es darte cuenta de que nada empuja la puerta. El objetivo no es resistir cigarrillos para siempre; es no quererlos de verdad, hacia donde te diriges.",
+    "pt": "A força de vontade é manter uma porta fechada contra algo que ainda queres. A identidade é perceber que nada empurra a porta. O objectivo não é resistir a cigarros para sempre; é não os querer de verdade, para onde te diriges."
+  },
+  "days[14].title": {
+    "es": "Día 45: A mitad del capítulo tres",
+    "pt": "Dia 45: A meio do capítulo três"
+  },
+  "days[14].intro": {
+    "es": "Estrés, presión social y alcohol ya han aparecido, y los manejaste.",
+    "pt": "Stress, pressão social e álcool já apareceram, e geriste-os."
+  },
+  "days[14].tasks[0].title": {
+    "es": "Evalúa este capítulo hasta ahora",
+    "pt": "Avalia este capítulo até agora"
+  },
+  "days[14].tasks[0].text": {
+    "es": "Evalúa cómo ha ido el capítulo tres comparado con el capítulo dos.",
+    "pt": "Avalia como correu o capítulo três comparado com o capítulo dois."
+  },
+  "days[14].tasks[1].title": {
+    "es": "Toma un descanso mental",
+    "pt": "Toma uma pausa mental"
+  },
+  "days[14].tasks[1].text": {
+    "es": "Juega un minijuego dos minutos solo para reiniciarte, sin necesidad de antojo.",
+    "pt": "Joga um minijogo dois minutos só para reiniciar, sem necessidade de desejo."
+  },
+  "days[15].title": {
+    "es": "Día 46: Ira e irritabilidad",
+    "pt": "Dia 46: Raiva e irritabilidade"
+  },
+  "days[15].intro": {
+    "es": "Los cigarrillos solían ser la forma de calmarse tras la ira. Esa válvula de escape necesita un nuevo ajuste.",
+    "pt": "Os cigarros costumavam ser a forma de acalmar depois da raiva. Essa válvula de escape precisa de um novo ajuste."
+  },
+  "days[15].tasks[0].title": {
+    "es": "Respira antes de reaccionar",
+    "pt": "Respira antes de reagir"
+  },
+  "days[15].tasks[0].text": {
+    "es": "La próxima vez que la frustración suba hoy, usa la herramienta de respiración antes de responder a alguien.",
+    "pt": "Da próxima vez que a frustração subir hoje, usa a ferramenta de respiração antes de responder a alguém."
+  },
+  "days[15].tasks[1].title": {
+    "es": "Recuerda un momento de fumar con ira",
+    "pt": "Recorda um momento de fumar com raiva"
+  },
+  "days[15].tasks[1].text": {
+    "es": "Escribe sobre una vez que fumaste específicamente porque estabas enfadado, y qué arregló realmente el cigarrillo. Spoiler: el problema seguía ahí después.",
+    "pt": "Escreve sobre uma vez que fumaste especificamente porque estavas zangado, e o que o cigarro realmente resolveu. Spoiler: o problema continuava lá depois."
+  },
+  "days[16].title": {
+    "es": "Día 47: Detonantes de fin de semana",
+    "pt": "Dia 47: Detonadores de fim de semana"
+  },
+  "days[16].intro": {
+    "es": "Los fines de semana tienen su propio ritmo: más tiempo libre, más tiempo social, más tiempo muerto, todos viejos huecos de fumar.",
+    "pt": "Os fins de semana têm o seu próprio ritmo: mais tempo livre, mais tempo social, mais tempo morto, todos velhos espaços de fumar."
+  },
+  "days[16].tasks[0].title": {
+    "es": "Planifica tu fin de semana de forma distinta",
+    "pt": "Planeia o teu fim de semana de forma diferente"
+  },
+  "days[16].tasks[0].text": {
+    "es": "Elige una parte de tu patrón habitual de fin de semana y manéjala de forma distinta esta semana.",
+    "pt": "Escolhe uma parte do teu padrão habitual de fim de semana e gere-a de forma diferente esta semana."
+  },
+  "days[16].tasks[1].title": {
+    "es": "Evalúa la dificultad del fin de semana",
+    "pt": "Avalia a dificuldade do fim de semana"
+  },
+  "days[16].tasks[1].text": {
+    "es": "Evalúa qué tan duros se sienten los fines de semana comparados con los días laborables ahora mismo.",
+    "pt": "Avalia o quão difíceis os fins de semana parecem comparados com os dias de semana agora mesmo."
+  },
+  "days[17].title": {
+    "es": "Día 48: Siete semanas libre",
+    "pt": "Dia 48: Sete semanas livre"
+  },
+  "days[17].intro": {
+    "es": "El espacio entre tú y tu último cigarrillo sigue creciendo, y también tu archivo de evidencias.",
+    "pt": "O espaço entre ti e o teu último cigarro continua a crescer, e também o teu ficheiro de evidências."
+  },
+  "days[17].tasks[0].title": {
+    "es": "Reclama tu insignia de siete semanas",
+    "pt": "Reclama o teu distintivo de sete semanas"
+  },
+  "days[17].tasks[0].text": {
+    "es": "Abre la pestaña de insignias y recoge este hito.",
+    "pt": "Abre o separador de distintivos e recolhe este marco."
+  },
+  "days[17].tasks[1].title": {
+    "es": "Actualización de circulación",
+    "pt": "Actualização de circulação"
+  },
+  "days[17].tasks[1].text": {
+    "es": "En esta etapa la circulación suele haber mejorado más, lo que hace que la actividad física se sienta notablemente más fácil que cuando fumabas.",
+    "pt": "Nesta fase a circulação costuma ter melhorado mais, o que faz a actividade física parecer visivelmente mais fácil do que quando fumavas."
+  },
+  "days[18].title": {
+    "es": "Día 49: Comprobación de envidia",
+    "pt": "Dia 49: Verificação de inveja"
+  },
+  "days[18].intro": {
+    "es": "Cuando ves a alguien fumando, ¿qué sientes? Hoy te aseguras de que es lo correcto.",
+    "pt": "Quando vês alguém a fumar, o que sentes? Hoje garantes que é o certo."
+  },
+  "days[18].tasks[0].title": {
+    "es": "No envidies a fumadores, comprende",
+    "pt": "Não invejes fumadores, compreende"
+  },
+  "days[18].tasks[0].text": {
+    "es": "La próxima vez que veas a alguien encender, recuerda: no disfrutan un capricho que te niegan. Alivian una abstinencia que ya no tienes, y la mayoría desearía poder parar. Si sientes algo, que sea alivio de estar fuera.",
+    "pt": "Da próxima vez que vires alguém acender, lembra-te: não desfrutam de um capricho que te negam. Aliviam uma abstinência que já não tens, e a maioria gostaria de parar. Se sentires algo, que seja alívio por estares fora."
+  },
+  "days[18].tasks[1].title": {
+    "es": "Registra tu reacción honesta",
+    "pt": "Regista a tua reacção honesta"
+  },
+  "days[18].tasks[1].text": {
+    "es": "Escribe qué sentiste realmente la última vez que viste a alguien fumar cerca.",
+    "pt": "Escreve o que sentiste realmente da última vez que viste alguém a fumar perto."
+  },
+  "days[19].title": {
+    "es": "Día 50: Cincuenta días",
+    "pt": "Dia 50: Cinquenta dias"
+  },
+  "days[19].intro": {
+    "es": "Cincuenta días es un número que muchos quienes dejan de fumar nunca alcanzan. Ya lo superaste y aceleras.",
+    "pt": "Cinquenta dias é um número que muitos quem deixa de fumar nunca alcança. Já o ultrapassaste e aceleras."
+  },
+  "days[19].tasks[0].title": {
+    "es": "Mira tu resumen de cincuenta días",
+    "pt": "Vê o teu resumo de cinquenta dias"
+  },
+  "days[19].tasks[0].text": {
+    "es": "Abre tus estadísticas y mira todo desde el día uno: racha, dinero, cigarrillos evitados, marcadores de salud.",
+    "pt": "Abre as tuas estatísticas e olha tudo desde o dia um: sequência, dinheiro, cigarros evitados, marcadores de saúde."
+  },
+  "days[19].tasks[1].title": {
+    "es": "Comparte el hito",
+    "pt": "Partilha o marco"
+  },
+  "days[19].tasks[1].text": {
+    "es": "Publica una actualización en la comunidad sobre llegar a cincuenta días.",
+    "pt": "Publica uma actualização na comunidade sobre chegar aos cinquenta dias."
+  },
+  "days[20].title": {
+    "es": "Día 51: Aburrimiento revisitado",
+    "pt": "Dia 51: Tédio revisitado"
+  },
+  "days[20].intro": {
+    "es": "Los detonantes de aburrimiento regresan con disfraces nuevos cuando la vida se asienta en rutina. Mantén los contadores frescos.",
+    "pt": "Os detonadores de tédio regressam com disfarces novos quando a vida se instala em rotina. Mantém os contadores frescos."
+  },
+  "days[20].tasks[0].title": {
+    "es": "Evalúa el aburrimiento de hoy",
+    "pt": "Avalia o tédio de hoje"
+  },
+  "days[20].tasks[0].text": {
+    "es": "Evalúa qué tan aburrido te sentiste hoy y si se conectó con algún antojo.",
+    "pt": "Avalia o quão aborrecido te sentiste hoje e se se ligou a algum desejo."
+  },
+  "days[20].tasks[1].title": {
+    "es": "Juega en el hueco",
+    "pt": "Joga no vazio"
+  },
+  "days[20].tasks[1].text": {
+    "es": "En el próximo hueco de aburrimiento hoy, llénalo con un minijuego en lugar de dejar que tu mente vague a viejos hábitos.",
+    "pt": "No próximo vazio de tédio hoje, enche-o com um minijogo em vez de deixar a mente vaguear para velhos hábitos."
+  },
+  "days[21].title": {
+    "es": "Día 52: Destellos son normales",
+    "pt": "Dia 52: Lampejos são normais"
+  },
+  "days[21].intro": {
+    "es": "Un destello de antojo al ver u oler un cigarrillo, incluso tras semanas libre, no dice nada sobre tu progreso.",
+    "pt": "Um lampejo de desejo ao ver ou cheirar um cigarro, mesmo após semanas livre, não diz nada sobre o teu progresso."
+  },
+  "days[21].tasks[0].title": {
+    "es": "Los detonantes visuales son solo ecos",
+    "pt": "Os detonadores visuais são só ecos"
+  },
+  "days[21].tasks[0].text": {
+    "es": "Ver u oler el cigarrillo de otra persona puede provocar un impulso breve mucho después de dejar. Es una asociación que se desvanece, no una advertencia de recaída.",
+    "pt": "Ver ou cheirar o cigarro de outra pessoa pode provocar um impulso breve muito depois de deixar. É uma associação a desvanecer, não um aviso de recaída."
+  },
+  "days[21].tasks[1].title": {
+    "es": "Responde al destello",
+    "pt": "Responde ao lampejo"
+  },
+  "days[21].tasks[1].text": {
+    "es": "Cuando llegue un destello, respóndele en una línea: buen intento, no fumo. Luego sigue. Los destellos odian ser ignorados; así mueren.",
+    "pt": "Quando um lampejo chegar, responde-lhe numa linha: boa tentativa, não fumo. Depois segue. Os lampejos odeiam ser ignorados; é assim que morrem."
+  },
+  "days[22].title": {
+    "es": "Día 53: Tu sistema de apoyo",
+    "pt": "Dia 53: O teu sistema de apoio"
+  },
+  "days[22].intro": {
+    "es": "Dejar de fumar es más fácil con personas a tu alrededor que saben qué haces y por qué.",
+    "pt": "Deixar de fumar é mais fácil com pessoas à tua volta que sabem o que fazes e porquê."
+  },
+  "days[22].tasks[0].title": {
+    "es": "Conéctate con la comunidad",
+    "pt": "Liga-te à comunidade"
+  },
+  "days[22].tasks[0].text": {
+    "es": "Comenta o reacciona a dos publicaciones de otras personas hoy.",
+    "pt": "Comenta ou reage a duas publicações de outras pessoas hoje."
+  },
+  "days[22].tasks[1].title": {
+    "es": "Nombra a tu mayor apoyo",
+    "pt": "Dá nome ao teu maior apoio"
+  },
+  "days[22].tasks[1].text": {
+    "es": "Anota quién ha sido más solidario con tu abandono hasta ahora, y considera decírselo.",
+    "pt": "Anota quem tem sido mais solidário com a tua desistência até agora, e considera dizê-lo."
+  },
+  "days[23].title": {
+    "es": "Día 54: Ocho semanas libre",
+    "pt": "Dia 54: Oito semanas livre"
+  },
+  "days[23].intro": {
+    "es": "Dos meses completos de mañanas, comidas, estrés y noches fuera, todo sin un cigarrillo.",
+    "pt": "Dois meses completos de manhãs, refeições, stress e noites fora, tudo sem um cigarro."
+  },
+  "days[23].tasks[0].title": {
+    "es": "Reclama tu insignia de ocho semanas",
+    "pt": "Reclama o teu distintivo de oito semanas"
+  },
+  "days[23].tasks[0].text": {
+    "es": "Abre la pestaña de insignias y recoge este hito.",
+    "pt": "Abre o separador de distintivos e recolhe este marco."
+  },
+  "days[23].tasks[1].title": {
+    "es": "Logros de salud de dos meses",
+    "pt": "Ganhos de saúde de dois meses"
+  },
+  "days[23].tasks[1].text": {
+    "es": "Abre la pestaña de progreso de salud y mira cuánto han avanzado tus marcadores clave en dos meses.",
+    "pt": "Abre o separador de progresso de saúde e vê quanto os teus marcadores-chave avançaram em dois meses."
+  },
+  "days[24].title": {
+    "es": "Día 55: Los resbalones ocurren, los planes importan",
+    "pt": "Dia 55: Escorregões acontecem, planos importam"
+  },
+  "days[24].intro": {
+    "es": "Incluso con una racha fuerte, saber exactamente qué harías tras un resbalón le quita el poder de hacer bola de nieve.",
+    "pt": "Mesmo com uma sequência forte, saber exactamente o que farias após um escorregão remove o seu poder de fazer bola de neve."
+  },
+  "days[24].tasks[0].title": {
+    "es": "Escribe tu plan de recuperación de resbalones",
+    "pt": "Escreve o teu plano de recuperação de escorregões"
+  },
+  "days[24].tasks[0].text": {
+    "es": "Escribe exactamente qué harías en la primera hora tras un resbalón: a quién se lo cuentas, tirar cualquier cigarrillo restante, y volver al plan el mismo día, no el lunes siguiente.",
+    "pt": "Escreve exactamente o que farias na primeira hora após um escorregão: a quem contas, deitar fora quaisquer cigarros restantes, e voltar ao plano no mesmo dia, não na segunda-feira seguinte."
+  },
+  "days[24].tasks[1].title": {
+    "es": "Un resbalón no es el final",
+    "pt": "Um escorregão não é o fim"
+  },
+  "days[24].tasks[1].text": {
+    "es": "Muchos quienes dejaron con éxito resbalaron al menos una vez. Lo que los separó fue tratarlo como un fuego que apagar de inmediato, no una razón para quemar la casa.",
+    "pt": "Muitos que deixaram com sucesso escorregaram pelo menos uma vez. O que os separou foi tratá-lo como um fogo a apagar de imediato, não uma razão para queimar a casa."
+  },
+  "days[25].title": {
+    "es": "Día 56: Segunda reducción de parche",
+    "pt": "Dia 56: Segunda redução de penso"
+  },
+  "days[25].intro": {
+    "es": "Dos semanas con el parche de potencia media terminadas. Este es el punto estándar para bajar a la potencia más baja en el tramo final.",
+    "pt": "Duas semanas com o penso de potência média terminadas. Este é o ponto padrão para baixar à potência mais baixa no tramo final."
+  },
+  "days[25].tasks[0].title": {
+    "es": "Baja al parche más bajo",
+    "pt": "Baixa ao penso mais baixo"
+  },
+  "days[25].tasks[0].text": {
+    "es": "Si completaste unas dos semanas con la potencia media, baja al parche más bajo, normalmente 7 mg, durante las próximas dos semanas. Mismo procedimiento que la última vez: pastillas extra, agua y respiración los primeros días. Estás a dos semanas de estar sin parche.",
+    "pt": "Se completaste cerca de duas semanas com a potência média, baixa ao penso mais baixo, normalmente 7 mg, durante as próximas duas semanas. Mesmo procedimento que da última vez: pastilhas extra, água e respiração nos primeiros dias. Estás a duas semanas de estar sem penso."
+  },
+  "days[25].tasks[1].title": {
+    "es": "Situación más dura de este capítulo",
+    "pt": "Situação mais difícil deste capítulo"
+  },
+  "days[25].tasks[1].text": {
+    "es": "Escribe sobre la situación más difícil que enfrentaste en el capítulo tres y cómo la superaste.",
+    "pt": "Escreve sobre a situação mais difícil que enfrentaste no capítulo três e como a ultrapassaste."
+  },
+  "days[26].title": {
+    "es": "Día 57: Comprobación de confianza",
+    "pt": "Dia 57: Verificação de confiança"
+  },
+  "days[26].intro": {
+    "es": "Para ahora tienes evidencia, no solo esperanza, de que puedes manejar momentos duros sin fumar.",
+    "pt": "A esta altura tens evidência, não só esperança, de que consegues lidar com momentos difíceis sem fumar."
+  },
+  "days[26].tasks[0].title": {
+    "es": "Cuenta tu evidencia",
+    "pt": "Conta a tua evidência"
+  },
+  "days[26].tasks[0].text": {
+    "es": "Abre tus estadísticas y cuenta los días que has superado. Cada uno es un dato contra la historia de la adicción.",
+    "pt": "Abre as tuas estatísticas e conta os dias que ultrapassaste. Cada um é um dado contra a história da dependência."
+  },
+  "days[26].tasks[1].title": {
+    "es": "Evalúa tu confianza",
+    "pt": "Avalia a tua confiança"
+  },
+  "days[26].tasks[1].text": {
+    "es": "Evalúa qué tan confiado te sientes de mantenerte libre de humo los próximos treinta días.",
+    "pt": "Avalia o quão confiante te sentes de te manteres livre de fumo nos próximos trinta dias."
+  },
+  "days[27].title": {
+    "es": "Día 58: Casi dos meses",
+    "pt": "Dia 58: Quase dois meses"
+  },
+  "days[27].intro": {
+    "es": "Nota cuánto menos cruzan tu mente los cigarrillos ahora comparado con la semana uno.",
+    "pt": "Repara o quão menos os cigarros cruzam a tua mente agora comparado com a semana um."
+  },
+  "days[27].tasks[0].title": {
+    "es": "Mide la calma mental",
+    "pt": "Mede a calma mental"
+  },
+  "days[27].tasks[0].text": {
+    "es": "Escribe con qué frecuencia cruzan tu mente los cigarrillos ahora versus tu primera semana.",
+    "pt": "Escreve com que frequência os cigarros cruzam a tua mente agora versus a tua primeira semana."
+  },
+  "days[27].tasks[1].title": {
+    "es": "Planifica la marca de dos meses",
+    "pt": "Planeia a marca de dois meses"
+  },
+  "days[27].tasks[1].text": {
+    "es": "Decide cómo quieres reconocer dos meses completos en dos días.",
+    "pt": "Decide como queres reconhecer dois meses completos daqui a dois dias."
+  },
+  "days[28].title": {
+    "es": "Día 59: Un día restante",
+    "pt": "Dia 59: Um dia restante"
+  },
+  "days[28].intro": {
+    "es": "Mañana cierra el capítulo tres. Superaste las situaciones más propensas a causar recaída.",
+    "pt": "Amanhã fecha o capítulo três. Ultrapassaste as situações mais propensas a causar recaída."
+  },
+  "days[28].tasks[0].title": {
+    "es": "Previsualiza el capítulo cuatro",
+    "pt": "Pré-visualiza o capítulo quatro"
+  },
+  "days[28].tasks[0].text": {
+    "es": "El capítulo cuatro cubre trampas de recaída, complacencia, el fin de tu reducción de TSN y tu hito de tres meses.",
+    "pt": "O capítulo quatro cobre armadilhas de recaída, complacência, o fim da tua redução de TSN e o teu marco de três meses."
+  },
+  "days[28].tasks[1].title": {
+    "es": "Evalúa tu preparación",
+    "pt": "Avalia a tua preparação"
+  },
+  "days[28].tasks[1].text": {
+    "es": "Evalúa qué tan preparado te sientes para el próximo capítulo.",
+    "pt": "Avalia o quão preparado te sentes para o próximo capítulo."
+  },
+  "days[29].title": {
+    "es": "Día 60: Dos meses libre de humo",
+    "pt": "Dia 60: Dois meses livre de fumo"
+  },
+  "days[29].intro": {
+    "es": "Sesenta días. Fiestas, copas, estrés, familia y aburrimiento, todo manejado sin fumar. Eso no es suerte, es una habilidad que construiste.",
+    "pt": "Sessenta dias. Festas, copos, stress, família e tédio, tudo gerido sem fumar. Isso não é sorte, é uma competência que construíste."
+  },
+  "days[29].tasks[0].title": {
+    "es": "Reclama tu insignia de dos meses",
+    "pt": "Reclama o teu distintivo de dois meses"
+  },
+  "days[29].tasks[0].text": {
+    "es": "Abre la pestaña de insignias y recoge este hito mayor.",
+    "pt": "Abre o separador de distintivos e recolhe este marco maior."
+  },
+  "days[29].tasks[1].title": {
+    "es": "Mira tu transformación de dos meses",
+    "pt": "Vê a tua transformação de dois meses"
+  },
+  "days[29].tasks[1].text": {
+    "es": "Abre tus estadísticas completas y resumen de salud para ver todo lo que cambió desde el día uno.",
+    "pt": "Abre as tuas estatísticas completas e resumo de saúde para ver tudo o que mudou desde o dia um."
+  },
+  "days[29].tasks[2].title": {
+    "es": "Resumen del capítulo tres",
+    "pt": "Resumo do capítulo três"
+  },
+  "days[29].tasks[2].text": {
+    "es": "Escribe unas frases resumiendo lo que aprendiste durante el capítulo tres.",
+    "pt": "Escreve algumas frases a resumir o que aprendeste durante o capítulo três."
+  },
+  "days[29].tasks[3].title": {
+    "es": "Mira hacia el capítulo cuatro",
+    "pt": "Olha para o capítulo quatro"
+  },
+  "days[29].tasks[3].text": {
+    "es": "Lee la introducción del capítulo cuatro y fija un objetivo para mantenerte fuerte hacia tres meses.",
+    "pt": "Lê a introdução do capítulo quatro e define um objectivo para te manteres forte rumo a três meses."
+  }
+}

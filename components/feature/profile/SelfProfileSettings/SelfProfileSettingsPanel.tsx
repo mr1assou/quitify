@@ -9,9 +9,11 @@ import {
 import { HabitSettingsModal } from "@/components/feature/profile/HabitSettingsModal";
 import { UsernameEditModal } from "@/components/feature/profile/UsernameEditModal";
 import { PushNotificationsToggle } from "@/components/feature/profile/PushNotificationsToggle";
+import { LanguageSwitcher } from "@/components/feature/profile/LanguageSwitcher/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useResetJourney } from "@/hooks/auth/useResetJourney";
 import { usePushNotificationsSettings } from "@/hooks/push/usePushNotificationsSettings";
 import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
@@ -35,32 +37,33 @@ export function SelfProfileSettings({
   onSignOut,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const resetJourney = useResetJourney();
   const pushSettings = usePushNotificationsSettings();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
   const [habitModalOpen, setHabitModalOpen] = useState(false);
   const [usernameModalOpen, setUsernameModalOpen] = useState(false);
 
-  const displayUsername = profile.name?.trim() || "Not set";
+  const displayUsername = profile.name?.trim() || t("settings.notSet");
 
   const accountRows: ListRow[] = isSignedIn
     ? [
         {
           id: "username",
           icon: "at-outline",
-          label: "Username",
+          label: t("settings.username"),
           value: displayUsername,
           onPress: () => setUsernameModalOpen(true),
         },
         {
           id: "signed-in",
           icon: "person-circle-outline",
-          label: accountEmail ?? "Signed in",
+          label: accountEmail ?? t("settings.signedIn"),
         },
         {
           id: "reset-journey",
           icon: "refresh-outline",
-          label: "Reset my journey",
+          label: t("settings.resetJourney"),
           onPress: () => setResetModal({ type: "confirm" }),
         },
       ]
@@ -68,7 +71,7 @@ export function SelfProfileSettings({
         {
           id: "signup",
           icon: "cloud-upload-outline",
-          label: "Save my progress",
+          label: t("settings.saveProgress"),
           onPress: () => safeRouter.push("/signup"),
         },
       ];
@@ -77,13 +80,13 @@ export function SelfProfileSettings({
     {
       id: "quit-date",
       icon: "calendar-outline",
-      label: "Quit date",
+      label: t("settings.quitDate"),
       value: formatDate(profile.quitDate),
     },
     {
       id: "habits",
       icon: "logo-no-smoking",
-      label: "Smoking settings",
+      label: t("settings.smokingSettings"),
       onPress: isSignedIn ? () => setHabitModalOpen(true) : undefined,
     },
   ];
@@ -94,10 +97,10 @@ export function SelfProfileSettings({
       .then(() => setResetModal(null))
       .catch((error: unknown) => {
         const message =
-          error instanceof Error ? error.message : "Please try again in a moment.";
+          error instanceof Error ? error.message : t("settings.resetErrorMessage");
         setResetModal({
           type: "error",
-          title: "Could not reset journey",
+          title: t("settings.resetErrorTitle"),
           message,
         });
       });
@@ -106,6 +109,7 @@ export function SelfProfileSettings({
   return (
     <View className="gap-4">
       <ThemeSwitcher />
+      <LanguageSwitcher />
       <ListGroup rows={accountRows} />
       {isSignedIn ? (
         <PushNotificationsToggle
@@ -122,7 +126,7 @@ export function SelfProfileSettings({
           {
             id: "talk-to-support",
             icon: "chatbubbles-outline",
-            label: "Talk to support",
+            label: t("settings.talkToSupport"),
             onPress: () =>
               safeRouter.push({ pathname: "/chats", params: { section: "support" } }),
           },
@@ -131,7 +135,7 @@ export function SelfProfileSettings({
                 {
                   id: "logout",
                   icon: "log-out-outline" as const,
-                  label: "Log out",
+                  label: t("settings.logout"),
                   destructive: true,
                   onPress: onSignOut,
                 },
@@ -145,10 +149,10 @@ export function SelfProfileSettings({
           <View className="rounded-3xl bg-primary p-4">
             <View className="flex-row items-center">
               <Ionicons name="diamond" size={20} color={colors.white} />
-              <Text className="ml-2 text-base font-bold text-white">Unlock VIP mode</Text>
+              <Text className="ml-2 text-base font-bold text-white">{t("settings.unlockVip")}</Text>
             </View>
             <Text className="mt-1 text-xs text-white opacity-80">
-              See the full $4.17/month offer.
+              {t("settings.vipOffer")}
             </Text>
           </View>
         </Pressable>

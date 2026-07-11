@@ -3,6 +3,7 @@ import * as Haptics from "expo-haptics";
 import { Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export type PlanDayLockedModalContent = {
   day: number;
@@ -17,6 +18,7 @@ type Props = {
 
 export function PlanDayLockedModal({ content, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const visible = content !== null;
 
   const handleClose = () => {
@@ -34,7 +36,7 @@ export function PlanDayLockedModal({ content, onClose }: Props) {
       <View className="flex-1 items-center justify-center px-6">
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Close"
+          accessibilityLabel={t("common.close")}
           className="absolute inset-0 bg-black/50"
           onPress={handleClose}
         />
@@ -66,7 +68,9 @@ export function PlanDayLockedModal({ content, onClose }: Props) {
                 onPress={handleClose}
                 className="rounded-2xl bg-primary px-10 py-3.5"
               >
-                <Text className="text-center text-base font-bold text-white">Got it</Text>
+                <Text className="text-center text-base font-bold text-white">
+                  {t("common.gotIt")}
+                </Text>
               </Pressable>
             </View>
           </View>

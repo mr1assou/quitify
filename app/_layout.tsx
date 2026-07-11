@@ -12,6 +12,7 @@ import { GoalsProvider } from "@/context/GoalsContext";
 import { PlanProvider } from "@/context/PlanContext";
 import { RelaxSoundPlayerProvider } from "@/context/RelaxSoundPlayerContext";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { LocaleProvider } from "@/context/LocaleContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
@@ -34,17 +35,19 @@ export default function RootLayout() {
         navigationBarTranslucent={Platform.OS === "android"}
       >
         <ThemeProvider>
-          <SafeAreaProvider>
-            <AppProvider>
-              <OnboardingProvider>
-                <CommunityProvider>
-                  <NotificationProvider>
-                    <GoalsProviderWrapper />
-                  </NotificationProvider>
-                </CommunityProvider>
-              </OnboardingProvider>
-            </AppProvider>
-          </SafeAreaProvider>
+          <LocaleProvider>
+            <SafeAreaProvider>
+              <AppProvider>
+                <OnboardingProvider>
+                  <CommunityProvider>
+                    <NotificationProvider>
+                      <GoalsProviderWrapper />
+                    </NotificationProvider>
+                  </CommunityProvider>
+                </OnboardingProvider>
+              </AppProvider>
+            </SafeAreaProvider>
+          </LocaleProvider>
         </ThemeProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

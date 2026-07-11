@@ -18,6 +18,7 @@ import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThreads } from "@/hooks/chat/useChat";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { fetchSupportUsers } from "@/services/chat/chatApi";
 import type { CommunityUser } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
@@ -29,6 +30,7 @@ function parseChatsSection(value: string | string[] | undefined): ChatsSection {
 }
 
 export default function ChatsScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { section: sectionParam } = useLocalSearchParams<{ section?: string | string[] }>();
   const { state } = useApp();
@@ -53,7 +55,7 @@ export default function ChatsScreen() {
       setSupportList(page.items.map(mapSupportUserToCommunityUser));
     } catch {
       setSupportError(
-        isSupportStaff ? "Could not load users" : "Could not load support",
+        isSupportStaff ? t("chat.loadUsersFailed") : t("chat.loadSupportFailed"),
       );
       setSupportList([]);
     } finally {
@@ -90,13 +92,13 @@ export default function ChatsScreen() {
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
       <StackScreenHeader
-        title="Chats"
+        title={t("chat.tabsChats")}
         rightAction={
           section === "chats" ? (
             <Pressable
               onPress={() => safeRouter.push("/community-search")}
               hitSlop={8}
-              accessibilityLabel="Find user"
+              accessibilityLabel={t("common.search")}
             >
               <Ionicons name="search-outline" size={22} color={colors.primary} />
             </Pressable>
@@ -118,12 +120,12 @@ export default function ChatsScreen() {
             <View className="items-center px-6 pt-16">
               <Ionicons name="chatbubbles-outline" size={48} color={colors.mutedForeground} />
               <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
-                No chats yet
+                {t("chat.noChatsYet")}
               </Text>
               <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
                 {isSupportStaff
-                  ? "Open the Support tab to message other support team members."
-                  : "Open the Support tab to reach our team, or search Community to chat."}
+                  ? t("chat.supportTabHintStaff")
+                  : t("chat.supportTabHintUser")}
               </Text>
             </View>
           }
@@ -152,13 +154,15 @@ export default function ChatsScreen() {
               />
               <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
                 {supportError ??
-                  (isSupportStaff ? "No support teammates found" : "No support available")}
+                  (isSupportStaff
+                    ? t("chat.noSupportTeammates")
+                    : t("chat.noSupportAvailable"))}
               </Text>
               {!supportError ? (
                 <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
                   {isSupportStaff
-                    ? "Other support team members will appear here."
-                    : "Our support team will appear here when available."}
+                    ? t("chat.supportTeammatesEmpty")
+                    : t("chat.supportTeamEmpty")}
                 </Text>
               ) : null}
             </View>

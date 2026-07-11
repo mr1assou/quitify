@@ -4,6 +4,7 @@ import { SaveCardButton } from "@/components/feature/craving/saved/SaveCardButto
 import { MotivationCardStack } from "@/components/feature/craving/motivation-cards/MotivationCardStack";
 import type { MotivationQuote } from "@/constants/craving/motivationCardTypes";
 import type { SavedCardsSection } from "@/constants/craving/savedCardsSections";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   quotes: readonly MotivationQuote[];
@@ -20,18 +21,20 @@ export function MotivationCardsSession({
   quotes,
   currentIndex,
   onIndexChange,
-  hintText = "Swipe for another message",
+  hintText,
   saveSection,
   canGoToIndex,
   onSwipeBlocked,
   displayTotal,
 }: Props) {
+  const { t } = useTranslation();
+  const resolvedHint = hintText ?? t("craving.swipeMessage");
   const currentQuote = quotes[currentIndex];
 
   return (
     <View className="flex-1 items-center justify-center px-6 pb-6 pt-2">
       <Text className="mb-4 text-xs text-muted-foreground dark:text-d-muted">
-        {hintText}
+        {resolvedHint}
       </Text>
 
       <MotivationCardStack

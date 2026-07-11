@@ -1,0 +1,23 @@
+export const paywall = {
+  title: "Invest in your health today.",
+  benefit1:
+    "Making a payment builds financial accountability and strengthens your chances of achieving your goal.",
+  benefit2: "The subscription costs little compared to the money you'll save over time.",
+  offerTitle: "Show your offer",
+  offerSubtitle: "Auto-renewing subscription, cancel anytime",
+  tryFree: "Try free",
+  continue: "Continue",
+  processing: "Processing...",
+  restore: "Restore purchases",
+  restoring: "Restoring...",
+  privacy: "Privacy policy",
+  terms: "Terms of service",
+  comparisonTitle: "Your money, your choice",
+  cigarettes: "Cigarettes",
+  quitifyVip: "Quitify VIP",
+  perMonth: "/month",
+  monthlyPlan: "Monthly plan",
+  yearlyPlan: "Yearly plan",
+  trialBadge: "3 days free trial",
+  recommended: "Recommended",
+} as const;

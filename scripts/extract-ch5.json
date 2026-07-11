@@ -1,0 +1,762 @@
+[
+  {
+    "path": "name",
+    "value": "Who you are now"
+  },
+  {
+    "path": "role",
+    "value": "Days 91-120: identity as a non-smoker, fully nicotine free, health wins, mentoring"
+  },
+  {
+    "path": "days[0].title",
+    "value": "Day 91: Welcome to chapter five"
+  },
+  {
+    "path": "days[0].intro",
+    "value": "This chapter is less about fighting cravings and more about settling into who you are now: a non smoker, not a smoker resisting."
+  },
+  {
+    "path": "days[0].tasks[0].title",
+    "value": "Finish this sentence"
+  },
+  {
+    "path": "days[0].tasks[0].text",
+    "value": "Write a few words completing this sentence: I am someone who."
+  },
+  {
+    "path": "days[0].tasks[1].title",
+    "value": "Set your chapter five goal"
+  },
+  {
+    "path": "days[0].tasks[1].text",
+    "value": "Pick one thing to focus on around identity and confidence this month."
+  },
+  {
+    "path": "days[1].title",
+    "value": "Day 92: Your health report card"
+  },
+  {
+    "path": "days[1].intro",
+    "value": "Three months in, your body has made real, measurable progress."
+  },
+  {
+    "path": "days[1].tasks[0].title",
+    "value": "Review your health gains"
+  },
+  {
+    "path": "days[1].tasks[0].text",
+    "value": "Open your health progress tab and review every marker that has improved since day one."
+  },
+  {
+    "path": "days[1].tasks[1].title",
+    "value": "The change that matters most"
+  },
+  {
+    "path": "days[1].tasks[1].text",
+    "value": "Write which physical change has meant the most to you personally."
+  },
+  {
+    "path": "days[2].title",
+    "value": "Day 93: No longer the exception"
+  },
+  {
+    "path": "days[2].intro",
+    "value": "Turning down a cigarette no longer needs to feel like an act of willpower. It is simply what you do."
+  },
+  {
+    "path": "days[2].tasks[0].title",
+    "value": "Rate how automatic no feels"
+  },
+  {
+    "path": "days[2].tasks[0].text",
+    "value": "Rate how automatic declining a cigarette feels now compared to month one."
+  },
+  {
+    "path": "days[2].tasks[1].title",
+    "value": "Catch the effortless moments"
+  },
+  {
+    "path": "days[2].tasks[1].text",
+    "value": "Notice any moment today where not smoking took zero conscious thought. Those moments are the finish line arriving early."
+  },
+  {
+    "path": "days[3].title",
+    "value": "Day 94: Thirteen weeks free"
+  },
+  {
+    "path": "days[3].intro",
+    "value": "A full quarter year and one extra week."
+  },
+  {
+    "path": "days[3].tasks[0].title",
+    "value": "Claim your thirteen week badge"
+  },
+  {
+    "path": "days[3].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[3].tasks[1].title",
+    "value": "Lozenge exit check"
+  },
+  {
+    "path": "days[3].tasks[1].text",
+    "value": "If you are still using nicotine lozenges, check your count: the aim is zero by around day one hundred. Swap remaining slots for peppermints or plain gum. If you already stopped, enjoy the fact that your only remaining habit is a mint habit."
+  },
+  {
+    "path": "days[4].title",
+    "value": "Day 95: Confidence in new situations"
+  },
+  {
+    "path": "days[4].intro",
+    "value": "By now you have likely faced something brand new, a job change, a new social circle, entirely smoke free from the start."
+  },
+  {
+    "path": "days[4].tasks[0].title",
+    "value": "A new situation handled clean"
+  },
+  {
+    "path": "days[4].tasks[0].text",
+    "value": "Write about any new situation you entered since quitting and handled without smoking."
+  },
+  {
+    "path": "days[4].tasks[1].title",
+    "value": "Proof, not luck"
+  },
+  {
+    "path": "days[4].tasks[1].text",
+    "value": "Navigating new situations smoke free is direct evidence of a stable new identity, not a coincidence."
+  },
+  {
+    "path": "days[5].title",
+    "value": "Day 96: Physical performance check"
+  },
+  {
+    "path": "days[5].intro",
+    "value": "Stamina and recovery keep improving well past the three month mark."
+  },
+  {
+    "path": "days[5].tasks[0].title",
+    "value": "Push a little"
+  },
+  {
+    "path": "days[5].tasks[0].text",
+    "value": "Do a slightly more demanding physical activity than usual today and notice how your body responds."
+  },
+  {
+    "path": "days[5].tasks[1].title",
+    "value": "Rate your stamina"
+  },
+  {
+    "path": "days[5].tasks[1].text",
+    "value": "Rate your overall stamina compared to when you smoked."
+  },
+  {
+    "path": "days[6].title",
+    "value": "Day 97: Skin and appearance"
+  },
+  {
+    "path": "days[6].intro",
+    "value": "Smoking affected more than lungs. Skin and overall appearance recover too."
+  },
+  {
+    "path": "days[6].tasks[0].title",
+    "value": "The appearance dividend"
+  },
+  {
+    "path": "days[6].tasks[0].text",
+    "value": "Better blood flow and oxygen delivery after quitting can improve skin tone and slow visible aging compared to continued smoking."
+  },
+  {
+    "path": "days[6].tasks[1].title",
+    "value": "Any comments yet"
+  },
+  {
+    "path": "days[6].tasks[1].text",
+    "value": "Write whether anyone has commented on your appearance since you quit, or what you have noticed yourself."
+  },
+  {
+    "path": "days[7].title",
+    "value": "Day 98: Fourteen weeks free"
+  },
+  {
+    "path": "days[7].intro",
+    "value": "Each week adds more proof that this is simply how you live now."
+  },
+  {
+    "path": "days[7].tasks[0].title",
+    "value": "Claim your fourteen week badge"
+  },
+  {
+    "path": "days[7].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[7].tasks[1].title",
+    "value": "Share a confidence win"
+  },
+  {
+    "path": "days[7].tasks[1].text",
+    "value": "Post about a recent moment where you felt fully confident as a non smoker."
+  },
+  {
+    "path": "days[8].title",
+    "value": "Day 99: Mentoring others"
+  },
+  {
+    "path": "days[8].intro",
+    "value": "You now have real, specific, tested advice that a day-one quitter needs."
+  },
+  {
+    "path": "days[8].tasks[0].title",
+    "value": "Give a beginner one real tip"
+  },
+  {
+    "path": "days[8].tasks[0].text",
+    "value": "Find someone in chapter one or two and share one specific tactic that worked for you: your best oral kit item, your lozenge timing, your reframe."
+  },
+  {
+    "path": "days[8].tasks[1].title",
+    "value": "Your top three tips"
+  },
+  {
+    "path": "days[8].tasks[1].text",
+    "value": "Write the three pieces of advice you would give anyone starting day one today."
+  },
+  {
+    "path": "days[9].title",
+    "value": "Day 100: One hundred days"
+  },
+  {
+    "path": "days[9].intro",
+    "value": "One hundred days without a cigarette. The number tells its own story about who you have become."
+  },
+  {
+    "path": "days[9].tasks[0].title",
+    "value": "Claim your one hundred day badge"
+  },
+  {
+    "path": "days[9].tasks[0].text",
+    "value": "Open your badges tab and collect this major milestone."
+  },
+  {
+    "path": "days[9].tasks[1].title",
+    "value": "The full hundred day picture"
+  },
+  {
+    "path": "days[9].tasks[1].text",
+    "value": "Open your stats and look across streak, money saved, cigarettes avoided and health gains."
+  },
+  {
+    "path": "days[9].tasks[2].title",
+    "value": "One hundred day reflection"
+  },
+  {
+    "path": "days[9].tasks[2].text",
+    "value": "Write a few sentences on what one hundred days smoke free means to you."
+  },
+  {
+    "path": "days[9].tasks[3].title",
+    "value": "Celebrate publicly"
+  },
+  {
+    "path": "days[9].tasks[3].text",
+    "value": "Share your one hundred day milestone with the community."
+  },
+  {
+    "path": "days[10].title",
+    "value": "Day 101: Past the headline number"
+  },
+  {
+    "path": "days[10].intro",
+    "value": "The big round number is behind you. The work now is quiet consistency."
+  },
+  {
+    "path": "days[10].tasks[0].title",
+    "value": "Set a new personal target"
+  },
+  {
+    "path": "days[10].tasks[0].text",
+    "value": "Pick a new milestone to aim for, like a specific date or event."
+  },
+  {
+    "path": "days[10].tasks[1].title",
+    "value": "Consistency beats moments"
+  },
+  {
+    "path": "days[10].tasks[1].text",
+    "value": "Long term success comes from many ordinary days handled well, not from any single milestone."
+  },
+  {
+    "path": "days[11].title",
+    "value": "Day 102: Stress resilience now"
+  },
+  {
+    "path": "days[11].intro",
+    "value": "Compare how you handle stress today to day five. That gap is the real trophy."
+  },
+  {
+    "path": "days[11].tasks[0].title",
+    "value": "Compare stress responses"
+  },
+  {
+    "path": "days[11].tasks[0].text",
+    "value": "Write how your reaction to a stressful moment today compares to early in your quit."
+  },
+  {
+    "path": "days[11].tasks[1].title",
+    "value": "You did not lose a crutch"
+  },
+  {
+    "path": "days[11].tasks[1].text",
+    "value": "You did not give up a stress reliever; you removed a stress generator. The background anxiety of always needing the next cigarette is gone, which is why hard days now start from a calmer floor."
+  },
+  {
+    "path": "days[12].title",
+    "value": "Day 103: Fifteen weeks free"
+  },
+  {
+    "path": "days[12].intro",
+    "value": "Over a third of the way to six months."
+  },
+  {
+    "path": "days[12].tasks[0].title",
+    "value": "Claim your fifteen week badge"
+  },
+  {
+    "path": "days[12].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[12].tasks[1].title",
+    "value": "Fifteen week stats"
+  },
+  {
+    "path": "days[12].tasks[1].text",
+    "value": "Open your stats and review your overall progress."
+  },
+  {
+    "path": "days[13].title",
+    "value": "Day 104: Your new normal day"
+  },
+  {
+    "path": "days[13].intro",
+    "value": "Picture an average day now versus an average day when you smoked."
+  },
+  {
+    "path": "days[13].tasks[0].title",
+    "value": "Describe a normal day now"
+  },
+  {
+    "path": "days[13].tasks[0].text",
+    "value": "Write what a typical day looks like for you now, without any reference to smoking."
+  },
+  {
+    "path": "days[13].tasks[1].title",
+    "value": "Notice the absence"
+  },
+  {
+    "path": "days[13].tasks[1].text",
+    "value": "Your description probably did not mention cigarettes at all. That absence is the real win."
+  },
+  {
+    "path": "days[14].title",
+    "value": "Day 105: Comfortable in hard rooms"
+  },
+  {
+    "path": "days[14].intro",
+    "value": "A room full of smokers no longer has to feel like a test of strength."
+  },
+  {
+    "path": "days[14].tasks[0].title",
+    "value": "Rate your comfort around smokers"
+  },
+  {
+    "path": "days[14].tasks[0].text",
+    "value": "Rate how comfortable you feel around people smoking now versus month one."
+  },
+  {
+    "path": "days[14].tasks[1].title",
+    "value": "Watch with clear eyes"
+  },
+  {
+    "path": "days[14].tasks[1].text",
+    "value": "If you are around smokers today, watch one of them for a moment. Notice the automatic, joyless mechanics of it. That was never pleasure you were seeing; it was maintenance of an addiction. Feel free, because you are."
+  },
+  {
+    "path": "days[15].title",
+    "value": "Day 106: What smoking really cost"
+  },
+  {
+    "path": "days[15].intro",
+    "value": "Beyond money: time, smell, breathlessness, worry, the constant planning around the next one."
+  },
+  {
+    "path": "days[15].tasks[0].title",
+    "value": "List the non-money costs"
+  },
+  {
+    "path": "days[15].tasks[0].text",
+    "value": "Write three things smoking cost you that were not money: time, smell, worry, or standing outside in the cold."
+  },
+  {
+    "path": "days[15].tasks[1].title",
+    "value": "See the money anyway"
+  },
+  {
+    "path": "days[15].tasks[1].text",
+    "value": "Open your money saved tab and look at the full total since day one."
+  },
+  {
+    "path": "days[16].title",
+    "value": "Day 107: Sixteen weeks free"
+  },
+  {
+    "path": "days[16].intro",
+    "value": "Four full months of consistency."
+  },
+  {
+    "path": "days[16].tasks[0].title",
+    "value": "Claim your sixteen week badge"
+  },
+  {
+    "path": "days[16].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[16].tasks[1].title",
+    "value": "Share your four month update"
+  },
+  {
+    "path": "days[16].tasks[1].text",
+    "value": "Post a short update about reaching four months."
+  },
+  {
+    "path": "days[17].title",
+    "value": "Day 108: Reframing your past"
+  },
+  {
+    "path": "days[17].intro",
+    "value": "How you talk about your smoking past shapes how solid your present feels."
+  },
+  {
+    "path": "days[17].tasks[0].title",
+    "value": "Your past in one paragraph"
+  },
+  {
+    "path": "days[17].tasks[0].text",
+    "value": "Write a short paragraph about your smoking past as something that happened, not something that defines you."
+  },
+  {
+    "path": "days[17].tasks[1].title",
+    "value": "Rate any leftover shame"
+  },
+  {
+    "path": "days[17].tasks[1].text",
+    "value": "Rate how much shame or judgment you still feel toward your past smoking self. The goal is compassion; you were caught in a well-designed trap, and you got out."
+  },
+  {
+    "path": "days[18].title",
+    "value": "Day 109: The long view"
+  },
+  {
+    "path": "days[18].intro",
+    "value": "Occasionally picture yourself a year or more from now, still smoke free, because that is the trajectory you are on."
+  },
+  {
+    "path": "days[18].tasks[0].title",
+    "value": "Picture one year from now"
+  },
+  {
+    "path": "days[18].tasks[0].text",
+    "value": "Write a few sentences imagining yourself one year from today, still smoke free."
+  },
+  {
+    "path": "days[18].tasks[1].title",
+    "value": "Set a one year intention"
+  },
+  {
+    "path": "days[18].tasks[1].text",
+    "value": "Write one thing you want to be true about your life a year from now because you quit."
+  },
+  {
+    "path": "days[19].title",
+    "value": "Day 110: Energy and mood"
+  },
+  {
+    "path": "days[19].intro",
+    "value": "Steadier energy and mood are common by this stage compared to the rise and fall of regular nicotine use."
+  },
+  {
+    "path": "days[19].tasks[0].title",
+    "value": "The mood stability benefit"
+  },
+  {
+    "path": "days[19].tasks[0].text",
+    "value": "Without nicotine levels rising and crashing all day, many ex smokers experience steadier mood and energy rather than the dips smoking caused between cigarettes."
+  },
+  {
+    "path": "days[19].tasks[1].title",
+    "value": "Rate your mood stability"
+  },
+  {
+    "path": "days[19].tasks[1].text",
+    "value": "Rate how stable your mood has felt this week."
+  },
+  {
+    "path": "days[20].title",
+    "value": "Day 111: Seventeen weeks free"
+  },
+  {
+    "path": "days[20].intro",
+    "value": "Closing in on the second half of your guided plan."
+  },
+  {
+    "path": "days[20].tasks[0].title",
+    "value": "Claim your seventeen week badge"
+  },
+  {
+    "path": "days[20].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[20].tasks[1].title",
+    "value": "Seventeen week stats"
+  },
+  {
+    "path": "days[20].tasks[1].text",
+    "value": "Open your stats and review your full progress so far."
+  },
+  {
+    "path": "days[21].title",
+    "value": "Day 112: Teaching what you know"
+  },
+  {
+    "path": "days[21].intro",
+    "value": "Explaining your process to someone else reveals how much you actually understand now."
+  },
+  {
+    "path": "days[21].tasks[0].title",
+    "value": "Answer a community question"
+  },
+  {
+    "path": "days[21].tasks[0].text",
+    "value": "Find a question from a newer member and answer it with something specific that worked for you."
+  },
+  {
+    "path": "days[21].tasks[1].title",
+    "value": "Write your craving playbook"
+  },
+  {
+    "path": "days[21].tasks[1].text",
+    "value": "Write out, as if teaching someone, exactly how you get through a craving now, from first flicker to gone."
+  },
+  {
+    "path": "days[22].title",
+    "value": "Day 113: Checking old triggers"
+  },
+  {
+    "path": "days[22].intro",
+    "value": "Revisit the trigger list you made in chapter one and measure how much has changed."
+  },
+  {
+    "path": "days[22].tasks[0].title",
+    "value": "Re-score your original triggers"
+  },
+  {
+    "path": "days[22].tasks[0].text",
+    "value": "Think back to the triggers you listed in chapter one and write how much power each still has over you now."
+  },
+  {
+    "path": "days[22].tasks[1].title",
+    "value": "Rate the strongest survivor"
+  },
+  {
+    "path": "days[22].tasks[1].text",
+    "value": "Rate whichever trigger still feels strongest today."
+  },
+  {
+    "path": "days[23].title",
+    "value": "Day 114: Eighteen weeks free"
+  },
+  {
+    "path": "days[23].intro",
+    "value": "Almost four and a half months in."
+  },
+  {
+    "path": "days[23].tasks[0].title",
+    "value": "Claim your eighteen week badge"
+  },
+  {
+    "path": "days[23].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[23].tasks[1].title",
+    "value": "Eighteen week numbers"
+  },
+  {
+    "path": "days[23].tasks[1].text",
+    "value": "Open your stats and review streak, money and health progress."
+  },
+  {
+    "path": "days[24].title",
+    "value": "Day 115: Non smoker, fully"
+  },
+  {
+    "path": "days[24].intro",
+    "value": "Today is simply about sitting with the plain fact: you are a non smoker now, and if you followed the taper, a completely nicotine free one."
+  },
+  {
+    "path": "days[24].tasks[0].title",
+    "value": "Write the plain fact"
+  },
+  {
+    "path": "days[24].tasks[0].text",
+    "value": "Write one simple sentence stating you are a non smoker, no qualifiers, no conditions."
+  },
+  {
+    "path": "days[24].tasks[1].title",
+    "value": "Rate how true it feels"
+  },
+  {
+    "path": "days[24].tasks[1].text",
+    "value": "Rate how true that sentence feels right now."
+  },
+  {
+    "path": "days[25].title",
+    "value": "Day 116: Health momentum"
+  },
+  {
+    "path": "days[25].intro",
+    "value": "Health improvements keep compounding well beyond the early months."
+  },
+  {
+    "path": "days[25].tasks[0].title",
+    "value": "The long term momentum"
+  },
+  {
+    "path": "days[25].tasks[0].text",
+    "value": "Many benefits keep building for months and years, with risk reduction for several serious conditions growing the longer you stay smoke free."
+  },
+  {
+    "path": "days[25].tasks[1].title",
+    "value": "Invest in future you"
+  },
+  {
+    "path": "days[25].tasks[1].text",
+    "value": "Do one thing today that supports long term health: a walk, water, or a good meal."
+  },
+  {
+    "path": "days[26].title",
+    "value": "Day 117: Nineteen weeks free"
+  },
+  {
+    "path": "days[26].intro",
+    "value": "One week from chapter six."
+  },
+  {
+    "path": "days[26].tasks[0].title",
+    "value": "Claim your nineteen week badge"
+  },
+  {
+    "path": "days[26].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[26].tasks[1].title",
+    "value": "Rate chapter five overall"
+  },
+  {
+    "path": "days[26].tasks[1].text",
+    "value": "Rate how chapter five has felt for you."
+  },
+  {
+    "path": "days[27].title",
+    "value": "Day 118: Preparing for hard days"
+  },
+  {
+    "path": "days[27].intro",
+    "value": "Chapter six prepares you for genuinely hard stretches: stress, slips, tough seasons. Today is the bridge."
+  },
+  {
+    "path": "days[27].tasks[0].title",
+    "value": "Preview chapter six"
+  },
+  {
+    "path": "days[27].tasks[0].text",
+    "value": "The next chapter covers grief, major stress, holidays, winter, and what to do if a slip ever happens."
+  },
+  {
+    "path": "days[27].tasks[1].title",
+    "value": "Your hardest season"
+  },
+  {
+    "path": "days[27].tasks[1].text",
+    "value": "Write which time of year or type of situation you expect to be hardest going forward."
+  },
+  {
+    "path": "days[28].title",
+    "value": "Day 119: One day before chapter six"
+  },
+  {
+    "path": "days[28].intro",
+    "value": "Tomorrow closes a chapter about identity and opens one about real world resilience."
+  },
+  {
+    "path": "days[28].tasks[0].title",
+    "value": "Reflect on chapter five"
+  },
+  {
+    "path": "days[28].tasks[0].text",
+    "value": "Write a few sentences about how your sense of identity shifted during this chapter."
+  },
+  {
+    "path": "days[28].tasks[1].title",
+    "value": "Rate your readiness"
+  },
+  {
+    "path": "days[28].tasks[1].text",
+    "value": "Rate how prepared you feel for handling genuinely hard days ahead."
+  },
+  {
+    "path": "days[29].title",
+    "value": "Day 120: Four months and a settled identity"
+  },
+  {
+    "path": "days[29].intro",
+    "value": "One hundred and twenty days. You are no longer someone trying to quit smoking; you are someone who quit. Chapter six prepares you for the days that test that the most."
+  },
+  {
+    "path": "days[29].tasks[0].title",
+    "value": "Claim your four month badge"
+  },
+  {
+    "path": "days[29].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[29].tasks[1].title",
+    "value": "Four month transformation"
+  },
+  {
+    "path": "days[29].tasks[1].text",
+    "value": "Open your full stats and health overview to see the journey from day one to day one hundred twenty."
+  },
+  {
+    "path": "days[29].tasks[2].title",
+    "value": "Chapter five summary"
+  },
+  {
+    "path": "days[29].tasks[2].text",
+    "value": "Write a short summary of how you see yourself differently after this chapter."
+  },
+  {
+    "path": "days[29].tasks[3].title",
+    "value": "Look ahead to chapter six"
+  },
+  {
+    "path": "days[29].tasks[3].text",
+    "value": "Read the chapter six intro and set one intention for handling hard days ahead."
+  }
+]

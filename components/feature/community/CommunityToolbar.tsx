@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import {
@@ -7,6 +7,7 @@ import {
   isDefaultCommunityFeedFilter,
 } from "@/constants/community/communityFeedFilter";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 import { safeRouter } from "@/utils/app/safeRouter";
@@ -27,22 +28,26 @@ type Props = {
 
 export function CommunityToolbar({ filter, onFilterChange }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { requirePremium } = usePremiumGate();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterActive = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
 
-  const actions: ToolbarAction[] = [
-    {
-      icon: "add-outline",
-      label: "Post",
-      onPress: () => safeRouter.push("/post-composer"),
-    },
-    {
-      icon: "search-outline",
-      label: "Search",
-      onPress: () => safeRouter.push("/community-search"),
-    },
-  ];
+  const actions: ToolbarAction[] = useMemo(
+    () => [
+      {
+        icon: "add-outline",
+        label: t("common.post"),
+        onPress: () => safeRouter.push("/post-composer"),
+      },
+      {
+        icon: "search-outline",
+        label: t("common.search"),
+        onPress: () => safeRouter.push("/community-search"),
+      },
+    ],
+    [t],
+  );
 
   return (
     <>
@@ -53,7 +58,7 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
             setFilterOpen(true);
           }}
           accessibilityRole="button"
-          accessibilityLabel="Filter posts"
+          accessibilityLabel={t("community.filterPosts")}
           className="h-10 max-w-[52%] flex-row items-center rounded-full bg-section px-3 dark:bg-d-surface"
         >
           <Ionicons

@@ -7,6 +7,7 @@ import Svg, { Path } from "react-native-svg";
 
 import { MissionMapCurrentNode } from "@/components/feature/missions/MissionMapCurrentNode";
 import { missionPlanLabel } from "@/constants/progress/plan";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useTheme } from "@/context/ThemeContext";
 import type { MissionMapDay } from "@/hooks/progress/useMissionPlan";
 
@@ -55,6 +56,7 @@ export function MissionPlanMap({
   onSelectDay,
   onLockedDayPress,
 }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [width, setWidth] = useState(0);
   const height = days.length * ROW + 24;
@@ -114,7 +116,7 @@ export function MissionPlanMap({
             onSelectDay(day.day);
           };
 
-          const planLabel = missionPlanLabel(day.day);
+          const planLabel = missionPlanLabel(day.day, t);
 
           if (isCurrent) {
             return (

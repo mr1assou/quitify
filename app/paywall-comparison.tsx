@@ -15,6 +15,7 @@ import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useApp } from "@/context/AppContext";
 import { computeMonthlyCigaretteSpend } from "@/utils/paywall/monthlyCigaretteSpend";
 import { safeRouter } from "@/utils/app/safeRouter";
@@ -66,6 +67,7 @@ function ComparisonBox({
 }
 
 export default function PaywallComparison() {
+  const { t } = useTranslation();
   const { state } = useApp();
   const { plans } = usePaywallPlans();
   const insets = useSafeAreaInsets();
@@ -129,29 +131,29 @@ export default function PaywallComparison() {
             showsVerticalScrollIndicator={false}
           >
             <Text className="text-3xl font-extrabold leading-tight text-d-text">
-              Your money, your choice
+              {t("paywall.comparisonTitle")}
             </Text>
             <Text className="mt-2 text-sm leading-5 text-d-muted">
-              What you spend on cigarettes each month vs Quitify.
+              {t("paywall.offerSubtitle")}
             </Text>
 
             <View className="mt-6 flex-row gap-3">
               <ComparisonBox
                 icon="cash"
-                title="Cigarettes"
+                title={t("paywall.cigarettes")}
                 amount={cigaretteDisplay}
-                period="/month"
+                period={t("paywall.perMonth")}
               />
               <ComparisonBox
                 logoSource={QUITIFY_LOGO}
-                title="Quitify VIP"
+                title={t("paywall.quitifyVip")}
                 amount={quitifyDisplay}
-                period="/month"
+                period={t("paywall.perMonth")}
               />
             </View>
 
             <View className="mt-5">
-              <Button label="Continue" size="md" fullWidth onPress={dismiss} />
+              <Button label={t("paywall.continue")} size="md" fullWidth onPress={dismiss} />
             </View>
           </ScrollView>
       </View>

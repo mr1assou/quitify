@@ -1,0 +1,522 @@
+[
+  {
+    "path": "name",
+    "value": "Survival and setup"
+  },
+  {
+    "path": "role",
+    "value": "First 2 weeks: set up NRT and your oral kit, ride out peak withdrawal, plant the core mindset"
+  },
+  {
+    "path": "days[0].title",
+    "value": "Day 1: You are not giving anything up"
+  },
+  {
+    "path": "days[0].intro",
+    "value": "Today you quit, and here is the most important idea of the whole plan: you are not sacrificing a pleasure, you are escaping a trap. Cigarettes never gave you anything, they only briefly relieved the discomfort the previous cigarette created. You do not need willpower for six months right now, just the next ten minutes."
+  },
+  {
+    "path": "days[0].tasks[0].title",
+    "value": "Remove every cigarette and lighter"
+  },
+  {
+    "path": "days[0].tasks[0].text",
+    "value": "Go through your home, car, bag and desk and throw away every cigarette, lighter and ashtray. Do not keep one for emergencies. An escaped prisoner does not keep a cell key in his pocket."
+  },
+  {
+    "path": "days[0].tasks[1].title",
+    "value": "Start your NRT if you chose it"
+  },
+  {
+    "path": "days[0].tasks[1].text",
+    "value": "If you are using nicotine replacement, apply your first patch this morning on clean, dry, hairless skin like your upper arm. If you smoked ten or more a day, the standard starting patch is the highest strength, usually 21 mg. Keep lozenges or gum nearby for breakthrough cravings. Confirm your dose with a pharmacist if you have not yet."
+  },
+  {
+    "path": "days[0].tasks[2].title",
+    "value": "Build your oral rescue kit"
+  },
+  {
+    "path": "days[0].tasks[2].text",
+    "value": "Fill a small tin or pocket with peppermints, sugar-free gum, toothpicks, cinnamon sticks or sunflower seeds, and keep a water bottle with you. Your mouth and hands will look for a job today; this kit is the new job."
+  },
+  {
+    "path": "days[0].tasks[3].title",
+    "value": "Read the core idea"
+  },
+  {
+    "path": "days[0].tasks[3].text",
+    "value": "Smoking never relaxed you and never gave you real pleasure. Each cigarette only calmed the withdrawal the one before it caused, then restarted the cycle. Non smokers do not suffer without cigarettes; only smokers do. You are not giving up a friend today, you are dropping a burden."
+  },
+  {
+    "path": "days[0].tasks[4].title",
+    "value": "Learn the craving reset now"
+  },
+  {
+    "path": "days[0].tasks[4].text",
+    "value": "Open the craving tool once now, before you need it, so it takes zero thought when the first real craving hits."
+  },
+  {
+    "path": "days[1].title",
+    "value": "Day 2: Your body is already healing"
+  },
+  {
+    "path": "days[1].intro",
+    "value": "Roughness today is not your body failing, it is your body repairing. The discomfort you feel is the addiction dying, and that is worth celebrating rather than mourning."
+  },
+  {
+    "path": "days[1].tasks[0].title",
+    "value": "Know what is happening inside"
+  },
+  {
+    "path": "days[1].tasks[0].text",
+    "value": "Your heart rate and blood pressure are already moving back toward normal, carbon monoxide has largely cleared from your blood, and oxygen is reaching your muscles and organs better than two days ago."
+  },
+  {
+    "path": "days[1].tasks[1].title",
+    "value": "Learn correct lozenge and gum technique"
+  },
+  {
+    "path": "days[1].tasks[1].text",
+    "value": "Do not chew nicotine gum like normal gum. Chew slowly until you feel a tingle, then park it against your cheek until the tingle fades, and repeat for about thirty minutes. Let lozenges dissolve slowly without chewing. Avoid food and drinks, especially coffee or juice, for fifteen minutes before, since acidic drinks block absorption."
+  },
+  {
+    "path": "days[1].tasks[2].title",
+    "value": "Tell one person you trust"
+  },
+  {
+    "path": "days[1].tasks[2].text",
+    "value": "Message or call one person and tell them you quit yesterday. Saying it out loud makes it real and recruits your first supporter."
+  },
+  {
+    "path": "days[1].tasks[3].title",
+    "value": "Notice the illusion of pleasure"
+  },
+  {
+    "path": "days[1].tasks[3].text",
+    "value": "Think back honestly: were your cigarettes actually enjoyable, or were most of them automatic? The first one after a gap only felt good because it ended the withdrawal itch. That is not pleasure, that is a mugger giving back your wallet."
+  },
+  {
+    "path": "days[2].title",
+    "value": "Day 3: Peak day, meet the little monster"
+  },
+  {
+    "path": "days[2].intro",
+    "value": "Withdrawal is usually strongest around day three. Picture the physical craving as a tiny nicotine monster inside you, weak and starving. Every craving you do not feed is the monster getting smaller. Today it is screaming loudest because it is dying fastest."
+  },
+  {
+    "path": "days[2].tasks[0].title",
+    "value": "Reframe every craving today"
+  },
+  {
+    "path": "days[2].tasks[0].text",
+    "value": "Each time a craving hits today, say to yourself: that is the monster starving, and I am winning right now. A craving is not a signal that something is wrong, it is direct proof the addiction is dying."
+  },
+  {
+    "path": "days[2].tasks[1].title",
+    "value": "Ride one craving with the tool"
+  },
+  {
+    "path": "days[2].tasks[1].text",
+    "value": "Next time a craving hits, open the craving tool instead of fighting it in your head, and let it guide you through the wave."
+  },
+  {
+    "path": "days[2].tasks[2].title",
+    "value": "Use your rescue NRT properly"
+  },
+  {
+    "path": "days[2].tasks[2].text",
+    "value": "If a craving is too sharp to ride out, use a lozenge or piece of gum on top of your patch. Combining a patch with a fast-acting form is a standard, pharmacist-approved approach for tough moments in the early weeks."
+  },
+  {
+    "path": "days[2].tasks[3].title",
+    "value": "Log today's hardest moment"
+  },
+  {
+    "path": "days[2].tasks[3].text",
+    "value": "In one or two sentences, note the hardest moment of the day and what you were doing right before it."
+  },
+  {
+    "path": "days[3].title",
+    "value": "Day 4: Naming your triggers"
+  },
+  {
+    "path": "days[3].intro",
+    "value": "Cravings rarely come out of nowhere. They ride in on places, feelings and routines. Today you put names on yours so they stop ambushing you."
+  },
+  {
+    "path": "days[3].tasks[0].title",
+    "value": "List your top three triggers"
+  },
+  {
+    "path": "days[3].tasks[0].text",
+    "value": "Write the three moments that pull hardest right now, for example morning coffee, after meals, or stress at work."
+  },
+  {
+    "path": "days[3].tasks[1].title",
+    "value": "Break one trigger physically"
+  },
+  {
+    "path": "days[3].tasks[1].text",
+    "value": "Pick one trigger and change something physical about it today: drink your coffee in a different spot, sit in a different chair, take a different route on your break."
+  },
+  {
+    "path": "days[3].tasks[2].title",
+    "value": "Time a lozenge before a known trigger"
+  },
+  {
+    "path": "days[3].tasks[2].text",
+    "value": "If you know a trigger moment is coming, like after lunch, start a lozenge ten minutes beforehand so the craving arrives to find the door already closed."
+  },
+  {
+    "path": "days[3].tasks[3].title",
+    "value": "See your money saved so far"
+  },
+  {
+    "path": "days[3].tasks[3].text",
+    "value": "Open your stats tab and look at the money already kept in your pocket since day one."
+  },
+  {
+    "path": "days[4].title",
+    "value": "Day 5: Your hands and mouth need a job"
+  },
+  {
+    "path": "days[4].intro",
+    "value": "A big part of the urge is physical ritual: something between your fingers, something at your lips. Today your oral kit earns its place."
+  },
+  {
+    "path": "days[4].tasks[0].title",
+    "value": "Deploy the oral kit all day"
+  },
+  {
+    "path": "days[4].tasks[0].text",
+    "value": "Carry your kit everywhere today. Reach for a peppermint, toothpick or cinnamon stick every single time your hand starts looking for a pack. Do it even for mild urges; you are retraining the reflex, not just surviving it."
+  },
+  {
+    "path": "days[4].tasks[1].title",
+    "value": "Play instead of smoking"
+  },
+  {
+    "path": "days[4].tasks[1].text",
+    "value": "When you feel restless, open a mini game for two minutes instead of stepping outside. Restless hands love a game."
+  },
+  {
+    "path": "days[4].tasks[2].title",
+    "value": "Rate today's cravings"
+  },
+  {
+    "path": "days[4].tasks[2].text",
+    "value": "Mark how strong cravings felt today from one to five so you can watch the trend fall."
+  },
+  {
+    "path": "days[5].title",
+    "value": "Day 6: Sleep, dreams and patches"
+  },
+  {
+    "path": "days[5].intro",
+    "value": "Withdrawal and NRT can both stir up your sleep for a little while. Knowing this in advance makes it boring instead of scary."
+  },
+  {
+    "path": "days[5].tasks[0].title",
+    "value": "Handle vivid dreams the easy way"
+  },
+  {
+    "path": "days[5].tasks[0].text",
+    "value": "Nicotine patches worn overnight can cause vivid dreams or restless sleep. If that is happening, it is fine to remove the patch before bed and apply a fresh one in the morning. Also rotate the patch to a different skin spot each day to avoid irritation."
+  },
+  {
+    "path": "days[5].tasks[1].title",
+    "value": "Wind down with sound"
+  },
+  {
+    "path": "days[5].tasks[1].text",
+    "value": "Play one relaxing sound from the toolkit for five minutes before you try to sleep tonight."
+  },
+  {
+    "path": "days[5].tasks[2].title",
+    "value": "Note your energy"
+  },
+  {
+    "path": "days[5].tasks[2].text",
+    "value": "Write one line about how your energy today compares to day one."
+  },
+  {
+    "path": "days[6].title",
+    "value": "Day 7: One week free"
+  },
+  {
+    "path": "days[6].intro",
+    "value": "Seven days. The little monster inside has been starving for a full week and it is already noticeably weaker. Your body has begun repairs you cannot even feel yet."
+  },
+  {
+    "path": "days[6].tasks[0].title",
+    "value": "Claim your one week badge"
+  },
+  {
+    "path": "days[6].tasks[0].text",
+    "value": "Open your badges tab and collect the one week milestone. You earned this one the hard way."
+  },
+  {
+    "path": "days[6].tasks[1].title",
+    "value": "See what week one did"
+  },
+  {
+    "path": "days[6].tasks[1].text",
+    "value": "Your sense of taste and smell are starting to sharpen, and your lungs have begun clearing out mucus and debris built up from smoking."
+  },
+  {
+    "path": "days[6].tasks[2].title",
+    "value": "Check for the feeling of sacrifice"
+  },
+  {
+    "path": "days[6].tasks[2].text",
+    "value": "Ask yourself honestly: have you been feeling deprived this week? If yes, remind yourself what you actually lost: a cough, a smell, an expense, and a leash. Deprivation is a story the addiction tells; nothing of value is missing."
+  },
+  {
+    "path": "days[6].tasks[3].title",
+    "value": "Write to day one you"
+  },
+  {
+    "path": "days[6].tasks[3].text",
+    "value": "Write two sentences to yourself on day one, telling them how week one actually went."
+  },
+  {
+    "path": "days[7].title",
+    "value": "Day 8: The two monsters"
+  },
+  {
+    "path": "days[7].intro",
+    "value": "There are two enemies in quitting. The little monster is the physical craving, and it dies within weeks. The big monster is the brainwashing: years of believing cigarettes relax you, reward you, or complete a coffee. The big monster only dies when you stop believing it."
+  },
+  {
+    "path": "days[7].tasks[0].title",
+    "value": "Spot the big monster talking"
+  },
+  {
+    "path": "days[7].tasks[0].text",
+    "value": "Today, catch one thought that glorifies smoking, like a cigarette would fix this stress, and answer it out loud or in your head: no, a cigarette would only fix the withdrawal a cigarette caused. Non smokers handle this same stress every day without one."
+  },
+  {
+    "path": "days[7].tasks[1].title",
+    "value": "Know the week two trap"
+  },
+  {
+    "path": "days[7].tasks[1].text",
+    "value": "Many relapses happen in week two, often after one drink or one bad moment, on the thought that a single cigarette will not matter. One cigarette refeeds the little monster and restarts the entire cycle."
+  },
+  {
+    "path": "days[7].tasks[2].title",
+    "value": "Plan your next risky moment"
+  },
+  {
+    "path": "days[7].tasks[2].text",
+    "value": "Name one event this week where you might be tempted, and decide right now exactly what you will do instead, including which kit item or NRT you will use."
+  },
+  {
+    "path": "days[7].tasks[3].title",
+    "value": "Check your supplies"
+  },
+  {
+    "path": "days[7].tasks[3].text",
+    "value": "Count your remaining patches and lozenges. Running out mid-craving is an avoidable emergency, so restock before you are below a three day supply."
+  },
+  {
+    "path": "days[8].title",
+    "value": "Day 9: Replace the ritual"
+  },
+  {
+    "path": "days[8].intro",
+    "value": "Smoking was a pause button in your day: a break, a breather, an excuse to step outside. You still deserve the pause. You just do not need the poison delivery device attached to it."
+  },
+  {
+    "path": "days[8].tasks[0].title",
+    "value": "Design your new break ritual"
+  },
+  {
+    "path": "days[8].tasks[0].text",
+    "value": "Pick one short activity to replace the old smoke break: a two minute walk, stretching, or stepping outside for actual fresh air with a peppermint instead of a cigarette."
+  },
+  {
+    "path": "days[8].tasks[1].title",
+    "value": "Interrogate what you miss"
+  },
+  {
+    "path": "days[8].tasks[1].text",
+    "value": "Write one honest sentence about what you miss most, then look at it again: is it the break, the hand ritual, the company outside? Every one of those is still available to you. The only thing gone is the nicotine, and nicotine was the problem, not the pleasure."
+  },
+  {
+    "path": "days[8].tasks[2].title",
+    "value": "Read one community story"
+  },
+  {
+    "path": "days[8].tasks[2].text",
+    "value": "Open the community tab and read one story from someone further along than you."
+  },
+  {
+    "path": "days[9].title",
+    "value": "Day 10: Double digits"
+  },
+  {
+    "path": "days[9].intro",
+    "value": "Ten days. The worst of the physical withdrawal is mostly behind you. What remains now is habit and belief, which is exactly what this plan keeps dismantling."
+  },
+  {
+    "path": "days[9].tasks[0].title",
+    "value": "Know what is left to beat"
+  },
+  {
+    "path": "days[9].tasks[0].text",
+    "value": "Most physical nicotine withdrawal fades within one to two weeks. From here, cravings are mostly triggered memories, and every one you ignore gets weaker."
+  },
+  {
+    "path": "days[9].tasks[1].title",
+    "value": "Beat your craving game score"
+  },
+  {
+    "path": "days[9].tasks[1].text",
+    "value": "Open a mini game and try to beat your previous score during a free moment today."
+  },
+  {
+    "path": "days[9].tasks[2].title",
+    "value": "Spend some victory money"
+  },
+  {
+    "path": "days[9].tasks[2].text",
+    "value": "Look at your money saved and spend a small piece of it on something that has nothing to do with smoking."
+  },
+  {
+    "path": "days[10].title",
+    "value": "Day 11: Boredom is a trigger too"
+  },
+  {
+    "path": "days[10].intro",
+    "value": "Stress gets the blame, but plain boredom causes just as many cravings. An idle brain replays old habits."
+  },
+  {
+    "path": "days[10].tasks[0].title",
+    "value": "Spot your boredom moments"
+  },
+  {
+    "path": "days[10].tasks[0].text",
+    "value": "Write down one moment today when you wanted a cigarette purely out of boredom, not stress."
+  },
+  {
+    "path": "days[10].tasks[1].title",
+    "value": "Build a boredom list"
+  },
+  {
+    "path": "days[10].tasks[1].text",
+    "value": "List three things you can do for two minutes when boredom hits, and add a peppermint or toothpick as the zero-effort backup. Save the list somewhere visible."
+  },
+  {
+    "path": "days[10].tasks[2].title",
+    "value": "Reset your focus with sound"
+  },
+  {
+    "path": "days[10].tasks[2].text",
+    "value": "Play a focus or calm sound for five minutes during a slow part of the day."
+  },
+  {
+    "path": "days[11].title",
+    "value": "Day 12: Cravings are waves, and short ones"
+  },
+  {
+    "path": "days[11].intro",
+    "value": "A craving typically rises and fades within three to five minutes if you do not feed it. The addiction wants you to believe it lasts forever. Time it and catch it lying."
+  },
+  {
+    "path": "days[11].tasks[0].title",
+    "value": "Time your next craving"
+  },
+  {
+    "path": "days[11].tasks[0].text",
+    "value": "Next time a craving hits, start the timer in the craving tool and watch it peak and fade. Suck a peppermint while you watch it die."
+  },
+  {
+    "path": "days[11].tasks[1].title",
+    "value": "Never doubt the decision"
+  },
+  {
+    "path": "days[11].tasks[1].text",
+    "value": "Moping about not being allowed to smoke is what makes quitting feel hard. You are allowed; you simply choose not to, because you know it gives nothing. Practice thinking: I do not smoke, and I am glad, instead of: I cannot smoke."
+  },
+  {
+    "path": "days[11].tasks[2].title",
+    "value": "Encourage someone else"
+  },
+  {
+    "path": "days[11].tasks[2].text",
+    "value": "Find someone in the community on an earlier day than you and send one encouraging message."
+  },
+  {
+    "path": "days[12].title",
+    "value": "Day 13: Almost two weeks"
+  },
+  {
+    "path": "days[12].intro",
+    "value": "Tomorrow closes the hardest chapter. Today, notice the distance between day one you and today you."
+  },
+  {
+    "path": "days[12].tasks[0].title",
+    "value": "Compare day one to today"
+  },
+  {
+    "path": "days[12].tasks[0].text",
+    "value": "Write two or three sentences comparing how you felt on day one to how you feel right now."
+  },
+  {
+    "path": "days[12].tasks[1].title",
+    "value": "Review how your NRT is working"
+  },
+  {
+    "path": "days[12].tasks[1].text",
+    "value": "Rate honestly: are cravings manageable on your current setup? If you are still having frequent hard cravings, or if you feel over-stimulated or nauseous, talk to a pharmacist about adjusting your dose. Do not change strengths on guesswork."
+  },
+  {
+    "path": "days[12].tasks[2].title",
+    "value": "Plan tomorrow's milestone"
+  },
+  {
+    "path": "days[12].tasks[2].text",
+    "value": "Plan one small way to mark two weeks tomorrow: tell someone, or buy yourself something small with saved money."
+  },
+  {
+    "path": "days[13].title",
+    "value": "Day 14: Two weeks. Survival complete"
+  },
+  {
+    "path": "days[13].intro",
+    "value": "You outlasted the worst of the physical withdrawal. The little monster is on its knees. Chapter two is about rewiring the routines that used to feed it, so the big monster starves too."
+  },
+  {
+    "path": "days[13].tasks[0].title",
+    "value": "Claim your two week badge"
+  },
+  {
+    "path": "days[13].tasks[0].text",
+    "value": "Open your badges tab and collect the two week milestone. This one marks the end of survival mode."
+  },
+  {
+    "path": "days[13].tasks[1].title",
+    "value": "See how far your body has come"
+  },
+  {
+    "path": "days[13].tasks[1].text",
+    "value": "In two weeks your circulation and lung function have already begun improving, and nicotine itself is long gone from your bloodstream apart from any NRT you are using deliberately and temporarily."
+  },
+  {
+    "path": "days[13].tasks[2].title",
+    "value": "Write your survival summary"
+  },
+  {
+    "path": "days[13].tasks[2].text",
+    "value": "Three short sentences: what was hardest, what surprised you, and what you are proud of from these two weeks."
+  },
+  {
+    "path": "days[13].tasks[3].title",
+    "value": "Look ahead to chapter two"
+  },
+  {
+    "path": "days[13].tasks[3].text",
+    "value": "Read the intro to your next chapter and set one intention for the next two weeks."
+  }
+]

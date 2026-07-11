@@ -5,8 +5,10 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { QuitAttemptsPickStep } from "@/components/feature/onboarding/QuitAttemptsPickStep";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export default function QuitAttempts() {
+  const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
   const choice = draft.priorQuitAttempts;
 
@@ -14,9 +16,9 @@ export default function QuitAttempts() {
     <OnboardingShell
       step={3}
       total={ONBOARDING_TOTAL_STEPS}
-      title="How many times have you tried to quit smoking?"
-      subtitle="Choose the option that fits you best. There is no wrong answer."
-      primaryLabel="Continue"
+      title={t("onboarding.quitAttempts.title")}
+      subtitle={t("onboarding.quitAttempts.subtitle")}
+      primaryLabel={t("common.continue")}
       primaryDisabled={!choice}
       onPrimary={() => safeRouter.push("/onboarding/interests")}
       showBack

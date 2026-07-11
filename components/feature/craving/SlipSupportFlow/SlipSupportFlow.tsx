@@ -8,8 +8,10 @@ import { CravingSessionHeader } from "@/components/feature/craving/CravingSessio
 import { SlipSubmittingOverlay } from "@/components/feature/craving/SlipSubmittingOverlay";
 import { useOutcomeBackHandler } from "@/hooks/app/useOutcomeBackHandler";
 import { useSlipSubmit } from "@/hooks/stats/useSlipSubmit";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export function SlipSupportFlow() {
+  const { t } = useTranslation();
   const { submit, undo, isSubmitting } = useSlipSubmit();
   const { showBack, register, goBack } = useOutcomeBackHandler();
 
@@ -21,7 +23,7 @@ export function SlipSupportFlow() {
       edges={["top", "bottom"]}
     >
       <CravingSessionHeader
-        title="Slip support"
+        title={t("craving.slipTitle")}
         showBack={showBack && !isSubmitting}
         onBack={goBack}
         onClose={isSubmitting ? () => {} : close}

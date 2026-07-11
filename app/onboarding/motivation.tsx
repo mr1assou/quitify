@@ -5,8 +5,10 @@ import { MotivationStep } from "@/components/feature/onboarding/MotivationStep";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export default function Motivation() {
+  const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
   const level = draft.motivationLevel;
 
@@ -14,9 +16,9 @@ export default function Motivation() {
     <OnboardingShell
       step={2}
       total={ONBOARDING_TOTAL_STEPS}
-      title="How motivated are you to stop smoking?"
-      subtitle="Choose the level that fits you today. There is no wrong answer."
-      primaryLabel="Continue"
+      title={t("onboarding.motivation.title")}
+      subtitle={t("onboarding.motivation.subtitle")}
+      primaryLabel={t("common.continue")}
       primaryDisabled={!level}
       onPrimary={() => safeRouter.push("/onboarding/quit-attempts")}
       showBack

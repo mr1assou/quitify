@@ -1,0 +1,3714 @@
+{
+  "app_name": "Quitify",
+  "plan_name": "Plan d'arrêt du tabac sur 180 jours",
+  "total_days": 180,
+  "method_note": "Ce plan repose sur trois piliers : (1) la thérapie de substitution nicotinique (NRT) en option (patchs, pastilles, gommes) pour adoucir le sevrage physique, (2) un kit oral de substitution (menthes, gommes sans sucre, cure-dents, bâtons de cannelle) pour le geste main-bouche, et (3) un travail sur l'état d'esprit inspiré de la méthode Easyway : fumer n'apporte aucun plaisir réel, les envies sont l'addiction qui meurt, et arrêter est une libération, pas un sacrifice. Les dosages NRT indiqués suivent les recommandations standard en vente libre ; confirmez votre dose et votre calendrier avec un pharmacien ou un médecin, surtout en cas de grossesse, si vous avez moins de 18 ans, ou si vous suivez un traitement cardiaque.",
+  "task_types": [
+    "action",
+    "fact",
+    "journal",
+    "breathing",
+    "checkin",
+    "game",
+    "audio",
+    "social",
+    "reward",
+    "nrt",
+    "mindset"
+  ],
+  "chapters": [
+    {
+      "chapter": 1,
+      "name": "Survie et mise en place",
+      "role": "Les 2 premières semaines : installer la NRT et votre kit oral, traverser le pic de sevrage, ancrer l'état d'esprit de base",
+      "day_start": 1,
+      "day_end": 14,
+      "days": [
+        {
+          "day": 1,
+          "title": "Jour 1 : Vous ne renoncez à rien",
+          "intro": "Aujourd'hui, vous arrêtez, et voici l'idée la plus importante de tout le plan : vous ne sacrifiez pas un plaisir, vous échappez à un piège. Les cigarettes ne vous ont jamais rien apporté, elles n'ont fait que soulager brièvement l'inconfort créé par la cigarette précédente. Vous n’avez pas besoin de volonté pendant six mois pour le moment, juste les dix prochaines minutes.",
+          "tasks": [
+            {
+              "id": "d1t1",
+              "type": "action",
+              "title": "Retirez chaque cigarette et briquet",
+              "text": "Parcourez votre maison, votre voiture, votre sac et votre bureau et jetez chaque cigarette, briquet et cendrier. N’en gardez pas un en cas d’urgence. Un prisonnier évadé ne garde pas de clé de cellule dans sa poche."
+            },
+            {
+              "id": "d1t2",
+              "type": "nrt",
+              "title": "Démarrez votre NRT si vous l'avez choisi",
+              "text": "Si vous utilisez un substitut nicotinique, appliquez votre premier patch ce matin sur une peau propre, sèche et glabre comme le haut de votre bras. Si vous en fumez dix ou plus par jour, le patch de départ standard est le plus concentré, généralement 21 mg. Gardez des pastilles ou de la gomme à proximité en cas d'envies. Confirmez votre dose auprès d'un pharmacien si vous ne l'avez pas encore fait."
+            },
+            {
+              "id": "d1t3",
+              "type": "action",
+              "title": "Préparez votre kit oral de secours",
+              "text": "Remplissez une petite boîte ou une poche de menthe poivrée, de gomme sans sucre, de cure-dents, de bâtons de cannelle ou de graines de tournesol et gardez une bouteille d'eau avec vous. Votre bouche et vos mains chercheront un travail aujourd'hui ; ce kit est le nouveau travail."
+            },
+            {
+              "id": "d1t4",
+              "type": "mindset",
+              "title": "Lire l'idée de base",
+              "text": "Fumer ne vous a jamais détendu et ne vous a jamais procuré un réel plaisir. Chaque cigarette ne faisait que calmer le sevrage de celle qu'elle avait provoquée, puis relançait le cycle. Les non-fumeurs ne souffrent pas sans cigarettes ; seuls les fumeurs le font. Aujourd’hui, vous ne perdez pas un ami, vous vous débarrassez d'un fardeau."
+            },
+            {
+              "id": "d1t5",
+              "type": "breathing",
+              "title": "Apprenez à réinitialiser l'envie maintenant",
+              "text": "Ouvrez l'outil anti-envie une fois maintenant, avant d'en avoir besoin, afin que vous n'y réfléchissiez pas lorsque la première véritable envie survient."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Jour 2 : Votre corps guérit déjà",
+          "intro": "La rugosité d’aujourd’hui n’est pas une défaillance de votre corps, c’est une réparation de votre corps. L’inconfort que vous ressentez est la mort de la dépendance, et cela mérite d’être célébré plutôt que pleuré.",
+          "tasks": [
+            {
+              "id": "d2t1",
+              "type": "fact",
+              "title": "Sachez ce qui se passe à l'intérieur",
+              "text": "Votre fréquence cardiaque et votre tension artérielle sont déjà revenues à la normale, le monoxyde de carbone a été largement éliminé de votre sang et l'oxygène atteint vos muscles et vos organes mieux qu'il y a deux jours."
+            },
+            {
+              "id": "d2t2",
+              "type": "nrt",
+              "title": "Apprenez la bonne technique de pastille et de gomme",
+              "text": "Ne mâchez pas de gomme à la nicotine comme une gomme normale. Mâchez lentement jusqu'à ressentir un picotement, puis placez-le contre votre joue jusqu'à ce que le picotement disparaisse, et répétez pendant environ trente minutes. Laissez les pastilles se dissoudre lentement sans les mâcher. Évitez les aliments et les boissons, en particulier le café ou les jus, quinze minutes avant, car les boissons acides bloquent l'absorption."
+            },
+            {
+              "id": "d2t3",
+              "type": "action",
+              "title": "Parlez-en à une personne en qui vous avez confiance",
+              "text": "Envoyez un message ou appelez une personne et dites-lui que vous avez arrêté hier. Le dire à voix haute le rend réel et recrute votre premier supporter."
+            },
+            {
+              "id": "d2t4",
+              "type": "mindset",
+              "title": "Remarquez l'illusion du plaisir",
+              "text": "Réfléchissez honnêtement : vos cigarettes étaient-elles réellement agréables ou la plupart étaient-elles automatiques ? Le premier après un écart n'a fait du bien que parce qu'il a mis fin à la démangeaison de manque. Ce n'est pas du plaisir, c'est un agresseur qui vous rend votre portefeuille."
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Jour 3 : Jour de pointe, rencontrez le petit monstre",
+          "intro": "Le sevrage est généralement plus fort vers le troisième jour. Imaginez le besoin physique comme un petit monstre de nicotine en vous, faible et affamé. Chaque envie que vous ne nourrissez pas fait que le monstre devient plus petit. Aujourd’hui, c’est lui qui crie le plus fort parce qu’il meurt le plus vite.",
+          "tasks": [
+            {
+              "id": "d3t1",
+              "type": "mindset",
+              "title": "Recadrez chaque envie aujourd'hui",
+              "text": "Chaque fois qu'une envie vous frappe aujourd'hui, dites-vous : c'est le monstre qui meurt de faim, et je suis en train de gagner en ce moment. Une envie n’est pas un signal que quelque chose ne va pas, c’est une preuve directe que la dépendance est en train de mourir."
+            },
+            {
+              "id": "d3t2",
+              "type": "breathing",
+              "title": "Chevauchez une envie avec l'outil",
+              "text": "La prochaine fois qu'une envie vous surprendra, ouvrez l'outil anti-envie au lieu de le combattre dans votre tête et laissez-le vous guider à travers la vague."
+            },
+            {
+              "id": "d3t3",
+              "type": "nrt",
+              "title": "Utilisez correctement votre NRT de secours",
+              "text": "Si une envie est trop forte pour disparaître, utilisez une pastille ou un morceau de gomme sur votre patch. La combinaison d'un patch avec une forme à action rapide est une approche standard approuvée par les pharmaciens pour les moments difficiles des premières semaines."
+            },
+            {
+              "id": "d3t4",
+              "type": "journal",
+              "title": "Enregistrez le moment le plus difficile de la journée",
+              "text": "En une ou deux phrases, notez le moment le plus difficile de la journée et ce que vous faisiez juste avant."
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Jour 4 : Nommer vos déclencheurs",
+          "intro": "Les envies viennent rarement de nulle part. Ils se déplacent dans des lieux, des sentiments et des routines. Aujourd'hui, vous mettez des noms sur le vôtre pour qu'ils arrêtent de vous tendre une embuscade.",
+          "tasks": [
+            {
+              "id": "d4t1",
+              "type": "journal",
+              "title": "Énumérez vos trois principaux déclencheurs",
+              "text": "Écrivez les trois moments qui vous sollicitent le plus en ce moment, par exemple le café du matin, après les repas ou le stress au travail."
+            },
+            {
+              "id": "d4t2",
+              "type": "action",
+              "title": "Briser physiquement une gâchette",
+              "text": "Choisissez un déclencheur et changez quelque chose de physique aujourd’hui : buvez votre café dans un autre endroit, asseyez-vous sur une autre chaise, empruntez un itinéraire différent pendant votre pause."
+            },
+            {
+              "id": "d4t3",
+              "type": "nrt",
+              "title": "Chronométrer une pastille avant un déclencheur connu",
+              "text": "Si vous savez qu'un moment déclencheur arrive, comme après le déjeuner, commencez une pastille dix minutes à l'avance pour que l'envie arrive et trouve la porte déjà fermée."
+            },
+            {
+              "id": "d4t4",
+              "type": "fact",
+              "title": "Consultez votre argent économisé jusqu'à présent",
+              "text": "Ouvrez votre onglet statistiques et regardez l'argent déjà gardé dans votre poche depuis le premier jour."
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Jour 5 : Vos mains et votre bouche ont besoin d'un travail",
+          "intro": "Une grande partie de l’envie est un rituel physique : quelque chose entre vos doigts, quelque chose sur vos lèvres. Aujourd’hui votre kit oral gagne sa place.",
+          "tasks": [
+            {
+              "id": "d5t1",
+              "type": "action",
+              "title": "Déployer le kit oral toute la journée",
+              "text": "Emportez votre kit partout aujourd'hui. Prenez une menthe poivrée, un cure-dent ou un bâton de cannelle chaque fois que votre main commence à chercher un paquet. Faites-le même pour des envies légères ; vous recyclez le réflexe, pas seulement vous y survivez."
+            },
+            {
+              "id": "d5t2",
+              "type": "game",
+              "title": "Jouer au lieu de fumer",
+              "text": "Lorsque vous vous sentez agité, lancez un mini-jeu pendant deux minutes au lieu de sortir. Les mains agitées adorent jouer."
+            },
+            {
+              "id": "d5t3",
+              "type": "checkin",
+              "title": "Notez les envies du jour",
+              "text": "Notez la force des envies ressenties aujourd'hui, de un à cinq, afin de pouvoir observer la tendance à la baisse."
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Jour 6 : Sommeil, rêves et patchs",
+          "intro": "Le sevrage et la NRT peuvent tous deux perturber votre sommeil pendant un petit moment. Le savoir à l’avance rend la situation ennuyeuse au lieu d’effrayante.",
+          "tasks": [
+            {
+              "id": "d6t1",
+              "type": "nrt",
+              "title": "Gérez vos rêves vivants en toute simplicité",
+              "text": "Les patchs à la nicotine portés pendant la nuit peuvent provoquer des rêves vifs ou un sommeil agité. Si cela se produit, vous pouvez retirer le patch avant de vous coucher et en appliquer un nouveau le matin. Faites également pivoter le patch sur une zone cutanée différente chaque jour pour éviter les irritations."
+            },
+            {
+              "id": "d6t2",
+              "type": "audio",
+              "title": "Détendez-vous avec le son",
+              "text": "Jouez un son relaxant de la boîte à outils pendant cinq minutes avant d'essayer de vous endormir ce soir."
+            },
+            {
+              "id": "d6t3",
+              "type": "journal",
+              "title": "Notez votre énergie",
+              "text": "Écrivez une ligne sur la façon dont votre énergie d’aujourd’hui se compare à celle du premier jour."
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Jour 7 : Une semaine sans cigarette",
+          "intro": "Sept jours. Le petit monstre à l’intérieur meurt de faim depuis une semaine complète et il est déjà visiblement plus faible. Votre corps a commencé des réparations que vous ne pouvez même pas encore ressentir.",
+          "tasks": [
+            {
+              "id": "d7t1",
+              "type": "reward",
+              "title": "Récupérez votre badge d'une semaine",
+              "text": "Ouvrez l'onglet de vos badges et collectez le jalon d'une semaine. Vous avez gagné celui-ci à vos dépens."
+            },
+            {
+              "id": "d7t2",
+              "type": "fact",
+              "title": "Voyez quelle semaine a fait",
+              "text": "Votre sens du goût et de l’odorat commence à s’aiguiser et vos poumons ont commencé à éliminer le mucus et les débris accumulés par le tabagisme."
+            },
+            {
+              "id": "d7t3",
+              "type": "mindset",
+              "title": "Vérifiez le sentiment de sacrifice",
+              "text": "Demandez-vous honnêtement : vous êtes-vous senti démuni cette semaine ? Si oui, rappelez-vous ce que vous avez réellement perdu : une toux, une odeur, une dépense et une laisse. La privation est une histoire que raconte la dépendance ; rien de valeur ne manque."
+            },
+            {
+              "id": "d7t4",
+              "type": "journal",
+              "title": "Écrivez au premier jour",
+              "text": "Écrivez-vous deux phrases le premier jour, en leur expliquant comment s'est réellement déroulée la première semaine."
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Jour 8 : Les deux monstres",
+          "intro": "Il y a deux ennemis à arrêter de fumer. Le petit monstre est l’envie physique et il meurt en quelques semaines. Le grand monstre, c'est le lavage de cerveau : des années à croire que la cigarette vous détend, vous récompense ou complète un café. Le grand monstre ne meurt que lorsque vous arrêtez d'y croire.",
+          "tasks": [
+            {
+              "id": "d8t1",
+              "type": "mindset",
+              "title": "Repérez le gros monstre qui parle",
+              "text": "Aujourd’hui, saisissez une pensée qui glorifie le tabagisme, comme si une cigarette réglerait ce stress, et répondez-y à voix haute ou dans votre tête : non, une cigarette ne ferait que remédier au sevrage provoqué par la cigarette. Les non-fumeurs gèrent ce même stress tous les jours sans en avoir un."
+            },
+            {
+              "id": "d8t2",
+              "type": "fact",
+              "title": "Connaître le piège de la deuxième semaine",
+              "text": "De nombreuses rechutes surviennent au cours de la deuxième semaine, souvent après un verre ou un mauvais moment, en pensant qu'une seule cigarette n'a pas d'importance. Une cigarette réalimente le petit monstre et relance tout le cycle."
+            },
+            {
+              "id": "d8t3",
+              "type": "action",
+              "title": "Planifiez votre prochain moment risqué",
+              "text": "Nommez un événement cette semaine où vous pourriez être tenté et décidez dès maintenant exactement ce que vous ferez à la place, y compris quel élément du kit ou NRT vous utiliserez."
+            },
+            {
+              "id": "d8t4",
+              "type": "nrt",
+              "title": "Vérifiez vos fournitures",
+              "text": "Comptez vos patchs et pastilles restants. Manquer à mi-envie est une urgence évitable, alors réapprovisionnez-vous avant d'être en dessous d'un approvisionnement de trois jours."
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Jour 9 : Remplacer le rituel",
+          "intro": "Fumer était un bouton de pause dans votre journée : une pause, une pause, une excuse pour sortir. Vous méritez toujours la pause. Vous n’avez tout simplement pas besoin du dispositif de distribution de poison qui y est attaché.",
+          "tasks": [
+            {
+              "id": "d9t1",
+              "type": "action",
+              "title": "Concevez votre nouveau rituel de pause",
+              "text": "Choisissez une activité courte pour remplacer l'ancienne pause cigarette : une marche de deux minutes, des étirements ou une sortie dehors pour prendre l'air frais avec une menthe poivrée au lieu d'une cigarette."
+            },
+            {
+              "id": "d9t2",
+              "type": "mindset",
+              "title": "Interrogez ce qui vous manque",
+              "text": "Écrivez une phrase honnête sur ce qui vous manque le plus, puis relisez-la : est-ce la pause, le rituel des mains, la compagnie à l'extérieur ? Chacun d’entre eux est toujours à votre disposition. La seule chose qui a disparu, c'est la nicotine, et la nicotine était le problème, pas le plaisir."
+            },
+            {
+              "id": "d9t3",
+              "type": "social",
+              "title": "Lire une histoire communautaire",
+              "text": "Ouvrez l’onglet Communauté et lisez l’histoire de quelqu’un de plus avancé que vous."
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Jour 10 : À deux chiffres",
+          "intro": "Dix jours. Le pire du sevrage physique est en grande partie derrière vous. Ce qui reste maintenant, ce sont les habitudes et les croyances, et c’est exactement ce que ce plan ne cesse de démanteler.",
+          "tasks": [
+            {
+              "id": "d10t1",
+              "type": "fact",
+              "title": "Sachez ce qu'il reste à battre",
+              "text": "La plupart des sevrage physique à la nicotine disparaissent en une à deux semaines. À partir de là, les envies sont pour la plupart des souvenirs déclenchés, et tous ceux que vous ignorez s’affaiblissent."
+            },
+            {
+              "id": "d10t2",
+              "type": "game",
+              "title": "Battez votre score de jeu d'envie",
+              "text": "Ouvrez un mini-jeu et essayez de battre votre score précédent pendant un moment libre aujourd'hui."
+            },
+            {
+              "id": "d10t3",
+              "type": "action",
+              "title": "Dépensez de l'argent de la victoire",
+              "text": "Regardez votre argent économisé et dépensez-en une petite partie pour quelque chose qui n’a rien à voir avec le tabagisme."
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Jour 11 : L'ennui est aussi un déclencheur",
+          "intro": "Le stress est en cause, mais l’ennui provoque tout autant d'envies. Un cerveau inactif rejoue de vieilles habitudes.",
+          "tasks": [
+            {
+              "id": "d11t1",
+              "type": "journal",
+              "title": "Repérez vos moments d'ennui",
+              "text": "Notez un moment aujourd'hui où vous avez eu envie de fumer une cigarette uniquement par ennui et non par stress."
+            },
+            {
+              "id": "d11t2",
+              "type": "action",
+              "title": "Construisez une liste d’ennui",
+              "text": "Énumérez trois choses que vous pouvez faire pendant deux minutes lorsque l’ennui frappe et ajoutez une menthe poivrée ou un cure-dent comme solution de secours sans effort. Enregistrez la liste dans un endroit visible."
+            },
+            {
+              "id": "d11t3",
+              "type": "audio",
+              "title": "Réinitialisez votre concentration avec le son",
+              "text": "Jouez un son concentré ou calme pendant cinq minutes pendant une partie lente de la journée."
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Jour 12 : Les envies sont des vagues, et courtes",
+          "intro": "Une envie augmente et disparaît généralement en trois à cinq minutes si vous ne la nourrissez pas. La dépendance veut vous faire croire qu’elle dure pour toujours. Chronométrez-le et attrapez-le en train de mentir.",
+          "tasks": [
+            {
+              "id": "d12t1",
+              "type": "breathing",
+              "title": "Planifiez votre prochaine envie",
+              "text": "La prochaine fois que vous ressentez une envie, démarrez le chronomètre dans l’outil d’envie et regardez-la atteindre son apogée et s’atténuer. Sucez une menthe poivrée pendant que vous la regardez mourir."
+            },
+            {
+              "id": "d12t2",
+              "type": "mindset",
+              "title": "Ne doutez jamais de la décision",
+              "text": "Se plaindre de ne pas avoir le droit de fumer est ce qui rend l'arrêt du tabac difficile. Vous êtes autorisé ; vous choisissez simplement de ne pas le faire, parce que vous savez que cela ne donne rien. Entraînez-vous à penser : je ne fume pas et je suis heureux, au lieu de : je ne peux pas fumer."
+            },
+            {
+              "id": "d12t3",
+              "type": "social",
+              "title": "Encouragez quelqu'un d'autre",
+              "text": "Trouvez quelqu'un dans la communauté plus tôt que vous et envoyez un message d'encouragement."
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Jour 13 : Presque deux semaines",
+          "intro": "Demain se clôture le chapitre le plus difficile. Aujourd’hui, remarquez la distance entre vous le premier jour et vous aujourd’hui.",
+          "tasks": [
+            {
+              "id": "d13t1",
+              "type": "journal",
+              "title": "Comparez le premier jour à aujourd’hui",
+              "text": "Écrivez deux ou trois phrases comparant ce que vous avez ressenti le premier jour à ce que vous ressentez actuellement."
+            },
+            {
+              "id": "d13t2",
+              "type": "nrt",
+              "title": "Examinez le fonctionnement de votre NRT",
+              "text": "Évaluez honnêtement : les envies sont-elles gérables avec votre configuration actuelle ? Si vous avez encore des envies fréquentes, ou si vous vous sentez trop stimulé ou nauséeux, parlez à un pharmacien pour ajuster votre dose. Ne changez pas les points forts sur la base de conjectures."
+            },
+            {
+              "id": "d13t3",
+              "type": "action",
+              "title": "Planifiez l'étape de demain",
+              "text": "Prévoyez une petite façon de marquer deux semaines demain : parlez-en à quelqu'un ou achetez-vous quelque chose de petit avec l'argent économisé."
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Jour 14 : Quinze jours. Survie terminée",
+          "intro": "Vous avez survécu au pire du sevrage physique. Le petit monstre est à genoux. Le chapitre deux concerne la reconfiguration des routines qui le nourrissaient, afin que le gros monstre meure également de faim.",
+          "tasks": [
+            {
+              "id": "d14t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de deux semaines",
+              "text": "Ouvrez l'onglet de vos badges et collectez le jalon de deux semaines. Celui-ci marque la fin du mode survie."
+            },
+            {
+              "id": "d14t2",
+              "type": "fact",
+              "title": "Voyez jusqu'où votre corps est venu",
+              "text": "En deux semaines, votre circulation et votre fonction pulmonaire ont déjà commencé à s'améliorer, et la nicotine elle-même a disparu depuis longtemps de votre circulation sanguine, à l'exception de toute NRT que vous utilisez délibérément et temporairement."
+            },
+            {
+              "id": "d14t3",
+              "type": "journal",
+              "title": "Rédigez votre résumé de survie",
+              "text": "Trois phrases courtes : ce qui a été le plus dur, ce qui vous a surpris et ce dont vous êtes fier de ces deux semaines."
+            },
+            {
+              "id": "d14t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre deux",
+              "text": "Lisez l'introduction de votre prochain chapitre et fixez une intention pour les deux prochaines semaines."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "name": "Casser l'habitude",
+      "role": "Jours 15 à 30 : recâbler les matins, les repas, le café, les trajets et les pauses pendant que la NRT stabilise le côté physique",
+      "day_start": 15,
+      "day_end": 30,
+      "days": [
+        {
+          "day": 15,
+          "title": "Jour 15 : Bienvenue au chapitre deux",
+          "intro": "Le mode Survie est terminé. Maintenant, vous démontez la machinerie quotidienne de l’habitude, une routine à la fois, tandis que votre patch garde le côté physique en arrière-plan.",
+          "tasks": [
+            {
+              "id": "d15t1",
+              "type": "journal",
+              "title": "Cartographiez votre ancien horaire de tabagisme",
+              "text": "Notez les moments de la journée où vous fumiez le plus : réveil, après les repas, pauses au travail, conduite, avant de vous coucher."
+            },
+            {
+              "id": "d15t2",
+              "type": "action",
+              "title": "Choisissez votre heure la plus difficile",
+              "text": "Choisissez l'heure de la journée qui est encore la plus difficile et attribuez-lui un remplacement spécifique : une promenade, une pastille, un jeu ou un appel."
+            },
+            {
+              "id": "d15t3",
+              "type": "nrt",
+              "title": "Restez à pleine puissance pour l'instant",
+              "text": "Ne vous précipitez pas pour réduire l’intensité de votre patch simplement parce que la première semaine s’est bien passée. Le calendrier standard maintient l'effectif de départ pendant environ six semaines avant de se retirer. La stabilité vous offre désormais une réduction facile plus tard."
+            },
+            {
+              "id": "d15t4",
+              "type": "checkin",
+              "title": "Fixez votre objectif du chapitre deux",
+              "text": "Écrivez ou choisissez un objectif personnel que vous souhaitez atteindre au trenteième jour."
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Jour 16 : La reconstruction du matin",
+          "intro": "La cigarette de réveil était la plus forte car votre corps a passé toute la nuit en sevrage. Votre patch supprime désormais entièrement ce désespoir matinal. Ce qui reste n’est que chorégraphie, et la chorégraphie peut être réécrite.",
+          "tasks": [
+            {
+              "id": "d16t1",
+              "type": "action",
+              "title": "Repensez vos dix premières minutes",
+              "text": "Planifiez exactement ce que vous ferez dans les dix premières minutes après votre réveil demain : de l'eau, un patch sur une tache fraîche de peau, un étirement, puis du café. Donnez au matin un nouveau scénario."
+            },
+            {
+              "id": "d16t2",
+              "type": "mindset",
+              "title": "Voir clairement la cigarette du matin",
+              "text": "Cette première cigarette n’a jamais réveillé votre cerveau. Cela mettait fin à huit heures de retrait, c'est pourquoi c'était si important. Les non-fumeurs se réveillent déjà en ressentant ce qu'il fallait ressentir en fumant."
+            },
+            {
+              "id": "d16t3",
+              "type": "breathing",
+              "title": "Réinitialisation de la respiration matinale",
+              "text": "Utilisez l'outil de respiration pendant une minute demain matin avant de vérifier votre téléphone."
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Jour 17 : Après les repas",
+          "intro": "La cigarette après le repas est l’un des liens les plus automatiques qui soient. Aujourd'hui, vous donnez une nouvelle fin à vos repas.",
+          "tasks": [
+            {
+              "id": "d17t1",
+              "type": "action",
+              "title": "Installer une nouvelle fin de repas",
+              "text": "Juste après avoir mangé aujourd'hui, faites immédiatement l'une de ces choses : brossez-vous les dents, prenez de la menthe poivrée, mâchez de la gomme sans sucre ou faites une courte promenade. L’astuce est la vitesse ; combler le vide avant le vieux réflexe."
+            },
+            {
+              "id": "d17t2",
+              "type": "fact",
+              "title": "Profitez de la mise à niveau du goût",
+              "text": "Les aliments ont véritablement meilleur goût au cours des premières semaines, à mesure que les récepteurs olfactifs et gustatifs se rétablissent. Remarquez aujourd’hui une saveur que vous aviez oubliée."
+            },
+            {
+              "id": "d17t3",
+              "type": "journal",
+              "title": "Évaluez le tirage après le repas",
+              "text": "Une seule ligne : quelle était la force de l'envie après votre plus gros repas d'aujourd'hui, par rapport à la première semaine ?"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Jour 18 : Le déclencheur du trajet domicile-travail",
+          "intro": "Conduire, marcher pour se rendre au travail ou attendre le bus était accompagné d'une cigarette. Ce créneau de votre journée est désormais ouvert pour quelque chose de mieux.",
+          "tasks": [
+            {
+              "id": "d18t1",
+              "type": "action",
+              "title": "Reprogrammer le trajet",
+              "text": "Changez une chose dans votre trajet aujourd'hui : un podcast, une nouvelle musique, un itinéraire différent ou un cure-dent à la main là où se trouvait la cigarette."
+            },
+            {
+              "id": "d18t2",
+              "type": "checkin",
+              "title": "Enregistrez un déclencheur que vous avez remarqué",
+              "text": "Appuyez pour enregistrer tout moment déclencheur que vous avez remarqué aujourd’hui, même les plus petits."
+            },
+            {
+              "id": "d18t3",
+              "type": "audio",
+              "title": "Du son pour la balade",
+              "text": "Jouez un son apaisant ou énergisant pendant une partie de votre trajet aujourd'hui."
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Jour 19 : Le mensonge du stress",
+          "intro": "Le plus gros lavage de cerveau est que les cigarettes soulagent le stress. Ils font le contraire : le retrait de la nicotine entre les cigarettes ajoute un stress de fond constant que les non-fumeurs n'ont tout simplement pas.",
+          "tasks": [
+            {
+              "id": "d19t1",
+              "type": "mindset",
+              "title": "Démanteler le mythe du stress",
+              "text": "Lorsque les fumeurs commencent à fumer sous l'effet du stress, le soulagement qu'ils ressentent est la fin du sevrage et non la diminution du problème. Le stress est toujours là après, et en plus ils ont payé pour se sentir normaux pendant vingt minutes. Vous gérez désormais le stress à un niveau de référence permanent qu'ils visitent uniquement."
+            },
+            {
+              "id": "d19t2",
+              "type": "breathing",
+              "title": "Utiliser la respiration pour le stress lui-même",
+              "text": "La prochaine fois que vous vous sentirez stressé aujourd’hui, même sans envie, utilisez l’outil de respiration. C'est votre nouvelle soupape de stress et, contrairement à une cigarette, elle réduit votre fréquence cardiaque."
+            },
+            {
+              "id": "d19t3",
+              "type": "journal",
+              "title": "Nommez votre source de stress",
+              "text": "Notez la principale chose qui vous cause du stress cette semaine, afin qu'il s'agisse d'un problème nommé plutôt que d'un vague nuage."
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Jour 20 : Vingt jours dans",
+          "intro": "Environ trois semaines, c'est à ce moment-là que les routines de remplacement cessent de se sentir forcées et commencent à ressembler aux vôtres.",
+          "tasks": [
+            {
+              "id": "d20t1",
+              "type": "checkin",
+              "title": "Évaluez à quel point cela semble automatique",
+              "text": "Évaluez de un à cinq le caractère naturel de vos habitudes de remplacement par rapport à il y a deux semaines."
+            },
+            {
+              "id": "d20t2",
+              "type": "fact",
+              "title": "Voir votre étape financière",
+              "text": "Vérifiez l'onglet de votre argent économisé et voyez ce que ce montant pourrait acheter dès maintenant."
+            },
+            {
+              "id": "d20t3",
+              "type": "social",
+              "title": "Partagez une petite victoire",
+              "text": "Publiez une petite victoire de cette semaine dans la communauté."
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Jour 21 : Trois semaines gratuites",
+          "intro": "Trois semaines sont souvent citées comme le moment où de nouvelles habitudes s’enracinent. Vous en êtes la preuve vivante.",
+          "tasks": [
+            {
+              "id": "d21t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de trois semaines",
+              "text": "Ouvrez l'onglet de vos badges et collectez le jalon de trois semaines."
+            },
+            {
+              "id": "d21t2",
+              "type": "fact",
+              "title": "Visualisez la progression de vos poumons",
+              "text": "À ce stade, de nombreuses personnes remarquent moins de toux et une respiration plus facile lors d’activités légères à mesure que la fonction pulmonaire se rétablit."
+            },
+            {
+              "id": "d21t3",
+              "type": "action",
+              "title": "Faites un petit test contrôlé",
+              "text": "Mettez-vous volontairement dans une situation légèrement déclenchante aujourd'hui, comme vous asseoir près d'un endroit où les gens fument, avec une menthe poivrée dans la bouche, et remarquez que vous pouvez la gérer confortablement."
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Jour 22 : Soirée de détente",
+          "intro": "Les soirées avaient leur propre rituel : la cigarette de fin de travail, celle d'après dîner, la dernière avant de se coucher. Construisez la nouvelle clôture de la journée.",
+          "tasks": [
+            {
+              "id": "d22t1",
+              "type": "action",
+              "title": "Construisez un rituel du soir",
+              "text": "Choisissez une activité apaisante pour terminer chaque journée au lieu d'une cigarette : un thé, un spectacle, une petite promenade ou dix minutes de lecture d'un livre."
+            },
+            {
+              "id": "d22t2",
+              "type": "audio",
+              "title": "Dormez bien ce soir",
+              "text": "Jouez un son relaxant de la boîte à outils pendant dix minutes avant de vous coucher."
+            },
+            {
+              "id": "d22t3",
+              "type": "journal",
+              "title": "Notez la qualité de votre sommeil",
+              "text": "Écrivez une ligne sur la façon dont vous avez dormi la semaine dernière."
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Jour 23 : Le lien café",
+          "intro": "Le café et les cigarettes ont été soudés ensemble pendant des années. Vous gardez le café. La soudure se détache.",
+          "tasks": [
+            {
+              "id": "d23t1",
+              "type": "action",
+              "title": "Changez la scène du café",
+              "text": "Buvez votre café dans un autre endroit ou avec une activité différente aujourd'hui : debout, près d'une fenêtre, avec un jeu ouvert ou avec un bâton de cannelle pour remuer et tenir."
+            },
+            {
+              "id": "d23t2",
+              "type": "nrt",
+              "title": "Attention au choc café-pastille",
+              "text": "N'oubliez pas : le café, les jus de fruits et les boissons gazeuses sont acides et bloquent l'absorption de la nicotine des gommes et des pastilles. Finissez votre café, attendez quinze minutes, puis utilisez la pastille si vous en avez besoin."
+            },
+            {
+              "id": "d23t3",
+              "type": "checkin",
+              "title": "Évaluez le café",
+              "text": "Évaluez la force de l’envie de fumer avec du café, de un à cinq."
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Jour 24 : L'ennui et les temps d'arrêt",
+          "intro": "À mesure que les principaux déclencheurs s’affaiblissent, les plus discrets, comme l’ennui, apparaissent plus clairement. Bien; vous pouvez les voir maintenant.",
+          "tasks": [
+            {
+              "id": "d24t1",
+              "type": "action",
+              "title": "Améliorez votre liste d'ennui",
+              "text": "Ajoutez une nouvelle activité à votre liste d’ennuis en fonction de ce qui a réellement fonctionné jusqu’à présent et supprimez tout ce que vous n’utilisez jamais."
+            },
+            {
+              "id": "d24t2",
+              "type": "game",
+              "title": "Jouez sur les temps d'arrêt",
+              "text": "Prochain moment calme sans rien faire, ouvrez un mini-jeu au lieu de dériver."
+            },
+            {
+              "id": "d24t3",
+              "type": "fact",
+              "title": "Consultez votre tableau de progression",
+              "text": "Regardez votre tableau de fréquence des envies et notez la direction générale depuis le premier jour."
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Jour 25 : Auditez vos nouvelles machines",
+          "intro": "Plusieurs petites habitudes de remplacement sont désormais présentes en arrière-plan de votre journée. Il est temps de les remarquer et de les renforcer.",
+          "tasks": [
+            {
+              "id": "d25t1",
+              "type": "journal",
+              "title": "Listez vos nouvelles habitudes",
+              "text": "Notez toutes les habitudes de remplacement que vous avez adoptées jusqu'à présent, même les plus petites comme la menthe poivrée après le déjeuner."
+            },
+            {
+              "id": "d25t2",
+              "type": "action",
+              "title": "Renforcer le plus faible",
+              "text": "Choisissez l’habitude de remplacement qui vous semble la moins solide et faites-la délibérément aujourd’hui, même sans envie."
+            },
+            {
+              "id": "d25t3",
+              "type": "social",
+              "title": "Lire une histoire du premier mois",
+              "text": "Lisez un message communautaire de quelqu'un d'autre au cours de son premier mois."
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "Jour 26 : L'alcool, la plus grande embuscade",
+          "intro": "Boire et fumer étaient étroitement liés pour la plupart des fumeurs, et l'alcool abaisse la garde qui protège votre séquence. Ce déclencheur a son propre jour avant d'avoir une chance sur vous.",
+          "tasks": [
+            {
+              "id": "d26t1",
+              "type": "fact",
+              "title": "Connaître le risque lié à l'alcool",
+              "text": "La consommation d'alcool est l'une des situations de rechute les plus courantes, car une diminution de l'inhibition permet au réflexe main-bouche de revenir avant que vous ne décidiez consciemment quoi que ce soit."
+            },
+            {
+              "id": "d26t2",
+              "type": "action",
+              "title": "Élaborez un plan de consommation d'alcool",
+              "text": "Avant votre prochaine occasion de boire, décidez : de votre limite de consommation, de ce que vous avez dans la main entre deux gorgées et de ce que vous faites lorsque d'autres sortent pour fumer. Mettez une pastille et une menthe poivrée dans votre poche avant de quitter la maison."
+            },
+            {
+              "id": "d26t3",
+              "type": "mindset",
+              "title": "Précharger la réponse",
+              "text": "Répétez la pensée maintenant, sobrement : fumer une cigarette en buvant n'est pas un bonus pour la nuit, c'est offrir un festin au petit monstre et recommencer le premier jour. Décidez de la réponse avant que l’alcool ne soit voté."
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "Jour 27 : Presque un mois",
+          "intro": "Jours à compter de votre premier mois complet. Le gros du travail de démolition des habitudes est en grande partie effectué.",
+          "tasks": [
+            {
+              "id": "d27t1",
+              "type": "journal",
+              "title": "Revenez au chapitre deux",
+              "text": "Écrivez deux ou trois phrases sur ce qui a changé au cours de ce chapitre de recâblage."
+            },
+            {
+              "id": "d27t2",
+              "type": "fact",
+              "title": "Consultez votre calendrier de santé",
+              "text": "Ouvrez l'onglet de progression de votre santé et voyez quels marqueurs ont le plus bougé au cours des deux dernières semaines."
+            },
+            {
+              "id": "d27t3",
+              "type": "action",
+              "title": "Planifiez le cap d'un mois",
+              "text": "Décidez comment vous souhaitez marquer un mois complet, même quelque chose de petit."
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "Jour 28 : Quatre semaines gratuites",
+          "intro": "Quatre semaines complètes. Votre vie quotidienne se déroule désormais selon des routines qui n'incluent pas la cigarette.",
+          "tasks": [
+            {
+              "id": "d28t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de quatre semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d28t2",
+              "type": "fact",
+              "title": "Voyez votre risque déjà en baisse",
+              "text": "Dès le premier mois, le risque de certains problèmes cardiaques liés au tabagisme commence déjà à diminuer par rapport à une personne qui a continué à fumer."
+            },
+            {
+              "id": "d28t3",
+              "type": "social",
+              "title": "Partagez votre histoire d'un mois",
+              "text": "Publiez une brève mise à jour dans la communauté sur l'atteinte des quatre semaines."
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "Jour 29 : Connaissez vos meilleures armes",
+          "intro": "Vous avez essayé de nombreux outils ce mois-ci. Il est temps d’identifier votre top trois personnel.",
+          "tasks": [
+            {
+              "id": "d29t1",
+              "type": "journal",
+              "title": "Classez vos outils préférés",
+              "text": "Notez quels outils ont le mieux fonctionné pour vous personnellement : respiration, pastilles, menthe poivrée, jeux, sons, promenades. Vos trois premiers deviennent votre trousse d’urgence à l’avenir."
+            },
+            {
+              "id": "d29t2",
+              "type": "nrt",
+              "title": "Aperçu du cône",
+              "text": "Anticipez : vers la sixième semaine, vous réduirez probablement la dose d'un patch, puis de nouveau deux semaines plus tard, pour terminer les patchs vers la dixième semaine. Rien ne change encore ; il suffit de connaître la route pour que la descente soit planifiée et non effrayante."
+            },
+            {
+              "id": "d29t3",
+              "type": "action",
+              "title": "Signaler un défi à venir",
+              "text": "Notez un événement le mois prochain qui pourrait être un véritable test, afin que le chapitre trois puisse vous y préparer."
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "Jour 30 : Un mois sans fumer",
+          "intro": "Trente jours sans une seule cigarette. Vous n’avez pas eu le courage de le faire ; vous avez reconstruit la machinerie de votre journée. Le chapitre trois prouve que la nouvelle machine résiste à une réelle pression sociale.",
+          "tasks": [
+            {
+              "id": "d30t1",
+              "type": "reward",
+              "title": "Récupérez votre badge d'un mois",
+              "text": "Ouvrez l'onglet de vos badges et collectez le jalon d'un mois, l'un des plus importants à ce jour."
+            },
+            {
+              "id": "d30t2",
+              "type": "fact",
+              "title": "Voyez votre transformation en un mois",
+              "text": "Ouvrez votre aperçu complet de votre santé et de vos statistiques et voyez tout ce qui a changé en trente jours."
+            },
+            {
+              "id": "d30t3",
+              "type": "journal",
+              "title": "Écrivez une lettre au premier jour",
+              "text": "Une courte lettre au vous du jour 1, en lui expliquant à quoi ressemblait réellement le premier mois."
+            },
+            {
+              "id": "d30t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre trois",
+              "text": "Lisez l'introduction du chapitre trois et fixez-vous un objectif pour gérer les situations sociales sans fumer."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "name": "Nouvelle normale",
+      "role": "Jours 31 à 60 : situations sociales, alcool, stress au travail, plus vos premières réductions de NRT",
+      "day_start": 31,
+      "day_end": 60,
+      "days": [
+        {
+          "day": 31,
+          "title": "Jour 31 : Bienvenue au chapitre trois",
+          "intro": "La construction d’habitudes est terminée. Maintenant, vous prouvez que la nouvelle normalité tient dans la nature : les fêtes, les boissons, les semaines stressantes et les vieux amis fumeurs. Ce chapitre contient également votre première réduction NRT.",
+          "tasks": [
+            {
+              "id": "d31t1",
+              "type": "journal",
+              "title": "Listez vos événements sociaux à venir",
+              "text": "Notez toutes les fêtes, dîners ou rassemblements au cours des deux prochaines semaines."
+            },
+            {
+              "id": "d31t2",
+              "type": "action",
+              "title": "Préparez un script social",
+              "text": "Écrivez une courte phrase que vous pouvez dire si quelqu'un vous propose une cigarette, comme : non merci, je ne fume pas. Notez le libellé : non, j'essaie d'arrêter, mais je ne fume pas. Les mots façonnent l’identité."
+            },
+            {
+              "id": "d31t3",
+              "type": "checkin",
+              "title": "Fixez votre objectif du chapitre trois",
+              "text": "Choisissez une situation spécifique que vous souhaitez gérer sans fumer ce mois-ci."
+            }
+          ]
+        },
+        {
+          "day": 32,
+          "title": "Jour 32 : Dire non sans expliquer",
+          "intro": "Vous ne devez une histoire à personne. Un non court et joyeux est une réponse complète.",
+          "tasks": [
+            {
+              "id": "d32t1",
+              "type": "action",
+              "title": "Pratiquez votre non à voix haute",
+              "text": "Dites à haute voix votre phrase préparée une fois aujourd’hui pour qu’elle se déroule sans problème lorsque cela compte."
+            },
+            {
+              "id": "d32t2",
+              "type": "mindset",
+              "title": "Non, ce n'est pas une privation",
+              "text": "Lorsque vous refusez une cigarette, vous ne résistez pas à une friandise, vous refusez un fardeau, comme vous refuseriez une dette. Il n’y a rien à envier quand les autres s’illuminent."
+            }
+          ]
+        },
+        {
+          "day": 33,
+          "title": "Jour 33 : Vieux amis fumeurs",
+          "intro": "Certaines amitiés se sont construites en partie autour du fait de fumer ensemble. L'amitié reste ; sa forme change.",
+          "tasks": [
+            {
+              "id": "d33t1",
+              "type": "journal",
+              "title": "Pensez à un ami en particulier",
+              "text": "Écrivez à propos d’un ami avec qui vous fumiez et à quoi pourrait ressembler votre temps ensemble maintenant."
+            },
+            {
+              "id": "d33t2",
+              "type": "action",
+              "title": "Suggérer un autre Hangout",
+              "text": "Si vous voyez bientôt un ami fumeur, proposez-lui une activité qui ne s'articule pas autour de pauses cigarette : manger, marcher, jouer."
+            }
+          ]
+        },
+        {
+          "day": 34,
+          "title": "Jour 34 : Stress au travail",
+          "intro": "Le stress au travail vous envoyait directement dehors avec un paquet. La pause est toujours à vous ; seule la cigarette est tirée.",
+          "tasks": [
+            {
+              "id": "d34t1",
+              "type": "breathing",
+              "title": "Respirer au bureau",
+              "text": "Au prochain pic de stress au travail, éloignez-vous pendant une minute et utilisez l'outil de respiration au lieu d'une pause cigarette."
+            },
+            {
+              "id": "d34t2",
+              "type": "action",
+              "title": "Faites une vraie pause",
+              "text": "Faites une promenade de deux minutes depuis votre bureau aujourd'hui pour créer votre nouvelle version d'une pause. Vous avez droit à des pauses sans cigarette comme excuse."
+            },
+            {
+              "id": "d34t3",
+              "type": "checkin",
+              "title": "Enregistrez le stress du jour",
+              "text": "Évaluez à quel point le travail est stressant aujourd'hui sur une échelle simple."
+            }
+          ]
+        },
+        {
+          "day": 35,
+          "title": "Jour 35 : Cinq semaines gratuites",
+          "intro": "Cinq semaines plus tard, vous avez déjà traité plus de déclencheurs que prévu.",
+          "tasks": [
+            {
+              "id": "d35t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cinq semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d35t2",
+              "type": "social",
+              "title": "Soulevez quelqu'un de plus récent",
+              "text": "Trouvez quelqu'un au cours de ses deux premières semaines et envoyez un message encourageant."
+            }
+          ]
+        },
+        {
+          "day": 36,
+          "title": "Jour 36 : Boire au restaurant, avec un plan",
+          "intro": "Sortir boire un verre est la situation la plus à risque qui soit. Vous entrez armé.",
+          "tasks": [
+            {
+              "id": "d36t1",
+              "type": "action",
+              "title": "Préparez votre kit de soirée",
+              "text": "Avant toute sortie nocturne : fixez une limite de consommation, mettez des pastilles et des menthes poivrées dans votre poche et décidez de ce que vous ferez pendant la réunion pour fumer à l'extérieur, comme commander le prochain tour ou garder la table."
+            },
+            {
+              "id": "d36t2",
+              "type": "fact",
+              "title": "Connaître la véritable fenêtre de risque",
+              "text": "Le moment dangereux n’est généralement pas le premier verre ; il est tard dans la nuit lorsque la fatigue et une garde baissée rencontrent des gens qui fument dehors."
+            }
+          ]
+        },
+        {
+          "day": 37,
+          "title": "Jour 37 : Après une soirée",
+          "intro": "Si la nuit dernière était un test, c'est aujourd'hui le débriefing honnête, si tout s'est parfaitement déroulé ou presque.",
+          "tasks": [
+            {
+              "id": "d37t1",
+              "type": "journal",
+              "title": "Réfléchissez à la nuit dernière",
+              "text": "Écrivez comment s'est déroulée une situation sociale ou de consommation d'alcool récente, y compris les accidents rapprochés."
+            },
+            {
+              "id": "d37t2",
+              "type": "mindset",
+              "title": "Un appel serré est une victoire",
+              "text": "Se sentir tenté et ne pas fumer n’est pas une faiblesse qui se manifeste, c’est une force qui tient. Chaque embuscade survécue affaiblit la suivante."
+            }
+          ]
+        },
+        {
+          "day": 38,
+          "title": "Jour 38 : Célébrations et bonnes nouvelles",
+          "intro": "Les bons moments, pas seulement les mauvais, s’accompagnaient autrefois d’une cigarette. La joie mérite un meilleur signe de ponctuation.",
+          "tasks": [
+            {
+              "id": "d38t1",
+              "type": "action",
+              "title": "Choisissez un nouveau mouvement de célébration",
+              "text": "Choisissez une nouvelle façon de marquer une bonne nouvelle : une collation préférée, en parler à quelqu'un ou consacrer cinq de vos dollars économisés à quelque chose que vous voulez."
+            },
+            {
+              "id": "d38t2",
+              "type": "fact",
+              "title": "Les deux extrémités du déclencheur d'émotion",
+              "text": "Les habitudes de tabagisme déclenchent de fortes émotions dans les deux sens, le stress et l'excitation, donc les deux méritent un plan."
+            }
+          ]
+        },
+        {
+          "day": 39,
+          "title": "Jour 39 : Réunions de famille",
+          "intro": "Les événements familiaux peuvent rapidement réveiller de vieilles habitudes, en particulier autour de proches qui fument encore.",
+          "tasks": [
+            {
+              "id": "d39t1",
+              "type": "action",
+              "title": "Préparez votre prochain événement familial",
+              "text": "Si un rassemblement a lieu, décidez où vous serez et ce que vous ferez pendant les pauses cigarette que les autres prendront. Apportez votre kit oral."
+            },
+            {
+              "id": "d39t2",
+              "type": "checkin",
+              "title": "Évaluez la pression familiale",
+              "text": "Évaluez la pression que vous ressentez de la part de votre famille ou de vos proches à l'idée de cesser de fumer."
+            }
+          ]
+        },
+        {
+          "day": 40,
+          "title": "Jour 40 : Fort de quarante jours",
+          "intro": "Les modèles qui exécutaient automatiquement votre journée ne le font plus. Quarante jours de preuve.",
+          "tasks": [
+            {
+              "id": "d40t1",
+              "type": "fact",
+              "title": "Sentez vos poumons travailler",
+              "text": "À ce stade, de nombreux ex-fumeurs remarquent une respiration nettement plus facile lors d’exercices légers à mesure que les voies respiratoires continuent de guérir."
+            },
+            {
+              "id": "d40t2",
+              "type": "action",
+              "title": "Tester volontairement une situation plus difficile",
+              "text": "Mettez-vous aujourd’hui dans une situation modérément déclenchante, délibérément et préparé, et remarquez que vous vous en sortez."
+            }
+          ]
+        },
+        {
+          "day": 41,
+          "title": "Jour 41 : Le mythe d'une cigarette",
+          "intro": "Un seul ne fera pas de mal est la phrase la plus dangereuse pour arrêter de fumer. Aujourd'hui, vous le démontez pour de bon.",
+          "tasks": [
+            {
+              "id": "d41t1",
+              "type": "mindset",
+              "title": "Comprendre pourquoi on n'est jamais un",
+              "text": "Une cigarette fait deux choses : elle réalimente le petit monstre pour que l'envie physique revienne, et elle indique au grand monstre que le lavage de cerveau était correct depuis le début. Il n’existe pas une seule cigarette ; il n’y a que le premier des dix mille suivants, ou pas du tout."
+            },
+            {
+              "id": "d41t2",
+              "type": "journal",
+              "title": "Écrivez votre propre note d'avertissement",
+              "text": "Écrivez une courte note à votre futur moi expliquant pourquoi cela n'en vaut pas la peine, et gardez-la pour tout moment de tentation."
+            }
+          ]
+        },
+        {
+          "day": 42,
+          "title": "Jour 42 : Six semaines gratuites, point de contrôle progressif",
+          "intro": "Six semaines : la chimie corporelle, les routines et la confiance ont toutes changé. C’est également le point de contrôle standard pour réduire votre correctif.",
+          "tasks": [
+            {
+              "id": "d42t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de six semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d42t2",
+              "type": "nrt",
+              "title": "Planifiez votre première mise à jour progressive",
+              "text": "Si vous avez commencé avec le patch le plus puissant, cette semaine est le point standard pour baisser d'un niveau, généralement de 21 mg à 14 mg, pour les deux semaines suivantes. Confirmez auprès de votre pharmacien et gardez les pastilles à portée de main pendant les deux ou trois premiers jours d'utilisation du nouveau dosage."
+            },
+            {
+              "id": "d42t3",
+              "type": "social",
+              "title": "Partagez une mise à jour de six semaines",
+              "text": "Publiez une brève mise à jour dans la communauté sur l'atteinte des six semaines."
+            }
+          ]
+        },
+        {
+          "day": 43,
+          "title": "Jour 43 : Premiers jours sur un patch plus léger",
+          "intro": "Une diminution peut entraîner un jour ou deux d’envies légèrement plus fortes pendant que votre corps s’adapte. C’est attendu, temporaire et signe que la sortie fonctionne.",
+          "tasks": [
+            {
+              "id": "d43t1",
+              "type": "nrt",
+              "title": "Soutenir la démission",
+              "text": "Durant les deux ou trois prochains jours, soyez un peu plus généreux avec des pastilles, de la menthe poivrée, de l'eau et des séances de respiration. La bosse passe vite ; ne reculez pas après un après-midi difficile."
+            },
+            {
+              "id": "d43t2",
+              "type": "checkin",
+              "title": "Évaluez l’ajustement",
+              "text": "Évaluez la sensation du patch plus léger jusqu'à présent, de un à cinq."
+            }
+          ]
+        },
+        {
+          "day": 44,
+          "title": "Jour 44 : Enregistrement d'identité",
+          "intro": "À l’heure actuelle, de nombreuses personnes arrêtent tranquillement de se considérer comme des fumeurs qui ont arrêté et commencent à être simplement des non-fumeurs.",
+          "tasks": [
+            {
+              "id": "d44t1",
+              "type": "journal",
+              "title": "Comment te décris-tu maintenant",
+              "text": "Écrivez comment vous décririez votre relation avec le tabagisme aujourd’hui par rapport à il y a deux mois."
+            },
+            {
+              "id": "d44t2",
+              "type": "mindset",
+              "title": "L'identité bat la volonté",
+              "text": "La volonté ferme la porte à quelque chose que vous voulez encore. L'identité, c'est réaliser que rien ne pousse à la porte. Le but n’est pas de résister éternellement à la cigarette ; c’est vraiment ne pas en vouloir, et c’est là que vous vous dirigez."
+            }
+          ]
+        },
+        {
+          "day": 45,
+          "title": "Jour 45 : À mi-chemin du chapitre trois",
+          "intro": "Le stress, la pression sociale et l’alcool sont désormais apparus et vous les avez gérés.",
+          "tasks": [
+            {
+              "id": "d45t1",
+              "type": "checkin",
+              "title": "Notez ce chapitre jusqu'à présent",
+              "text": "Évaluez le déroulement du chapitre trois par rapport au chapitre deux."
+            },
+            {
+              "id": "d45t2",
+              "type": "game",
+              "title": "Faites une pause mentale",
+              "text": "Jouez à un mini-jeu pendant deux minutes juste pour réinitialiser, aucune envie n'est requise."
+            }
+          ]
+        },
+        {
+          "day": 46,
+          "title": "Jour 46 : Colère et irritabilité",
+          "intro": "Autrefois, la cigarette était un moyen de se calmer après la colère. Cette soupape de décharge a besoin d'un nouveau raccord.",
+          "tasks": [
+            {
+              "id": "d46t1",
+              "type": "breathing",
+              "title": "Respirez avant de réagir",
+              "text": "La prochaine fois que la frustration augmentera aujourd’hui, utilisez l’outil de respiration avant de répondre à qui que ce soit."
+            },
+            {
+              "id": "d46t2",
+              "type": "journal",
+              "title": "Rappelez-vous un moment de colère en fumant",
+              "text": "Écrivez une occasion où vous avez fumé spécifiquement parce que vous étiez en colère et ce que la cigarette a réellement résolu. Spoiler : le problème était toujours là après."
+            }
+          ]
+        },
+        {
+          "day": 47,
+          "title": "Jour 47 : Déclencheurs du week-end",
+          "intro": "Les week-ends ont leur propre rythme : plus de temps libre, plus de temps social, plus de temps libres, tous les vieux créneaux fumeurs.",
+          "tasks": [
+            {
+              "id": "d47t1",
+              "type": "action",
+              "title": "Planifiez votre week-end autrement",
+              "text": "Choisissez une partie de votre schéma habituel du week-end et gérez-la différemment cette semaine."
+            },
+            {
+              "id": "d47t2",
+              "type": "checkin",
+              "title": "Évaluer la difficulté du week-end",
+              "text": "Évaluez à quel point les week-ends sont difficiles par rapport aux jours de semaine en ce moment."
+            }
+          ]
+        },
+        {
+          "day": 48,
+          "title": "Jour 48 : Sept semaines gratuites",
+          "intro": "L’espace entre vous et votre dernière cigarette ne cesse de croître, tout comme votre dossier de preuves.",
+          "tasks": [
+            {
+              "id": "d48t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de sept semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d48t2",
+              "type": "fact",
+              "title": "Mise à jour de la diffusion",
+              "text": "À ce stade, la circulation s’est généralement encore améliorée, ce qui rend l’activité physique sensiblement plus facile que lorsque vous fumiez."
+            }
+          ]
+        },
+        {
+          "day": 49,
+          "title": "Jour 49 : Chèque d'envie",
+          "intro": "Quand vous voyez quelqu’un fumer, que ressentez-vous ? Aujourd’hui, vous vous assurez que c’est la bonne chose.",
+          "tasks": [
+            {
+              "id": "d49t1",
+              "type": "mindset",
+              "title": "N'enviez pas les fumeurs, comprenez-les",
+              "text": "La prochaine fois que vous verrez quelqu'un s'illuminer, rappelez-vous : il ne profite pas d'une friandise qui vous est refusée. Ils soulagent un manque que vous n’avez plus et la plupart d’entre eux souhaiteraient pouvoir arrêter. Si vous ressentez quelque chose, soyez soulagé de savoir que vous êtes absent."
+            },
+            {
+              "id": "d49t2",
+              "type": "journal",
+              "title": "Enregistrez votre réaction honnête",
+              "text": "Écrivez ce que vous avez réellement ressenti la dernière fois que vous avez vu quelqu'un fumer à proximité."
+            }
+          ]
+        },
+        {
+          "day": 50,
+          "title": "Jour 50 : Cinquante jours",
+          "intro": "Cinquante jours, c’est un nombre que beaucoup d’abandons n’atteignent jamais. Vous l’avez dépassé et vous accélérez.",
+          "tasks": [
+            {
+              "id": "d50t1",
+              "type": "fact",
+              "title": "Consultez votre aperçu de cinquante jours",
+              "text": "Ouvrez vos statistiques et regardez tout depuis le premier jour : séquence, argent, cigarettes évitées, marqueurs de santé."
+            },
+            {
+              "id": "d50t2",
+              "type": "social",
+              "title": "Partagez le jalon",
+              "text": "Publiez une mise à jour dans la communauté sur l'atteinte des cinquante jours."
+            }
+          ]
+        },
+        {
+          "day": 51,
+          "title": "Jour 51 : L'ennui revisité",
+          "intro": "L'ennui déclenche le retour sous de nouveaux déguisements alors que la vie s'installe dans la routine. Gardez les comptoirs frais.",
+          "tasks": [
+            {
+              "id": "d51t1",
+              "type": "checkin",
+              "title": "Évaluez l'ennui d'aujourd'hui",
+              "text": "Évaluez à quel point vous vous êtes ennuyé aujourd’hui et si cela est lié à une envie."
+            },
+            {
+              "id": "d51t2",
+              "type": "game",
+              "title": "Jouer l'écart",
+              "text": "Prochaine pause d'ennui aujourd'hui, remplissez-la avec un mini-jeu au lieu de laisser votre esprit vagabonder vers de vieilles habitudes."
+            }
+          ]
+        },
+        {
+          "day": 52,
+          "title": "Jour 52 : Les scintillement sont normaux",
+          "intro": "Un soupçon d’envie lorsque vous voyez ou sentez une cigarette, même après des semaines libres, ne signifie rien sur vos progrès.",
+          "tasks": [
+            {
+              "id": "d52t1",
+              "type": "fact",
+              "title": "Les déclencheurs visuels ne sont que des échos",
+              "text": "Voir ou sentir la cigarette de quelqu'un d'autre peut déclencher une brève envie longtemps après avoir arrêté. Il s’agit d’une association qui s’estompe, et non d’un avertissement de rechute."
+            },
+            {
+              "id": "d52t2",
+              "type": "mindset",
+              "title": "Répondez au scintillement",
+              "text": "Lorsqu'un scintillement apparaît, répondez-y en une seule ligne : bien essayé, je ne fume pas. Alors continuez. Les scintillements détestent être ignorés ; c'est ainsi qu'ils meurent."
+            }
+          ]
+        },
+        {
+          "day": 53,
+          "title": "Jour 53 : Votre système d'assistance",
+          "intro": "Arrêter de fumer est plus facile avec des gens autour de vous qui savent ce que vous faites et pourquoi.",
+          "tasks": [
+            {
+              "id": "d53t1",
+              "type": "social",
+              "title": "Connectez-vous avec la communauté",
+              "text": "Commentez ou réagissez aux messages de deux autres personnes aujourd'hui."
+            },
+            {
+              "id": "d53t2",
+              "type": "journal",
+              "title": "Nommez votre plus grand supporter",
+              "text": "Notez qui a été le plus favorable à votre arrêt jusqu’à présent et envisagez de le leur dire."
+            }
+          ]
+        },
+        {
+          "day": 54,
+          "title": "Jour 54 : Huit semaines gratuites",
+          "intro": "Deux mois complets de matinées, de repas, de stress et de soirées, le tout sans cigarette.",
+          "tasks": [
+            {
+              "id": "d54t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de huit semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d54t2",
+              "type": "fact",
+              "title": "Gains de santé en deux mois",
+              "text": "Ouvrez l'onglet de progression de votre santé et voyez jusqu'où vos marqueurs clés ont évolué en deux mois."
+            }
+          ]
+        },
+        {
+          "day": 55,
+          "title": "Jour 55 : Les dérapages arrivent, les plans comptent",
+          "intro": "Même avec une forte séquence, savoir exactement ce que vous feriez après une glissade lui enlève le pouvoir de faire boule de neige.",
+          "tasks": [
+            {
+              "id": "d55t1",
+              "type": "action",
+              "title": "Rédigez votre plan de récupération des glissades",
+              "text": "Écrivez exactement ce que vous feriez dans la première heure après une erreur : à qui vous en parlerez, en jetant les cigarettes restantes et en revenant au plan le même jour, pas lundi prochain."
+            },
+            {
+              "id": "d55t2",
+              "type": "fact",
+              "title": "Un faux pas n'est pas la fin",
+              "text": "Beaucoup de ceux qui ont réussi à arrêter ont commis une erreur au moins une fois. Ce qui les séparait, c'était de considérer cela comme un incendie à éteindre immédiatement, et non comme une raison pour incendier la maison."
+            }
+          ]
+        },
+        {
+          "day": 56,
+          "title": "Jour 56 : Réduction du deuxième patch",
+          "intro": "Deux semaines avec le patch de force moyenne sont terminées. C'est le point standard pour descendre à la résistance la plus basse pour le tronçon final.",
+          "tasks": [
+            {
+              "id": "d56t1",
+              "type": "nrt",
+              "title": "Descendez jusqu'au patch le plus bas",
+              "text": "Si vous avez terminé environ deux semaines avec la dose moyenne, passez au patch le plus bas, généralement 7 mg, pendant les deux semaines suivantes. Même exercice que la dernière fois : pastilles supplémentaires, eau et respiration pendant les premiers jours. Il vous reste deux semaines pour ne plus disposer de correctifs."
+            },
+            {
+              "id": "d56t2",
+              "type": "journal",
+              "title": "Situation la plus difficile de ce chapitre",
+              "text": "Écrivez sur la situation la plus difficile à laquelle vous avez été confrontée au chapitre trois et comment vous y êtes parvenue."
+            }
+          ]
+        },
+        {
+          "day": 57,
+          "title": "Jour 57 : Contrôle de confiance",
+          "intro": "Vous avez désormais la preuve, et pas seulement l’espoir, que vous pouvez gérer les moments difficiles sans fumer.",
+          "tasks": [
+            {
+              "id": "d57t1",
+              "type": "fact",
+              "title": "Comptez vos preuves",
+              "text": "Ouvrez vos statistiques et comptez les jours que vous avez passés. Chacun est un point de données contre l’histoire de la dépendance."
+            },
+            {
+              "id": "d57t2",
+              "type": "checkin",
+              "title": "Évaluez votre confiance",
+              "text": "Évaluez dans quelle mesure vous vous sentez confiant de ne pas fumer au cours des trente prochains jours."
+            }
+          ]
+        },
+        {
+          "day": 58,
+          "title": "Jour 58 : Presque deux mois",
+          "intro": "Remarquez à quel point les cigarettes vous viennent moins souvent à l’esprit maintenant par rapport à la première semaine.",
+          "tasks": [
+            {
+              "id": "d58t1",
+              "type": "journal",
+              "title": "Mesurer le calme mental",
+              "text": "Écrivez à quelle fréquence les cigarettes vous viennent à l'esprit maintenant par rapport à votre première semaine."
+            },
+            {
+              "id": "d58t2",
+              "type": "action",
+              "title": "Planifiez la barre des deux mois",
+              "text": "Décidez comment vous souhaitez reconnaître deux mois complets en deux jours."
+            }
+          ]
+        },
+        {
+          "day": 59,
+          "title": "Jour 59 : Il reste un jour",
+          "intro": "Demain se termine le chapitre trois. Vous avez surmonté les situations les plus susceptibles de provoquer une rechute.",
+          "tasks": [
+            {
+              "id": "d59t1",
+              "type": "fact",
+              "title": "Aperçu du chapitre quatre",
+              "text": "Le chapitre quatre traite des pièges à rechute, de la complaisance, de la fin de votre réduction de NRT et de votre étape de trois mois."
+            },
+            {
+              "id": "d59t2",
+              "type": "checkin",
+              "title": "Évaluez votre état de préparation",
+              "text": "Évaluez à quel point vous vous sentez prêt pour le prochain chapitre."
+            }
+          ]
+        },
+        {
+          "day": 60,
+          "title": "Jour 60 : Deux mois sans fumer",
+          "intro": "Soixante jours. Fêtes, boissons, stress, famille et ennui, tout cela sans fumer. Ce n’est pas de la chance, c’est une compétence que vous avez acquise.",
+          "tasks": [
+            {
+              "id": "d60t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de deux mois",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon majeur."
+            },
+            {
+              "id": "d60t2",
+              "type": "fact",
+              "title": "Voyez votre transformation en deux mois",
+              "text": "Ouvrez vos statistiques complètes et votre aperçu de votre santé pour voir tout ce qui a changé depuis le premier jour."
+            },
+            {
+              "id": "d60t3",
+              "type": "journal",
+              "title": "Résumé du chapitre trois",
+              "text": "Écrivez quelques phrases résumant ce que vous avez appris au chapitre trois."
+            },
+            {
+              "id": "d60t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre quatre",
+              "text": "Lisez l'introduction du chapitre quatre et fixez-vous un objectif pour rester fort pendant trois mois."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "name": "Tenir bon",
+      "role": "Jours 61 à 90 : vaincre la complaisance et les pièges de la rechute, terminer le sevrage des patchs, atteindre 3 mois",
+      "day_start": 61,
+      "day_end": 90,
+      "days": [
+        {
+          "day": 61,
+          "title": "Jour 61 : Bienvenue au chapitre quatre",
+          "intro": "La confiance est élevée en ce moment, et c’est exactement à ce moment-là que la garde peut glisser. Ce chapitre vous permet de rester alerte jusqu'à trois mois, et c'est là que vous terminez entièrement votre dose de nicotine.",
+          "tasks": [
+            {
+              "id": "d61t1",
+              "type": "fact",
+              "title": "Connaître le piège de la complaisance",
+              "text": "De nombreuses rechutes surviennent après deux mois, non pas parce que la vie devient plus difficile, mais parce que les gens cessent de prendre leurs envies au sérieux une fois qu'ils sentent qu'ils ont déjà gagné."
+            },
+            {
+              "id": "d61t2",
+              "type": "journal",
+              "title": "Nommez votre plus grand risque actuel",
+              "text": "Notez la situation la plus susceptible de vous mettre au défi au cours des trente prochains jours."
+            },
+            {
+              "id": "d61t3",
+              "type": "checkin",
+              "title": "Fixez votre objectif du chapitre quatre",
+              "text": "Choisissez une chose sur laquelle vous souhaitez rester vigilant ce mois-ci."
+            }
+          ]
+        },
+        {
+          "day": 62,
+          "title": "Jour 62 : Le piège du simple contrôle",
+          "intro": "En avoir un pour tester votre volonté ressemble à une curiosité inoffensive. C’est la dépendance qui écrit son propre retour.",
+          "tasks": [
+            {
+              "id": "d62t1",
+              "type": "mindset",
+              "title": "Pourquoi se tester se retourne contre vous",
+              "text": "Une cigarette test remet de la nicotine dans votre organisme et réveille le petit monstre. Cela ne prouve rien sinon que le piège fonctionne toujours. Le véritable test de la liberté n’est pas de fumer et de se sentir bien ; ce n’est pas en vouloir du tout."
+            },
+            {
+              "id": "d62t2",
+              "type": "journal",
+              "title": "Vérification d'honnêteté",
+              "text": "Écrivez honnêtement si l’idée d’en faire un seul pour vous tester vous a traversé l’esprit ces derniers temps. Nommer la pensée la désamorce."
+            }
+          ]
+        },
+        {
+          "day": 63,
+          "title": "Jour 63 : L'ennui, le long jeu",
+          "intro": "L'ennui ne disparaît jamais complètement, il vient simplement moins souvent. Gardez la boîte à outils huilée.",
+          "tasks": [
+            {
+              "id": "d63t1",
+              "type": "game",
+              "title": "Rafraîchissez votre boîte à outils contre l'ennui",
+              "text": "Essayez un mini-jeu que vous n'avez pas utilisé depuis un moment pendant un moment lent aujourd'hui."
+            },
+            {
+              "id": "d63t2",
+              "type": "action",
+              "title": "Ajouter une nouvelle activité contre l'ennui",
+              "text": "Ajoutez une activité à votre liste d'ennui que vous n'avez jamais essayée auparavant."
+            }
+          ]
+        },
+        {
+          "day": 64,
+          "title": "Jour 64 : Neuf semaines gratuites",
+          "intro": "Neuf semaines. Votre ancien horaire de tabagisme ressemble probablement au calendrier de quelqu'un d'autre.",
+          "tasks": [
+            {
+              "id": "d64t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de neuf semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d64t2",
+              "type": "fact",
+              "title": "Statistiques sur neuf semaines",
+              "text": "Ouvrez vos statistiques et examinez votre séquence, l'argent économisé et vos marqueurs de santé."
+            }
+          ]
+        },
+        {
+          "day": 65,
+          "title": "Jour 65 : La célébration recommence",
+          "intro": "Les promotions, les réalisations et les fêtes peuvent murmurer tranquillement l'ancienne façon de célébrer.",
+          "tasks": [
+            {
+              "id": "d65t1",
+              "type": "journal",
+              "title": "Auditer un bon moment récent",
+              "text": "Écrivez sur une bonne nouvelle récente et si une envie l'accompagne."
+            },
+            {
+              "id": "d65t2",
+              "type": "action",
+              "title": "Planifiez votre célébration de trois mois",
+              "text": "Décidez à l’avance de la manière dont vous célébrerez l’étape des trois mois lorsqu’elle arrivera, en utilisant l’argent économisé si vous le souhaitez."
+            }
+          ]
+        },
+        {
+          "day": 66,
+          "title": "Jour 66 : Jours fériés et jours spéciaux",
+          "intro": "Les occasions spéciales, même les plus petites, véhiculent de vieilles associations. Un plan bat la volonté à chaque fois.",
+          "tasks": [
+            {
+              "id": "d66t1",
+              "type": "checkin",
+              "title": "Évaluer le risque d’événement à venir",
+              "text": "Si un anniversaire, des vacances ou un événement approche, évaluez le risque que cela représente."
+            },
+            {
+              "id": "d66t2",
+              "type": "fact",
+              "title": "Le plan bat la volonté",
+              "text": "Se rendre à une occasion spéciale avec un plan de pauses cigarette et de toasts fonctionne bien mieux que d'improviser contre la pression du moment."
+            }
+          ]
+        },
+        {
+          "day": 67,
+          "title": "Jour 67 : Vieux amis, vieilles habitudes",
+          "intro": "Quelqu’un de votre passé de fumeur peut refaire surface sans avertissement : une réunion, un ancien collègue, un ami de retour.",
+          "tasks": [
+            {
+              "id": "d67t1",
+              "type": "journal",
+              "title": "Nommez la personne",
+              "text": "Écrivez sur toute personne de votre passé que vous associez fortement au tabagisme, même si vous la voyez rarement."
+            },
+            {
+              "id": "d67t2",
+              "type": "action",
+              "title": "Prédécidez votre réponse",
+              "text": "Décidez maintenant exactement de ce que vous direz et ferez si cette personne vous propose une cigarette. Les réponses répétées ne vacillent pas."
+            }
+          ]
+        },
+        {
+          "day": 68,
+          "title": "Jour 68 : Dix semaines, dernière semaine de patch",
+          "intro": "Dix semaines gratuites, et si vous avez suivi la réduction standard, c'est votre dernière semaine de port d'un patch.",
+          "tasks": [
+            {
+              "id": "d68t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de dix semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d68t2",
+              "type": "nrt",
+              "title": "Préparez-vous à une vie sans patch",
+              "text": "Si vous avez terminé environ deux semaines avec la dose la plus faible, vous pouvez arrêter les patchs à la fin de cette semaine. Conservez une petite quantité de pastilles pendant les deux ou trois semaines suivantes comme filet de sécurité en cas d'envies surprises, et prévoyez de les supprimer également progressivement."
+            }
+          ]
+        },
+        {
+          "day": 69,
+          "title": "Jour 69 : Fatigue et manque d'énergie",
+          "intro": "L’épuisement fait baisser la garde de chacun, y compris face aux vieilles habitudes. Le repos est un outil de prévention des rechutes.",
+          "tasks": [
+            {
+              "id": "d69t1",
+              "type": "journal",
+              "title": "Remarquez le lien fatigue",
+              "text": "Écrivez si vous avez remarqué un lien entre être très fatigué et penser à la cigarette."
+            },
+            {
+              "id": "d69t2",
+              "type": "audio",
+              "title": "Se reposer volontairement",
+              "text": "Utilisez un son relaxant pendant quelques minutes aujourd’hui si vous vous sentez épuisé."
+            }
+          ]
+        },
+        {
+          "day": 70,
+          "title": "Jour 70 : Journée sans patch",
+          "intro": "Soixante-dix jours, et pour les utilisateurs de cônes standard, le premier jour sans aucun patch. À partir d’aujourd’hui, toute nicotine dans votre corps est nulle. Le petit monstre ne meurt plus seulement de faim ; c'est parti.",
+          "tasks": [
+            {
+              "id": "d70t1",
+              "type": "nrt",
+              "title": "Marquez le jalon sans correctif",
+              "text": "Si c’est aujourd’hui votre premier jour sans patch, attendez-vous à quelques jours plus calmes que prévu. Gardez des pastilles et votre kit oral à portée de main en guise de sauvegarde, et rappelez-vous : toute envie est maintenant un écho purement mental, et non un besoin chimique."
+            },
+            {
+              "id": "d70t2",
+              "type": "mindset",
+              "title": "Le petit monstre est mort",
+              "text": "Comme aucune nicotine ne pénètre dans votre corps, quelle qu'en soit la source, la dépendance physique n'a plus aucune raison de vivre. Tout ce qui se passe ici n’est que mémoire d’habitudes et de vieilles croyances, et vous les démantelez depuis dix semaines."
+            },
+            {
+              "id": "d70t3",
+              "type": "social",
+              "title": "Partager une mise à jour de soixante-dix jours",
+              "text": "Publiez une mise à jour rapide dans la communauté concernant l'atteinte des soixante-dix jours."
+            }
+          ]
+        },
+        {
+          "day": 71,
+          "title": "Jour 71 : Surveiller les signes avant-coureurs",
+          "intro": "Les petits signes avant-coureurs, comme des pensées plus fréquentes concernant le tabagisme, méritent d’être détectés tôt, surtout dans la semaine qui suit l’arrêt de la NRT.",
+          "tasks": [
+            {
+              "id": "d71t1",
+              "type": "checkin",
+              "title": "Évaluez la fréquence des envies",
+              "text": "Évaluez la fréquence à laquelle vous avez pensé à fumer au cours des trois derniers jours."
+            },
+            {
+              "id": "d71t2",
+              "type": "action",
+              "title": "Ajoutez un outil supplémentaire cette semaine",
+              "text": "Si les envies de fumer semblent plus fortes depuis l'abandon du patch, ajoutez un outil quotidien supplémentaire cette semaine : une séance de respiration programmée, une promenade en soirée ou un enregistrement dans la communauté."
+            }
+          ]
+        },
+        {
+          "day": 72,
+          "title": "Jour 72 : Le piège mental du marchandage",
+          "intro": "Juste pour cela, les pensées deviennent plus articulées avec le temps. Le risque qui les sous-tend ne change jamais.",
+          "tasks": [
+            {
+              "id": "d72t1",
+              "type": "mindset",
+              "title": "Connaître le modèle de négociation",
+              "text": "L’esprit peut construire un beau dossier pour une exception : une occasion spéciale, un jour terrible, juste pour cette fois. Aussi élégant que soit l’argument, le résultat est identique : le monstre est nourri et le cycle recommence. Il n’y a pas de cigarettes pour les occasions spéciales, seulement les premières cigarettes."
+            },
+            {
+              "id": "d72t2",
+              "type": "journal",
+              "title": "Écrivez votre contre-argument",
+              "text": "Écrivez une phrase forte pour répondre à n’importe quelle pensée ponctuelle, prête à l’avance."
+            }
+          ]
+        },
+        {
+          "day": 73,
+          "title": "Jour 73 : Vérifier votre pourquoi",
+          "intro": "Se reconnecter à votre raison originelle la maintient vivante au lieu de la laisser se fondre dans le papier peint.",
+          "tasks": [
+            {
+              "id": "d73t1",
+              "type": "journal",
+              "title": "Revisitez votre raison initiale",
+              "text": "Écrivez la principale raison pour laquelle vous avez arrêté et si cela vous semble toujours aussi important maintenant."
+            },
+            {
+              "id": "d73t2",
+              "type": "fact",
+              "title": "Regardez les économies croître",
+              "text": "Ouvrez l'onglet Argent économisé et notez le total, désormais également exempt de frais de NRT à l'avenir."
+            }
+          ]
+        },
+        {
+          "day": 74,
+          "title": "Jour 74 : Onze semaines gratuites",
+          "intro": "Une semaine de plus vous sépare de trois mois complets.",
+          "tasks": [
+            {
+              "id": "d74t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de onze semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d74t2",
+              "type": "checkin",
+              "title": "Préparation au tarif pendant trois mois",
+              "text": "Évaluez à quel point vous vous sentez prêt pour l’étape de trois mois."
+            }
+          ]
+        },
+        {
+          "day": 75,
+          "title": "Jour 75 : Aider quelqu'un d'autre",
+          "intro": "Soutenir un autre abandon renforce en même temps votre propre détermination.",
+          "tasks": [
+            {
+              "id": "d75t1",
+              "type": "social",
+              "title": "Soutenez un nouveau lâcheur",
+              "text": "Trouvez quelqu'un au cours de son premier mois et offrez-lui un encouragement ou un conseil."
+            },
+            {
+              "id": "d75t2",
+              "type": "journal",
+              "title": "Que diriez-vous au premier jour",
+              "text": "Écrivez la chose la plus utile que vous vous diriez le premier jour, sachant ce que vous savez maintenant."
+            }
+          ]
+        },
+        {
+          "day": 76,
+          "title": "Jour 76 : Boost d’activité physique",
+          "intro": "L’endurance continue de s’améliorer au-delà des premiers mois, et maintenant sans nicotine ne resserrant vos vaisseaux sanguins.",
+          "tasks": [
+            {
+              "id": "d76t1",
+              "type": "fact",
+              "title": "Consultez vos gains d'endurance",
+              "text": "Au bout de trois mois environ, la fonction pulmonaire s'est suffisamment améliorée pour de nombreux anciens fumeurs, de sorte que les escaliers et la marche rapide semblent sensiblement plus faciles."
+            },
+            {
+              "id": "d76t2",
+              "type": "action",
+              "title": "Testez votre endurance",
+              "text": "Faites une activité physique aujourd’hui, même une courte marche rapide, et remarquez la différence par rapport à vos journées de tabagisme."
+            }
+          ]
+        },
+        {
+          "day": 77,
+          "title": "Jour 77 : Contrôle de clarté mentale",
+          "intro": "Une concentration plus constante est l’un des gains les plus fréquemment signalés à ce stade, maintenant que les montagnes russes du retrait et de l’aide ont disparu.",
+          "tasks": [
+            {
+              "id": "d77t1",
+              "type": "journal",
+              "title": "Remarquez votre concentration",
+              "text": "Écrivez si votre concentration ou votre clarté mentale semble différente depuis que vous avez arrêté."
+            },
+            {
+              "id": "d77t2",
+              "type": "checkin",
+              "title": "Évaluez votre bien-être",
+              "text": "Évaluez ce que vous ressentez globalement aujourd’hui sur une échelle simple."
+            }
+          ]
+        },
+        {
+          "day": 78,
+          "title": "Jour 78 : Douze semaines gratuites",
+          "intro": "Trois mois, c'est dans deux jours.",
+          "tasks": [
+            {
+              "id": "d78t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de douze semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d78t2",
+              "type": "action",
+              "title": "Finalisez votre plan de trois mois",
+              "text": "Décidez exactement comment vous marquerez trois mois complets en deux jours."
+            }
+          ]
+        },
+        {
+          "day": 79,
+          "title": "Jour 79 : La veille au soir",
+          "intro": "Demain est une étape majeure. Aujourd’hui, il s’agit simplement de rester stable.",
+          "tasks": [
+            {
+              "id": "d79t1",
+              "type": "fact",
+              "title": "Faites défiler tout votre voyage",
+              "text": "Ouvrez vos statistiques et faites défiler tout votre historique du premier jour à aujourd'hui."
+            },
+            {
+              "id": "d79t2",
+              "type": "journal",
+              "title": "Ce que signifie demain",
+              "text": "Écrivez une phrase ou deux sur ce que représente pour vous l’atteinte de trois mois."
+            }
+          ]
+        },
+        {
+          "day": 80,
+          "title": "Jour 80 : Trois mois sans fumer",
+          "intro": "Quatre-vingt-dix jours selon l'ancien décompte, trois mois calendaires selon tous les calculs : un quart d'année sans une seule cigarette, et maintenant sans aucune nicotine. L’une des étapes les plus importantes pour arrêter de fumer, sur le plan médical et mental.",
+          "tasks": [
+            {
+              "id": "d80t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de trois mois",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon majeur."
+            },
+            {
+              "id": "d80t2",
+              "type": "fact",
+              "title": "Transformation en trois mois",
+              "text": "Au bout de trois mois, la fonction pulmonaire et la circulation se sont généralement considérablement améliorées par rapport à l'époque où vous fumiez, et votre corps fonctionne totalement sans nicotine."
+            },
+            {
+              "id": "d80t3",
+              "type": "social",
+              "title": "Partagez le jalon",
+              "text": "Publiez votre mise à jour de trois mois dans la communauté."
+            },
+            {
+              "id": "d80t4",
+              "type": "journal",
+              "title": "Rédigez le résumé de votre voyage",
+              "text": "Quelques phrases résumant le chemin parcouru du premier jour à aujourd'hui."
+            }
+          ]
+        },
+        {
+          "day": 81,
+          "title": "Jour 81 : Après la grande étape",
+          "intro": "La motivation diminue souvent légèrement juste après le passage d’une étape importante. Le savoir à l’avance en fait un haussement d’épaules plutôt qu’une crise.",
+          "tasks": [
+            {
+              "id": "d81t1",
+              "type": "fact",
+              "title": "Le creux post-jalon",
+              "text": "La motivation diminue un peu après un grand objectif simplement parce que l’objectif immédiat a disparu. C'est normal et temporaire."
+            },
+            {
+              "id": "d81t2",
+              "type": "checkin",
+              "title": "Définir la prochaine cible",
+              "text": "Choisissez un nouvel objectif personnel maintenant que trois mois sont derrière vous."
+            }
+          ]
+        },
+        {
+          "day": 82,
+          "title": "Jour 82 : Entretien courant",
+          "intro": "L’objectif passe de la création d’habitudes au simple maintien de celles qui fonctionnent.",
+          "tasks": [
+            {
+              "id": "d82t1",
+              "type": "journal",
+              "title": "Énumérez vos principales habitudes",
+              "text": "Écrivez les trois ou quatre habitudes de remplacement qui sont devenues les plus automatiques."
+            },
+            {
+              "id": "d82t2",
+              "type": "action",
+              "title": "Gardez une habitude fraîche",
+              "text": "Faites exprès une habitude de remplacement de base aujourd’hui, même sans en avoir besoin."
+            }
+          ]
+        },
+        {
+          "day": 83,
+          "title": "Jour 83 : Objectif financier à long terme",
+          "intro": "Trois mois d’argent non dépensé en cigarettes, c’est une somme réelle. Pensez plus grand avec.",
+          "tasks": [
+            {
+              "id": "d83t1",
+              "type": "fact",
+              "title": "Consultez vos économies sur trois mois",
+              "text": "Ouvrez l'onglet Argent économisé et regardez le total depuis le premier jour."
+            },
+            {
+              "id": "d83t2",
+              "type": "action",
+              "title": "Fixez-vous un objectif d’épargne",
+              "text": "Choisissez quelque chose de spécifique dans lequel investir votre argent pour fumer au cours des prochains mois."
+            }
+          ]
+        },
+        {
+          "day": 84,
+          "title": "Jour 84 : Supprimer progressivement les pastilles",
+          "intro": "Si vous avez conservé des pastilles comme filet de sécurité après l’application du patch, c’est également une bonne semaine pour commencer à les abandonner.",
+          "tasks": [
+            {
+              "id": "d84t1",
+              "type": "nrt",
+              "title": "Réduire la dernière NRT",
+              "text": "Commencez à remplacer les pastilles de nicotine par de la menthe poivrée nature ou de la gomme sans sucre, en réduisant votre nombre quotidien de pastilles environ de moitié cette semaine et en visant zéro d'ici deux à trois semaines. Si les envies augmentent, ralentissez plutôt que de faire des jointures blanches ; la sortie compte toujours si elle prend une semaine supplémentaire."
+            },
+            {
+              "id": "d84t2",
+              "type": "checkin",
+              "title": "Évaluez la sensation de fumer à distance",
+              "text": "Évaluez à quel point vos journées de tabagisme sont lointaines par rapport à juste après avoir arrêté."
+            }
+          ]
+        },
+        {
+          "day": 85,
+          "title": "Jour 85 : Montre de rechute d’ennui",
+          "intro": "Même à ce stade, l’ennui pur et simple reste l’un des déclencheurs les plus sournois.",
+          "tasks": [
+            {
+              "id": "d85t1",
+              "type": "fact",
+              "title": "L'ennui ne disparaît jamais complètement",
+              "text": "Même les anciens fumeurs de longue date peuvent ressentir une attirance occasionnelle lors de périodes très ennuyeuses. Avoir un plan prêt compte plus que s’attendre à ce que l’envie disparaisse pour toujours."
+            },
+            {
+              "id": "d85t2",
+              "type": "action",
+              "title": "Actualisez votre liste de distractions",
+              "text": "Mettez à jour votre liste d'ennui avec tout ce que vous avez découvert."
+            }
+          ]
+        },
+        {
+          "day": 86,
+          "title": "Jour 86 : Réflexion sur l'identité",
+          "intro": "À l’heure actuelle, de nombreuses personnes sont simplement des non-fumeurs, plutôt que des fumeurs qui ferment leur porte.",
+          "tasks": [
+            {
+              "id": "d86t1",
+              "type": "journal",
+              "title": "Le test de l'étranger",
+              "text": "Écrivez comment une personne qui vous rencontre aujourd’hui, sans antécédents, décrirait votre relation avec le tabagisme."
+            },
+            {
+              "id": "d86t2",
+              "type": "fact",
+              "title": "L'identité prédit le succès",
+              "text": "Passer de l'abandon du tabac à simplement le non-fumeur est, dans votre esprit, l'un des indicateurs les plus puissants pour rester sans fumer à long terme."
+            }
+          ]
+        },
+        {
+          "day": 87,
+          "title": "Jour 87 : Élaborer votre propre plan",
+          "intro": "Près de trois mois de missions derrière vous. Il est temps de remarquer ce dont vous avez encore besoin.",
+          "tasks": [
+            {
+              "id": "d87t1",
+              "type": "checkin",
+              "title": "Évaluez l'utilisation de votre outil",
+              "text": "Évaluez la fréquence à laquelle vous utilisez encore la boîte à outils sur le manque par rapport au premier mois."
+            },
+            {
+              "id": "d87t2",
+              "type": "journal",
+              "title": "De quoi as-tu besoin de moins",
+              "text": "Écrivez quelle partie du plan vous estimez avoir besoin de moins de soutien à partir de maintenant."
+            }
+          ]
+        },
+        {
+          "day": 88,
+          "title": "Jour 88 : Presque le chapitre cinq",
+          "intro": "Le chapitre suivant aborde l'identité, les gains en matière de santé et la confiance en soi en tant que non-fumeur établi.",
+          "tasks": [
+            {
+              "id": "d88t1",
+              "type": "fact",
+              "title": "Aperçu du chapitre cinq",
+              "text": "Le chapitre cinq se concentre sur l'identité en tant que non-fumeur, les gains de santé continus et la fin de toute NRT restante afin que vous soyez totalement sans nicotine."
+            },
+            {
+              "id": "d88t2",
+              "type": "action",
+              "title": "Définir une intention pour le chapitre cinq",
+              "text": "Écrivez une intention sur la façon dont vous voulez penser à vous-même pour le chapitre suivant."
+            }
+          ]
+        },
+        {
+          "day": 89,
+          "title": "Jour 89 : Il reste un jour au chapitre quatre",
+          "intro": "Demain se termine un chapitre construit autour de la fenêtre de risque de complaisance la plus élevée, et vous en sortez avec votre séquence intacte.",
+          "tasks": [
+            {
+              "id": "d89t1",
+              "type": "journal",
+              "title": "Un moment de garde que vous avez repéré",
+              "text": "Écrivez à propos d'un moment de ce chapitre où vous avez presque baissé votre garde mais ne l'avez pas fait."
+            },
+            {
+              "id": "d89t2",
+              "type": "checkin",
+              "title": "Notez le chapitre quatre",
+              "text": "Évaluez dans quelle mesure vous avez géré le chapitre quatre dans l’ensemble."
+            }
+          ]
+        },
+        {
+          "day": 90,
+          "title": "Jour 90 : Trois mois et ça compte",
+          "intro": "Quatre-vingt-dix jours derrière vous, un patch derrière vous, et la fenêtre de complaisance la plus risquée s'est écoulée avec votre séquence intacte. À partir de là, le travail passe de rester fort à devenir pleinement ce que vous êtes maintenant.",
+          "tasks": [
+            {
+              "id": "d90t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de quatre-vingt-dix jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d90t2",
+              "type": "fact",
+              "title": "Aperçu complet de quatre-vingt-dix jours",
+              "text": "Ouvrez vos statistiques et examinez les séquences, l'argent, les cigarettes évitées et la santé depuis le premier jour."
+            },
+            {
+              "id": "d90t3",
+              "type": "social",
+              "title": "Partager l'achèvement du chapitre quatre",
+              "text": "Publiez dans la communauté la fin du chapitre quatre et l'atteinte des trois mois."
+            },
+            {
+              "id": "d90t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre cinq",
+              "text": "Lisez l'introduction du chapitre cinq et fixez-vous un objectif autour de votre identité en tant que non-fumeur."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "name": "Qui vous êtes maintenant",
+      "role": "Jours 91 à 120 : identité de non-fumeur, totalement libre de nicotine, victoires santé, mentorat",
+      "day_start": 91,
+      "day_end": 120,
+      "days": [
+        {
+          "day": 91,
+          "title": "Jour 91 : Bienvenue au chapitre cinq",
+          "intro": "Ce chapitre porte moins sur la lutte contre les envies que sur la façon de s'installer dans ce que vous êtes maintenant : un non-fumeur, pas un fumeur résistant.",
+          "tasks": [
+            {
+              "id": "d91t1",
+              "type": "journal",
+              "title": "Terminez cette phrase",
+              "text": "Écrivez quelques mots pour compléter cette phrase : Je suis quelqu'un qui."
+            },
+            {
+              "id": "d91t2",
+              "type": "checkin",
+              "title": "Fixez votre objectif du chapitre cinq",
+              "text": "Choisissez une chose sur laquelle vous concentrer sur l’identité et la confiance ce mois-ci."
+            }
+          ]
+        },
+        {
+          "day": 92,
+          "title": "Jour 92 : Votre bulletin de santé",
+          "intro": "Après trois mois, votre corps a fait des progrès réels et mesurables.",
+          "tasks": [
+            {
+              "id": "d92t1",
+              "type": "fact",
+              "title": "Passez en revue vos gains de santé",
+              "text": "Ouvrez l'onglet de progression de votre santé et examinez chaque marqueur qui s'est amélioré depuis le premier jour."
+            },
+            {
+              "id": "d92t2",
+              "type": "journal",
+              "title": "Le changement qui compte le plus",
+              "text": "Écrivez quel changement physique a le plus signifié pour vous personnellement."
+            }
+          ]
+        },
+        {
+          "day": 93,
+          "title": "Jour 93 : Ce n'est plus l'exception",
+          "intro": "Baisser une cigarette ne doit plus nécessairement être un acte de volonté. C'est simplement ce que vous faites.",
+          "tasks": [
+            {
+              "id": "d93t1",
+              "type": "checkin",
+              "title": "Évaluez à quel point le non est automatique",
+              "text": "Évaluez à quel point le déclin automatique d'une cigarette se sent maintenant par rapport au premier mois."
+            },
+            {
+              "id": "d93t2",
+              "type": "action",
+              "title": "Capturez les moments sans effort",
+              "text": "Remarquez un moment aujourd’hui où ne pas fumer n’a nécessité aucune réflexion consciente. Ces moments sont la ligne d’arrivée qui arrive tôt."
+            }
+          ]
+        },
+        {
+          "day": 94,
+          "title": "Jour 94 : Treize semaines gratuites",
+          "intro": "Un trimestre complet et une semaine supplémentaire.",
+          "tasks": [
+            {
+              "id": "d94t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de treize semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d94t2",
+              "type": "nrt",
+              "title": "Contrôle de sortie losange",
+              "text": "Si vous utilisez encore des pastilles à la nicotine, vérifiez votre décompte : l'objectif est zéro au centième jour environ. Remplacez les emplacements restants par des menthes poivrées ou de la gomme nature. Si vous avez déjà arrêté, profitez du fait qu’il ne vous reste plus qu’une habitude à la menthe."
+            }
+          ]
+        },
+        {
+          "day": 95,
+          "title": "Jour 95 : Confiance dans de nouvelles situations",
+          "intro": "À présent, vous avez probablement fait face à quelque chose de tout nouveau, un changement d’emploi, un nouveau cercle social, entièrement sans fumer depuis le début.",
+          "tasks": [
+            {
+              "id": "d95t1",
+              "type": "journal",
+              "title": "Une nouvelle situation gérée proprement",
+              "text": "Écrivez sur toute nouvelle situation dans laquelle vous êtes entré depuis que vous avez arrêté de fumer et que vous avez gérée sans fumer."
+            },
+            {
+              "id": "d95t2",
+              "type": "fact",
+              "title": "Une preuve, pas de chance",
+              "text": "Naviguer dans de nouvelles situations sans fumer est la preuve directe d’une nouvelle identité stable, et non une coïncidence."
+            }
+          ]
+        },
+        {
+          "day": 96,
+          "title": "Jour 96 : Contrôle des performances physiques",
+          "intro": "L’endurance et la récupération continuent de s’améliorer bien au-delà des trois mois.",
+          "tasks": [
+            {
+              "id": "d96t1",
+              "type": "action",
+              "title": "Poussez un peu",
+              "text": "Faites une activité physique légèrement plus exigeante que d’habitude aujourd’hui et remarquez comment votre corps réagit."
+            },
+            {
+              "id": "d96t2",
+              "type": "checkin",
+              "title": "Évaluez votre endurance",
+              "text": "Évaluez votre endurance globale par rapport à l’époque où vous fumiez."
+            }
+          ]
+        },
+        {
+          "day": 97,
+          "title": "Jour 97 : Peau et apparence",
+          "intro": "Le tabagisme n’affectait pas seulement les poumons. La peau et l’apparence générale se rétablissent également.",
+          "tasks": [
+            {
+              "id": "d97t1",
+              "type": "fact",
+              "title": "Le dividende de l'apparence",
+              "text": "Une meilleure circulation sanguine et un meilleur apport d'oxygène après avoir arrêté de fumer peuvent améliorer le teint de la peau et ralentir le vieillissement visible par rapport à la poursuite du tabagisme."
+            },
+            {
+              "id": "d97t2",
+              "type": "journal",
+              "title": "Des commentaires pour l'instant",
+              "text": "Écrivez si quelqu'un a commenté votre apparence depuis que vous avez arrêté de fumer ou ce que vous avez remarqué vous-même."
+            }
+          ]
+        },
+        {
+          "day": 98,
+          "title": "Jour 98 : Quatorze semaines gratuites",
+          "intro": "Chaque semaine ajoute une preuve supplémentaire que c’est simplement ainsi que vous vivez actuellement.",
+          "tasks": [
+            {
+              "id": "d98t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de quatorze semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d98t2",
+              "type": "social",
+              "title": "Partagez une victoire en confiance",
+              "text": "Postez un moment récent où vous vous êtes senti pleinement en confiance en tant que non-fumeur."
+            }
+          ]
+        },
+        {
+          "day": 99,
+          "title": "Jour 99 : Encadrer les autres",
+          "intro": "Vous disposez désormais de conseils réels, spécifiques et testés dont un abandon précoce a besoin.",
+          "tasks": [
+            {
+              "id": "d99t1",
+              "type": "social",
+              "title": "Donnez un vrai conseil à un débutant",
+              "text": "Trouvez quelqu'un dans le chapitre un ou deux et partagez une tactique spécifique qui a fonctionné pour vous : votre meilleur article de kit oral, votre timing de pastille, votre recadrage."
+            },
+            {
+              "id": "d99t2",
+              "type": "journal",
+              "title": "Vos trois meilleurs conseils",
+              "text": "Écrivez les trois conseils que vous donneriez à quiconque dès le premier jour."
+            }
+          ]
+        },
+        {
+          "day": 100,
+          "title": "Jour 100 : Cent jours",
+          "intro": "Cent jours sans cigarette. Le nombre raconte sa propre histoire sur qui vous êtes devenu.",
+          "tasks": [
+            {
+              "id": "d100t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cent jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon majeur."
+            },
+            {
+              "id": "d100t2",
+              "type": "fact",
+              "title": "L'image complète de cent jours",
+              "text": "Ouvrez vos statistiques et examinez les séquences, l'argent économisé, les cigarettes évitées et les gains de santé."
+            },
+            {
+              "id": "d100t3",
+              "type": "journal",
+              "title": "Cent jours de réflexion",
+              "text": "Écrivez quelques phrases sur ce que signifie pour vous cent jours sans fumer."
+            },
+            {
+              "id": "d100t4",
+              "type": "social",
+              "title": "Célébrer publiquement",
+              "text": "Partagez votre jalon de cent jours avec la communauté."
+            }
+          ]
+        },
+        {
+          "day": 101,
+          "title": "Jour 101 : Passé le numéro du titre",
+          "intro": "Le grand chiffre rond est derrière vous. Le travail est désormais d’une cohérence tranquille.",
+          "tasks": [
+            {
+              "id": "d101t1",
+              "type": "checkin",
+              "title": "Fixez-vous un nouvel objectif personnel",
+              "text": "Choisissez une nouvelle étape à viser, comme une date ou un événement spécifique."
+            },
+            {
+              "id": "d101t2",
+              "type": "fact",
+              "title": "La cohérence bat les moments",
+              "text": "Le succès à long terme vient de plusieurs journées ordinaires bien gérées, et non d’une seule étape."
+            }
+          ]
+        },
+        {
+          "day": 102,
+          "title": "Jour 102 : La résilience au stress maintenant",
+          "intro": "Comparez la façon dont vous gérez le stress aujourd’hui au cinquième jour. Cet écart est le vrai trophée.",
+          "tasks": [
+            {
+              "id": "d102t1",
+              "type": "journal",
+              "title": "Comparez les réponses au stress",
+              "text": "Écrivez comment votre réaction à un moment stressant d’aujourd’hui se compare à celle du début de votre arrêt."
+            },
+            {
+              "id": "d102t2",
+              "type": "mindset",
+              "title": "Tu n'as pas perdu de béquille",
+              "text": "Vous n’avez pas abandonné un analgésique ; vous avez supprimé un générateur de stress. L'anxiété de fond d'avoir toujours besoin de la prochaine cigarette a disparu, c'est pourquoi les journées difficiles commencent désormais sur un sol plus calme."
+            }
+          ]
+        },
+        {
+          "day": 103,
+          "title": "Jour 103 : Quinze semaines gratuites",
+          "intro": "Plus d’un tiers du chemin jusqu’à six mois.",
+          "tasks": [
+            {
+              "id": "d103t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de quinze semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d103t2",
+              "type": "fact",
+              "title": "Statistiques sur quinze semaines",
+              "text": "Ouvrez vos statistiques et examinez votre progression globale."
+            }
+          ]
+        },
+        {
+          "day": 104,
+          "title": "Jour 104 : Votre nouvelle journée normale",
+          "intro": "Imaginez une journée moyenne aujourd’hui par rapport à une journée moyenne où vous fumiez.",
+          "tasks": [
+            {
+              "id": "d104t1",
+              "type": "journal",
+              "title": "Décrivez une journée normale maintenant",
+              "text": "Écrivez à quoi ressemble une journée typique pour vous maintenant, sans aucune référence au tabagisme."
+            },
+            {
+              "id": "d104t2",
+              "type": "fact",
+              "title": "Remarquez l'absence",
+              "text": "Votre description ne mentionnait probablement pas du tout les cigarettes. Cette absence est la vraie victoire."
+            }
+          ]
+        },
+        {
+          "day": 105,
+          "title": "Jour 105 : À l'aise dans les pièces dures",
+          "intro": "Une salle remplie de fumeurs ne doit plus nécessairement ressembler à une épreuve de force.",
+          "tasks": [
+            {
+              "id": "d105t1",
+              "type": "checkin",
+              "title": "Évaluez votre confort en présence de fumeurs",
+              "text": "Évaluez à quel point vous vous sentez à l'aise avec des personnes qui fument maintenant par rapport au premier mois."
+            },
+            {
+              "id": "d105t2",
+              "type": "mindset",
+              "title": "Regardez avec des yeux clairs",
+              "text": "Si vous êtes entouré de fumeurs aujourd’hui, observez-en un pendant un moment. Remarquez sa mécanique automatique et sans joie. Ce n’était jamais un plaisir que vous voyiez ; c'était le maintien d'une dépendance. N'hésitez pas, parce que vous l'êtes."
+            }
+          ]
+        },
+        {
+          "day": 106,
+          "title": "Jour 106 : Ce que coûte réellement le tabagisme",
+          "intro": "Au-delà de l’argent : le temps, l’odeur, l’essoufflement, l’inquiétude, la planification constante du prochain.",
+          "tasks": [
+            {
+              "id": "d106t1",
+              "type": "journal",
+              "title": "Énumérez les coûts non monétaires",
+              "text": "Écrivez trois choses que fumer vous a coûté qui n'étaient pas de l'argent : le temps, l'odeur, l'inquiétude ou le fait de rester dehors dans le froid."
+            },
+            {
+              "id": "d106t2",
+              "type": "fact",
+              "title": "Voir l'argent quand même",
+              "text": "Ouvrez l'onglet Argent économisé et consultez le total depuis le premier jour."
+            }
+          ]
+        },
+        {
+          "day": 107,
+          "title": "Jour 107 : Seize semaines gratuites",
+          "intro": "Quatre mois complets de régularité.",
+          "tasks": [
+            {
+              "id": "d107t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de seize semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d107t2",
+              "type": "social",
+              "title": "Partagez votre mise à jour de quatre mois",
+              "text": "Publiez une courte mise à jour sur l’atteinte de quatre mois."
+            }
+          ]
+        },
+        {
+          "day": 108,
+          "title": "Jour 108 : Recadrer votre passé",
+          "intro": "La façon dont vous parlez de votre passé de fumeur détermine la solidité de votre présent.",
+          "tasks": [
+            {
+              "id": "d108t1",
+              "type": "journal",
+              "title": "Votre passé en un seul paragraphe",
+              "text": "Écrivez un court paragraphe sur votre passé de fumeur comme quelque chose qui s'est produit et non comme quelque chose qui vous définit."
+            },
+            {
+              "id": "d108t2",
+              "type": "checkin",
+              "title": "Évaluez toute honte restante",
+              "text": "Évaluez la honte ou le jugement que vous ressentez encore à l’égard de votre passé de fumeur. Le but est la compassion ; vous avez été pris dans un piège bien conçu et vous en êtes sorti."
+            }
+          ]
+        },
+        {
+          "day": 109,
+          "title": "Jour 109 : La vision à long terme",
+          "intro": "Imaginez-vous de temps en temps dans un an ou plus, toujours sans fumer, car c’est la trajectoire que vous suivez.",
+          "tasks": [
+            {
+              "id": "d109t1",
+              "type": "journal",
+              "title": "Photo dans un an",
+              "text": "Écrivez quelques phrases en vous imaginant dans un an, toujours sans fumer."
+            },
+            {
+              "id": "d109t2",
+              "type": "action",
+              "title": "Fixer une intention sur un an",
+              "text": "Écrivez une chose que vous voulez être vraie dans votre vie dans un an parce que vous avez arrêté."
+            }
+          ]
+        },
+        {
+          "day": 110,
+          "title": "Jour 110 : Énergie et humeur",
+          "intro": "Une énergie et une humeur plus stables sont courantes à ce stade, par rapport à l’augmentation et à la diminution de la consommation régulière de nicotine.",
+          "tasks": [
+            {
+              "id": "d110t1",
+              "type": "fact",
+              "title": "L’avantage de la stabilité de l’humeur",
+              "text": "Sans que les niveaux de nicotine n’augmentent et ne chutent toute la journée, de nombreux ex-fumeurs ressentent une humeur et une énergie plus stables plutôt que les baisses provoquées par le tabagisme entre les cigarettes."
+            },
+            {
+              "id": "d110t2",
+              "type": "checkin",
+              "title": "Évaluez la stabilité de votre humeur",
+              "text": "Évaluez la stabilité de votre humeur cette semaine."
+            }
+          ]
+        },
+        {
+          "day": 111,
+          "title": "Jour 111 : Dix-sept semaines gratuites",
+          "intro": "Nous nous rapprochons de la seconde moitié de votre plan guidé.",
+          "tasks": [
+            {
+              "id": "d111t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de dix-sept semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d111t2",
+              "type": "fact",
+              "title": "Statistiques de dix-sept semaines",
+              "text": "Ouvrez vos statistiques et examinez vos progrès complets jusqu'à présent."
+            }
+          ]
+        },
+        {
+          "day": 112,
+          "title": "Jour 112 : Enseigner ce que vous savez",
+          "intro": "Expliquer votre processus à quelqu'un d'autre révèle à quel point vous comprenez réellement maintenant.",
+          "tasks": [
+            {
+              "id": "d112t1",
+              "type": "social",
+              "title": "Répondre à une question de la communauté",
+              "text": "Trouvez une question d'un nouveau membre et répondez-y avec quelque chose de spécifique qui a fonctionné pour vous."
+            },
+            {
+              "id": "d112t2",
+              "type": "journal",
+              "title": "Écrivez votre manuel de jeu sur les envies",
+              "text": "Écrivez, comme si vous appreniez à quelqu'un, exactement comment vous surmontez une envie maintenant, du premier scintillement jusqu'à sa disparition."
+            }
+          ]
+        },
+        {
+          "day": 113,
+          "title": "Jour 113 : Vérification des anciens déclencheurs",
+          "intro": "Revisitez la liste de déclencheurs que vous avez établie au chapitre un et mesurez les changements.",
+          "tasks": [
+            {
+              "id": "d113t1",
+              "type": "journal",
+              "title": "Re-marquez vos déclencheurs d'origine",
+              "text": "Repensez aux déclencheurs que vous avez répertoriés dans le premier chapitre et écrivez quel pouvoir chacun a encore sur vous maintenant."
+            },
+            {
+              "id": "d113t2",
+              "type": "checkin",
+              "title": "Évaluez le survivant le plus fort",
+              "text": "Évaluez le déclencheur qui vous semble encore le plus fort aujourd’hui."
+            }
+          ]
+        },
+        {
+          "day": 114,
+          "title": "Jour 114 : Dix-huit semaines gratuites",
+          "intro": "Presque quatre mois et demi.",
+          "tasks": [
+            {
+              "id": "d114t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de dix-huit semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d114t2",
+              "type": "fact",
+              "title": "Numéros de dix-huit semaines",
+              "text": "Ouvrez vos statistiques et examinez les progrès en matière de séquence, d'argent et de santé."
+            }
+          ]
+        },
+        {
+          "day": 115,
+          "title": "Jour 115 : non-fumeur, entièrement",
+          "intro": "Aujourd’hui, il s’agit simplement de s’asseoir avec le simple fait : vous êtes maintenant un non-fumeur, et si vous avez suivi la cigarette, vous êtes totalement sans nicotine.",
+          "tasks": [
+            {
+              "id": "d115t1",
+              "type": "journal",
+              "title": "Écrivez le fait clair",
+              "text": "Écrivez une phrase simple indiquant que vous êtes non-fumeur, sans qualificatif, sans condition."
+            },
+            {
+              "id": "d115t2",
+              "type": "checkin",
+              "title": "Évaluez à quel point cela semble vrai",
+              "text": "Évaluez à quel point cette phrase semble vraie en ce moment."
+            }
+          ]
+        },
+        {
+          "day": 116,
+          "title": "Jour 116 : Dynamique santé",
+          "intro": "Les améliorations en matière de santé continuent de s’aggraver bien au-delà des premiers mois.",
+          "tasks": [
+            {
+              "id": "d116t1",
+              "type": "fact",
+              "title": "La dynamique à long terme",
+              "text": "De nombreux avantages continuent de s’accumuler pendant des mois et des années, la réduction du risque de plusieurs maladies graves augmentant à mesure que vous restez sans fumer longtemps."
+            },
+            {
+              "id": "d116t2",
+              "type": "action",
+              "title": "Investissez dans votre avenir",
+              "text": "Faites aujourd’hui une chose qui favorise la santé à long terme : une promenade, de l’eau ou un bon repas."
+            }
+          ]
+        },
+        {
+          "day": 117,
+          "title": "Jour 117 : Dix-neuf semaines gratuites",
+          "intro": "Une semaine à partir du chapitre six.",
+          "tasks": [
+            {
+              "id": "d117t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de dix-neuf semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d117t2",
+              "type": "checkin",
+              "title": "Notez le chapitre cinq dans son ensemble",
+              "text": "Évaluez ce que le chapitre cinq a ressenti pour vous."
+            }
+          ]
+        },
+        {
+          "day": 118,
+          "title": "Jour 118 : Se préparer aux journées difficiles",
+          "intro": "Le chapitre six vous prépare à des périodes vraiment difficiles : stress, dérapages, saisons difficiles. Aujourd'hui, c'est le pont.",
+          "tasks": [
+            {
+              "id": "d118t1",
+              "type": "fact",
+              "title": "Aperçu du chapitre six",
+              "text": "Le chapitre suivant traite du deuil, du stress majeur, des vacances, de l'hiver et de ce qu'il faut faire en cas de dérapage."
+            },
+            {
+              "id": "d118t2",
+              "type": "journal",
+              "title": "Votre saison la plus difficile",
+              "text": "Écrivez à quelle période de l’année ou quel type de situation vous vous attendez à ce qu’il soit le plus difficile à l’avenir."
+            }
+          ]
+        },
+        {
+          "day": 119,
+          "title": "Jour 119 : Un jour avant le chapitre six",
+          "intro": "Demain clôture un chapitre sur l’identité et en ouvre un sur la résilience du monde réel.",
+          "tasks": [
+            {
+              "id": "d119t1",
+              "type": "journal",
+              "title": "Réfléchissez au chapitre cinq",
+              "text": "Écrivez quelques phrases sur la façon dont votre sentiment d’identité a changé au cours de ce chapitre."
+            },
+            {
+              "id": "d119t2",
+              "type": "checkin",
+              "title": "Évaluez votre état de préparation",
+              "text": "Évaluez à quel point vous vous sentez prêt à affronter les jours vraiment difficiles à venir."
+            }
+          ]
+        },
+        {
+          "day": 120,
+          "title": "Jour 120 : Quatre mois et une identité bien établie",
+          "intro": "Cent vingt jours. Vous n’êtes plus quelqu’un qui essaie d’arrêter de fumer ; vous êtes quelqu'un qui a arrêté. Le chapitre six vous prépare aux jours qui mettent le plus à rude épreuve.",
+          "tasks": [
+            {
+              "id": "d120t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de quatre mois",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d120t2",
+              "type": "fact",
+              "title": "Transformation en quatre mois",
+              "text": "Ouvrez vos statistiques complètes et votre aperçu de votre santé pour voir le parcours du premier au cent vingt jour."
+            },
+            {
+              "id": "d120t3",
+              "type": "journal",
+              "title": "Résumé du chapitre cinq",
+              "text": "Rédigez un bref résumé de la façon dont vous vous voyez différemment après ce chapitre."
+            },
+            {
+              "id": "d120t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre six",
+              "text": "Lisez l’introduction du chapitre six et fixez-vous une intention pour gérer les jours difficiles à venir."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "name": "Les jours difficiles",
+      "role": "Jours 121 à 150 : se préparer au deuil, au stress majeur, à l'hiver et aux fêtes, aux faux pas et aux anciens amis fumeurs",
+      "day_start": 121,
+      "day_end": 150,
+      "days": [
+        {
+          "day": 121,
+          "title": "Jour 121 : Bienvenue au chapitre six",
+          "intro": "Ce chapitre n’a pas pour but de douter de vos progrès. Il s’agit de s’assurer que vous êtes prêt pour les jours vraiment difficiles que la vie vous réserve encore, car les abandons préparés ne deviennent pas des rechutes surpris.",
+          "tasks": [
+            {
+              "id": "d121t1",
+              "type": "fact",
+              "title": "Pourquoi ce chapitre existe",
+              "text": "Même ceux qui ont arrêté de fumer à long terme sont confrontés à de sérieuses épreuves : chagrin, stress majeur, saisons difficiles. Se préparer à l’avance réduit considérablement le risque d’erreur à leur arrivée."
+            },
+            {
+              "id": "d121t2",
+              "type": "checkin",
+              "title": "Fixez votre objectif du chapitre six",
+              "text": "Choisissez un type de journée difficile pour laquelle vous souhaitez vous sentir préparé d’ici la fin de ce chapitre."
+            }
+          ]
+        },
+        {
+          "day": 122,
+          "title": "Jour 122 : Définir votre pire cas",
+          "intro": "Il est utile de savoir, en particulier, à quoi ressemblerait votre journée la plus difficile possible, afin qu'il ne puisse jamais vraiment vous tendre une embuscade.",
+          "tasks": [
+            {
+              "id": "d122t1",
+              "type": "journal",
+              "title": "Décrivez votre scénario le plus difficile",
+              "text": "Écrivez la situation la plus difficile à laquelle vous pouvez imaginer être confrontée tout en restant sans fumer."
+            },
+            {
+              "id": "d122t2",
+              "type": "action",
+              "title": "Rédiger le plan d'urgence",
+              "text": "Écrivez exactement ce que vous ferez si ce scénario se produit, étape par étape : qui vous appelez, quel outil vous ouvrez en premier, ce qui va dans votre bouche à la place d'une cigarette."
+            }
+          ]
+        },
+        {
+          "day": 123,
+          "title": "Jour 123 : Deuil et stress majeur",
+          "intro": "La perte et le deuil font partie des situations les plus à risque de rechute, même après des années d'arrêt, car l'envie de faire face à l'ancienne méthode revient lors d'une douleur intense.",
+          "tasks": [
+            {
+              "id": "d123t1",
+              "type": "fact",
+              "title": "Connaître le risque de deuil",
+              "text": "Des événements émotionnels majeurs sont liés à une rechute, même après de longues périodes sans fumer. Une cigarette pendant le deuil n’atténuerait pas la douleur ; cela ajouterait une dépendance en plus. Planifier cela maintenant est un acte de gentillesse envers votre futur moi."
+            },
+            {
+              "id": "d123t2",
+              "type": "action",
+              "title": "Construire une liste de contacts en cas de crise",
+              "text": "Notez deux ou trois personnes à qui vous vous adresseriez en premier si vous traversiez une situation très difficile."
+            }
+          ]
+        },
+        {
+          "day": 124,
+          "title": "Jour 124 : Dix-huit semaines de préparation",
+          "intro": "Plus de quatre mois de régularité derrière vous, et maintenant un chapitre de préparation délibérée à venir.",
+          "tasks": [
+            {
+              "id": "d124t1",
+              "type": "fact",
+              "title": "Voir vos statistiques",
+              "text": "Ouvrez vos statistiques et examinez vos progrès complets à ce stade."
+            },
+            {
+              "id": "d124t2",
+              "type": "breathing",
+              "title": "Gardez le réflexe vif",
+              "text": "Utilisez l'outil respiratoire une fois aujourd'hui, sans y être invité, afin qu'il reste un réflexe pour le jour où vous en avez besoin sous une pression réelle."
+            }
+          ]
+        },
+        {
+          "day": 125,
+          "title": "Jour 125 : Préparer l'hiver et les vacances",
+          "intro": "Les mois plus froids entraînent davantage de rassemblements à l’intérieur, le stress des vacances et des journées plus courtes, autant de facteurs qui peuvent modifier l’humeur et les habitudes.",
+          "tasks": [
+            {
+              "id": "d125t1",
+              "type": "journal",
+              "title": "Nommez vos risques hivernaux",
+              "text": "Écrivez quelles parties des mois les plus froids ou des vacances pourraient être plus difficiles pour vous en particulier."
+            },
+            {
+              "id": "d125t2",
+              "type": "action",
+              "title": "Planifiez une stratégie hivernale",
+              "text": "Choisissez un plan spécifique pour gérer les réunions de vacances ou les jours plus sombres sans fumer, y compris ce qui se passe dans votre poche avant de quitter la maison."
+            }
+          ]
+        },
+        {
+          "day": 126,
+          "title": "Jour 126 : De vieux amis reviennent",
+          "intro": "Des personnes de votre passé de fumeur peuvent refaire surface sans avertissement : une réunion, un ancien collègue, un ami qui revient.",
+          "tasks": [
+            {
+              "id": "d126t1",
+              "type": "checkin",
+              "title": "Évaluez ce risque",
+              "text": "Évaluez la probabilité qu’un vieil ami fumeur réapparaisse bientôt."
+            },
+            {
+              "id": "d126t2",
+              "type": "action",
+              "title": "Préchargez votre réaction",
+              "text": "Décidez maintenant de ce que vous direz et ferez si un vieil ami fumeur vous propose une cigarette à l'improviste. Votre phrase du chapitre trois fonctionne toujours : non merci, je ne fume pas."
+            }
+          ]
+        },
+        {
+          "day": 127,
+          "title": "Jour 127 : Le piège de l'empathie",
+          "intro": "Parfois, ce n’est pas la cigarette qui attire l’attention ; c'est le moment de liaison qui l'entoure. Vous pouvez garder le lien et éviter la fumée.",
+          "tasks": [
+            {
+              "id": "d127t1",
+              "type": "mindset",
+              "title": "Rejoignez le moment, pas l'habitude",
+              "text": "Vous pouvez vous tenir aux côtés des fumeurs, parler, rire et partager la pause sans partager la dépendance. Ce que vous appréciiez, c’était la connexion, et la connexion n’a jamais été à l’intérieur de la cigarette."
+            },
+            {
+              "id": "d127t2",
+              "type": "fact",
+              "title": "Voyez votre tendance en matière d'envie",
+              "text": "Ouvrez vos statistiques et observez l’évolution de la fréquence des envies au cours du mois dernier."
+            }
+          ]
+        },
+        {
+          "day": 128,
+          "title": "Jour 128 : Et si vous glissiez",
+          "intro": "Se préparer à un éventuel dérapage, ce n’est pas s’en attendre. Il lui enlève son pouvoir de faire boule de neige.",
+          "tasks": [
+            {
+              "id": "d128t1",
+              "type": "journal",
+              "title": "Mettez à jour votre plan de récupération des glissades",
+              "text": "Revisitez le plan de récupération des glissades du cinquante-cinquième jour et mettez-le à jour avec tout ce que vous avez appris depuis."
+            },
+            {
+              "id": "d128t2",
+              "type": "fact",
+              "title": "Un faux pas n’efface pas les progrès",
+              "text": "Si jamais une erreur se produit, vos gains de santé et vos compétences ne disparaissent pas. La priorité est de revenir à zéro le jour même, d’en parler à quelqu’un et de traiter cela comme un mauvais moment et non comme un nouveau style de vie."
+            }
+          ]
+        },
+        {
+          "day": 129,
+          "title": "Jour 129 : Solitude et isolement",
+          "intro": "Se sentir isolé tranquillement augmente l’attrait vers les anciens conforts, y compris celui-ci.",
+          "tasks": [
+            {
+              "id": "d129t1",
+              "type": "journal",
+              "title": "Notez tout isolement",
+              "text": "Écrivez honnêtement si vous vous êtes senti isolé ou déconnecté ces derniers temps."
+            },
+            {
+              "id": "d129t2",
+              "type": "social",
+              "title": "Tendez la main",
+              "text": "Publiez quelque chose dans la communauté aujourd'hui, ne serait-ce qu'un simple enregistrement, pour rester connecté."
+            }
+          ]
+        },
+        {
+          "day": 130,
+          "title": "Jour 130 : Contrôle de résilience",
+          "intro": "Environ quatre mois et demi de progrès constants. Mesurez la croissance.",
+          "tasks": [
+            {
+              "id": "d130t1",
+              "type": "checkin",
+              "title": "Évaluez votre résilience",
+              "text": "Évaluez à quel point vous vous sentez résilient maintenant par rapport au premier chapitre."
+            },
+            {
+              "id": "d130t2",
+              "type": "reward",
+              "title": "Récupérez votre badge de la semaine",
+              "text": "Ouvrez l'onglet Badges et récupérez le jalon de cette semaine."
+            }
+          ]
+        },
+        {
+          "day": 131,
+          "title": "Jour 131 : Dates d'anniversaire",
+          "intro": "Les rendez-vous liés à votre passé de fumeur ou à des événements douloureux peuvent avoir un poids émotionnel discret.",
+          "tasks": [
+            {
+              "id": "d131t1",
+              "type": "journal",
+              "title": "Cartographier les dates significatives",
+              "text": "Écrivez toutes les dates ou anniversaires liés à votre passé de fumeur qui pourraient vous affecter."
+            },
+            {
+              "id": "d131t2",
+              "type": "action",
+              "title": "Planifiez en fonction d'un rendez-vous difficile",
+              "text": "Si un rendez-vous difficile approche, notez comment vous allez le gérer : entreprise, activité, outils."
+            }
+          ]
+        },
+        {
+          "day": 132,
+          "title": "Jour 132 : Stress financier et tabagisme",
+          "intro": "Les soucis d’argent étaient autrefois à la fois une raison de fumer pour se soulager et une raison d’arrêter pour économiser. Maintenant, ils ne sont plus que les deuxièmes.",
+          "tasks": [
+            {
+              "id": "d132t1",
+              "type": "fact",
+              "title": "Voir les économies à long terme",
+              "text": "Ouvrez l'onglet Argent économisé et regardez le total conservé depuis le premier jour, un fonds qui augmente chaque jour où vous restez arrêté."
+            },
+            {
+              "id": "d132t2",
+              "type": "checkin",
+              "title": "Évaluez votre stress financier",
+              "text": "Évaluez le stress financier que vous ressentez actuellement, indépendamment du fait de fumer."
+            }
+          ]
+        },
+        {
+          "day": 133,
+          "title": "Jour 133 : Vingt semaines gratuites",
+          "intro": "Cinq mois complets de cohérence sont désormais derrière vous.",
+          "tasks": [
+            {
+              "id": "d133t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d133t2",
+              "type": "fact",
+              "title": "Aperçu sur cinq mois",
+              "text": "Ouvrez vos statistiques et examinez vos progrès complets au bout de cinq mois."
+            }
+          ]
+        },
+        {
+          "day": 134,
+          "title": "Jour 134 : Revoir tout votre arc",
+          "intro": "Au début du chapitre six, découvrez tout le voyage jusqu'à présent.",
+          "tasks": [
+            {
+              "id": "d134t1",
+              "type": "journal",
+              "title": "Résumer le voyage complet",
+              "text": "Écrivez un court paragraphe résumant le premier jour jusqu’à aujourd’hui."
+            },
+            {
+              "id": "d134t2",
+              "type": "fact",
+              "title": "Faites défiler votre historique",
+              "text": "Ouvrez vos statistiques et faites défiler tout votre historique depuis le tout début."
+            }
+          ]
+        },
+        {
+          "day": 135,
+          "title": "Jour 135 : Gérer l'inattendu",
+          "intro": "On ne peut pas prévoir toutes les journées difficiles. La préparation générale est la réponse à la surprise.",
+          "tasks": [
+            {
+              "id": "d135t1",
+              "type": "breathing",
+              "title": "Pratiquez votre réinitialisation la plus rapide",
+              "text": "Utilisez l'outil de respiration aujourd'hui et remarquez à quelle vitesse il vous calme. C'est votre outil le plus rapide en cas de stress soudain."
+            },
+            {
+              "id": "d135t2",
+              "type": "checkin",
+              "title": "Évaluez la préparation aux surprises",
+              "text": "Évaluez à quel point vous vous sentez prêt à gérer un événement stressant soudain sans fumer."
+            }
+          ]
+        },
+        {
+          "day": 136,
+          "title": "Jour 136 : Vingt et une semaines de preuves",
+          "intro": "Vingt et une semaines de preuve que les moments difficiles ne signifient pas nécessairement fumer.",
+          "tasks": [
+            {
+              "id": "d136t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt et une semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d136t2",
+              "type": "mindset",
+              "title": "La peur était la cage",
+              "text": "Ce qui pousse la plupart des fumeurs à fumer, ce n'est pas le plaisir mais la peur : peur du stress sans cigarette, peur de vivre une vie incomplète. Vous avez désormais vécu vingt et une semaines de stress, de fête et d'ennui sans eux. La peur était la seule chose que la cigarette protégeait."
+            }
+          ]
+        },
+        {
+          "day": 137,
+          "title": "Jour 137 : Des saisons difficiles, pas seulement des jours difficiles",
+          "intro": "Parfois, il ne s’agit pas d’une mauvaise journée mais de toute une série : une saison de travail brutale, un hiver rigoureux, des semaines de pression.",
+          "tasks": [
+            {
+              "id": "d137t1",
+              "type": "journal",
+              "title": "Nommez une saison difficile",
+              "text": "Écrivez sur une période de temps, passée ou à venir, qui a tendance à être plus difficile pour vous qu'une seule journée."
+            },
+            {
+              "id": "d137t2",
+              "type": "fact",
+              "title": "Les saisons ont besoin d'un plan différent",
+              "text": "Une saison difficile nécessite de petits contrôles fréquents avec vous-même plutôt qu'un grand plan, car la pression monte progressivement au lieu d'un seul coup."
+            }
+          ]
+        },
+        {
+          "day": 138,
+          "title": "Jour 138 : S'enregistrer honnêtement",
+          "intro": "Ce chapitre fonctionne mieux avec des auto-enregistrements honnêtes, et non avec du bruit de motivation.",
+          "tasks": [
+            {
+              "id": "d138t1",
+              "type": "checkin",
+              "title": "Évaluez aujourd'hui honnêtement",
+              "text": "Évaluez aujourd’hui en incluant tout ce qui vous a semblé difficile."
+            },
+            {
+              "id": "d138t2",
+              "type": "action",
+              "title": "Répondre à une véritable préoccupation",
+              "text": "Si quelque chose vous inquiète discrètement concernant votre non-fumeur, écrivez-le et notez une étape pour y remédier."
+            }
+          ]
+        },
+        {
+          "day": 139,
+          "title": "Jour 139 : Vingt-deux semaines gratuites",
+          "intro": "Chaque semaine s’accumule sur la précédente, créant un record difficile à contester.",
+          "tasks": [
+            {
+              "id": "d139t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt-deux semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d139t2",
+              "type": "journal",
+              "title": "Le one-liner de ce soir",
+              "text": "Écrivez une phrase sur ce que vous ressentez en ce moment au cours de votre voyage."
+            }
+          ]
+        },
+        {
+          "day": 140,
+          "title": "Jour 140 : Cent quarante jours",
+          "intro": "Au plus profond du dernier chapitre de préparation avant le début de la dernière ligne droite.",
+          "tasks": [
+            {
+              "id": "d140t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cent quarante jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d140t2",
+              "type": "fact",
+              "title": "Voir l'image complète",
+              "text": "Ouvrez vos statistiques complètes et votre aperçu de votre santé sur cent quarante jours."
+            },
+            {
+              "id": "d140t3",
+              "type": "social",
+              "title": "Partager une mise à jour",
+              "text": "Publiez une brève mise à jour dans la communauté indiquant où vous vous trouvez."
+            }
+          ]
+        },
+        {
+          "day": 141,
+          "title": "Jour 141 : Il reste dix jours au chapitre six",
+          "intro": "Encore dix jours avant le début de la dernière partie du plan guidé.",
+          "tasks": [
+            {
+              "id": "d141t1",
+              "type": "checkin",
+              "title": "Fixez-vous un objectif pour le reste",
+              "text": "Choisissez un objectif pour les jours restants du chapitre six."
+            },
+            {
+              "id": "d141t2",
+              "type": "fact",
+              "title": "Sachez ce qui vous attend",
+              "text": "Le chapitre sept est le dernier chapitre, un rythme hebdomadaire plus léger menant à votre étape de six mois et à l'fin du parcours guidé vers une vie indépendante sans fumer."
+            }
+          ]
+        },
+        {
+          "day": 142,
+          "title": "Jour 142 : Réflexion sur six chapitres",
+          "intro": "La survie, la reconfiguration des habitudes, la pression sociale, le fait de rester fort, l'identité et la préparation aux dures journées, presque tout est terminé.",
+          "tasks": [
+            {
+              "id": "d142t1",
+              "type": "journal",
+              "title": "Votre chapitre le plus difficile",
+              "text": "Écrivez quel chapitre vous a semblé le plus difficile et pourquoi."
+            },
+            {
+              "id": "d142t2",
+              "type": "journal",
+              "title": "Votre moment le plus fier",
+              "text": "Écrivez sur le moment le plus fier de tout votre voyage jusqu’à présent."
+            }
+          ]
+        },
+        {
+          "day": 143,
+          "title": "Jour 143 : Des outils dont vous n'avez plus besoin au quotidien",
+          "intro": "Les outils qui étaient essentiels au début sont désormais rarement utilisés. C'est une remise de diplômes, pas un problème.",
+          "tasks": [
+            {
+              "id": "d143t1",
+              "type": "checkin",
+              "title": "Évaluez l'utilisation de votre outil",
+              "text": "Évaluez la fréquence à laquelle vous utilisez maintenant la boîte à outils sur le manque par rapport au chapitre un."
+            },
+            {
+              "id": "d143t2",
+              "type": "fact",
+              "title": "Moins d’utilisation signifie plus de progrès",
+              "text": "Avoir moins besoin d’outils est un signe de progrès. Ils restent dans votre poche à vie, ne coûtent rien à transporter et sont toujours à portée de main."
+            }
+          ]
+        },
+        {
+          "day": 144,
+          "title": "Jour 144 : Rester humble face au risque",
+          "intro": "Même avec des mois derrière vous, considérer chaque jour comme méritant d'être protégé maintient votre garde à la bonne hauteur : détendue et non endormie.",
+          "tasks": [
+            {
+              "id": "d144t1",
+              "type": "journal",
+              "title": "Écrivez votre engagement continu",
+              "text": "Écrivez une phrase décrivant votre engagement continu à rester sans fumer, quel que soit le nombre de mois."
+            },
+            {
+              "id": "d144t2",
+              "type": "fact",
+              "title": "Le succès à long terme reste actif",
+              "text": "Les personnes qui ne fument pas à long terme traitent néanmoins sérieusement les rares envies fortes plutôt que de supposer qu’elles sont immunisées de façon permanente."
+            }
+          ]
+        },
+        {
+          "day": 145,
+          "title": "Jour 145 : Soutenir la communauté à grande échelle",
+          "intro": "Avec des mois d’expérience, votre point de vue a un réel poids pour les débutants.",
+          "tasks": [
+            {
+              "id": "d145t1",
+              "type": "social",
+              "title": "Écrivez un message d'assistance plus long",
+              "text": "Écrivez un message détaillé de soutien ou de conseils pour une personne en difficulté dans la communauté en ce moment."
+            },
+            {
+              "id": "d145t2",
+              "type": "checkin",
+              "title": "Évaluez la sensation de redonner",
+              "text": "Évaluez à quel point il est important de soutenir les autres à ce stade."
+            }
+          ]
+        },
+        {
+          "day": 146,
+          "title": "Jour 146 : Cinq jours avant le dernier chapitre",
+          "intro": "Le chapitre sept est proche : la dernière ligne droite avant de passer à la maintenance indépendante.",
+          "tasks": [
+            {
+              "id": "d146t1",
+              "type": "fact",
+              "title": "Ce que signifie l'fin du parcours guidé",
+              "text": "L’obtention d’un diplôme ne signifie pas que l’application cesse d’être utile. Cela signifie passer de missions structurées quotidiennes à un support de maintenance léger et à long terme."
+            },
+            {
+              "id": "d146t2",
+              "type": "journal",
+              "title": "Concevez votre maintenance",
+              "text": "Écrivez le type de soutien continu dont vous pensez avoir besoin après la fin du plan guidé."
+            }
+          ]
+        },
+        {
+          "day": 147,
+          "title": "Jour 147 : Révision de vos badges",
+          "intro": "Chaque jalon collecté est un enregistrement concret de cohérence dans le temps.",
+          "tasks": [
+            {
+              "id": "d147t1",
+              "type": "fact",
+              "title": "Passez en revue votre collection",
+              "text": "Ouvrez l'onglet Badges et parcourez chaque étape du premier jour à aujourd'hui."
+            },
+            {
+              "id": "d147t2",
+              "type": "journal",
+              "title": "Votre badge préféré",
+              "text": "Écrivez quel badge signifiait le plus et pourquoi."
+            }
+          ]
+        },
+        {
+          "day": 148,
+          "title": "Jour 148 : Presque le chapitre sept",
+          "intro": "Il reste deux jours. Vous avez développé une réelle préparation pour les jours difficiles, qu’ils arrivent pleinement ou non.",
+          "tasks": [
+            {
+              "id": "d148t1",
+              "type": "checkin",
+              "title": "Notez le chapitre six",
+              "text": "Évaluez à quel point ce chapitre vous a permis de vous sentir préparé pour des journées vraiment difficiles."
+            },
+            {
+              "id": "d148t2",
+              "type": "action",
+              "title": "Attachez les plans lâches",
+              "text": "Passez en revue les plans d’urgence et les plans pour les jours difficiles que vous avez rédigés dans ce chapitre et assurez-vous qu’ils semblent toujours solides."
+            }
+          ]
+        },
+        {
+          "day": 149,
+          "title": "Jour 149 : Un jour avant le dernier chapitre",
+          "intro": "Demain s'ouvre le dernier chapitre : la progression vers six mois sans tabac et l'fin du parcours guidé.",
+          "tasks": [
+            {
+              "id": "d149t1",
+              "type": "journal",
+              "title": "Réfléchissez au chapitre six",
+              "text": "Écrivez quelques phrases sur la façon dont vous vous sentez préparé pour les journées difficiles par rapport au début de ce chapitre."
+            },
+            {
+              "id": "d149t2",
+              "type": "fact",
+              "title": "Un dernier regard vers l'avenir",
+              "text": "Le chapitre sept maintient vos progrès avec une concentration hebdomadaire plus légère à mesure que vous progressez dans le plan structuré."
+            }
+          ]
+        },
+        {
+          "day": 150,
+          "title": "Jour 150 : Prêt pour les journées difficiles, prêt à tout",
+          "intro": "Cent cinquante jours. Vous n’avez pas seulement évité les journées difficiles, vous vous y êtes activement préparé. Le dernier chapitre poursuit cela pour de bon.",
+          "tasks": [
+            {
+              "id": "d150t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cent cinquante jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d150t2",
+              "type": "fact",
+              "title": "Aperçu complet du chapitre six",
+              "text": "Ouvrez vos statistiques et votre aperçu de votre santé pour voir vos progrès dans le chapitre six."
+            },
+            {
+              "id": "d150t3",
+              "type": "journal",
+              "title": "Résumé du chapitre six",
+              "text": "Rédigez un bref résumé de ce que vous avez appris sur la préparation aux journées difficiles."
+            },
+            {
+              "id": "d150t4",
+              "type": "action",
+              "title": "Attendez-vous au chapitre sept",
+              "text": "Lisez l'intro du chapitre sept et fixez une intention pour la dernière ligne droite à six mois sans tabac."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "name": "Six mois libre",
+      "role": "Jours 151 à 180 : entretien hebdomadaire léger, mentorat, fin du plan guidé",
+      "day_start": 151,
+      "day_end": 180,
+      "days": [
+        {
+          "day": 151,
+          "title": "Jour 151 : Bienvenue dans le dernier chapitre",
+          "intro": "Le dernier chapitre de votre plan guidé. La charge quotidienne devient désormais plus légère car l’objectif est la maintenance et non la construction. Le piège est derrière vous ; ce mois-ci, il s’agit de s’en éloigner sans regarder en arrière.",
+          "tasks": [
+            {
+              "id": "d151t1",
+              "type": "fact",
+              "title": "Comment fonctionne ce chapitre",
+              "text": "Le chapitre sept utilise une concentration hebdomadaire légère au lieu de tâches quotidiennes denses, puisque le gros du travail consistant à arrêter de fumer est derrière vous."
+            },
+            {
+              "id": "d151t2",
+              "type": "checkin",
+              "title": "Fixez votre objectif d'fin du parcours guidé",
+              "text": "Choisissez une chose que vous voulez être vraie à propos de votre relation avec le tabagisme avant le jour de la remise des diplômes."
+            }
+          ]
+        },
+        {
+          "day": 152,
+          "title": "Jour 152 : Focus de la semaine, contrôle de routine",
+          "intro": "Une simple vérification pour savoir si vos routines de remplacement sont toujours solides.",
+          "tasks": [
+            {
+              "id": "d152t1",
+              "type": "journal",
+              "title": "Passez en revue vos routines de base",
+              "text": "Notez vos routines actuelles du matin et du soir et si elles semblent toujours automatiques."
+            }
+          ]
+        },
+        {
+          "day": 153,
+          "title": "Jour 153 : Vingt-trois semaines gratuites",
+          "intro": "Presque cinq mois et demi.",
+          "tasks": [
+            {
+              "id": "d153t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt-trois semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            }
+          ]
+        },
+        {
+          "day": 154,
+          "title": "Jour 154 : Vérification rapide de l'envie",
+          "intro": "Une simple vérification du pouls pour savoir où en sont les envies actuelles.",
+          "tasks": [
+            {
+              "id": "d154t1",
+              "type": "checkin",
+              "title": "Notez les envies de cette semaine",
+              "text": "Évaluez à quelle fréquence, le cas échéant, vous avez remarqué une envie cette semaine."
+            }
+          ]
+        },
+        {
+          "day": 155,
+          "title": "Jour 155 : Enregistrement communautaire",
+          "intro": "Rester légèrement connecté est utile même après que les missions quotidiennes se soient calmées.",
+          "tasks": [
+            {
+              "id": "d155t1",
+              "type": "social",
+              "title": "Vérifiez la communauté",
+              "text": "Passez quelques minutes dans la communauté aujourd'hui, à lire ou à répondre."
+            }
+          ]
+        },
+        {
+          "day": 156,
+          "title": "Jour 156 : Aperçu des jalons financiers",
+          "intro": "Un aperçu rapide de l’augmentation de votre argent économisé.",
+          "tasks": [
+            {
+              "id": "d156t1",
+              "type": "fact",
+              "title": "Consultez vos économies",
+              "text": "Ouvrez l'onglet Argent économisé et consultez votre total actuel, désormais exempt des coûts des cigarettes et des NRT."
+            }
+          ]
+        },
+        {
+          "day": 157,
+          "title": "Jour 157 : Vingt-quatre semaines gratuites",
+          "intro": "Vingt-quatre semaines, un décompte semestriel propre en semaines seulement.",
+          "tasks": [
+            {
+              "id": "d157t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt-quatre semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            }
+          ]
+        },
+        {
+          "day": 158,
+          "title": "Jour 158 : Le focus de cette semaine, déclencher l'analyse",
+          "intro": "Une légère vérification pour savoir si un ancien déclencheur a discrètement refait surface.",
+          "tasks": [
+            {
+              "id": "d158t1",
+              "type": "journal",
+              "title": "Rechercher les déclencheurs de resurfaçage",
+              "text": "Écrivez si un ancien déclencheur s'est senti légèrement plus fort ces derniers temps, même légèrement."
+            }
+          ]
+        },
+        {
+          "day": 159,
+          "title": "Jour 159 : Regard sur la santé",
+          "intro": "Un aperçu rapide de la façon dont vos progrès en matière de santé continuent de se développer.",
+          "tasks": [
+            {
+              "id": "d159t1",
+              "type": "fact",
+              "title": "Consultez votre aperçu de la santé",
+              "text": "Ouvrez l'onglet de progression de votre santé et remarquez l'amélioration continue depuis le chapitre cinq."
+            }
+          ]
+        },
+        {
+          "day": 160,
+          "title": "Jour 160 : Cent soixante jours",
+          "intro": "Il reste vingt jours jusqu'à ce que vous obteniez entièrement le plan guidé.",
+          "tasks": [
+            {
+              "id": "d160t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cent soixante jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d160t2",
+              "type": "checkin",
+              "title": "Évaluez la sensation de la maintenance",
+              "text": "Évaluez à quel point il est naturel de ne pas fumer maintenant par rapport au besoin de structure quotidienne."
+            }
+          ]
+        },
+        {
+          "day": 161,
+          "title": "Jour 161 : Le focus de cette semaine, la gratitude",
+          "intro": "Remarquez ce que le fait d’arrêter de fumer vous a apporté, et pas seulement ce que cela vous a enlevé.",
+          "tasks": [
+            {
+              "id": "d161t1",
+              "type": "journal",
+              "title": "Une chose pour laquelle vous êtes reconnaissant(e)",
+              "text": "Écrivez une chose spécifique sur l’arrêt du tabac pour laquelle vous êtes vraiment reconnaissant."
+            }
+          ]
+        },
+        {
+          "day": 162,
+          "title": "Jour 162 : Vingt-cinq semaines gratuites",
+          "intro": "Les chiffres continuent de grimper tranquillement dans le contexte de votre vie normale.",
+          "tasks": [
+            {
+              "id": "d162t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt-cinq semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            }
+          ]
+        },
+        {
+          "day": 163,
+          "title": "Jour 163 : Vérification du mentorat",
+          "intro": "Continuez à soutenir les autres à l’approche de l’obtention de votre diplôme. Cela cimente votre propre liberté.",
+          "tasks": [
+            {
+              "id": "d163t1",
+              "type": "social",
+              "title": "Aidez un nouveau membre",
+              "text": "Trouvez une personne plus tôt dans son voyage et offrez-lui des encouragements ou un conseil spécifique."
+            }
+          ]
+        },
+        {
+          "day": 164,
+          "title": "Jour 164 : Le focus de la semaine, l'identité",
+          "intro": "Un petit rappel du chemin parcouru par votre estime de soi depuis le premier jour.",
+          "tasks": [
+            {
+              "id": "d164t1",
+              "type": "journal",
+              "title": "Décrivez-vous en une seule ligne",
+              "text": "Écrivez une ligne décrivant comment vous vous voyez actuellement par rapport au tabagisme."
+            }
+          ]
+        },
+        {
+          "day": 165,
+          "title": "Jour 165 : Vingt-six semaines gratuites",
+          "intro": "Vingt-six semaines, soit exactement six mois par semaine.",
+          "tasks": [
+            {
+              "id": "d165t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de vingt-six semaines",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            },
+            {
+              "id": "d165t2",
+              "type": "fact",
+              "title": "Statistiques semestrielles",
+              "text": "Ouvrez vos statistiques et examinez vos progrès complets au bout d’un semestre par semaines."
+            }
+          ]
+        },
+        {
+          "day": 166,
+          "title": "Jour 166 : Aperçu des statistiques",
+          "intro": "Un aperçu rapide des chiffres complets à l’approche de l’fin du parcours guidé.",
+          "tasks": [
+            {
+              "id": "d166t1",
+              "type": "fact",
+              "title": "Consultez vos statistiques complètes",
+              "text": "Ouvrez votre onglet de statistiques et examinez les séquences, l'argent économisé et les cigarettes évitées."
+            }
+          ]
+        },
+        {
+          "day": 167,
+          "title": "Jour 167 : Le focus de cette semaine, la vie après le plan",
+          "intro": "Pensez à la vie de non-fumeur permanent au-delà de la structure guidée de l'application.",
+          "tasks": [
+            {
+              "id": "d167t1",
+              "type": "journal",
+              "title": "Imaginez la vie après l'fin du parcours guidé",
+              "text": "Écrivez quelques phrases sur la façon dont vous souhaitez maintenir votre vie sans fumer une fois le plan guidé terminé : quelles habitudes restent, quels enregistrements se poursuivent, qui vous continuez à soutenir."
+            }
+          ]
+        },
+        {
+          "day": 168,
+          "title": "Jour 168 : Douze jours avant l'fin du parcours guidé",
+          "intro": "Il reste douze jours jusqu'à ce que vous ayez terminé le plan guidé complet et atteint six mois.",
+          "tasks": [
+            {
+              "id": "d168t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de cent soixante-huit jours",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon."
+            }
+          ]
+        },
+        {
+          "day": 169,
+          "title": "Jour 169 : Enregistrement rapide",
+          "intro": "Un simple contrôle du pouls alors que le dernier tronçon commence.",
+          "tasks": [
+            {
+              "id": "d169t1",
+              "type": "checkin",
+              "title": "Évaluez votre préparation à l'fin du parcours guidé",
+              "text": "Évaluez à quel point vous vous sentez prêt à aller au-delà du plan quotidien structuré."
+            }
+          ]
+        },
+        {
+          "day": 170,
+          "title": "Jour 170 : Le focus de cette semaine, la boucle est bouclée",
+          "intro": "Un retour réfléchi sur l’ensemble du plan que vous êtes sur le point de terminer.",
+          "tasks": [
+            {
+              "id": "d170t1",
+              "type": "journal",
+              "title": "Réflexion en cercle complet",
+              "text": "Écrivez quelques phrases en réfléchissant sur la route du premier au cent soixante-dix jour."
+            }
+          ]
+        },
+        {
+          "day": 171,
+          "title": "Jour 171 : Il reste neuf jours",
+          "intro": "Neuf jours jusqu'à ce que vous obteniez votre diplôme et que vous atteigniez six mois.",
+          "tasks": [
+            {
+              "id": "d171t1",
+              "type": "fact",
+              "title": "Voyez à quel point vous êtes proche",
+              "text": "Ouvrez vos statistiques et voyez à quel point vous êtes proche du cap des six mois."
+            }
+          ]
+        },
+        {
+          "day": 172,
+          "title": "Jour 172 : Merci à la communauté",
+          "intro": "Remerciez les personnes qui vous ont soutenu tout au long de votre parcours.",
+          "tasks": [
+            {
+              "id": "d172t1",
+              "type": "social",
+              "title": "Remercier quelqu'un",
+              "text": "Envoyez un message de remerciement à tous les membres de la communauté qui vous ont aidé dans votre voyage."
+            }
+          ]
+        },
+        {
+          "day": 173,
+          "title": "Jour 173 : Il reste sept jours",
+          "intro": "Il reste une semaine avant que vous ayez terminé le plan guidé complet.",
+          "tasks": [
+            {
+              "id": "d173t1",
+              "type": "checkin",
+              "title": "Évaluez la confiance de la semaine dernière",
+              "text": "Évaluez à quel point vous vous sentez confiant à l’approche de votre dernière semaine."
+            }
+          ]
+        },
+        {
+          "day": 174,
+          "title": "Jour 174 : Planifier votre diplôme",
+          "intro": "Il reste six jours. Décidez comment vous marquerez la fin de l’ensemble du plan.",
+          "tasks": [
+            {
+              "id": "d174t1",
+              "type": "action",
+              "title": "Planifiez la célébration",
+              "text": "Décidez comment vous souhaitez célébrer six mois et l'obtention de votre diplôme en six jours, idéalement financés entièrement par l'argent que vous n'avez pas brûlé."
+            }
+          ]
+        },
+        {
+          "day": 175,
+          "title": "Jour 175 : Il reste cinq jours",
+          "intro": "Une courte invite de réflexion à l’approche de la ligne d’arrivée.",
+          "tasks": [
+            {
+              "id": "d175t1",
+              "type": "journal",
+              "title": "Ce que signifie l'fin du parcours guidé",
+              "text": "Écrivez quelques phrases sur ce que signifie pour vous la réalisation de l’intégralité de ce plan guidé."
+            }
+          ]
+        },
+        {
+          "day": 176,
+          "title": "Jour 176 : Il reste quatre jours",
+          "intro": "Quatre jours jusqu'à ce que chaque chapitre du plan guidé soit terminé.",
+          "tasks": [
+            {
+              "id": "d176t1",
+              "type": "fact",
+              "title": "Revenez au premier chapitre",
+              "text": "Ouvrez votre historique à partir du premier chapitre et remarquez à quel point cette version de vous était différente de celle d'aujourd'hui."
+            }
+          ]
+        },
+        {
+          "day": 177,
+          "title": "Jour 177 : Il reste trois jours",
+          "intro": "Presque toutes les étapes du plan sont désormais derrière vous.",
+          "tasks": [
+            {
+              "id": "d177t1",
+              "type": "checkin",
+              "title": "Évaluez le forfait complet",
+              "text": "Évaluez votre expérience globale du plan guidé du premier jour à maintenant."
+            }
+          ]
+        },
+        {
+          "day": 178,
+          "title": "Jour 178 : Il reste deux jours",
+          "intro": "Bientôt, vous serez officiellement diplômé des missions quotidiennes structurées.",
+          "tasks": [
+            {
+              "id": "d178t1",
+              "type": "journal",
+              "title": "Une note pour votre futur",
+              "text": "Écrivez une courte note à lire lors d'une journée difficile après l'obtention de votre diplôme, en vous rappelant pourquoi vous avez arrêté, que les envies sont des échos et qu'il n'existe pas qu'une seule."
+            }
+          ]
+        },
+        {
+          "day": 179,
+          "title": "Jour 179 : Il reste un jour",
+          "intro": "Demain : six mois complets sans fumer et la fin officielle de votre plan guidé.",
+          "tasks": [
+            {
+              "id": "d179t1",
+              "type": "fact",
+              "title": "Un dernier regard en arrière",
+              "text": "Ouvrez vos statistiques complètes et faites défiler l'intégralité de votre parcours, du premier jour à aujourd'hui."
+            },
+            {
+              "id": "d179t2",
+              "type": "journal",
+              "title": "La réflexion de ce soir",
+              "text": "Écrivez une phrase sur ce que vous ressentez la nuit précédant les six mois."
+            }
+          ]
+        },
+        {
+          "day": 180,
+          "title": "Jour 180 : Six mois sans tabac, plan terminé",
+          "intro": "Cent quatre-vingts jours. Six mois complets sans une seule cigarette, libre de nicotine, et le plan guidé complet terminé du début à la fin. Vous n’avez pas abandonné quelque chose ; vous vous êtes retrouvé(e). Chaque outil reste dans votre poche à vie, mais vous sortez d'ici comme vous êtes simplement maintenant : un non-fumeur.",
+          "tasks": [
+            {
+              "id": "d180t1",
+              "type": "reward",
+              "title": "Récupérez votre badge de six mois",
+              "text": "Ouvrez votre onglet badges et récupérez ce jalon majeur, la plus importante du plan guidé."
+            },
+            {
+              "id": "d180t2",
+              "type": "fact",
+              "title": "Votre transformation complète en six mois",
+              "text": "Ouvrez vos statistiques complètes et votre aperçu de la santé pour voir l’intégralité du parcours au cours des six mois et de chaque chapitre."
+            },
+            {
+              "id": "d180t3",
+              "type": "journal",
+              "title": "Écrivez votre lettre de fin de parcours",
+              "text": "Écrivez une lettre au vous du jour 1, en lui racontant tout ce qui s'est passé entre le premier jour et cent quatre-vingts jours."
+            },
+            {
+              "id": "d180t4",
+              "type": "social",
+              "title": "Partagez votre réussite",
+              "text": "Publiez dans la communauté que vous avez terminé le plan guidé complet et atteint six mois sans fumer."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

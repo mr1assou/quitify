@@ -3,17 +3,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
 import type { MotivationQuote } from "@/constants/craving/motivationCardTypes";
-import { MOTIVATION_QUOTES } from "@/constants/craving/motivationQuotes";
-import { TIP_QUOTES } from "@/constants/craving/tipQuotes";
+import { useLocalizedCardQuotes } from "@/hooks/i18n/useLocalizedCardQuotes";
 import { updateUserPreferences } from "@/services/auth/preferencesApi";
 import { getAccessToken } from "@/utils/auth/authStorage";
 
 export type SwipeableCardToolId = "motivation-cards" | "tips";
-
-const QUOTES_BY_TOOL = {
-  "motivation-cards": MOTIVATION_QUOTES,
-  tips: TIP_QUOTES,
-} as const satisfies Record<SwipeableCardToolId, readonly MotivationQuote[]>;
 
 function normalizeIndex(index: number, total: number): number {
   if (total === 0) return 0;
@@ -32,7 +26,7 @@ function savedIndexForTool(
 
 /** Swipeable cards with index restored from the server and saved on screen exit. */
 export function useSwipeableCardSession(tool: SwipeableCardToolId) {
-  const quotes = QUOTES_BY_TOOL[tool];
+  const quotes = useLocalizedCardQuotes(tool);
   const total = quotes.length;
   const { state, setAccount } = useApp();
   const savedIndex = savedIndexForTool(tool, state.account);
@@ -109,3 +103,5 @@ export function useSwipeableCardSession(tool: SwipeableCardToolId) {
     goToIndex,
   };
 }
+
+export type { MotivationQuote };

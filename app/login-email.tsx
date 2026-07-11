@@ -15,17 +15,16 @@ import {
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   isEmailNotFoundError,
   sendEmailLoginOtp,
 } from "@/services/auth/emailSignupOtpApi";
 import { safeRouter } from "@/utils/app/safeRouter";
 
-const LOGIN_EMAIL_NOT_FOUND =
-  "Your email doesn't exist. Tap Get started on the welcome screen to create an account.";
-
 export default function LoginEmailScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,9 +46,9 @@ export default function LoginEmailScreen() {
     } catch (e) {
       setBusy(false);
       if (isEmailNotFoundError(e)) {
-        setError(LOGIN_EMAIL_NOT_FOUND);
+        setError(t("auth.emailNotFound"));
       } else {
-        setError(e instanceof Error ? e.message : "Could not send verification code");
+        setError(e instanceof Error ? e.message : t("auth.sendCodeFailed"));
       }
     }
   };
@@ -66,7 +65,7 @@ export default function LoginEmailScreen() {
             disabled={busy}
             className="h-10 w-10 items-center justify-center rounded-full active:bg-section dark:active:bg-d-surface"
             accessibilityRole="button"
-            accessibilityLabel="Back"
+            accessibilityLabel={t("common.back")}
           >
             <Ionicons name="chevron-back" size={24} color={colors.foreground} />
           </Pressable>
@@ -74,10 +73,10 @@ export default function LoginEmailScreen() {
 
         <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
           <Text className="text-center text-3xl font-bold text-foreground dark:text-d-text">
-            Sign in with email
+            {t("auth.loginTitle")}
           </Text>
           <Text className="mt-3 text-center text-sm text-muted-foreground dark:text-d-muted">
-            We&apos;ll send a verification code to your inbox.
+            {t("auth.loginSubtitle")}
           </Text>
 
           {error ? (
@@ -86,10 +85,10 @@ export default function LoginEmailScreen() {
 
           <View className="mt-10 gap-3">
             <Field
-              label="Email"
+              label={t("auth.emailLabel")}
               value={email}
               onChangeText={setEmail}
-              placeholder="you@email.com"
+              placeholder={t("auth.emailPlaceholder")}
               autoCapitalize="none"
               keyboardType="email-address"
               editable={!busy}
@@ -99,7 +98,7 @@ export default function LoginEmailScreen() {
 
           <View className="mt-10">
             <Button
-              label="Continue"
+              label={t("common.continue")}
               size="lg"
               fullWidth
               loading={busy}

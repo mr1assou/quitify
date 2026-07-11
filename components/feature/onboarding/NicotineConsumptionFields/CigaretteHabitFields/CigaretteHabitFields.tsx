@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Text, View } from "react-native";
 
 import { CigarettesPerPackField } from "@/components/feature/onboarding/NicotineConsumptionFields/CigarettesPerPackField";
@@ -5,14 +6,17 @@ import { PackCostField } from "@/components/feature/onboarding/NicotineConsumpti
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
 import {
+  CIGARETTES_PER_DAY_BANDS,
   CIGARETTES_PER_DAY_DROPDOWN_OPTIONS,
+  NICOTINE_HABIT_YEARS_BANDS,
   NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS,
-  cigarettesPerDayBandHint,
   type CigarettesPerDayBandId,
   type NicotineHabitYearsBandId,
 } from "@/constants/onboarding/onboardingNicotineBands";
 import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import type { OnboardingDraft } from "@/types";
+import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   patchForCigarettesPerDayBand,
   patchForCigarettesPerPackInput,
@@ -35,19 +39,42 @@ function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBan
 }
 
 export function CigaretteHabitFields({ draft, patch }: Props) {
-  const cigarettesHint = cigarettesPerDayBandHint(draft.cigarettesPerDayBand);
+  const { t } = useTranslation();
+  const { localize, label } = useLocalizedCatalog();
+
+  const cigarettesPerDayOptions = useMemo(
+    () =>
+      localize(CIGARETTES_PER_DAY_BANDS, "onboarding.nicotine", ["label"]).map((band) => ({
+        value: band.id,
+        label: band.label,
+      })),
+    [localize],
+  );
+
+  const habitYearsOptions = useMemo(
+    () =>
+      localize(NICOTINE_HABIT_YEARS_BANDS, "onboarding.nicotine", ["label"]).map((band) => ({
+        value: band.id,
+        label: band.label,
+      })),
+    [localize],
+  );
+
+  const cigarettesHint = draft.cigarettesPerDayBand
+    ? label("onboarding.nicotine", draft.cigarettesPerDayBand, "hint")
+    : undefined;
   const packSizeError = hasInvalidCigarettesPerPackInput(draft);
 
   return (
     <View className="w-full gap-5">
       <View className="gap-2">
-        <OnboardingFieldLabel>How many cigarettes do you smoke per day?</OnboardingFieldLabel>
+        <OnboardingFieldLabel>{t("onboarding.nicotine.cigsPerDay.label")}</OnboardingFieldLabel>
         <SelectFieldString
-          fieldLabel="How many cigarettes do you smoke per day?"
+          fieldLabel={t("onboarding.nicotine.cigsPerDay.label")}
           showLabel={false}
           value={draft.cigarettesPerDayBand}
-          placeholder="Select a range…"
-          options={CIGARETTES_PER_DAY_DROPDOWN_OPTIONS}
+          placeholder={t("common.selectRange")}
+          options={cigarettesPerDayOptions}
           allowClear={false}
           controlHeight={ONBOARDING_CONTROL_HEIGHT}
           onChange={(value) => {
@@ -64,7 +91,7 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
       </View>
 
       <View className="gap-2">
-        <OnboardingFieldLabel>How many cigarettes are in one pack?</OnboardingFieldLabel>
+        <OnboardingFieldLabel>{t("onboarding.nicotine.packSize.label")}</OnboardingFieldLabel>
         <CigarettesPerPackField
           value={draft.cigarettesPerPackInput}
           hasError={packSizeError}
@@ -78,7 +105,7 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
       </View>
 
       <View className="gap-2">
-        <OnboardingFieldLabel>How much does one pack cost?</OnboardingFieldLabel>
+        <OnboardingFieldLabel>{t("onboarding.nicotine.price.label")}</OnboardingFieldLabel>
         <PackCostField
           currency={draft.currency}
           value={draft.packCostInput}
@@ -87,13 +114,13 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
       </View>
 
       <View className="gap-2">
-        <OnboardingFieldLabel>For how many years have you been smoking?</OnboardingFieldLabel>
+        <OnboardingFieldLabel>{t("onboarding.nicotine.habitYears.label")}</OnboardingFieldLabel>
         <SelectFieldString
-          fieldLabel="For how many years have you been smoking?"
+          fieldLabel={t("onboarding.nicotine.habitYears.label")}
           showLabel={false}
           value={draft.nicotineHabitYearsBand}
-          placeholder="Select a range…"
-          options={NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS}
+          placeholder={t("common.selectRange")}
+          options={habitYearsOptions}
           allowClear={false}
           controlHeight={ONBOARDING_CONTROL_HEIGHT}
           onChange={(value) => {

@@ -3,6 +3,7 @@ import { Pressable, Text, View } from "react-native";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 
 export function PremiumLockedSection({ title, description }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { requirePremium } = usePremiumGate();
 
   return (
@@ -23,7 +25,7 @@ export function PremiumLockedSection({ title, description }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-primary">
-              VIP feature
+              {t("premium.lockedBadge")}
             </Text>
             <Text className="mt-1 text-base font-bold text-foreground dark:text-d-text">
               {title}
@@ -31,7 +33,9 @@ export function PremiumLockedSection({ title, description }: Props) {
             <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">
               {description}
             </Text>
-            <Text className="mt-3 text-sm font-semibold text-primary">Unlock VIP →</Text>
+            <Text className="mt-3 text-sm font-semibold text-primary">
+              {t("premium.unlockCta")}
+            </Text>
           </View>
         </View>
       </Card>

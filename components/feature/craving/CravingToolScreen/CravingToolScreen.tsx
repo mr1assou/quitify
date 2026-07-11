@@ -3,7 +3,8 @@ import { useCallback, type ReactNode } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
-import { getCravingTool, type CravingToolId } from "@/constants/craving/cravingTools";
+import { useCravingTool } from "@/hooks/i18n/useCravingTools";
+import type { CravingToolId } from "@/constants/craving/cravingTools";
 
 type Props = {
   toolId: CravingToolId;
@@ -13,7 +14,7 @@ type Props = {
 
 /** Full-screen shell for a craving tool (standard app background). */
 export function CravingToolScreen({ toolId, title, children }: Props) {
-  const tool = getCravingTool(toolId);
+  const tool = useCravingTool(toolId);
   const close = useCallback(() => router.back(), []);
 
   return (

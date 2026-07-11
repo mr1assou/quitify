@@ -16,11 +16,13 @@ import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvat
 import { countryFlagForRank } from "@/constants/leaderboard/leaderboardCountries";
 import { useNotifications } from "@/context/NotificationContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { AppNotification } from "@/types/notifications/notification";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { formatRelativeTime } from "@/utils/community";
 
 export default function NotificationsScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const {
     notifications,
@@ -50,7 +52,7 @@ export default function NotificationsScreen() {
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
-      <StackScreenHeader title="Notifications" />
+      <StackScreenHeader title={t("notifications.title")} />
 
       <FlatList
         data={notifications}
@@ -95,7 +97,7 @@ export default function NotificationsScreen() {
                 color={colors.mutedForeground}
               />
               <Text className="mt-3 text-center text-sm text-muted-foreground dark:text-d-muted">
-                You&apos;re all caught up. New notifications will show up here.
+                {t("notifications.empty")}
               </Text>
             </View>
           )
@@ -106,13 +108,13 @@ export default function NotificationsScreen() {
   );
 }
 
-const ACTION_BY_TYPE: Record<AppNotification["type"], string> = {
-  comment: "commented on your post",
-  reply: "replied to your comment",
-  upvote: "upvoted your post",
-  downvote: "downvoted your post",
-  post: "shared a new post",
-};
+const ACTION_KEY_BY_TYPE = {
+  comment: "notifications.commented",
+  reply: "notifications.replied",
+  upvote: "notifications.upvoted",
+  downvote: "notifications.downvoted",
+  post: "notifications.sharedPost",
+} as const satisfies Record<AppNotification["type"], string>;
 
 const BADGE_ICON_BY_TYPE: Record<
   AppNotification["type"],
@@ -133,7 +135,9 @@ function NotificationRow({
   onPress: () => void;
 }) {
   const { colors } = useTheme();
-  const action = ACTION_BY_TYPE[item.type] ?? ACTION_BY_TYPE.comment;
+  const { t } = useTranslation();
+  const actionKey = ACTION_KEY_BY_TYPE[item.type] ?? ACTION_KEY_BY_TYPE.comment;
+  const action = t(actionKey as Parameters<typeof t>[0]);
   const badgeIcon = BADGE_ICON_BY_TYPE[item.type] ?? BADGE_ICON_BY_TYPE.comment;
   const badgeColor =
     item.type === "downvote" ? colors.alert : colors.primary;

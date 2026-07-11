@@ -6,11 +6,13 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { CravingToolCard } from "@/components/feature/craving/CravingToolCard";
 import { RelaxSoundHeadphonesModal } from "@/components/feature/craving/relax-sound/RelaxSoundHeadphonesModal";
-import { CRAVING_TOOLS, type CravingToolId } from "@/constants/craving/cravingTools";
+import { type CravingToolId } from "@/constants/craving/cravingTools";
 import { isPremiumCravingTool } from "@/constants/premium/premiumFeatures";
+import { useCravingTools } from "@/hooks/i18n/useCravingTools";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 
 export function CravingToolsGrid() {
+  const tools = useCravingTools();
   const { isPremium, requirePremium } = usePremiumGate();
   const [loadingToolId, setLoadingToolId] = useState<CravingToolId | null>(null);
   const [showRelaxHeadphonesModal, setShowRelaxHeadphonesModal] = useState(false);
@@ -21,7 +23,7 @@ export function CravingToolsGrid() {
     }, []),
   );
 
-  const openTool = (tool: (typeof CRAVING_TOOLS)[number]) => {
+  const openTool = (tool: (typeof tools)[number]) => {
     if (isPremiumCravingTool(tool.id) && !requirePremium()) return;
 
     if (tool.id === "relax-sound") {
@@ -37,7 +39,7 @@ export function CravingToolsGrid() {
     <>
       <Animated.View entering={FadeInUp.delay(180).duration(450)}>
         <View className="flex-row flex-wrap justify-between gap-y-3">
-          {CRAVING_TOOLS.map((tool) => (
+          {tools.map((tool) => (
             <CravingToolCard
               key={tool.id}
               label={tool.label}

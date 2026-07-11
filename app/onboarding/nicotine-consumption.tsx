@@ -12,9 +12,11 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboarding/onboardingNicotineForm";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { isNicotineConsumptionStepComplete } from "@/utils/onboarding/nicotineOnboarding";
 
 export default function NicotineConsumptionOnboarding() {
+  const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
 
   useEffect(() => {
@@ -35,8 +37,9 @@ export default function NicotineConsumptionOnboarding() {
       <OnboardingShell
         step={6}
         total={ONBOARDING_TOTAL_STEPS}
-        title="Your cigarette habits"
-        primaryLabel="Continue"
+        title={t("onboarding.nicotine.title")}
+        subtitle={t("onboarding.nicotine.subtitle")}
+        primaryLabel={t("common.continue")}
         primaryDisabled={!canContinue}
         onPrimary={() => safeRouter.push("/onboarding/analyzing")}
         showBack

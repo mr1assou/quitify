@@ -1,0 +1,3714 @@
+{
+  "app_name": "Quitify",
+  "plan_name": "180-Tage-Rauchstopp-Plan",
+  "total_days": 180,
+  "method_note": "Dieser Plan verbindet drei Säulen: (1) optional Nikotinersatztherapie (Pflaster, Lutschtabletten, Kaugummi), um körperliche Entzugserscheinungen abzumildern, (2) ein orales Ersatz-Set (Pfefferminz, zuckerfreier Kaugummi, Zahnstocher, Zimtstangen) für die Hand-zu-Mund-Gewohnheit und (3) Mindset-Arbeit inspiriert vom Easyway-Ansatz: Rauchen bringt kein echtes Vergnügen, Gelüste sind die sterbende Sucht, und Aufhören ist eine Befreiung, kein Verzicht. Die gezeigten NRT-Dosierungen entsprechen der Standard-Empfehlung für rezeptfreie Produkte; Nutzer sollten Dosis und Zeitplan mit Apotheker oder Arzt abklären, besonders bei Schwangerschaft, unter 18 Jahren oder bei Herzerkrankungen.",
+  "task_types": [
+    "action",
+    "fact",
+    "journal",
+    "breathing",
+    "checkin",
+    "game",
+    "audio",
+    "social",
+    "reward",
+    "nrt",
+    "mindset"
+  ],
+  "chapters": [
+    {
+      "chapter": 1,
+      "name": "Überleben und Vorbereitung",
+      "role": "Erste 2 Wochen: NRT und orales Set einrichten, Spitzenentzug durchstehen, Grundhaltung verankern",
+      "day_start": 1,
+      "day_end": 14,
+      "days": [
+        {
+          "day": 1,
+          "title": "Tag 1: Du verzichtest auf nichts",
+          "intro": "Heute hörst du auf, und hier ist die wichtigste Idee des gesamten Plans: Du opferst kein Vergnügen, du entkommst einer Falle. Zigaretten haben dir nie etwas gegeben, sie haben nur kurz das Unbehagen gelindert, das die vorherige Zigarette verursacht hat. Du brauchst jetzt keine Willenskraft für sechs Monate, nur für die nächsten zehn Minuten.",
+          "tasks": [
+            {
+              "id": "d1t1",
+              "type": "action",
+              "title": "Entferne jede Zigarette und jedes Feuerzeug",
+              "text": "Geh durch dein Zuhause, Auto, Tasche und Schreibtisch und wirf jede Zigarette, jedes Feuerzeug und jeden Aschenbecher weg. Behalte keine für den Notfall. Ein entkommener Gefangener trägt keinen Zellenschlüssel in der Tasche."
+            },
+            {
+              "id": "d1t2",
+              "type": "nrt",
+              "title": "Starte deine NRT, wenn du dich dafür entschieden hast",
+              "text": "Wenn du Nikotinersatz nutzt, bringe heute Morgen dein erstes Pflaster auf saubere, trockene, unbehaarte Haut wie den Oberarm. Wenn du zehn oder mehr pro Tag geraucht hast, ist das Standard-Startpflaster die höchste Stärke, meist 21 mg. Halte Lutschtabletten oder Kaugummi bereit für Durchbruchsgelüste. Kläre deine Dosis mit dem Apotheker ab, falls du das noch nicht getan hast."
+            },
+            {
+              "id": "d1t3",
+              "type": "action",
+              "title": "Stelle dein orales Notfall-Set zusammen",
+              "text": "Fülle eine kleine Dose oder Tasche mit Pfefferminz, zuckerfreiem Kaugummi, Zahnstochern, Zimtstangen oder Sonnenblumenkernen und nimm eine Wasserflasche mit. Mund und Hände suchen heute nach Beschäftigung; dieses Set ist die neue Aufgabe."
+            },
+            {
+              "id": "d1t4",
+              "type": "mindset",
+              "title": "Lies die Kernidee",
+              "text": "Rauchen hat dich nie entspannt und nie echtes Vergnügen gegeben. Jede Zigarette beruhigte nur den Entzug, den die vorherige verursacht hat, und startete den Kreislauf neu. Nichtraucher leiden nicht ohne Zigaretten; nur Raucher. Du gibst heute keinen Freund auf, du legst eine Last ab."
+            },
+            {
+              "id": "d1t5",
+              "type": "breathing",
+              "title": "Lerne den Gelüst-Reset jetzt",
+              "text": "Öffne das Gelüst-Tool einmal jetzt, bevor du es brauchst, damit es null Nachdenken kostet, wenn das erste echte Gelüst kommt."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Tag 2: Dein Körper heilt bereits",
+          "intro": "Die Unruhe heute bedeutet nicht, dass dein Körper versagt, sondern dass er sich repariert. Das Unbehagen, das du spürst, ist die sterbende Sucht, und das ist eher Grund zum Feiern als zum Trauern.",
+          "tasks": [
+            {
+              "id": "d2t1",
+              "type": "fact",
+              "title": "Verstehe, was innen passiert",
+              "text": "Herzfrequenz und Blutdruck bewegen sich bereits zurück in Richtung Normal, Kohlenmonoxid ist weitgehend aus deinem Blut verschwunden, und Sauerstoff erreicht Muskeln und Organe besser als vor zwei Tagen."
+            },
+            {
+              "id": "d2t2",
+              "type": "nrt",
+              "title": "Lerne die richtige Technik für Lutschtabletten und Kaugummi",
+              "text": "Kaue Nikotinkaugummi nicht wie normalen Kaugummi. Kaue langsam, bis du ein Kribbeln spürst, lege ihn dann an die Wange, bis das Kribbeln nachlässt, und wiederhole das etwa dreißig Minuten lang. Lass Lutschtabletten langsam ohne Kauen zergehen. Vermeide Essen und Getränke, besonders Kaffee oder Saft, fünfzehn Minuten vorher, da saure Getränke die Aufnahme blockieren."
+            },
+            {
+              "id": "d2t3",
+              "type": "action",
+              "title": "Sag es einer Person, der du vertraust",
+              "text": "Schreib oder ruf eine Person an und sag ihr, dass du gestern aufgehört hast. Es laut auszusprechen macht es real und holt deinen ersten Unterstützer an Bord."
+            },
+            {
+              "id": "d2t4",
+              "type": "mindset",
+              "title": "Erkenne die Illusion des Vergnügens",
+              "text": "Denk ehrlich zurück: Waren deine Zigaretten wirklich angenehm, oder waren die meisten automatisch? Die erste nach einer Pause fühlte sich nur gut an, weil sie den Entzugsjuckreiz beendete. Das ist kein Vergnügen, das ist ein Räuber, der dir deine Brieftasche zurückgibt."
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Tag 3: Spitzentag, triff das kleine Monster",
+          "intro": "Der Entzug ist meist um Tag drei am stärksten. Stell dir das körperliche Verlangen als kleines Nikotinmonster in dir vor, schwach und hungernd. Jedes Gelüst, das du nicht fütterst, lässt das Monster kleiner werden. Heute schreit es am lautesten, weil es am schnellsten stirbt.",
+          "tasks": [
+            {
+              "id": "d3t1",
+              "type": "mindset",
+              "title": "Rahme jedes Gelüst heute neu",
+              "text": "Jedes Mal, wenn heute ein Gelüst kommt, sag dir: Das ist das hungernde Monster, und gerade gewinne ich. Ein Gelüst ist kein Signal, dass etwas falsch ist, es ist der direkte Beweis, dass die Sucht stirbt."
+            },
+            {
+              "id": "d3t2",
+              "type": "breathing",
+              "title": "Reite ein Gelüst mit dem Tool durch",
+              "text": "Wenn das nächste Gelüst kommt, öffne das Gelüst-Tool, statt im Kopf dagegen anzukämpfen, und lass es dich durch die Welle führen."
+            },
+            {
+              "id": "d3t3",
+              "type": "nrt",
+              "title": "Nutze deine Notfall-NRT richtig",
+              "text": "Wenn ein Gelüst zu stark ist, um es auszuhalten, nimm zusätzlich zum Pflaster eine Lutschtablette oder ein Stück Kaugummi. Pflaster plus schnell wirkende Form ist ein Standardansatz, den Apotheker empfehlen, für harte Momente in den ersten Wochen."
+            },
+            {
+              "id": "d3t4",
+              "type": "journal",
+              "title": "Notiere den härtesten Moment von heute",
+              "text": "Notiere in ein oder zwei Sätzen den härtesten Moment des Tages und was du kurz davor gemacht hast."
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "Tag 4: Benenne deine Auslöser",
+          "intro": "Gelüste kommen selten aus dem Nichts. Sie reiten auf Orte, Gefühle und Routinen mit. Heute gibst du deinen Namen, damit sie dich nicht mehr überrumpeln.",
+          "tasks": [
+            {
+              "id": "d4t1",
+              "type": "journal",
+              "title": "Liste deine drei stärksten Auslöser",
+              "text": "Schreib die drei Momente auf, die gerade am stärksten ziehen, zum Beispiel Morgenkaffee, nach dem Essen oder Stress bei der Arbeit."
+            },
+            {
+              "id": "d4t2",
+              "type": "action",
+              "title": "Brich einen Auslöser physisch auf",
+              "text": "Wähle einen Auslöser und ändere heute etwas Physisches daran: Trink deinen Kaffee an einem anderen Ort, setz dich auf einen anderen Stuhl, nimm eine andere Route in der Pause."
+            },
+            {
+              "id": "d4t3",
+              "type": "nrt",
+              "title": "Timing: Lutschtablette vor bekanntem Auslöser",
+              "text": "Wenn du weißt, dass ein Auslöser kommt, etwa nach dem Mittagessen, starte zehn Minuten vorher eine Lutschtablette, damit das Gelüst an einer bereits geschlossenen Tür ankommt."
+            },
+            {
+              "id": "d4t4",
+              "type": "fact",
+              "title": "Sieh dir dein bisher gespartes Geld an",
+              "text": "Öffne den Statistik-Tab und sieh dir an, wie viel Geld du seit Tag eins bereits behalten hast."
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "Tag 5: Hände und Mund brauchen eine Aufgabe",
+          "intro": "Ein großer Teil des Drangs ist physisches Ritual: etwas zwischen den Fingern, etwas an den Lippen. Heute verdient sich dein orales Set seinen Platz.",
+          "tasks": [
+            {
+              "id": "d5t1",
+              "type": "action",
+              "title": "Nutze das orale Set den ganzen Tag",
+              "text": "Trag dein Set heute überall mit. Greif jedes Mal zu Pfefferminz, Zahnstocher oder Zimtstange, wenn deine Hand nach einer Schachtel sucht. Mach es auch bei leichten Drängen; du trainierst den Reflex neu, nicht nur Überleben."
+            },
+            {
+              "id": "d5t2",
+              "type": "game",
+              "title": "Spielen statt rauchen",
+              "text": "Wenn du unruhig bist, öffne zwei Minuten lang ein Minispiel, statt nach draußen zu gehen. Unruhige Hände lieben ein Spiel."
+            },
+            {
+              "id": "d5t3",
+              "type": "checkin",
+              "title": "Bewerte die Gelüste von heute",
+              "text": "Markiere, wie stark die Gelüste heute von eins bis fünf waren, damit du den fallenden Trend sehen kannst."
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "Tag 6: Schlaf, Träume und Pflaster",
+          "intro": "Entzug und NRT können deinen Schlaf eine Weile durcheinanderbringen. Das vorher zu wissen macht es langweilig statt beängstigend.",
+          "tasks": [
+            {
+              "id": "d6t1",
+              "type": "nrt",
+              "title": "Lebhafte Träume einfach handhaben",
+              "text": "Über Nacht getragene Nikotinpflaster können lebhafte Träume oder unruhigen Schlaf verursachen. Wenn das passiert, darfst du das Pflaster vor dem Schlafengehen entfernen und morgens ein frisches aufbringen. Wechsle außerdem täglich die Hautstelle, um Reizungen zu vermeiden."
+            },
+            {
+              "id": "d6t2",
+              "type": "audio",
+              "title": "Mit Klang abschalten",
+              "text": "Spiel heute Abend fünf Minuten lang einen entspannenden Klang aus dem Toolkit, bevor du schlafen gehst."
+            },
+            {
+              "id": "d6t3",
+              "type": "journal",
+              "title": "Notiere deine Energie",
+              "text": "Schreib eine Zeile darüber, wie deine Energie heute im Vergleich zu Tag eins ist."
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "Tag 7: Eine Woche frei",
+          "intro": "Sieben Tage. Das kleine Monster in dir hungert seit einer ganzen Woche und ist schon spürbar schwächer. Dein Körper hat Reparaturen begonnen, die du noch gar nicht spürst.",
+          "tasks": [
+            {
+              "id": "d7t1",
+              "type": "reward",
+              "title": "Hol dir dein Ein-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle den Ein-Wochen-Meilenstein ein. Den hast du dir hart erarbeitet."
+            },
+            {
+              "id": "d7t2",
+              "type": "fact",
+              "title": "Sieh, was Woche eins bewirkt hat",
+              "text": "Geschmack und Geruchssinn werden schärfer, und deine Lungen haben begonnen, Schleim und Ablagerungen aus dem Rauchen abzubauen."
+            },
+            {
+              "id": "d7t3",
+              "type": "mindset",
+              "title": "Prüfe das Gefühl des Verzichts",
+              "text": "Frag dich ehrlich: Hast du dich diese Woche benachteiligt gefühlt? Wenn ja, erinnere dich, was du wirklich verloren hast: Husten, Geruch, Kosten und eine Leine. Benachteiligung ist eine Geschichte der Sucht; nichts Wertvolles fehlt."
+            },
+            {
+              "id": "d7t4",
+              "type": "journal",
+              "title": "Schreib an dich von Tag eins",
+              "text": "Schreib zwei Sätze an dich von Tag eins und erzähl, wie Woche eins wirklich war."
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "Tag 8: Die zwei Monster",
+          "intro": "Beim Aufhören gibt es zwei Feinde. Das kleine Monster ist das körperliche Verlangen, und es stirbt innerhalb von Wochen. Das große Monster ist die Gehirnwäsche: Jahre des Glaubens, Zigaretten entspannten dich, belohnten dich oder vervollständigten einen Kaffee. Das große Monster stirbt erst, wenn du aufhörst, daran zu glauben.",
+          "tasks": [
+            {
+              "id": "d8t1",
+              "type": "mindset",
+              "title": "Erkenne, wenn das große Monster spricht",
+              "text": "Fang heute einen Gedanken ab, der Rauchen verherrlicht, etwa eine Zigarette würde diesen Stress lösen, und antworte laut oder im Kopf: Nein, eine Zigarette würde nur den Entzug lösen, den eine Zigarette verursacht hat. Nichtraucher meistern denselben Stress jeden Tag ohne eine."
+            },
+            {
+              "id": "d8t2",
+              "type": "fact",
+              "title": "Kenne die Woche-zwei-Falle",
+              "text": "Viele Rückfälle passieren in Woche zwei, oft nach einem Drink oder einem schlechten Moment, mit dem Gedanken, eine einzelne Zigarette mache nichts. Eine Zigarette füttert das kleine Monster wieder und startet den ganzen Kreislauf neu."
+            },
+            {
+              "id": "d8t3",
+              "type": "action",
+              "title": "Plane deinen nächsten riskanten Moment",
+              "text": "Nenne ein Ereignis diese Woche, bei dem du versucht sein könntest, und entscheide jetzt genau, was du stattdessen tust, einschließlich welches Set-Teil oder welche NRT du nutzt."
+            },
+            {
+              "id": "d8t4",
+              "type": "nrt",
+              "title": "Prüfe deine Vorräte",
+              "text": "Zähl deine restlichen Pflaster und Lutschtabletten. Mitten im Gelüst leer zu sein ist ein vermeidbarer Notfall, also fülle nach, bevor du unter einen Drei-Tage-Vorrat kommst."
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "Tag 9: Ersetze das Ritual",
+          "intro": "Rauchen war eine Pause-Taste in deinem Tag: eine Break, ein Atemholen, ein Vorwand, nach draußen zu gehen. Die Pause verdienst du noch. Du brauchst nur nicht das Gift-Liefergerät daran.",
+          "tasks": [
+            {
+              "id": "d9t1",
+              "type": "action",
+              "title": "Gestalte dein neues Pausenritual",
+              "text": "Wähle eine kurze Aktivität als Ersatz für die alte Raucherpause: ein zweiminütiger Spaziergang, Dehnen oder nach draußen für echte frische Luft mit Pfefferminz statt Zigarette."
+            },
+            {
+              "id": "d9t2",
+              "type": "mindset",
+              "title": "Hinterfrage, was du vermisst",
+              "text": "Schreib einen ehrlichen Satz darüber, was du am meisten vermisst, und schau nochmal: Ist es die Pause, das Handritual, die Gesellschaft draußen? All das ist dir noch verfügbar. Weg ist nur das Nikotin, und Nikotin war das Problem, nicht das Vergnügen."
+            },
+            {
+              "id": "d9t3",
+              "type": "social",
+              "title": "Lies eine Community-Geschichte",
+              "text": "Öffne den Community-Tab und lies eine Geschichte von jemandem, der weiter ist als du."
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "Tag 10: Zweistellig",
+          "intro": "Zehn Tage. Das Schlimmste des körperlichen Entzugs liegt größtenteils hinter dir. Was bleibt, ist Gewohnheit und Glaube, und genau das baut dieser Plan weiter ab.",
+          "tasks": [
+            {
+              "id": "d10t1",
+              "type": "fact",
+              "title": "Wisse, was noch zu besiegen ist",
+              "text": "Der körperliche Nikotinentzug klingt meist innerhalb von ein bis zwei Wochen ab. Ab hier sind Gelüste meist ausgelöste Erinnerungen, und jedes, das du ignorierst, wird schwächer."
+            },
+            {
+              "id": "d10t2",
+              "type": "game",
+              "title": "Schlag deinen Gelüst-Spiel-Score",
+              "text": "Öffne ein Minispiel und versuche heute in einer freien Minute deinen bisherigen Score zu schlagen."
+            },
+            {
+              "id": "d10t3",
+              "type": "action",
+              "title": "Gib etwas Siegesgeld aus",
+              "text": "Schau dir dein gespartes Geld an und gib einen kleinen Teil für etwas aus, das nichts mit Rauchen zu tun hat."
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "Tag 11: Langeweile ist auch ein Auslöser",
+          "intro": "Stress bekommt die Schuld, aber schlichte Langeweile verursacht genauso viele Gelüste. Ein untätiges Gehirn spielt alte Gewohnheiten ab.",
+          "tasks": [
+            {
+              "id": "d11t1",
+              "type": "journal",
+              "title": "Erkenne deine Langeweile-Momente",
+              "text": "Notiere einen Moment heute, in dem du aus purer Langeweile, nicht aus Stress, eine Zigarette wolltest."
+            },
+            {
+              "id": "d11t2",
+              "type": "action",
+              "title": "Erstelle eine Langeweile-Liste",
+              "text": "Liste drei Dinge auf, die du zwei Minuten lang machen kannst, wenn Langeweile kommt, und füge Pfefferminz oder Zahnstocher als Null-Aufwand-Backup hinzu. Speichere die Liste sichtbar."
+            },
+            {
+              "id": "d11t3",
+              "type": "audio",
+              "title": "Setze deinen Fokus mit Klang zurück",
+              "text": "Spiel fünf Minuten lang einen Fokus- oder Ruhe-Klang in einer ruhigen Phase des Tages."
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "Tag 12: Gelüste sind Wellen, und kurze",
+          "intro": "Ein Gelüst steigt typischerweise und verblasst innerhalb von drei bis fünf Minuten, wenn du es nicht fütterst. Die Sucht will, dass du glaubst, es dauert ewig. Stoppe die Zeit und ertappe sie beim Lügen.",
+          "tasks": [
+            {
+              "id": "d12t1",
+              "type": "breathing",
+              "title": "Stoppe dein nächstes Gelüst",
+              "text": "Wenn das nächste Gelüst kommt, starte den Timer im Gelüst-Tool und beobachte, wie es ansteigt und verblasst. Lutsch eine Pfefferminz, während du zusiehst, wie es stirbt."
+            },
+            {
+              "id": "d12t2",
+              "type": "mindset",
+              "title": "Zweifle nie an der Entscheidung",
+              "text": "Grübeln darüber, dass du nicht rauchen darfst, macht Aufhören schwer. Du darfst; du wählst einfach nicht, weil du weißt, dass es nichts bringt. Übe zu denken: Ich rauche nicht, und ich bin froh, statt: Ich darf nicht rauchen."
+            },
+            {
+              "id": "d12t3",
+              "type": "social",
+              "title": "Ermutige jemand anderen",
+              "text": "Finde jemanden in der Community an einem früheren Tag als du und schick eine ermutigende Nachricht."
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "Tag 13: Fast zwei Wochen",
+          "intro": "Morgen schließt das härteste Kapitel. Heute spürst du die Distanz zwischen dir von Tag eins und dir von heute.",
+          "tasks": [
+            {
+              "id": "d13t1",
+              "type": "journal",
+              "title": "Vergleiche Tag eins mit heute",
+              "text": "Schreib zwei oder drei Sätze, die vergleichen, wie du dich an Tag eins gefühlt hast und wie du dich jetzt fühlst."
+            },
+            {
+              "id": "d13t2",
+              "type": "nrt",
+              "title": "Prüfe, wie deine NRT wirkt",
+              "text": "Bewerte ehrlich: Sind Gelüste mit deinem aktuellen Setup beherrschbar? Wenn du noch häufig harte Gelüste hast oder dich überreizt oder übel fühlst, sprich mit dem Apotheker über eine Dosisanpassung. Ändere Stärken nicht nach Bauchgefühl."
+            },
+            {
+              "id": "d13t3",
+              "type": "action",
+              "title": "Plane den Meilenstein von morgen",
+              "text": "Plane eine kleine Art, morgen zwei Wochen zu markieren: Sag es jemandem oder kauf dir etwas Kleines vom gesparten Geld."
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "Tag 14: Zwei Wochen. Überleben geschafft",
+          "intro": "Du hast das Schlimmste des körperlichen Entzugs überstanden. Das kleine Monster kniet. Kapitel zwei dreht sich darum, die Routinen neu zu verdrahten, die es gefüttert haben, damit auch das große Monster verhungert.",
+          "tasks": [
+            {
+              "id": "d14t1",
+              "type": "reward",
+              "title": "Hol dir dein Zwei-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle den Zwei-Wochen-Meilenstein ein. Dieser markiert das Ende des Überlebensmodus."
+            },
+            {
+              "id": "d14t2",
+              "type": "fact",
+              "title": "Sieh, wie weit dein Körper gekommen ist",
+              "text": "In zwei Wochen haben Kreislauf und Lungenfunktion bereits begonnen, sich zu verbessern, und Nikotin selbst ist längst aus deinem Blut verschwunden, abgesehen von NRT, die du bewusst und vorübergehend nutzt."
+            },
+            {
+              "id": "d14t3",
+              "type": "journal",
+              "title": "Schreib deine Überlebens-Zusammenfassung",
+              "text": "Drei kurze Sätze: Was war am härtesten, was hat dich überrascht, und worauf bist du stolz aus diesen zwei Wochen."
+            },
+            {
+              "id": "d14t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel zwei",
+              "text": "Lies die Einleitung zum nächsten Kapitel und setze eine Absicht für die nächsten zwei Wochen."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "name": "Die Gewohnheit durchbrechen",
+      "role": "Tag 15-30: Morgen, Mahlzeiten, Kaffee, Pendeln und Pausen neu verdrahten, während NRT die körperliche Seite stabil hält",
+      "day_start": 15,
+      "day_end": 30,
+      "days": [
+        {
+          "day": 15,
+          "title": "Tag 15: Willkommen in Kapitel zwei",
+          "intro": "Der Überlebensmodus ist vorbei. Jetzt baust du die tägliche Maschinerie der Gewohnheit ab, eine Routine nach der anderen, während dein Pflaster die körperliche Seite im Hintergrund ruhig hält.",
+          "tasks": [
+            {
+              "id": "d15t1",
+              "type": "journal",
+              "title": "Kartiere deinen alten Rauchplan",
+              "text": "Schreib die Tageszeiten auf, zu denen du am meisten geraucht hast: Aufwachen, nach dem Essen, Arbeitspausen, Fahren, vor dem Schlafengehen."
+            },
+            {
+              "id": "d15t2",
+              "type": "action",
+              "title": "Wähle deine härteste Stunde",
+              "text": "Wähle die einzelne Stunde des Tages, die noch am härtesten ist, und gib ihr einen konkreten Ersatz: Spaziergang, Lutschtablette, Spiel oder Anruf."
+            },
+            {
+              "id": "d15t3",
+              "type": "nrt",
+              "title": "Bleib vorerst auf voller Stärke",
+              "text": "Reduziere die Pflasterstärke nicht vorschnell, nur weil Woche eins gut lief. Der Standardplan hält die Startstärke etwa sechs Wochen, bevor abgestuft wird. Stabilität jetzt macht später eine leichte Reduktion möglich."
+            },
+            {
+              "id": "d15t4",
+              "type": "checkin",
+              "title": "Setze dein Kapitel-zwei-Ziel",
+              "text": "Schreib oder wähle ein persönliches Ziel, das du bis Tag dreißig erreichen willst."
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "Tag 16: Der Morgen-Neubau",
+          "intro": "Die Aufwach-Zigarette war die stärkste, weil dein Körper die ganze Nacht im Entzug war. Dein Pflaster nimmt diese morgendliche Verzweiflung jetzt vollständig weg. Was bleibt, ist nur Choreografie, und Choreografie lässt sich umschreiben.",
+          "tasks": [
+            {
+              "id": "d16t1",
+              "type": "action",
+              "title": "Gestalte deine ersten zehn Minuten neu",
+              "text": "Plane genau, was du in den ersten zehn Minuten nach dem Aufwachen morgen tust: Wasser, Pflaster auf frische Hautstelle, Dehnen, dann Kaffee. Gib dem Morgen ein neues Drehbuch."
+            },
+            {
+              "id": "d16t2",
+              "type": "mindset",
+              "title": "Sieh die Morgen-Zigarette klar",
+              "text": "Diese erste Zigarette hat dein Gehirn nie wach gemacht. Sie beendete acht Stunden Entzug, deshalb fühlte sie sich so groß an. Nichtraucher wachen bereits so auf, wie du erst durch Rauchen fühlen musstest."
+            },
+            {
+              "id": "d16t3",
+              "type": "breathing",
+              "title": "Morgendlicher Atem-Reset",
+              "text": "Nutze das Atem-Tool morgen früh eine Minute, bevor du dein Handy checkst."
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "Tag 17: Nach dem Essen",
+          "intro": "Die Zigarette nach dem Essen ist eine der automatischsten Verknüpfungen. Heute gibst du deinen Mahlzeiten ein neues Ende.",
+          "tasks": [
+            {
+              "id": "d17t1",
+              "type": "action",
+              "title": "Installiere ein neues Mahlzeiten-Ende",
+              "text": "Direkt nach dem Essen heute sofort eines davon tun: Zähne putzen, Pfefferminz nehmen, zuckerfreien Kaugummi kauen oder kurz spazieren. Der Trick ist Geschwindigkeit; fülle die Lücke, bevor der alte Reflex es tut."
+            },
+            {
+              "id": "d17t2",
+              "type": "fact",
+              "title": "Genieße das Geschmacks-Upgrade",
+              "text": "Essen schmeckt in den ersten Wochen wirklich besser, wenn Geruchs- und Geschmacksrezeptoren sich erholen. Nimm heute einen Geschmack wahr, den du vergessen hattest."
+            },
+            {
+              "id": "d17t3",
+              "type": "journal",
+              "title": "Bewerte den Drang nach dem Essen",
+              "text": "Eine Zeile: Wie stark war der Drang nach deiner größten Mahlzeit heute im Vergleich zu Woche eins?"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "Tag 18: Der Pendel-Auslöser",
+          "intro": "Fahren, zur Arbeit laufen oder auf den Bus warten kam früher mit einer Zigarette. Dieser Slot in deinem Tag ist jetzt offen für etwas Besseres.",
+          "tasks": [
+            {
+              "id": "d18t1",
+              "type": "action",
+              "title": "Programmiere das Pendeln um",
+              "text": "Ändere heute etwas am Pendeln: einen Podcast, neue Musik, eine andere Route oder einen Zahnstocher in der Hand, wo früher die Zigarette war."
+            },
+            {
+              "id": "d18t2",
+              "type": "checkin",
+              "title": "Logge einen Auslöser, den du bemerkt hast",
+              "text": "Tippe, um jeden Auslöser-Moment zu loggen, den du heute bemerkt hast, auch kleine."
+            },
+            {
+              "id": "d18t3",
+              "type": "audio",
+              "title": "Klang für die Fahrt",
+              "text": "Spiel heute einen beruhigenden oder belebenden Klang während eines Teils deines Pendelns."
+            }
+          ]
+        },
+        {
+          "day": 19,
+          "title": "Tag 19: Die Stress-Lüge",
+          "intro": "Der größte Teil der Gehirnwäsche ist, dass Zigaretten Stress lindern. Sie tun das Gegenteil: Nikotinentzug zwischen Zigaretten fügt einen ständigen Hintergrundstress hinzu, den Nichtraucher einfach nicht haben.",
+          "tasks": [
+            {
+              "id": "d19t1",
+              "type": "mindset",
+              "title": "Baue den Stress-Mythos ab",
+              "text": "Wenn Raucher unter Stress anzünden, ist die Erleichterung das Ende des Entzugs, nicht das Schrumpfen des Problems. Das Stressige ist danach noch da, plus sie haben bezahlt, um zwanzig Minuten normal zu fühlen. Du meisterst Stress jetzt auf einer dauerhaften Basis, die sie nur kurz besuchen."
+            },
+            {
+              "id": "d19t2",
+              "type": "breathing",
+              "title": "Nutze Atmen gegen Stress selbst",
+              "text": "Wenn du heute das nächste Mal gestresst bist, auch ohne Gelüst, nutze das Atem-Tool. Es ist dein neues Stressventil, und anders als eine Zigarette senkt es wirklich deine Herzfrequenz."
+            },
+            {
+              "id": "d19t3",
+              "type": "journal",
+              "title": "Benenne deine Stressquelle",
+              "text": "Schreib die Hauptsache auf, die dir diese Woche Stress macht, damit es ein benanntes Problem ist statt einer vagen Wolke."
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "Tag 20: Zwanzig Tage dabei",
+          "intro": "Um die drei Wochen herum fühlen sich Ersatzroutinen nicht mehr erzwungen an, sondern wie deine eigenen.",
+          "tasks": [
+            {
+              "id": "d20t1",
+              "type": "checkin",
+              "title": "Bewerte, wie automatisch es sich anfühlt",
+              "text": "Bewerte von eins bis fünf, wie natürlich sich deine Ersatzgewohnheiten im Vergleich zu vor zwei Wochen anfühlen."
+            },
+            {
+              "id": "d20t2",
+              "type": "fact",
+              "title": "Sieh deinen Geld-Meilenstein",
+              "text": "Öffne den Gespartes-Geld-Tab und sieh, was dieser Betrag gerade kaufen könnte."
+            },
+            {
+              "id": "d20t3",
+              "type": "social",
+              "title": "Teile einen kleinen Erfolg",
+              "text": "Poste einen kleinen Erfolg aus dieser Woche in der Community."
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "Tag 21: Drei Wochen frei",
+          "intro": "Drei Wochen gelten oft als der Punkt, an dem neue Gewohnheiten Wurzeln schlagen. Du bist der lebende Beweis.",
+          "tasks": [
+            {
+              "id": "d21t1",
+              "type": "reward",
+              "title": "Hol dir dein Drei-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle den Drei-Wochen-Meilenstein ein."
+            },
+            {
+              "id": "d21t2",
+              "type": "fact",
+              "title": "Sieh deinen Lungen-Fortschritt",
+              "text": "In dieser Phase bemerken viele weniger Husten und leichteres Atmen bei leichter Aktivität, während sich die Lungenfunktion erholt."
+            },
+            {
+              "id": "d21t3",
+              "type": "action",
+              "title": "Mach einen kleinen kontrollierten Test",
+              "text": "Setz dich heute absichtlich in eine leicht auslösende Situation, etwa in die Nähe von Rauchern, mit Pfefferminz im Mund, und merke, dass du es bequem schaffst."
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "Tag 22: Abendliches Abschalten",
+          "intro": "Abende hatten ihr eigenes Ritual: die Feierabend-Zigarette, die nach dem Essen, die letzte vor dem Schlafengehen. Baue den neuen Tagesabschluss.",
+          "tasks": [
+            {
+              "id": "d22t1",
+              "type": "action",
+              "title": "Baue ein Abendritual",
+              "text": "Wähle eine beruhigende Aktivität, um jeden Tag statt einer Zigarette zu beenden: Tee, eine Serie, kurzer Spaziergang oder zehn Minuten Buch."
+            },
+            {
+              "id": "d22t2",
+              "type": "audio",
+              "title": "Schlaf heute Nacht gut",
+              "text": "Spiel zehn Minuten vor dem Schlafengehen einen entspannenden Klang aus dem Toolkit."
+            },
+            {
+              "id": "d22t3",
+              "type": "journal",
+              "title": "Notiere deine Schlafqualität",
+              "text": "Schreib eine Zeile darüber, wie du diese Woche geschlafen hast."
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "Tag 23: Die Kaffee-Verknüpfung",
+          "intro": "Kaffee und Zigaretten waren jahrelang verschweißt. Den Kaffee behältst du. Die Schweißnaht löst sich.",
+          "tasks": [
+            {
+              "id": "d23t1",
+              "type": "action",
+              "title": "Ändere die Kaffee-Szene",
+              "text": "Trink deinen Kaffee heute an einem anderen Ort oder mit einer anderen Aktivität: stehend, am Fenster, mit offenem Spiel oder mit Zimtstange zum Rühren und Halten."
+            },
+            {
+              "id": "d23t2",
+              "type": "nrt",
+              "title": "Beachte den Kaffee-Lutschtabletten-Konflikt",
+              "text": "Denk dran: Kaffee, Saft und Sprudelgetränke sind sauer und blockieren die Nikotinaufnahme aus Kaugummi und Lutschtabletten. Beende deinen Kaffee, warte fünfzehn Minuten, dann nimm die Lutschtablette, wenn du sie brauchst."
+            },
+            {
+              "id": "d23t3",
+              "type": "checkin",
+              "title": "Bewerte den Kaffee-Drang",
+              "text": "Bewerte, wie stark der Drang, mit Kaffee zu rauchen, noch ist, eins bis fünf."
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "Tag 24: Langeweile und Freizeit",
+          "intro": "Während die großen Auslöser schwächer werden, treten leisere wie Langeweile klarer hervor. Gut; du kannst sie jetzt sehen.",
+          "tasks": [
+            {
+              "id": "d24t1",
+              "type": "action",
+              "title": "Upgrade deine Langeweile-Liste",
+              "text": "Füge deiner Langeweile-Liste eine neue Aktivität hinzu, die bisher wirklich funktioniert hat, und streiche alles, was du nie nutzt."
+            },
+            {
+              "id": "d24t2",
+              "type": "game",
+              "title": "Spiele die Freizeit",
+              "text": "Beim nächsten ruhigen Moment ohne Aufgabe öffne ein Minispiel statt abzudriften."
+            },
+            {
+              "id": "d24t3",
+              "type": "fact",
+              "title": "Sieh dein Fortschritts-Diagramm",
+              "text": "Schau dir dein Gelüst-Häufigkeits-Diagramm an und bemerke die Gesamtrichtung seit Tag eins."
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "Tag 25: Prüfe deine neue Maschinerie",
+          "intro": "Mittlerweile laufen mehrere kleine Ersatzgewohnheiten im Hintergrund deines Tages. Zeit, sie zu bemerken und zu stärken.",
+          "tasks": [
+            {
+              "id": "d25t1",
+              "type": "journal",
+              "title": "Liste deine neuen Gewohnheiten",
+              "text": "Schreib jede Ersatzgewohnheit auf, die du bisher aufgebaut hast, auch winzige wie die Pfefferminz nach dem Mittagessen."
+            },
+            {
+              "id": "d25t2",
+              "type": "action",
+              "title": "Stärke die schwächste",
+              "text": "Wähle die Ersatzgewohnheit, die sich am wenigsten fest anfühlt, und tu sie heute bewusst, auch ohne Gelüst."
+            },
+            {
+              "id": "d25t3",
+              "type": "social",
+              "title": "Lies eine Ersten-Monat-Geschichte",
+              "text": "Lies einen Community-Post von jemandem in seinem ersten Monat."
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "Tag 26: Alkohol, der größte Hinterhalt",
+          "intro": "Trinken und Rauchen waren für die meisten Raucher eng verknüpft, und Alkohol senkt die Wache, die deine Serie schützt. Dieser Auslöser bekommt seinen eigenen Tag, bevor er dich erwischt.",
+          "tasks": [
+            {
+              "id": "d26t1",
+              "type": "fact",
+              "title": "Kenne das Alkohol-Risiko",
+              "text": "Trinken ist eine der häufigsten Rückfall-Situationen, weil gesenkte Hemmung den Hand-zu-Mund-Reflex zurückbringt, bevor du bewusst etwas entscheidest."
+            },
+            {
+              "id": "d26t2",
+              "type": "action",
+              "title": "Mach einen Trink-Plan",
+              "text": "Vor deinem nächsten Trink-Anlass entscheide: dein Getränkelimit, was zwischen den Schlucken in deiner Hand ist, und was du tust, wenn andere rausgehen zum Rauchen. Steck eine Lutschtablette und Pfefferminz in die Tasche, bevor du das Haus verlässt."
+            },
+            {
+              "id": "d26t3",
+              "type": "mindset",
+              "title": "Lade die Antwort vor",
+              "text": "Probiere den Gedanken jetzt nüchtern: Eine Zigarette beim Trinken ist kein Bonus für die Nacht, sondern ein Festmahl fürs kleine Monster und Neustart von Tag eins. Entscheide die Antwort, bevor Alkohol mitredet."
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "Tag 27: Fast ein Monat",
+          "intro": "Tage bis zu deinem ersten vollen Monat. Das Schwere beim Abbau der Gewohnheit ist größtenteils geschafft.",
+          "tasks": [
+            {
+              "id": "d27t1",
+              "type": "journal",
+              "title": "Schau zurück auf Kapitel zwei",
+              "text": "Schreib zwei oder drei Sätze darüber, was sich in diesem Neuverdrahtungs-Kapitel verändert hat."
+            },
+            {
+              "id": "d27t2",
+              "type": "fact",
+              "title": "Sieh deine Gesundheits-Zeitleiste",
+              "text": "Öffne den Gesundheits-Fortschritt-Tab und sieh, welche Marker sich in den letzten zwei Wochen am meisten bewegt haben."
+            },
+            {
+              "id": "d27t3",
+              "type": "action",
+              "title": "Plane die Ein-Monat-Marke",
+              "text": "Entscheide, wie du einen vollen Monat markieren willst, auch etwas Kleines."
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "Tag 28: Vier Wochen frei",
+          "intro": "Vier volle Wochen. Dein Alltag läuft jetzt auf Routinen, die keine Zigaretten enthalten.",
+          "tasks": [
+            {
+              "id": "d28t1",
+              "type": "reward",
+              "title": "Hol dir dein Vier-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d28t2",
+              "type": "fact",
+              "title": "Sieh, wie dein Risiko bereits sinkt",
+              "text": "Im ersten Monat beginnt das Risiko bestimmter herzbezogener Probleme durch Rauchen bereits zu sinken im Vergleich zu jemandem, der weitergeraucht hat."
+            },
+            {
+              "id": "d28t3",
+              "type": "social",
+              "title": "Teile deine Ein-Monat-Geschichte",
+              "text": "Poste ein kurzes Update in der Community über vier erreichte Wochen."
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "Tag 29: Kenn deine besten Waffen",
+          "intro": "Du hast diesen Monat viele Tools ausprobiert. Zeit, deine persönlichen Top drei zu finden.",
+          "tasks": [
+            {
+              "id": "d29t1",
+              "type": "journal",
+              "title": "Ranke deine Lieblings-Tools",
+              "text": "Schreib auf, welche Tools für dich persönlich am besten funktioniert haben: Atmen, Lutschtabletten, Pfefferminz, Spiele, Klänge, Spaziergänge. Deine Top drei werden dein Notfall-Set für die Zukunft."
+            },
+            {
+              "id": "d29t2",
+              "type": "nrt",
+              "title": "Vorschau auf die Reduktion",
+              "text": "Schau voraus: Um Woche sechs wirst du dein Pflaster wahrscheinlich eine Stärke runterstufen, dann zwei Wochen später nochmal, Pflaster enden um Woche zehn. Noch ändert sich nichts; kenn einfach den Weg, damit die Reduktion geplant wirkt, nicht beängstigend."
+            },
+            {
+              "id": "d29t3",
+              "type": "action",
+              "title": "Markiere eine kommende Herausforderung",
+              "text": "Notiere ein Ereignis im nächsten Monat, das ein echter Test sein könnte, damit Kapitel drei dich darauf vorbereiten kann."
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "Tag 30: Ein Monat rauchfrei",
+          "intro": "Dreißig Tage ohne eine einzige Zigarette. Du hast nicht mit zusammengebissenen Zähnen durchgehalten; du hast die Maschinerie deines Tages neu gebaut. Kapitel drei beweist, dass die neue Maschinerie unter echtem sozialem Druck hält.",
+          "tasks": [
+            {
+              "id": "d30t1",
+              "type": "reward",
+              "title": "Hol dir dein Ein-Monat-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle den Ein-Monat-Meilenstein ein, einer der größten bisher."
+            },
+            {
+              "id": "d30t2",
+              "type": "fact",
+              "title": "Sieh deine Ein-Monat-Transformation",
+              "text": "Öffne deine vollständige Gesundheits- und Statistik-Übersicht und sieh alles, was sich in dreißig Tagen verändert hat."
+            },
+            {
+              "id": "d30t3",
+              "type": "journal",
+              "title": "Schreib einen Brief an dich von Tag eins",
+              "text": "Ein kurzer Brief an dich von Tag eins, der erzählt, wie der erste Monat wirklich war."
+            },
+            {
+              "id": "d30t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel drei",
+              "text": "Lies die Kapitel-drei-Einleitung und setze ein Ziel für soziale Situationen rauchfrei."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "name": "Neue Normalität",
+      "role": "Tag 31-60: soziale Situationen, Alkohol, Arbeitsstress, plus deine ersten NRT-Reduktionen",
+      "day_start": 31,
+      "day_end": 60,
+      "days": [
+        {
+          "day": 31,
+          "title": "Tag 31: Willkommen in Kapitel drei",
+          "intro": "Gewohnheitsaufbau ist geschafft. Jetzt beweist du, dass die neue Normalität in freier Wildbahn hält: Partys, Drinks, stressige Wochen und alte Raucherfreunde. Dieses Kapitel bringt auch deine erste NRT-Reduktion.",
+          "tasks": [
+            {
+              "id": "d31t1",
+              "type": "journal",
+              "title": "Liste deine kommenden sozialen Events",
+              "text": "Schreib Partys, Abendessen oder Treffen in den nächsten zwei Wochen auf."
+            },
+            {
+              "id": "d31t2",
+              "type": "action",
+              "title": "Bereite einen sozialen Satz vor",
+              "text": "Schreib einen kurzen Satz, den du sagen kannst, wenn jemand eine Zigarette anbietet, etwa: Nein danke, ich rauche nicht. Achte auf die Formulierung: nicht Ich versuche aufzuhören, sondern Ich rauche nicht. Worte formen Identität."
+            },
+            {
+              "id": "d31t3",
+              "type": "checkin",
+              "title": "Setze dein Kapitel-drei-Ziel",
+              "text": "Wähle eine konkrete Situation, die du diesen Monat rauchfrei meistern willst."
+            }
+          ]
+        },
+        {
+          "day": 32,
+          "title": "Tag 32: Nein sagen ohne Erklärung",
+          "intro": "Du schuldest niemandem eine Geschichte. Ein kurzes, fröhliches Nein ist eine vollständige Antwort.",
+          "tasks": [
+            {
+              "id": "d32t1",
+              "type": "action",
+              "title": "Übe dein Nein laut",
+              "text": "Sag deinen vorbereiteten Satz heute einmal laut, damit er flüssig rauskommt, wenn es zählt."
+            },
+            {
+              "id": "d32t2",
+              "type": "mindset",
+              "title": "Nein ist kein Verzicht",
+              "text": "Wenn du eine Zigarette ablehnst, widerstehst du keinem Genuss, du lehnst eine Last ab, wie du eine Schuld ablehnen würdest. Es gibt nichts Neidwürdiges, wenn andere anzünden."
+            }
+          ]
+        },
+        {
+          "day": 33,
+          "title": "Tag 33: Alte Raucherfreunde",
+          "intro": "Manche Freundschaften bauten sich teilweise ums gemeinsame Rauchen auf. Die Freundschaft bleibt; ihre Form ändert sich.",
+          "tasks": [
+            {
+              "id": "d33t1",
+              "type": "journal",
+              "title": "Denk an einen bestimmten Freund",
+              "text": "Schreib über einen Freund, mit dem du früher geraucht hast, und wie eure gemeinsame Zeit jetzt aussehen könnte."
+            },
+            {
+              "id": "d33t2",
+              "type": "action",
+              "title": "Schlage ein anderes Treffen vor",
+              "text": "Wenn du bald einen rauchenden Freund siehst, schlage eine Aktivität vor, die nicht um Raucherpausen dreht: Essen, Spaziergang, Spiel."
+            }
+          ]
+        },
+        {
+          "day": 34,
+          "title": "Tag 34: Stress bei der Arbeit",
+          "intro": "Arbeitsstress schickte dich früher direkt nach draußen mit einer Schachtel. Die Pause gehört dir noch; nur die Zigarette ist entlassen.",
+          "tasks": [
+            {
+              "id": "d34t1",
+              "type": "breathing",
+              "title": "Atmen am Schreibtisch",
+              "text": "Beim nächsten Arbeitsstress-Spike geh eine Minute weg und nutze das Atem-Tool statt einer Raucherpause."
+            },
+            {
+              "id": "d34t2",
+              "type": "action",
+              "title": "Mach eine echte Pause",
+              "text": "Mach heute einen zweiminütigen Spaziergang weg vom Schreibtisch als deine neue Version einer Pause. Du darfst Pausen ohne Zigarette als Vorwand."
+            },
+            {
+              "id": "d34t3",
+              "type": "checkin",
+              "title": "Logge den Stress von heute",
+              "text": "Bewerte, wie stressig die Arbeit heute auf einer einfachen Skala war."
+            }
+          ]
+        },
+        {
+          "day": 35,
+          "title": "Tag 35: Fünf Wochen frei",
+          "intro": "Fünf Wochen dabei, und du hast schon mehr Auslöser gemeistert, als du erwartet hast.",
+          "tasks": [
+            {
+              "id": "d35t1",
+              "type": "reward",
+              "title": "Hol dir dein Fünf-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d35t2",
+              "type": "social",
+              "title": "Heb jemanden auf, der neuer ist",
+              "text": "Finde jemanden in seinen ersten zwei Wochen und schick eine ermutigende Nachricht."
+            }
+          ]
+        },
+        {
+          "day": 36,
+          "title": "Tag 36: Ausgehen trinken, mit Plan",
+          "intro": "Ausgehen zum Trinken ist die höchstrisiko Situation überhaupt. Du gehst bewaffnet rein.",
+          "tasks": [
+            {
+              "id": "d36t1",
+              "type": "action",
+              "title": "Packe dein Ausgeh-Set",
+              "text": "Vor jedem Ausgehen: Setze ein Getränkelimit, steck Lutschtabletten und Pfefferminz in die Tasche und entscheide, was du während der Rauchergruppe draußen tust, etwa die nächste Runde bestellen oder den Tisch hüten."
+            },
+            {
+              "id": "d36t2",
+              "type": "fact",
+              "title": "Kenne das echte Risiko-Fenster",
+              "text": "Der gefährliche Moment ist meist nicht der erste Drink; es ist spät in der Nacht, wenn Müdigkeit und gesenkte Wache auf Raucher draußen treffen."
+            }
+          ]
+        },
+        {
+          "day": 37,
+          "title": "Tag 37: Nach einem Abend aus",
+          "intro": "Wenn gestern Nacht ein Test war, ist heute die ehrliche Nachbesprechung, ob es perfekt lief oder fast nicht.",
+          "tasks": [
+            {
+              "id": "d37t1",
+              "type": "journal",
+              "title": "Reflektiere gestern Nacht",
+              "text": "Schreib, wie eine kürzliche soziale oder Trink-Situation lief, inklusive Knapp-daneben-Momente."
+            },
+            {
+              "id": "d37t2",
+              "type": "mindset",
+              "title": "Ein Knapp-daneben ist ein Sieg",
+              "text": "Versucht zu fühlen und nicht zu rauchen ist keine gezeigte Schwäche, sondern eine gehaltene Stärke. Jeder überlebte Hinterhalt macht den nächsten schwächer."
+            }
+          ]
+        },
+        {
+          "day": 38,
+          "title": "Tag 38: Feiern und gute Nachrichten",
+          "intro": "Gute Momente, nicht nur schlechte, kamen früher mit einer Zigarette. Freude verdient ein besseres Satzzeichen.",
+          "tasks": [
+            {
+              "id": "d38t1",
+              "type": "action",
+              "title": "Wähle eine neue Feier-Geste",
+              "text": "Wähle eine neue Art, gute Nachrichten zu markieren: Lieblingssnack, jemandem erzählen oder fünf deiner gesparten Dollar für etwas nutzen, das du willst."
+            },
+            {
+              "id": "d38t2",
+              "type": "fact",
+              "title": "Beide Enden der Emotion lösen aus",
+              "text": "Rauchgewohnheiten feuern bei starker Emotion in beide Richtungen, Stress und Aufregung gleichermaßen, also verdienen beide einen Plan."
+            }
+          ]
+        },
+        {
+          "day": 39,
+          "title": "Tag 39: Familientreffen",
+          "intro": "Familien-Events können alte Gewohnheiten schnell wecken, besonders bei Verwandten, die noch rauchen.",
+          "tasks": [
+            {
+              "id": "d39t1",
+              "type": "action",
+              "title": "Bereite dich auf dein nächstes Familien-Event vor",
+              "text": "Wenn ein Treffen kommt, entscheide, wo du bist und was du während Raucherpausen anderer tust. Nimm dein orales Set mit."
+            },
+            {
+              "id": "d39t2",
+              "type": "checkin",
+              "title": "Bewerte Familiendruck",
+              "text": "Bewerte, wie viel Druck du von Familie oder Verwandten rund ums Aufhören spürst."
+            }
+          ]
+        },
+        {
+          "day": 40,
+          "title": "Tag 40: Vierzig Tage stark",
+          "intro": "Muster, die früher deinen Tag automatisch steuerten, tun es nicht mehr. Vierzig Tage Beweis.",
+          "tasks": [
+            {
+              "id": "d40t1",
+              "type": "fact",
+              "title": "Spür deine Lungen arbeiten",
+              "text": "In dieser Phase bemerken viele Ex-Raucher deutlich leichteres Atmen bei leichter Bewegung, während sich die Atemwege weiter erholen."
+            },
+            {
+              "id": "d40t2",
+              "type": "action",
+              "title": "Teste absichtlich eine härtere Situation",
+              "text": "Setz dich heute bewusst und vorbereitet in eine mäßig auslösende Situation und merke, dass du durchkommst."
+            }
+          ]
+        },
+        {
+          "day": 41,
+          "title": "Tag 41: Der Eine-Zigarette-Mythos",
+          "intro": "Nur eine schadet nicht ist der gefährlichste Satz beim Aufhören. Heute nimmst du ihn endgültig auseinander.",
+          "tasks": [
+            {
+              "id": "d41t1",
+              "type": "mindset",
+              "title": "Verstehe, warum eine nie eine ist",
+              "text": "Eine Zigarette tut zwei Dinge: Sie füttert das kleine Monster wieder, sodass körperliches Verlangen zurückkommt, und sie sagt dem großen Monster, die Gehirnwäsche hatte recht. Es gibt keine eine Zigarette; nur die erste der nächsten zehntausend oder gar keine."
+            },
+            {
+              "id": "d41t2",
+              "type": "journal",
+              "title": "Schreib deine eigene Warnnotiz",
+              "text": "Schreib eine kurze Notiz an dein zukünftiges Ich, warum eine es nicht wert ist, für jeden versuchten Moment bereit."
+            }
+          ]
+        },
+        {
+          "day": 42,
+          "title": "Tag 42: Sechs Wochen frei, Reduktions-Checkpoint",
+          "intro": "Sechs Wochen: Körperchemie, Routinen und Selbstvertrauen haben sich verschoben. Das ist auch der Standard-Checkpoint, dein Pflaster zu reduzieren.",
+          "tasks": [
+            {
+              "id": "d42t1",
+              "type": "reward",
+              "title": "Hol dir dein Sechs-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d42t2",
+              "type": "nrt",
+              "title": "Plane deine erste Pflaster-Reduktion",
+              "text": "Wenn du mit dem stärksten Pflaster gestartet hast, ist diese Woche der Standardpunkt, eine Stufe runterzugehen, meist 21 mg auf 14 mg, für die nächsten zwei Wochen. Kläre es mit dem Apotheker und halte Lutschtabletten bereit für die ersten zwei oder drei Tage der neuen Stärke."
+            },
+            {
+              "id": "d42t3",
+              "type": "social",
+              "title": "Teile ein Sechs-Wochen-Update",
+              "text": "Poste ein kurzes Update in der Community über sechs erreichte Wochen."
+            }
+          ]
+        },
+        {
+          "day": 43,
+          "title": "Tag 43: Erste Tage mit leichterem Pflaster",
+          "intro": "Eine Reduktion kann ein oder zwei Tage etwas lautere Gelüste bringen, während sich dein Körper anpasst. Das ist erwartbar, vorübergehend und ein Zeichen, dass der Ausstieg wirkt.",
+          "tasks": [
+            {
+              "id": "d43t1",
+              "type": "nrt",
+              "title": "Unterstütze die Reduktion",
+              "text": "Sei die nächsten zwei oder drei Tage etwas großzügiger mit Lutschtabletten, Pfefferminz, Wasser und Atem-Sessions. Der Knubbel vergeht schnell; steig nicht wegen eines rauen Nachmittags wieder hoch."
+            },
+            {
+              "id": "d43t2",
+              "type": "checkin",
+              "title": "Bewerte die Anpassung",
+              "text": "Bewerte, wie sich das leichtere Pflaster bisher anfühlt, eins bis fünf."
+            }
+          ]
+        },
+        {
+          "day": 44,
+          "title": "Tag 44: Identitäts-Check-in",
+          "intro": "Um diese Zeit hören viele leise auf, sich als Raucher zu sehen, der aufgehört hat, und werden einfach Nichtraucher.",
+          "tasks": [
+            {
+              "id": "d44t1",
+              "type": "journal",
+              "title": "Wie beschreibst du dich jetzt",
+              "text": "Schreib, wie du deine Beziehung zum Rauchen heute im Vergleich zu vor zwei Monaten beschreiben würdest."
+            },
+            {
+              "id": "d44t2",
+              "type": "mindset",
+              "title": "Identität schlägt Willenskraft",
+              "text": "Willenskraft ist, eine Tür zu halten gegen etwas, das du noch willst. Identität ist zu erkennen, dass nichts gegen die Tür drückt. Das Ziel ist nicht, Zigaretten ewig zu widerstehen; es ist, sie wirklich nicht zu wollen, und dahin gehst du."
+            }
+          ]
+        },
+        {
+          "day": 45,
+          "title": "Tag 45: Halbzeit in Kapitel drei",
+          "intro": "Stress, sozialer Druck und Alkohol sind alle schon aufgetaucht, und du hast sie gemeistert.",
+          "tasks": [
+            {
+              "id": "d45t1",
+              "type": "checkin",
+              "title": "Bewerte dieses Kapitel bisher",
+              "text": "Bewerte, wie Kapitel drei im Vergleich zu Kapitel zwei gelaufen ist."
+            },
+            {
+              "id": "d45t2",
+              "type": "game",
+              "title": "Mach eine mentale Pause",
+              "text": "Spiel zwei Minuten ein Minispiel nur zum Reset, kein Gelüst nötig."
+            }
+          ]
+        },
+        {
+          "day": 46,
+          "title": "Tag 46: Wut und Reizbarkeit",
+          "intro": "Zigaretten waren früher die Abkühlung nach Wut. Dieses Entlastungsventil braucht ein neues Teil.",
+          "tasks": [
+            {
+              "id": "d46t1",
+              "type": "breathing",
+              "title": "Atme, bevor du reagierst",
+              "text": "Wenn heute Frustration hochgeht, nutze das Atem-Tool, bevor du jemandem antwortest."
+            },
+            {
+              "id": "d46t2",
+              "type": "journal",
+              "title": "Erinnere dich an einen wütenden Rauchmoment",
+              "text": "Schreib über eine Zeit, als du gezielt wegen Wut geraucht hast, und was die Zigarette wirklich repariert hat. Spoiler: Das Problem war danach noch da."
+            }
+          ]
+        },
+        {
+          "day": 47,
+          "title": "Tag 47: Wochenend-Auslöser",
+          "intro": "Wochenenden haben ihren eigenen Rhythmus: mehr Freizeit, mehr soziale Zeit, mehr Leerlauf, alles alte Rauch-Slots.",
+          "tasks": [
+            {
+              "id": "d47t1",
+              "type": "action",
+              "title": "Plane dein Wochenende anders",
+              "text": "Wähle einen Teil deines üblichen Wochenendmusters und handle ihn diese Woche anders."
+            },
+            {
+              "id": "d47t2",
+              "type": "checkin",
+              "title": "Bewerte Wochenend-Schwierigkeit",
+              "text": "Bewerte, wie schwer sich Wochenenden gerade im Vergleich zu Wochentagen anfühlen."
+            }
+          ]
+        },
+        {
+          "day": 48,
+          "title": "Tag 48: Sieben Wochen frei",
+          "intro": "Der Abstand zwischen dir und deiner letzten Zigarette wächst, und deine Beweisakte auch.",
+          "tasks": [
+            {
+              "id": "d48t1",
+              "type": "reward",
+              "title": "Hol dir dein Sieben-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d48t2",
+              "type": "fact",
+              "title": "Kreislauf-Update",
+              "text": "In dieser Phase hat sich der Kreislauf meist weiter verbessert, wodurch sich körperliche Aktivität spürbar leichter anfühlt als beim Rauchen."
+            }
+          ]
+        },
+        {
+          "day": 49,
+          "title": "Tag 49: Neid-Check",
+          "intro": "Wenn du jemanden rauchen siehst, was fühlst du? Heute stellst du sicher, dass es das Richtige ist.",
+          "tasks": [
+            {
+              "id": "d49t1",
+              "type": "mindset",
+              "title": "Beneide Raucher nicht, verstehe sie",
+              "text": "Wenn du das nächste Mal jemanden anzünden siehst, denk dran: Sie genießen keinen Genuss, der dir verwehrt ist. Sie lindern einen Entzug, den du nicht mehr hast, und die meisten wünschen sich, aufhören zu können. Wenn du etwas fühlst, lass es Erleichterung sein, dass du draußen bist."
+            },
+            {
+              "id": "d49t2",
+              "type": "journal",
+              "title": "Notiere deine ehrliche Reaktion",
+              "text": "Schreib, was du wirklich gefühlt hast, als du das letzte Mal jemanden in der Nähe rauchen gesehen hast."
+            }
+          ]
+        },
+        {
+          "day": 50,
+          "title": "Tag 50: Fünfzig Tage",
+          "intro": "Fünfzig Tage ist eine Zahl, die viele Aufhörer nie erreichen. Du bist darüber und beschleunigst.",
+          "tasks": [
+            {
+              "id": "d50t1",
+              "type": "fact",
+              "title": "Sieh deine Fünfzig-Tage-Übersicht",
+              "text": "Öffne deine Statistik und schau alles seit Tag eins: Serie, Geld, vermiedene Zigaretten, Gesundheitsmarker."
+            },
+            {
+              "id": "d50t2",
+              "type": "social",
+              "title": "Teile den Meilenstein",
+              "text": "Poste ein Update in der Community über fünfzig erreichte Tage."
+            }
+          ]
+        },
+        {
+          "day": 51,
+          "title": "Tag 51: Langeweile erneut",
+          "intro": "Langeweile-Auslöser kehren in neuen Verkleidungen zurück, wenn das Leben in Routine fällt. Halte die Gegenmittel frisch.",
+          "tasks": [
+            {
+              "id": "d51t1",
+              "type": "checkin",
+              "title": "Bewerte die Langeweile von heute",
+              "text": "Bewerte, wie gelangweilt du dich heute gefühlt hast und ob es mit einem Gelüst zusammenhing."
+            },
+            {
+              "id": "d51t2",
+              "type": "game",
+              "title": "Spiele die Lücke",
+              "text": "Fülle die nächste Langeweile-Lücke heute mit einem Minispiel, statt den Kopf zu alten Gewohnheiten wandern zu lassen."
+            }
+          ]
+        },
+        {
+          "day": 52,
+          "title": "Tag 52: Flackern ist normal",
+          "intro": "Ein Flackern von Verlangen, wenn du eine Zigarette siehst oder riechst, auch nach Wochen frei, sagt nichts über deinen Fortschritt.",
+          "tasks": [
+            {
+              "id": "d52t1",
+              "type": "fact",
+              "title": "Visuelle Auslöser sind nur Echos",
+              "text": "Die Zigarette eines anderen sehen oder riechen kann lange nach dem Aufhören einen kurzen Drang auslösen. Es ist eine verblassende Verknüpfung, keine Rückfall-Warnung."
+            },
+            {
+              "id": "d52t2",
+              "type": "mindset",
+              "title": "Antworte dem Flackern",
+              "text": "Wenn ein Flackern kommt, antworte in einer Zeile: Netter Versuch, ich rauche nicht. Dann weiter. Flackern hassen Ignorieren; so sterben sie."
+            }
+          ]
+        },
+        {
+          "day": 53,
+          "title": "Tag 53: Dein Unterstützungssystem",
+          "intro": "Aufhören ist leichter mit Menschen um dich, die wissen, was du tust und warum.",
+          "tasks": [
+            {
+              "id": "d53t1",
+              "type": "social",
+              "title": "Verbinde dich mit der Community",
+              "text": "Kommentiere oder reagiere heute auf zwei Posts anderer Leute."
+            },
+            {
+              "id": "d53t2",
+              "type": "journal",
+              "title": "Nenne deinen größten Unterstützer",
+              "text": "Schreib auf, wer dein Aufhören bisher am meisten unterstützt hat, und überlege, es ihm zu sagen."
+            }
+          ]
+        },
+        {
+          "day": 54,
+          "title": "Tag 54: Acht Wochen frei",
+          "intro": "Zwei volle Monate Morgen, Mahlzeiten, Stress und Abende aus, alles ohne Zigarette.",
+          "tasks": [
+            {
+              "id": "d54t1",
+              "type": "reward",
+              "title": "Hol dir dein Acht-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d54t2",
+              "type": "fact",
+              "title": "Zwei-Monats-Gesundheitsgewinne",
+              "text": "Öffne den Gesundheits-Fortschritt-Tab und sieh, wie weit sich deine wichtigsten Marker in zwei Monaten bewegt haben."
+            }
+          ]
+        },
+        {
+          "day": 55,
+          "title": "Tag 55: Ausrutscher passieren, Pläne zählen",
+          "intro": "Selbst mit starker Serie nimmt das genaue Wissen, was du nach einem Ausrutscher tust, seiner Schneeballeffekt-Kraft.",
+          "tasks": [
+            {
+              "id": "d55t1",
+              "type": "action",
+              "title": "Schreib deinen Ausrutscher-Wiederherstellungsplan",
+              "text": "Schreib genau, was du in der ersten Stunde nach einem Ausrutscher tust: wem du es sagst, restliche Zigaretten wegwerfen und am selben Tag zurück zum Plan, nicht erst nächsten Montag."
+            },
+            {
+              "id": "d55t2",
+              "type": "fact",
+              "title": "Ein Ausrutscher ist nicht das Ende",
+              "text": "Viele erfolgreiche Aufhörer sind mindestens einmal ausgerutscht. Was sie trennte: Sie behandelten es als Feuer, das sofort gelöscht wird, nicht als Grund, das Haus abzubrennen."
+            }
+          ]
+        },
+        {
+          "day": 56,
+          "title": "Tag 56: Zweite Pflaster-Reduktion",
+          "intro": "Zwei Wochen mit mittlerer Pflasterstärke sind geschafft. Das ist der Standardpunkt, auf die niedrigste Stärke für die Endphase zu gehen.",
+          "tasks": [
+            {
+              "id": "d56t1",
+              "type": "nrt",
+              "title": "Reduziere auf das schwächste Pflaster",
+              "text": "Wenn du etwa zwei Wochen mit mittlerer Stärke geschafft hast, reduziere auf das schwächste Pflaster, meist 7 mg, für die nächsten zwei Wochen. Gleiche Übung wie letztes Mal: extra Lutschtabletten, Wasser und Atmen für die ersten Tage. Du bist zwei Wochen vom Pflaster-frei-Sein entfernt."
+            },
+            {
+              "id": "d56t2",
+              "type": "journal",
+              "title": "Härteste Situation dieses Kapitels",
+              "text": "Schreib über die einzelne härteste Situation in Kapitel drei und wie du durchkamst."
+            }
+          ]
+        },
+        {
+          "day": 57,
+          "title": "Tag 57: Selbstvertrauens-Check",
+          "intro": "Mittlerweile hast du Beweise, nicht nur Hoffnung, dass du harte Momente ohne Rauchen schaffst.",
+          "tasks": [
+            {
+              "id": "d57t1",
+              "type": "fact",
+              "title": "Zähl deine Beweise",
+              "text": "Öffne deine Statistik und zähl die Tage, die du durchgekommen bist. Jeder ist ein Datenpunkt gegen die Geschichte der Sucht."
+            },
+            {
+              "id": "d57t2",
+              "type": "checkin",
+              "title": "Bewerte dein Selbstvertrauen",
+              "text": "Bewerte, wie zuversichtlich du dich fühlst, die nächsten dreißig Tage rauchfrei zu bleiben."
+            }
+          ]
+        },
+        {
+          "day": 58,
+          "title": "Tag 58: Fast zwei Monate",
+          "intro": "Merke, wie viel seltener Zigaretten dir jetzt durch den Kopf gehen im Vergleich zu Woche eins.",
+          "tasks": [
+            {
+              "id": "d58t1",
+              "type": "journal",
+              "title": "Miss die mentale Ruhe",
+              "text": "Schreib, wie oft dir Zigaretten jetzt durch den Kopf gehen versus deiner ersten Woche."
+            },
+            {
+              "id": "d58t2",
+              "type": "action",
+              "title": "Plane die Zwei-Monats-Marke",
+              "text": "Entscheide, wie du in zwei Tagen zwei volle Monate würdigen willst."
+            }
+          ]
+        },
+        {
+          "day": 59,
+          "title": "Tag 59: Noch ein Tag",
+          "intro": "Morgen schließt Kapitel drei. Du hast die Situationen durchgestanden, die am ehesten einen Rückfall auslösen.",
+          "tasks": [
+            {
+              "id": "d59t1",
+              "type": "fact",
+              "title": "Vorschau auf Kapitel vier",
+              "text": "Kapitel vier behandelt Rückfall-Fallen, Selbstzufriedenheit, das Ende deiner NRT-Reduktion und deinen Drei-Monats-Meilenstein."
+            },
+            {
+              "id": "d59t2",
+              "type": "checkin",
+              "title": "Bewerte deine Bereitschaft",
+              "text": "Bewerte, wie bereit du dich für das nächste Kapitel fühlst."
+            }
+          ]
+        },
+        {
+          "day": 60,
+          "title": "Tag 60: Zwei Monate rauchfrei",
+          "intro": "Sechzig Tage. Partys, Drinks, Stress, Familie und Langeweile, alles ohne Rauchen gemeistert. Das ist kein Glück, das ist eine Fähigkeit, die du aufgebaut hast.",
+          "tasks": [
+            {
+              "id": "d60t1",
+              "type": "reward",
+              "title": "Hol dir dein Zwei-Monat-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen wichtigen Meilenstein ein."
+            },
+            {
+              "id": "d60t2",
+              "type": "fact",
+              "title": "Sieh deine Zwei-Monats-Transformation",
+              "text": "Öffne deine vollständige Statistik- und Gesundheitsübersicht und sieh alles, was sich seit Tag eins verändert hat."
+            },
+            {
+              "id": "d60t3",
+              "type": "journal",
+              "title": "Kapitel-drei-Zusammenfassung",
+              "text": "Schreib ein paar Sätze, die zusammenfassen, was du in Kapitel drei gelernt hast."
+            },
+            {
+              "id": "d60t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel vier",
+              "text": "Lies die Kapitel-vier-Einleitung und setze ein Ziel, stark Richtung drei Monate zu bleiben."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "name": "Stark bleiben",
+      "role": "Tag 61-90: Selbstzufriedenheit und Rückfall-Fallen schlagen, Pflaster-Reduktion beenden, 3 Monate erreichen",
+      "day_start": 61,
+      "day_end": 90,
+      "days": [
+        {
+          "day": 61,
+          "title": "Tag 61: Willkommen in Kapitel vier",
+          "intro": "Das Selbstvertrauen ist gerade hoch, und genau dann kann die Wache nachlassen. Dieses Kapitel hält dich scharf auf dem Weg zu drei Monaten, und hier beendest du deine Nikotin-Reduktion vollständig.",
+          "tasks": [
+            {
+              "id": "d61t1",
+              "type": "fact",
+              "title": "Kenne die Selbstzufriedenheits-Falle",
+              "text": "Viele Rückfälle passieren nach der Zwei-Monats-Marke, nicht weil das Leben härter wird, sondern weil Menschen Gelüste nicht mehr ernst nehmen, sobald sie sich als Gewinner fühlen."
+            },
+            {
+              "id": "d61t2",
+              "type": "journal",
+              "title": "Benenne dein aktuell größtes Risiko",
+              "text": "Schreib die eine Situation auf, die dich in den nächsten dreißig Tagen am ehesten herausfordert."
+            },
+            {
+              "id": "d61t3",
+              "type": "checkin",
+              "title": "Setze dein Kapitel-vier-Ziel",
+              "text": "Wähle eine Sache, bei der du diesen Monat wach bleiben willst."
+            }
+          ]
+        },
+        {
+          "day": 62,
+          "title": "Tag 62: Die Nur-mal-testen-Falle",
+          "intro": "Eine zum Testen der Willenskraft klingt wie harmlose Neugier. Es ist die Sucht, die ihr eigenes Comeback schreibt.",
+          "tasks": [
+            {
+              "id": "d62t1",
+              "type": "mindset",
+              "title": "Warum Selbsttests nach hinten losgehen",
+              "text": "Eine Test-Zigarette bringt Nikotin zurück in deinen Körper und weckt das kleine Monster. Sie beweist nichts außer, dass die Falle noch funktioniert. Der echte Freiheitstest ist nicht eine zu rauchen und sich gut zu fühlen; es ist, gar keine zu wollen."
+            },
+            {
+              "id": "d62t2",
+              "type": "journal",
+              "title": "Ehrlichkeits-Check",
+              "text": "Schreib ehrlich, ob der Gedanke an nur eine zum Testen dir kürzlich durch den Kopf ging. Den Gedanken zu benennen entkräftet ihn."
+            }
+          ]
+        },
+        {
+          "day": 63,
+          "title": "Tag 63: Langeweile, das Langzeitspiel",
+          "intro": "Langeweile geht nie vollständig in Rente, sie kommt nur seltener. Halte das Toolkit geölt.",
+          "tasks": [
+            {
+              "id": "d63t1",
+              "type": "game",
+              "title": "Erneuere dein Langeweile-Toolkit",
+              "text": "Probier heute in einem ruhigen Moment ein Minispiel, das du länger nicht genutzt hast."
+            },
+            {
+              "id": "d63t2",
+              "type": "action",
+              "title": "Füge eine neue Langeweile-Aktivität hinzu",
+              "text": "Füge deiner Langeweile-Liste eine Aktivität hinzu, die du noch nie probiert hast."
+            }
+          ]
+        },
+        {
+          "day": 64,
+          "title": "Tag 64: Neun Wochen frei",
+          "intro": "Neun Wochen. Dein alter Rauchplan fühlt sich wahrscheinlich wie der Kalender eines anderen an.",
+          "tasks": [
+            {
+              "id": "d64t1",
+              "type": "reward",
+              "title": "Hol dir dein Neun-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d64t2",
+              "type": "fact",
+              "title": "Neun-Wochen-Statistik",
+              "text": "Öffne deine Statistik und prüfe Serie, gespartes Geld und Gesundheitsmarker."
+            }
+          ]
+        },
+        {
+          "day": 65,
+          "title": "Tag 65: Feier-Auslöser erneut",
+          "intro": "Beförderungen, Erfolge und Partys können leise die alte Art zu feiern flüstern.",
+          "tasks": [
+            {
+              "id": "d65t1",
+              "type": "journal",
+              "title": "Prüfe einen kürzlichen guten Moment",
+              "text": "Schreib über eine kürzliche gute Nachricht und ob ein Drang dabei war."
+            },
+            {
+              "id": "d65t2",
+              "type": "action",
+              "title": "Plane deine Drei-Monats-Feier",
+              "text": "Entscheide vorab, wie du den Drei-Monats-Meilenstein feiern willst, wenn er kommt, gern mit gespartem Geld."
+            }
+          ]
+        },
+        {
+          "day": 66,
+          "title": "Tag 66: Feiertage und besondere Tage",
+          "intro": "Besondere Anlässe, auch kleine, tragen alte Verknüpfungen. Ein Plan schlägt Willenskraft jedes Mal.",
+          "tasks": [
+            {
+              "id": "d66t1",
+              "type": "checkin",
+              "title": "Bewerte Risiko kommender Anlässe",
+              "text": "Wenn ein Geburtstag, Feiertag oder Event kommt, bewerte, wie riskant es sich anfühlt."
+            },
+            {
+              "id": "d66t2",
+              "type": "fact",
+              "title": "Plan schlägt Willenskraft",
+              "text": "In einen besonderen Anlass mit Plan für Raucherpausen und Toasts zu gehen funktioniert viel besser als im Moment gegen Druck zu improvisieren."
+            }
+          ]
+        },
+        {
+          "day": 67,
+          "title": "Tag 67: Alte Freunde, alte Gewohnheiten",
+          "intro": "Jemand aus deiner Rauchvergangenheit kann ohne Warnung wieder auftauchen: ein Wiedersehen, ein alter Kollege, ein zurückkehrender Freund.",
+          "tasks": [
+            {
+              "id": "d67t1",
+              "type": "journal",
+              "title": "Nenne die Person",
+              "text": "Schreib über jeden aus deiner Vergangenheit, den du stark mit Rauchen verbindest, auch wenn du ihn selten siehst."
+            },
+            {
+              "id": "d67t2",
+              "type": "action",
+              "title": "Entscheide deine Antwort vorab",
+              "text": "Entscheide jetzt genau, was du sagst und tust, wenn diese Person dir eine Zigarette anbietet. Eingeübte Antworten wackeln nicht."
+            }
+          ]
+        },
+        {
+          "day": 68,
+          "title": "Tag 68: Zehn Wochen, letzte Pflasterwoche",
+          "intro": "Zehn Wochen frei, und wenn du der Standard-Reduktion gefolgt bist, ist dies deine letzte Woche mit Pflaster.",
+          "tasks": [
+            {
+              "id": "d68t1",
+              "type": "reward",
+              "title": "Hol dir dein Zehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d68t2",
+              "type": "nrt",
+              "title": "Bereite dich auf pflasterfreies Leben vor",
+              "text": "Wenn du etwa zwei Wochen mit der niedrigsten Stärke geschafft hast, kannst du am Ende dieser Woche die Pflaster stoppen. Halte zwei oder drei Wochen ein kleines Lutschtabletten-Vorrat als Sicherheitsnetz für Überraschungs-Gelüste und plane, die auch auszuphasen."
+            }
+          ]
+        },
+        {
+          "day": 69,
+          "title": "Tag 69: Müdigkeit und wenig Energie",
+          "intro": "Erschöpfung senkt jedermanns Wache, auch bei alten Gewohnheiten. Ruhe ist ein Rückfall-Präventions-Tool.",
+          "tasks": [
+            {
+              "id": "d69t1",
+              "type": "journal",
+              "title": "Bemerke die Müdigkeits-Verknüpfung",
+              "text": "Schreib, ob du eine Verbindung zwischen großer Müdigkeit und Gedanken an Zigaretten bemerkt hast."
+            },
+            {
+              "id": "d69t2",
+              "type": "audio",
+              "title": "Ruhe bewusst",
+              "text": "Nutze heute ein paar Minuten einen entspannenden Klang, wenn du erschöpft bist."
+            }
+          ]
+        },
+        {
+          "day": 70,
+          "title": "Tag 70: Pflasterfreier Tag",
+          "intro": "Siebzig Tage, und für Standard-Reduktions-Nutzer der erste Tag ganz ohne Pflaster. Ab heute ist Nikotin in deinem Körper null. Das kleine Monster hungert nicht nur mehr; es ist weg.",
+          "tasks": [
+            {
+              "id": "d70t1",
+              "type": "nrt",
+              "title": "Markiere den pflasterfreien Meilenstein",
+              "text": "Wenn heute dein erster pflasterfreier Tag ist, rechne mit ein paar ruhigeren Tagen als befürchtet. Halte Lutschtabletten und dein orales Set als Backup bereit, und denk dran: Jedes Gelüst jetzt ist reines mentales Echo, kein chemisches Bedürfnis."
+            },
+            {
+              "id": "d70t2",
+              "type": "mindset",
+              "title": "Das kleine Monster ist tot",
+              "text": "Ohne Nikotin aus irgendeiner Quelle hat die körperliche Sucht nichts mehr zum Leben. Ab hier ist alles Gewohnheitserinnerung und alte Überzeugungen, und die baust du seit zehn Wochen ab."
+            },
+            {
+              "id": "d70t3",
+              "type": "social",
+              "title": "Teile ein Siebzig-Tage-Update",
+              "text": "Poste ein kurzes Update in der Community über siebzig erreichte Tage."
+            }
+          ]
+        },
+        {
+          "day": 71,
+          "title": "Tag 71: Warnzeichen beobachten",
+          "intro": "Kleine Warnzeichen, wie häufigere Gedanken ans Rauchen, lohnt es früh zu erwischen, besonders in der Woche nach NRT-Stopp.",
+          "tasks": [
+            {
+              "id": "d71t1",
+              "type": "checkin",
+              "title": "Bewerte Gelüst-Häufigkeit",
+              "text": "Bewerte, wie oft du in den letzten drei Tagen ans Rauchen gedacht hast."
+            },
+            {
+              "id": "d71t2",
+              "type": "action",
+              "title": "Füge diese Woche ein Extra-Tool hinzu",
+              "text": "Wenn Gelüste seit dem Pflaster-Stopp lauter wirken, füge diese Woche ein tägliches Extra-Tool hinzu: geplante Atem-Session, Abendspaziergang oder Community-Check-in."
+            }
+          ]
+        },
+        {
+          "day": 72,
+          "title": "Tag 72: Die mentale Verhandlungs-Falle",
+          "intro": "Nur dieses eine Mal Gedanken werden mit der Zeit eloquenter. Das Risiko darunter ändert sich nie.",
+          "tasks": [
+            {
+              "id": "d72t1",
+              "type": "mindset",
+              "title": "Kenne das Verhandlungsmuster",
+              "text": "Der Verstand kann einen schönen Fall für eine Ausnahme bauen: besonderer Anlass, schrecklicher Tag, nur dieses eine Mal. Wie elegant das Argument auch ist, das Ergebnis ist identisch: Das Monster wird gefüttert und der Kreislauf startet neu. Es gibt keine Anlass-Zigaretten, nur erste Zigaretten."
+            },
+            {
+              "id": "d72t2",
+              "type": "journal",
+              "title": "Schreib dein Gegenargument",
+              "text": "Schreib einen starken Satz als Antwort auf jeden Nur-dieses-eine-Mal-Gedanken, im Voraus bereit."
+            }
+          ]
+        },
+        {
+          "day": 73,
+          "title": "Tag 73: Dein Warum prüfen",
+          "intro": "Mit deinem ursprünglichen Grund wieder zu verbinden hält ihn lebendig, statt ihn zur Tapete verblassen zu lassen.",
+          "tasks": [
+            {
+              "id": "d73t1",
+              "type": "journal",
+              "title": "Besuche deinen ursprünglichen Grund erneut",
+              "text": "Schreib den Hauptgrund, warum du aufgehört hast, und ob er sich jetzt noch genauso wichtig anfühlt."
+            },
+            {
+              "id": "d73t2",
+              "type": "fact",
+              "title": "Sieh die Ersparnisse wachsen",
+              "text": "Öffne den Gespartes-Geld-Tab und bemerke die Summe, jetzt auch frei von NRT-Kosten künftig."
+            }
+          ]
+        },
+        {
+          "day": 74,
+          "title": "Tag 74: Elf Wochen frei",
+          "intro": "Noch eine Woche trennt dich von drei vollen Monaten.",
+          "tasks": [
+            {
+              "id": "d74t1",
+              "type": "reward",
+              "title": "Hol dir dein Elf-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d74t2",
+              "type": "checkin",
+              "title": "Bewerte Bereitschaft für drei Monate",
+              "text": "Bewerte, wie bereit du dich für den Drei-Monats-Meilenstein fühlst."
+            }
+          ]
+        },
+        {
+          "day": 75,
+          "title": "Tag 75: Jemand anderem helfen",
+          "intro": "Einen anderen Aufhörer zu unterstützen stärkt gleichzeitig deinen eigenen Entschluss.",
+          "tasks": [
+            {
+              "id": "d75t1",
+              "type": "social",
+              "title": "Unterstütze einen neueren Aufhörer",
+              "text": "Finde jemanden in seinem ersten Monat und gib ein Stück Ermutigung oder Rat."
+            },
+            {
+              "id": "d75t2",
+              "type": "journal",
+              "title": "Was würdest du dir von Tag eins sagen",
+              "text": "Schreib das eine nützlichste, was du dir von Tag eins sagen würdest, mit dem Wissen von jetzt."
+            }
+          ]
+        },
+        {
+          "day": 76,
+          "title": "Tag 76: Körperliche Aktivität-Boost",
+          "intro": "Ausdauer verbessert sich weit über die frühen Monate hinaus, jetzt ohne Nikotin, das deine Blutgefäße verengt.",
+          "tasks": [
+            {
+              "id": "d76t1",
+              "type": "fact",
+              "title": "Sieh deine Ausdauer-Gewinne",
+              "text": "Um drei Monate herum hat sich die Lungenfunktion bei vielen Ex-Rauchern so verbessert, dass Treppen und zügiges Gehen spürbar leichter sind."
+            },
+            {
+              "id": "d76t2",
+              "type": "action",
+              "title": "Teste deine Ausdauer",
+              "text": "Mach heute eine körperliche Aktivität, auch nur einen kurzen zügigen Spaziergang, und merke den Unterschied zu deinen Rauchtagen."
+            }
+          ]
+        },
+        {
+          "day": 77,
+          "title": "Tag 77: Mentale Klarheits-Prüfung",
+          "intro": "Stetigerer Fokus ist einer der häufigsten Gewinne in dieser Phase, jetzt wo die Entzug-Erleichterungs-Achterbahn weg ist.",
+          "tasks": [
+            {
+              "id": "d77t1",
+              "type": "journal",
+              "title": "Bemerke deinen Fokus",
+              "text": "Schreib, ob sich deine Konzentration oder mentale Klarheit seit dem Aufhören anders anfühlt."
+            },
+            {
+              "id": "d77t2",
+              "type": "checkin",
+              "title": "Bewerte dein Wohlbefinden",
+              "text": "Bewerte, wie du dich heute insgesamt auf einer einfachen Skala fühlst."
+            }
+          ]
+        },
+        {
+          "day": 78,
+          "title": "Tag 78: Zwölf Wochen frei",
+          "intro": "Drei Monate sind zwei Tage entfernt.",
+          "tasks": [
+            {
+              "id": "d78t1",
+              "type": "reward",
+              "title": "Hol dir dein Zwölf-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d78t2",
+              "type": "action",
+              "title": "Finalisiere deinen Drei-Monats-Plan",
+              "text": "Entscheide genau, wie du in zwei Tagen drei volle Monate markieren wirst."
+            }
+          ]
+        },
+        {
+          "day": 79,
+          "title": "Tag 79: Die Nacht davor",
+          "intro": "Morgen ist ein großer Meilenstein. Heute geht es nur ums Stabilbleiben.",
+          "tasks": [
+            {
+              "id": "d79t1",
+              "type": "fact",
+              "title": "Scrolle deine ganze Reise",
+              "text": "Öffne deine Statistik und scrolle deine gesamte Geschichte von Tag eins bis heute."
+            },
+            {
+              "id": "d79t2",
+              "type": "journal",
+              "title": "Was morgen bedeutet",
+              "text": "Schreib ein oder zwei Sätze darüber, was drei Monate für dich bedeuten."
+            }
+          ]
+        },
+        {
+          "day": 80,
+          "title": "Tag 80: Drei Monate rauchfrei",
+          "intro": "Neunzig Tage nach alter Zählung, drei Kalendermonate nach jeder Zählung: ein Vierteljahr ohne eine einzige Zigarette, und jetzt ganz ohne Nikotin. Einer der größten Meilensteine beim Aufhören, medizinisch und mental.",
+          "tasks": [
+            {
+              "id": "d80t1",
+              "type": "reward",
+              "title": "Hol dir dein Drei-Monat-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen wichtigen Meilenstein ein."
+            },
+            {
+              "id": "d80t2",
+              "type": "fact",
+              "title": "Drei-Monats-Transformation",
+              "text": "Nach drei Monaten haben sich Lungenfunktion und Kreislauf meist deutlich verbessert im Vergleich zum Rauchen, und dein Körper läuft vollständig nikotinfrei."
+            },
+            {
+              "id": "d80t3",
+              "type": "social",
+              "title": "Teile den Meilenstein",
+              "text": "Poste dein Drei-Monats-Update in der Community."
+            },
+            {
+              "id": "d80t4",
+              "type": "journal",
+              "title": "Schreib deine Reise-Zusammenfassung",
+              "text": "Ein paar Sätze, die den Weg von Tag eins bis heute zusammenfassen."
+            }
+          ]
+        },
+        {
+          "day": 81,
+          "title": "Tag 81: Nach dem großen Meilenstein",
+          "intro": "Motivation sinkt oft leicht direkt nach einem großen Meilenstein. Das vorher zu wissen macht es zu einem Schulterzucken statt einer Krise.",
+          "tasks": [
+            {
+              "id": "d81t1",
+              "type": "fact",
+              "title": "Das Nach-Meilenstein-Tief",
+              "text": "Motivation sinkt nach einem großen Ziel ein wenig, einfach weil das unmittelbare Ziel weg ist. Das ist normal und vorübergehend."
+            },
+            {
+              "id": "d81t2",
+              "type": "checkin",
+              "title": "Setze das nächste Ziel",
+              "text": "Wähle ein neues persönliches Ziel, jetzt wo drei Monate hinter dir liegen."
+            }
+          ]
+        },
+        {
+          "day": 82,
+          "title": "Tag 82: Routinen-Wartung",
+          "intro": "Das Ziel verschiebt sich vom Aufbau von Gewohnheiten zum einfachen Erhalten der funktionierenden.",
+          "tasks": [
+            {
+              "id": "d82t1",
+              "type": "journal",
+              "title": "Liste deine Kern-Gewohnheiten",
+              "text": "Schreib die drei oder vier Ersatzgewohnheiten auf, die am automatischsten geworden sind."
+            },
+            {
+              "id": "d82t2",
+              "type": "action",
+              "title": "Halte eine Gewohnheit frisch",
+              "text": "Tu heute bewusst eine Kern-Ersatzgewohnheit, auch ohne sie zu brauchen."
+            }
+          ]
+        },
+        {
+          "day": 83,
+          "title": "Tag 83: Langfristiges Geldziel",
+          "intro": "Drei Monate unausgegebenes Zigarettengeld ist ein echter Betrag. Denk größer damit.",
+          "tasks": [
+            {
+              "id": "d83t1",
+              "type": "fact",
+              "title": "Sieh deine Drei-Monats-Ersparnisse",
+              "text": "Öffne den Gespartes-Geld-Tab und schau die Summe seit Tag eins."
+            },
+            {
+              "id": "d83t2",
+              "type": "action",
+              "title": "Setze ein Sparziel",
+              "text": "Wähle etwas Konkretes, wofür du dein Rauchgeld in den nächsten Monaten nutzen willst."
+            }
+          ]
+        },
+        {
+          "day": 84,
+          "title": "Tag 84: Lutschtabletten ausphasen",
+          "intro": "Wenn du Lutschtabletten als Post-Pflaster-Sicherheitsnetz behalten hast, ist dies eine gute Woche, sie auch loszulassen.",
+          "tasks": [
+            {
+              "id": "d84t1",
+              "type": "nrt",
+              "title": "Reduziere die letzte NRT",
+              "text": "Tausche Nikotin-Lutschtabletten gegen normale Pfefferminz oder zuckerfreien Kaugummi, halbiere diese Woche grob die tägliche Lutschtabletten-Zahl und ziele auf null in zwei bis drei Wochen. Wenn Gelüste hochgehen, verlangsame statt mit zusammengebissenen Zähnen durchzuhalten; der Ausstieg zählt auch mit einer Extra-Woche."
+            },
+            {
+              "id": "d84t2",
+              "type": "checkin",
+              "title": "Bewerte, wie fern sich Rauchen anfühlt",
+              "text": "Bewerte, wie weit entfernt sich deine Rauchzeiten anfühlen im Vergleich zu direkt nach dem Aufhören."
+            }
+          ]
+        },
+        {
+          "day": 85,
+          "title": "Tag 85: Langeweile-Rückfall-Wache",
+          "intro": "Selbst in dieser Phase bleibt schlichte Langeweile einer der hinterhältigeren Auslöser.",
+          "tasks": [
+            {
+              "id": "d85t1",
+              "type": "fact",
+              "title": "Langeweile geht nie vollständig in Rente",
+              "text": "Selbst langjährige Ex-Raucher können in sehr langweiligen Phasen gelegentlich einen Zug spüren. Ein bereiter Plan zählt mehr als zu erwarten, der Drang verschwindet für immer."
+            },
+            {
+              "id": "d85t2",
+              "type": "action",
+              "title": "Erneuere deine Ablenkungsliste",
+              "text": "Aktualisiere deine Langeweile-Liste mit allem Neuen, das du entdeckt hast."
+            }
+          ]
+        },
+        {
+          "day": 86,
+          "title": "Tag 86: Über Identität reflektieren",
+          "intro": "Mittlerweile sind viele einfach Nichtraucher, statt Raucher, die eine Tür zuhalten.",
+          "tasks": [
+            {
+              "id": "d86t1",
+              "type": "journal",
+              "title": "Der Fremden-Test",
+              "text": "Schreib, wie jemand, der dich heute ohne Vorgeschichte trifft, deine Beziehung zum Rauchen beschreiben würde."
+            },
+            {
+              "id": "d86t2",
+              "type": "fact",
+              "title": "Identität sagt Erfolg voraus",
+              "text": "In deinem eigenen Kopf vom aufhörenden Raucher zum einfachen Nichtraucher zu wechseln ist einer der stärksten Prädiktoren für langfristig rauchfrei bleiben."
+            }
+          ]
+        },
+        {
+          "day": 87,
+          "title": "Tag 87: Deinen eigenen Plan formen",
+          "intro": "Fast drei Monate Missionen hinter dir. Zeit zu merken, was du wirklich noch brauchst.",
+          "tasks": [
+            {
+              "id": "d87t1",
+              "type": "checkin",
+              "title": "Bewerte deine Tool-Nutzung",
+              "text": "Bewerte, wie oft du das Gelüst-Toolkit noch nutzt im Vergleich zu Monat eins."
+            },
+            {
+              "id": "d87t2",
+              "type": "journal",
+              "title": "Wobei brauchst du weniger",
+              "text": "Schreib, welchen Teil des Plans du jetzt weniger Unterstützung brauchst."
+            }
+          ]
+        },
+        {
+          "day": 88,
+          "title": "Tag 88: Fast Kapitel fünf",
+          "intro": "Das nächste Kapitel geht in Identität, Gesundheitsgewinne und Selbstvertrauen als fest etablierter Nichtraucher.",
+          "tasks": [
+            {
+              "id": "d88t1",
+              "type": "fact",
+              "title": "Vorschau auf Kapitel fünf",
+              "text": "Kapitel fünf fokussiert Identität als Nichtraucher, laufende Gesundheitsgewinne und das Beenden restlicher NRT, damit du vollständig nikotinfrei bist."
+            },
+            {
+              "id": "d88t2",
+              "type": "action",
+              "title": "Setze eine Kapitel-fünf-Absicht",
+              "text": "Schreib eine Absicht, wie du über dich denken willst, wenn du ins nächste Kapitel gehst."
+            }
+          ]
+        },
+        {
+          "day": 89,
+          "title": "Tag 89: Noch ein Tag in Kapitel vier",
+          "intro": "Morgen schließt ein Kapitel um das höchste Selbstzufriedenheits-Risiko-Fenster, und du verlässt es mit intakter Serie.",
+          "tasks": [
+            {
+              "id": "d89t1",
+              "type": "journal",
+              "title": "Ein Nachlass-Moment, den du erwischt hast",
+              "text": "Schreib über einen Moment in diesem Kapitel, wo du fast die Wache sinken ließest, aber nicht."
+            },
+            {
+              "id": "d89t2",
+              "type": "checkin",
+              "title": "Bewerte Kapitel vier",
+              "text": "Bewerte, wie gut du Kapitel vier insgesamt gemeistert hast."
+            }
+          ]
+        },
+        {
+          "day": 90,
+          "title": "Tag 90: Drei Monate und es geht weiter",
+          "intro": "Neunzig Tage hinter dir, Pflaster hinter dir, und das riskanteste Selbstzufriedenheits-Fenster mit intakter Serie passiert. Ab hier verschiebt sich die Arbeit von stark bleiben zu vollständig werden, wer du jetzt bist.",
+          "tasks": [
+            {
+              "id": "d90t1",
+              "type": "reward",
+              "title": "Hol dir dein Neunzig-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d90t2",
+              "type": "fact",
+              "title": "Vollständige Neunzig-Tage-Übersicht",
+              "text": "Öffne deine Statistik und schau über Serie, Geld, vermiedene Zigaretten und Gesundheit seit Tag eins."
+            },
+            {
+              "id": "d90t3",
+              "type": "social",
+              "title": "Teile Kapitel-vier-Abschluss",
+              "text": "Poste in der Community über den Abschluss von Kapitel vier und drei erreichte Monate."
+            },
+            {
+              "id": "d90t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel fünf",
+              "text": "Lies die Kapitel-fünf-Einleitung und setze ein Ziel rund um deine Identität als Nichtraucher."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "name": "Wer du jetzt bist",
+      "role": "Tag 91-120: Identität als Nichtraucher, vollständig nikotinfrei, Gesundheitsgewinne, Mentoring",
+      "day_start": 91,
+      "day_end": 120,
+      "days": [
+        {
+          "day": 91,
+          "title": "Tag 91: Willkommen in Kapitel fünf",
+          "intro": "Dieses Kapitel geht weniger ums Bekämpfen von Gelüsten und mehr ums Einleben in wer du jetzt bist: ein Nichtraucher, kein widerstehender Raucher.",
+          "tasks": [
+            {
+              "id": "d91t1",
+              "type": "journal",
+              "title": "Vervollständige diesen Satz",
+              "text": "Schreib ein paar Worte, die diesen Satz vervollständigen: Ich bin jemand, der."
+            },
+            {
+              "id": "d91t2",
+              "type": "checkin",
+              "title": "Setze dein Kapitel-fünf-Ziel",
+              "text": "Wähle eine Sache, auf die du diesen Monat bei Identität und Selbstvertrauen fokussierst."
+            }
+          ]
+        },
+        {
+          "day": 92,
+          "title": "Tag 92: Dein Gesundheits-Zeugnis",
+          "intro": "Drei Monate dabei, dein Körper hat echten, messbaren Fortschritt gemacht.",
+          "tasks": [
+            {
+              "id": "d92t1",
+              "type": "fact",
+              "title": "Prüfe deine Gesundheitsgewinne",
+              "text": "Öffne den Gesundheits-Fortschritt-Tab und prüfe jeden Marker, der sich seit Tag eins verbessert hat."
+            },
+            {
+              "id": "d92t2",
+              "type": "journal",
+              "title": "Die Veränderung, die am meisten zählt",
+              "text": "Schreib, welche körperliche Veränderung dir persönlich am meisten bedeutet hat."
+            }
+          ]
+        },
+        {
+          "day": 93,
+          "title": "Tag 93: Nicht mehr die Ausnahme",
+          "intro": "Eine Zigarette ablehnen muss sich nicht mehr wie ein Akt der Willenskraft anfühlen. Es ist einfach, was du tust.",
+          "tasks": [
+            {
+              "id": "d93t1",
+              "type": "checkin",
+              "title": "Bewerte, wie automatisch sich Nein anfühlt",
+              "text": "Bewerte, wie automatisch sich Ablehnen einer Zigarette jetzt anfühlt im Vergleich zu Monat eins."
+            },
+            {
+              "id": "d93t2",
+              "type": "action",
+              "title": "Erwische die mühelosen Momente",
+              "text": "Bemerke jeden Moment heute, wo Nichtrauchen null bewussten Gedanken kostete. Diese Momente sind die Ziellinie, die früh ankommt."
+            }
+          ]
+        },
+        {
+          "day": 94,
+          "title": "Tag 94: Dreizehn Wochen frei",
+          "intro": "Ein volles Vierteljahr und eine Extra-Woche.",
+          "tasks": [
+            {
+              "id": "d94t1",
+              "type": "reward",
+              "title": "Hol dir dein Dreizehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d94t2",
+              "type": "nrt",
+              "title": "Lutschtabletten-Ausstiegs-Check",
+              "text": "Wenn du noch Nikotin-Lutschtabletten nutzt, prüfe deine Zahl: Ziel ist null um Tag hundert. Tausche restliche Slots gegen Pfefferminz oder normalen Kaugummi. Wenn du schon gestoppt hast, genieße, dass deine einzige verbleibende Gewohnheit eine Minz-Gewohnheit ist."
+            }
+          ]
+        },
+        {
+          "day": 95,
+          "title": "Tag 95: Selbstvertrauen in neuen Situationen",
+          "intro": "Mittlerweile hast du wahrscheinlich etwas völlig Neues gemeistert, Jobwechsel, neuer Freundeskreis, von Anfang an komplett rauchfrei.",
+          "tasks": [
+            {
+              "id": "d95t1",
+              "type": "journal",
+              "title": "Eine neue Situation sauber gemeistert",
+              "text": "Schreib über jede neue Situation, die du seit dem Aufhören betreten und ohne Rauchen gemeistert hast."
+            },
+            {
+              "id": "d95t2",
+              "type": "fact",
+              "title": "Beweis, kein Glück",
+              "text": "Neue Situationen rauchfrei zu meistern ist direkter Beweis einer stabilen neuen Identität, kein Zufall."
+            }
+          ]
+        },
+        {
+          "day": 96,
+          "title": "Tag 96: Körperliche Leistungs-Prüfung",
+          "intro": "Ausdauer und Erholung verbessern sich weit über die Drei-Monats-Marke hinaus.",
+          "tasks": [
+            {
+              "id": "d96t1",
+              "type": "action",
+              "title": "Fordere dich etwas",
+              "text": "Mach heute eine etwas anspruchsvollere körperliche Aktivität als üblich und merke, wie dein Körper reagiert."
+            },
+            {
+              "id": "d96t2",
+              "type": "checkin",
+              "title": "Bewerte deine Ausdauer",
+              "text": "Bewerte deine Gesamtausdauer im Vergleich zu deiner Rauchzeit."
+            }
+          ]
+        },
+        {
+          "day": 97,
+          "title": "Tag 97: Haut und Aussehen",
+          "intro": "Rauchen betraf mehr als Lungen. Haut und Gesamtaussehen erholen sich auch.",
+          "tasks": [
+            {
+              "id": "d97t1",
+              "type": "fact",
+              "title": "Die Aussehens-Dividende",
+              "text": "Besserer Blutfluss und Sauerstoffversorgung nach dem Aufhören können Hautton verbessern und sichtbares Altern verlangsamen im Vergleich zu weiterem Rauchen."
+            },
+            {
+              "id": "d97t2",
+              "type": "journal",
+              "title": "Schon Kommentare",
+              "text": "Schreib, ob jemand dein Aussehen seit dem Aufhören kommentiert hat, oder was du selbst bemerkt hast."
+            }
+          ]
+        },
+        {
+          "day": 98,
+          "title": "Tag 98: Vierzehn Wochen frei",
+          "intro": "Jede Woche fügt mehr Beweis hinzu, dass das einfach so dein Leben jetzt ist.",
+          "tasks": [
+            {
+              "id": "d98t1",
+              "type": "reward",
+              "title": "Hol dir dein Vierzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d98t2",
+              "type": "social",
+              "title": "Teile einen Selbstvertrauens-Erfolg",
+              "text": "Poste über einen kürzlichen Moment, wo du dich als Nichtraucher vollständig selbstsicher gefühlt hast."
+            }
+          ]
+        },
+        {
+          "day": 99,
+          "title": "Tag 99: Andere mentoren",
+          "intro": "Du hast jetzt echten, konkreten, getesteten Rat, den ein Tag-eins-Aufhörer braucht.",
+          "tasks": [
+            {
+              "id": "d99t1",
+              "type": "social",
+              "title": "Gib einem Anfänger einen echten Tipp",
+              "text": "Finde jemanden in Kapitel eins oder zwei und teile eine konkrete Taktik, die für dich funktionierte: dein bestes orales Set-Teil, dein Lutschtabletten-Timing, dein Reframe."
+            },
+            {
+              "id": "d99t2",
+              "type": "journal",
+              "title": "Deine Top-drei-Tipps",
+              "text": "Schreib die drei Ratschläge, die du jedem geben würdest, der heute Tag eins startet."
+            }
+          ]
+        },
+        {
+          "day": 100,
+          "title": "Tag 100: Hundert Tage",
+          "intro": "Hundert Tage ohne Zigarette. Die Zahl erzählt ihre eigene Geschichte darüber, wer du geworden bist.",
+          "tasks": [
+            {
+              "id": "d100t1",
+              "type": "reward",
+              "title": "Hol dir dein Hundert-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen wichtigen Meilenstein ein."
+            },
+            {
+              "id": "d100t2",
+              "type": "fact",
+              "title": "Das volle Hundert-Tage-Bild",
+              "text": "Öffne deine Statistik und schau über Serie, gespartes Geld, vermiedene Zigaretten und Gesundheitsgewinne."
+            },
+            {
+              "id": "d100t3",
+              "type": "journal",
+              "title": "Hundert-Tage-Reflexion",
+              "text": "Schreib ein paar Sätze darüber, was hundert Tage rauchfrei für dich bedeuten."
+            },
+            {
+              "id": "d100t4",
+              "type": "social",
+              "title": "Feiere öffentlich",
+              "text": "Teile deinen Hundert-Tage-Meilenstein mit der Community."
+            }
+          ]
+        },
+        {
+          "day": 101,
+          "title": "Tag 101: Jenseits der Schlagzeilen-Zahl",
+          "intro": "Die große runde Zahl liegt hinter dir. Die Arbeit jetzt ist leise Beständigkeit.",
+          "tasks": [
+            {
+              "id": "d101t1",
+              "type": "checkin",
+              "title": "Setze ein neues persönliches Ziel",
+              "text": "Wähle einen neuen Meilenstein als Ziel, etwa ein bestimmtes Datum oder Event."
+            },
+            {
+              "id": "d101t2",
+              "type": "fact",
+              "title": "Beständigkeit schlägt Momente",
+              "text": "Langfristiger Erfolg kommt aus vielen gewöhnlichen Tagen, die gut gemeistert werden, nicht aus einem einzelnen Meilenstein."
+            }
+          ]
+        },
+        {
+          "day": 102,
+          "title": "Tag 102: Stress-Resilienz jetzt",
+          "intro": "Vergleiche, wie du Stress heute meisterst mit Tag fünf. Diese Lücke ist die echte Trophäe.",
+          "tasks": [
+            {
+              "id": "d102t1",
+              "type": "journal",
+              "title": "Vergleiche Stress-Reaktionen",
+              "text": "Schreib, wie deine Reaktion auf einen stressigen Moment heute im Vergleich zu früh in deinem Aufhören ist."
+            },
+            {
+              "id": "d102t2",
+              "type": "mindset",
+              "title": "Du hast keine Krücke verloren",
+              "text": "Du hast keinen Stresslöser aufgegeben; du hast einen Stress-Erzeuger entfernt. Die Hintergrund-Angst, immer die nächste Zigarette zu brauchen, ist weg, deshalb starten harte Tage jetzt von einem ruhigeren Boden."
+            }
+          ]
+        },
+        {
+          "day": 103,
+          "title": "Tag 103: Fünfzehn Wochen frei",
+          "intro": "Über ein Drittel des Wegs zu sechs Monaten.",
+          "tasks": [
+            {
+              "id": "d103t1",
+              "type": "reward",
+              "title": "Hol dir dein Fünfzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d103t2",
+              "type": "fact",
+              "title": "Fünfzehn-Wochen-Statistik",
+              "text": "Öffne deine Statistik und prüfe deinen Gesamtfortschritt."
+            }
+          ]
+        },
+        {
+          "day": 104,
+          "title": "Tag 104: Dein neuer Normaltag",
+          "intro": "Stell dir einen durchschnittlichen Tag jetzt versus einen durchschnittlichen Tag beim Rauchen vor.",
+          "tasks": [
+            {
+              "id": "d104t1",
+              "type": "journal",
+              "title": "Beschreibe einen Normaltag jetzt",
+              "text": "Schreib, wie ein typischer Tag für dich jetzt aussieht, ohne Bezug aufs Rauchen."
+            },
+            {
+              "id": "d104t2",
+              "type": "fact",
+              "title": "Bemerke die Abwesenheit",
+              "text": "Deine Beschreibung erwähnte wahrscheinlich gar keine Zigaretten. Diese Abwesenheit ist der echte Gewinn."
+            }
+          ]
+        },
+        {
+          "day": 105,
+          "title": "Tag 105: Wohl in harten Räumen",
+          "intro": "Ein Raum voller Raucher muss sich nicht mehr wie ein Stärketest anfühlen.",
+          "tasks": [
+            {
+              "id": "d105t1",
+              "type": "checkin",
+              "title": "Bewerte dein Wohlbefinden bei Rauchern",
+              "text": "Bewerte, wie wohl du dich bei rauchenden Menschen jetzt fühlst im Vergleich zu Monat eins."
+            },
+            {
+              "id": "d105t2",
+              "type": "mindset",
+              "title": "Schau mit klaren Augen",
+              "text": "Wenn du heute bei Rauchern bist, beobachte einen einen Moment. Merke die automatische, freudlose Mechanik. Das war nie Vergnügen, das du gesehen hast; es war Wartung einer Sucht. Fühl dich frei, weil du es bist."
+            }
+          ]
+        },
+        {
+          "day": 106,
+          "title": "Tag 106: Was Rauchen wirklich kostete",
+          "intro": "Jenseits von Geld: Zeit, Geruch, Atemnot, Sorge, die ständige Planung um die nächste.",
+          "tasks": [
+            {
+              "id": "d106t1",
+              "type": "journal",
+              "title": "Liste die Nicht-Geld-Kosten",
+              "text": "Schreib drei Dinge auf, die Rauchen dich gekostet hat, die kein Geld waren: Zeit, Geruch, Sorge oder draußen in der Kälte stehen."
+            },
+            {
+              "id": "d106t2",
+              "type": "fact",
+              "title": "Sieh trotzdem das Geld",
+              "text": "Öffne den Gespartes-Geld-Tab und schau die volle Summe seit Tag eins."
+            }
+          ]
+        },
+        {
+          "day": 107,
+          "title": "Tag 107: Sechzehn Wochen frei",
+          "intro": "Vier volle Monate Beständigkeit.",
+          "tasks": [
+            {
+              "id": "d107t1",
+              "type": "reward",
+              "title": "Hol dir dein Sechzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d107t2",
+              "type": "social",
+              "title": "Teile dein Vier-Monat-Update",
+              "text": "Poste ein kurzes Update über vier erreichte Monate."
+            }
+          ]
+        },
+        {
+          "day": 108,
+          "title": "Tag 108: Deine Vergangenheit neu rahmen",
+          "intro": "Wie du über deine Rauchvergangenheit sprichst, formt, wie fest sich deine Gegenwart anfühlt.",
+          "tasks": [
+            {
+              "id": "d108t1",
+              "type": "journal",
+              "title": "Deine Vergangenheit in einem Absatz",
+              "text": "Schreib einen kurzen Absatz über deine Rauchvergangenheit als etwas, das passiert ist, nicht etwas, das dich definiert."
+            },
+            {
+              "id": "d108t2",
+              "type": "checkin",
+              "title": "Bewerte restliche Scham",
+              "text": "Bewerte, wie viel Scham oder Urteil du noch gegenüber deinem früheren rauchenden Ich fühlst. Das Ziel ist Mitgefühl; du warst in einer gut konstruierten Falle, und du bist raus."
+            }
+          ]
+        },
+        {
+          "day": 109,
+          "title": "Tag 109: Die Langzeit-Perspektive",
+          "intro": "Stell dir gelegentlich dich in einem Jahr oder mehr vor, noch rauchfrei, weil das die Bahn ist, auf der du bist.",
+          "tasks": [
+            {
+              "id": "d109t1",
+              "type": "journal",
+              "title": "Stell dir ein Jahr ab jetzt vor",
+              "text": "Schreib ein paar Sätze, in denen du dich ein Jahr ab heute vorstellst, noch rauchfrei."
+            },
+            {
+              "id": "d109t2",
+              "type": "action",
+              "title": "Setze eine Ein-Jahr-Absicht",
+              "text": "Schreib eine Sache, die in einem Jahr wahr sein soll über dein Leben, weil du aufgehört hast."
+            }
+          ]
+        },
+        {
+          "day": 110,
+          "title": "Tag 110: Energie und Stimmung",
+          "intro": "Stetigere Energie und Stimmung sind in dieser Phase üblich im Vergleich zum Auf und Ab regelmäßigen Nikotinkonsums.",
+          "tasks": [
+            {
+              "id": "d110t1",
+              "type": "fact",
+              "title": "Der Stimmungs-Stabilitäts-Gewinn",
+              "text": "Ohne Nikotinspiegel, die den ganzen Tag steigen und crashen, erleben viele Ex-Raucher stabilere Stimmung und Energie statt der Tiefs, die Rauchen zwischen Zigaretten verursachte."
+            },
+            {
+              "id": "d110t2",
+              "type": "checkin",
+              "title": "Bewerte deine Stimmungs-Stabilität",
+              "text": "Bewerte, wie stabil sich deine Stimmung diese Woche angefühlt hat."
+            }
+          ]
+        },
+        {
+          "day": 111,
+          "title": "Tag 111: Siebzehn Wochen frei",
+          "intro": "Du näherst dich der zweiten Hälfte deines geführten Plans.",
+          "tasks": [
+            {
+              "id": "d111t1",
+              "type": "reward",
+              "title": "Hol dir dein Siebzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d111t2",
+              "type": "fact",
+              "title": "Siebzehn-Wochen-Statistik",
+              "text": "Öffne deine Statistik und prüfe deinen bisherigen Gesamtfortschritt."
+            }
+          ]
+        },
+        {
+          "day": 112,
+          "title": "Tag 112: Lehren, was du weißt",
+          "intro": "Deinen Prozess jemand anderem zu erklären zeigt, wie viel du jetzt wirklich verstehst.",
+          "tasks": [
+            {
+              "id": "d112t1",
+              "type": "social",
+              "title": "Beantworte eine Community-Frage",
+              "text": "Finde eine Frage von einem neueren Mitglied und beantworte sie mit etwas Konkretem, das für dich funktionierte."
+            },
+            {
+              "id": "d112t2",
+              "type": "journal",
+              "title": "Schreib dein Gelüst-Playbook",
+              "text": "Schreib aus, als würdest du jemandem beibringen, genau wie du jetzt ein Gelüst durchstehst, vom ersten Flackern bis weg."
+            }
+          ]
+        },
+        {
+          "day": 113,
+          "title": "Tag 113: Alte Auslöser prüfen",
+          "intro": "Besuche die Auslöserliste aus Kapitel eins und miss, wie viel sich verändert hat.",
+          "tasks": [
+            {
+              "id": "d113t1",
+              "type": "journal",
+              "title": "Bewerte deine ursprünglichen Auslöser neu",
+              "text": "Denk zurück an die Auslöser aus Kapitel eins und schreib, wie viel Macht jeder jetzt noch über dich hat."
+            },
+            {
+              "id": "d113t2",
+              "type": "checkin",
+              "title": "Bewerte den stärksten Überlebenden",
+              "text": "Bewerte, welcher Auslöser heute noch am stärksten wirkt."
+            }
+          ]
+        },
+        {
+          "day": 114,
+          "title": "Tag 114: Achtzehn Wochen frei",
+          "intro": "Fast viereinhalb Monate dabei.",
+          "tasks": [
+            {
+              "id": "d114t1",
+              "type": "reward",
+              "title": "Hol dir dein Achtzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d114t2",
+              "type": "fact",
+              "title": "Achtzehn-Wochen-Zahlen",
+              "text": "Öffne deine Statistik und prüfe Serie, Geld und Gesundheitsfortschritt."
+            }
+          ]
+        },
+        {
+          "day": 115,
+          "title": "Tag 115: Nichtraucher, vollständig",
+          "intro": "Heute geht es einfach darum, bei der klaren Tatsache zu sitzen: Du bist jetzt Nichtraucher, und wenn du der Reduktion gefolgt bist, ein vollständig nikotinfreier.",
+          "tasks": [
+            {
+              "id": "d115t1",
+              "type": "journal",
+              "title": "Schreib die klare Tatsache",
+              "text": "Schreib einen einfachen Satz, der sagt, dass du Nichtraucher bist, ohne Einschränkungen, ohne Bedingungen."
+            },
+            {
+              "id": "d115t2",
+              "type": "checkin",
+              "title": "Bewerte, wie wahr es sich anfühlt",
+              "text": "Bewerte, wie wahr sich dieser Satz gerade anfühlt."
+            }
+          ]
+        },
+        {
+          "day": 116,
+          "title": "Tag 116: Gesundheits-Schwung",
+          "intro": "Gesundheitsverbesserungen summieren sich weit über die frühen Monate hinaus.",
+          "tasks": [
+            {
+              "id": "d116t1",
+              "type": "fact",
+              "title": "Der Langzeit-Schwung",
+              "text": "Viele Vorteile bauen sich Monate und Jahre auf, mit wachsender Risikoreduktion für mehrere ernste Erkrankungen, je länger du rauchfrei bleibst."
+            },
+            {
+              "id": "d116t2",
+              "type": "action",
+              "title": "Investiere in dein zukünftiges Ich",
+              "text": "Tu heute eine Sache, die langfristige Gesundheit unterstützt: Spaziergang, Wasser oder eine gute Mahlzeit."
+            }
+          ]
+        },
+        {
+          "day": 117,
+          "title": "Tag 117: Neunzehn Wochen frei",
+          "intro": "Eine Woche bis Kapitel sechs.",
+          "tasks": [
+            {
+              "id": "d117t1",
+              "type": "reward",
+              "title": "Hol dir dein Neunzehn-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d117t2",
+              "type": "checkin",
+              "title": "Bewerte Kapitel fünf insgesamt",
+              "text": "Bewerte, wie sich Kapitel fünf für dich angefühlt hat."
+            }
+          ]
+        },
+        {
+          "day": 118,
+          "title": "Tag 118: Vorbereitung auf harte Tage",
+          "intro": "Kapitel sechs bereitet dich auf wirklich harte Phasen vor: Stress, Ausrutscher, harte Jahreszeiten. Heute ist die Brücke.",
+          "tasks": [
+            {
+              "id": "d118t1",
+              "type": "fact",
+              "title": "Vorschau auf Kapitel sechs",
+              "text": "Das nächste Kapitel behandelt Trauer, großen Stress, Feiertage, Winter und was zu tun ist, wenn ein Ausrutscher passiert."
+            },
+            {
+              "id": "d118t2",
+              "type": "journal",
+              "title": "Deine härteste Jahreszeit",
+              "text": "Schreib, welche Jahreszeit oder Situationsart du künftig am härtesten erwartest."
+            }
+          ]
+        },
+        {
+          "day": 119,
+          "title": "Tag 119: Ein Tag vor Kapitel sechs",
+          "intro": "Morgen schließt ein Kapitel über Identität und öffnet eines über Resilienz in der echten Welt.",
+          "tasks": [
+            {
+              "id": "d119t1",
+              "type": "journal",
+              "title": "Reflektiere Kapitel fünf",
+              "text": "Schreib ein paar Sätze darüber, wie sich dein Identitätsgefühl in diesem Kapitel verschoben hat."
+            },
+            {
+              "id": "d119t2",
+              "type": "checkin",
+              "title": "Bewerte deine Bereitschaft",
+              "text": "Bewerte, wie vorbereitet du dich fühlst, wirklich harte Tage vor dir zu meistern."
+            }
+          ]
+        },
+        {
+          "day": 120,
+          "title": "Tag 120: Vier Monate und feste Identität",
+          "intro": "Hundertzwanzig Tage. Du bist nicht mehr jemand, der versucht aufzuhören; du bist jemand, der aufgehört hat. Kapitel sechs bereitet dich auf die Tage vor, die das am meisten testen.",
+          "tasks": [
+            {
+              "id": "d120t1",
+              "type": "reward",
+              "title": "Hol dir dein Vier-Monat-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d120t2",
+              "type": "fact",
+              "title": "Vier-Monats-Transformation",
+              "text": "Öffne deine vollständige Statistik- und Gesundheitsübersicht und sieh die Reise von Tag eins bis Tag hundertzwanzig."
+            },
+            {
+              "id": "d120t3",
+              "type": "journal",
+              "title": "Kapitel-fünf-Zusammenfassung",
+              "text": "Schreib eine kurze Zusammenfassung, wie du dich nach diesem Kapitel anders siehst."
+            },
+            {
+              "id": "d120t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel sechs",
+              "text": "Lies die Kapitel-sechs-Einleitung und setze eine Absicht für harte Tage vor dir."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "name": "Harte Tage voraus",
+      "role": "Tag 121-150: Vorbereitung auf Trauer, großen Stress, Winter und Feiertage, Ausrutscher und alte Raucherfreunde",
+      "day_start": 121,
+      "day_end": 150,
+      "days": [
+        {
+          "day": 121,
+          "title": "Tag 121: Willkommen in Kapitel sechs",
+          "intro": "Dieses Kapitel geht nicht darum, deinen Fortschritt zu bezweifeln. Es geht darum, sicherzustellen, dass du bereit bist für die wirklich harten Tage, die das Leben noch bereithält, weil vorbereitete Aufhörer keine überraschten Rückfäller werden.",
+          "tasks": [
+            {
+              "id": "d121t1",
+              "type": "fact",
+              "title": "Warum dieses Kapitel existiert",
+              "text": "Selbst starke Langzeit-Aufhörer stehen vor ernsten Tests: Trauer, großer Stress, harte Jahreszeiten. Voraus-Vorbereitung senkt das Ausrutscher-Risiko dramatisch, wenn sie kommen."
+            },
+            {
+              "id": "d121t2",
+              "type": "checkin",
+              "title": "Setze dein Kapitel-sechs-Ziel",
+              "text": "Wähle eine Art harten Tag, für den du dich bis Kapitelende vorbereitet fühlen willst."
+            }
+          ]
+        },
+        {
+          "day": 122,
+          "title": "Tag 122: Deinen Worst Case definieren",
+          "intro": "Es hilft, konkret zu wissen, wie dein härtestmöglicher Tag aussehen würde, damit er dich nie wirklich überrumpeln kann.",
+          "tasks": [
+            {
+              "id": "d122t1",
+              "type": "journal",
+              "title": "Beschreibe dein härtestes Szenario",
+              "text": "Schreib die einzelne härteste Situation, die du dir vorstellen kannst, rauchfrei zu meistern."
+            },
+            {
+              "id": "d122t2",
+              "type": "action",
+              "title": "Schreib den Notfallplan",
+              "text": "Schreib genau, was du tust, wenn dieses Szenario passiert, Schritt für Schritt: wen du anrufst, welches Tool du zuerst öffnest, was in deinen Mund statt einer Zigarette kommt."
+            }
+          ]
+        },
+        {
+          "day": 123,
+          "title": "Tag 123: Trauer und großer Stress",
+          "intro": "Verlust und Trauer gehören zu den höchstrisiko Situationen für Rückfall, selbst Jahre nach dem Aufhören, weil der Drang, auf die alte Weise zu bewältigen, bei intensivem Schmerz zurückkommt.",
+          "tasks": [
+            {
+              "id": "d123t1",
+              "type": "fact",
+              "title": "Kenne das Trauer-Risiko",
+              "text": "Große emotionale Ereignisse sind mit Rückfall verknüpft, selbst nach langen rauchfreien Phasen. Eine Zigarette in der Trauer würde den Schmerz nicht mildern; sie würde eine Sucht obendrauf legen. Jetzt dafür zu planen ist ein Akt der Freundlichkeit zu deinem zukünftigen Ich."
+            },
+            {
+              "id": "d123t2",
+              "type": "action",
+              "title": "Baue eine Krisen-Kontaktliste",
+              "text": "Schreib zwei oder drei Menschen auf, die du zuerst kontaktieren würdest, wenn du etwas sehr Schwieriges durchmachst."
+            }
+          ]
+        },
+        {
+          "day": 124,
+          "title": "Tag 124: Achtzehn Wochen Bereitschaft",
+          "intro": "Mehr als vier Monate Beständigkeit hinter dir, und jetzt ein Kapitel bewusster Vorbereitung vor dir.",
+          "tasks": [
+            {
+              "id": "d124t1",
+              "type": "fact",
+              "title": "Sieh deine Statistik",
+              "text": "Öffne deine Statistik und prüfe deinen vollen Fortschritt in dieser Phase."
+            },
+            {
+              "id": "d124t2",
+              "type": "breathing",
+              "title": "Halte den Reflex scharf",
+              "text": "Nutze das Atem-Tool heute einmal unaufgefordert, damit es ein Reflex bleibt für den Tag, an dem du es unter echtem Druck brauchst."
+            }
+          ]
+        },
+        {
+          "day": 125,
+          "title": "Tag 125: Vorbereitung auf Winter und Feiertage",
+          "intro": "Kältere Monate bringen mehr Indoor-Treffen, Feiertagsstress und kürzere Tage, alles kann Stimmung und Gewohnheiten anstoßen.",
+          "tasks": [
+            {
+              "id": "d125t1",
+              "type": "journal",
+              "title": "Benenne deine Winter-Risiken",
+              "text": "Schreib, welche Teile kälterer Monate oder Feiertage für dich speziell härter sein könnten."
+            },
+            {
+              "id": "d125t2",
+              "type": "action",
+              "title": "Plane eine Winter-Strategie",
+              "text": "Wähle einen konkreten Plan für Feiertags-Treffen oder dunklere Tage ohne Rauchen, inklusive was in deine Tasche kommt, bevor du das Haus verlässt."
+            }
+          ]
+        },
+        {
+          "day": 126,
+          "title": "Tag 126: Alte Freunde kehren zurück",
+          "intro": "Menschen aus deiner Rauchvergangenheit können ohne Warnung wieder auftauchen: ein Wiedersehen, ein alter Kollege, ein zurückkehrender Freund.",
+          "tasks": [
+            {
+              "id": "d126t1",
+              "type": "checkin",
+              "title": "Bewerte dieses Risiko",
+              "text": "Bewerte, wie wahrscheinlich es sich anfühlt, dass ein alter Raucherfreund bald wieder auftaucht."
+            },
+            {
+              "id": "d126t2",
+              "type": "action",
+              "title": "Lade deine Reaktion vor",
+              "text": "Entscheide jetzt, was du sagst und tust, wenn ein alter Raucherfreund dir unerwartet eine Zigarette anbietet. Dein Satz aus Kapitel drei funktioniert noch: Nein danke, ich rauche nicht."
+            }
+          ]
+        },
+        {
+          "day": 127,
+          "title": "Tag 127: Die Empathie-Falle",
+          "intro": "Manchmal ist der Zug nicht die Zigarette; es ist der Bindungsmoment drumherum. Du kannst die Bindung behalten und den Rauch weglassen.",
+          "tasks": [
+            {
+              "id": "d127t1",
+              "type": "mindset",
+              "title": "Schließ dich dem Moment an, nicht der Gewohnheit",
+              "text": "Du kannst bei Rauchern stehen, reden, lachen und die Pause teilen, ohne die Sucht zu teilen. Was du schätztest, war die Verbindung, und Verbindung war nie in der Zigarette."
+            },
+            {
+              "id": "d127t2",
+              "type": "fact",
+              "title": "Sieh deinen Gelüst-Trend",
+              "text": "Öffne deine Statistik und schau, wie sich die Gelüst-Häufigkeit im letzten Monat entwickelt hat."
+            }
+          ]
+        },
+        {
+          "day": 128,
+          "title": "Tag 128: Was wenn du ausrutschst",
+          "intro": "Sich auf einen möglichen Ausrutscher vorzubereiten heißt nicht, einen zu erwarten. Es nimmt seiner Schneeballeffekt-Kraft.",
+          "tasks": [
+            {
+              "id": "d128t1",
+              "type": "journal",
+              "title": "Aktualisiere deinen Ausrutscher-Wiederherstellungsplan",
+              "text": "Besuche den Ausrutscher-Wiederherstellungsplan von Tag fünfundfünfzig und aktualisiere ihn mit allem, was du seitdem gelernt hast."
+            },
+            {
+              "id": "d128t2",
+              "type": "fact",
+              "title": "Ein Ausrutscher löscht Fortschritt nicht",
+              "text": "Wenn ein Ausrutscher passiert, verschwinden deine Gesundheitsgewinne und Fähigkeiten nicht. Priorität ist, am selben Tag zurück auf null zu kommen, es jemandem zu sagen und es als einen schlechten Moment zu behandeln, nicht als neuen Lebensstil."
+            }
+          ]
+        },
+        {
+          "day": 129,
+          "title": "Tag 129: Einsamkeit und Isolation",
+          "intro": "Sich isoliert zu fühlen erhöht leise den Zug zu alten Trostquellen, inklusive dieser einen.",
+          "tasks": [
+            {
+              "id": "d129t1",
+              "type": "journal",
+              "title": "Bemerke jede Isolation",
+              "text": "Schreib ehrlich, ob du dich kürzlich isoliert oder abgekoppelt gefühlt hast."
+            },
+            {
+              "id": "d129t2",
+              "type": "social",
+              "title": "Melde dich",
+              "text": "Poste heute etwas in der Community, auch nur ein Check-in, um verbunden zu bleiben."
+            }
+          ]
+        },
+        {
+          "day": 130,
+          "title": "Tag 130: Resilienz-Check",
+          "intro": "Ungefähr viereinhalb Monate stetiger Fortschritt. Miss das Wachstum.",
+          "tasks": [
+            {
+              "id": "d130t1",
+              "type": "checkin",
+              "title": "Bewerte deine Resilienz",
+              "text": "Bewerte, wie resilient du dich jetzt fühlst im Vergleich zu Kapitel eins."
+            },
+            {
+              "id": "d130t2",
+              "type": "reward",
+              "title": "Hol dir dein Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle den Meilenstein dieser Woche ein."
+            }
+          ]
+        },
+        {
+          "day": 131,
+          "title": "Tag 131: Jahrestags-Daten",
+          "intro": "Daten, die mit deiner Rauchvergangenheit oder schmerzhaften Ereignissen verbunden sind, können leises emotionales Gewicht tragen.",
+          "tasks": [
+            {
+              "id": "d131t1",
+              "type": "journal",
+              "title": "Kartiere die bedeutsamen Daten",
+              "text": "Schreib alle Daten oder Jahrestage auf, die mit deiner Rauchvergangenheit verbunden sind und dich betreffen könnten."
+            },
+            {
+              "id": "d131t2",
+              "type": "action",
+              "title": "Plane um ein hartes Datum",
+              "text": "Wenn ein hartes Datum kommt, schreib auf, wie du es handhabst: Gesellschaft, Aktivität, Tools."
+            }
+          ]
+        },
+        {
+          "day": 132,
+          "title": "Tag 132: Finanzstress und Rauchen",
+          "intro": "Geldsorgen waren einmal sowohl Grund zum Rauchen zur Erleichterung als auch Grund zum Aufhören zum Sparen. Jetzt sind es nur noch der zweite.",
+          "tasks": [
+            {
+              "id": "d132t1",
+              "type": "fact",
+              "title": "Sieh die Langzeit-Ersparnisse",
+              "text": "Öffne den Gespartes-Geld-Tab und schau die behaltene Summe seit Tag eins, ein Fonds, der jeden Tag wächst, den du aufhörst."
+            },
+            {
+              "id": "d132t2",
+              "type": "checkin",
+              "title": "Bewerte deinen Finanzstress",
+              "text": "Bewerte, wie viel Finanzstress du gerade spürst, unabhängig vom Rauchen."
+            }
+          ]
+        },
+        {
+          "day": 133,
+          "title": "Tag 133: Zwanzig Wochen frei",
+          "intro": "Fünf volle Monate Beständigkeit stehen jetzt hinter dir.",
+          "tasks": [
+            {
+              "id": "d133t1",
+              "type": "reward",
+              "title": "Hol dir dein Zwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d133t2",
+              "type": "fact",
+              "title": "Fünf-Monats-Übersicht",
+              "text": "Öffne deine Statistik und prüfe deinen vollen Fortschritt bei der Fünf-Monats-Marke."
+            }
+          ]
+        },
+        {
+          "day": 134,
+          "title": "Tag 134: Deinen ganzen Bogen prüfen",
+          "intro": "Mitten in Kapitel sechs, nimm die ganze Reise bisher auf.",
+          "tasks": [
+            {
+              "id": "d134t1",
+              "type": "journal",
+              "title": "Fasse die ganze Reise zusammen",
+              "text": "Schreib einen kurzen Absatz, der Tag eins bis heute zusammenfasst."
+            },
+            {
+              "id": "d134t2",
+              "type": "fact",
+              "title": "Scrolle deine Geschichte",
+              "text": "Öffne deine Statistik und scrolle deine gesamte Geschichte vom allerersten Anfang."
+            }
+          ]
+        },
+        {
+          "day": 135,
+          "title": "Tag 135: Unerwartetes handhaben",
+          "intro": "Nicht jeder harte Tag ist vorhersagbar. Allgemeine Bereitschaft ist die Antwort auf Überraschung.",
+          "tasks": [
+            {
+              "id": "d135t1",
+              "type": "breathing",
+              "title": "Übe deinen schnellsten Reset",
+              "text": "Nutze heute das Atem-Tool und merke, wie schnell es dich beruhigt. Das ist dein schnellstes Tool für plötzlichen Stress."
+            },
+            {
+              "id": "d135t2",
+              "type": "checkin",
+              "title": "Bewerte Bereitschaft für Überraschungen",
+              "text": "Bewerte, wie bereit du dich fühlst, ein plötzliches stressiges Ereignis ohne Rauchen zu meistern."
+            }
+          ]
+        },
+        {
+          "day": 136,
+          "title": "Tag 136: Einundzwanzig Wochen Beweise",
+          "intro": "Einundzwanzig Wochen Beweis, dass harte Momente nicht Rauchen bedeuten müssen.",
+          "tasks": [
+            {
+              "id": "d136t1",
+              "type": "reward",
+              "title": "Hol dir dein Einundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d136t2",
+              "type": "mindset",
+              "title": "Angst war der Käfig",
+              "text": "Was die meisten Raucher rauchen lässt, ist nicht Vergnügen, sondern Angst: Angst vor Stress ohne Zigaretten, Angst, dass das Leben unvollständig wirkt. Du hast jetzt einundzwanzig Wochen Stress, Feier und Langeweile ohne sie gelebt. Die Angst war das einzige, was die Zigarette je beschützt hat."
+            }
+          ]
+        },
+        {
+          "day": 137,
+          "title": "Tag 137: Harte Jahreszeiten, nicht nur harte Tage",
+          "intro": "Manchmal ist es nicht ein schlechter Tag, sondern eine ganze Phase: eine brutale Arbeitssaison, ein harter Winter, Wochen voller Druck.",
+          "tasks": [
+            {
+              "id": "d137t1",
+              "type": "journal",
+              "title": "Benenne eine harte Jahreszeit",
+              "text": "Schreib über eine Zeitspanne, vergangen oder kommend, die für dich härter tendiert als ein einzelner Tag."
+            },
+            {
+              "id": "d137t2",
+              "type": "fact",
+              "title": "Jahreszeiten brauchen anderen Plan",
+              "text": "Eine harte Jahreszeit braucht häufige kleine Check-ins mit dir selbst statt einen großen Plan, weil der Druck allmählich wächst statt auf einmal."
+            }
+          ]
+        },
+        {
+          "day": 138,
+          "title": "Tag 138: Ehrlich einchecken",
+          "intro": "Dieses Kapitel funktioniert am besten mit ehrlichen Selbst-Check-ins, nicht Motivations-Lärm.",
+          "tasks": [
+            {
+              "id": "d138t1",
+              "type": "checkin",
+              "title": "Bewerte heute ehrlich",
+              "text": "Bewerte heute inklusive allem, was sich schwer anfühlte."
+            },
+            {
+              "id": "d138t2",
+              "type": "action",
+              "title": "Geh eine echte Sorge an",
+              "text": "Wenn dich etwas leise wegen rauchfrei bleiben sorgt, schreib es auf und notiere einen Schritt, es anzugehen."
+            }
+          ]
+        },
+        {
+          "day": 139,
+          "title": "Tag 139: Zweiundzwanzig Wochen frei",
+          "intro": "Jede Woche stapelt sich auf die letzte und baut eine Akte, die schwer zu bestreiten ist.",
+          "tasks": [
+            {
+              "id": "d139t1",
+              "type": "reward",
+              "title": "Hol dir dein Zweiundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d139t2",
+              "type": "journal",
+              "title": "Heutiger Einzeiler",
+              "text": "Schreib einen Satz darüber, wie du dich gerade in deiner Reise fühlst."
+            }
+          ]
+        },
+        {
+          "day": 140,
+          "title": "Tag 140: Hundertvierzig Tage",
+          "intro": "Tief im letzten Vorbereitungs-Kapitel, bevor die Endphase beginnt.",
+          "tasks": [
+            {
+              "id": "d140t1",
+              "type": "reward",
+              "title": "Hol dir dein Hundertvierzig-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d140t2",
+              "type": "fact",
+              "title": "Sieh das volle Bild",
+              "text": "Öffne deine vollständige Statistik- und Gesundheitsübersicht über hundertvierzig Tage."
+            },
+            {
+              "id": "d140t3",
+              "type": "social",
+              "title": "Teile ein Update",
+              "text": "Poste ein kurzes Update in der Community darüber, wo du stehst."
+            }
+          ]
+        },
+        {
+          "day": 141,
+          "title": "Tag 141: Noch zehn Tage in Kapitel sechs",
+          "intro": "Noch zehn Tage, bevor die Endphase des geführten Plans beginnt.",
+          "tasks": [
+            {
+              "id": "d141t1",
+              "type": "checkin",
+              "title": "Setze ein Ziel für den Rest",
+              "text": "Wähle einen Fokus für die restlichen Tage von Kapitel sechs."
+            },
+            {
+              "id": "d141t2",
+              "type": "fact",
+              "title": "Wisse, was voraus liegt",
+              "text": "Kapitel sieben ist das letzte Kapitel, ein leichterer Wochenrhythmus Richtung Sechs-Monats-Meilenstein und Abschluss in unabhängiges rauchfreies Leben."
+            }
+          ]
+        },
+        {
+          "day": 142,
+          "title": "Tag 142: Über sechs Kapitel reflektieren",
+          "intro": "Überleben, Gewohnheits-Neuverdrahtung, sozialer Druck, stark bleiben, Identität und Harte-Tage-Vorbereitung, fast alles geschafft.",
+          "tasks": [
+            {
+              "id": "d142t1",
+              "type": "journal",
+              "title": "Dein härtestes Kapitel",
+              "text": "Schreib, welches Kapitel am härtesten war und warum."
+            },
+            {
+              "id": "d142t2",
+              "type": "journal",
+              "title": "Dein stolzester Moment",
+              "text": "Schreib über den einzelnen stolzesten Moment deiner gesamten Reise bisher."
+            }
+          ]
+        },
+        {
+          "day": 143,
+          "title": "Tag 143: Tools, die du täglich nicht mehr brauchst",
+          "intro": "Tools, die früh essenziell waren, nutzt du jetzt vielleicht selten. Das ist ein Abschluss, kein Problem.",
+          "tasks": [
+            {
+              "id": "d143t1",
+              "type": "checkin",
+              "title": "Bewerte deine Tool-Nutzung",
+              "text": "Bewerte, wie oft du das Gelüst-Toolkit jetzt nutzt im Vergleich zu Kapitel eins."
+            },
+            {
+              "id": "d143t2",
+              "type": "fact",
+              "title": "Weniger Nutzung heißt mehr Fortschritt",
+              "text": "Die Tools weniger zu brauchen ist ein Fortschrittszeichen. Sie bleiben lebenslang in deiner Tasche, kosten nichts mitzutragen und sind immer einen Tap entfernt."
+            }
+          ]
+        },
+        {
+          "day": 144,
+          "title": "Tag 144: Bescheiden bleiben beim Risiko",
+          "intro": "Selbst mit Monaten hinter dir hält dich das Behandeln jedes Tages als schützenswert auf der richtigen Wachen-Höhe: entspannt, nicht schlafend.",
+          "tasks": [
+            {
+              "id": "d144t1",
+              "type": "journal",
+              "title": "Schreib dein laufendes Commitment",
+              "text": "Schreib einen Satz über dein laufendes Commitment, rauchfrei zu bleiben, egal wie viele Monate."
+            },
+            {
+              "id": "d144t2",
+              "type": "fact",
+              "title": "Langfristiger Erfolg bleibt aktiv",
+              "text": "Menschen, die langfristig rauchfrei bleiben, nehmen seltene starke Gelüste noch ernst, statt zu glauben, sie seien dauerhaft immun."
+            }
+          ]
+        },
+        {
+          "day": 145,
+          "title": "Tag 145: Community großflächig unterstützen",
+          "intro": "Mit Monaten Erfahrung trägt deine Perspektive echtes Gewicht für Leute, die gerade starten.",
+          "tasks": [
+            {
+              "id": "d145t1",
+              "type": "social",
+              "title": "Schreib eine längere Unterstützungsnachricht",
+              "text": "Schreib eine ausführliche Unterstützungs- oder Ratschaftsnachricht für jemanden, der gerade in der Community kämpft."
+            },
+            {
+              "id": "d145t2",
+              "type": "checkin",
+              "title": "Bewerte, wie sich Geben anfühlt",
+              "text": "Bewerte, wie bedeutsam es sich anfühlt, andere in dieser Phase zu unterstützen."
+            }
+          ]
+        },
+        {
+          "day": 146,
+          "title": "Tag 146: Fünf Tage bis zum letzten Kapitel",
+          "intro": "Kapitel sieben ist nah: die Endphase, bevor du in unabhängige Wartung abschließt.",
+          "tasks": [
+            {
+              "id": "d146t1",
+              "type": "fact",
+              "title": "Was Abschluss bedeutet",
+              "text": "Abschluss heißt nicht, dass die App nutzlos wird. Es heißt, von täglichen strukturierten Missionen zu leichter, langfristiger Wartungs-Unterstützung zu wechseln."
+            },
+            {
+              "id": "d146t2",
+              "type": "journal",
+              "title": "Gestalte deine Wartung",
+              "text": "Schreib, welche Art laufender Unterstützung du nach dem geführten Plan willst."
+            }
+          ]
+        },
+        {
+          "day": 147,
+          "title": "Tag 147: Deine Abzeichen prüfen",
+          "intro": "Jeder gesammelte Meilenstein ist ein konkreter Nachweis von Beständigkeit über die Zeit.",
+          "tasks": [
+            {
+              "id": "d147t1",
+              "type": "fact",
+              "title": "Prüfe deine Sammlung",
+              "text": "Öffne den Abzeichen-Tab und schau jeden Meilenstein von Tag eins bis heute durch."
+            },
+            {
+              "id": "d147t2",
+              "type": "journal",
+              "title": "Dein Lieblings-Abzeichen",
+              "text": "Schreib, welches Abzeichen am meisten bedeutete und warum."
+            }
+          ]
+        },
+        {
+          "day": 148,
+          "title": "Tag 148: Fast Kapitel sieben",
+          "intro": "Noch zwei Tage. Du hast echte Bereitschaft für harte Tage aufgebaut, ob sie voll ankommen oder nicht.",
+          "tasks": [
+            {
+              "id": "d148t1",
+              "type": "checkin",
+              "title": "Bewerte Kapitel sechs",
+              "text": "Bewerte, wie vorbereitet dich dieses Kapitel für wirklich harte Tage fühlen lässt."
+            },
+            {
+              "id": "d148t2",
+              "type": "action",
+              "title": "Schließe lose Pläne ab",
+              "text": "Prüfe die Notfall- und Harte-Tage-Pläne aus diesem Kapitel und stell sicher, dass sie noch solide wirken."
+            }
+          ]
+        },
+        {
+          "day": 149,
+          "title": "Tag 149: Ein Tag vor dem letzten Kapitel",
+          "intro": "Morgen öffnet das letzte Kapitel: die Strecke zu sechs Monaten frei und Abschluss.",
+          "tasks": [
+            {
+              "id": "d149t1",
+              "type": "journal",
+              "title": "Reflektiere Kapitel sechs",
+              "text": "Schreib ein paar Sätze darüber, wie vorbereitet du dich für harte Tage fühlst im Vergleich zu Kapitelbeginn."
+            },
+            {
+              "id": "d149t2",
+              "type": "fact",
+              "title": "Ein letzter Blick voraus",
+              "text": "Kapitel sieben hält deinen Fortschritt mit leichterem Wochenfokus, während du den strukturierten Plan abschließt."
+            }
+          ]
+        },
+        {
+          "day": 150,
+          "title": "Tag 150: Bereit für harte Tage, bereit für alles",
+          "intro": "Hundertfünfzig Tage. Du hast harte Tage nicht nur vermieden, du hast dich aktiv darauf vorbereitet. Das letzte Kapitel trägt das dauerhaft weiter.",
+          "tasks": [
+            {
+              "id": "d150t1",
+              "type": "reward",
+              "title": "Hol dir dein Hundertfünfzig-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d150t2",
+              "type": "fact",
+              "title": "Vollständige Kapitel-sechs-Übersicht",
+              "text": "Öffne deine Statistik- und Gesundheitsübersicht und sieh deinen Fortschritt durch Kapitel sechs."
+            },
+            {
+              "id": "d150t3",
+              "type": "journal",
+              "title": "Kapitel-sechs-Zusammenfassung",
+              "text": "Schreib eine kurze Zusammenfassung, was du über Vorbereitung auf harte Tage gelernt hast."
+            },
+            {
+              "id": "d150t4",
+              "type": "action",
+              "title": "Schau voraus auf Kapitel sieben",
+              "text": "Lies die Kapitel-sieben-Einleitung und setze eine Absicht für die Endphase zu sechs Monaten frei."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "name": "Sechs Monate frei",
+      "role": "Tag 151-180: leichte wöchentliche Wartung, Mentoring, Abschluss des geführten Plans",
+      "day_start": 151,
+      "day_end": 180,
+      "days": [
+        {
+          "day": 151,
+          "title": "Tag 151: Willkommen im letzten Kapitel",
+          "intro": "Das letzte Kapitel deines geführten Plans. Die tägliche Last wird von hier leichter, weil das Ziel Wartung ist, nicht Aufbau. Die Falle liegt hinter dir; dieser Monat geht ums Weggehen ohne Zurückschauen.",
+          "tasks": [
+            {
+              "id": "d151t1",
+              "type": "fact",
+              "title": "Wie dieses Kapitel funktioniert",
+              "text": "Kapitel sieben nutzt einen leichten Wochenfokus statt dichter täglicher Aufgaben, da das Schwere beim Aufhören hinter dir liegt."
+            },
+            {
+              "id": "d151t2",
+              "type": "checkin",
+              "title": "Setze dein Abschluss-Ziel",
+              "text": "Wähle eine Sache, die am Abschlusstag wahr sein soll über deine Beziehung zum Rauchen."
+            }
+          ]
+        },
+        {
+          "day": 152,
+          "title": "Tag 152: Wochenfokus, Routinen-Check",
+          "intro": "Ein einfacher Check, ob deine Ersatzroutinen noch solide sind.",
+          "tasks": [
+            {
+              "id": "d152t1",
+              "type": "journal",
+              "title": "Prüfe deine Kern-Routinen",
+              "text": "Schreib deine aktuellen Morgen- und Abendroutinen auf und ob sie sich noch automatisch anfühlen."
+            }
+          ]
+        },
+        {
+          "day": 153,
+          "title": "Tag 153: Dreiundzwanzig Wochen frei",
+          "intro": "Fast fünfeinhalb Monate.",
+          "tasks": [
+            {
+              "id": "d153t1",
+              "type": "reward",
+              "title": "Hol dir dein Dreiundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            }
+          ]
+        },
+        {
+          "day": 154,
+          "title": "Tag 154: Schneller Gelüst-Check",
+          "intro": "Ein einfacher Puls-Check, wo Gelüste jetzt stehen.",
+          "tasks": [
+            {
+              "id": "d154t1",
+              "type": "checkin",
+              "title": "Bewerte die Gelüste dieser Woche",
+              "text": "Bewerte, wie oft du diese Woche, falls überhaupt, ein Gelüst bemerkt hast."
+            }
+          ]
+        },
+        {
+          "day": 155,
+          "title": "Tag 155: Community-Check-in",
+          "intro": "Leicht verbunden zu bleiben hilft auch, wenn tägliche Missionen nachlassen.",
+          "tasks": [
+            {
+              "id": "d155t1",
+              "type": "social",
+              "title": "Check die Community",
+              "text": "Verbring heute ein paar Minuten in der Community, lesen oder antworten."
+            }
+          ]
+        },
+        {
+          "day": 156,
+          "title": "Tag 156: Geld-Meilenstein-Blick",
+          "intro": "Ein schneller Blick, wie sehr dein gespartes Geld gewachsen ist.",
+          "tasks": [
+            {
+              "id": "d156t1",
+              "type": "fact",
+              "title": "Sieh deine Ersparnisse",
+              "text": "Öffne den Gespartes-Geld-Tab und schau deine aktuelle Summe, jetzt frei von Zigaretten- und NRT-Kosten."
+            }
+          ]
+        },
+        {
+          "day": 157,
+          "title": "Tag 157: Vierundzwanzig Wochen frei",
+          "intro": "Vierundzwanzig Wochen, ein sauberes Halbjahr nur nach Wochen gezählt.",
+          "tasks": [
+            {
+              "id": "d157t1",
+              "type": "reward",
+              "title": "Hol dir dein Vierundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            }
+          ]
+        },
+        {
+          "day": 158,
+          "title": "Tag 158: Wochenfokus, Auslöser-Scan",
+          "intro": "Ein leichter Check, ob ein alter Auslöser leise wieder aufgetaucht ist.",
+          "tasks": [
+            {
+              "id": "d158t1",
+              "type": "journal",
+              "title": "Scanne nach wiederauftauchenden Auslösern",
+              "text": "Schreib, ob ein alter Auslöser kürzlich etwas stärker wirkte, auch nur leicht."
+            }
+          ]
+        },
+        {
+          "day": 159,
+          "title": "Tag 159: Gesundheits-Blick",
+          "intro": "Ein schneller Blick, wie sich dein Gesundheitsfortschritt weiter aufbaut.",
+          "tasks": [
+            {
+              "id": "d159t1",
+              "type": "fact",
+              "title": "Sieh deine Gesundheitsübersicht",
+              "text": "Öffne den Gesundheits-Fortschritt-Tab und bemerke die anhaltende Verbesserung seit Kapitel fünf."
+            }
+          ]
+        },
+        {
+          "day": 160,
+          "title": "Tag 160: Hundertsechzig Tage",
+          "intro": "Noch zwanzig Tage, bis du den geführten Plan vollständig abschließt.",
+          "tasks": [
+            {
+              "id": "d160t1",
+              "type": "reward",
+              "title": "Hol dir dein Hundertsechzig-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d160t2",
+              "type": "checkin",
+              "title": "Bewerte, wie sich Wartung anfühlt",
+              "text": "Bewerte, wie natürlich sich rauchfrei bleiben jetzt anfühlt im Vergleich zu täglicher Struktur."
+            }
+          ]
+        },
+        {
+          "day": 161,
+          "title": "Tag 161: Wochenfokus, Dankbarkeit",
+          "intro": "Bemerke, was Aufhören dir gegeben hat, nicht nur was es genommen hat.",
+          "tasks": [
+            {
+              "id": "d161t1",
+              "type": "journal",
+              "title": "Eine Sache, für die du dankbar bist",
+              "text": "Schreib eine konkrete Sache ums Aufhören, für die du wirklich dankbar bist."
+            }
+          ]
+        },
+        {
+          "day": 162,
+          "title": "Tag 162: Fünfundzwanzig Wochen frei",
+          "intro": "Die Zahlen steigen leise im Hintergrund deines normalen Lebens.",
+          "tasks": [
+            {
+              "id": "d162t1",
+              "type": "reward",
+              "title": "Hol dir dein Fünfundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            }
+          ]
+        },
+        {
+          "day": 163,
+          "title": "Tag 163: Mentoring-Check",
+          "intro": "Unterstütze weiter andere, während du dem Abschluss näher kommst. Das zementiert deine eigene Freiheit.",
+          "tasks": [
+            {
+              "id": "d163t1",
+              "type": "social",
+              "title": "Hilf einem neueren Mitglied",
+              "text": "Finde eine Person früher in ihrer Reise und gib Ermutigung oder einen konkreten Tipp."
+            }
+          ]
+        },
+        {
+          "day": 164,
+          "title": "Tag 164: Wochenfokus, Identität",
+          "intro": "Eine kurze Erinnerung, wie weit dein Selbstgefühl seit Tag eins gereist ist.",
+          "tasks": [
+            {
+              "id": "d164t1",
+              "type": "journal",
+              "title": "Beschreibe dich in einer Zeile",
+              "text": "Schreib eine Zeile, wie du dich jetzt in Bezug auf Rauchen siehst."
+            }
+          ]
+        },
+        {
+          "day": 165,
+          "title": "Tag 165: Sechsundzwanzig Wochen frei",
+          "intro": "Sechsundzwanzig Wochen, genau ein halbes Jahr nach Wochenzahl.",
+          "tasks": [
+            {
+              "id": "d165t1",
+              "type": "reward",
+              "title": "Hol dir dein Sechsundzwanzig-Wochen-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            },
+            {
+              "id": "d165t2",
+              "type": "fact",
+              "title": "Halbjahres-Statistik",
+              "text": "Öffne deine Statistik und prüfe deinen vollen Fortschritt bei der Halbjahres-Marke nach Wochen."
+            }
+          ]
+        },
+        {
+          "day": 166,
+          "title": "Tag 166: Statistik-Blick",
+          "intro": "Ein schneller Blick auf die vollen Zahlen, während der Abschluss näher rückt.",
+          "tasks": [
+            {
+              "id": "d166t1",
+              "type": "fact",
+              "title": "Prüfe deine volle Statistik",
+              "text": "Öffne den Statistik-Tab und schau über Serie, gespartes Geld und vermiedene Zigaretten."
+            }
+          ]
+        },
+        {
+          "day": 167,
+          "title": "Tag 167: Wochenfokus, Leben nach dem Plan",
+          "intro": "Denk über Leben als dauerhafter Nichtraucher jenseits der geführten App-Struktur nach.",
+          "tasks": [
+            {
+              "id": "d167t1",
+              "type": "journal",
+              "title": "Stell dir Leben nach Abschluss vor",
+              "text": "Schreib ein paar Sätze, wie du dein rauchfreies Leben nach dem geführten Plan halten willst: welche Gewohnheiten bleiben, welche Check-ins weiterlaufen, wen du weiter unterstützt."
+            }
+          ]
+        },
+        {
+          "day": 168,
+          "title": "Tag 168: Zwölf Tage bis Abschluss",
+          "intro": "Noch zwölf Tage, bis du den vollen geführten Plan abschließt und sechs Monate erreichst.",
+          "tasks": [
+            {
+              "id": "d168t1",
+              "type": "reward",
+              "title": "Hol dir dein Hundertachtundsechzig-Tage-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen Meilenstein ein."
+            }
+          ]
+        },
+        {
+          "day": 169,
+          "title": "Tag 169: Schneller Check-in",
+          "intro": "Ein einfacher Puls-Check, während die Endphase beginnt.",
+          "tasks": [
+            {
+              "id": "d169t1",
+              "type": "checkin",
+              "title": "Bewerte deine Abschluss-Bereitschaft",
+              "text": "Bewerte, wie bereit du dich fühlst, über den strukturierten Tagesplan hinauszugehen."
+            }
+          ]
+        },
+        {
+          "day": 170,
+          "title": "Tag 170: Wochenfokus, voller Kreis",
+          "intro": "Ein reflektierender Rückblick auf den gesamten Plan, den du gleich abschließt.",
+          "tasks": [
+            {
+              "id": "d170t1",
+              "type": "journal",
+              "title": "Voller-Kreis-Reflexion",
+              "text": "Schreib ein paar Sätze über den Weg von Tag eins bis Tag hundertsiebzig."
+            }
+          ]
+        },
+        {
+          "day": 171,
+          "title": "Tag 171: Noch neun Tage",
+          "intro": "Noch neun Tage bis Abschluss und sechs Monate.",
+          "tasks": [
+            {
+              "id": "d171t1",
+              "type": "fact",
+              "title": "Sieh, wie nah du dran bist",
+              "text": "Öffne deine Statistik und schau, wie nah du am Sechs-Monats-Meilenstein bist."
+            }
+          ]
+        },
+        {
+          "day": 172,
+          "title": "Tag 172: Community-Danke",
+          "intro": "Erkenne die Menschen an, die dich unterwegs unterstützt haben.",
+          "tasks": [
+            {
+              "id": "d172t1",
+              "type": "social",
+              "title": "Danke jemandem",
+              "text": "Schick eine Dankesnachricht an jeden in der Community, der dir auf deiner Reise geholfen hat."
+            }
+          ]
+        },
+        {
+          "day": 173,
+          "title": "Tag 173: Noch sieben Tage",
+          "intro": "Noch eine Woche, bis du den vollen geführten Plan abschließt.",
+          "tasks": [
+            {
+              "id": "d173t1",
+              "type": "checkin",
+              "title": "Bewerte Selbstvertrauen in letzter Woche",
+              "text": "Bewerte, wie zuversichtlich du dich in deine letzte Woche fühlst."
+            }
+          ]
+        },
+        {
+          "day": 174,
+          "title": "Tag 174: Abschluss planen",
+          "intro": "Noch sechs Tage. Entscheide, wie du den Abschluss des gesamten Plans markierst.",
+          "tasks": [
+            {
+              "id": "d174t1",
+              "type": "action",
+              "title": "Plane die Feier",
+              "text": "Entscheide, wie du in sechs Tagen sechs Monate und Abschluss feiern willst, idealerweise komplett mit Geld, das du nicht verbrannt hast."
+            }
+          ]
+        },
+        {
+          "day": 175,
+          "title": "Tag 175: Noch fünf Tage",
+          "intro": "Ein kurzer Reflexions-Impuls, während die Ziellinie näher rückt.",
+          "tasks": [
+            {
+              "id": "d175t1",
+              "type": "journal",
+              "title": "Was Abschluss bedeutet",
+              "text": "Schreib ein paar Sätze darüber, was der Abschluss dieses gesamten geführten Plans für dich bedeutet."
+            }
+          ]
+        },
+        {
+          "day": 176,
+          "title": "Tag 176: Noch vier Tage",
+          "intro": "Noch vier Tage, bis jedes Kapitel des geführten Plans vollständig ist.",
+          "tasks": [
+            {
+              "id": "d176t1",
+              "type": "fact",
+              "title": "Schau zurück auf Kapitel eins",
+              "text": "Öffne deine Geschichte ab Kapitel eins und merke, wie anders sich diese Version von dir anfühlte im Vergleich zu jetzt."
+            }
+          ]
+        },
+        {
+          "day": 177,
+          "title": "Tag 177: Noch drei Tage",
+          "intro": "Fast jeder Meilenstein im Plan liegt jetzt hinter dir.",
+          "tasks": [
+            {
+              "id": "d177t1",
+              "type": "checkin",
+              "title": "Bewerte den vollen Plan",
+              "text": "Bewerte deine Gesamterfahrung des geführten Plans von Tag eins bis jetzt."
+            }
+          ]
+        },
+        {
+          "day": 178,
+          "title": "Tag 178: Noch zwei Tage",
+          "intro": "Bald schließt du offiziell von strukturierten Tagesmissionen ab.",
+          "tasks": [
+            {
+              "id": "d178t1",
+              "type": "journal",
+              "title": "Eine Notiz für dein zukünftiges Ich",
+              "text": "Schreib eine kurze Notiz für jeden harten Tag nach dem Abschluss: warum du aufgehört hast, dass Gelüste Echos sind, und dass es keine nur eine gibt."
+            }
+          ]
+        },
+        {
+          "day": 179,
+          "title": "Tag 179: Noch ein Tag",
+          "intro": "Morgen: sechs volle Monate rauchfrei und das offizielle Ende deines geführten Plans.",
+          "tasks": [
+            {
+              "id": "d179t1",
+              "type": "fact",
+              "title": "Ein letzter Rückblick",
+              "text": "Öffne deine volle Statistik und scrolle deine gesamte Reise von Tag eins bis heute."
+            },
+            {
+              "id": "d179t2",
+              "type": "journal",
+              "title": "Heutige Abend-Reflexion",
+              "text": "Schreib einen Satz darüber, wie du dich in der Nacht vor sechs Monaten fühlst."
+            }
+          ]
+        },
+        {
+          "day": 180,
+          "title": "Tag 180: Sechs Monate frei, Plan abgeschlossen",
+          "intro": "Hundertachtzig Tage. Sechs volle Monate ohne eine einzige Zigarette, nikotinfrei, und der komplette geführte Plan von Anfang bis Ende geschafft. Du hast nichts aufgegeben; du hast dich selbst zurückbekommen. Jedes Tool bleibt lebenslang in deiner Tasche, aber du gehst hier raus als das, was du jetzt einfach bist: ein Nichtraucher.",
+          "tasks": [
+            {
+              "id": "d180t1",
+              "type": "reward",
+              "title": "Hol dir dein Sechs-Monat-Abzeichen",
+              "text": "Öffne den Abzeichen-Tab und sammle diesen wichtigen Meilenstein ein, den größten im geführten Plan."
+            },
+            {
+              "id": "d180t2",
+              "type": "fact",
+              "title": "Deine volle Sechs-Monats-Transformation",
+              "text": "Öffne deine volle Statistik- und Gesundheitsübersicht und sieh die gesamte Reise über alle sechs Monate und jedes Kapitel."
+            },
+            {
+              "id": "d180t3",
+              "type": "journal",
+              "title": "Schreib deinen Abschluss-Brief",
+              "text": "Schreib einen Brief an dich von Tag eins und erzähl alles, was zwischen Tag eins und Tag hundertachtzig passiert ist."
+            },
+            {
+              "id": "d180t4",
+              "type": "social",
+              "title": "Teile deinen Abschluss",
+              "text": "Poste in der Community, dass du den vollen geführten Plan abgeschlossen und sechs Monate rauchfrei erreicht hast."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

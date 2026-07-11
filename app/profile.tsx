@@ -8,10 +8,12 @@ import { useApp } from "@/context/AppContext";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useSelfPlayerProfile } from "@/hooks/community/useSelfPlayerProfile";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function ProfileModal() {
+  const { t } = useTranslation();
   const { state } = useApp();
   const isPremium = useIsPremium();
   const signOut = useLogout();
@@ -24,7 +26,7 @@ export default function ProfileModal() {
     <ScreenCanvas edges={["top", "bottom"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
         <ProfileScreenHeader
-          title="Settings"
+          title={t("profile.settings")}
           variant="close"
           onClose={() => safeRouter.back()}
         />
@@ -52,7 +54,7 @@ export default function ProfileModal() {
         </View>
 
         <Text className="mt-8 text-center text-xs text-muted-foreground dark:text-d-muted">
-          Quit Smoking · v1.0
+          {t("profile.version")}
         </Text>
       </ScrollView>
     </ScreenCanvas>

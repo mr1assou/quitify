@@ -16,10 +16,12 @@ import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { isCreateProfileStepComplete } from "@/utils/onboarding/createProfileOnboarding";
 import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 
 export default function OnboardingCreateProfile() {
+  const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
   const quitDateHandlers = useQuitPlanHandlers(draft, patch);
 
@@ -36,8 +38,9 @@ export default function OnboardingCreateProfile() {
       <OnboardingShell
         step={5}
         total={ONBOARDING_TOTAL_STEPS}
-        title="Let's create your profile now"
-        primaryLabel="Continue"
+        title={t("onboarding.profile.title")}
+        subtitle={t("onboarding.profile.subtitle")}
+        primaryLabel={t("common.continue")}
         primaryDisabled={!canContinue}
         onPrimary={() => safeRouter.push("/onboarding/nicotine-consumption")}
         showBack

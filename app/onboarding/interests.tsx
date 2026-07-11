@@ -6,8 +6,10 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { PrimaryInterestId } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export default function Interests() {
+  const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
   const selectedIds = draft.primaryInterestIds ?? [];
 
@@ -26,8 +28,9 @@ export default function Interests() {
     <OnboardingShell
       step={4}
       total={ONBOARDING_TOTAL_STEPS}
-      title="What interests you the most?"
-      primaryLabel="Continue"
+      title={t("onboarding.interests.title")}
+      subtitle={t("onboarding.interests.subtitle")}
+      primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => safeRouter.push("/onboarding/create-profile")}
       showBack

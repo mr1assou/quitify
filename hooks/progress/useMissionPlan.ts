@@ -1,14 +1,15 @@
 import { useCallback, useMemo, useState } from "react";
 
 import {
-  QUIT_PLAN,
   arePlanTasksComplete,
   getChapterForDay,
   getDayPlan,
+  getQuitPlanSnapshot,
 } from "@/constants/progress/plan";
 import { PLAN_PREVIEW_UNLOCK_ALL } from "@/config/plan";
 import type { PlanDayLockedModalContent } from "@/components/feature/missions/PlanDayLockedModal";
 import { usePlanProgress } from "@/hooks/progress/usePlanProgress";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { QuitPlanDay, ResolvedPlanTask } from "@/types";
 import { getPlanDayLockedCopy } from "@/utils/progress/planDayLockedMessage";
 
@@ -55,6 +56,7 @@ export type MissionPlan = {
 };
 
 export function useMissionPlan(): MissionPlan {
+  const { t, locale } = useTranslation();
   const {
     profile,
     currentDay,
@@ -85,23 +87,26 @@ export function useMissionPlan(): MissionPlan {
     return Math.min(preferred, currentChapter.chapter);
   }, [selectedModule, currentChapter.chapter]);
   const activeChapter =
-    QUIT_PLAN.chapters.find((chapter) => chapter.chapter === activeModuleNumber) ??
+    getQuitPlanSnapshot().chapters.find((chapter) => chapter.chapter === activeModuleNumber) ??
     currentChapter;
 
   const modules = useMemo(() => {
+    const plan = getQuitPlanSnapshot();
     const chapters = PLAN_PREVIEW_UNLOCK_ALL
-      ? QUIT_PLAN.chapters
-      : QUIT_PLAN.chapters.filter((chapter) => chapter.chapter <= currentChapter.chapter);
+      ? plan.chapters
+      : plan.chapters.filter((chapter) => chapter.chapter <= currentChapter.chapter);
 
     return chapters.map((chapter) => ({
       chapterNumber: chapter.chapter,
       chapterName: chapter.name,
     }));
-  }, [currentChapter.chapter]);
+  }, [currentChapter.chapter, locale]);
 
   const selectModule = useCallback(
     (chapterNumber: number) => {
-      const exists = QUIT_PLAN.chapters.some((chapter) => chapter.chapter === chapterNumber);
+      const exists = getQuitPlanSnapshot().chapters.some(
+        (chapter) => chapter.chapter === chapterNumber,
+      );
       if (!exists) return;
       if (!PLAN_PREVIEW_UNLOCK_ALL && chapterNumber > currentChapter.chapter) return;
       setSelectedModule(chapterNumber);
@@ -151,7 +156,7 @@ export function useMissionPlan(): MissionPlan {
         status,
       };
     });
-  }, [activeChapter.days, displayCurrentDay, unlockedThroughDay, todayComplete]);
+  }, [activeChapter.days, displayCurrentDay, unlockedThroughDay, todayComplete, locale]);
 
   const selectedDayPlan = useMemo(() => {
     return getDayPlan(activeDay) ?? activeChapter.days[0];
@@ -178,10 +183,10 @@ export function useMissionPlan(): MissionPlan {
 
   const showLockedDayMessage = useCallback(
     (day: number) => {
-      const copy = getPlanDayLockedCopy(day);
+      const copy = getPlanDayLockedCopy(day, (key, params) => t(key as Parameters<typeof t>[0], params));
       setLockedDayModal({ day, ...copy });
     },
-    [],
+    [t],
   );
 
   const closeLockedDayModal = useCallback(() => {

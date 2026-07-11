@@ -20,6 +20,7 @@ import { useApp } from "@/context/AppContext";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useGoogleSignIn } from "@/hooks/auth/useGoogleSignIn";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { finalizeGoogleAuth } from "@/services/auth/finalizeGoogleAuth";
 import { finalizeGoogleLogin } from "@/services/auth/finalizeGoogleLogin";
 import {
@@ -27,14 +28,9 @@ import {
   GoogleAccountNotFoundError,
 } from "@/services/auth/googleNativeAuthApi";
 
-const CELEBRATION_TITLE = "Your smoke-free story starts here";
-const LOGIN_TITLE = "Welcome back";
-const LOGIN_EMAIL_NOT_FOUND =
-  "Your email doesn't exist. Tap Get started on the welcome screen to create an account.";
-const SIGNUP_EMAIL_EXISTS =
-  "Your email already exists. Tap I already have an account to sign in.";
 
 export default function OnboardingProfile() {
+  const { t } = useTranslation();
   const { colors, resolved } = useTheme();
   const insets = useSafeAreaInsets();
   const { draft } = useOnboarding();
@@ -79,16 +75,16 @@ export default function OnboardingProfile() {
       safeRouter.replace("/(tabs)");
     } catch (e) {
       if (isLoginFlow && e instanceof GoogleAccountNotFoundError) {
-        setError(LOGIN_EMAIL_NOT_FOUND);
+        setError(t("auth.emailNotFound"));
         setBusy(false);
         return;
       }
       if (!isLoginFlow && e instanceof GoogleAccountAlreadyExistsError) {
-        setError(SIGNUP_EMAIL_EXISTS);
+        setError(t("auth.emailExists"));
         setBusy(false);
         return;
       }
-      setError(e instanceof Error ? e.message : "Google sign-in failed");
+      setError(e instanceof Error ? e.message : t("auth.googleFailed"));
       setBusy(false);
     }
   }, [
@@ -99,6 +95,7 @@ export default function OnboardingProfile() {
     draft,
     setAccount,
     completeOnboarding,
+    t,
   ]);
 
   const continueWithEmail = useCallback(() => {
@@ -156,7 +153,7 @@ export default function OnboardingProfile() {
               onPress={() => safeRouter.back()}
               className="-ml-2 h-10 w-10 items-center justify-center rounded-full active:bg-section/60 dark:active:bg-d-surface/80"
               accessibilityRole="button"
-              accessibilityLabel="Back"
+              accessibilityLabel={t("common.back")}
             >
               <Ionicons name="chevron-back" size={24} color={colors.foreground} />
             </Pressable>
@@ -164,7 +161,7 @@ export default function OnboardingProfile() {
 
           <View className="min-h-0 flex-1 justify-center px-1" style={{ marginTop: 20 }}>
             <Text className="text-center text-3xl font-bold leading-9 text-foreground dark:text-d-text">
-              {isLoginFlow ? LOGIN_TITLE : CELEBRATION_TITLE}
+              {isLoginFlow ? t("onboarding.celebration.loginTitle") : t("onboarding.celebration.signupTitle")}
             </Text>
             <Image
               source={require("../../assets/images/yes.webp")}
@@ -183,8 +180,14 @@ export default function OnboardingProfile() {
               onEmail={continueWithEmail}
               googleDisabled={busy || !isReady}
               emailDisabled={busy}
-              googleLabel={isLoginFlow ? "Sign in with Google" : "Sign up with Google"}
-              emailLabel={isLoginFlow ? "Sign in with email" : "Sign up with email"}
+              googleLabel={
+                isLoginFlow
+                  ? t("onboarding.celebration.signInGoogle")
+                  : t("onboarding.celebration.signUpGoogle")
+              }
+              emailLabel={
+                isLoginFlow ? t("auth.loginTitle") : t("onboarding.celebration.continueEmail")
+              }
             />
           </View>
         </View>

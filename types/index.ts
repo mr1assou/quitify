@@ -9,6 +9,7 @@ export type * from "./app";
 export type * from "./chat";
 export type * from "./community";
 export type * from "./craving";
+export type * from "./i18n";
 export type * from "./leaderboard";
 export type * from "./onboarding";
 export type * from "./profile";

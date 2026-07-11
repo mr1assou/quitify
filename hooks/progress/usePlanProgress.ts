@@ -8,11 +8,13 @@ import {
 } from "@/constants/progress/plan";
 import { useApp } from "@/context/AppContext";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePlanState } from "@/hooks/progress/usePlanState";
 import type { ResolvedPlanTask } from "@/types";
 import { currentMissionDay } from "@/utils/streak";
 
 export function usePlanProgress() {
+  const { locale } = useTranslation();
   const { state } = useApp();
   const { requirePremium } = usePremiumGate();
   const { planState, loading, error, refresh, toggleTaskOnServer, saveTaskNoteOnServer } =
@@ -40,7 +42,7 @@ export function usePlanProgress() {
 
   const currentChapter = useMemo(
     () => getChapterForDay(currentDay > 0 ? currentDay : 1),
-    [currentDay],
+    [currentDay, locale],
   );
 
   const progressByDay = useMemo(() => {
@@ -79,7 +81,7 @@ export function usePlanProgress() {
         note: saved?.taskNotes?.[task.id],
       }));
     },
-    [progressByDay, currentDay],
+    [progressByDay, currentDay, locale],
   );
 
   const toggleTask = useCallback(

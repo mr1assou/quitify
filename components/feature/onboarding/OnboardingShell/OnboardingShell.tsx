@@ -6,6 +6,7 @@ import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   step: number;
@@ -33,6 +34,7 @@ export function OnboardingShell({
   scrollBody = false,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
@@ -49,7 +51,7 @@ export function OnboardingShell({
             <View className="h-10 w-10" />
           )}
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Step {step} of {total}
+            {t("common.stepOf", { step, total })}
           </Text>
           <View className="h-10 w-10" />
         </View>

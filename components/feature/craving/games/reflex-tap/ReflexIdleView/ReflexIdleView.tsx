@@ -7,12 +7,14 @@ import {
   CIGARETTE_NINJA_TARGET_SCORE,
 } from "@/constants/craving/games/cigaretteNinja";
 import { REFLEX_TAP_LOGO_IMAGE } from "@/constants/craving/games/cravingGameAssets";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   onStart: () => void;
 };
 
 export function ReflexIdleView({ onStart }: Props) {
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const logoWidth = Math.min(width - 60, 320);
   const logoHeight = logoWidth * 0.82;
@@ -24,7 +26,7 @@ export function ReflexIdleView({ onStart }: Props) {
         className="items-center gap-3 px-4"
       >
         <Text className="text-center text-2xl font-bold text-foreground dark:text-d-text">
-          Cigarette Ninja
+          {t("craving.ninjaTitle")}
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
           {CIGARETTE_NINJA_DURATION_LABEL} battle — swipe to slice cigarettes, vapes, and smoke clouds. Reach{" "}
@@ -51,7 +53,7 @@ export function ReflexIdleView({ onStart }: Props) {
         entering={FadeInUp.delay(300).duration(400)}
         className="w-full"
       >
-        <Button label="Start battle" size="lg" fullWidth onPress={onStart} />
+        <Button label={t("craving.startBattle")} size="lg" fullWidth onPress={onStart} />
       </Animated.View>
     </View>
   );

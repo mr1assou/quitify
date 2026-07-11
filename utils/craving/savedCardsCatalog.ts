@@ -1,23 +1,21 @@
 import type { MotivationQuote } from "@/constants/craving/motivationCardTypes";
-import { MOTIVATION_QUOTES } from "@/constants/craving/motivationQuotes";
 import type { SavedCardsSection } from "@/constants/craving/savedCardsSections";
-import { TIP_QUOTES } from "@/constants/craving/tipQuotes";
+import { buildMotivationQuotes } from "@/i18n/content/buildMotivationQuotes";
+import { buildTipQuotes } from "@/i18n/content/buildTipQuotes";
+import type { AppLocale } from "@/types/i18n/locale";
 
-const TIPS_BY_ID = new Map(TIP_QUOTES.map((quote) => [quote.id, quote]));
-const MOTIVATION_BY_ID = new Map(
-  MOTIVATION_QUOTES.map((quote) => [quote.id, quote]),
-);
-
-function catalogForSection(section: SavedCardsSection) {
-  return section === "tips" ? TIPS_BY_ID : MOTIVATION_BY_ID;
+function catalogForSection(section: SavedCardsSection, locale: AppLocale) {
+  const quotes = section === "tips" ? buildTipQuotes(locale) : buildMotivationQuotes(locale);
+  return new Map(quotes.map((quote) => [quote.id, quote]));
 }
 
 /** Resolves saved card ids to quotes, preserving the saved order. */
 export function resolveSavedQuotes(
   section: SavedCardsSection,
   ids: readonly string[],
+  locale: AppLocale,
 ): MotivationQuote[] {
-  const catalog = catalogForSection(section);
+  const catalog = catalogForSection(section, locale);
   return ids
     .map((id) => catalog.get(id))
     .filter((quote): quote is MotivationQuote => quote != null);

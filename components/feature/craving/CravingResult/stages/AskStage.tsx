@@ -4,6 +4,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   onResisted: () => void;
@@ -12,6 +13,7 @@ type Props = {
 
 export function AskStage({ onResisted, onSmoked }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Animated.View entering={FadeInUp.duration(400)} className="gap-4">
@@ -20,7 +22,7 @@ export function AskStage({ onResisted, onSmoked }: Props) {
           <Ionicons name="trophy" size={28} color={colors.accent} />
         </View>
         <Text className="mt-3 text-2xl font-bold text-foreground dark:text-d-text">
-          You made it through
+          {t("craving.sessionAskTitle")}
         </Text>
         <Text className="mt-1 px-6 text-center text-sm text-muted-foreground dark:text-d-muted">
           How did this one go? Be honest — there&apos;s no judgement here.
@@ -29,14 +31,14 @@ export function AskStage({ onResisted, onSmoked }: Props) {
 
       <View className="gap-3">
         <Button
-          label="I resisted"
+          label={t("craving.sessionResisted")}
           variant="accent"
           size="lg"
           fullWidth
           leading={<Ionicons name="shield-checkmark" size={18} color={colors.white} />}
           onPress={onResisted}
         />
-        <Button label="I smoked" variant="ghost" size="lg" fullWidth onPress={onSmoked} />
+        <Button label={t("craving.sessionSmoked")} variant="ghost" size="lg" fullWidth onPress={onSmoked} />
       </View>
     </Animated.View>
   );

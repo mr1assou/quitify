@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { View } from "react-native";
 
 import { Chip } from "@/components/ui/Chip";
@@ -5,6 +6,7 @@ import {
   PRIOR_QUIT_ATTEMPT_OPTIONS,
   type PriorQuitAttempts,
 } from "@/constants/onboarding/onboardingPriorQuitAttempts";
+import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 
 type Props = {
   selected?: PriorQuitAttempts;
@@ -12,9 +14,15 @@ type Props = {
 };
 
 export function QuitAttemptsPickStep({ selected, onSelect }: Props) {
+  const { localize } = useLocalizedCatalog();
+  const options = useMemo(
+    () => localize(PRIOR_QUIT_ATTEMPT_OPTIONS, "onboarding.quitAttempts", ["label"]),
+    [localize],
+  );
+
   return (
     <View className="w-full gap-3">
-      {PRIOR_QUIT_ATTEMPT_OPTIONS.map((opt) => (
+      {options.map((opt) => (
         <Chip
           key={opt.id}
           label={opt.label}

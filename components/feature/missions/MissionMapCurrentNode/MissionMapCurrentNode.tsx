@@ -13,6 +13,7 @@ import Animated, {
 
 import { missionPlanLabel } from "@/constants/progress/plan";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -26,6 +27,7 @@ type Props = {
 
 /** Current day on the plan map — same pulsing primary style as craving CTAs. */
 export function MissionMapCurrentNode({ day, onPress }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const press = useSharedValue(1);
   const halo = useSharedValue(0);
@@ -71,7 +73,7 @@ export function MissionMapCurrentNode({ day, onPress }: Props) {
         />
         <AnimatedPressable
           accessibilityRole="button"
-          accessibilityLabel={missionPlanLabel(day)}
+          accessibilityLabel={missionPlanLabel(day, t)}
           accessibilityState={{ selected: true }}
           onPressIn={() => {
             press.value = withSpring(0.94, { damping: 18, stiffness: 280 });
@@ -102,7 +104,7 @@ export function MissionMapCurrentNode({ day, onPress }: Props) {
         numberOfLines={2}
         className="mt-1.5 max-w-[132px] text-center text-[10px] font-bold leading-3 text-foreground dark:text-d-text"
       >
-        {missionPlanLabel(day)}
+        {missionPlanLabel(day, t)}
       </Text>
     </View>
   );

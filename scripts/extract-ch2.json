@@ -1,0 +1,538 @@
+[
+  {
+    "path": "name",
+    "value": "Break the habit"
+  },
+  {
+    "path": "role",
+    "value": "Days 15-30: rewire mornings, meals, coffee, commutes and breaks while NRT holds the physical side steady"
+  },
+  {
+    "path": "days[0].title",
+    "value": "Day 15: Welcome to chapter two"
+  },
+  {
+    "path": "days[0].intro",
+    "value": "Survival mode is over. Now you dismantle the daily machinery of the habit, one routine at a time, while your patch keeps the physical side quiet in the background."
+  },
+  {
+    "path": "days[0].tasks[0].title",
+    "value": "Map your old smoking schedule"
+  },
+  {
+    "path": "days[0].tasks[0].text",
+    "value": "Write down the times of day you used to smoke most: waking up, after meals, work breaks, driving, before bed."
+  },
+  {
+    "path": "days[0].tasks[1].title",
+    "value": "Pick your hardest hour"
+  },
+  {
+    "path": "days[0].tasks[1].text",
+    "value": "Choose the single hour of the day that is still hardest and assign it one specific replacement: a walk, a lozenge, a game, or a call."
+  },
+  {
+    "path": "days[0].tasks[2].title",
+    "value": "Stay on full strength for now"
+  },
+  {
+    "path": "days[0].tasks[2].text",
+    "value": "Do not rush to lower your patch strength just because week one went well. The standard schedule keeps the starting strength for about six weeks before stepping down. Stability now buys you an easy taper later."
+  },
+  {
+    "path": "days[0].tasks[3].title",
+    "value": "Set your chapter two goal"
+  },
+  {
+    "path": "days[0].tasks[3].text",
+    "value": "Write or pick one personal goal you want to hit by day thirty."
+  },
+  {
+    "path": "days[1].title",
+    "value": "Day 16: The morning rebuild"
+  },
+  {
+    "path": "days[1].intro",
+    "value": "The wake-up cigarette was the strongest one because your body spent all night in withdrawal. Your patch now removes that morning desperation entirely. What is left is just choreography, and choreography can be rewritten."
+  },
+  {
+    "path": "days[1].tasks[0].title",
+    "value": "Redesign your first ten minutes"
+  },
+  {
+    "path": "days[1].tasks[0].text",
+    "value": "Plan exactly what you will do in the first ten minutes after waking tomorrow: water, patch on a fresh skin spot, a stretch, then coffee. Give the morning a new script."
+  },
+  {
+    "path": "days[1].tasks[1].title",
+    "value": "See the morning cigarette clearly"
+  },
+  {
+    "path": "days[1].tasks[1].text",
+    "value": "That first cigarette never woke your brain up. It ended eight hours of withdrawal, which is why it felt so big. Non smokers wake up already feeling the way you had to smoke to feel."
+  },
+  {
+    "path": "days[1].tasks[2].title",
+    "value": "Morning breathing reset"
+  },
+  {
+    "path": "days[1].tasks[2].text",
+    "value": "Use the breathing tool for one minute tomorrow morning before checking your phone."
+  },
+  {
+    "path": "days[2].title",
+    "value": "Day 17: After meals"
+  },
+  {
+    "path": "days[2].intro",
+    "value": "The after-meal cigarette is one of the most automatic links there is. Today you give your meals a new ending."
+  },
+  {
+    "path": "days[2].tasks[0].title",
+    "value": "Install a new meal ending"
+  },
+  {
+    "path": "days[2].tasks[0].text",
+    "value": "Right after eating today, immediately do one of these: brush your teeth, take a peppermint, chew sugar-free gum, or take a short walk. The trick is speed; fill the gap before the old reflex does."
+  },
+  {
+    "path": "days[2].tasks[1].title",
+    "value": "Enjoy the taste upgrade"
+  },
+  {
+    "path": "days[2].tasks[1].text",
+    "value": "Food genuinely tastes better within the first weeks as smell and taste receptors recover. Notice one flavor today you had forgotten about."
+  },
+  {
+    "path": "days[2].tasks[2].title",
+    "value": "Rate the after-meal pull"
+  },
+  {
+    "path": "days[2].tasks[2].text",
+    "value": "One line: how strong was the urge after your biggest meal today, compared to week one?"
+  },
+  {
+    "path": "days[3].title",
+    "value": "Day 18: The commute trigger"
+  },
+  {
+    "path": "days[3].intro",
+    "value": "Driving, walking to work, or waiting for the bus used to come with a cigarette. That slot in your day is now open for something better."
+  },
+  {
+    "path": "days[3].tasks[0].title",
+    "value": "Reprogram the commute"
+  },
+  {
+    "path": "days[3].tasks[0].text",
+    "value": "Change one thing about your commute today: a podcast, new music, a different route, or a toothpick in hand where the cigarette used to be."
+  },
+  {
+    "path": "days[3].tasks[1].title",
+    "value": "Log a trigger you noticed"
+  },
+  {
+    "path": "days[3].tasks[1].text",
+    "value": "Tap to log any trigger moment you noticed today, even small ones."
+  },
+  {
+    "path": "days[3].tasks[2].title",
+    "value": "Sound for the ride"
+  },
+  {
+    "path": "days[3].tasks[2].text",
+    "value": "Play a calming or energizing sound during part of your commute today."
+  },
+  {
+    "path": "days[4].title",
+    "value": "Day 19: The stress lie"
+  },
+  {
+    "path": "days[4].intro",
+    "value": "The biggest piece of brainwashing is that cigarettes relieve stress. They do the opposite: nicotine withdrawal between cigarettes adds a constant background stress that non smokers simply do not have."
+  },
+  {
+    "path": "days[4].tasks[0].title",
+    "value": "Dismantle the stress myth"
+  },
+  {
+    "path": "days[4].tasks[0].text",
+    "value": "When smokers light up under stress, the relief they feel is withdrawal ending, not the problem shrinking. The stressful thing is still there afterwards, plus they have paid to feel normal for twenty minutes. You now handle stress at a permanent baseline they only visit."
+  },
+  {
+    "path": "days[4].tasks[1].title",
+    "value": "Use breathing for stress itself"
+  },
+  {
+    "path": "days[4].tasks[1].text",
+    "value": "Next time you feel stressed today, even with zero craving, use the breathing tool. It is your new stress valve, and unlike a cigarette it actually lowers your heart rate."
+  },
+  {
+    "path": "days[4].tasks[2].title",
+    "value": "Name your stress source"
+  },
+  {
+    "path": "days[4].tasks[2].text",
+    "value": "Write down the main thing causing you stress this week, so it is a named problem instead of a vague cloud."
+  },
+  {
+    "path": "days[5].title",
+    "value": "Day 20: Twenty days in"
+  },
+  {
+    "path": "days[5].intro",
+    "value": "Around three weeks is when replacement routines stop feeling forced and start feeling like yours."
+  },
+  {
+    "path": "days[5].tasks[0].title",
+    "value": "Rate how automatic it feels"
+  },
+  {
+    "path": "days[5].tasks[0].text",
+    "value": "Rate from one to five how natural your replacement habits feel compared to two weeks ago."
+  },
+  {
+    "path": "days[5].tasks[1].title",
+    "value": "See your money milestone"
+  },
+  {
+    "path": "days[5].tasks[1].text",
+    "value": "Check your money saved tab and see what that amount could buy right now."
+  },
+  {
+    "path": "days[5].tasks[2].title",
+    "value": "Share a small win"
+  },
+  {
+    "path": "days[5].tasks[2].text",
+    "value": "Post one small win from this week in the community."
+  },
+  {
+    "path": "days[6].title",
+    "value": "Day 21: Three weeks free"
+  },
+  {
+    "path": "days[6].intro",
+    "value": "Three weeks is often cited as the point where new habits take root. You are living proof."
+  },
+  {
+    "path": "days[6].tasks[0].title",
+    "value": "Claim your three week badge"
+  },
+  {
+    "path": "days[6].tasks[0].text",
+    "value": "Open your badges tab and collect the three week milestone."
+  },
+  {
+    "path": "days[6].tasks[1].title",
+    "value": "See your lung progress"
+  },
+  {
+    "path": "days[6].tasks[1].text",
+    "value": "Around this stage many people notice less coughing and easier breathing during light activity as lung function recovers."
+  },
+  {
+    "path": "days[6].tasks[2].title",
+    "value": "Take a small controlled test"
+  },
+  {
+    "path": "days[6].tasks[2].text",
+    "value": "Put yourself in a mildly triggering situation on purpose today, like sitting near where people smoke, with a peppermint in your mouth, and notice you can handle it comfortably."
+  },
+  {
+    "path": "days[7].title",
+    "value": "Day 22: Evening wind down"
+  },
+  {
+    "path": "days[7].intro",
+    "value": "Evenings had their own ritual: the end-of-work cigarette, the after-dinner one, the last one before bed. Build the new close of day."
+  },
+  {
+    "path": "days[7].tasks[0].title",
+    "value": "Build an evening ritual"
+  },
+  {
+    "path": "days[7].tasks[0].text",
+    "value": "Choose one calming activity to end each day instead of a cigarette: tea, a show, a short walk, or ten minutes of a book."
+  },
+  {
+    "path": "days[7].tasks[1].title",
+    "value": "Sleep sound tonight"
+  },
+  {
+    "path": "days[7].tasks[1].text",
+    "value": "Play a relaxing sound from the toolkit for ten minutes before bed."
+  },
+  {
+    "path": "days[7].tasks[2].title",
+    "value": "Note your sleep quality"
+  },
+  {
+    "path": "days[7].tasks[2].text",
+    "value": "Write one line about how you have been sleeping this past week."
+  },
+  {
+    "path": "days[8].title",
+    "value": "Day 23: The coffee link"
+  },
+  {
+    "path": "days[8].intro",
+    "value": "Coffee and cigarettes were welded together for years. You keep the coffee. The weld comes off."
+  },
+  {
+    "path": "days[8].tasks[0].title",
+    "value": "Change the coffee scene"
+  },
+  {
+    "path": "days[8].tasks[0].text",
+    "value": "Drink your coffee in a different place or with a different activity today: standing, at a window, with a game open, or with a cinnamon stick to stir and hold."
+  },
+  {
+    "path": "days[8].tasks[1].title",
+    "value": "Mind the coffee-lozenge clash"
+  },
+  {
+    "path": "days[8].tasks[1].text",
+    "value": "Remember: coffee, juice and fizzy drinks are acidic and block nicotine absorption from gum and lozenges. Finish your coffee, wait fifteen minutes, then use the lozenge if you need it."
+  },
+  {
+    "path": "days[8].tasks[2].title",
+    "value": "Rate the coffee pull"
+  },
+  {
+    "path": "days[8].tasks[2].text",
+    "value": "Rate how strong the urge to smoke with coffee still feels, one to five."
+  },
+  {
+    "path": "days[9].title",
+    "value": "Day 24: Boredom and downtime"
+  },
+  {
+    "path": "days[9].intro",
+    "value": "With the big triggers weakening, quieter ones like boredom show up more clearly. Good; you can see them now."
+  },
+  {
+    "path": "days[9].tasks[0].title",
+    "value": "Upgrade your boredom list"
+  },
+  {
+    "path": "days[9].tasks[0].text",
+    "value": "Add one new activity to your boredom list based on what has actually worked so far, and drop anything you never use."
+  },
+  {
+    "path": "days[9].tasks[1].title",
+    "value": "Game the downtime"
+  },
+  {
+    "path": "days[9].tasks[1].text",
+    "value": "Next quiet moment with nothing to do, open a mini game instead of drifting."
+  },
+  {
+    "path": "days[9].tasks[2].title",
+    "value": "See your progress chart"
+  },
+  {
+    "path": "days[9].tasks[2].text",
+    "value": "Look at your craving frequency chart and notice the overall direction since day one."
+  },
+  {
+    "path": "days[10].title",
+    "value": "Day 25: Audit your new machinery"
+  },
+  {
+    "path": "days[10].intro",
+    "value": "By now several small replacement habits are running in the background of your day. Time to notice and reinforce them."
+  },
+  {
+    "path": "days[10].tasks[0].title",
+    "value": "List your new habits"
+  },
+  {
+    "path": "days[10].tasks[0].text",
+    "value": "Write down every replacement habit you have built so far, even tiny ones like the peppermint after lunch."
+  },
+  {
+    "path": "days[10].tasks[1].title",
+    "value": "Strengthen the weakest one"
+  },
+  {
+    "path": "days[10].tasks[1].text",
+    "value": "Pick the replacement habit that feels least solid and do it deliberately today, even without a craving."
+  },
+  {
+    "path": "days[10].tasks[2].title",
+    "value": "Read a first-month story"
+  },
+  {
+    "path": "days[10].tasks[2].text",
+    "value": "Read one community post from someone else in their first month."
+  },
+  {
+    "path": "days[11].title",
+    "value": "Day 26: Alcohol, the biggest ambush"
+  },
+  {
+    "path": "days[11].intro",
+    "value": "Drinking and smoking were tightly linked for most smokers, and alcohol lowers the guard that protects your streak. This trigger gets its own day before it gets a chance at you."
+  },
+  {
+    "path": "days[11].tasks[0].title",
+    "value": "Know the alcohol risk"
+  },
+  {
+    "path": "days[11].tasks[0].text",
+    "value": "Drinking is one of the most common relapse situations, because lowered inhibition lets the hand-to-mouth reflex return before you consciously decide anything."
+  },
+  {
+    "path": "days[11].tasks[1].title",
+    "value": "Make a drinking plan"
+  },
+  {
+    "path": "days[11].tasks[1].text",
+    "value": "Before your next drinking occasion, decide: your drink limit, what goes in your hand between sips, and what you do when others step out to smoke. Put a lozenge and a peppermint in your pocket before you leave the house."
+  },
+  {
+    "path": "days[11].tasks[2].title",
+    "value": "Preload the answer"
+  },
+  {
+    "path": "days[11].tasks[2].text",
+    "value": "Rehearse the thought now, sober: a cigarette while drinking is not a bonus to the night, it is handing the little monster a feast and restarting day one. Decide the answer before alcohol gets a vote."
+  },
+  {
+    "path": "days[12].title",
+    "value": "Day 27: Almost one month"
+  },
+  {
+    "path": "days[12].intro",
+    "value": "Days from your first full month. The heavy lifting of habit demolition is mostly done."
+  },
+  {
+    "path": "days[12].tasks[0].title",
+    "value": "Look back at chapter two"
+  },
+  {
+    "path": "days[12].tasks[0].text",
+    "value": "Write two or three sentences about what changed during this rewiring chapter."
+  },
+  {
+    "path": "days[12].tasks[1].title",
+    "value": "See your health timeline"
+  },
+  {
+    "path": "days[12].tasks[1].text",
+    "value": "Open your health progress tab and see which markers moved most in the last two weeks."
+  },
+  {
+    "path": "days[12].tasks[2].title",
+    "value": "Plan the one month mark"
+  },
+  {
+    "path": "days[12].tasks[2].text",
+    "value": "Decide how you want to mark one full month, even something small."
+  },
+  {
+    "path": "days[13].title",
+    "value": "Day 28: Four weeks free"
+  },
+  {
+    "path": "days[13].intro",
+    "value": "Four full weeks. Your daily life now runs on routines that do not include cigarettes."
+  },
+  {
+    "path": "days[13].tasks[0].title",
+    "value": "Claim your four week badge"
+  },
+  {
+    "path": "days[13].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[13].tasks[1].title",
+    "value": "See your risk already dropping"
+  },
+  {
+    "path": "days[13].tasks[1].text",
+    "value": "Within the first month, the risk of certain heart related issues linked to smoking already begins to decrease compared to someone who kept smoking."
+  },
+  {
+    "path": "days[13].tasks[2].title",
+    "value": "Share your one month story"
+  },
+  {
+    "path": "days[13].tasks[2].text",
+    "value": "Post a short update in the community about reaching four weeks."
+  },
+  {
+    "path": "days[14].title",
+    "value": "Day 29: Know your best weapons"
+  },
+  {
+    "path": "days[14].intro",
+    "value": "You have tried a lot of tools this month. Time to identify your personal top three."
+  },
+  {
+    "path": "days[14].tasks[0].title",
+    "value": "Rank your go-to tools"
+  },
+  {
+    "path": "days[14].tasks[0].text",
+    "value": "Write down which tools have worked best for you personally: breathing, lozenges, peppermints, games, sounds, walks. Your top three become your emergency kit going forward."
+  },
+  {
+    "path": "days[14].tasks[1].title",
+    "value": "Preview the taper"
+  },
+  {
+    "path": "days[14].tasks[1].text",
+    "value": "Look ahead: around week six you will likely step your patch down one strength, then again two weeks later, finishing patches around week ten. Nothing changes yet; just know the road so the step-down feels planned, not scary."
+  },
+  {
+    "path": "days[14].tasks[2].title",
+    "value": "Flag one upcoming challenge"
+  },
+  {
+    "path": "days[14].tasks[2].text",
+    "value": "Note one event in the next month that could be a real test, so chapter three can prepare you for it."
+  },
+  {
+    "path": "days[15].title",
+    "value": "Day 30: One month smoke free"
+  },
+  {
+    "path": "days[15].intro",
+    "value": "Thirty days without a single cigarette. You did not white-knuckle it; you rebuilt the machinery of your day. Chapter three proves the new machinery holds under real social pressure."
+  },
+  {
+    "path": "days[15].tasks[0].title",
+    "value": "Claim your one month badge"
+  },
+  {
+    "path": "days[15].tasks[0].text",
+    "value": "Open your badges tab and collect the one month milestone, one of the biggest yet."
+  },
+  {
+    "path": "days[15].tasks[1].title",
+    "value": "See your one month transformation"
+  },
+  {
+    "path": "days[15].tasks[1].text",
+    "value": "Open your full health and stats overview and see everything that changed in thirty days."
+  },
+  {
+    "path": "days[15].tasks[2].title",
+    "value": "Write a letter to day one you"
+  },
+  {
+    "path": "days[15].tasks[2].text",
+    "value": "A short letter to yourself on day one, telling them what the first month was really like."
+  },
+  {
+    "path": "days[15].tasks[3].title",
+    "value": "Look ahead to chapter three"
+  },
+  {
+    "path": "days[15].tasks[3].text",
+    "value": "Read the chapter three intro and set one goal for handling social situations smoke free."
+  }
+]

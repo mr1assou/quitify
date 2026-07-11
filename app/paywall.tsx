@@ -18,14 +18,12 @@ import { useApp } from "@/context/AppContext";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { usePaywallPurchase } from "@/hooks/paywall/usePaywallPurchase";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
 
-const BENEFITS = [
-  "Making a payment builds financial accountability and strengthens your chances of achieving your goal.",
-  "The subscription costs little compared to the money you'll save over time.",
-] as const;
+const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 
 /** Paywall is always presented in the premium dark palette. */
 const PAYWALL_COLORS = getThemeColors("dark");
@@ -34,6 +32,7 @@ const PAYWALL_COLORS = getThemeColors("dark");
 const PAYWALL_MODAL_DISMISS_MS = 420;
 
 export default function Paywall() {
+  const { t } = useTranslation();
   const { setFlag } = useApp();
   const insets = useSafeAreaInsets();
   const { plans } = usePaywallPlans();
@@ -42,10 +41,10 @@ export default function Paywall() {
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const primaryCtaLabel = purchasing
-    ? "Processing..."
+    ? t("paywall.processing")
     : selectedPlan === "yearly"
-      ? "Try free"
-      : "Continue";
+      ? t("paywall.tryFree")
+      : t("paywall.continue");
 
   const finishPaywall = () => {
     if (comparisonTimerRef.current) {
@@ -115,24 +114,24 @@ export default function Paywall() {
           showsVerticalScrollIndicator={false}
         >
           <Text className="text-4xl font-extrabold leading-tight text-d-text">
-            Invest in your health today.
+            {t("paywall.title")}
           </Text>
 
           <View className="mt-7 gap-4">
-            {BENEFITS.map((text) => (
-              <View key={text} className="flex-row items-start">
+            {BENEFIT_KEYS.map((key) => (
+              <View key={key} className="flex-row items-start">
                 <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-d-accent-soft">
                   <Ionicons name="checkmark" size={17} color={PAYWALL_COLORS.accent} />
                 </View>
-                <Text className="flex-1 text-sm leading-5 text-d-muted">{text}</Text>
+                <Text className="flex-1 text-sm leading-5 text-d-muted">{t(key)}</Text>
               </View>
             ))}
           </View>
 
           <View className="mt-10">
-            <Text className="text-xl font-bold text-d-text">Show your offer</Text>
+            <Text className="text-xl font-bold text-d-text">{t("paywall.offerTitle")}</Text>
             <Text className="mt-1.5 text-sm text-d-muted">
-              Auto-renewing subscription, cancel anytime
+              {t("paywall.offerSubtitle")}
             </Text>
 
             <View className="mt-6 gap-3">
@@ -162,7 +161,7 @@ export default function Paywall() {
               className="mt-3 items-center py-2 active:opacity-70"
             >
               <Text className="text-sm font-semibold text-d-muted">
-                {restoring ? "Restoring..." : "Restore purchases"}
+                {restoring ? t("paywall.restoring") : t("paywall.restore")}
               </Text>
             </Pressable>
 
@@ -171,13 +170,13 @@ export default function Paywall() {
                 onPress={() => openExternalUrl(WEBSITE_PRIVACY_URL)}
                 className="active:opacity-70"
               >
-                <Text className="text-sm text-d-muted">Privacy policy</Text>
+                <Text className="text-sm text-d-muted">{t("paywall.privacy")}</Text>
               </Pressable>
               <Pressable
                 onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
                 className="active:opacity-70"
               >
-                <Text className="text-sm text-d-muted">Terms of service</Text>
+                <Text className="text-sm text-d-muted">{t("paywall.terms")}</Text>
               </Pressable>
             </View>
           </View>

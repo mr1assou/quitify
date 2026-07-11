@@ -10,9 +10,11 @@ import { useTheme } from "@/context/ThemeContext";
 import { useOpenPlanDay } from "@/hooks/progress/useOpenPlanDay";
 import { usePlanTaskNotes } from "@/hooks/progress/usePlanTaskNotes";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export default function Missions() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { plan, openDay, lockedDayModal, closeLockedDayModal } = useOpenPlanDay();
   const { noteCount } = usePlanTaskNotes();
@@ -32,14 +34,13 @@ export default function Missions() {
             {!plan.hasQuitStreak ? (
               <View className="mx-6 mt-4 rounded-2xl border border-border/60 bg-section px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                  Set your quit date during onboarding to unlock your 180-day plan.
+                  {t("missions.noQuitDate")}
                 </Text>
               </View>
             ) : plan.unlockedThroughDay <= 0 ? (
               <View className="mx-6 mt-4 rounded-2xl border border-border/60 bg-section px-4 py-4 dark:border-d-border/60 dark:bg-d-surface/90">
                 <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                  Your plan unlocks when your quit day begins. Complete each day to unlock the
-                  next one.
+                  {t("missions.planNotStarted")}
                 </Text>
               </View>
             ) : null}
@@ -79,7 +80,7 @@ export default function Missions() {
                             : "text-foreground dark:text-d-text"
                         }`}
                       >
-                        Module {module.chapterNumber}
+                        {t("missions.module", { n: module.chapterNumber })}
                       </Text>
                     </Pressable>
                   );

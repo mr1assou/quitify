@@ -21,24 +21,27 @@ import { Stopwatch } from "@/components/feature/intro/visuals/Stopwatch";
 import { TargetArrow } from "@/components/feature/intro/visuals/TargetArrow";
 import { Button } from "@/components/ui/Button";
 import {
-  INTRO_SLIDES,
   introUsesUnifiedGradient,
   type IntroSlideContent,
 } from "@/constants/app/intro";
 import { useTheme } from "@/context/ThemeContext";
+import { useIntroSlides } from "@/hooks/i18n/useIntroSlides";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const NEXT_ROUTE = "/onboarding/reasons";
 const SWIPE_THRESHOLD_RATIO = 0.22;
 
 export function IntroPager() {
   const { colors, resolved } = useTheme();
+  const { t } = useTranslation();
+  const slides = useIntroSlides();
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);
   const [pagerAndFooterH, setPagerAndFooterH] = useState(0);
   const translateX = useSharedValue(0);
-  const total = INTRO_SLIDES.length;
+  const total = slides.length;
   const isLast = index === total - 1;
-  const currentSlide = INTRO_SLIDES[index];
+  const currentSlide = slides[index];
   const unifiedGradient =
     currentSlide !== undefined && introUsesUnifiedGradient(currentSlide.id);
 
@@ -138,7 +141,7 @@ export function IntroPager() {
                   trackStyle,
                 ]}
               >
-                {INTRO_SLIDES.map((slide, i) => (
+                {slides.map((slide, i) => (
                   <Slide
                     key={slide.id}
                     slide={slide}
@@ -160,7 +163,7 @@ export function IntroPager() {
         >
           <IntroDots total={total} active={index} />
           <Button
-            label={isLast ? "Begin" : "Next"}
+            label={isLast ? t("intro.cta.begin") : t("intro.cta.next")}
             size="lg"
             fullWidth
             onPress={goNext}

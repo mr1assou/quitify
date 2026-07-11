@@ -1,0 +1,770 @@
+[
+  {
+    "path": "name",
+    "value": "New normal"
+  },
+  {
+    "path": "role",
+    "value": "Days 31-60: social situations, alcohol, work stress, plus your first NRT step-downs"
+  },
+  {
+    "path": "days[0].title",
+    "value": "Day 31: Welcome to chapter three"
+  },
+  {
+    "path": "days[0].intro",
+    "value": "Habit building is done. Now you prove the new normal holds in the wild: parties, drinks, stressful weeks and old smoking friends. This chapter also carries your first NRT step-down."
+  },
+  {
+    "path": "days[0].tasks[0].title",
+    "value": "List your upcoming social events"
+  },
+  {
+    "path": "days[0].tasks[0].text",
+    "value": "Write down any parties, dinners or gatherings in the next two weeks."
+  },
+  {
+    "path": "days[0].tasks[1].title",
+    "value": "Prepare one social script"
+  },
+  {
+    "path": "days[0].tasks[1].text",
+    "value": "Write one short sentence you can say if someone offers a cigarette, like: no thanks, I do not smoke. Note the wording: not I am trying to quit, but I do not smoke. Words shape identity."
+  },
+  {
+    "path": "days[0].tasks[2].title",
+    "value": "Set your chapter three goal"
+  },
+  {
+    "path": "days[0].tasks[2].text",
+    "value": "Pick one specific situation you want to handle smoke free this month."
+  },
+  {
+    "path": "days[1].title",
+    "value": "Day 32: Saying no without explaining"
+  },
+  {
+    "path": "days[1].intro",
+    "value": "You do not owe anyone a story. A short, cheerful no is a complete answer."
+  },
+  {
+    "path": "days[1].tasks[0].title",
+    "value": "Practice your no out loud"
+  },
+  {
+    "path": "days[1].tasks[0].text",
+    "value": "Say your prepared line out loud once today so it comes out smoothly when it matters."
+  },
+  {
+    "path": "days[1].tasks[1].title",
+    "value": "No is not deprivation"
+  },
+  {
+    "path": "days[1].tasks[1].text",
+    "value": "When you decline a cigarette, you are not resisting a treat, you are declining a burden, the way you would decline a debt. There is nothing to be envious about when others light up."
+  },
+  {
+    "path": "days[2].title",
+    "value": "Day 33: Old smoking friends"
+  },
+  {
+    "path": "days[2].intro",
+    "value": "Some friendships were built partly around smoking together. The friendship stays; the shape of it changes."
+  },
+  {
+    "path": "days[2].tasks[0].title",
+    "value": "Think about one specific friend"
+  },
+  {
+    "path": "days[2].tasks[0].text",
+    "value": "Write about one friend you used to smoke with and how your time together might look now."
+  },
+  {
+    "path": "days[2].tasks[1].title",
+    "value": "Suggest a different hangout"
+  },
+  {
+    "path": "days[2].tasks[1].text",
+    "value": "If you are seeing a smoking friend soon, suggest an activity that is not built around smoke breaks: food, a walk, a game."
+  },
+  {
+    "path": "days[3].title",
+    "value": "Day 34: Stress at work"
+  },
+  {
+    "path": "days[3].intro",
+    "value": "Work stress used to send you straight outside with a pack. The break is still yours; only the cigarette is fired."
+  },
+  {
+    "path": "days[3].tasks[0].title",
+    "value": "Breathing at the desk"
+  },
+  {
+    "path": "days[3].tasks[0].text",
+    "value": "Next work stress spike, step away for one minute and use the breathing tool instead of a smoke break."
+  },
+  {
+    "path": "days[3].tasks[1].title",
+    "value": "Take a real break"
+  },
+  {
+    "path": "days[3].tasks[1].text",
+    "value": "Take a two minute walk away from your desk today as your new version of a break. You are allowed breaks without a cigarette as the excuse."
+  },
+  {
+    "path": "days[3].tasks[2].title",
+    "value": "Log today's stress"
+  },
+  {
+    "path": "days[3].tasks[2].text",
+    "value": "Rate how stressful work felt today on a simple scale."
+  },
+  {
+    "path": "days[4].title",
+    "value": "Day 35: Five weeks free"
+  },
+  {
+    "path": "days[4].intro",
+    "value": "Five weeks in, and you have already handled more triggers than you expected to."
+  },
+  {
+    "path": "days[4].tasks[0].title",
+    "value": "Claim your five week badge"
+  },
+  {
+    "path": "days[4].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[4].tasks[1].title",
+    "value": "Lift someone newer"
+  },
+  {
+    "path": "days[4].tasks[1].text",
+    "value": "Find someone in their first two weeks and send one encouraging message."
+  },
+  {
+    "path": "days[5].title",
+    "value": "Day 36: Drinking out, with a plan"
+  },
+  {
+    "path": "days[5].intro",
+    "value": "Going out for drinks is the highest-risk situation there is. You go in armed."
+  },
+  {
+    "path": "days[5].tasks[0].title",
+    "value": "Pack your night-out kit"
+  },
+  {
+    "path": "days[5].tasks[0].text",
+    "value": "Before any night out: set a drink limit, put lozenges and peppermints in your pocket, and decide what you will do during the smoking huddle outside, like ordering the next round or guarding the table."
+  },
+  {
+    "path": "days[5].tasks[1].title",
+    "value": "Know the real risk window"
+  },
+  {
+    "path": "days[5].tasks[1].text",
+    "value": "The dangerous moment is usually not the first drink; it is late in the night when tiredness and a lowered guard meet people smoking outside."
+  },
+  {
+    "path": "days[6].title",
+    "value": "Day 37: After a night out"
+  },
+  {
+    "path": "days[6].intro",
+    "value": "If last night was a test, today is the honest debrief, whether it went perfectly or nearly did not."
+  },
+  {
+    "path": "days[6].tasks[0].title",
+    "value": "Reflect on last night"
+  },
+  {
+    "path": "days[6].tasks[0].text",
+    "value": "Write how any recent social or drinking situation went, including close calls."
+  },
+  {
+    "path": "days[6].tasks[1].title",
+    "value": "A close call is a win"
+  },
+  {
+    "path": "days[6].tasks[1].text",
+    "value": "Feeling tempted and not smoking is not a weakness that showed, it is a strength that held. Every survived ambush makes the next one weaker."
+  },
+  {
+    "path": "days[7].title",
+    "value": "Day 38: Celebrations and good news"
+  },
+  {
+    "path": "days[7].intro",
+    "value": "Good moments, not just bad ones, used to come with a cigarette. Joy deserves a better punctuation mark."
+  },
+  {
+    "path": "days[7].tasks[0].title",
+    "value": "Pick a new celebration move"
+  },
+  {
+    "path": "days[7].tasks[0].text",
+    "value": "Choose one new way to mark good news: a favorite snack, telling someone, or putting five of your saved dollars toward something you want."
+  },
+  {
+    "path": "days[7].tasks[1].title",
+    "value": "Both ends of emotion trigger"
+  },
+  {
+    "path": "days[7].tasks[1].text",
+    "value": "Smoking habits fire on strong emotion in either direction, stress and excitement alike, so both deserve a plan."
+  },
+  {
+    "path": "days[8].title",
+    "value": "Day 39: Family gatherings"
+  },
+  {
+    "path": "days[8].intro",
+    "value": "Family events can wake old habits fast, especially around relatives who still smoke."
+  },
+  {
+    "path": "days[8].tasks[0].title",
+    "value": "Prepare for your next family event"
+  },
+  {
+    "path": "days[8].tasks[0].text",
+    "value": "If a gathering is coming, decide where you will be and what you will do during any smoke breaks others take. Bring your oral kit."
+  },
+  {
+    "path": "days[8].tasks[1].title",
+    "value": "Rate family pressure"
+  },
+  {
+    "path": "days[8].tasks[1].text",
+    "value": "Rate how much pressure you feel from family or relatives around your quitting."
+  },
+  {
+    "path": "days[9].title",
+    "value": "Day 40: Forty days strong"
+  },
+  {
+    "path": "days[9].intro",
+    "value": "Patterns that used to run your day automatically no longer do. Forty days of proof."
+  },
+  {
+    "path": "days[9].tasks[0].title",
+    "value": "Feel your lungs working"
+  },
+  {
+    "path": "days[9].tasks[0].text",
+    "value": "By this stage many ex smokers notice clearly easier breathing during light exercise as airways continue to heal."
+  },
+  {
+    "path": "days[9].tasks[1].title",
+    "value": "Test a harder situation on purpose"
+  },
+  {
+    "path": "days[9].tasks[1].text",
+    "value": "Put yourself in a moderately triggering situation today, deliberately and prepared, and notice you get through it."
+  },
+  {
+    "path": "days[10].title",
+    "value": "Day 41: The one cigarette myth"
+  },
+  {
+    "path": "days[10].intro",
+    "value": "Just one will not hurt is the single most dangerous sentence in quitting. Today you take it apart for good."
+  },
+  {
+    "path": "days[10].tasks[0].title",
+    "value": "Understand why one is never one"
+  },
+  {
+    "path": "days[10].tasks[0].text",
+    "value": "One cigarette does two things: it refeeds the little monster so physical craving returns, and it tells the big monster the brainwashing was right all along. There is no such thing as one cigarette; there is only the first of the next ten thousand, or none at all."
+  },
+  {
+    "path": "days[10].tasks[1].title",
+    "value": "Write your own warning note"
+  },
+  {
+    "path": "days[10].tasks[1].text",
+    "value": "Write a short note to your future self about why one is not worth it, saved for any tempted moment."
+  },
+  {
+    "path": "days[11].title",
+    "value": "Day 42: Six weeks free, taper checkpoint"
+  },
+  {
+    "path": "days[11].intro",
+    "value": "Six weeks: body chemistry, routines and confidence have all shifted. This is also the standard checkpoint to step your patch down."
+  },
+  {
+    "path": "days[11].tasks[0].title",
+    "value": "Claim your six week badge"
+  },
+  {
+    "path": "days[11].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[11].tasks[1].title",
+    "value": "Plan your first patch step-down"
+  },
+  {
+    "path": "days[11].tasks[1].text",
+    "value": "If you started on the highest strength patch, this week is the standard point to step down one level, usually 21 mg to 14 mg, for the next two weeks. Confirm with your pharmacist, and keep lozenges handy for the first two or three days of the new strength."
+  },
+  {
+    "path": "days[11].tasks[2].title",
+    "value": "Share a six week update"
+  },
+  {
+    "path": "days[11].tasks[2].text",
+    "value": "Post a short update in the community about reaching six weeks."
+  },
+  {
+    "path": "days[12].title",
+    "value": "Day 43: First days on a lighter patch"
+  },
+  {
+    "path": "days[12].intro",
+    "value": "A step-down can bring a day or two of slightly louder cravings while your body adjusts. That is expected, temporary, and a sign the exit is working."
+  },
+  {
+    "path": "days[12].tasks[0].title",
+    "value": "Support the step-down"
+  },
+  {
+    "path": "days[12].tasks[0].text",
+    "value": "For the next two or three days, be a little more generous with lozenges, peppermints, water and breathing sessions. The bump passes quickly; do not step back up over a rough afternoon."
+  },
+  {
+    "path": "days[12].tasks[1].title",
+    "value": "Rate the adjustment"
+  },
+  {
+    "path": "days[12].tasks[1].text",
+    "value": "Rate how the lighter patch feels so far, one to five."
+  },
+  {
+    "path": "days[13].title",
+    "value": "Day 44: Identity check-in"
+  },
+  {
+    "path": "days[13].intro",
+    "value": "Around now, many people quietly stop thinking of themselves as a smoker who quit and start being simply a non smoker."
+  },
+  {
+    "path": "days[13].tasks[0].title",
+    "value": "How do you describe yourself now"
+  },
+  {
+    "path": "days[13].tasks[0].text",
+    "value": "Write how you would describe your relationship with smoking today compared to two months ago."
+  },
+  {
+    "path": "days[13].tasks[1].title",
+    "value": "Identity beats willpower"
+  },
+  {
+    "path": "days[13].tasks[1].text",
+    "value": "Willpower is holding a door shut against something you still want. Identity is realizing nothing is pushing on the door. The goal is not to resist cigarettes forever; it is to genuinely not want them, which is where you are heading."
+  },
+  {
+    "path": "days[14].title",
+    "value": "Day 45: Halfway through chapter three"
+  },
+  {
+    "path": "days[14].intro",
+    "value": "Stress, social pressure and alcohol have all shown up by now, and you handled them."
+  },
+  {
+    "path": "days[14].tasks[0].title",
+    "value": "Rate this chapter so far"
+  },
+  {
+    "path": "days[14].tasks[0].text",
+    "value": "Rate how chapter three has gone compared to chapter two."
+  },
+  {
+    "path": "days[14].tasks[1].title",
+    "value": "Take a mental break"
+  },
+  {
+    "path": "days[14].tasks[1].text",
+    "value": "Play a mini game for two minutes just to reset, no craving required."
+  },
+  {
+    "path": "days[15].title",
+    "value": "Day 46: Anger and irritability"
+  },
+  {
+    "path": "days[15].intro",
+    "value": "Cigarettes used to be the cool-down after anger. That release valve needs a new fitting."
+  },
+  {
+    "path": "days[15].tasks[0].title",
+    "value": "Breathe before reacting"
+  },
+  {
+    "path": "days[15].tasks[0].text",
+    "value": "Next time frustration spikes today, use the breathing tool before responding to anyone."
+  },
+  {
+    "path": "days[15].tasks[1].title",
+    "value": "Recall an angry smoking moment"
+  },
+  {
+    "path": "days[15].tasks[1].text",
+    "value": "Write about a time you smoked specifically because you were angry, and what the cigarette actually fixed. Spoiler: the problem was still there after."
+  },
+  {
+    "path": "days[16].title",
+    "value": "Day 47: Weekend triggers"
+  },
+  {
+    "path": "days[16].intro",
+    "value": "Weekends have their own rhythm: more free time, more social time, more downtime, all old smoking slots."
+  },
+  {
+    "path": "days[16].tasks[0].title",
+    "value": "Plan your weekend differently"
+  },
+  {
+    "path": "days[16].tasks[0].text",
+    "value": "Pick one part of your usual weekend pattern and handle it differently this week."
+  },
+  {
+    "path": "days[16].tasks[1].title",
+    "value": "Rate weekend difficulty"
+  },
+  {
+    "path": "days[16].tasks[1].text",
+    "value": "Rate how hard weekends feel compared to weekdays right now."
+  },
+  {
+    "path": "days[17].title",
+    "value": "Day 48: Seven weeks free"
+  },
+  {
+    "path": "days[17].intro",
+    "value": "The space between you and your last cigarette keeps growing, and so does your evidence file."
+  },
+  {
+    "path": "days[17].tasks[0].title",
+    "value": "Claim your seven week badge"
+  },
+  {
+    "path": "days[17].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[17].tasks[1].title",
+    "value": "Circulation update"
+  },
+  {
+    "path": "days[17].tasks[1].text",
+    "value": "By this stage circulation has generally improved further, which makes physical activity feel noticeably easier than when you smoked."
+  },
+  {
+    "path": "days[18].title",
+    "value": "Day 49: Envy check"
+  },
+  {
+    "path": "days[18].intro",
+    "value": "When you see someone smoking, what do you feel? Today you make sure it is the right thing."
+  },
+  {
+    "path": "days[18].tasks[0].title",
+    "value": "Do not envy smokers, understand them"
+  },
+  {
+    "path": "days[18].tasks[0].text",
+    "value": "Next time you see someone light up, remember: they are not enjoying a treat you are denied. They are relieving a withdrawal you no longer have, and most of them wish they could stop. If you feel anything, let it be relief that you are out."
+  },
+  {
+    "path": "days[18].tasks[1].title",
+    "value": "Record your honest reaction"
+  },
+  {
+    "path": "days[18].tasks[1].text",
+    "value": "Write what you actually felt last time you watched someone smoke nearby."
+  },
+  {
+    "path": "days[19].title",
+    "value": "Day 50: Fifty days"
+  },
+  {
+    "path": "days[19].intro",
+    "value": "Fifty days is a number a lot of quitters never reach. You are past it and accelerating."
+  },
+  {
+    "path": "days[19].tasks[0].title",
+    "value": "See your fifty day overview"
+  },
+  {
+    "path": "days[19].tasks[0].text",
+    "value": "Open your stats and look at everything since day one: streak, money, cigarettes avoided, health markers."
+  },
+  {
+    "path": "days[19].tasks[1].title",
+    "value": "Share the milestone"
+  },
+  {
+    "path": "days[19].tasks[1].text",
+    "value": "Post an update in the community about reaching fifty days."
+  },
+  {
+    "path": "days[20].title",
+    "value": "Day 51: Boredom revisited"
+  },
+  {
+    "path": "days[20].intro",
+    "value": "Boredom triggers return in new disguises as life settles into routine. Keep the counters fresh."
+  },
+  {
+    "path": "days[20].tasks[0].title",
+    "value": "Rate today's boredom"
+  },
+  {
+    "path": "days[20].tasks[0].text",
+    "value": "Rate how bored you felt today and whether it connected to any craving."
+  },
+  {
+    "path": "days[20].tasks[1].title",
+    "value": "Game the gap"
+  },
+  {
+    "path": "days[20].tasks[1].text",
+    "value": "Next boredom gap today, fill it with a mini game instead of letting your mind wander to old habits."
+  },
+  {
+    "path": "days[21].title",
+    "value": "Day 52: Flickers are normal"
+  },
+  {
+    "path": "days[21].intro",
+    "value": "A flicker of craving when you see or smell a cigarette, even after weeks free, means nothing about your progress."
+  },
+  {
+    "path": "days[21].tasks[0].title",
+    "value": "Visual triggers are just echoes"
+  },
+  {
+    "path": "days[21].tasks[0].text",
+    "value": "Seeing or smelling someone else's cigarette can trigger a brief urge long after quitting. It is a fading association, not a warning of relapse."
+  },
+  {
+    "path": "days[21].tasks[1].title",
+    "value": "Answer the flicker"
+  },
+  {
+    "path": "days[21].tasks[1].text",
+    "value": "When a flicker comes, answer it in one line: nice try, I do not smoke. Then move on. Flickers hate being ignored; it is how they die."
+  },
+  {
+    "path": "days[22].title",
+    "value": "Day 53: Your support system"
+  },
+  {
+    "path": "days[22].intro",
+    "value": "Quitting is easier with people around you who know what you are doing and why."
+  },
+  {
+    "path": "days[22].tasks[0].title",
+    "value": "Connect with the community"
+  },
+  {
+    "path": "days[22].tasks[0].text",
+    "value": "Comment on or react to two other people's posts today."
+  },
+  {
+    "path": "days[22].tasks[1].title",
+    "value": "Name your biggest supporter"
+  },
+  {
+    "path": "days[22].tasks[1].text",
+    "value": "Write down who has been most supportive of your quitting so far, and consider telling them."
+  },
+  {
+    "path": "days[23].title",
+    "value": "Day 54: Eight weeks free"
+  },
+  {
+    "path": "days[23].intro",
+    "value": "Two full months of mornings, meals, stress and nights out, all without a cigarette."
+  },
+  {
+    "path": "days[23].tasks[0].title",
+    "value": "Claim your eight week badge"
+  },
+  {
+    "path": "days[23].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[23].tasks[1].title",
+    "value": "Two month health gains"
+  },
+  {
+    "path": "days[23].tasks[1].text",
+    "value": "Open your health progress tab and see how far your key markers have moved in two months."
+  },
+  {
+    "path": "days[24].title",
+    "value": "Day 55: Slips happen, plans matter"
+  },
+  {
+    "path": "days[24].intro",
+    "value": "Even with a strong streak, knowing exactly what you would do after a slip removes its power to snowball."
+  },
+  {
+    "path": "days[24].tasks[0].title",
+    "value": "Write your slip recovery plan"
+  },
+  {
+    "path": "days[24].tasks[0].text",
+    "value": "Write exactly what you would do in the first hour after a slip: who you tell, throwing out any remaining cigarettes, and returning to the plan the same day, not next Monday."
+  },
+  {
+    "path": "days[24].tasks[1].title",
+    "value": "A slip is not the end"
+  },
+  {
+    "path": "days[24].tasks[1].text",
+    "value": "Many successful quitters slipped at least once. What separated them was treating it as a fire to put out immediately, not a reason to burn the house down."
+  },
+  {
+    "path": "days[25].title",
+    "value": "Day 56: Second patch step-down"
+  },
+  {
+    "path": "days[25].intro",
+    "value": "Two weeks on the middle strength patch are done. This is the standard point to step down to the lowest strength for the final stretch."
+  },
+  {
+    "path": "days[25].tasks[0].title",
+    "value": "Step down to the lowest patch"
+  },
+  {
+    "path": "days[25].tasks[0].text",
+    "value": "If you have completed about two weeks on the middle strength, step down to the lowest patch, usually 7 mg, for the next two weeks. Same drill as last time: extra lozenges, water and breathing for the first couple of days. You are two weeks from being patch free."
+  },
+  {
+    "path": "days[25].tasks[1].title",
+    "value": "Hardest situation this chapter"
+  },
+  {
+    "path": "days[25].tasks[1].text",
+    "value": "Write about the single hardest situation you faced in chapter three and how you got through it."
+  },
+  {
+    "path": "days[26].title",
+    "value": "Day 57: Confidence check"
+  },
+  {
+    "path": "days[26].intro",
+    "value": "By now you have evidence, not just hope, that you can handle hard moments without smoking."
+  },
+  {
+    "path": "days[26].tasks[0].title",
+    "value": "Count your evidence"
+  },
+  {
+    "path": "days[26].tasks[0].text",
+    "value": "Open your stats and count the days you have gotten through. Each one is a data point against the addiction's story."
+  },
+  {
+    "path": "days[26].tasks[1].title",
+    "value": "Rate your confidence"
+  },
+  {
+    "path": "days[26].tasks[1].text",
+    "value": "Rate how confident you feel about staying smoke free for the next thirty days."
+  },
+  {
+    "path": "days[27].title",
+    "value": "Day 58: Almost two months"
+  },
+  {
+    "path": "days[27].intro",
+    "value": "Notice how much less often cigarettes cross your mind now compared to week one."
+  },
+  {
+    "path": "days[27].tasks[0].title",
+    "value": "Measure the mental quiet"
+  },
+  {
+    "path": "days[27].tasks[0].text",
+    "value": "Write about how often cigarettes cross your mind now versus your first week."
+  },
+  {
+    "path": "days[27].tasks[1].title",
+    "value": "Plan the two month mark"
+  },
+  {
+    "path": "days[27].tasks[1].text",
+    "value": "Decide how you want to acknowledge two full months in two days."
+  },
+  {
+    "path": "days[28].title",
+    "value": "Day 59: One day to go"
+  },
+  {
+    "path": "days[28].intro",
+    "value": "Tomorrow closes chapter three. You have made it through the situations most likely to cause a relapse."
+  },
+  {
+    "path": "days[28].tasks[0].title",
+    "value": "Preview chapter four"
+  },
+  {
+    "path": "days[28].tasks[0].text",
+    "value": "Chapter four covers relapse traps, complacency, the end of your NRT taper, and your three month milestone."
+  },
+  {
+    "path": "days[28].tasks[1].title",
+    "value": "Rate your readiness"
+  },
+  {
+    "path": "days[28].tasks[1].text",
+    "value": "Rate how ready you feel for the next chapter."
+  },
+  {
+    "path": "days[29].title",
+    "value": "Day 60: Two months smoke free"
+  },
+  {
+    "path": "days[29].intro",
+    "value": "Sixty days. Parties, drinks, stress, family and boredom, all handled without smoking. That is not luck, it is a skill you built."
+  },
+  {
+    "path": "days[29].tasks[0].title",
+    "value": "Claim your two month badge"
+  },
+  {
+    "path": "days[29].tasks[0].text",
+    "value": "Open your badges tab and collect this major milestone."
+  },
+  {
+    "path": "days[29].tasks[1].title",
+    "value": "See your two month transformation"
+  },
+  {
+    "path": "days[29].tasks[1].text",
+    "value": "Open your full stats and health overview to see everything that changed since day one."
+  },
+  {
+    "path": "days[29].tasks[2].title",
+    "value": "Chapter three summary"
+  },
+  {
+    "path": "days[29].tasks[2].text",
+    "value": "Write a few sentences summarizing what you learned during chapter three."
+  },
+  {
+    "path": "days[29].tasks[3].title",
+    "value": "Look ahead to chapter four"
+  },
+  {
+    "path": "days[29].tasks[3].text",
+    "value": "Read the chapter four intro and set one goal for staying strong toward three months."
+  }
+]

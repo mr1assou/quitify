@@ -6,9 +6,11 @@ import { PremiumHeaderButton } from "@/components/layout/PremiumHeaderButton";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useNotifications } from "@/context/NotificationContext";
 import { useChatUnreadTotal } from "@/hooks/chat/useChat";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export function ScreenHeaderActions() {
+  const { t } = useTranslation();
   const isPremium = useIsPremium();
   const unread = useChatUnreadTotal();
   const { unreadCount: notificationsUnread } = useNotifications();
@@ -18,13 +20,13 @@ export function ScreenHeaderActions() {
       <View className="flex-row items-center gap-1">
         <HeaderIconButton
           icon="chatbubbles-outline"
-          accessibilityLabel="Messages"
+          accessibilityLabel={t("layout.messages")}
           badge={unread > 0 ? unread : undefined}
           onPress={() => safeRouter.push("/chats")}
         />
         <HeaderIconButton
           icon="notifications-outline"
-          accessibilityLabel="Notifications"
+          accessibilityLabel={t("layout.notifications")}
           badge={notificationsUnread > 0 ? notificationsUnread : undefined}
           onPress={() => safeRouter.push("/notifications")}
         />

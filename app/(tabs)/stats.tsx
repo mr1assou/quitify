@@ -21,22 +21,25 @@ import { useStatsAttempts } from "@/hooks/stats/useStatsAttempts";
 import { useStatsFreedomPoints } from "@/hooks/stats/useStatsFreedomPoints";
 import { useStatsGoals } from "@/hooks/stats/useStatsGoals";
 import { useStatsOverview } from "@/hooks/stats/useStatsOverview";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { computeAchievementBadgeSummary } from "@/utils/progress/achievementProgress";
 import { getDeviceTimezone } from "@/utils/device/getDeviceTimezone";
 import { exactGlobalRankFromLeaderboard } from "@/utils/leaderboard/exactGlobalRank";
 
 function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {
+  const { t } = useTranslation();
   return (
     <View className="items-center gap-4 rounded-2xl bg-section px-4 py-8 dark:bg-d-surface">
       <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">{message}</Text>
       <Pressable onPress={onRetry} className="rounded-2xl bg-primary px-5 py-3">
-        <Text className="text-sm font-semibold text-white">Try again</Text>
+        <Text className="text-sm font-semibold text-white">{t("common.tryAgain")}</Text>
       </Pressable>
     </View>
   );
 }
 
 export default function Stats() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { state } = useApp();
   const isPremium = useIsPremium();
@@ -97,7 +100,7 @@ export default function Stats() {
         <ScreenHeader leading={<AppBrandMark />} />
 
         <Text className="mt-4 px-6 text-lg font-semibold text-foreground dark:text-d-text">
-          Your Stats
+          {t("stats.title")}
         </Text>
 
         <View className="mt-4 gap-4 px-6">
@@ -132,8 +135,8 @@ export default function Stats() {
             <SectionError message={attempts.error} onRetry={() => void attempts.refresh()} />
           ) : !isPremium ? (
             <PremiumLockedSection
-              title="Attempt history"
-              description="See every quit attempt, slips, and progress over time with VIP."
+              title={t("stats.attemptHistory")}
+              description={t("stats.emptyAttempts")}
             />
           ) : attempts.data && profile ? (
             <AttemptHistoryCard
@@ -151,8 +154,8 @@ export default function Stats() {
             <SectionError message={goals.error} onRetry={() => void goals.refresh()} />
           ) : !isPremium ? (
             <PremiumLockedSection
-              title="Goal history"
-              description="Track completed goals and rewards with VIP."
+              title={t("stats.goalHistory")}
+              description={t("stats.emptyGoals")}
             />
           ) : goals.data ? (
             <GoalHistoryCard
@@ -170,8 +173,8 @@ export default function Stats() {
             <SectionError message={freedomPoints.error} onRetry={() => void freedomPoints.refresh()} />
           ) : !isPremium ? (
             <PremiumLockedSection
-              title="Freedom points history"
-              description="Review every FP reward you earned with VIP."
+              title={t("stats.freedomPointsHistory")}
+              description={t("stats.emptyRewards")}
             />
           ) : freedomPoints.data ? (
             <FreedomPointHistoryCard

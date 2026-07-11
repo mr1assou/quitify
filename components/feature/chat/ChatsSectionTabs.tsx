@@ -1,11 +1,8 @@
 import { Pressable, Text, View } from "react-native";
 
-export type ChatsSection = "chats" | "support";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
-const OPTIONS: { id: ChatsSection; label: string }[] = [
-  { id: "chats", label: "Chats" },
-  { id: "support", label: "Support" },
-];
+export type ChatsSection = "chats" | "support";
 
 type Props = {
   value: ChatsSection;
@@ -13,9 +10,15 @@ type Props = {
 };
 
 export function ChatsSectionTabs({ value, onChange }: Props) {
+  const { t } = useTranslation();
+  const options: { id: ChatsSection; labelKey: "chat.tabsChats" | "chat.tabsSupport" }[] = [
+    { id: "chats", labelKey: "chat.tabsChats" },
+    { id: "support", labelKey: "chat.tabsSupport" },
+  ];
+
   return (
     <View className="mx-6 mb-4 flex-row rounded-2xl bg-section p-1 dark:bg-d-surface">
-      {OPTIONS.map((opt) => {
+      {options.map((opt) => {
         const active = opt.id === value;
         return (
           <Pressable
@@ -34,7 +37,7 @@ export function ChatsSectionTabs({ value, onChange }: Props) {
                   : "text-muted-foreground dark:text-d-muted"
               }`}
             >
-              {opt.label}
+              {t(opt.labelKey)}
             </Text>
           </Pressable>
         );

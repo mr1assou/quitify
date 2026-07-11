@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -23,6 +24,7 @@ type Props = {
 /** Support entry for logging a slip — same size and pulse as the craving CTA. */
 export function SlipCTA({ onPress }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const press = useSharedValue(1);
   const halo = useSharedValue(0);
 
@@ -67,7 +69,7 @@ export function SlipCTA({ onPress }: Props) {
         >
           <MaterialCommunityIcons name="smoking" size={40} color={colors.white} />
           <Text className="mt-2 px-4 text-center text-base font-bold text-white">
-            Smoked again?
+            {t("home.slipCta")}
           </Text>
         </AnimatedPressable>
       </View>

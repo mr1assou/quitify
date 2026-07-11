@@ -9,17 +9,19 @@ import { SavedCardsSectionTabs } from "@/components/feature/craving/saved/SavedC
 import type { SavedCardsSection } from "@/constants/craving/savedCardsSections";
 import { useTheme } from "@/context/ThemeContext";
 import { useSavedCards } from "@/hooks/craving/useSavedCards";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { resolveSavedQuotes } from "@/utils/craving/savedCardsCatalog";
 
 export function SavedCardsScreen() {
+  const { t, locale } = useTranslation();
   const { colors } = useTheme();
   const [section, setSection] = useState<SavedCardsSection>("tips");
   const [currentIndex, setCurrentIndex] = useState(0);
   const { idsForSection } = useSavedCards();
 
   const savedQuotes = useMemo(
-    () => resolveSavedQuotes(section, idsForSection(section)),
-    [idsForSection, section],
+    () => resolveSavedQuotes(section, idsForSection(section), locale),
+    [idsForSection, section, locale],
   );
 
   useEffect(() => {
@@ -36,11 +38,9 @@ export function SavedCardsScreen() {
 
   const currentQuote = savedQuotes[currentIndex];
   const emptyTitle =
-    section === "tips" ? "No saved tips yet" : "No saved motivation yet";
+    section === "tips" ? t("craving.savedTipsEmpty") : t("craving.savedMotivationEmpty");
   const emptySubtitle =
-    section === "tips"
-      ? "Tap the bookmark on a tip to save it here."
-      : "Tap the bookmark on a motivation card to save it here.";
+    section === "tips" ? t("craving.savedTipsHint") : t("craving.savedMotivationHint");
 
   return (
     <CravingToolScreen toolId="saved">

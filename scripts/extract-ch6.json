@@ -1,0 +1,754 @@
+[
+  {
+    "path": "name",
+    "value": "Hard days ahead"
+  },
+  {
+    "path": "role",
+    "value": "Days 121-150: prepare for grief, major stress, winter and holidays, slips, and old smoking friends"
+  },
+  {
+    "path": "days[0].title",
+    "value": "Day 121: Welcome to chapter six"
+  },
+  {
+    "path": "days[0].intro",
+    "value": "This chapter is not about doubting your progress. It is about making sure you are ready for the genuinely hard days life still has in store, because prepared quitters do not become surprised relapsers."
+  },
+  {
+    "path": "days[0].tasks[0].title",
+    "value": "Why this chapter exists"
+  },
+  {
+    "path": "days[0].tasks[0].text",
+    "value": "Even strong long term quitters face serious tests: grief, major stress, tough seasons. Preparing in advance dramatically lowers the risk of a slip when they arrive."
+  },
+  {
+    "path": "days[0].tasks[1].title",
+    "value": "Set your chapter six goal"
+  },
+  {
+    "path": "days[0].tasks[1].text",
+    "value": "Pick one type of hard day you want to feel prepared for by the end of this chapter."
+  },
+  {
+    "path": "days[1].title",
+    "value": "Day 122: Defining your worst case"
+  },
+  {
+    "path": "days[1].intro",
+    "value": "It helps to know, specifically, what your hardest possible day would look like, so it can never truly ambush you."
+  },
+  {
+    "path": "days[1].tasks[0].title",
+    "value": "Describe your toughest scenario"
+  },
+  {
+    "path": "days[1].tasks[0].text",
+    "value": "Write the single hardest situation you can imagine facing while staying smoke free."
+  },
+  {
+    "path": "days[1].tasks[1].title",
+    "value": "Write the emergency plan"
+  },
+  {
+    "path": "days[1].tasks[1].text",
+    "value": "Write exactly what you will do if that scenario happens, step by step: who you call, which tool you open first, what goes in your mouth instead of a cigarette."
+  },
+  {
+    "path": "days[2].title",
+    "value": "Day 123: Grief and major stress"
+  },
+  {
+    "path": "days[2].intro",
+    "value": "Loss and grief are among the highest risk situations for relapse, even years into a quit, because the urge to cope the old way returns during intense pain."
+  },
+  {
+    "path": "days[2].tasks[0].title",
+    "value": "Know the grief risk"
+  },
+  {
+    "path": "days[2].tasks[0].text",
+    "value": "Major emotional events are linked to relapse even after long smoke free periods. A cigarette during grief would not soften the pain; it would add an addiction on top of it. Planning for this now is an act of kindness to your future self."
+  },
+  {
+    "path": "days[2].tasks[1].title",
+    "value": "Build a crisis contact list"
+  },
+  {
+    "path": "days[2].tasks[1].text",
+    "value": "Write down two or three people you would reach out to first if you were going through something very difficult."
+  },
+  {
+    "path": "days[3].title",
+    "value": "Day 124: Eighteen weeks of readiness"
+  },
+  {
+    "path": "days[3].intro",
+    "value": "More than four months of consistency behind you, and now a chapter of deliberate preparation ahead."
+  },
+  {
+    "path": "days[3].tasks[0].title",
+    "value": "See your stats"
+  },
+  {
+    "path": "days[3].tasks[0].text",
+    "value": "Open your stats and review your full progress at this stage."
+  },
+  {
+    "path": "days[3].tasks[1].title",
+    "value": "Keep the reflex sharp"
+  },
+  {
+    "path": "days[3].tasks[1].text",
+    "value": "Use the breathing tool once today, unprompted, so it stays a reflex for the day you need it under real pressure."
+  },
+  {
+    "path": "days[4].title",
+    "value": "Day 125: Preparing for winter and holidays"
+  },
+  {
+    "path": "days[4].intro",
+    "value": "Colder months bring more indoor gatherings, holiday stress and shorter days, all of which can nudge mood and habits."
+  },
+  {
+    "path": "days[4].tasks[0].title",
+    "value": "Name your winter risks"
+  },
+  {
+    "path": "days[4].tasks[0].text",
+    "value": "Write which parts of colder months or holidays might be harder for you specifically."
+  },
+  {
+    "path": "days[4].tasks[1].title",
+    "value": "Plan one winter strategy"
+  },
+  {
+    "path": "days[4].tasks[1].text",
+    "value": "Pick one specific plan for handling holiday gatherings or darker days without smoking, including what goes in your pocket before you leave the house."
+  },
+  {
+    "path": "days[5].title",
+    "value": "Day 126: Old friends returning"
+  },
+  {
+    "path": "days[5].intro",
+    "value": "People from your smoking past can resurface without warning: a reunion, an old coworker, a returning friend."
+  },
+  {
+    "path": "days[5].tasks[0].title",
+    "value": "Rate this risk"
+  },
+  {
+    "path": "days[5].tasks[0].text",
+    "value": "Rate how likely it feels that an old smoking friend could reappear soon."
+  },
+  {
+    "path": "days[5].tasks[1].title",
+    "value": "Pre-load your reaction"
+  },
+  {
+    "path": "days[5].tasks[1].text",
+    "value": "Decide now what you will say and do if an old smoking friend offers you a cigarette unexpectedly. Your line from chapter three still works: no thanks, I do not smoke."
+  },
+  {
+    "path": "days[6].title",
+    "value": "Day 127: The empathy trap"
+  },
+  {
+    "path": "days[6].intro",
+    "value": "Sometimes the pull is not the cigarette; it is the bonding moment around it. You can keep the bond and skip the smoke."
+  },
+  {
+    "path": "days[6].tasks[0].title",
+    "value": "Join the moment, not the habit"
+  },
+  {
+    "path": "days[6].tasks[0].text",
+    "value": "You can stand with smokers, talk, laugh, and share the break without sharing the addiction. What you valued was the connection, and connection was never inside the cigarette."
+  },
+  {
+    "path": "days[6].tasks[1].title",
+    "value": "See your craving trend"
+  },
+  {
+    "path": "days[6].tasks[1].text",
+    "value": "Open your stats and look at how craving frequency has trended over the past month."
+  },
+  {
+    "path": "days[7].title",
+    "value": "Day 128: What if you do slip"
+  },
+  {
+    "path": "days[7].intro",
+    "value": "Preparing for a possible slip is not expecting one. It is removing its power to snowball."
+  },
+  {
+    "path": "days[7].tasks[0].title",
+    "value": "Update your slip recovery plan"
+  },
+  {
+    "path": "days[7].tasks[0].text",
+    "value": "Revisit the slip recovery plan from day fifty five and update it with anything you have learned since."
+  },
+  {
+    "path": "days[7].tasks[1].title",
+    "value": "One slip does not erase progress"
+  },
+  {
+    "path": "days[7].tasks[1].text",
+    "value": "If a slip ever happens, your health gains and skills do not vanish. The priority is getting back to zero the same day, telling someone, and treating it as one bad moment, not a new lifestyle."
+  },
+  {
+    "path": "days[8].title",
+    "value": "Day 129: Loneliness and isolation"
+  },
+  {
+    "path": "days[8].intro",
+    "value": "Feeling isolated quietly increases the pull toward old comforts, including this one."
+  },
+  {
+    "path": "days[8].tasks[0].title",
+    "value": "Notice any isolation"
+  },
+  {
+    "path": "days[8].tasks[0].text",
+    "value": "Write honestly whether you have felt isolated or disconnected lately."
+  },
+  {
+    "path": "days[8].tasks[1].title",
+    "value": "Reach out"
+  },
+  {
+    "path": "days[8].tasks[1].text",
+    "value": "Post something in the community today, even just a check-in, to stay connected."
+  },
+  {
+    "path": "days[9].title",
+    "value": "Day 130: Resilience check"
+  },
+  {
+    "path": "days[9].intro",
+    "value": "Roughly four and a half months of steady progress. Measure the growth."
+  },
+  {
+    "path": "days[9].tasks[0].title",
+    "value": "Rate your resilience"
+  },
+  {
+    "path": "days[9].tasks[0].text",
+    "value": "Rate how resilient you feel now compared to chapter one."
+  },
+  {
+    "path": "days[9].tasks[1].title",
+    "value": "Claim your week badge"
+  },
+  {
+    "path": "days[9].tasks[1].text",
+    "value": "Open your badges tab and collect this week's milestone."
+  },
+  {
+    "path": "days[10].title",
+    "value": "Day 131: Anniversary dates"
+  },
+  {
+    "path": "days[10].intro",
+    "value": "Dates connected to your smoking past, or to painful events, can carry quiet emotional weight."
+  },
+  {
+    "path": "days[10].tasks[0].title",
+    "value": "Map the meaningful dates"
+  },
+  {
+    "path": "days[10].tasks[0].text",
+    "value": "Write any dates or anniversaries connected to your smoking past that might affect you."
+  },
+  {
+    "path": "days[10].tasks[1].title",
+    "value": "Plan around a tough date"
+  },
+  {
+    "path": "days[10].tasks[1].text",
+    "value": "If a hard date is coming, write down how you will handle it: company, activity, tools."
+  },
+  {
+    "path": "days[11].title",
+    "value": "Day 132: Financial stress and smoking"
+  },
+  {
+    "path": "days[11].intro",
+    "value": "Money worries were once both a reason to smoke for relief and a reason to quit for savings. Now they are only the second one."
+  },
+  {
+    "path": "days[11].tasks[0].title",
+    "value": "See the long term savings"
+  },
+  {
+    "path": "days[11].tasks[0].text",
+    "value": "Open your money saved tab and look at the total kept since day one, a fund that grows every day you stay quit."
+  },
+  {
+    "path": "days[11].tasks[1].title",
+    "value": "Rate your financial stress"
+  },
+  {
+    "path": "days[11].tasks[1].text",
+    "value": "Rate how much financial stress you feel currently, regardless of smoking."
+  },
+  {
+    "path": "days[12].title",
+    "value": "Day 133: Twenty weeks free"
+  },
+  {
+    "path": "days[12].intro",
+    "value": "Five full months of consistency stand behind you now."
+  },
+  {
+    "path": "days[12].tasks[0].title",
+    "value": "Claim your twenty week badge"
+  },
+  {
+    "path": "days[12].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[12].tasks[1].title",
+    "value": "Five month overview"
+  },
+  {
+    "path": "days[12].tasks[1].text",
+    "value": "Open your stats and review your full progress at the five month mark."
+  },
+  {
+    "path": "days[13].title",
+    "value": "Day 134: Reviewing your whole arc"
+  },
+  {
+    "path": "days[13].intro",
+    "value": "Well into chapter six, take in the whole journey so far."
+  },
+  {
+    "path": "days[13].tasks[0].title",
+    "value": "Summarize the full journey"
+  },
+  {
+    "path": "days[13].tasks[0].text",
+    "value": "Write a short paragraph summarizing day one through today."
+  },
+  {
+    "path": "days[13].tasks[1].title",
+    "value": "Scroll your history"
+  },
+  {
+    "path": "days[13].tasks[1].text",
+    "value": "Open your stats and scroll through your entire history from the very beginning."
+  },
+  {
+    "path": "days[14].title",
+    "value": "Day 135: Handling the unexpected"
+  },
+  {
+    "path": "days[14].intro",
+    "value": "Not every hard day can be predicted. General readiness is the answer to surprise."
+  },
+  {
+    "path": "days[14].tasks[0].title",
+    "value": "Practice your fastest reset"
+  },
+  {
+    "path": "days[14].tasks[0].text",
+    "value": "Use the breathing tool today and notice how quickly it settles you. This is your fastest tool for sudden stress."
+  },
+  {
+    "path": "days[14].tasks[1].title",
+    "value": "Rate readiness for surprises"
+  },
+  {
+    "path": "days[14].tasks[1].text",
+    "value": "Rate how ready you feel to handle a sudden stressful event without smoking."
+  },
+  {
+    "path": "days[15].title",
+    "value": "Day 136: Twenty one weeks of evidence"
+  },
+  {
+    "path": "days[15].intro",
+    "value": "Twenty one weeks of proof that hard moments do not have to mean smoking."
+  },
+  {
+    "path": "days[15].tasks[0].title",
+    "value": "Claim your twenty one week badge"
+  },
+  {
+    "path": "days[15].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[15].tasks[1].title",
+    "value": "Fear was the cage"
+  },
+  {
+    "path": "days[15].tasks[1].text",
+    "value": "What keeps most smokers smoking is not pleasure but fear: fear of stress without cigarettes, fear of life feeling incomplete. You have now lived twenty one weeks of stress, celebration and boredom without them. The fear was the only thing the cigarette ever protected."
+  },
+  {
+    "path": "days[16].title",
+    "value": "Day 137: Tough seasons, not just tough days"
+  },
+  {
+    "path": "days[16].intro",
+    "value": "Sometimes it is not one bad day but a whole stretch: a brutal work season, a hard winter, weeks of pressure."
+  },
+  {
+    "path": "days[16].tasks[0].title",
+    "value": "Name a hard season"
+  },
+  {
+    "path": "days[16].tasks[0].text",
+    "value": "Write about a stretch of time, past or upcoming, that tends to be harder for you than a single day."
+  },
+  {
+    "path": "days[16].tasks[1].title",
+    "value": "Seasons need a different plan"
+  },
+  {
+    "path": "days[16].tasks[1].text",
+    "value": "A hard season needs frequent small check-ins with yourself rather than one big plan, because the pressure builds gradually instead of all at once."
+  },
+  {
+    "path": "days[17].title",
+    "value": "Day 138: Checking in honestly"
+  },
+  {
+    "path": "days[17].intro",
+    "value": "This chapter works best with honest self check-ins, not motivational noise."
+  },
+  {
+    "path": "days[17].tasks[0].title",
+    "value": "Rate today honestly"
+  },
+  {
+    "path": "days[17].tasks[0].text",
+    "value": "Rate today including anything that felt hard."
+  },
+  {
+    "path": "days[17].tasks[1].title",
+    "value": "Address one real concern"
+  },
+  {
+    "path": "days[17].tasks[1].text",
+    "value": "If something has been quietly worrying you about staying smoke free, write it down and note one step to address it."
+  },
+  {
+    "path": "days[18].title",
+    "value": "Day 139: Twenty two weeks free"
+  },
+  {
+    "path": "days[18].intro",
+    "value": "Each week stacks on the last, building a record that is hard to argue with."
+  },
+  {
+    "path": "days[18].tasks[0].title",
+    "value": "Claim your twenty two week badge"
+  },
+  {
+    "path": "days[18].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[18].tasks[1].title",
+    "value": "Tonight's one-liner"
+  },
+  {
+    "path": "days[18].tasks[1].text",
+    "value": "Write one sentence about how you feel right now in your journey."
+  },
+  {
+    "path": "days[19].title",
+    "value": "Day 140: One hundred forty days"
+  },
+  {
+    "path": "days[19].intro",
+    "value": "Deep into the final preparation chapter before the home stretch begins."
+  },
+  {
+    "path": "days[19].tasks[0].title",
+    "value": "Claim your one hundred forty day badge"
+  },
+  {
+    "path": "days[19].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[19].tasks[1].title",
+    "value": "See the full picture"
+  },
+  {
+    "path": "days[19].tasks[1].text",
+    "value": "Open your full stats and health overview across one hundred forty days."
+  },
+  {
+    "path": "days[19].tasks[2].title",
+    "value": "Share an update"
+  },
+  {
+    "path": "days[19].tasks[2].text",
+    "value": "Post a short update in the community about where you are."
+  },
+  {
+    "path": "days[20].title",
+    "value": "Day 141: Ten days left in chapter six"
+  },
+  {
+    "path": "days[20].intro",
+    "value": "Ten more days before the final stretch of the guided plan begins."
+  },
+  {
+    "path": "days[20].tasks[0].title",
+    "value": "Set a goal for the remainder"
+  },
+  {
+    "path": "days[20].tasks[0].text",
+    "value": "Pick one focus for the remaining days of chapter six."
+  },
+  {
+    "path": "days[20].tasks[1].title",
+    "value": "Know what is ahead"
+  },
+  {
+    "path": "days[20].tasks[1].text",
+    "value": "Chapter seven is the final chapter, a lighter weekly rhythm leading to your six month milestone and graduation into independent smoke free living."
+  },
+  {
+    "path": "days[21].title",
+    "value": "Day 142: Reflecting on six chapters"
+  },
+  {
+    "path": "days[21].intro",
+    "value": "Survival, habit rewiring, social pressure, staying strong, identity, and hard-day preparation, nearly all complete."
+  },
+  {
+    "path": "days[21].tasks[0].title",
+    "value": "Your hardest chapter"
+  },
+  {
+    "path": "days[21].tasks[0].text",
+    "value": "Write which chapter felt hardest and why."
+  },
+  {
+    "path": "days[21].tasks[1].title",
+    "value": "Your proudest moment"
+  },
+  {
+    "path": "days[21].tasks[1].text",
+    "value": "Write about the single proudest moment of your entire journey so far."
+  },
+  {
+    "path": "days[22].title",
+    "value": "Day 143: Tools you no longer need daily"
+  },
+  {
+    "path": "days[22].intro",
+    "value": "Tools that were essential early on may now be rarely used. That is a graduation, not a problem."
+  },
+  {
+    "path": "days[22].tasks[0].title",
+    "value": "Rate your tool usage"
+  },
+  {
+    "path": "days[22].tasks[0].text",
+    "value": "Rate how often you use the craving toolkit now compared to chapter one."
+  },
+  {
+    "path": "days[22].tasks[1].title",
+    "value": "Less use means more progress"
+  },
+  {
+    "path": "days[22].tasks[1].text",
+    "value": "Needing the tools less is a sign of progress. They stay in your pocket for life, cost nothing to carry, and are always one tap away."
+  },
+  {
+    "path": "days[23].title",
+    "value": "Day 144: Staying humble about risk"
+  },
+  {
+    "path": "days[23].intro",
+    "value": "Even with months behind you, treating every day as worth protecting keeps your guard at the right height: relaxed, not asleep."
+  },
+  {
+    "path": "days[23].tasks[0].title",
+    "value": "Write your ongoing commitment"
+  },
+  {
+    "path": "days[23].tasks[0].text",
+    "value": "Write one sentence describing your ongoing commitment to staying smoke free, whatever the month count."
+  },
+  {
+    "path": "days[23].tasks[1].title",
+    "value": "Long term success stays active"
+  },
+  {
+    "path": "days[23].tasks[1].text",
+    "value": "People who stay smoke free long term still treat rare strong cravings seriously rather than assuming they are permanently immune."
+  },
+  {
+    "path": "days[24].title",
+    "value": "Day 145: Supporting the community at scale"
+  },
+  {
+    "path": "days[24].intro",
+    "value": "With months of experience, your perspective carries real weight for people just starting."
+  },
+  {
+    "path": "days[24].tasks[0].title",
+    "value": "Write a longer support message"
+  },
+  {
+    "path": "days[24].tasks[0].text",
+    "value": "Write a detailed message of support or advice for someone struggling in the community right now."
+  },
+  {
+    "path": "days[24].tasks[1].title",
+    "value": "Rate how giving back feels"
+  },
+  {
+    "path": "days[24].tasks[1].text",
+    "value": "Rate how meaningful it feels to support others at this stage."
+  },
+  {
+    "path": "days[25].title",
+    "value": "Day 146: Five days to the final chapter"
+  },
+  {
+    "path": "days[25].intro",
+    "value": "Chapter seven is close: the final stretch before you graduate into independent maintenance."
+  },
+  {
+    "path": "days[25].tasks[0].title",
+    "value": "What graduation means"
+  },
+  {
+    "path": "days[25].tasks[0].text",
+    "value": "Graduating does not mean the app stops being useful. It means moving from daily structured missions to light, long term maintenance support."
+  },
+  {
+    "path": "days[25].tasks[1].title",
+    "value": "Design your maintenance"
+  },
+  {
+    "path": "days[25].tasks[1].text",
+    "value": "Write what kind of ongoing support you think you will want after the guided plan ends."
+  },
+  {
+    "path": "days[26].title",
+    "value": "Day 147: Reviewing your badges"
+  },
+  {
+    "path": "days[26].intro",
+    "value": "Every milestone collected is a concrete record of consistency over time."
+  },
+  {
+    "path": "days[26].tasks[0].title",
+    "value": "Review your collection"
+  },
+  {
+    "path": "days[26].tasks[0].text",
+    "value": "Open your badges tab and look through every milestone from day one to today."
+  },
+  {
+    "path": "days[26].tasks[1].title",
+    "value": "Your favorite badge"
+  },
+  {
+    "path": "days[26].tasks[1].text",
+    "value": "Write which badge meant the most and why."
+  },
+  {
+    "path": "days[27].title",
+    "value": "Day 148: Almost chapter seven"
+  },
+  {
+    "path": "days[27].intro",
+    "value": "Two days left. You have built real readiness for hard days, whether or not they ever fully arrive."
+  },
+  {
+    "path": "days[27].tasks[0].title",
+    "value": "Rate chapter six"
+  },
+  {
+    "path": "days[27].tasks[0].text",
+    "value": "Rate how prepared this chapter has made you feel for genuinely hard days."
+  },
+  {
+    "path": "days[27].tasks[1].title",
+    "value": "Tie up loose plans"
+  },
+  {
+    "path": "days[27].tasks[1].text",
+    "value": "Review the emergency and hard-day plans you wrote this chapter and make sure they still feel solid."
+  },
+  {
+    "path": "days[28].title",
+    "value": "Day 149: One day before the final chapter"
+  },
+  {
+    "path": "days[28].intro",
+    "value": "Tomorrow opens the last chapter: the stretch to six months free and graduation."
+  },
+  {
+    "path": "days[28].tasks[0].title",
+    "value": "Reflect on chapter six"
+  },
+  {
+    "path": "days[28].tasks[0].text",
+    "value": "Write a few sentences about how prepared you feel for hard days compared to when this chapter started."
+  },
+  {
+    "path": "days[28].tasks[1].title",
+    "value": "One last look ahead"
+  },
+  {
+    "path": "days[28].tasks[1].text",
+    "value": "Chapter seven maintains your progress with a lighter weekly focus as you graduate the structured plan."
+  },
+  {
+    "path": "days[29].title",
+    "value": "Day 150: Ready for hard days, ready for anything"
+  },
+  {
+    "path": "days[29].intro",
+    "value": "One hundred and fifty days. You have not just avoided hard days, you have actively prepared for them. The final chapter carries this forward for good."
+  },
+  {
+    "path": "days[29].tasks[0].title",
+    "value": "Claim your one hundred fifty day badge"
+  },
+  {
+    "path": "days[29].tasks[0].text",
+    "value": "Open your badges tab and collect this milestone."
+  },
+  {
+    "path": "days[29].tasks[1].title",
+    "value": "Full chapter six overview"
+  },
+  {
+    "path": "days[29].tasks[1].text",
+    "value": "Open your stats and health overview to see your progress through chapter six."
+  },
+  {
+    "path": "days[29].tasks[2].title",
+    "value": "Chapter six summary"
+  },
+  {
+    "path": "days[29].tasks[2].text",
+    "value": "Write a short summary of what you learned about preparing for hard days."
+  },
+  {
+    "path": "days[29].tasks[3].title",
+    "value": "Look ahead to chapter seven"
+  },
+  {
+    "path": "days[29].tasks[3].text",
+    "value": "Read the chapter seven intro and set one intention for the final stretch to six months free."
+  }
+]

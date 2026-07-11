@@ -1,0 +1,182 @@
+export const goals = {
+  createTitle: "Create a goal",
+  editTitle: "Edit goal",
+  manageTitle: "Your goal",
+  setGoal: "Set goal",
+  saveChanges: "Save changes",
+  deleteGoal: "Delete goal",
+  cigarettesAvoided: "Cigarettes avoided",
+  moneySaved: "Money saved",
+  saveFailed: "Could not save goal",
+  deleteFailed: "Could not delete goal",
+  empty: "No goals yet",
+  emptyHint: "Set a target to stay motivated.",
+} as const;
+
+export const missions = {
+  noQuitDate: "Set your quit date during onboarding to unlock your 180-day plan.",
+  planNotStarted:
+    "Your plan unlocks when your quit day begins. Complete each day to unlock the next one.",
+  module: "Module {{n}}",
+  lockedTitle: "Day {{day}} is locked",
+  lockedMessage: "Complete day {{previousDay}} first to unlock this day.",
+  notesTitle: "Plan notes",
+  addNote: "Add note",
+  editNote: "Edit note",
+  notePlaceholder: "How did this task go? What did you learn?",
+  bonusComplete: "All daily missions are done. Nice work.",
+  dayTitle: "Day {{day}}",
+  dayLockedCompleteEarlier: "Complete earlier days to unlock this plan.",
+} as const;
+
+export const community = {
+  emptyTitle: "No posts yet",
+  emptyHint: "Tap + to share the first post with the community.",
+  noMatch: "No posts match your filter.",
+  filterPosts: "Filter posts",
+  newest: "Newest",
+  mostPopular: "Most popular",
+  mostDiscussed: "Most discussed",
+  createPost: "Create post",
+  editPost: "Edit post",
+  titleLabel: "Title",
+  titlePlaceholder: "What's on your mind?",
+  bodyPlaceholder: "Body text (optional)",
+  addComment: "Add a comment…",
+  deleteCommentTitle: "Delete comment?",
+  deleteCommentMessage: "This cannot be undone.",
+  searchTitle: "Find someone by username",
+  searchEmpty: "No user found",
+  shareTitle: "Send post",
+  sending: "Sending...",
+} as const;
+
+export const chat = {
+  tabsChats: "Chats",
+  tabsSupport: "Support",
+  emptyGreeting: "Say hi to {{name}}",
+  emptyRespect: "Be respectful and supportive. You're both on the same journey.",
+  sayHi: "Say hi 👋",
+  composerPlaceholder: "Message…",
+  editPlaceholder: "Edit your message…",
+  previewEmpty: "No messages yet",
+  deleteFailed: "Could not delete message",
+  cantStart: "Can't start chat",
+  calling: "Calling…",
+  connecting: "Connecting…",
+  callEnded: "Call ended",
+  mute: "Mute",
+  unmute: "Unmute",
+  endCall: "End call",
+  incomingVideo: "Incoming video call",
+  incomingVoice: "Incoming voice call",
+  micPermission: "Allow microphone access to send voice messages.",
+  loadUsersFailed: "Could not load users",
+  loadSupportFailed: "Could not load support",
+  supportTabHintStaff:
+    "Open the Support tab to message other support team members.",
+  supportTabHintUser:
+    "Open the Support tab to reach our team, or search Community to chat.",
+  noSupportTeammates: "No support teammates found",
+  noSupportAvailable: "No support available",
+  supportTeammatesEmpty: "Other support team members will appear here.",
+  supportTeamEmpty: "Our support team will appear here when available.",
+  deleteMessageFailed: "Could not delete message",
+  deleteMessageNotDeletable: "This message may no longer be deletable.",
+  editMessageFailed: "Could not edit message",
+  editMessageNotEditable: "This message may no longer be editable.",
+  writeComment: "Write a comment…",
+  replyTo: "Reply to @{{handle}}…",
+  loadChatsFailed: "Could not load people you have chatted with.",
+  sendPostFailed: "Could not send post right now. Please try again.",
+  noChatsYet: "No chats yet",
+} as const;
+
+export const stats = {
+  title: "Your Stats",
+  moneySaved: "Money saved",
+  cigarettesAvoided: "Cigarettes avoided",
+  lifeGained: "Life gained",
+  smokeFreeTime: "Smoke-free time",
+  range7d: "7 days",
+  range30d: "30 days",
+  range90d: "90 days",
+  rangeLifetime: "Lifetime",
+  cravingsByTime: "Cravings by time of day",
+  last7Days: "Last 7 days",
+  resisted: "Resisted",
+  smoked: "Smoked",
+  emptyCravings: "No cravings logged yet.",
+  emptyAttempts: "No attempts yet.",
+  emptyGoals: "No goals yet.",
+  emptyRewards: "No rewards yet.",
+  attemptHistory: "Attempt history",
+  goalHistory: "Goal history",
+  freedomPointsHistory: "Freedom points history",
+} as const;
+
+export const achievements = {
+  tabRank: "Global Rank",
+  tabBadges: "Badges",
+  locked: "Locked",
+  earned: "Earned",
+  inProgress: "In progress",
+  currentBadge: "Current badge",
+  allUnlocked: "Every badge is unlocked. You set the bar now.",
+  loadMore: "Load more",
+  profilePhoto: "Your profile photo",
+} as const;
+
+export const profile = {
+  settings: "Settings",
+  profile: "Profile",
+  quitter: "Quitter",
+  vipMember: "VIP member",
+  guest: "Guest",
+  member: "Member",
+  online: "Online",
+  offline: "Offline",
+  memberSince: "Member since {{date}}",
+  resetTitle: "Reset my journey?",
+  resetLossBadges: "All badges earned",
+  resetLossStreak: "Your current streak",
+  resetLossStats: "Stats and progress",
+  activityPosts: "Posts",
+  activityComments: "Comments",
+  activityUpvoted: "Upvoted",
+  emptyPosts: "No posts yet.",
+  globalRank: "Global rank",
+  freedomPoints: "Freedom points",
+  currentStreak: "Current streak",
+  bestStreak: "Best streak",
+  version: "Quit Smoking · v1.0",
+} as const;
+
+export const notifications = {
+  title: "Notifications",
+  empty: "You're all caught up. New notifications will show up here.",
+  commented: "commented on your post",
+  replied: "replied to your comment",
+  upvoted: "upvoted your post",
+  downvoted: "downvoted your post",
+  sharedPost: "shared a new post",
+} as const;
+
+export const layout = {
+  messages: "Messages",
+  notifications: "Notifications",
+  upgradeVip: "Upgrade to VIP",
+  offlineTitle: "Internet required",
+  offlineMessage: "Connect to the internet to use Quitify.",
+} as const;
+
+export const premium = {
+  lockedBadge: "VIP feature",
+  unlockCta: "Unlock VIP →",
+} as const;
+
+export const legal = {
+  privacyTitle: "Privacy policy",
+  termsTitle: "Terms of service",
+  placeholder: "This is a placeholder. Replace with your final legal text.",
+} as const;

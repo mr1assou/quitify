@@ -8,9 +8,11 @@ import { isSupportRole } from "@/constants/auth/userRoles";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityFeed } from "@/hooks/community/useCommunityFeed";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { dbAuthorId } from "@/utils/community/presence";
 
 export default function CommunityScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { state } = useApp();
   const isSupportStaff = isSupportRole(state.account?.role);
@@ -64,11 +66,11 @@ export default function CommunityScreen() {
           ) : (
             <View className="items-center px-8 py-16">
               <Text className="text-center text-base font-semibold text-foreground dark:text-d-text">
-                {error ?? (hasActiveFilter ? "No posts match your filters" : "No posts yet")}
+                {error ?? (hasActiveFilter ? t("community.noMatch") : t("community.emptyTitle"))}
               </Text>
               {!error && !hasActiveFilter ? (
                 <Text className="mt-2 text-center text-sm text-muted-foreground dark:text-d-muted">
-                  Tap + to share the first post with the community.
+                  {t("community.emptyHint")}
                 </Text>
               ) : null}
             </View>

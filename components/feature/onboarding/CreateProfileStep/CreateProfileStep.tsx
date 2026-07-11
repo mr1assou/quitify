@@ -8,6 +8,8 @@ import {
 } from "@/constants/onboarding/onboardingUsername";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import { useTheme } from "@/context/ThemeContext";
+import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   username: string;
@@ -23,17 +25,20 @@ export function CreateProfileStep({
   onSexChange,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { localize } = useLocalizedCatalog();
+  const sexOptions = localize(PROFILE_SEX_OPTIONS, "onboarding.profile.sex", ["label"]);
 
   return (
     <View className="w-full gap-5">
       <View className="gap-1">
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Username
+          {t("onboarding.profile.username.label")}
         </Text>
         <TextInput
           value={username}
           onChangeText={(text) => onUsernameChange(normalizeOnboardingUsername(text))}
-          placeholder="How should we call you?"
+          placeholder={t("onboarding.profile.username.placeholder")}
           placeholderTextColor={colors.mutedForeground}
           autoCapitalize="none"
           autoCorrect={false}
@@ -44,10 +49,10 @@ export function CreateProfileStep({
 
       <View className="gap-2">
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Sex
+          {t("onboarding.profile.sex.label")}
         </Text>
         <View className="flex-row flex-wrap gap-2">
-          {PROFILE_SEX_OPTIONS.map((opt) => (
+          {sexOptions.map((opt) => (
             <Chip
               key={opt.id}
               label={opt.label}

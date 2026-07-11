@@ -1,35 +1,34 @@
-import planData from "@/constants/progress/quit-plan.json";
-import type { MissionLog, QuitPlan, QuitPlanChapter, QuitPlanDay, ResolvedPlanTask } from "@/types";
+import type { MissionLog, QuitPlanDay, ResolvedPlanTask } from "@/types";
 import { dayKey } from "@/utils/shared/dates";
 
-export const QUIT_PLAN = planData as QuitPlan;
+import {
+  getActiveDayPlan,
+  getActiveChapterForDay,
+  getActivePlanTotalDays,
+  getActiveQuitPlan,
+} from "@/i18n/content/quitPlanStore";
 
-export const PLAN_TOTAL_DAYS = QUIT_PLAN.total_days;
+export const PLAN_TOTAL_DAYS = 180;
 
-const dayByNumber = new Map<number, QuitPlanDay>();
+export function getPlanTotalDays(): number {
+  return getActivePlanTotalDays();
+}
 
-for (const chapter of QUIT_PLAN.chapters) {
-  for (const day of chapter.days) {
-    dayByNumber.set(day.day, day);
-  }
+/** @deprecated Use getQuitPlanSnapshot() for locale-aware plan data */
+export function getQuitPlanLegacyExport() {
+  return getActiveQuitPlan();
 }
 
 export function getDayPlan(day: number): QuitPlanDay | null {
-  if (day < 1 || day > PLAN_TOTAL_DAYS) return null;
-  return dayByNumber.get(day) ?? null;
+  return getActiveDayPlan(day);
 }
 
-export function getChapterForDay(day: number): QuitPlanChapter {
-  const chapter = QUIT_PLAN.chapters.find(
-    (entry) => day >= entry.day_start && day <= entry.day_end,
-  );
-  if (!chapter) {
-    return QUIT_PLAN.chapters[QUIT_PLAN.chapters.length - 1];
-  }
-  return chapter;
+export function getChapterForDay(day: number) {
+  return getActiveChapterForDay(day);
 }
 
-export function missionPlanLabel(day: number): string {
+export function missionPlanLabel(day: number, t?: (key: string, params?: Record<string, string | number>) => string): string {
+  if (t) return t("missions.dayTitle", { day: String(day) });
   return `Your plan for Day ${day}`;
 }
 
@@ -62,3 +61,5 @@ export function resolvePlanTasks(
 export function arePlanTasksComplete(tasks: readonly ResolvedPlanTask[]): boolean {
   return tasks.length > 0 && tasks.every((task) => task.done);
 }
+
+export { getActiveQuitPlan as getQuitPlanSnapshot };

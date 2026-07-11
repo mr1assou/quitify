@@ -2,13 +2,21 @@ import { Pressable, Text, View } from "react-native";
 
 import { ACHIEVEMENT_SECTIONS } from "@/constants/progress/achievementSections";
 import type { AchievementSection } from "@/constants/progress/achievementSections";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   value: AchievementSection;
   onChange: (section: AchievementSection) => void;
 };
 
+const SECTION_LABEL_KEYS = {
+  rank: "achievements.tabRank",
+  badges: "achievements.tabBadges",
+} as const satisfies Record<AchievementSection, "achievements.tabRank" | "achievements.tabBadges">;
+
 export function AchievementSectionTabs({ value, onChange }: Props) {
+  const { t } = useTranslation();
+
   return (
     <View className="flex-row rounded-2xl bg-elevated p-1 dark:bg-d-surface">
       {ACHIEVEMENT_SECTIONS.map((opt) => {
@@ -30,7 +38,7 @@ export function AchievementSectionTabs({ value, onChange }: Props) {
                   : "text-muted-foreground dark:text-d-muted"
               }`}
             >
-              {opt.label}
+              {t(SECTION_LABEL_KEYS[opt.id])}
             </Text>
           </Pressable>
         );

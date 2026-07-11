@@ -3,6 +3,7 @@ import * as Haptics from "expo-haptics";
 import { Pressable } from "react-native";
 
 import { VIP_IMAGE } from "@/constants/app/assets";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   isPremium: boolean;
@@ -10,9 +11,11 @@ type Props = {
 };
 
 export function PremiumHeaderButton({ isPremium, onPress }: Props) {
+  const { t } = useTranslation();
+
   return (
     <Pressable
-      accessibilityLabel={isPremium ? "VIP member" : "Upgrade to VIP"}
+      accessibilityLabel={isPremium ? t("profile.vipMember") : t("layout.upgradeVip")}
       onPress={() => {
         Haptics.selectionAsync().catch(() => {});
         onPress();

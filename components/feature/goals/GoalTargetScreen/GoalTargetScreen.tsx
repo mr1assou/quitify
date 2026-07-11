@@ -11,6 +11,7 @@ import { useApp } from "@/context/AppContext";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useNow } from "@/hooks/shared/useNow";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 const GOAL_TYPE = "smoke_free_days" as const;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export function GoalTargetScreen({ mode = "create", goalId }: Props) {
+  const { t } = useTranslation();
   const { state } = useApp();
   const { goals, minTargets, setGoal, refresh, isReady } = useUserGoals();
   const { requirePremium } = usePremiumGate();
@@ -48,12 +50,12 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
       } catch {
         setGoalModal({
           type: "error",
-          title: "Could not save goal",
-          message: "Please try again.",
+          title: t("goals.saveFailed"),
+          message: t("common.tryAgain"),
         });
       }
     },
-    [isEdit, requirePremium, setGoal],
+    [isEdit, requirePremium, setGoal, t],
   );
 
   if (!state.profile) return null;
@@ -74,7 +76,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-d-bg" edges={["top", "bottom"]}>
       <CravingSessionHeader
-        title={isEdit ? "Edit goal" : "Create a goal"}
+        title={isEdit ? t("goals.editTitle") : t("goals.createTitle")}
         showBack
         onBack={close}
         onClose={close}
@@ -97,7 +99,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
             economics={economics}
             minDaysAheadFromServer={minTargets.smoke_free_days}
             initialDays={initialDays}
-            confirmLabel={isEdit ? "Save changes" : "Set goal"}
+            confirmLabel={isEdit ? t("goals.saveChanges") : t("goals.setGoal")}
             onConfirm={handleConfirm}
           />
         </ScrollView>

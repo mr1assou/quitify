@@ -14,6 +14,7 @@ import Animated, {
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { AnalyzingTask } from "@/types";
 
 export type { AnalyzingTask } from "@/types";
@@ -306,6 +307,7 @@ function TaskRow({
 const TICK_MS = 80;
 
 export function AnalyzingProgress({ tasks, onComplete }: Props) {
+  const { t } = useTranslation();
   const totalDuration = useMemo(
     () => tasks.reduce((sum, t) => sum + t.durationMs, 0),
     [tasks],
@@ -353,10 +355,10 @@ export function AnalyzingProgress({ tasks, onComplete }: Props) {
           className="mt-3 text-center text-3xl font-bold leading-9 text-foreground dark:text-d-text"
           style={{ letterSpacing: -0.5 }}
         >
-          Building your{"\n"}personalized plan
+          {t("onboarding.analyzing.title")}
         </Text>
         <Text className="mt-3 max-w-[300px] text-center text-[15px] leading-5 text-muted-foreground dark:text-d-muted">
-          Hang tight we’re tailoring everything around your answers.
+          {t("onboarding.analyzing.subtitle")}
         </Text>
       </View>
 

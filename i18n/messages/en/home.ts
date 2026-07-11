@@ -1,0 +1,15 @@
+export const home = {
+  streakLabel: "Current streak",
+  attempt: "Attempt {{n}}",
+  since: "Since {{date}}",
+  saved: "saved",
+  cigsAvoided: "cigs avoided",
+  lifeGained: "life gained",
+  cravingCta: "I have a craving",
+  slipCta: "Smoked again?",
+  recoveryTitle: "Your recovery",
+  goalsTitle: "Your goals",
+  ringNicotine: "Nicotine Cleared",
+  ringBreathing: "Breathing Recovery",
+  ringHeart: "Heart Health",
+} as const;

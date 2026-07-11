@@ -1,12 +1,12 @@
+import { useMemo } from "react";
 import { Text, View } from "react-native";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
 import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
-import {
-  QUIT_METHOD_DROPDOWN_OPTIONS,
-  quitMethodHint,
-} from "@/constants/onboarding/onboardingQuitPlan";
+import { QUIT_METHOD_OPTIONS } from "@/constants/onboarding/onboardingQuitPlan";
+import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { QuitMethod } from "@/types/onboarding/onboarding";
 
 type Props = {
@@ -15,16 +15,29 @@ type Props = {
 };
 
 export function QuitMethodPicker({ selected, onSelect }: Props) {
-  const hint = quitMethodHint(selected);
+  const { t } = useTranslation();
+  const { localize, label } = useLocalizedCatalog();
+
+  const options = useMemo(
+    () =>
+      localize(QUIT_METHOD_OPTIONS, "onboarding.quitPlan", ["label"]).map((option) => ({
+        value: option.id,
+        label: option.label,
+      })),
+    [localize],
+  );
+
+  const hint = selected ? label("onboarding.quitPlan", selected, "hint") : undefined;
+  const fieldLabel = t("onboarding.quitPlan.methodTitle");
 
   return (
     <View className="gap-1.5">
-      <OnboardingFieldLabel>How do you want to quit?</OnboardingFieldLabel>
+      <OnboardingFieldLabel>{fieldLabel}</OnboardingFieldLabel>
       <SelectFieldString
-        fieldLabel="How do you want to quit?"
+        fieldLabel={fieldLabel}
         value={selected}
-        placeholder="Select a method"
-        options={QUIT_METHOD_DROPDOWN_OPTIONS}
+        placeholder={t("common.selectMethod")}
+        options={options}
         allowClear={false}
         showLabel={false}
         controlHeight={ONBOARDING_CONTROL_HEIGHT}
