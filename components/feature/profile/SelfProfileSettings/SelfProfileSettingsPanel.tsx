@@ -148,7 +148,7 @@ export function SelfProfileSettings({
               <Text className="ml-2 text-base font-bold text-white">Unlock VIP mode</Text>
             </View>
             <Text className="mt-1 text-xs text-white opacity-80">
-              See the full $4.99/month offer.
+              See the full $4.17/month offer.
             </Text>
           </View>
         </Pressable>

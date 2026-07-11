@@ -89,7 +89,7 @@ export default function PaywallComparison() {
   );
   const quitifyDisplay =
     plans.find((plan) => plan.id === "yearly")?.rightPrice ??
-    formatCurrency(4.99, "USD");
+    formatCurrency(4.17, "USD");
 
   const dismiss = () => {
     void markPostPaywallFlowComplete();

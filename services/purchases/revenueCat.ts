@@ -2,9 +2,13 @@ import { Platform } from "react-native";
 import Purchases, {
   LOG_LEVEL,
   PACKAGE_TYPE,
+  PRODUCT_CATEGORY,
+  PURCHASES_ERROR_CODE,
   type CustomerInfo,
   type PurchasesOffering,
   type PurchasesPackage,
+  type PurchasesStoreProduct,
+  type SubscriptionOption,
 } from "react-native-purchases";
 
 import {
@@ -13,6 +17,9 @@ import {
 } from "@/config/revenuecat";
 import { REVENUECAT_PREMIUM_ENTITLEMENT } from "@/constants/paywall/revenueCat";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
+import {
+  PLAY_YEARLY_TRIAL_OFFER_ID,
+} from "@/constants/paywall/purchases";
 import {
   getRevenueCatConfigurePromise,
   isRevenueCatConfigured,
@@ -158,9 +165,118 @@ export function packageForPlan(
 }
 
 export async function syncPremiumFromRevenueCat(): Promise<boolean> {
+  await waitForRevenueCatReady();
   if (!isRevenueCatLinked()) return false;
   const customerInfo = await Purchases.getCustomerInfo();
   return hasPremiumEntitlement(customerInfo);
+}
+
+/** Wait until configure + logIn chain finished. */
+export async function waitForRevenueCatReady(): Promise<void> {
+  const configurePromise = getRevenueCatConfigurePromise();
+  if (configurePromise) await configurePromise;
+  await syncChain;
+}
+
+export function premiumFromCustomerInfo(customerInfo: CustomerInfo): boolean {
+  return hasPremiumEntitlement(customerInfo);
+}
+
+function isProductAlreadyPurchasedError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+  return (error as { code?: string }).code === PURCHASES_ERROR_CODE.PRODUCT_ALREADY_PURCHASED_ERROR;
+}
+
+function logSubscriptionOptions(context: string, product: PurchasesStoreProduct): void {
+  if (!__DEV__) return;
+
+  const options = product.subscriptionOptions ?? [];
+  console.log(`[revenuecat] ${context} ${product.identifier}`, {
+    defaultOptionId: product.defaultOption?.id ?? null,
+    options: options.map((option) => ({
+      id: option.id,
+      hasFreePhase: option.freePhase != null,
+      phases: option.pricingPhases.map((phase) => ({
+        price: phase.price.formatted,
+        period: phase.billingPeriod.iso8601,
+      })),
+    })),
+  });
+}
+
+async function freshStoreProduct(productId: string): Promise<PurchasesStoreProduct | null> {
+  const products = await Purchases.getProducts([productId], PRODUCT_CATEGORY.SUBSCRIPTION);
+  return products[0] ?? null;
+}
+
+function isTrialSubscriptionOption(option: SubscriptionOption): boolean {
+  if (option.freePhase != null) return true;
+  if (option.id.includes(PLAY_YEARLY_TRIAL_OFFER_ID)) return true;
+  return option.pricingPhases.some((phase) => phase.price.amountMicros === 0);
+}
+
+function yearlyTrialSubscriptionOption(product: PurchasesStoreProduct): SubscriptionOption | null {
+  if (Platform.OS !== "android") return null;
+
+  const options = product.subscriptionOptions ?? [];
+  if (!options.length) return null;
+
+  const trialOfferSuffix = `:${PLAY_YEARLY_TRIAL_OFFER_ID}`;
+  const byOfferId = options.find(
+    (option) => option.id.endsWith(trialOfferSuffix) && isTrialSubscriptionOption(option),
+  );
+  if (byOfferId) return byOfferId;
+
+  return options.find((option) => isTrialSubscriptionOption(option)) ?? null;
+}
+
+async function resolveYearlyStoreProduct(
+  selectedPackage: PurchasesPackage,
+): Promise<PurchasesStoreProduct> {
+  const cachedProduct = selectedPackage.product;
+  const freshProduct = await freshStoreProduct(cachedProduct.identifier);
+  const product = freshProduct ?? cachedProduct;
+
+  logSubscriptionOptions("yearly product options", product);
+  return product;
+}
+
+/** New Google accounts get the trial offer; returning users pay full price immediately. */
+async function purchaseYearlyPlan(
+  selectedPackage: PurchasesPackage,
+  product: PurchasesStoreProduct,
+): Promise<CustomerInfo> {
+  const trialOption = yearlyTrialSubscriptionOption(product);
+
+  if (trialOption) {
+    if (__DEV__) {
+      console.log(`[revenuecat] purchasing yearly trial option ${trialOption.id}`);
+    }
+    const { customerInfo } = await Purchases.purchaseSubscriptionOption(trialOption);
+    return customerInfo;
+  }
+
+  if (__DEV__) {
+    console.log("[revenuecat] trial not eligible — purchasing yearly at full price");
+  }
+  const { customerInfo } = await Purchases.purchasePackage(selectedPackage);
+  return customerInfo;
+}
+
+async function purchaseSelectedPackage(
+  selectedPackage: PurchasesPackage,
+  planId: PaywallPlanId,
+): Promise<CustomerInfo> {
+  if (planId === "yearly") {
+    const product = await resolveYearlyStoreProduct(selectedPackage);
+    return purchaseYearlyPlan(selectedPackage, product);
+  }
+
+  if (__DEV__) {
+    console.log(`[revenuecat] purchasing ${planId} package ${selectedPackage.product.identifier}`);
+  }
+  const { customerInfo } = await Purchases.purchasePackage(selectedPackage);
+  return customerInfo;
 }
 
 export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolean> {
@@ -174,8 +290,16 @@ export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolea
     throw new Error("This plan is not available yet. Check your RevenueCat offering.");
   }
 
-  const { customerInfo } = await Purchases.purchasePackage(selectedPackage);
-  return hasPremiumEntitlement(customerInfo);
+  try {
+    const customerInfo = await purchaseSelectedPackage(selectedPackage, planId);
+    return hasPremiumEntitlement(customerInfo);
+  } catch (error) {
+    if (isProductAlreadyPurchasedError(error)) {
+      const customerInfo = await Purchases.restorePurchases();
+      return hasPremiumEntitlement(customerInfo);
+    }
+    throw error;
+  }
 }
 
 export async function restoreRevenueCatPurchases(): Promise<boolean> {

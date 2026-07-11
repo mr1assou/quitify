@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
-import { updatePremiumOnServer } from "@/services/auth/premiumApi";
+import { persistPremiumStatus } from "@/services/auth/persistPremiumStatus";
 import {
   purchasePaywallPlan,
   restoreRevenueCatPurchases,
@@ -13,20 +13,6 @@ import {
   isPurchaseCancelledError,
   purchaseErrorMessage,
 } from "@/utils/purchases/revenueCatErrors";
-
-async function persistPremiumToDb(
-  setAccount: ReturnType<typeof useApp>["setAccount"],
-  account: ReturnType<typeof useApp>["state"]["account"],
-): Promise<boolean> {
-  const me = await updatePremiumOnServer(true);
-  if (!account) return Boolean(me.isPremium);
-
-  setAccount({
-    ...account,
-    isPremium: Boolean(me.isPremium),
-  });
-  return Boolean(me.isPremium);
-}
 
 export function usePaywallPurchase() {
   const { state, setAccount } = useApp();
@@ -42,7 +28,7 @@ export function usePaywallPurchase() {
         const entitled = await purchasePaywallPlan(planId);
         if (!entitled) return false;
 
-        return await persistPremiumToDb(setAccount, state.account);
+        return await persistPremiumStatus(true, setAccount, state.account);
       } catch (error) {
         if (isPurchaseCancelledError(error)) return false;
 
@@ -68,8 +54,8 @@ export function usePaywallPurchase() {
     try {
       const entitled = await restoreRevenueCatPurchases();
       const premium = entitled
-        ? await persistPremiumToDb(setAccount, state.account)
-        : false;
+        ? await persistPremiumStatus(true, setAccount, state.account)
+        : await persistPremiumStatus(false, setAccount, state.account);
 
       Alert.alert(
         premium ? "Restored" : "No subscription found",
@@ -92,10 +78,9 @@ export function usePaywallPurchase() {
   const refreshPremium = useCallback(async (): Promise<boolean> => {
     try {
       const entitled = await syncPremiumFromRevenueCat();
-      if (!entitled) return false;
-      return await persistPremiumToDb(setAccount, state.account);
+      return await persistPremiumStatus(entitled, setAccount, state.account);
     } catch {
-      return false;
+      return Boolean(state.account?.isPremium);
     }
   }, [setAccount, state.account]);
 

@@ -15,9 +15,9 @@ export const PAYWALL_PLANS_USD = [
   {
     id: "yearly" as const,
     label: "Yearly plan",
-    rightAmountUsd: 4.99,
+    rightAmountUsd: 4.17,
     rightPeriod: "/mo",
-    subAmountUsd: 59.99,
+    subAmountUsd: 49.99,
     subPeriod: "/year",
     trial: "3 days free trial",
     recommended: true,
