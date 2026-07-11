@@ -107,8 +107,16 @@ function ThemedRoot() {
           options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
         <Stack.Screen
+          name="signup-verify-otp"
+          options={{ animation: "fade", animationDuration: 200 }}
+        />
+        <Stack.Screen
           name="login-email"
           options={{ animation: "slide_from_right" }}
+        />
+        <Stack.Screen
+          name="login-verify-otp"
+          options={{ animation: "fade", animationDuration: 200 }}
         />
         <Stack.Screen
           name="paywall"

@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { safeRouter } from "@/utils/app/safeRouter";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -11,43 +11,52 @@ import {
   TextInput,
   View,
 } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { Button } from "@/components/ui/Button";
-import { useApp } from "@/context/AppContext";
-import { buildProfile, useOnboarding } from "@/context/OnboardingContext";
 import { useTheme } from "@/context/ThemeContext";
-import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
+import {
+  isEmailAlreadyExistsError,
+  sendEmailSignupOtp,
+} from "@/services/auth/emailSignupOtpApi";
+import { safeRouter } from "@/utils/app/safeRouter";
+
+const SIGNUP_EMAIL_EXISTS =
+  "Your email already exists. Tap I already have an account to sign in.";
 
 export default function Signup() {
   const { fromCelebration } = useLocalSearchParams<{ fromCelebration?: string }>();
   const fromCelebrationScreen = fromCelebration === "1";
-  const { state, completeOnboarding, setAccount, setFlag } = useApp();
-  const { draft } = useOnboarding();
   const { colors } = useTheme();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const valid = email.includes("@") && email.includes(".");
 
-  const enterAppFromCelebration = useCallback(() => {
-    completeOnboarding(buildProfile(draft));
-    safeRouter.replace("/(tabs)");
-  }, [completeOnboarding, draft]);
+  const submit = async () => {
+    if (!valid || busy) return;
 
-  const submit = () => {
-    if (!valid) return;
-    setAccount({
-      name: name.trim() || undefined,
-      email: email.trim().toLowerCase(),
-      createdAt: Date.now(),
-    });
-    setFlag("hasSeenSignupPrompt", true);
-    if (fromCelebrationScreen) {
-      void markPostSignupFlowPending().then(() => enterAppFromCelebration());
-    } else if (state.isOnboarded) safeRouter.replace("/(tabs)");
-    else router.back();
+    setBusy(true);
+    setError(null);
+    try {
+      await sendEmailSignupOtp(email);
+      Keyboard.dismiss();
+      safeRouter.pushStack({
+        pathname: "/signup-verify-otp",
+        params: {
+          email: email.trim().toLowerCase(),
+          ...(fromCelebrationScreen ? { fromCelebration: "1" } : {}),
+        },
+      });
+    } catch (e) {
+      setBusy(false);
+      if (isEmailAlreadyExistsError(e)) {
+        setError(SIGNUP_EMAIL_EXISTS);
+      } else {
+        setError(e instanceof Error ? e.message : "Could not send verification code");
+      }
+    }
   };
 
   return (
@@ -69,16 +78,15 @@ export default function Signup() {
           <Text className="text-center text-3xl font-bold text-foreground dark:text-d-text">
             Sign up with email
           </Text>
+          <Text className="mt-3 text-center text-sm text-muted-foreground dark:text-d-muted">
+            We&apos;ll send a verification code to your inbox.
+          </Text>
 
-          <Animated.View entering={FadeInUp.delay(120).duration(450)} className="mt-10 gap-3">
-            <Field
-              label="Name"
-              value={name}
-              onChangeText={setName}
-              placeholder="Optional"
-              autoCapitalize="words"
-              colors={colors}
-            />
+          {error ? (
+            <Text className="mt-4 text-center text-sm text-alert">{error}</Text>
+          ) : null}
+
+          <View className="mt-10 gap-3">
             <Field
               label="Email"
               value={email}
@@ -86,17 +94,19 @@ export default function Signup() {
               placeholder="you@email.com"
               autoCapitalize="none"
               keyboardType="email-address"
+              editable={!busy}
               colors={colors}
             />
-          </Animated.View>
+          </View>
 
           <View className="mt-10">
             <Button
-              label="Sign up"
+              label="Continue"
               size="lg"
               fullWidth
-              disabled={!valid}
-              onPress={submit}
+              loading={busy}
+              disabled={!valid || busy}
+              onPress={() => void submit()}
             />
           </View>
         </ScrollView>
@@ -112,6 +122,7 @@ function Field({
   placeholder,
   autoCapitalize = "sentences",
   keyboardType,
+  editable = true,
   colors,
 }: {
   label: string;
@@ -120,7 +131,8 @@ function Field({
   placeholder?: string;
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
   keyboardType?: "default" | "email-address";
-  colors: { mutedForeground: string; foreground: string };
+  editable?: boolean;
+  colors: { mutedForeground: string };
 }) {
   return (
     <View className="gap-1">
@@ -134,6 +146,7 @@ function Field({
         placeholderTextColor={colors.mutedForeground}
         autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
+        editable={editable}
         className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
       />
     </View>

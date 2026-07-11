@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -10,26 +11,26 @@ import {
   TextInput,
   View,
 } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
-import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
 import { Button } from "@/components/ui/Button";
-import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
-import { loginWithEmail } from "@/services/auth/emailLoginApi";
-import { finalizeGoogleLogin } from "@/services/auth/finalizeGoogleLogin";
+import {
+  isEmailNotFoundError,
+  sendEmailLoginOtp,
+} from "@/services/auth/emailSignupOtpApi";
 import { safeRouter } from "@/utils/app/safeRouter";
+
+const LOGIN_EMAIL_NOT_FOUND =
+  "Your email doesn't exist. Tap Get started on the welcome screen to create an account.";
 
 export default function LoginEmailScreen() {
   const { colors } = useTheme();
-  const { setAccount, completeOnboarding } = useApp();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = email.includes("@") && password.trim().length > 0;
+  const canSubmit = email.includes("@") && email.includes(".");
 
   const submit = async () => {
     if (!canSubmit || busy) return;
@@ -37,32 +38,21 @@ export default function LoginEmailScreen() {
     setBusy(true);
     setError(null);
     try {
-      const tokens = await loginWithEmail(email, password);
-      const session = await finalizeGoogleLogin(
-        {
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
-          isNewUser: false,
-          email: email.trim().toLowerCase(),
-        },
-        { setAccount, completeOnboarding },
-      );
-
-      if (!session.isOnboarded) {
-        safeRouter.replace("/onboarding/reasons");
-        return;
-      }
-
-      safeRouter.replace("/(tabs)");
+      await sendEmailLoginOtp(email);
+      Keyboard.dismiss();
+      safeRouter.pushStack({
+        pathname: "/login-verify-otp",
+        params: { email: email.trim().toLowerCase() },
+      });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Sign-in failed");
       setBusy(false);
+      if (isEmailNotFoundError(e)) {
+        setError(LOGIN_EMAIL_NOT_FOUND);
+      } else {
+        setError(e instanceof Error ? e.message : "Could not send verification code");
+      }
     }
   };
-
-  if (busy) {
-    return <ThemedLoadingScreen />;
-  }
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
@@ -73,6 +63,7 @@ export default function LoginEmailScreen() {
         <View className="flex-row items-center px-4 pt-2">
           <Pressable
             onPress={() => router.back()}
+            disabled={busy}
             className="h-10 w-10 items-center justify-center rounded-full active:bg-section dark:active:bg-d-surface"
             accessibilityRole="button"
             accessibilityLabel="Back"
@@ -85,12 +76,15 @@ export default function LoginEmailScreen() {
           <Text className="text-center text-3xl font-bold text-foreground dark:text-d-text">
             Sign in with email
           </Text>
+          <Text className="mt-3 text-center text-sm text-muted-foreground dark:text-d-muted">
+            We&apos;ll send a verification code to your inbox.
+          </Text>
 
           {error ? (
             <Text className="mt-4 text-center text-sm text-alert">{error}</Text>
           ) : null}
 
-          <Animated.View entering={FadeInUp.delay(120).duration(450)} className="mt-10 gap-3">
+          <View className="mt-10 gap-3">
             <Field
               label="Email"
               value={email}
@@ -98,24 +92,18 @@ export default function LoginEmailScreen() {
               placeholder="you@email.com"
               autoCapitalize="none"
               keyboardType="email-address"
+              editable={!busy}
               colors={colors}
             />
-            <Field
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Your password"
-              secureTextEntry
-              colors={colors}
-            />
-          </Animated.View>
+          </View>
 
           <View className="mt-10">
             <Button
-              label="Sign in"
+              label="Continue"
               size="lg"
               fullWidth
-              disabled={!canSubmit}
+              loading={busy}
+              disabled={!canSubmit || busy}
               onPress={() => void submit()}
             />
           </View>
@@ -132,7 +120,7 @@ function Field({
   placeholder,
   autoCapitalize = "sentences",
   keyboardType,
-  secureTextEntry,
+  editable = true,
   colors,
 }: {
   label: string;
@@ -141,7 +129,7 @@ function Field({
   placeholder?: string;
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
   keyboardType?: "default" | "email-address";
-  secureTextEntry?: boolean;
+  editable?: boolean;
   colors: { mutedForeground: string };
 }) {
   return (
@@ -156,7 +144,7 @@ function Field({
         placeholderTextColor={colors.mutedForeground}
         autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
-        secureTextEntry={secureTextEntry}
+        editable={editable}
         className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
       />
     </View>
