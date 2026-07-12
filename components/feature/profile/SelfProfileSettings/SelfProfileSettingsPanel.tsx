@@ -9,7 +9,6 @@ import {
 import { HabitSettingsModal } from "@/components/feature/profile/HabitSettingsModal";
 import { UsernameEditModal } from "@/components/feature/profile/UsernameEditModal";
 import { PushNotificationsToggle } from "@/components/feature/profile/PushNotificationsToggle";
-import { LanguageSwitcher } from "@/components/feature/profile/LanguageSwitcher/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
@@ -109,7 +108,6 @@ export function SelfProfileSettings({
   return (
     <View className="gap-4">
       <ThemeSwitcher />
-      <LanguageSwitcher />
       <ListGroup rows={accountRows} />
       {isSignedIn ? (
         <PushNotificationsToggle

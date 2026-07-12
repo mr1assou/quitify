@@ -6,6 +6,7 @@ import { StatBlock } from "@/components/feature/stats/StatBlock";
 import { Card } from "@/components/ui/Card";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { StatsOverviewByRange } from "@/types/stats/statsOverview";
 import { formatCurrency, formatDuration, formatLifeGained, formatNumber } from "@/utils/shared/format";
 import { formatStreakDuration } from "@/utils/streak";
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { requirePremium } = usePremiumGate();
   const impact = byRange.lifetime;
@@ -36,10 +38,10 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
           </View>
           <View className="flex-1 justify-center">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Overview
+              {t("stats.overview")}
             </Text>
             <Text className="mt-0.5 text-sm text-muted-foreground dark:text-d-muted">
-              Stats of all attempts
+              {t("stats.overviewSubtitle")}
             </Text>
           </View>
         </View>
@@ -47,7 +49,7 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
         <View className="mt-4 gap-3">
           <View className="flex-row gap-3">
             <StatBlock
-              label="Money saved"
+              label={t("stats.moneySaved")}
               value={impact.moneySaved}
               display={formatCurrency(impact.moneySaved, currency)}
               icon="cash"
@@ -57,7 +59,7 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
               onLockedPress={requirePremium}
             />
             <StatBlock
-              label="Cigarettes avoided"
+              label={t("stats.cigarettesAvoided")}
               value={impact.cigarettesAvoided}
               display={formatNumber(impact.cigarettesAvoided)}
               icon="smoking"
@@ -71,7 +73,7 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
 
           <View className="flex-row gap-3">
             <StatBlock
-              label="Life gained"
+              label={t("stats.lifeGained")}
               value={impact.lifeMinutesGained}
               display={formatLifeGained(impact.lifeMinutesGained)}
               icon="heart"
@@ -81,7 +83,7 @@ export function StatsOverviewCard({ currency, byRange, isPremium }: Props) {
               onLockedPress={requirePremium}
             />
             <StatBlock
-              label="Smoke-free time"
+              label={t("stats.smokeFreeTime")}
               value={smokeFreeHours}
               display={smokeFreeDisplay}
               icon="time"

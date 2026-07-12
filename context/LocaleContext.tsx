@@ -1,23 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getLocales } from "expo-localization";
 import {
   createContext,
-  useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
 
-import {
-  DEFAULT_LOCALE,
-  isAppLocale,
-  languageMeta,
-  LOCALE_STORAGE_KEY,
-  normalizeStoredLocale,
-} from "@/constants/i18n/languages";
-import { initQuitPlanLocale, setQuitPlanLocale } from "@/i18n/content/quitPlanStore";
+import { DEFAULT_LOCALE, languageMeta } from "@/constants/i18n/languages";
+import { initQuitPlanLocale } from "@/i18n/content/quitPlanStore";
 import { createTranslator } from "@/i18n/translate";
 import type { AppLocale } from "@/types/i18n/locale";
 import type { TranslationKey } from "@/i18n/translate";
@@ -33,48 +22,18 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function resolveDeviceLocale(): AppLocale {
-  const code = getLocales()[0]?.languageCode;
-  if (isAppLocale(code)) return code;
-  if (code === "ar") return DEFAULT_LOCALE;
-  return DEFAULT_LOCALE;
-}
+initQuitPlanLocale(DEFAULT_LOCALE);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<AppLocale>(() => {
-    const initial = resolveDeviceLocale();
-    initQuitPlanLocale(initial);
-    return initial;
-  });
-
-  useEffect(() => {
-    AsyncStorage.getItem(LOCALE_STORAGE_KEY)
-      .then((raw) => {
-        const stored = normalizeStoredLocale(raw);
-        if (stored == null) return;
-        if (stored !== raw) {
-          AsyncStorage.setItem(LOCALE_STORAGE_KEY, stored).catch(() => {});
-        }
-        initQuitPlanLocale(stored);
-        setLocaleState(stored);
-      })
-      .catch(() => {});
-  }, []);
-
-  const setLocale = useCallback((next: AppLocale) => {
-    setLocaleState((current) => {
-      if (next === current) return current;
-      setQuitPlanLocale(next);
-      AsyncStorage.setItem(LOCALE_STORAGE_KEY, next).catch(() => {});
-      return next;
-    });
-  }, []);
-
-  const t = useMemo(() => createTranslator(locale), [locale]);
+  const t = useMemo(() => createTranslator(DEFAULT_LOCALE), []);
 
   const value = useMemo<LocaleContextValue>(
-    () => ({ locale, setLocale, t }),
-    [locale, setLocale, t],
+    () => ({
+      locale: DEFAULT_LOCALE,
+      setLocale: () => {},
+      t,
+    }),
+    [t],
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

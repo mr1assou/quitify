@@ -8,6 +8,7 @@ import { StatsListPagination } from "@/components/feature/stats/StatsListPaginat
 import { Card } from "@/components/ui/Card";
 import { STATS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
 import type { AttemptStatsRow } from "@/types/stats/userStats";
 import {
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function AttemptHistoryCard({ attempts, currency, timeZone }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [selectedAttempt, setSelectedAttempt] = useState<AttemptStatsRow | null>(null);
 
@@ -30,6 +32,13 @@ export function AttemptHistoryCard({ attempts, currency, timeZone }: Props) {
     "attempts",
     STATS_LIST_PAGE_SIZE,
   );
+
+  const countLabel =
+    attempts.length === 0
+      ? t("stats.emptyAttempts")
+      : attempts.length === 1
+        ? t("stats.attemptSingular", { count: attempts.length })
+        : t("stats.attemptPlural", { count: attempts.length });
 
   return (
     <>
@@ -41,20 +50,16 @@ export function AttemptHistoryCard({ attempts, currency, timeZone }: Props) {
             </View>
             <View className="flex-1">
               <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                Your attempts
+                {t("stats.yourAttempts")}
               </Text>
-              <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
-                {attempts.length === 0
-                  ? "No attempts yet."
-                  : `${attempts.length} attempt${attempts.length === 1 ? "" : "s"}`}
-              </Text>
+              <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">{countLabel}</Text>
             </View>
           </View>
 
           {attempts.length === 0 ? (
             <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
               <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                No quit attempts yet.
+                {t("stats.noQuitAttemptsYet")}
               </Text>
             </View>
           ) : (
@@ -92,18 +97,19 @@ function AttemptRow({
   timeZone: string;
   onPress: () => void;
 }) {
-  const status = attemptOutcomeLabel(row);
+  const { t } = useTranslation();
+  const status = attemptOutcomeLabel(row, t);
 
   return (
     <Pressable
       onPress={onPress}
       className="rounded-2xl bg-elevated px-3 py-3 active:opacity-80 dark:bg-d-elevated"
       accessibilityRole="button"
-      accessibilityLabel={`Attempt ${row.attemptNumber}, ${status}. Tap for details.`}
+      accessibilityLabel={t("stats.attemptA11y", { n: row.attemptNumber, status })}
     >
       <View className="flex-row items-center justify-between">
         <Text className="text-sm font-bold text-foreground dark:text-d-text">
-          Attempt {row.attemptNumber}
+          {t("stats.attemptNumber", { n: row.attemptNumber })}
         </Text>
         <View className="flex-row items-center gap-2">
           <View
@@ -124,7 +130,7 @@ function AttemptRow({
       </View>
 
       <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-        {formatAttemptDateRange(row, timeZone)}
+        {formatAttemptDateRange(row, timeZone, t)}
       </Text>
     </Pressable>
   );

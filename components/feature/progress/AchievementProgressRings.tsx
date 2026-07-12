@@ -6,6 +6,7 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import type { GlobalRank } from "@/types/progress/progress";
 import type { AchievementBadgeMetric } from "@/utils/progress/achievementProgress";
@@ -29,6 +30,7 @@ export function AchievementProgressRings({
   currentBadgeId,
   rank,
 }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const pct = progressToPercent(badge.progress);
   const hasEarnedBadge = badge.caption !== "—";
@@ -42,7 +44,7 @@ export function AchievementProgressRings({
           </View>
           <View className="flex-1 justify-center">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Your progress
+              {t("stats.yourProgress")}
             </Text>
           </View>
         </View>
@@ -78,7 +80,7 @@ export function AchievementProgressRings({
         <View className="mt-5 w-full flex-row border-t border-background pt-5 dark:border-d-border">
           <View className="flex-1 items-center border-r border-background pr-3 dark:border-d-border">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Worldwide rank
+              {t("stats.worldwideRank")}
             </Text>
             <View className="mt-2 flex-row items-center gap-2">
               <View className="h-8 w-8 items-center justify-center rounded-full bg-accent">
@@ -99,13 +101,18 @@ export function AchievementProgressRings({
           <View className="flex-1 items-center pl-3">
             <View className="flex-row items-center gap-1">
               <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                Freedom points
+                {t("stats.freedomPoints")}
               </Text>
               <Pressable
-                onPress={showFreedomPointsInfo}
+                onPress={() =>
+                  showFreedomPointsInfo(
+                    t("stats.freedomPointsInfoTitle"),
+                    t("stats.freedomPointsInfoMessage"),
+                  )
+                }
                 hitSlop={8}
                 accessibilityRole="button"
-                accessibilityLabel="Learn how Freedom Points work"
+                accessibilityLabel={t("stats.freedomPointsInfoA11y")}
                 className="active:opacity-70"
               >
                 <Ionicons

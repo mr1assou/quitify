@@ -61,7 +61,7 @@ export function MissionDayTasksScreen({ missionDay }: Props) {
           onPress={() => safeRouter.back()}
           className="h-10 w-10 items-center justify-center rounded-full active:bg-section/60 dark:active:bg-d-surface/80"
           accessibilityRole="button"
-          accessibilityLabel="Close"
+          accessibilityLabel={t("common.close")}
         >
           <Ionicons name="close" size={24} color={colors.foreground} />
         </Pressable>

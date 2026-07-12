@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { AttemptStatsRow } from "@/types/stats/userStats";
 import {
   attemptOutcomeLabel,
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -28,7 +30,7 @@ export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Pro
   };
 
   const detailRows = attempt
-    ? buildAttemptDetailRows(attempt, currency, timeZone)
+    ? buildAttemptDetailRows(attempt, currency, timeZone, t)
     : [];
 
   return (
@@ -52,7 +54,7 @@ export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Pro
                   <Ionicons name="medal" size={26} color={colors.white} />
                 </View>
                 <Text className="mt-4 text-center text-xl font-bold text-foreground dark:text-d-text">
-                  Attempt {attempt.attemptNumber}
+                  {t("stats.attemptNumber", { n: attempt.attemptNumber })}
                 </Text>
                 <View
                   className={`mt-2 rounded-full px-3 py-1 ${
@@ -64,7 +66,7 @@ export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Pro
                       attempt.isActive ? "text-accent" : "text-muted-foreground dark:text-d-muted"
                     }`}
                   >
-                    {attemptOutcomeLabel(attempt)}
+                    {attemptOutcomeLabel(attempt, t)}
                   </Text>
                 </View>
               </View>
@@ -78,7 +80,7 @@ export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Pro
               </ScrollView>
 
               <View className="mt-5">
-                <Button label="Close" onPress={handleClose} fullWidth />
+                <Button label={t("common.close")} onPress={handleClose} fullWidth />
               </View>
             </>
           ) : null}

@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { STATS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
 import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
 import type { FreedomPointLedgerRow } from "@/types/stats/statsFreedomPoints";
 import {
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
 
   const { page, totalPages, setPage, paginatedItems: visibleEntries } = usePaginatedList(
@@ -30,6 +32,19 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
     "freedom-points",
     STATS_LIST_PAGE_SIZE,
   );
+
+  const summaryLabel =
+    entries.length === 0
+      ? t("stats.emptyRewards")
+      : entries.length === 1
+        ? t("stats.fpSummarySingular", {
+            points: formatNumber(totalFreedomPoints),
+            count: entries.length,
+          })
+        : t("stats.fpSummaryPlural", {
+            points: formatNumber(totalFreedomPoints),
+            count: entries.length,
+          });
 
   return (
     <Animated.View entering={FadeInDown.duration(420).delay(40)}>
@@ -41,13 +56,18 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
           <View className="flex-1">
             <View className="flex-row items-center gap-1">
               <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                Freedom points
+                {t("stats.freedomPoints")}
               </Text>
               <Pressable
-                onPress={showFreedomPointsInfo}
+                onPress={() =>
+                  showFreedomPointsInfo(
+                    t("stats.freedomPointsInfoTitle"),
+                    t("stats.freedomPointsInfoMessage"),
+                  )
+                }
                 hitSlop={8}
                 accessibilityRole="button"
-                accessibilityLabel="Learn how Freedom Points work"
+                accessibilityLabel={t("stats.freedomPointsInfoA11y")}
                 className="active:opacity-70"
               >
                 <Ionicons
@@ -57,18 +77,14 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
                 />
               </Pressable>
             </View>
-            <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
-              {entries.length === 0
-                ? "No rewards yet."
-                : `${formatNumber(totalFreedomPoints)} FP · ${entries.length} reward${entries.length === 1 ? "" : "s"}`}
-            </Text>
+            <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">{summaryLabel}</Text>
           </View>
         </View>
 
         {entries.length === 0 ? (
           <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
             <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-              Stay smoke-free and complete goals to earn Freedom points.
+              {t("stats.staySmokeFreeHint")}
             </Text>
           </View>
         ) : (
@@ -85,8 +101,9 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
 }
 
 function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: string }) {
-  const label = freedomPointSourceLabel(row);
-  const description = freedomPointSourceDescription(row);
+  const { t } = useTranslation();
+  const label = freedomPointSourceLabel(row, t);
+  const description = freedomPointSourceDescription(row, t);
   const earnedOn = formatUtcDateInTimezone(row.earnedAt, timeZone);
 
   return (
@@ -101,7 +118,7 @@ function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: st
         <View className="items-end">
           <Text className="text-xs text-muted-foreground dark:text-d-muted">{earnedOn}</Text>
           <Text className="mt-0.5 text-base font-bold tabular-nums text-primary">
-            +{formatNumber(row.amount)} FP
+            {t("stats.fpAmount", { amount: formatNumber(row.amount) })}
           </Text>
         </View>
       </View>

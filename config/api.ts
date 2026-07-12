@@ -1,6 +1,6 @@
 /**
  * Backend URL for all app API calls (REST + WebSockets).
- * Local backend on your PC's Wi‑Fi IP (physical phone on same network).
+ * Production (Render). For local dev: http://192.168.x.x:3000
  * Android emulator: http://10.0.2.2:3000
  */
-export const API_URL = "http://192.168.100.162:3000";
+export const API_URL = "https://backend-smoking.onrender.com";

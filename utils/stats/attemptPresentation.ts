@@ -1,4 +1,6 @@
 import type { AttemptStatsRow } from "@/types/stats/userStats";
+import type { TranslationParams } from "@/types/i18n/locale";
+import type { TranslationKey } from "@/i18n/translate";
 import {
   formatCurrency,
   formatDuration,
@@ -13,24 +15,27 @@ export type AttemptDetailRow = {
   value: string;
 };
 
-export function attemptOutcomeLabel(row: AttemptStatsRow): string {
-  if (row.isActive) return "Active";
-  if (row.endOutcome === "lapse") return "Lapse";
-  if (row.endOutcome === "relapse") return "Relapse";
-  return "Ended";
+type Translate = (key: TranslationKey, params?: TranslationParams) => string;
+
+export function attemptOutcomeLabel(row: AttemptStatsRow, t: Translate): string {
+  if (row.isActive) return t("stats.active");
+  if (row.endOutcome === "lapse") return t("stats.lapse");
+  if (row.endOutcome === "relapse") return t("stats.relapse");
+  return t("stats.ended");
 }
 
-export function attemptEndedDescription(row: AttemptStatsRow): string | null {
+export function attemptEndedDescription(row: AttemptStatsRow, t: Translate): string | null {
   if (row.isActive) return null;
-  if (row.endOutcome === "lapse") return "Ended after a lapse";
-  if (row.endOutcome === "relapse") return "Ended after a relapse";
-  return "Attempt closed";
+  if (row.endOutcome === "lapse") return t("stats.endedAfterLapse");
+  if (row.endOutcome === "relapse") return t("stats.endedAfterRelapse");
+  return t("stats.attemptClosed");
 }
 
 export function buildAttemptDetailRows(
   row: AttemptStatsRow,
   currency: string,
   timeZone: string,
+  t: Translate,
 ): AttemptDetailRow[] {
   const smokeFreeHours = row.durationSeconds / 3600;
   const smokeFreeDisplay =
@@ -40,47 +45,51 @@ export function buildAttemptDetailRows(
 
   const rows: AttemptDetailRow[] = [
     {
-      label: "Started",
+      label: t("stats.started"),
       value: formatUtcIsoInTimezone(row.startedAt, timeZone),
     },
     {
-      label: "Ended",
+      label: t("stats.endedLabel"),
       value: row.endedAt
         ? formatUtcIsoInTimezone(row.endedAt, timeZone)
-        : "In progress",
+        : t("stats.inProgress"),
     },
     {
-      label: "Smoke-free time",
+      label: t("stats.smokeFreeTime"),
       value: smokeFreeDisplay,
     },
     {
-      label: "Cigarettes avoided",
+      label: t("stats.cigarettesAvoided"),
       value: formatNumber(row.cigarettesAvoided),
     },
     {
-      label: "Money saved",
+      label: t("stats.moneySaved"),
       value: formatCurrency(row.moneySaved, currency),
     },
     {
-      label: "Life gained",
+      label: t("stats.lifeGained"),
       value: formatLifeGained(row.lifeMinutesGained),
     },
     {
-      label: "Cigarettes smoked on slips",
+      label: t("stats.cigarettesSmokedOnSlips"),
       value: formatNumber(row.slipCigarettesSmoked),
     },
   ];
 
-  const endedDescription = attemptEndedDescription(row);
+  const endedDescription = attemptEndedDescription(row, t);
   if (endedDescription) {
-    rows.push({ label: "Outcome", value: endedDescription });
+    rows.push({ label: t("stats.outcome"), value: endedDescription });
   }
 
   return rows;
 }
 
-export function formatAttemptDateRange(row: AttemptStatsRow, timeZone: string): string {
+export function formatAttemptDateRange(
+  row: AttemptStatsRow,
+  timeZone: string,
+  t: Translate,
+): string {
   const start = formatUtcIsoInTimezone(row.startedAt, timeZone);
-  if (!row.endedAt) return `${start} – In progress`;
+  if (!row.endedAt) return t("stats.dateRangeInProgress", { start });
   return `${start} – ${formatUtcIsoInTimezone(row.endedAt, timeZone)}`;
 }

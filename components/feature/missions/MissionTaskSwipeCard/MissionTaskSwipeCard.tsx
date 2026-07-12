@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { QuitPlanTaskType, ResolvedPlanTask } from "@/types";
 
 const TASK_ICONS: Record<QuitPlanTaskType, keyof typeof Ionicons.glyphMap> = {
@@ -42,6 +43,7 @@ export function MissionTaskSwipeCard({
   onToggle,
   onOpenNote,
 }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const icon = TASK_ICONS[task.type] ?? "ellipse-outline";
 
@@ -66,8 +68,8 @@ export function MissionTaskSwipeCard({
         elevation: 8,
       }}
     >
-      <View style={{ flex: 1, padding: 28, justifyContent: "space-between" }}>
-        <View className="flex-row items-center justify-between">
+      <View style={{ flex: 1, paddingHorizontal: 28, paddingTop: 24, paddingBottom: 22 }}>
+        <View className="mb-4 flex-row items-center justify-between">
           <View className="h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
             <Ionicons
               name={task.done ? "checkmark-done" : icon}
@@ -77,12 +79,17 @@ export function MissionTaskSwipeCard({
           </View>
           {task.done ? (
             <View className="rounded-full bg-white/20 px-3 py-1">
-              <Text className="text-xs font-semibold text-white">Done</Text>
+              <Text className="text-xs font-semibold text-white">{t("common.done")}</Text>
             </View>
           ) : null}
         </View>
 
-        <View style={{ flex: 1, justifyContent: "center" }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 12 }}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        >
           <Text
             className="text-2xl font-bold leading-8 text-white"
             style={task.done ? { opacity: 0.9 } : undefined}
@@ -93,16 +100,16 @@ export function MissionTaskSwipeCard({
           {task.note ? (
             <View className="mt-4 rounded-2xl bg-white/15 px-3 py-2">
               <Text className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                Your note
+                {t("missions.yourNote")}
               </Text>
               <Text className="mt-1 text-sm leading-5 text-white/90" numberOfLines={3}>
                 {task.note}
               </Text>
             </View>
           ) : null}
-        </View>
+        </ScrollView>
 
-        <View>
+        <View className="mt-2">
           {canSaveNotes && onOpenNote ? (
             <Pressable
               onPress={onOpenNote}
@@ -110,7 +117,7 @@ export function MissionTaskSwipeCard({
             >
               <Ionicons name="create-outline" size={16} color={colors.white} />
               <Text className="text-sm font-semibold text-white">
-                {task.note ? "Edit note" : "Add note"}
+                {task.note ? t("missions.editNote") : t("missions.addNote")}
               </Text>
             </Pressable>
           ) : null}
@@ -124,7 +131,7 @@ export function MissionTaskSwipeCard({
               {isToggling ? (
                 <ActivityIndicator color={colors.primary} />
               ) : (
-                <Text className="text-base font-semibold text-primary">Mark done</Text>
+                <Text className="text-base font-semibold text-primary">{t("missions.markDone")}</Text>
               )}
             </Pressable>
           ) : interactive && task.done ? (
@@ -139,7 +146,7 @@ export function MissionTaskSwipeCard({
               {isToggling ? (
                 <ActivityIndicator color={colors.white} />
               ) : (
-                <Text className="text-sm font-semibold text-white/90">Undo</Text>
+                <Text className="text-sm font-semibold text-white/90">{t("missions.undo")}</Text>
               )}
             </Pressable>
           ) : null}

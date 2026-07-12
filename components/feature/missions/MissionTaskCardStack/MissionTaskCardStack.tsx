@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { MissionTaskSwipeCard } from "@/components/feature/missions/MissionTaskSwipeCard";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { ResolvedPlanTask } from "@/types";
 
 const SWIPE_THRESHOLD_RATIO = 0.25;
@@ -45,6 +46,7 @@ export function MissionTaskCardStack({
   onOpenNote,
   togglingTaskId = null,
 }: Props) {
+  const { t } = useTranslation();
   const { width, height } = useWindowDimensions();
   const cardWidth = Math.min(Math.max(width - 48, MIN_CARD_WIDTH), 360);
   const cardHeight = Math.max(
@@ -119,7 +121,10 @@ export function MissionTaskCardStack({
 
   if (!currentTask) return null;
 
-  const footer = `Task ${currentIndex + 1} / ${total}`;
+  const footer = t("missions.taskOf", {
+    current: currentIndex + 1,
+    total,
+  });
 
   return (
     <View

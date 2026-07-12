@@ -22,6 +22,7 @@ import {
 } from "react-native-safe-area-context";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { ResolvedPlanTask } from "@/types";
 
 const NOTE_MAX_LENGTH = 500;
@@ -41,6 +42,7 @@ export function MissionTaskNoteModal({
   onClose,
   onSave,
 }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +67,7 @@ export function MissionTaskNoteModal({
         onClose();
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Could not save note.");
+        setError(err instanceof Error ? err.message : t("missions.noteSaveFailed"));
       });
   };
 
@@ -81,7 +83,7 @@ export function MissionTaskNoteModal({
         <KeyboardProvider>
           <NoteSheet
             colors={colors}
-            taskTitle={task?.title ?? "Task"}
+            taskTitle={task?.title ?? t("missions.taskFallback")}
             note={note}
             trimmed={trimmed}
             canSave={canSave}
@@ -122,6 +124,7 @@ function NoteSheet({
   onNoteChange,
   onSave,
 }: SheetProps) {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { height: keyboardHeight, progress } = useReanimatedKeyboardAnimation();
 
@@ -143,7 +146,7 @@ function NoteSheet({
           <View className="mb-5 flex-row items-center justify-between">
             <View className="flex-1 pr-3">
               <Text className="text-xl font-bold text-foreground dark:text-d-text">
-                Your note
+                {t("missions.yourNote")}
               </Text>
               <Text
                 className="mt-1 text-sm text-muted-foreground dark:text-d-muted"
@@ -162,15 +165,14 @@ function NoteSheet({
           </View>
 
           <Text className="mb-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            Write anything you want to remember about this task. It will appear in Your notes
-            on the map screen.
+            {t("missions.noteHint")}
           </Text>
 
           <View className="gap-2">
             <TextInput
               value={note}
               onChangeText={(text) => onNoteChange(text.slice(0, NOTE_MAX_LENGTH))}
-              placeholder="How did this task go? What did you learn?"
+              placeholder={t("missions.notePlaceholder")}
               placeholderTextColor={colors.mutedForeground}
               multiline
               textAlignVertical="top"
@@ -179,7 +181,10 @@ function NoteSheet({
               className="min-h-[120px] rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
             />
             <Text className="text-xs text-muted-foreground dark:text-d-muted">
-              {trimmed.length}/{NOTE_MAX_LENGTH} characters
+              {t("missions.charactersCount", {
+                count: trimmed.length,
+                max: NOTE_MAX_LENGTH,
+              })}
             </Text>
           </View>
 
@@ -196,7 +201,7 @@ function NoteSheet({
             {saving ? (
               <ActivityIndicator color={colors.white} />
             ) : (
-              <Text className="text-base font-bold text-white">Save note</Text>
+              <Text className="text-base font-bold text-white">{t("missions.saveNote")}</Text>
             )}
           </Pressable>
         </Animated.View>

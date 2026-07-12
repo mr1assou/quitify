@@ -6,6 +6,7 @@ import { StatsListPagination } from "@/components/feature/stats/StatsListPaginat
 import { Card } from "@/components/ui/Card";
 import { GOALS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
 import type { GoalStatsRow } from "@/types/stats/statsGoals";
 import {
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function GoalHistoryCard({ goals, currency, timeZone }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const symbol = currencySymbol(currency);
 
@@ -30,6 +32,13 @@ export function GoalHistoryCard({ goals, currency, timeZone }: Props) {
     "goals",
     GOALS_LIST_PAGE_SIZE,
   );
+
+  const countLabel =
+    goals.length === 0
+      ? t("stats.emptyGoals")
+      : goals.length === 1
+        ? t("stats.goalSingular", { count: goals.length })
+        : t("stats.goalPlural", { count: goals.length });
 
   return (
     <Animated.View entering={FadeInDown.duration(420).delay(80)}>
@@ -40,20 +49,16 @@ export function GoalHistoryCard({ goals, currency, timeZone }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Your goals
+              {t("stats.yourGoals")}
             </Text>
-            <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
-              {goals.length === 0
-                ? "No goals yet."
-                : `${goals.length} goal${goals.length === 1 ? "" : "s"}`}
-            </Text>
+            <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">{countLabel}</Text>
           </View>
         </View>
 
         {goals.length === 0 ? (
           <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">
             <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-              Create a goal from the home screen to track it here.
+              {t("stats.createGoalHint")}
             </Text>
           </View>
         ) : (
@@ -83,7 +88,8 @@ function GoalRow({
   currency: string;
   timeZone: string;
 }) {
-  const status = goalStatusLabel(row.status);
+  const { t } = useTranslation();
+  const status = goalStatusLabel(row.status, t);
   const isActive = row.status === "active";
   const isCompleted = row.status === "completed";
 
@@ -91,7 +97,7 @@ function GoalRow({
     <View className="rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated">
       <View className="flex-row items-center justify-between gap-3">
         <Text className="min-w-0 flex-1 text-sm font-bold text-foreground dark:text-d-text">
-          {formatGoalStatsTitle(row, currency)}
+          {formatGoalStatsTitle(row, currency, t)}
         </Text>
         <View
           className={`rounded-full px-2.5 py-0.5 ${
@@ -113,11 +119,11 @@ function GoalRow({
       </View>
 
       <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-        Attempt {row.attemptNumber}
+        {t("stats.attemptNumber", { n: row.attemptNumber })}
       </Text>
 
       <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-        {formatGoalStatsTimeline(row, timeZone)}
+        {formatGoalStatsTimeline(row, timeZone, t)}
       </Text>
     </View>
   );

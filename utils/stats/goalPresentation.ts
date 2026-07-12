@@ -1,49 +1,63 @@
 import type { GoalStatsRow } from "@/types/stats/statsGoals";
-import { formatGoalTitle } from "@/utils/goals/goalLabels";
+import type { TranslationParams } from "@/types/i18n/locale";
+import type { TranslationKey } from "@/i18n/translate";
+import { formatNumber } from "@/utils/shared/format";
 import { formatUtcIsoInTimezone } from "@/utils/time/formatInTimezone";
 
-export function goalStatusLabel(status: string): string {
+type Translate = (key: TranslationKey, params?: TranslationParams) => string;
+
+export function goalStatusLabel(status: string, t: Translate): string {
   switch (status) {
     case "active":
-      return "Active";
+      return t("stats.active");
     case "completed":
-      return "Completed";
+      return t("stats.completed");
     case "failed":
-      return "Failed";
+      return t("stats.failed");
     default:
       return status;
   }
 }
 
-export function formatGoalStatsTimeline(row: GoalStatsRow, timeZone: string): string {
+export function formatGoalStatsTimeline(
+  row: GoalStatsRow,
+  timeZone: string,
+  t: Translate,
+): string {
   const started = formatUtcIsoInTimezone(row.startedAt, timeZone);
 
   if (row.completedAt) {
-    return `${started} · Completed ${formatUtcIsoInTimezone(row.completedAt, timeZone)}`;
+    return t("stats.timelineCompleted", {
+      started,
+      at: formatUtcIsoInTimezone(row.completedAt, timeZone),
+    });
   }
 
   if (row.failedAt) {
-    return `${started} · Failed ${formatUtcIsoInTimezone(row.failedAt, timeZone)}`;
+    return t("stats.timelineFailed", {
+      started,
+      at: formatUtcIsoInTimezone(row.failedAt, timeZone),
+    });
   }
 
-  return `${started} · In progress`;
+  return t("stats.timelineInProgress", { started });
 }
 
 export function formatGoalStatsTitle(
   row: GoalStatsRow,
   currency: string,
+  t: Translate,
 ): string {
-  return formatGoalTitle(
-    {
-      id: row.id,
-      attemptId: row.attemptId,
-      type: row.type,
-      target: row.target,
-      status: row.status as "active" | "completed" | "failed",
-      startedAt: row.startedAt,
-      completedAt: row.completedAt,
-      failedAt: row.failedAt,
-    },
-    currency,
-  );
+  switch (row.type) {
+    case "money_saved":
+      return t("stats.goalTitleMoney", { amount: `${currency}${formatNumber(row.target)}` });
+    case "smoke_free_days":
+      return row.target === 1
+        ? t("stats.goalTitleSmokeFreeDay", { count: row.target })
+        : t("stats.goalTitleSmokeFreeDays", { count: row.target });
+    case "cigarettes_avoided":
+      return t("stats.goalTitleCigarettes", { count: formatNumber(row.target) });
+    default:
+      return String(row.type);
+  }
 }
