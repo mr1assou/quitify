@@ -29,7 +29,6 @@ export default function Interests() {
       step={4}
       total={ONBOARDING_TOTAL_STEPS}
       title={t("onboarding.interests.title")}
-      subtitle={t("onboarding.interests.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => safeRouter.push("/onboarding/create-profile")}

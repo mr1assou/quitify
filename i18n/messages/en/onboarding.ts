@@ -17,7 +17,8 @@ export const onboarding = {
   },
   motivation: {
     title: "How motivated are you to stop smoking?",
-    subtitle: "Be honest — there is no wrong answer.",
+    subtitle: "Your answer helps us support you better.",
+
     high: { label: "High" },
     medium: { label: "Medium" },
     low: { label: "Low" },
@@ -37,9 +38,7 @@ export const onboarding = {
   },
   interests: {
     title: "What matters most on your quit journey?",
-    subtitle: "Pick what you want Quitify to focus on.",
-    streak: { label: "My smoke-free streak", hint: "Seeing days add up keeps me going." },
-    money: { label: "Money I save", hint: "Watching pounds or dollars stack up." },
+    streak: { label: "My smoke-free streak", hint: "Seeing days add up keeps me going." },    money: { label: "Money I save", hint: "Watching pounds or dollars stack up." },
     health: { label: "Feeling healthier", hint: "Breathing, energy, and small wins." },
     cravings: { label: "Handling cravings", hint: "Tools when the urge hits." },
     missions: { label: "Daily missions", hint: "Small tasks that build momentum." },
@@ -49,7 +48,6 @@ export const onboarding = {
   },
   profile: {
     title: "Let's create your profile now",
-    subtitle: "A few details help us personalize your plan.",
     username: { label: "Username", placeholder: "How should we call you?" },
     sex: {
       label: "Sex",

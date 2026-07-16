@@ -39,7 +39,6 @@ export default function OnboardingCreateProfile() {
         step={5}
         total={ONBOARDING_TOTAL_STEPS}
         title={t("onboarding.profile.title")}
-        subtitle={t("onboarding.profile.subtitle")}
         primaryLabel={t("common.continue")}
         primaryDisabled={!canContinue}
         onPrimary={() => safeRouter.push("/onboarding/nicotine-consumption")}

@@ -40,7 +40,7 @@ function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBan
 
 export function CigaretteHabitFields({ draft, patch }: Props) {
   const { t } = useTranslation();
-  const { localize, label } = useLocalizedCatalog();
+  const { localize } = useLocalizedCatalog();
 
   const cigarettesPerDayOptions = useMemo(
     () =>
@@ -60,9 +60,6 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
     [localize],
   );
 
-  const cigarettesHint = draft.cigarettesPerDayBand
-    ? label("onboarding.nicotine", draft.cigarettesPerDayBand, "hint")
-    : undefined;
   const packSizeError = hasInvalidCigarettesPerPackInput(draft);
 
   return (
@@ -83,11 +80,6 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
             }
           }}
         />
-        {cigarettesHint ? (
-          <Text className="text-sm text-muted-foreground dark:text-d-muted">
-            {cigarettesHint}
-          </Text>
-        ) : null}
       </View>
 
       <View className="gap-2">
