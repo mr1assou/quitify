@@ -1,4 +1,5 @@
 import { CURRENT_USER_ID, getCommunityUser } from "@/constants/community/communityUsers";
+import { FIRST_STEP_BADGE_ID } from "@/constants/progress/badges";
 import {
   countryFlagForRank,
   resolveCountryFlagUrl,
@@ -86,6 +87,11 @@ export function resolveCommunityAuthor(
   return { ...resolved, avatarUrl };
 }
 
+type BuildCurrentUserOptions = {
+  badgeId?: string;
+  smokeFreeDays?: number;
+};
+
 export function buildCurrentUserCommunityAuthor(
   profile:
     | {
@@ -98,6 +104,7 @@ export function buildCurrentUserCommunityAuthor(
     | undefined,
   accountName?: string,
   accountUserId?: number | null,
+  options?: BuildCurrentUserOptions,
 ): CommunityUser {
   const seed = getCommunityUser(CURRENT_USER_ID)!;
   const id =
@@ -115,6 +122,9 @@ export function buildCurrentUserCommunityAuthor(
     avatarUrl: profile?.imageUrl ?? seed.avatarUrl,
     countryFlag,
     location: profile?.countryCode ?? seed.location,
+    // Never inherit mock seed days/badge (those caused a Champion flash on new posts).
+    smokeFreeDays: options?.smokeFreeDays ?? 0,
+    badgeId: options?.badgeId ?? FIRST_STEP_BADGE_ID,
     isCurrentUser: true,
     isOnline: true,
   });

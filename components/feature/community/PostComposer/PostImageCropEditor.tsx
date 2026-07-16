@@ -287,7 +287,7 @@ export const PostImageCropEditor = forwardRef<PostImageCropEditorHandle, Props>(
         onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
       >
         {containerWidth > 0 ? (
-          <Animated.Image source={{ uri }} style={imageStyle} resizeMode="cover" />
+          <Animated.Image source={{ uri }} style={imageStyle} resizeMode="stretch" />
         ) : null}
         {containerWidth > 0 ? (
           <PostImageCropGrid style={gridStyle} shape={maskShape} radius={maskRadius} />

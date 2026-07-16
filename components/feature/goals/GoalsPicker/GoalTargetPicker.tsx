@@ -5,7 +5,6 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 import { formatMinTargetError } from "@/utils/goals/goalLabels";
-import { formatGoalCompletionBonusLabel } from "@/utils/goals/goalCompletionBonus";
 import { showGoalDaysAheadInfo } from "@/utils/goals/showGoalDaysAheadInfo";
 import {
   cigarettesAvoidedAtSmokeFreeDays,
@@ -238,12 +237,6 @@ export function GoalTargetPicker({
             placeholder="0"
             prefix={symbol}
           />
-
-          <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
-            <Text className="text-sm font-semibold text-primary">
-              {formatGoalCompletionBonusLabel(GOAL_TYPE, parsedDays, 0, economics)}
-            </Text>
-          </View>
         </>
       ) : null}
 

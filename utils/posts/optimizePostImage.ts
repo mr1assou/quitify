@@ -35,25 +35,83 @@ function getImageSize(uri: string): Promise<{ width: number; height: number }> {
   });
 }
 
+/**
+ * Flattens EXIF orientation into real pixels so crop math matches what the
+ * editor shows (phone photos are the common failure case).
+ */
+export async function normalizeImageOrientation(uri: string): Promise<{
+  uri: string;
+  width: number;
+  height: number;
+}> {
+  const result = await ImageManipulator.manipulateAsync(uri, [], {
+    compress: 1,
+    format: ImageManipulator.SaveFormat.JPEG,
+  });
+
+  return {
+    uri: result.uri,
+    width: result.width,
+    height: result.height,
+  };
+}
+
 function computeSourceCropRect(
   imageSize: { width: number; height: number },
   frame: PostMediaFrame,
   crop: PostImageCrop,
 ): { originX: number; originY: number; width: number; height: number } {
   const aspectRatio = resolvePostMediaAspectRatio({ kind: "image", frame });
-  const container = containerForAspect(aspectRatio, 100);
+  const container = containerForAspect(aspectRatio, 1000);
   const normalizedCrop = normalizePostImageCrop(crop);
   const layout = getCroppedImageLayout(container, imageSize, normalizedCrop);
-  const { scale } = resolvePixelOffsets(container, imageSize, normalizedCrop);  
+  const { scale } = resolvePixelOffsets(container, imageSize, normalizedCrop);
   const coverScale = getCoverScale(container, imageSize);
   const factor = coverScale * scale;
 
-  const originX = Math.max(0, Math.round(-layout.left / factor));
-  const originY = Math.max(0, Math.round(-layout.top / factor));
-  const width = Math.min(imageSize.width - originX, Math.max(1, Math.round(container.width / factor)));
-  const height = Math.min(imageSize.height - originY, Math.max(1, Math.round(container.height / factor)));
+  if (factor <= 0) {
+    return { originX: 0, originY: 0, width: imageSize.width, height: imageSize.height };
+  }
 
-  return { originX, originY, width, height };
+  let originX = Math.max(0, Math.floor(-layout.left / factor));
+  let originY = Math.max(0, Math.floor(-layout.top / factor));
+  let width = Math.max(1, Math.round(container.width / factor));
+  let height = Math.max(1, Math.round(container.height / factor));
+
+  // Keep exact frame aspect so avatar/post cover doesn't re-crop after upload.
+  if (Math.abs(aspectRatio - 1) < 0.001) {
+    const side = Math.max(
+      1,
+      Math.min(width, height, imageSize.width - originX, imageSize.height - originY),
+    );
+    width = side;
+    height = side;
+  } else {
+    const targetHeight = Math.max(1, Math.round(width / aspectRatio));
+    if (originY + targetHeight <= imageSize.height) {
+      height = targetHeight;
+    } else {
+      height = Math.max(1, imageSize.height - originY);
+      width = Math.max(1, Math.round(height * aspectRatio));
+    }
+  }
+
+  if (originX + width > imageSize.width) {
+    originX = Math.max(0, imageSize.width - width);
+  }
+  if (originY + height > imageSize.height) {
+    originY = Math.max(0, imageSize.height - height);
+  }
+
+  width = Math.min(width, imageSize.width - originX);
+  height = Math.min(height, imageSize.height - originY);
+
+  return {
+    originX,
+    originY,
+    width: Math.max(1, width),
+    height: Math.max(1, height),
+  };
 }
 
 function resizeDimensions(
@@ -114,7 +172,9 @@ export async function optimizePostImageWithCropForUpload(
   maxLongEdge: number = POST_UPLOAD_MAX_LONG_EDGE,
   jpegQuality: number = POST_UPLOAD_JPEG_QUALITY,
 ): Promise<OptimizedPostImage> {
-  const imageSize = await getImageSize(uri);
+  // Normalize first so crop coordinates match the oriented pixels the editor used.
+  const normalized = await normalizeImageOrientation(uri);
+  const imageSize = { width: normalized.width, height: normalized.height };
   const sourceCrop = computeSourceCropRect(imageSize, frame, crop);
 
   const actions: ImageManipulator.Action[] = [{ crop: sourceCrop }];
@@ -123,7 +183,7 @@ export async function optimizePostImageWithCropForUpload(
     actions.push({ resize });
   }
 
-  const result = await ImageManipulator.manipulateAsync(uri, actions, {
+  const result = await ImageManipulator.manipulateAsync(normalized.uri, actions, {
     compress: jpegQuality,
     format: ImageManipulator.SaveFormat.JPEG,
   });

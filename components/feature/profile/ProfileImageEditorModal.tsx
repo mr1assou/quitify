@@ -13,6 +13,7 @@ import { updateProfileImage, uploadProfileImage } from "@/services/profile/profi
 import type { PostImageCrop } from "@/types/community/community";
 import { dbAuthorId } from "@/utils/community/presence";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
+import { normalizeImageOrientation } from "@/utils/posts/optimizePostImage";
 import { optimizeProfileImageForUpload } from "@/utils/profile/optimizeProfileImageForUpload";
 
 type Props = {
@@ -44,8 +45,15 @@ export function ProfileImageEditorModal({ visible, onClose }: Props) {
   const handlePick = useCallback(async () => {
     const picked = await pickImages();
     if (picked.length === 0) return;
-    setUri(picked[0].uri);
-    setCrop(DEFAULT_POST_IMAGE_CROP);
+    try {
+      // Flatten EXIF so the circle editor and the uploaded crop use the same pixels.
+      const normalized = await normalizeImageOrientation(picked[0].uri);
+      setUri(normalized.uri);
+      setCrop(DEFAULT_POST_IMAGE_CROP);
+    } catch {
+      setUri(picked[0].uri);
+      setCrop(DEFAULT_POST_IMAGE_CROP);
+    }
   }, [pickImages]);
 
   const handleSave = useCallback(async () => {

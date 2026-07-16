@@ -53,7 +53,7 @@ export const COMMUNITY_USERS: CommunityUser[] = [
       name: "You",
       handle: "you",
       bio: "Quitting smoking, one day at a time.",
-      smokeFreeDays: 95,
+      smokeFreeDays: 0,
       isCurrentUser: true,
       isOnline: true,
       location: "Home",

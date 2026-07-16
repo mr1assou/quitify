@@ -1,10 +1,9 @@
 import { useMemo } from "react";
-import { Pressable, Text, View } from "react-native";
+import { View } from "react-native";
 
 import { CustomQuitDatePicker } from "@/components/feature/onboarding/QuitPlanFields/CustomQuitDatePicker";
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
-import { useTheme } from "@/context/ThemeContext";
 import {
   QUIT_DATE_CONTROL_HEIGHT,
   QUIT_DATE_PRESET_WIDTH_WHEN_CUSTOM,
@@ -18,7 +17,7 @@ import type { QuitStartPreset } from "@/types/onboarding/onboarding";
 type Props = {
   draft: QuitStartDateDraft;
   label?: string;
-  /** `stacked` — text link for custom date + full-width month/day/year (reset journey). */
+  /** `stacked` — full-width preset + month/day/year below (reset journey). */
   variant?: "default" | "stacked";
   onSelectPreset: (preset: QuitStartPreset) => void;
   onMonthChange: (month: number | undefined) => void;
@@ -41,9 +40,8 @@ export function QuitStartPresetPicker({
   onDayChange,
   onYearChange,
 }: Props) {
-  const { colors } = useTheme();
   const { t } = useTranslation();
-  const { localize, label: localizedLabel } = useLocalizedCatalog();
+  const { localize } = useLocalizedCatalog();
   const selected = draft.quitStartPreset;
   const isCustom = selected === "custom";
   const fieldLabel = label ?? t("onboarding.quitPlan.whenTitle");
@@ -57,57 +55,32 @@ export function QuitStartPresetPicker({
     [localize],
   );
 
-  const nowOption = presetOptions.find((option) => option.value === "now");
-  const customLabel = localizedLabel("onboarding.quitPlan", "custom", "label");
-  const nowLabel = localizedLabel("onboarding.quitPlan", "now", "label");
-
   if (variant === "stacked") {
     return (
       <View className="gap-3">
         <OnboardingFieldLabel>{fieldLabel}</OnboardingFieldLabel>
 
+        <SelectFieldString
+          fieldLabel={t("onboarding.quitPlan.whenTitle")}
+          value={selected}
+          placeholder={t("common.selectPlaceholder")}
+          options={presetOptions}
+          allowClear={false}
+          showLabel={false}
+          controlHeight={QUIT_DATE_CONTROL_HEIGHT}
+          onChange={(value) => {
+            if (value && isQuitStartPreset(value)) onSelectPreset(value);
+          }}
+        />
+
         {isCustom ? (
-          <View className="gap-3">
-            <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-              {customLabel}
-            </Text>
-            <CustomQuitDatePicker
-              draft={draft}
-              onMonthChange={onMonthChange}
-              onDayChange={onDayChange}
-              onYearChange={onYearChange}
-            />
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => onSelectPreset("now")}
-              className="self-start active:opacity-70"
-            >
-              <Text className="text-sm font-semibold text-primary">{nowLabel}</Text>
-            </Pressable>
-          </View>
-        ) : (
-          <View className="gap-3">
-            <SelectFieldString
-              fieldLabel={t("onboarding.quitPlan.whenTitle")}
-              value="now"
-              placeholder={t("common.selectPlaceholder")}
-              options={nowOption ? [nowOption] : presetOptions.filter((o) => o.value === "now")}
-              allowClear={false}
-              showLabel={false}
-              controlHeight={QUIT_DATE_CONTROL_HEIGHT}
-              onChange={() => onSelectPreset("now")}
-            />
-            <Pressable
-              accessibilityRole="button"
-              onPress={() => onSelectPreset("custom")}
-              className="self-start active:opacity-70"
-            >
-              <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
-                {customLabel}
-              </Text>
-            </Pressable>
-          </View>
-        )}
+          <CustomQuitDatePicker
+            draft={draft}
+            onMonthChange={onMonthChange}
+            onDayChange={onDayChange}
+            onYearChange={onYearChange}
+          />
+        ) : null}
       </View>
     );
   }

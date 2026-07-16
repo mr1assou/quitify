@@ -33,22 +33,6 @@ export function computeGoalCompletionBonus(
   return days * GOAL_COMPLETION_BONUS.FP_PER_DAY;
 }
 
-export function formatGoalCompletionBonusLabel(
-  type: ActiveGoalType,
-  target: number,
-  baselineProgress: number,
-  economics?: GoalEconomics,
-): string {
-  const bonus = computeGoalCompletionBonus(type, target, baselineProgress, economics);
-  const fp = GOAL_COMPLETION_BONUS.FP_PER_DAY;
-
-  if (bonus <= 0) {
-    return `${fp} FP per day when you complete this goal`;
-  }
-
-  return `${bonus} FP bonus (${fp} FP per day)`;
-}
-
 /** @deprecated Legacy goal type — kept for old stats rows only. */
 export function goalTypeRewardDetails(type: GoalType): readonly string[] {
   const streak = `You earn ${GOAL_STREAK_FP_PER_DAY} FP for each smoke-free day while working toward this goal.`;

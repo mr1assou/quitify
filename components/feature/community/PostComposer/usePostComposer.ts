@@ -5,9 +5,12 @@ import { Alert } from "react-native";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
-import { createPost } from "@/services/posts/postsApi";
+import { createPost, fetchPostById } from "@/services/posts/postsApi";
 import { uploadPostMediaToR2 } from "@/services/posts/uploadPostMedia";
-import { mapBackendPostToCommunityPost } from "@/utils/community/mapBackendPost";
+import {
+  mapBackendPostToCommunityPost,
+  mapFeedPostsFromApi,
+} from "@/utils/community/mapBackendPost";
 import type { PostImageCrop, PostMediaFrame } from "@/types/community/community";
 import type { UpdatePostPayload } from "@/types/community/updatePost";
 import {
@@ -194,7 +197,36 @@ export function usePostComposer() {
         media_duration_ms: mediaDurationMs,
       });
 
+      // Prefer the feed author (real badge) so we never flash the mock Champion badge.
       let post = mapBackendPostToCommunityPost(created);
+      let author = buildCurrentUserCommunityAuthor(
+        appState.profile,
+        appState.account?.name,
+        appState.account?.userId,
+      );
+
+      try {
+        const feedPost = await fetchPostById(String(created.post_id));
+        const mapped = mapFeedPostsFromApi([feedPost]);
+        const feedMappedPost = mapped.posts[0];
+        const feedAuthor = mapped.authorsById[feedMappedPost?.authorId ?? ""];
+        if (feedMappedPost) post = feedMappedPost;
+        if (feedAuthor) {
+          author = {
+            ...feedAuthor,
+            isCurrentUser: true,
+            isOnline: true,
+            avatarUrl: appState.profile?.imageUrl ?? feedAuthor.avatarUrl,
+            name:
+              appState.account?.name?.trim() ||
+              appState.profile?.name?.trim() ||
+              feedAuthor.name,
+          };
+        }
+      } catch {
+        // Keep first-step fallback author from buildCurrentUserCommunityAuthor.
+      }
+
       if (media && post.media?.[0]) {
         post = {
           ...post,
@@ -208,14 +240,7 @@ export function usePostComposer() {
           ],
         };
       }
-      addPost(
-        post,
-        buildCurrentUserCommunityAuthor(
-          appState.profile,
-          appState.account?.name,
-          appState.account?.userId,
-        ),
-      );
+      addPost(post, author);
       setDraft(EMPTY_POST_DRAFT);
       router.back();
     } catch (error) {
