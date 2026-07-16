@@ -166,7 +166,7 @@ function ThemedRoot() {
         <Stack.Screen name="community-search" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat/[id]" options={{ animation: "slide_from_right" }} />
-        <Stack.Screen name="chat-by-user/[id]" options={{ animation: "none" }} />
+        <Stack.Screen name="chat-by-user/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen
           name="call-by-user/[id]"
           options={{ presentation: "fullScreenModal", animation: "slide_from_bottom" }}

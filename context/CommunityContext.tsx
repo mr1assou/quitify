@@ -47,7 +47,7 @@ import {
   mapBackendThreadSummary,
 } from "@/utils/chat/mapBackendChat";
 import type { ChatMediaPick } from "@/components/feature/chat/usePickChatMedia";
-import { parseDbUserId } from "@/utils/community/presence";
+import { dbAuthorId, parseDbUserId } from "@/utils/community/presence";
 import { applyCommentEngagement, applyCommentVote } from "@/utils/community/commentVote";
 import type { CommentReplyTarget } from "@/types/community/community";
 import { hasLoadedPostComments, countLoadedPostComments } from "@/utils/community/resolvePostCommentIds";
@@ -1110,6 +1110,12 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     async (peerUserId: number): Promise<string | null> => {
       if (!currentUserId) return null;
 
+      const participantId = dbAuthorId(peerUserId);
+      const existing = state.threads.find(
+        (thread) => thread.participantId === participantId,
+      );
+      if (existing) return existing.id;
+
       try {
         const summary = await openChatThreadApi(peerUserId);
         const mapped = mapBackendThreadSummary(summary, currentUserId);
@@ -1124,7 +1130,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
         return null;
       }
     },
-    [currentUserId],
+    [currentUserId, state.threads],
   );
 
   const receiveChatMessage = useCallback(
