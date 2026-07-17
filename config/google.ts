@@ -3,7 +3,7 @@
  * Used as `webClientId` for native sign-in so the id_token matches backend verification.
  *
  * Also create an Android OAuth client:
- * - Package: com.quitify.app
+ * - Package: com.pottypaw.quitify
  * - SHA-1: 5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25
  */
 export const GOOGLE_WEB_CLIENT_ID =

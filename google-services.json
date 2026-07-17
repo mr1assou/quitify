@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:448873724266:android:7a2705cb5e366398534d13",
+        "mobilesdk_app_id": "1:448873724266:android:780bb049bac2e552534d13",
         "android_client_info": {
-          "package_name": "com.quitify.app"
+          "package_name": "com.pottypaw.quitify"
         }
       },
       "oauth_client": [],

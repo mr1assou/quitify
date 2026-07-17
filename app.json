@@ -28,7 +28,7 @@
       "softwareKeyboardLayoutMode": "pan",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.marwane.quitify",
+      "package": "com.pottypaw.quitify",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
