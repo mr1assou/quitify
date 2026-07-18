@@ -34,6 +34,12 @@ export function useChatSocket() {
       if (!token || cancelled) return;
 
       unsubscribe = subscribeChatSocket({
+        // Runs on the first connect and after every reconnect (network blip,
+        // server restart/cold start): pulls threads + last messages from the
+        // API so anything missed while the socket was down still shows up.
+        onConnected: () => {
+          void loadChatThreads();
+        },
         onMessage: (payload) => {
           if (payload.sender_id === userId) return;
           receiveChatMessage(mapBackendMessage(payload, userId));

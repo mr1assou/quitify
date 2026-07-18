@@ -30,7 +30,11 @@ import { useChatThreadRealtime } from "@/hooks/chat/useChatThreadRealtime";
 import { useProactiveChatGate } from "@/hooks/premium/useProactiveChatGate";
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import type { CallKind, ChatMessage } from "@/types/chat/chat";
-import { joinChatThread, leaveChatThread } from "@/services/realtime/chatSocket";
+import {
+  addChatSocketListener,
+  joinChatThread,
+  leaveChatThread,
+} from "@/services/realtime/chatSocket";
 import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
 import {
   canShowChatMessageActions,
@@ -104,8 +108,20 @@ export default function ChatThreadScreen() {
     if (!threadId || !hasThread || !detail) return;
 
     joinChatThread(Number(threadId));
-    return () => leaveChatThread(Number(threadId));
-  }, [threadId, hasThread, detail]);
+
+    // After a reconnect (network blip, server restart) the server-side room
+    // membership is gone and messages sent meanwhile were never pushed —
+    // re-join the room and reload this thread from the API.
+    const unsubscribeReconnect = addChatSocketListener("onConnected", () => {
+      joinChatThread(Number(threadId));
+      void loadChatMessages(threadId);
+    });
+
+    return () => {
+      unsubscribeReconnect();
+      leaveChatThread(Number(threadId));
+    };
+  }, [threadId, hasThread, detail, loadChatMessages]);
 
   useEffect(() => {
     if (!detail?.threadId || messagesLoading) return;

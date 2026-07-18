@@ -15,10 +15,17 @@ const messageUpdatedListeners = new Set<(payload: BackendChatMessage) => void>()
 const messageDeletedListeners = new Set<(payload: BackendChatMessage) => void>();
 const seenListeners = new Set<(payload: BackendMessagesSeenPayload) => void>();
 const typingListeners = new Set<(payload: BackendChatTypingPayload) => void>();
+const connectedListeners = new Set<() => void>();
 
 function wireSocket(sock: Socket) {
   if (wired) return;
   wired = true;
+
+  // Fires on the first connection AND after every automatic reconnection.
+  // Listeners use it to re-join rooms and fetch messages missed while offline.
+  sock.on("connect", () => {
+    connectedListeners.forEach((listener) => listener());
+  });
 
   sock.on("chat:message", (payload: BackendChatMessage) => {
     messageListeners.forEach((listener) => listener(payload));
@@ -47,6 +54,8 @@ export type ChatSocketHandlers = {
   onMessageDeleted?: (message: BackendChatMessage) => void;
   onMessagesSeen?: (payload: BackendMessagesSeenPayload) => void;
   onTyping?: (payload: BackendChatTypingPayload) => void;
+  /** Called on every (re)connection — used to catch up on missed messages. */
+  onConnected?: () => void;
 };
 
 export function subscribeChatSocket(handlers: ChatSocketHandlers): () => void {
@@ -72,6 +81,10 @@ export function subscribeChatSocket(handlers: ChatSocketHandlers): () => void {
     typingListeners.add(handlers.onTyping);
     cleanups.push(() => typingListeners.delete(handlers.onTyping!));
   }
+  if (handlers.onConnected) {
+    connectedListeners.add(handlers.onConnected);
+    cleanups.push(() => connectedListeners.delete(handlers.onConnected!));
+  }
 
   return () => cleanups.forEach((cleanup) => cleanup());
 }
@@ -89,8 +102,11 @@ export function connectChatSocket(accessToken: string): Socket {
     auth: { token: accessToken },
     transports: ["websocket", "polling"],
     extraHeaders: { "ngrok-skip-browser-warning": "1" },
+    // Retry forever with backoff: a free-tier server cold start can take
+    // 30-60s, which would exhaust any small fixed attempt limit and leave
+    // the app with a permanently dead socket.
     reconnection: true,
-    reconnectionAttempts: 8,
+    reconnectionDelayMax: 10000,
   });
 
   wireSocket(socket);
@@ -125,6 +141,7 @@ export function disconnectChatSocket(): void {
   messageDeletedListeners.clear();
   seenListeners.clear();
   typingListeners.clear();
+  connectedListeners.clear();
   socket.removeAllListeners();
   socket.disconnect();
   socket = null;
