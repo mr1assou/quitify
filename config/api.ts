@@ -3,4 +3,4 @@
  * Local LAN IP (device/emulator on same network): http://192.168.11.100:3000
  * Android emulator alternative: http://10.0.2.2:3000
  */
-export const API_URL = "https://backend-smoking.onrender.com";
+export const API_URL = "http://192.168.1.18:3000";
