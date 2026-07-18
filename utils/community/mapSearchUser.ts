@@ -26,5 +26,6 @@ export function mapSearchUserToCommunityUser(
     avatarUrl: user.image_url ?? undefined,
     isOnline: user.is_online,
     role: DEFAULT_USER_ROLE,
+    accountStatus: user.status,
   };
 }

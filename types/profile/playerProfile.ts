@@ -14,6 +14,7 @@ export type PlayerProfile = {
   smokeFreeDays: number;
   bestSmokeFreeDays: number;
   isCurrentUser: boolean;
+  accountStatus?: "active" | "blocked";
   bio: string;
   memberSinceLabel: string;
   avatarUrl?: string;

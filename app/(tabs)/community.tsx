@@ -39,6 +39,9 @@ export default function CommunityScreen() {
               showModeratorActions={
                 isSupportStaff && item.post.authorId !== currentUserCommunityId
               }
+              showReportAction={
+                !isSupportStaff && item.post.authorId !== currentUserCommunityId
+              }
             />
           </View>
         )}

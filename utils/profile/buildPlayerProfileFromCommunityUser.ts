@@ -30,6 +30,7 @@ export function buildPlayerProfileFromCommunityUser(
     smokeFreeDays: resolved.smokeFreeDays,
     bestSmokeFreeDays: bestSmokeFreeDaysForRank(resolved.smokeFreeDays, resolved.leaderboardRank),
     isCurrentUser: false,
+    accountStatus: resolved.accountStatus,
     bio: resolved.bio,
     memberSinceLabel: memberSinceLabelForRank(resolved.leaderboardRank),
     avatarUrl: resolved.avatarUrl,

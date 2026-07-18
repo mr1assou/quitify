@@ -17,6 +17,7 @@ export type CommunityUser = {
   leaderboardRank: number;
   isCurrentUser?: boolean;
   role?: UserRole;
+  accountStatus?: "active" | "blocked";
   location?: string;
   /** Custom avatar from API (R2 profile folder). */
   avatarUrl?: string;

@@ -6,6 +6,7 @@ export type BackendUserSearchResult = {
   country: string | null;
   badge_id: string;
   is_online: boolean;
+  status: "active" | "blocked";
 };
 
 export type BackendUserSearchResponse = {

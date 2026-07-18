@@ -149,6 +149,52 @@ export async function moderatePost(
   return res.json() as Promise<{ post_id: number; author_id: number }>;
 }
 
+export type BackendReportedPost = BackendFeedPostResponse & {
+  report_count: number;
+};
+
+/** Support staff only — reported posts awaiting review. */
+export async function fetchReportedPosts(): Promise<{
+  items: BackendReportedPost[];
+}> {
+  const res = await authenticatedFetch("/posts/reports");
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not load reported posts"));
+  }
+
+  return res.json() as Promise<{ items: BackendReportedPost[] }>;
+}
+
+/** Support staff only — clears all reports on a post. */
+export async function dismissPostReports(
+  postId: string,
+): Promise<{ post_id: number; dismissed: boolean }> {
+  const res = await authenticatedFetch(`/posts/${postId}/reports/dismiss`, {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not dismiss reports"));
+  }
+
+  return res.json() as Promise<{ post_id: number; dismissed: boolean }>;
+}
+
+export async function reportPost(
+  postId: string,
+): Promise<{ post_id: number; reported: boolean }> {
+  const res = await authenticatedFetch(`/posts/${postId}/report`, {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    throw new Error(await parseErrorMessage(res, "Could not report post"));
+  }
+
+  return res.json() as Promise<{ post_id: number; reported: boolean }>;
+}
+
 export async function voteOnPost(
   postId: string,
   vote: PostVote,

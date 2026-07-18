@@ -6,6 +6,8 @@ import {
   communityFeedFilterSummary,
   isDefaultCommunityFeedFilter,
 } from "@/constants/community/communityFeedFilter";
+import { isSupportRole } from "@/constants/auth/userRoles";
+import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
@@ -29,12 +31,23 @@ type Props = {
 export function CommunityToolbar({ filter, onFilterChange }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { state: appState } = useApp();
   const { requirePremium } = usePremiumGate();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterActive = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
+  const isSupportStaff = isSupportRole(appState.account?.role);
 
   const actions: ToolbarAction[] = useMemo(
     () => [
+      ...(isSupportStaff
+        ? [
+            {
+              icon: "flag-outline",
+              label: "Reported posts",
+              onPress: () => safeRouter.push("/reported-posts"),
+            } satisfies ToolbarAction,
+          ]
+        : []),
       {
         icon: "add-outline",
         label: t("common.post"),
@@ -46,7 +59,7 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
         onPress: () => safeRouter.push("/community-search"),
       },
     ],
-    [t],
+    [isSupportStaff, t],
   );
 
   return (

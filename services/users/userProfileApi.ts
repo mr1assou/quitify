@@ -16,6 +16,40 @@ async function parseError(res: Response, fallback: string): Promise<never> {
   }
 }
 
+/** Support staff only — blocks the account so it can no longer sign in. */
+export async function blockUser(
+  userId: number,
+): Promise<{ user_id: number; status: string }> {
+  const res = await authenticatedFetch(`/users/${userId}/block`, {
+    method: "POST",
+  });
+  if (!res.ok) return parseError(res, "Could not block user");
+  return res.json() as Promise<{ user_id: number; status: string }>;
+}
+
+/** Support staff only — restores a blocked account. */
+export async function unblockUser(
+  userId: number,
+): Promise<{ user_id: number; status: string }> {
+  const res = await authenticatedFetch(`/users/${userId}/unblock`, {
+    method: "POST",
+  });
+  if (!res.ok) return parseError(res, "Could not unblock user");
+  return res.json() as Promise<{ user_id: number; status: string }>;
+}
+
+/** Support staff only — reads whether an account is active or blocked. */
+export async function fetchUserModerationStatus(
+  userId: number,
+): Promise<{ user_id: number; status: "active" | "blocked" }> {
+  const res = await authenticatedFetch(`/users/${userId}/moderation-status`);
+  if (!res.ok) return parseError(res, "Could not load user status");
+  return res.json() as Promise<{
+    user_id: number;
+    status: "active" | "blocked";
+  }>;
+}
+
 export async function fetchUserStreak(userId: number): Promise<BackendUserStreakResponse> {
   const res = await authenticatedFetch(`/users/${userId}/streak`);
   if (!res.ok) return parseError(res, "Could not load streak");

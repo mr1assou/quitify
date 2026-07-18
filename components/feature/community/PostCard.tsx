@@ -10,15 +10,22 @@ import { PostActions } from "./PostActions";
 import { PostHeader } from "./PostHeader";
 import { PostModeratorMenu } from "./PostModeratorMenu";
 import { PostOwnerMenu } from "./PostOwnerMenu";
+import { PostReportMenu } from "./PostReportMenu";
 import { PostContent } from "./PostContent";
 
 type Props = {
   item: FeedItem;
   showOwnerActions?: boolean;
   showModeratorActions?: boolean;
+  showReportAction?: boolean;
 };
 
-export function PostCard({ item, showOwnerActions = false, showModeratorActions = false }: Props) {
+export function PostCard({
+  item,
+  showOwnerActions = false,
+  showModeratorActions = false,
+  showReportAction = false,
+}: Props) {
   const { votePost } = useCommunity();
   const { post, author } = item;
 
@@ -36,6 +43,7 @@ export function PostCard({ item, showOwnerActions = false, showModeratorActions 
         </View>
         {showOwnerActions ? <PostOwnerMenu postId={post.id} /> : null}
         {showModeratorActions ? <PostModeratorMenu postId={post.id} /> : null}
+        {showReportAction ? <PostReportMenu postId={post.id} /> : null}
       </View>
 
       <PostContent post={post} onPress={openPost} />
