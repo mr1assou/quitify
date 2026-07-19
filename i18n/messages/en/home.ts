@@ -12,4 +12,6 @@ export const home = {
   ringNicotine: "Nicotine Cleared",
   ringBreathing: "Breathing Recovery",
   ringHeart: "Heart Health",
+  notificationsTitle: "Stay motivated",
+  notificationsCta: "Motivate me",
 } as const;

@@ -1,6 +1,7 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
-import { Alert } from "react-native";
+import * as Notifications from "expo-notifications";
+import { useCallback, useEffect, useState } from "react";
+import { Alert, Linking } from "react-native";
 
 import { useApp } from "@/context/AppContext";
 import {
@@ -10,6 +11,7 @@ import {
 import {
   getCachedPushTokenStatus,
   setCachedPushTokenStatus,
+  subscribeToCachedPushTokenStatus,
 } from "@/services/push/pushSettingsCache";
 import {
   cancelMotivationLocalNotifications,
@@ -34,6 +36,20 @@ export function usePushNotificationsSettings() {
     setEnabled(hasToken);
     setReady(true);
   }, []);
+
+  useEffect(
+    () =>
+      subscribeToCachedPushTokenStatus((hasToken) => {
+        if (hasToken === null) {
+          setEnabled(false);
+          setReady(false);
+          return;
+        }
+        setEnabled(hasToken);
+        setReady(true);
+      }),
+    [],
+  );
 
   const syncMotivationSchedule = useCallback(
     async (notificationsEnabled: boolean) => {
@@ -77,6 +93,23 @@ export function usePushNotificationsSettings() {
       setBusy(true);
       try {
         if (next) {
+          const permission = await Notifications.getPermissionsAsync();
+          if (permission.status !== "granted" && !permission.canAskAgain) {
+            Alert.alert(
+              "Enable notifications",
+              "Notifications are blocked for Quitify. Open your phone settings to enable them.",
+              [
+                { text: "Not now", style: "cancel" },
+                {
+                  text: "Open settings",
+                  onPress: () => void Linking.openSettings(),
+                },
+              ],
+            );
+            applyStatus(false);
+            return;
+          }
+
           const saved = await requestPushPermissionAndSaveToken();
           if (!saved) {
             applyStatus(false);

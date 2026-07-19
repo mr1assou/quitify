@@ -6,6 +6,7 @@ import { ScrollView, View } from "react-native";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { HomeGoalsSection } from "@/components/feature/home/HomeGoalsSection";
+import { HomeNotificationPrompt } from "@/components/feature/home/HomeNotificationPrompt/HomeNotificationPrompt";
 import { CravingActions } from "@/components/feature/home/CravingActions";
 import { RecoveryHighlights } from "@/components/feature/home/RecoveryHighlights";
 import { StreakHero } from "@/components/feature/home/StreakHero";
@@ -94,6 +95,8 @@ export default function Home() {
             currencySymbol={symbol}
           />
         </View>
+
+        <HomeNotificationPrompt />
 
         <View className="mt-8 px-6">
           <RecoveryHighlights />
