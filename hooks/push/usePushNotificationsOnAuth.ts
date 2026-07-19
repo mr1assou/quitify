@@ -3,28 +3,17 @@ import { useEffect } from "react";
 
 import { PUSH_PERMISSION_PROMPT_DELAY_MS } from "@/constants/push/signupPushPrompt";
 import { useApp } from "@/context/AppContext";
-import { fetchPushTokenStatus } from "@/services/push/pushTokenApi";
+import { setCachedPushTokenStatus } from "@/services/push/pushSettingsCache";
 import {
-  getCachedPushTokenStatus,
-  setCachedPushTokenStatus,
-} from "@/services/push/pushSettingsCache";
-import {
+  registerCurrentDevicePushTokenIfAuthorized,
   requestPushPermissionAndSaveToken,
-  syncPushTokenWithBackend,
 } from "@/services/push/registerPushToken";
 import { isPushPromptWaitsForPaywall } from "@/utils/onboarding/postSignupFlowStorage";
-import {
-  clearPushPermissionPromptPending,
-  isPushPermissionPromptPending,
-} from "@/utils/push/signupPushPromptStorage";
 
-function schedulePermissionPrompt(
-  onDone: () => void,
-): ReturnType<typeof setTimeout> {
+function schedulePermissionPrompt(): ReturnType<typeof setTimeout> {
   return setTimeout(() => {
     void (async () => {
       try {
-        await clearPushPermissionPromptPending();
         const saved = await requestPushPermissionAndSaveToken();
         setCachedPushTokenStatus(saved);
       } catch (error) {
@@ -32,37 +21,23 @@ function schedulePermissionPrompt(
           "[push] Permission prompt failed:",
           error instanceof Error ? error.message : error,
         );
-      } finally {
-        onDone();
       }
     })();
   }, PUSH_PERMISSION_PROMPT_DELAY_MS);
 }
 
-async function refreshCachedPushTokenStatus(): Promise<void> {
-  try {
-    const hasToken = await fetchPushTokenStatus();
-    setCachedPushTokenStatus(hasToken);
-  } catch {
-    // Keep the last cached toggle state if the API is unreachable.
-  }
-}
-
 /**
  * After sign-in:
- * - New sign-up → OS permission prompt after 5s
- * - Fresh install / reinstall where the OS has never been asked (status
- *   `undetermined`) → OS permission prompt after 5s, even if notifications were off
- * - Re-login with notifications previously on but OS permission lost → same prompt
- * - OS permission explicitly denied (and not a new sign-up) → no auto-prompt
- * - Otherwise sync push token only
+ * - New sign-up waits for the post-paywall flow.
+ * - Existing OS permission reassigns this device token to the current account.
+ * - If the OS can still ask, show its permission prompt after 5 seconds.
  */
 export function usePushNotificationsOnAuth() {
   const { isHydrated, state } = useApp();
-  const accountEmail = state.account?.email;
+  const userId = state.account?.userId;
 
   useEffect(() => {
-    if (!isHydrated || !accountEmail) return;
+    if (!isHydrated || !userId) return;
 
     let cancelled = false;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -73,48 +48,18 @@ export function usePushNotificationsOnAuth() {
           return;
         }
 
-        const promptPending = await isPushPermissionPromptPending();
+        const permission = await Notifications.getPermissionsAsync();
+        if (cancelled) return;
 
-        let hadTokenInDb = false;
-        try {
-          hadTokenInDb = await fetchPushTokenStatus();
-        } catch (error) {
-          console.error(
-            "[push] Could not load push token status:",
-            error instanceof Error ? error.message : error,
-          );
+        if (permission.status === "granted") {
+          const saved = await registerCurrentDevicePushTokenIfAuthorized();
+          if (!cancelled) setCachedPushTokenStatus(saved);
           return;
         }
 
-        if (getCachedPushTokenStatus() === null) {
-          setCachedPushTokenStatus(hadTokenInDb);
-        }
-
-        const { status: osStatus } = await Notifications.getPermissionsAsync();
-
-        // `undetermined` = OS has never asked on this install (fresh / reinstall),
-        // so it's safe to prompt regardless of the stored toggle. We only avoid
-        // auto-prompting when the user explicitly denied at the OS level.
-        const osNeverAsked = osStatus === "undetermined";
-
-        const shouldPrompt =
-          !cancelled &&
-          (promptPending ||
-            osNeverAsked ||
-            (hadTokenInDb && osStatus !== "granted"));
-
-        if (shouldPrompt) {
-          timeoutId = schedulePermissionPrompt(() => {
-            void syncPushTokenWithBackend()
-              .then(() => refreshCachedPushTokenStatus())
-              .catch(() => {});
-          });
-          return;
-        }
-
-        await syncPushTokenWithBackend();
-        if (!cancelled) {
-          await refreshCachedPushTokenStatus();
+        setCachedPushTokenStatus(false);
+        if (permission.canAskAgain) {
+          timeoutId = schedulePermissionPrompt();
         }
       } catch (error) {
         console.error(
@@ -128,5 +73,5 @@ export function usePushNotificationsOnAuth() {
       cancelled = true;
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [isHydrated, accountEmail]);
+  }, [isHydrated, userId]);
 }

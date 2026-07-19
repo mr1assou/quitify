@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -40,19 +40,27 @@ export default function Paywall() {
   const [selectedPlan, setSelectedPlan] = useState<PaywallPlanId>("yearly");
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Covers every dismissal path, including the Android back button/gesture,
+  // so the deferred notification prompt is never lost.
+  useEffect(() => {
+    return () => {
+      void markPostPaywallFlowComplete();
+    };
+  }, []);
+
   const primaryCtaLabel = purchasing
     ? t("paywall.processing")
     : selectedPlan === "yearly"
       ? t("paywall.tryFree")
       : t("paywall.continue");
 
-  const finishPaywall = () => {
+  const finishPaywall = async () => {
     if (comparisonTimerRef.current) {
       clearTimeout(comparisonTimerRef.current);
       comparisonTimerRef.current = null;
     }
     setFlag("hasSeenPaywall", true);
-    void markPostPaywallFlowComplete();
+    await markPostPaywallFlowComplete();
     safeRouter.back();
   };
 
@@ -72,12 +80,12 @@ export default function Paywall() {
 
   const handlePrimaryCta = async () => {
     const premium = await purchasePlan(selectedPlan);
-    if (premium) finishPaywall();
+    if (premium) await finishPaywall();
   };
 
   const handleRestore = async () => {
     const premium = await restore();
-    if (premium) finishPaywall();
+    if (premium) await finishPaywall();
   };
 
   return (

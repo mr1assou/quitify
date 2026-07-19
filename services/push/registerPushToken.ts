@@ -34,6 +34,24 @@ function resolvePushPlatform(): PushPlatform | null {
   return null;
 }
 
+async function saveCurrentDevicePushToken(
+  platform: PushPlatform,
+): Promise<boolean> {
+  await ensureAndroidNotificationChannel();
+
+  const { data: token } = await Notifications.getExpoPushTokenAsync({
+    projectId: getEasProjectId(),
+  });
+
+  if (!token) {
+    throw new Error("Expo did not return a push token.");
+  }
+
+  // The backend upsert moves this installation token to the signed-in user.
+  await registerPushTokenOnBackend({ token, platform });
+  return true;
+}
+
 /**
  * Shows the OS notification permission dialog, then saves the Expo push token
  * on the server when the user allows.
@@ -54,18 +72,23 @@ export async function requestPushPermissionAndSaveToken(): Promise<boolean> {
 
   if (finalStatus !== "granted") return false;
 
-  await ensureAndroidNotificationChannel();
+  return saveCurrentDevicePushToken(platform);
+}
 
-  const { data: token } = await Notifications.getExpoPushTokenAsync({
-    projectId: getEasProjectId(),
-  });
+/**
+ * Reassigns this installation's existing push token to the signed-in user
+ * without showing the OS permission dialog.
+ */
+export async function registerCurrentDevicePushTokenIfAuthorized(): Promise<boolean> {
+  if (!Device.isDevice) return false;
 
-  if (!token) {
-    throw new Error("Expo did not return a push token.");
-  }
+  const platform = resolvePushPlatform();
+  if (!platform) return false;
 
-  await registerPushTokenOnBackend({ token, platform });
-  return true;
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== "granted") return false;
+
+  return saveCurrentDevicePushToken(platform);
 }
 
 /**
@@ -96,13 +119,5 @@ export async function syncPushTokenWithBackend(): Promise<void> {
     return;
   }
 
-  await ensureAndroidNotificationChannel();
-
-  const { data: token } = await Notifications.getExpoPushTokenAsync({
-    projectId: getEasProjectId(),
-  });
-
-  if (!token) return;
-
-  await registerPushTokenOnBackend({ token, platform });
+  await saveCurrentDevicePushToken(platform);
 }

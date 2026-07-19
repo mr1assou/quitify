@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 
 import { useApp } from "@/context/AppContext";
@@ -10,6 +10,7 @@ import {
 import {
   getCachedPushTokenStatus,
   setCachedPushTokenStatus,
+  subscribeToCachedPushTokenStatus,
 } from "@/services/push/pushSettingsCache";
 
 /**
@@ -22,6 +23,12 @@ export function useMotivationLocalNotifications() {
   const username = state.profile?.name ?? state.account?.name;
   const motivationCardIndex = state.account?.motivationCardIndex ?? 0;
   const lastSyncKeyRef = useRef<string | null>(null);
+  const [cachedStatus, setCachedStatus] = useState(getCachedPushTokenStatus);
+
+  useEffect(
+    () => subscribeToCachedPushTokenStatus(setCachedStatus),
+    [],
+  );
 
   const sync = useCallback(async () => {
     if (!isHydrated) return;
@@ -32,7 +39,7 @@ export function useMotivationLocalNotifications() {
       return;
     }
 
-    let enabled = getCachedPushTokenStatus();
+    let enabled = cachedStatus;
     if (enabled === null) {
       try {
         enabled = await fetchPushTokenStatus();
@@ -58,7 +65,7 @@ export function useMotivationLocalNotifications() {
       username,
       motivationCardIndex,
     });
-  }, [isHydrated, userId, username, motivationCardIndex]);
+  }, [cachedStatus, isHydrated, userId, username, motivationCardIndex]);
 
   useEffect(() => {
     void sync();

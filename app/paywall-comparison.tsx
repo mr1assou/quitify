@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Pressable,
   ScrollView,
@@ -75,6 +75,13 @@ export default function PaywallComparison() {
   const profile = state.profile;
   const sheetHeight = windowHeight * SHEET_HEIGHT_RATIO;
 
+  // Covers every dismissal path, including the Android back button/gesture.
+  useEffect(() => {
+    return () => {
+      void markPostPaywallFlowComplete();
+    };
+  }, []);
+
   const monthlyCigaretteSpend = useMemo(
     () =>
       computeMonthlyCigaretteSpend({
@@ -93,8 +100,8 @@ export default function PaywallComparison() {
     plans.find((plan) => plan.id === "yearly")?.rightPrice ??
     formatCurrency(4.17, "USD");
 
-  const dismiss = () => {
-    void markPostPaywallFlowComplete();
+  const dismiss = async () => {
+    await markPostPaywallFlowComplete();
     safeRouter.back();
   };
 
@@ -104,7 +111,7 @@ export default function PaywallComparison() {
         accessibilityRole="button"
         accessibilityLabel="Dismiss comparison"
         className="absolute inset-0 bg-black/45"
-        onPress={dismiss}
+        onPress={() => void dismiss()}
       />
 
       <View
@@ -115,7 +122,7 @@ export default function PaywallComparison() {
 
         <View className="flex-row items-center justify-end px-4 pt-3">
             <Pressable
-              onPress={dismiss}
+              onPress={() => void dismiss()}
               className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
             >
               <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
@@ -153,7 +160,12 @@ export default function PaywallComparison() {
             </View>
 
             <View className="mt-5">
-              <Button label={t("paywall.continue")} size="md" fullWidth onPress={dismiss} />
+            <Button
+              label={t("paywall.continue")}
+              size="md"
+              fullWidth
+              onPress={() => void dismiss()}
+            />
             </View>
           </ScrollView>
       </View>

@@ -27,7 +27,7 @@ export default function Home() {
   const gates = useGates();
   const { activeGoals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
   usePostSignupPaywall();
-  const { onHomeInteraction } = usePostPaywallNotificationPrompt();
+  usePostPaywallNotificationPrompt();
 
   const openCreateGoal = useCallback(() => {
     safeRouter.push("/goals");
@@ -81,8 +81,6 @@ export default function Home() {
     <ScreenCanvas edges={["top"]}>
       <ScrollView
         contentContainerStyle={{ paddingBottom: 120 }}
-        onScrollBeginDrag={onHomeInteraction}
-        onTouchStart={onHomeInteraction}
       >
         <ScreenHeader leading={<AppBrandMark />} />
 
