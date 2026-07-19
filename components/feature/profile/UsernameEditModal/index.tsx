@@ -23,6 +23,7 @@ import {
 
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import {
+  isValidOnboardingUsername,
   normalizeOnboardingUsername,
   USERNAME_MAX_LENGTH,
 } from "@/constants/onboarding/onboardingUsername";
@@ -44,13 +45,15 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
   const { colors } = useTheme();
   const { state, updateProfile, setAccount } = useApp();
   const { patchAuthor } = useCommunity();
-  const [username, setUsername] = useState(profile.name ?? "");
+  const [username, setUsername] = useState(() =>
+    normalizeOnboardingUsername(profile.name ?? ""),
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!visible) return;
-    setUsername(profile.name ?? "");
+    setUsername(normalizeOnboardingUsername(profile.name ?? ""));
     setError(null);
   }, [profile.name, visible]);
 
@@ -59,7 +62,9 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
     [username],
   );
 
-  const canSave = normalized.length > 0 && normalized !== (profile.name ?? "").trim().toLowerCase();
+  const canSave =
+    isValidOnboardingUsername(normalized) &&
+    normalized !== normalizeOnboardingUsername(profile.name ?? "");
 
   const handleSave = () => {
     if (!canSave || saving) return;

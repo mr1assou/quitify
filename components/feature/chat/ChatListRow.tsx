@@ -1,5 +1,6 @@
-import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
+
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
@@ -34,7 +35,7 @@ export function ChatListRow({ preview }: Props) {
 
   return (
     <Pressable
-      onPress={() => router.push(`/chat/${threadId}`)}
+      onPress={() => safeRouter.push(`/chat/${threadId}`)}
       className="flex-row items-center px-6 py-3"
       android_ripple={{ color: colors.section }}
     >

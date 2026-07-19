@@ -45,6 +45,9 @@ export function CreateProfileStep({
           maxLength={USERNAME_MAX_LENGTH}
           className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
         />
+        <Text className="text-xs text-muted-foreground dark:text-d-muted">
+          {username.length}/{USERNAME_MAX_LENGTH} characters
+        </Text>
       </View>
 
       <View className="gap-2">

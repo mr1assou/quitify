@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
+
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
@@ -40,7 +41,7 @@ export function SearchUserResultRow({ user }: Props) {
     countryFlagForRank(user.avatarRank);
 
   const openProfile = () => navigateToUserProfile(user);
-  const openChat = () => router.push(`/chat-by-user/${user.id}`);
+  const openChat = () => safeRouter.push(`/chat-by-user/${user.id}`);
 
   return (
     <Pressable

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
+
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { SUPPORT_STAFF_SUBTITLE } from "@/constants/auth/userRoles";
@@ -15,7 +16,7 @@ type Props = {
 export function SupportStaffRow({ user }: Props) {
   const { colors } = useTheme();
 
-  const openChat = () => router.push(`/chat-by-user/${user.id}`);
+  const openChat = () => safeRouter.push(`/chat-by-user/${user.id}`);
 
   return (
     <View className="flex-row items-center rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated">

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
+
+import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { useTheme } from "@/context/ThemeContext";
@@ -18,7 +19,7 @@ export function UserResultRow({ user, trailing = "chevron" }: Props) {
   const badgeName = getBadgeName(user.badgeId);
 
   const openProfile = () => navigateToUserProfile(user);
-  const openChat = () => router.push(`/chat-by-user/${user.id}`);
+  const openChat = () => safeRouter.push(`/chat-by-user/${user.id}`);
 
   return (
     <Pressable
