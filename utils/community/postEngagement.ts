@@ -7,10 +7,10 @@ export function applyEngagementToPost(
 ): CommunityPost {
   return {
     ...post,
-    upvoteCount: engagement.upvote_count,
-    downvoteCount: engagement.downvote_count,
-    shareCount: engagement.share_count,
-    commentCount: engagement.comment_count,
+    upvoteCount: Math.max(0, engagement.upvote_count),
+    downvoteCount: Math.max(0, engagement.downvote_count),
+    shareCount: Math.max(0, engagement.share_count),
+    commentCount: Math.max(0, engagement.comment_count),
     myVote: engagement.my_vote,
   };
 }

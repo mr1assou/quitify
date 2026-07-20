@@ -197,7 +197,7 @@ export async function reportPost(
 
 export async function voteOnPost(
   postId: string,
-  vote: PostVote,
+  vote: PostVote | null,
 ): Promise<BackendPostEngagement> {
   const res = await authenticatedFetch(`/posts/${postId}/vote`, {
     method: "POST",
@@ -267,7 +267,7 @@ export async function createPostComment(
 export async function voteOnComment(
   postId: string,
   commentId: string,
-  vote: PostVote,
+  vote: PostVote | null,
 ): Promise<BackendPostCommentEngagement> {
   const res = await authenticatedFetch(`/posts/${postId}/comments/${commentId}/vote`, {
     method: "POST",

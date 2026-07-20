@@ -4,6 +4,7 @@ import {
   useContext,
   useMemo,
   useReducer,
+  useRef,
   type ReactNode,
 } from "react";
 
@@ -40,7 +41,7 @@ import {
 } from "@/utils/community/mapBackendComment";
 import { mapBackendPostToCommunityPost, mapFeedPostsFromApi } from "@/utils/community/mapBackendPost";
 import { applyEngagementToPost } from "@/utils/community/postEngagement";
-import { applyPostVote } from "@/utils/community/postVote";
+import { applyPostVoteState, nextPostVote } from "@/utils/community/postVote";
 import { mergeUpdatedPost } from "@/utils/community/mergeUpdatedPost";
 import {
   mapBackendMessage,
@@ -48,7 +49,7 @@ import {
 } from "@/utils/chat/mapBackendChat";
 import type { ChatMediaPick } from "@/components/feature/chat/usePickChatMedia";
 import { dbAuthorId, parseDbUserId } from "@/utils/community/presence";
-import { applyCommentEngagement, applyCommentVote } from "@/utils/community/commentVote";
+import { applyCommentEngagement, applyCommentVoteState } from "@/utils/community/commentVote";
 import type { CommentReplyTarget } from "@/types/community/community";
 import { hasLoadedPostComments, countLoadedPostComments } from "@/utils/community/resolvePostCommentIds";
 import type { UpdatePostPayload } from "@/types/community/updatePost";
@@ -67,13 +68,19 @@ type State = {
   commentsHasMoreByPostId: Record<string, boolean>;
   commentsLoadingMoreByPostId: Record<string, boolean>;
   commentsLoadingByPostId: Record<string, boolean>;
+  /** Post ids currently waiting on a vote API response. */
+  votingPostIds: Record<string, true>;
+  /** Comment ids currently waiting on a vote API response. */
+  votingCommentIds: Record<string, true>;
   /** Post ids removed locally (profile + feed stay in sync). */
   deletedPostIds: string[];
 };
 
 type Action =
-  | { type: "VOTE_POST"; postId: string; vote: PostVote }
+  | { type: "VOTE_POST"; postId: string; myVote: PostVote | null }
   | { type: "SYNC_ENGAGEMENT"; postId: string; engagement: BackendPostEngagement }
+  | { type: "SET_POST_VOTING"; postId: string; voting: boolean }
+  | { type: "SET_COMMENT_VOTING"; commentId: string; voting: boolean }
   | { type: "SHARE"; postId: string }
   | { type: "ADD_COMMENT"; post: PostComment; author: CommunityUser }
   | { type: "UPDATE_COMMENT"; comment: PostComment; author: CommunityUser }
@@ -154,7 +161,7 @@ type Action =
       message: ChatMessage;
     }
   | { type: "PATCH_CHAT_MESSAGE"; message: ChatMessage }
-  | { type: "PATCH_COMMENT_VOTE"; commentId: string; vote: PostVote }
+  | { type: "PATCH_COMMENT_VOTE"; commentId: string; myVote: PostVote | null }
   | { type: "SYNC_COMMENT_ENGAGEMENT"; commentId: string; engagement: BackendPostCommentEngagement }
   | { type: "SET_MESSAGES_SEEN"; threadId: string; lastReadAt: number }
   | { type: "MARK_THREAD_READ"; threadId: string }
@@ -172,6 +179,8 @@ const initialState: State = {
   commentsHasMoreByPostId: {},
   commentsLoadingMoreByPostId: {},
   commentsLoadingByPostId: {},
+  votingPostIds: {},
+  votingCommentIds: {},
   deletedPostIds: [],
 };
 
@@ -241,7 +250,7 @@ function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "VOTE_POST": {
       const posts = state.posts.map((p) =>
-        p.id === action.postId ? applyPostVote(p, action.vote) : p,
+        p.id === action.postId ? applyPostVoteState(p, action.myVote) : p,
       );
       return { ...state, posts };
     }
@@ -251,6 +260,20 @@ function reducer(state: State, action: Action): State {
         p.id === action.postId ? applyEngagementToPost(p, action.engagement) : p,
       );
       return { ...state, posts };
+    }
+
+    case "SET_POST_VOTING": {
+      const votingPostIds = { ...state.votingPostIds };
+      if (action.voting) votingPostIds[action.postId] = true;
+      else delete votingPostIds[action.postId];
+      return { ...state, votingPostIds };
+    }
+
+    case "SET_COMMENT_VOTING": {
+      const votingCommentIds = { ...state.votingCommentIds };
+      if (action.voting) votingCommentIds[action.commentId] = true;
+      else delete votingCommentIds[action.commentId];
+      return { ...state, votingCommentIds };
     }
 
     case "SHARE": {
@@ -400,7 +423,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         commentsById: {
           ...state.commentsById,
-          [action.commentId]: applyCommentVote(existing, action.vote),
+          [action.commentId]: applyCommentVoteState(existing, action.myVote),
         },
       };
     }
@@ -440,9 +463,31 @@ function reducer(state: State, action: Action): State {
         }
       }
 
+      // Keep optimistic vote state while a vote request is still in flight so a
+      // community tab refresh cannot clobber mid-tap scores.
+      const incomingIds = new Set(action.posts.map((post) => post.id));
+      const feedPosts = action.posts.map((incoming) => {
+        if (!state.votingPostIds[incoming.id]) return incoming;
+        const local = prevById.get(incoming.id);
+        if (!local) return incoming;
+        return {
+          ...incoming,
+          upvoteCount: local.upvoteCount,
+          downvoteCount: local.downvoteCount,
+          myVote: local.myVote,
+        };
+      });
+
+      // Keep profile/detail posts that are not in this feed page so voting on
+      // profile tabs still has a live community-state entry to update.
+      const preservedPosts = state.posts.filter(
+        (post) =>
+          !incomingIds.has(post.id) && !state.deletedPostIds.includes(post.id),
+      );
+
       return {
         ...state,
-        posts: action.posts,
+        posts: [...feedPosts, ...preservedPosts],
         authorsById: { ...state.authorsById, ...action.authorsById },
         commentsLoadedByPostId,
         commentsHasMoreByPostId,
@@ -450,11 +495,38 @@ function reducer(state: State, action: Action): State {
     }
 
     case "APPEND_POSTS": {
-      const existingIds = new Set(state.posts.map((post) => post.id));
-      const nextPosts = action.posts.filter((post) => !existingIds.has(post.id));
+      const incomingById = new Map(action.posts.map((post) => [post.id, post]));
+      const merged: CommunityPost[] = [];
+      const seen = new Set<string>();
+
+      for (const post of state.posts) {
+        const incoming = incomingById.get(post.id);
+        if (!incoming) {
+          merged.push(post);
+          seen.add(post.id);
+          continue;
+        }
+        // Prefer live local vote state when a vote is in flight.
+        if (state.votingPostIds[post.id]) {
+          merged.push(post);
+        } else {
+          merged.push({
+            ...incoming,
+            commentIds:
+              post.commentIds.length > 0 ? post.commentIds : incoming.commentIds,
+          });
+        }
+        seen.add(post.id);
+      }
+
+      for (const post of action.posts) {
+        if (seen.has(post.id)) continue;
+        merged.push(post);
+      }
+
       return {
         ...state,
-        posts: [...state.posts, ...nextPosts],
+        posts: merged,
         authorsById: { ...state.authorsById, ...action.authorsById },
       };
     }
@@ -796,14 +868,63 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { state: appState } = useApp();
   const currentUserId = appState.account?.userId ?? null;
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  const postVoteInFlightRef = useRef<Set<string>>(new Set());
+  const commentVoteInFlightRef = useRef<Set<string>>(new Set());
+  const pendingPostVoteRef = useRef<Map<string, PostVote | null>>(new Map());
+  const pendingCommentVoteRef = useRef<Map<string, PostVote | null>>(new Map());
+  /** Latest optimistic myVote per post — avoids stale stateRef between rapid taps. */
+  const latestPostMyVoteRef = useRef<Map<string, PostVote | null>>(new Map());
+  const latestCommentMyVoteRef = useRef<Map<string, PostVote | null>>(new Map());
 
   const votePost = useCallback(async (postId: string, vote: PostVote) => {
-    dispatch({ type: "VOTE_POST", postId, vote });
+    const post = stateRef.current.posts.find((p) => p.id === postId);
+    if (!post) return;
+
+    const currentMyVote = latestPostMyVoteRef.current.has(postId)
+      ? (latestPostMyVoteRef.current.get(postId) ?? null)
+      : post.myVote;
+    const desired = nextPostVote(currentMyVote, vote);
+    latestPostMyVoteRef.current.set(postId, desired);
+    pendingPostVoteRef.current.set(postId, desired);
+    dispatch({ type: "SET_POST_VOTING", postId, voting: true });
+    dispatch({ type: "VOTE_POST", postId, myVote: desired });
+
+    if (postVoteInFlightRef.current.has(postId)) return;
+    postVoteInFlightRef.current.add(postId);
+
     try {
-      const engagement = await voteOnPost(postId, vote);
-      dispatch({ type: "SYNC_ENGAGEMENT", postId, engagement });
-    } catch {
-      dispatch({ type: "VOTE_POST", postId, vote });
+      while (pendingPostVoteRef.current.has(postId)) {
+        const nextDesired = pendingPostVoteRef.current.get(postId) ?? null;
+        pendingPostVoteRef.current.delete(postId);
+
+        const current = stateRef.current.posts.find((p) => p.id === postId);
+        const snapshot: BackendPostEngagement = {
+          post_id: Number(postId) || 0,
+          upvote_count: current?.upvoteCount ?? 0,
+          downvote_count: current?.downvoteCount ?? 0,
+          share_count: current?.shareCount ?? 0,
+          comment_count: current?.commentCount ?? current?.commentIds.length ?? 0,
+          my_vote: current?.myVote ?? null,
+        };
+
+        try {
+          const engagement = await voteOnPost(postId, nextDesired);
+          if (!pendingPostVoteRef.current.has(postId)) {
+            latestPostMyVoteRef.current.set(postId, engagement.my_vote);
+            dispatch({ type: "SYNC_ENGAGEMENT", postId, engagement });
+          }
+        } catch {
+          if (!pendingPostVoteRef.current.has(postId)) {
+            latestPostMyVoteRef.current.delete(postId);
+            dispatch({ type: "SYNC_ENGAGEMENT", postId, engagement: snapshot });
+          }
+        }
+      }
+    } finally {
+      postVoteInFlightRef.current.delete(postId);
+      dispatch({ type: "SET_POST_VOTING", postId, voting: false });
     }
   }, []);
 
@@ -844,12 +965,54 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   );
 
   const voteComment = useCallback(async (postId: string, commentId: string, vote: PostVote) => {
-    dispatch({ type: "PATCH_COMMENT_VOTE", commentId, vote });
+    const comment = stateRef.current.commentsById[commentId];
+    if (!comment) return;
+
+    const currentMyVote = latestCommentMyVoteRef.current.has(commentId)
+      ? (latestCommentMyVoteRef.current.get(commentId) ?? null)
+      : comment.myVote;
+    const desired = nextPostVote(currentMyVote, vote);
+    latestCommentMyVoteRef.current.set(commentId, desired);
+    pendingCommentVoteRef.current.set(commentId, desired);
+    dispatch({ type: "SET_COMMENT_VOTING", commentId, voting: true });
+    dispatch({ type: "PATCH_COMMENT_VOTE", commentId, myVote: desired });
+
+    if (commentVoteInFlightRef.current.has(commentId)) return;
+    commentVoteInFlightRef.current.add(commentId);
+
     try {
-      const engagement = await voteOnComment(postId, commentId, vote);
-      dispatch({ type: "SYNC_COMMENT_ENGAGEMENT", commentId, engagement });
-    } catch {
-      dispatch({ type: "PATCH_COMMENT_VOTE", commentId, vote });
+      while (pendingCommentVoteRef.current.has(commentId)) {
+        const nextDesired = pendingCommentVoteRef.current.get(commentId) ?? null;
+        pendingCommentVoteRef.current.delete(commentId);
+
+        const current = stateRef.current.commentsById[commentId];
+        const snapshot: BackendPostCommentEngagement = {
+          comment_id: Number(commentId) || 0,
+          upvote_count: current?.upvoteCount ?? 0,
+          downvote_count: current?.downvoteCount ?? 0,
+          my_vote: current?.myVote ?? null,
+        };
+
+        try {
+          const engagement = await voteOnComment(postId, commentId, nextDesired);
+          if (!pendingCommentVoteRef.current.has(commentId)) {
+            latestCommentMyVoteRef.current.set(commentId, engagement.my_vote);
+            dispatch({ type: "SYNC_COMMENT_ENGAGEMENT", commentId, engagement });
+          }
+        } catch {
+          if (!pendingCommentVoteRef.current.has(commentId)) {
+            latestCommentMyVoteRef.current.delete(commentId);
+            dispatch({
+              type: "SYNC_COMMENT_ENGAGEMENT",
+              commentId,
+              engagement: snapshot,
+            });
+          }
+        }
+      }
+    } finally {
+      commentVoteInFlightRef.current.delete(commentId);
+      dispatch({ type: "SET_COMMENT_VOTING", commentId, voting: false });
     }
   }, []);
 

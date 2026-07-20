@@ -47,6 +47,12 @@ function postsContentEqual(a: CommunityPost, b: CommunityPost): boolean {
     a.text === b.text &&
     a.tagId === b.tagId &&
     a.createdAt === b.createdAt &&
+    a.upvoteCount === b.upvoteCount &&
+    a.downvoteCount === b.downvoteCount &&
+    a.shareCount === b.shareCount &&
+    a.myVote === b.myVote &&
+    (a.commentCount ?? a.commentIds.length) ===
+      (b.commentCount ?? b.commentIds.length) &&
     JSON.stringify(a.media) === JSON.stringify(b.media)
   );
 }
