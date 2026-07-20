@@ -1,7 +1,7 @@
 export const intro = {
   success: {
-    title: "Success isn't luck",
-    body: "Most people struggle alone. Quitify supports you when it matters most.",
+    title: "Quitting cigarettes isn't luck",
+    body: "Most people try alone and fall back. Quitify is made for cigarette smokers with real support when the urge hits.",
   },
   shortTime: {
     title: "The hardest part is temporary",
@@ -13,8 +13,8 @@ export const intro = {
       "As you move toward a smoke-free life, you'll grow stronger, more in control, and healthier every day.",
   },
   chance: {
-    title: "Your moment is now",
-    body: "Start today and take back control of your life one step at a time.",
+    title: "This is your moment to quit cigarettes",
+    body: "Start today. Put down the pack and take your life back one step, one craving, one win at a time.",
   },
   afterOnboard: {
     title: "Join those who chose to quit",
