@@ -18,6 +18,7 @@ import { usePushNotificationsSettings } from "@/hooks/push/usePushNotificationsS
 import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
 import type { UserProfile } from "@/types/profile/profile";
 import { safeRouter } from "@/utils/app/safeRouter";
+import { shareApp } from "@/utils/app/shareApp";
 import { formatDate } from "@/utils/shared/format";
 
 type Props = {
@@ -121,6 +122,12 @@ export function SelfProfileSettings({
 
       <ListGroup
         rows={[
+          {
+            id: "share-app",
+            icon: "share-social-outline",
+            label: t("settings.shareApp"),
+            onPress: () => void shareApp(),
+          },
           {
             id: "talk-to-support",
             icon: "chatbubbles-outline",

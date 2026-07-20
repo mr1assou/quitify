@@ -11,6 +11,7 @@ export const settings = {
   quitDate: "Quit date",
   smokingSettings: "Smoking settings",
   talkToSupport: "Talk to support",
+  shareApp: "Share Quitify",
   logout: "Log out",
   unlockVip: "Unlock VIP mode",
   vipOffer: "See the full $4.17/month offer.",
