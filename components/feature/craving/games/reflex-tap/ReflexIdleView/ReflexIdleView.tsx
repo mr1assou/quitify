@@ -29,7 +29,7 @@ export function ReflexIdleView({ onStart }: Props) {
           {t("craving.ninjaTitle")}
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          {CIGARETTE_NINJA_DURATION_LABEL} battle — swipe to slice cigarettes, vapes, and smoke clouds. Reach{" "}
+          {CIGARETTE_NINJA_DURATION_LABEL} battle swipe to slice cigarettes, vapes, and smoke clouds. Reach{" "}
           {CIGARETTE_NINJA_TARGET_SCORE} points to win.
         </Text>
       </Animated.View>

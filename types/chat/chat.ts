@@ -32,13 +32,3 @@ export type ChatThread = {
   /** Whether older messages exist before the loaded window. */
   hasMoreMessages?: boolean;
 };
-
-export type CallKind = "audio" | "video";
-
-export type CallSession = {
-  threadId: string;
-  participantId: string;
-  kind: CallKind;
-  /** Epoch ms when the call started. */
-  startedAt: number;
-};

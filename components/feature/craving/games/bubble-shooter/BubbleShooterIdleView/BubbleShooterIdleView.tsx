@@ -25,7 +25,7 @@ export function BubbleShooterIdleView({ onStart }: Props) {
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
           Aim and shoot bubbles. Match 3 or more of the same color to pop them.
-          Only a batch is on screen at a time — pop all{" "}
+          Only a batch is on screen at a time pop all{" "}
           {BUBBLE_SHOOTER_TOTAL_BUBBLES.toLocaleString("en-US")} to win.
         </Text>
       </Animated.View>

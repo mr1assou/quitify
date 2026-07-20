@@ -12,11 +12,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [
-          "audio",
-          "voip"
+          "audio"
         ],
-        "NSMicrophoneUsageDescription": "Quitify needs microphone access so you can make voice calls.",
-        "NSCameraUsageDescription": "Quitify needs camera access so you can make video calls."
+        "NSMicrophoneUsageDescription": "Quitify needs microphone access so you can send voice messages."
       }
     },
     "android": {
@@ -30,13 +28,11 @@
       "predictiveBackGestureEnabled": false,
       "package": "com.pottypaw.quitify",
       "permissions": [
-        "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
-        "android.permission.WAKE_LOCK",
-        "android.permission.READ_PHONE_STATE"
+        "android.permission.WAKE_LOCK"
       ]
     },
     "web": {
@@ -75,13 +71,6 @@
         {
           "icon": "./assets/images/logo-splash.png",
           "color": "#1A1410"
-        }
-      ],
-      [
-        "@config-plugins/react-native-webrtc",
-        {
-          "microphonePermission": "Quitify needs microphone access so you can make voice calls.",
-          "cameraPermission": "Quitify needs camera access so you can make video calls."
         }
       ],
       "expo-localization"

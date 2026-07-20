@@ -41,17 +41,6 @@ export function canFreeUserSendInThread(
   return peerHasInitiatedChat(messages);
 }
 
-export const MUTUAL_CHAT_REQUIRED_FOR_CALL_MESSAGE =
-  "You can start a call after you and this person have both sent at least one message.";
-
-/** Starting a call requires premium and a mutual message exchange. */
-export function canInitiateCall(
-  isPremium: boolean,
-  messages: readonly ChatMessage[],
-): boolean {
-  return isPremium && hasMutualChat(messages);
-}
-
 export function canSendChatMessage(
   isPremium: boolean,
   messages: readonly ChatMessage[],

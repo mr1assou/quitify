@@ -10,7 +10,6 @@ import {
 } from "@/constants/auth/userRoles";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
-import type { CallKind } from "@/types/chat/chat";
 import type { CommunityUser } from "@/types/community/community";
 import { getBadgeName } from "@/utils/progress/badges";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
@@ -20,19 +19,13 @@ const ONLINE_COLOR = "#22C55E";
 
 type Props = {
   participant: CommunityUser;
-  onCall: (kind: CallKind) => void;
   isTyping?: boolean;
-  canInitiateCall?: boolean;
-  onRequireCallAccess?: () => boolean;
 };
 
-/** Top bar for the chat thread screen — avatar, name, audio + video call. */
+/** Top bar for the chat thread screen — avatar, name, presence. */
 export function ChatHeader({
   participant,
-  onCall,
   isTyping = false,
-  canInitiateCall = true,
-  onRequireCallAccess,
 }: Props) {
   const { colors } = useTheme();
   const { isOnline, lastSeenAt } = useChatParticipantPresence(participant);
@@ -90,11 +83,6 @@ export function ChatHeader({
     </>
   );
 
-  const startCall = (kind: CallKind) => {
-    if (onRequireCallAccess && !onRequireCallAccess()) return;
-    onCall(kind);
-  };
-
   return (
     <View className="flex-row items-center border-b border-section py-3 pl-1 pr-4 dark:border-d-border">
       <Pressable
@@ -115,25 +103,6 @@ export function ChatHeader({
           {identity}
         </Pressable>
       )}
-
-      {!isSupportPeer ? (
-        <View className="flex-row items-center gap-2">
-          <CallIconButton
-            icon="call"
-            color={colors.primary}
-            locked={!canInitiateCall}
-            onPress={() => startCall("audio")}
-            accessibilityLabel="Start audio call"
-          />
-          <CallIconButton
-            icon="videocam"
-            color={colors.accent}
-            locked={!canInitiateCall}
-            onPress={() => startCall("video")}
-            accessibilityLabel="Start video call"
-          />
-        </View>
-      ) : null}
     </View>
   );
 }
@@ -163,35 +132,4 @@ function ChatPresenceSuffix({
   }
 
   return null;
-}
-
-function CallIconButton({
-  icon,
-  color,
-  onPress,
-  accessibilityLabel,
-  locked = false,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  color: string;
-  onPress: () => void;
-  accessibilityLabel: string;
-  locked?: boolean;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      hitSlop={6}
-      accessibilityLabel={accessibilityLabel}
-      className="relative h-10 w-10 items-center justify-center rounded-full"
-      style={{ backgroundColor: `${color}20` }}
-    >
-      <Ionicons name={icon} size={20} color={color} />
-      {locked ? (
-        <View className="absolute -right-0.5 -top-0.5 h-4 w-4 items-center justify-center rounded-full bg-primary">
-          <Ionicons name="lock-closed" size={9} color="#fff" />
-        </View>
-      ) : null}
-    </Pressable>
-  );
 }

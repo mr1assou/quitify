@@ -1,10 +1,6 @@
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import { CHAT_MESSAGE_EDIT_WINDOW_MS } from "@/constants/chat/chatMessageMutation";
 import type { ChatMessage } from "@/types/chat/chat";
-import {
-  formatCallHistoryPreview,
-  parseCallHistoryPayload,
-} from "@/utils/call/callHistoryMessage";
 import { parseSharedPostChatMessage } from "@/utils/chat/sharedPostMessage";
 
 function isOwnActiveMessage(message: ChatMessage): boolean {
@@ -33,14 +29,7 @@ export function canShowChatMessageActions(message: ChatMessage): boolean {
 
 export function formatChatMessagePreview(message: ChatMessage): string {
   if (message.isDeleted) return "Message deleted";
-  if (message.kind === "call") {
-    const payload = parseCallHistoryPayload(message.text);
-    if (payload) {
-      const fromMe = message.senderId === "me";
-      return formatCallHistoryPreview(payload, fromMe);
-    }
-    return "📞 Call";
-  }
+  if (message.kind === "call") return "Call";
   if (message.text.trim()) {
     if (parseSharedPostChatMessage(message.text)) return "Shared a community post";
     return message.text;

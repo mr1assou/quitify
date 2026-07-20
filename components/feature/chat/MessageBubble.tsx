@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
 import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
-import { CallHistoryBubble } from "@/components/feature/chat/CallHistoryBubble";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
 import { SharedPostMessageCard } from "@/components/feature/chat/SharedPostMessageCard";
 import { useTheme } from "@/context/ThemeContext";
@@ -34,12 +33,13 @@ export function MessageBubble({
 
   if (message.kind === "call") {
     return (
-      <CallHistoryBubble
-        message={message}
-        fromMe={fromMe}
-        timeZone={timeZone}
-        showTimestamp={showTimestamp}
-      />
+      <View className="my-1 items-center">
+        <View className="rounded-full bg-section px-3 py-1 dark:bg-d-surface">
+          <Text className="text-xs text-muted-foreground dark:text-d-muted">
+            Call
+          </Text>
+        </View>
+      </View>
     );
   }
 

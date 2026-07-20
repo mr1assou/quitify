@@ -80,11 +80,7 @@ export default function ChatByUserScreen() {
   return (
     <ScreenCanvas edges={["top"]}>
       {participant ? (
-        <ChatHeader
-          participant={participant}
-          onCall={() => {}}
-          canInitiateCall={false}
-        />
+        <ChatHeader participant={participant} />
       ) : (
         <ChatHeaderPlaceholder />
       )}

@@ -6,7 +6,6 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AppProvider } from "@/context/AppContext";
-import { CallProvider } from "@/context/CallContext";
 import { CommunityProvider } from "@/context/CommunityContext";
 import { GoalsProvider } from "@/context/GoalsContext";
 import { PlanProvider } from "@/context/PlanContext";
@@ -17,7 +16,6 @@ import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
-import { IncomingCallModal } from "@/components/feature/call/IncomingCallModal";
 import { RevenueCatBridge } from "@/components/purchases/RevenueCatBridge";
 import { PushNotificationsBridge } from "@/components/push/PushNotificationsBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
@@ -59,17 +57,14 @@ function GoalsProviderWrapper() {
     <GoalsProvider>
       <PlanProvider>
         <RelaxSoundPlayerProvider>
-          <CallProvider>
-            <WifiRequiredGate>
-              <RevenueCatBridge />
-              <PresenceSocketBridge />
-              <ChatSocketBridge />
-              <NotificationSocketBridge />
-              <PushNotificationsBridge />
-              <ThemedRoot />
-              <IncomingCallModal />
-            </WifiRequiredGate>
-          </CallProvider>
+          <WifiRequiredGate>
+            <RevenueCatBridge />
+            <PresenceSocketBridge />
+            <ChatSocketBridge />
+            <NotificationSocketBridge />
+            <PushNotificationsBridge />
+            <ThemedRoot />
+          </WifiRequiredGate>
         </RelaxSoundPlayerProvider>
       </PlanProvider>
     </GoalsProvider>
@@ -168,10 +163,6 @@ function ThemedRoot() {
         <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="chat-by-user/[id]" options={{ animation: "slide_from_right" }} />
-        <Stack.Screen
-          name="call-by-user/[id]"
-          options={{ presentation: "fullScreenModal", animation: "slide_from_bottom" }}
-        />
       </Stack>
     </View>
   );

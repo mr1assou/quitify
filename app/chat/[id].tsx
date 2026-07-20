@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -29,7 +29,7 @@ import { useChatThread } from "@/hooks/chat/useChat";
 import { useChatThreadRealtime } from "@/hooks/chat/useChatThreadRealtime";
 import { useProactiveChatGate } from "@/hooks/premium/useProactiveChatGate";
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
-import type { CallKind, ChatMessage } from "@/types/chat/chat";
+import type { ChatMessage } from "@/types/chat/chat";
 import {
   addChatSocketListener,
   joinChatThread,
@@ -68,7 +68,7 @@ export default function ChatThreadScreen() {
     editChatMessage,
     deleteChatMessage,
   } = useCommunity();
-  const { requireSendAccess, requireCallAccess, canCall } = useProactiveChatGate(
+  const { requireSendAccess } = useProactiveChatGate(
     detail?.participant,
     detail?.messages ?? [],
   );
@@ -165,15 +165,6 @@ export default function ChatThreadScreen() {
   const showNotFound = !hasThread && !hydrating && !messagesLoading;
   const showMessagesLoader = messagesLoading || hydrating;
 
-  const onCall = (kind: CallKind) => {
-    if (!detail) return;
-    if (!requireCallAccess()) return;
-    router.push({
-      pathname: "/call-by-user/[id]",
-      params: { id: detail.participant.id, kind },
-    });
-  };
-
   const onSend = (text: string) => {
     if (!detail) return;
     if (!requireSendAccess()) return;
@@ -262,10 +253,7 @@ export default function ChatThreadScreen() {
       {detail ? (
         <ChatHeader
           participant={detail.participant}
-          onCall={onCall}
           isTyping={peerTyping}
-          canInitiateCall={canCall}
-          onRequireCallAccess={requireCallAccess}
         />
       ) : (
         <ChatHeaderPlaceholder />
