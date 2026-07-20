@@ -425,10 +425,27 @@ function reducer(state: State, action: Action): State {
     }
 
     case "SET_POSTS": {
+      const prevById = new Map(state.posts.map((post) => [post.id, post]));
+      const commentsLoadedByPostId = { ...state.commentsLoadedByPostId };
+      const commentsHasMoreByPostId = { ...state.commentsHasMoreByPostId };
+
+      // Feed refresh updates commentCount but not comment bodies — drop the
+      // "fully loaded" flag when the count changed so the next open refetches.
+      for (const post of action.posts) {
+        const prev = prevById.get(post.id);
+        if (!prev) continue;
+        if ((prev.commentCount ?? 0) !== (post.commentCount ?? 0)) {
+          delete commentsLoadedByPostId[post.id];
+          delete commentsHasMoreByPostId[post.id];
+        }
+      }
+
       return {
         ...state,
         posts: action.posts,
         authorsById: { ...state.authorsById, ...action.authorsById },
+        commentsLoadedByPostId,
+        commentsHasMoreByPostId,
       };
     }
 
@@ -925,17 +942,28 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     options?: { force?: boolean },
   ) => {
     const force = options?.force ?? false;
+    const post = state.posts.find((p) => p.id === postId);
+    const loadedCount = countLoadedPostComments(postId, state.commentsById);
+    const expectedCount = post?.commentCount ?? loadedCount;
+    // Feed can refresh commentCount while an earlier empty/partial fetch is
+    // still marked fully loaded — treat that mismatch as a forced reload.
+    const staleByCount =
+      state.commentsLoadedByPostId[postId] === true &&
+      state.commentsHasMoreByPostId[postId] !== true &&
+      expectedCount !== loadedCount;
+    const shouldReload = force || staleByCount;
+
     const fullyLoaded =
       state.commentsLoadedByPostId[postId] === true &&
       state.commentsHasMoreByPostId[postId] !== true;
-    if (!force && fullyLoaded) return;
+    if (!shouldReload && fullyLoaded) return;
     if (state.commentsLoadingByPostId[postId]) return;
 
     dispatch({ type: "SET_COMMENTS_LOADING", postId, loading: true });
 
     try {
       let offset =
-        !force &&
+        !shouldReload &&
         hasLoadedPostComments(postId, {
           posts: state.posts,
           commentsById: state.commentsById,
@@ -943,7 +971,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
         })
           ? countLoadedPostComments(postId, state.commentsById)
           : 0;
-      let hasMore = force ? true : state.commentsHasMoreByPostId[postId] ?? true;
+      let hasMore = shouldReload
+        ? true
+        : state.commentsHasMoreByPostId[postId] ?? true;
       let isFirstPage = offset === 0;
 
       while (hasMore) {
