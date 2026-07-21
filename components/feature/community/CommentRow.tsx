@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
+import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import { useTheme } from "@/context/ThemeContext";
 import type { CommunityUser, PostComment, PostVote } from "@/types/community/community";
 import { formatRelativeTime } from "@/utils/community";
@@ -135,7 +136,7 @@ export function CommentRow({
           <View className="flex-row items-center">
             <Pressable onPress={openProfile} hitSlop={4} className="min-w-0 flex-1">
               <Text className="text-sm font-bold text-primary" numberOfLines={1}>
-                @{author.handle}
+                {formatUsernameMention(author.handle)}
               </Text>
             </Pressable>
             <Text className="ml-2 shrink-0 text-xs text-muted-foreground dark:text-d-muted">
@@ -205,7 +206,9 @@ export function CommentRow({
             <Text className="mt-1 text-sm leading-5 text-foreground dark:text-d-text">
               {mentionHandle ? (
                 <>
-                  <Text className="font-semibold text-primary">@{mentionHandle} </Text>
+                  <Text className="font-semibold text-primary">
+                    {formatUsernameMention(mentionHandle)}{" "}
+                  </Text>
                   {comment.text}
                 </>
               ) : (

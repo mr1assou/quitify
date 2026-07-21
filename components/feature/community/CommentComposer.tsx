@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import type { CommentReplyTarget } from "@/types/community/community";
 
 type Props = {
@@ -16,7 +17,7 @@ function stripReplyMention(text: string, handle?: string): string {
   if (!handle) return text.trim();
 
   const trimmed = text.trim();
-  const prefix = `@${handle}`;
+  const prefix = formatUsernameMention(handle);
   if (trimmed.toLowerCase().startsWith(prefix.toLowerCase())) {
     return trimmed.slice(prefix.length).trimStart();
   }
@@ -38,7 +39,7 @@ export function CommentComposer({
   useEffect(() => {
     if (!replyTo) return;
 
-    setText(`@${replyTo.handle} `);
+    setText(`${formatUsernameMention(replyTo.handle)} `);
     inputRef.current?.focus();
   }, [replyTo]);
 

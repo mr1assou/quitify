@@ -1,6 +1,7 @@
 import type { GoalStatsRow } from "@/types/stats/statsGoals";
 import type { TranslationParams } from "@/types/i18n/locale";
 import type { TranslationKey } from "@/i18n/translate";
+import { formatSmokeFreeGoalEndDate } from "@/utils/goals/goalEndDate";
 import { formatNumber } from "@/utils/shared/format";
 import { formatUtcIsoInTimezone } from "@/utils/time/formatInTimezone";
 
@@ -25,6 +26,10 @@ export function formatGoalStatsTimeline(
   t: Translate,
 ): string {
   const started = formatUtcIsoInTimezone(row.startedAt, timeZone);
+  const ends =
+    row.status === "active" && row.type === "smoke_free_days"
+      ? formatSmokeFreeGoalEndDate(row.startedAt, row.target, timeZone)
+      : null;
 
   if (row.completedAt) {
     return t("stats.timelineCompleted", {
@@ -38,6 +43,10 @@ export function formatGoalStatsTimeline(
       started,
       at: formatUtcIsoInTimezone(row.failedAt, timeZone),
     });
+  }
+
+  if (ends) {
+    return t("stats.timelineInProgressEnds", { started, ends });
   }
 
   return t("stats.timelineInProgress", { started });

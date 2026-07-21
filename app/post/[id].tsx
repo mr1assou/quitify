@@ -17,6 +17,7 @@ import { CommentThreadList } from "@/components/feature/community/CommentThreadL
 import { PostActions } from "@/components/feature/community/PostActions";
 import { PostHeader } from "@/components/feature/community/PostHeader";
 import { PostContent } from "@/components/feature/community/PostContent";
+import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -149,7 +150,11 @@ export default function PostDetailScreen() {
         <View className="border-t border-section bg-background px-4 pt-3 dark:border-d-border dark:bg-d-bg">
           <CommentComposer
             replyTo={replyTarget}
-            placeholder={replyTarget ? `Reply to @${replyTarget.handle}…` : "Write a comment…"}
+            placeholder={
+              replyTarget
+                ? `Reply to ${formatUsernameMention(replyTarget.handle)}…`
+                : "Write a comment…"
+            }
             onSubmit={async (text) => {
               await addComment(post.id, text, replyTarget);
               setReplyTarget(null);

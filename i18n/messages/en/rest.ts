@@ -11,6 +11,7 @@ export const goals = {
   deleteFailed: "Could not delete goal",
   empty: "No goals yet",
   emptyHint: "Set a target to stay motivated.",
+  endsOn: "Ends {{date}}",
 } as const;
 
 export const missions = {
@@ -88,7 +89,7 @@ export const chat = {
   editMessageFailed: "Could not edit message",
   editMessageNotEditable: "This message may no longer be editable.",
   writeComment: "Write a comment…",
-  replyTo: "Reply to @{{handle}}…",
+  replyTo: "Reply to {{handle}}…",
   loadChatsFailed: "Could not load people you have chatted with.",
   sendPostFailed: "Could not send post right now. Please try again.",
   noChatsYet: "No chats yet",
@@ -147,6 +148,8 @@ export const stats = {
   timelineCompleted: "{{started}} · Completed {{at}}",
   timelineFailed: "{{started}} · Failed {{at}}",
   timelineInProgress: "{{started}} · In progress",
+  timelineInProgressEnds: "{{started}} · Ends {{ends}}",
+  goalEndsOn: "Ends {{date}}",
   freedomPoints: "Freedom points",
   freedomPointsInfoA11y: "Learn how Freedom Points work",
   freedomPointsInfoTitle: "Freedom Points",

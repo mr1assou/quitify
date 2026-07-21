@@ -64,26 +64,28 @@ export function UserProfileActivity({ profile }: Props) {
           isEmpty={!activity.loading && activity.comments.length === 0}
           loading={activity.loading}
         >
-          {activity.comments.map(({ comment, post }) => (
-            <Pressable
-              key={comment.id}
-              onPress={() => safeRouter.push(`/post/${post.id}`)}
-              className="rounded-2xl bg-section p-4 dark:bg-d-surface"
-            >
-              <Text className="text-sm leading-5 text-foreground dark:text-d-text">
-                {comment.text}
-              </Text>
-              <Text
-                numberOfLines={1}
-                className="mt-2 text-xs text-muted-foreground dark:text-d-muted"
+          <View className="gap-3">
+            {activity.comments.map(({ comment, post }) => (
+              <Pressable
+                key={comment.id}
+                onPress={() => safeRouter.push(`/post/${post.id}`)}
+                className="rounded-2xl bg-section p-4 dark:bg-d-surface"
               >
-                On: {post.title?.trim() || post.text}
-              </Text>
-              <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-                {formatRelativeTime(comment.createdAt)}
-              </Text>
-            </Pressable>
-          ))}
+                <Text className="text-sm leading-5 text-foreground dark:text-d-text">
+                  {comment.text}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  className="mt-2 text-xs text-muted-foreground dark:text-d-muted"
+                >
+                  On: {post.title?.trim() || post.text}
+                </Text>
+                <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
+                  {formatRelativeTime(comment.createdAt)}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </ActivityList>
       ) : null}
 

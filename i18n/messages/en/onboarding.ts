@@ -17,7 +17,7 @@ export const onboarding = {
   },
   motivation: {
     title: "How ready are you to quit cigarettes?",
-    subtitle: "Be honest — we'll match Quitify to where you are right now.",
+    subtitle: "Be honest  we'll match Quitify to where you are right now.",
 
     high: { label: "High" },
     medium: { label: "Medium" },
@@ -25,7 +25,7 @@ export const onboarding = {
   },
   quitAttempts: {
     title: "Have you tried to quit cigarettes before?",
-    subtitle: "Past tries aren't failures — they help us build a smarter plan for you.",
+    subtitle: "Past tries aren't failures  they help us build a smarter plan for you.",
     never: {
       label: "Never",
       hint: "This is my first real try, or I have not counted past tries before.",
@@ -49,7 +49,7 @@ export const onboarding = {
   },
   profile: {
     title: "Create your quit profile",
-    username: { label: "Username", placeholder: "How should we call you?" },
+    username: { label: "Username", placeholder: "@username" },
     sex: {
       label: "Sex",
       female: { label: "Female" },

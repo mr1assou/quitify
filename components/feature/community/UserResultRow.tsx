@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
+import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
@@ -29,10 +30,7 @@ export function UserResultRow({ user, trailing = "chevron" }: Props) {
       <UserAvatar user={user} size={48} />
       <View className="ml-3 flex-1">
         <Text className="text-base font-bold text-foreground dark:text-d-text">
-          {user.name}{" "}
-          <Text className="text-sm font-normal text-muted-foreground dark:text-d-muted">
-            @{user.handle}
-          </Text>
+          {formatUsernameMention(user.handle || user.name)}
         </Text>
         <View className="mt-0.5 flex-row items-center">
           <Ionicons name="ribbon" size={12} color={colors.primary} />

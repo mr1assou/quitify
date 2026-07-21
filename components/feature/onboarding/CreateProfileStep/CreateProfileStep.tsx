@@ -4,7 +4,9 @@ import { Chip } from "@/components/ui/Chip";
 import type { ProfileSex } from "@/types";
 import {
   normalizeOnboardingUsername,
+  usernameHandleLength,
   USERNAME_MAX_LENGTH,
+  USERNAME_STORED_MAX_LENGTH,
 } from "@/constants/onboarding/onboardingUsername";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import { useTheme } from "@/context/ThemeContext";
@@ -42,11 +44,11 @@ export function CreateProfileStep({
           placeholderTextColor={colors.mutedForeground}
           autoCapitalize="none"
           autoCorrect={false}
-          maxLength={USERNAME_MAX_LENGTH}
+          maxLength={USERNAME_STORED_MAX_LENGTH}
           className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
         />
         <Text className="text-xs text-muted-foreground dark:text-d-muted">
-          {username.length}/{USERNAME_MAX_LENGTH} characters
+          {usernameHandleLength(username)}/{USERNAME_MAX_LENGTH} characters
         </Text>
       </View>
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
+import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -89,7 +90,11 @@ export function PostCommentsSection({
       <View className="mt-1.5">
         <CommentComposer
           compact={compactComposer}
-          placeholder={replyTarget ? `Reply to @${replyTarget.handle}…` : "Add a comment…"}
+          placeholder={
+            replyTarget
+              ? `Reply to ${formatUsernameMention(replyTarget.handle)}…`
+              : "Add a comment…"
+          }
           replyTo={replyTarget}
           onSubmit={async (text) => {
             await addComment(postId, text, replyTarget);

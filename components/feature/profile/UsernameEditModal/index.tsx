@@ -25,7 +25,9 @@ import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import {
   isValidOnboardingUsername,
   normalizeOnboardingUsername,
+  usernameHandleLength,
   USERNAME_MAX_LENGTH,
+  USERNAME_STORED_MAX_LENGTH,
 } from "@/constants/onboarding/onboardingUsername";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
@@ -185,8 +187,8 @@ function UsernameEditSheet({
           </View>
 
           <Text className="mb-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            Usernames are always saved in lowercase. This is how others see you in chat
-            and on the leaderboard.
+            Usernames always start with @ and are saved in lowercase. This is how others
+            see you in chat and on the leaderboard.
           </Text>
 
           <View className="gap-2">
@@ -198,15 +200,15 @@ function UsernameEditSheet({
               onChangeText={(text) =>
                 onUsernameChange(normalizeOnboardingUsername(text))
               }
-              placeholder="your username"
+              placeholder="@username"
               placeholderTextColor={colors.mutedForeground}
               autoCapitalize="none"
               autoCorrect={false}
-              maxLength={USERNAME_MAX_LENGTH}
+              maxLength={USERNAME_STORED_MAX_LENGTH}
               className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
             />
             <Text className="text-xs text-muted-foreground dark:text-d-muted">
-              {normalized.length}/{USERNAME_MAX_LENGTH} characters
+              {usernameHandleLength(normalized)}/{USERNAME_MAX_LENGTH} characters
             </Text>
           </View>
 
