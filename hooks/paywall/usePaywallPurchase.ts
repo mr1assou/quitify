@@ -5,6 +5,7 @@ import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
 import { persistPremiumStatus } from "@/services/auth/persistPremiumStatus";
 import {
+  getRevenueCatOwnershipIds,
   purchasePaywallPlan,
   restoreRevenueCatPurchases,
   syncPremiumFromRevenueCat,
@@ -28,7 +29,13 @@ export function usePaywallPurchase() {
         const entitled = await purchasePaywallPlan(planId);
         if (!entitled) return false;
 
-        return await persistPremiumStatus(true, setAccount, state.account);
+        const ownership = await getRevenueCatOwnershipIds();
+        return await persistPremiumStatus(
+          true,
+          setAccount,
+          state.account,
+          ownership?.originalAppUserId ?? String(state.account?.userId ?? ""),
+        );
       } catch (error) {
         if (isPurchaseCancelledError(error)) return false;
 
@@ -52,18 +59,38 @@ export function usePaywallPurchase() {
 
     setRestoring(true);
     try {
-      const entitled = await restoreRevenueCatPurchases();
-      const premium = entitled
-        ? await persistPremiumStatus(true, setAccount, state.account)
-        : await persistPremiumStatus(false, setAccount, state.account);
+      const result = await restoreRevenueCatPurchases();
 
+      if (result.status === "other_account") {
+        Alert.alert(
+          "Subscription belongs to another account",
+          "This Google Play purchase is already linked to a different Quitify account. Sign in with that account to use VIP.",
+        );
+        return false;
+      }
+
+      if (result.status === "restored") {
+        const premium = await persistPremiumStatus(
+          true,
+          setAccount,
+          state.account,
+          result.originalAppUserId,
+        );
+        Alert.alert(
+          premium ? "Restored" : "Could not restore",
+          premium
+            ? "Your premium access is active again."
+            : "This subscription could not be linked to this Quitify account.",
+        );
+        return premium;
+      }
+
+      await persistPremiumStatus(false, setAccount, state.account);
       Alert.alert(
-        premium ? "Restored" : "No subscription found",
-        premium
-          ? "Your premium access is active again."
-          : "We could not find an active subscription for this Google account.",
+        "No subscription found",
+        "We could not find an active subscription for this Quitify account.",
       );
-      return premium;
+      return false;
     } catch (error) {
       Alert.alert(
         "Restore failed",
@@ -78,7 +105,13 @@ export function usePaywallPurchase() {
   const refreshPremium = useCallback(async (): Promise<boolean> => {
     try {
       const entitled = await syncPremiumFromRevenueCat();
-      return await persistPremiumStatus(entitled, setAccount, state.account);
+      const ownership = entitled ? await getRevenueCatOwnershipIds() : null;
+      return await persistPremiumStatus(
+        entitled,
+        setAccount,
+        state.account,
+        ownership?.originalAppUserId,
+      );
     } catch {
       return Boolean(state.account?.isPremium);
     }

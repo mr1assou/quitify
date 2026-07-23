@@ -27,7 +27,12 @@ export function useRevenueCatBootstrap() {
       const current = Boolean(account.isPremium);
       if (entitled === current) return;
 
-      await persistPremiumStatus(entitled, setAccount, account);
+      await persistPremiumStatus(
+        entitled,
+        setAccount,
+        account,
+        entitled ? String(account.userId) : null,
+      );
       if (__DEV__) {
         console.log(`[revenuecat] premium synced ${current} -> ${entitled}`);
       }
@@ -41,7 +46,10 @@ export function useRevenueCatBootstrap() {
   useEffect(() => {
     if (!isHydrated) return;
 
-    if (userId == null) return;
+    if (userId == null) {
+      void syncRevenueCatUser(undefined);
+      return;
+    }
 
     void (async () => {
       await syncRevenueCatUser(userId);
@@ -57,11 +65,16 @@ export function useRevenueCatBootstrap() {
         const account = accountRef.current;
         if (!account?.userId) return;
 
-        const entitled = premiumFromCustomerInfo(customerInfo);
+        const entitled = premiumFromCustomerInfo(customerInfo, String(account.userId));
         const current = Boolean(account.isPremium);
         if (entitled === current) return;
 
-        await persistPremiumStatus(entitled, setAccount, account);
+        await persistPremiumStatus(
+          entitled,
+          setAccount,
+          account,
+          entitled ? customerInfo.originalAppUserId : null,
+        );
         if (__DEV__) {
           console.log(`[revenuecat] entitlement update ${current} -> ${entitled}`);
         }

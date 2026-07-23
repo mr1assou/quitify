@@ -20,6 +20,7 @@ import type {
 } from "@/types";
 import { clearStoredAuth } from "@/utils/auth/clearStoredAuth";
 import { dayKey } from "@/utils/shared/dates";
+import { syncRevenueCatUser } from "@/services/purchases/revenueCat";
 type Action =
   | {
       type: "RESTORE_SESSION";
@@ -234,6 +235,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(async () => {
+    await syncRevenueCatUser(undefined);
     await clearStoredAuth();
     dispatch({ type: "RESET" });
   }, []);

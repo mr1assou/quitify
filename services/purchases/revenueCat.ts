@@ -143,6 +143,18 @@ export function hasPremiumEntitlement(customerInfo: CustomerInfo): boolean {
   return customerInfo.entitlements.active[REVENUECAT_PREMIUM_ENTITLEMENT] != null;
 }
 
+/**
+ * True only when Premium is active AND the store purchase belongs to this Quitify user.
+ * Stops Account B from restoring Account A's Google Play subscription.
+ */
+export function isPremiumOwnedByAppUser(
+  customerInfo: CustomerInfo,
+  appUserId: string,
+): boolean {
+  if (!hasPremiumEntitlement(customerInfo)) return false;
+  return customerInfo.originalAppUserId === appUserId;
+}
+
 export function packageForPlan(
   offering: PurchasesOffering | null | undefined,
   planId: PaywallPlanId,
@@ -166,9 +178,9 @@ export function packageForPlan(
 
 export async function syncPremiumFromRevenueCat(): Promise<boolean> {
   await waitForRevenueCatReady();
-  if (!isRevenueCatLinked()) return false;
+  if (!isRevenueCatLinked() || !linkedAppUserId) return false;
   const customerInfo = await Purchases.getCustomerInfo();
-  return hasPremiumEntitlement(customerInfo);
+  return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
 }
 
 /** Wait until configure + logIn chain finished. */
@@ -178,8 +190,19 @@ export async function waitForRevenueCatReady(): Promise<void> {
   await syncChain;
 }
 
-export function premiumFromCustomerInfo(customerInfo: CustomerInfo): boolean {
-  return hasPremiumEntitlement(customerInfo);
+export function premiumFromCustomerInfo(
+  customerInfo: CustomerInfo,
+  appUserId?: string | null,
+): boolean {
+  const ownerId = appUserId ?? linkedAppUserId;
+  if (!ownerId) return false;
+  return isPremiumOwnedByAppUser(customerInfo, ownerId);
+}
+
+export function revenueCatOriginalAppUserIdFromInfo(
+  customerInfo: CustomerInfo,
+): string {
+  return customerInfo.originalAppUserId;
 }
 
 function isProductAlreadyPurchasedError(error: unknown): boolean {
@@ -280,7 +303,7 @@ async function purchaseSelectedPackage(
 }
 
 export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolean> {
-  if (!isRevenueCatLinked()) {
+  if (!isRevenueCatLinked() || !linkedAppUserId) {
     throw new Error("Sign in to purchase VIP.");
   }
   const offerings = await Purchases.getOfferings();
@@ -292,20 +315,37 @@ export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolea
 
   try {
     const customerInfo = await purchaseSelectedPackage(selectedPackage, planId);
-    return hasPremiumEntitlement(customerInfo);
+    return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
   } catch (error) {
     if (isProductAlreadyPurchasedError(error)) {
       const customerInfo = await Purchases.restorePurchases();
-      return hasPremiumEntitlement(customerInfo);
+      return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
     }
     throw error;
   }
 }
 
-export async function restoreRevenueCatPurchases(): Promise<boolean> {
-  if (!isRevenueCatLinked()) return false;
+export type RestorePurchasesResult =
+  | { status: "restored"; originalAppUserId: string }
+  | { status: "none" }
+  | { status: "other_account" };
+
+export async function restoreRevenueCatPurchases(): Promise<RestorePurchasesResult> {
+  if (!isRevenueCatLinked() || !linkedAppUserId) return { status: "none" };
+
   const customerInfo = await Purchases.restorePurchases();
-  return hasPremiumEntitlement(customerInfo);
+  if (!hasPremiumEntitlement(customerInfo)) {
+    return { status: "none" };
+  }
+
+  if (!isPremiumOwnedByAppUser(customerInfo, linkedAppUserId)) {
+    return { status: "other_account" };
+  }
+
+  return {
+    status: "restored",
+    originalAppUserId: customerInfo.originalAppUserId,
+  };
 }
 
 /** Current offering with localized store prices (logged-in users only). */
@@ -314,4 +354,16 @@ export async function fetchPaywallOffering(): Promise<PurchasesOffering | null> 
 
   const offerings = await Purchases.getOfferings();
   return offerings.current ?? null;
+}
+
+export async function getRevenueCatOwnershipIds(): Promise<{
+  appUserId: string;
+  originalAppUserId: string;
+} | null> {
+  if (!isRevenueCatLinked() || !linkedAppUserId) return null;
+  const customerInfo = await Purchases.getCustomerInfo();
+  return {
+    appUserId: linkedAppUserId,
+    originalAppUserId: customerInfo.originalAppUserId,
+  };
 }
