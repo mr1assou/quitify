@@ -38,13 +38,6 @@ export function GoalManageScreen({ goalId }: Props) {
     setGoalModal(null);
   }, []);
 
-  const handleEdit = useCallback(() => {
-    safeRouter.pushStack({
-      pathname: "/goals/edit",
-      params: { id: String(goalId) },
-    });
-  }, [goalId]);
-
   const handleDeletePress = useCallback(() => {
     setGoalModal({ type: "confirmDelete" });
   }, []);
@@ -94,8 +87,7 @@ export function GoalManageScreen({ goalId }: Props) {
         />
 
         {isActive ? (
-          <View className="mt-6 gap-3">
-            <Button label="Edit goal" size="lg" fullWidth onPress={handleEdit} />
+          <View className="mt-6">
             <Button
               label="Delete goal"
               size="lg"
