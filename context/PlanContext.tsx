@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -30,6 +31,8 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   const [planState, setPlanState] = useState<PlanState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const planStateRef = useRef<PlanState | null>(null);
+  planStateRef.current = planState;
 
   const canLoadPlan = isHydrated && state.isOnboarded && Boolean(state.account);
 
@@ -61,7 +64,9 @@ export function PlanProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    setLoading(true);
+    // Minute poll / unlock tick: refresh quietly so task cards don't remount.
+    const silent = planStateRef.current != null;
+    if (!silent) setLoading(true);
     void refresh();
   }, [canLoadPlan, refresh, now]);
 

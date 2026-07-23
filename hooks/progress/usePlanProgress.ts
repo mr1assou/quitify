@@ -71,17 +71,15 @@ export function usePlanProgress() {
 
       const saved = progressByDay.get(day);
       const taskStates = saved?.taskStates ?? {};
-      const isCompleteDay =
-        saved?.completedAt != null ||
-        (!PLAN_PREVIEW_UNLOCK_ALL && day < currentDay);
 
+      // Only trust per-task state — never force remaining cards done from day completedAt.
       return planDay.tasks.map((task) => ({
         ...task,
-        done: isCompleteDay ? true : (taskStates[task.id] ?? false),
+        done: taskStates[task.id] ?? false,
         note: saved?.taskNotes?.[task.id],
       }));
     },
-    [progressByDay, currentDay, locale],
+    [progressByDay, locale],
   );
 
   const toggleTask = useCallback(
@@ -118,6 +116,7 @@ export function usePlanProgress() {
     saveTaskNote,
     todayTasks,
     todayComplete,
+    planState,
     planLoading: loading,
     planError: error,
     refreshPlan: refresh,
