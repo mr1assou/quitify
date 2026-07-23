@@ -73,7 +73,7 @@ export function usePlanProgress() {
       const taskStates = saved?.taskStates ?? {};
 
       // Only trust per-task state — never force remaining cards done from day completedAt.
-      return planDay.tasks.map((task) => ({
+      return planDay.tasks.map((task) =>  ({
         ...task,
         done: taskStates[task.id] ?? false,
         note: saved?.taskNotes?.[task.id],
