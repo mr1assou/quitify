@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Text, TextInput, View } from "react-native";
 
 import { Chip } from "@/components/ui/Chip";
@@ -10,6 +11,7 @@ import {
 } from "@/constants/onboarding/onboardingUsername";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import { useTheme } from "@/context/ThemeContext";
+import { useUsernameAvailability } from "@/hooks/auth/useUsernameAvailability";
 import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 
@@ -18,6 +20,8 @@ type Props = {
   onUsernameChange: (v: string) => void;
   sex?: ProfileSex;
   onSexChange: (v: ProfileSex) => void;
+  /** Notifies parent when debounced availability changes (for Continue button). */
+  onAvailabilityChange?: (canUse: boolean) => void;
 };
 
 export function CreateProfileStep({
@@ -25,11 +29,17 @@ export function CreateProfileStep({
   onUsernameChange,
   sex,
   onSexChange,
+  onAvailabilityChange,
 }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
   const sexOptions = localize(PROFILE_SEX_OPTIONS, "onboarding.profile.sex", ["label"]);
+  const availability = useUsernameAvailability(username);
+
+  useEffect(() => {
+    onAvailabilityChange?.(availability.canUse);
+  }, [availability.canUse, onAvailabilityChange]);
 
   return (
     <View className="w-full gap-5">
@@ -50,6 +60,11 @@ export function CreateProfileStep({
         <Text className="text-xs text-muted-foreground dark:text-d-muted">
           {usernameHandleLength(username)}/{USERNAME_MAX_LENGTH} characters
         </Text>
+        {availability.taken ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.profile.username.taken")}
+          </Text>
+        ) : null}
       </View>
 
       <View className="gap-2">

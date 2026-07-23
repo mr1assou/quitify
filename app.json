@@ -23,7 +23,7 @@
         "backgroundColor": "#1A1410",
         "foregroundImage": "./assets/images/logo-foreground.png"
       },
-      "softwareKeyboardLayoutMode": "pan",
+      "softwareKeyboardLayoutMode": "resize",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.pottypaw.quitify",

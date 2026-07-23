@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 
 import type { Country } from "@/types/app/country";
-import { getDeviceCountryCodeAsync } from "@/utils/device/getDeviceCountryCode";
 
-/** Pre-fills country + currency from the user's location when none is chosen yet. */
+const DEFAULT_COUNTRY_CODE = "US";
+
+/** Pre-fills United States (+ USD) when the user hasn't chosen a country yet. */
 export function useAutoSelectCountry(
   countries: Country[],
   ready: boolean,
@@ -15,23 +16,12 @@ export function useAutoSelectCountry(
   useEffect(() => {
     if (!ready || appliedRef.current || selectedCode || countries.length === 0) return;
 
-    let cancelled = false;
+    const match = countries.find(
+      (country) => country.code.toUpperCase() === DEFAULT_COUNTRY_CODE,
+    );
+    if (!match) return;
 
-    void (async () => {
-      const deviceCode = await getDeviceCountryCodeAsync();
-      if (cancelled || appliedRef.current || !deviceCode) return;
-
-      const match = countries.find(
-        (country) => country.code.toUpperCase() === deviceCode.toUpperCase(),
-      );
-      if (!match) return;
-
-      appliedRef.current = true;
-      onSelect(match);
-    })();
-
-    return () => {
-      cancelled = true;
-    };
+    appliedRef.current = true;
+    onSelect(match);
   }, [ready, selectedCode, countries, onSelect]);
 }

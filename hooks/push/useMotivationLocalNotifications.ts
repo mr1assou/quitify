@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 
 import { useApp } from "@/context/AppContext";
-import { fetchPushTokenStatus } from "@/services/push/pushTokenApi";
 import {
   cancelMotivationLocalNotifications,
   syncMotivationLocalNotifications,
@@ -12,6 +11,7 @@ import {
   setCachedPushTokenStatus,
   subscribeToCachedPushTokenStatus,
 } from "@/services/push/pushSettingsCache";
+import { resolveSettledPushTokenStatus } from "@/services/push/resolveSettledPushTokenStatus";
 
 /**
  * Schedules motivation as local notifications at 12:30 PM and 8:30 PM US Eastern.
@@ -42,7 +42,7 @@ export function useMotivationLocalNotifications() {
     let enabled = cachedStatus;
     if (enabled === null) {
       try {
-        enabled = await fetchPushTokenStatus();
+        enabled = await resolveSettledPushTokenStatus();
         setCachedPushTokenStatus(enabled);
       } catch {
         return;

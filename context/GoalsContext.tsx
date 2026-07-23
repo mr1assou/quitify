@@ -114,7 +114,8 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
       minTargets: goalsState?.minTargets ?? EMPTY_GOALS_STATE.minTargets,
       isReady,
       hasOpenGoalSlot:
-        !isReady || !activeGoals.some((goal) => goal.type === "smoke_free_days"),
+        isReady &&
+        !activeGoals.some((goal) => goal.type === "smoke_free_days"),
       refresh,
       setGoal,
       deleteGoal,

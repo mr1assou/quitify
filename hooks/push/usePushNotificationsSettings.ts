@@ -4,12 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { Alert, Linking } from "react-native";
 
 import { useApp } from "@/context/AppContext";
-import {
-  clearPushTokensOnBackend,
-  fetchPushTokenStatus,
-} from "@/services/push/pushTokenApi";
+import { clearPushTokensOnBackend } from "@/services/push/pushTokenApi";
 import {
   getCachedPushTokenStatus,
+  hydrateCachedPushTokenStatus,
   setCachedPushTokenStatus,
   subscribeToCachedPushTokenStatus,
 } from "@/services/push/pushSettingsCache";
@@ -17,6 +15,11 @@ import {
   cancelMotivationLocalNotifications,
   syncMotivationLocalFromAppState,
 } from "@/services/push/motivationLocalNotifications";
+import {
+  markNotificationsDisabledByUser,
+  markNotificationsEnabledByUser,
+  resolveSettledPushTokenStatus,
+} from "@/services/push/resolveSettledPushTokenStatus";
 import {
   requestPushPermissionAndSaveToken,
   syncPushTokenWithBackend,
@@ -35,6 +38,15 @@ export function usePushNotificationsSettings() {
     setCachedPushTokenStatus(hasToken);
     setEnabled(hasToken);
     setReady(true);
+  }, []);
+
+  useEffect(() => {
+    void hydrateCachedPushTokenStatus().then(() => {
+      const cached = getCachedPushTokenStatus();
+      if (cached === null) return;
+      setEnabled(cached);
+      setReady(true);
+    });
   }, []);
 
   useEffect(
@@ -65,13 +77,15 @@ export function usePushNotificationsSettings() {
 
   const refresh = useCallback(async () => {
     try {
-      const hasToken = await fetchPushTokenStatus();
+      const hasToken = await resolveSettledPushTokenStatus();
       applyStatus(hasToken);
 
-      void syncPushTokenWithBackend()
-        .then(() => fetchPushTokenStatus())
-        .then(applyStatus)
-        .catch(() => {});
+      if (hasToken) {
+        void syncPushTokenWithBackend()
+          .then(() => resolveSettledPushTokenStatus())
+          .then(applyStatus)
+          .catch(() => {});
+      }
     } catch {
       // Keep cached toggle state if the API is unreachable.
       if (getCachedPushTokenStatus() !== null) {
@@ -112,16 +126,19 @@ export function usePushNotificationsSettings() {
 
           const saved = await requestPushPermissionAndSaveToken();
           if (!saved) {
+            await markNotificationsDisabledByUser();
             applyStatus(false);
             await syncMotivationSchedule(false);
             return;
           }
+          await markNotificationsEnabledByUser();
           applyStatus(true);
           await syncMotivationSchedule(true);
           return;
         }
 
         await clearPushTokensOnBackend();
+        await markNotificationsDisabledByUser();
         applyStatus(false);
         await syncMotivationSchedule(false);
       } catch (error) {

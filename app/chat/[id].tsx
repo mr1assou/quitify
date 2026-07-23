@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
+import { KeyboardAvoidingScreen } from "@/components/layout/KeyboardAvoidingScreen";
 
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
 import { ChatEmptyGreeting } from "@/components/feature/chat/ChatEmptyGreeting";
@@ -259,7 +259,7 @@ export default function ChatThreadScreen() {
         <ChatHeaderPlaceholder />
       )}
 
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: "transparent" }}>
+      <KeyboardAvoidingScreen>
         <View style={{ flex: 1, backgroundColor: "transparent" }}>
           {showMessagesLoader ? (
             <View className="flex-1 items-center justify-center gap-3">
@@ -290,6 +290,7 @@ export default function ChatThreadScreen() {
                   flexGrow: rows.length ? 0 : 1,
                 }}
                 keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
                 renderItem={({ item }) => (
                   <MessageBubble
                     message={item.message}
@@ -330,7 +331,7 @@ export default function ChatThreadScreen() {
           onSaveEdit={onSaveEdit}
           onCancelEdit={() => setEditingMessage(null)}
         />
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingScreen>
 
       <ChatMessageModals
         state={messageModal}

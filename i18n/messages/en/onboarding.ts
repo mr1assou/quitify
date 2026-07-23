@@ -25,7 +25,7 @@ export const onboarding = {
   },
   quitAttempts: {
     title: "Have you tried to quit cigarettes before?",
-    subtitle: "Past tries aren't failures  they help us build a smarter plan for you.",
+    subtitle: "Past tries aren't failures they help us build a smarter plan for you.",
     never: {
       label: "Never",
       hint: "This is my first real try, or I have not counted past tries before.",
@@ -49,7 +49,11 @@ export const onboarding = {
   },
   profile: {
     title: "Create your quit profile",
-    username: { label: "Username", placeholder: "@username" },
+    username: {
+      label: "Username",
+      placeholder: "@username",
+      taken: "Username already taken",
+    },
     sex: {
       label: "Sex",
       female: { label: "Female" },

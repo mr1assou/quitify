@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Modal,
@@ -23,7 +23,6 @@ import {
 
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
 import {
-  isValidOnboardingUsername,
   normalizeOnboardingUsername,
   usernameHandleLength,
   USERNAME_MAX_LENGTH,
@@ -32,6 +31,8 @@ import {
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useUsernameAvailability } from "@/hooks/auth/useUsernameAvailability";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { updateUsernameOnServer } from "@/services/auth/usernameApi";
 import type { UserProfile } from "@/types/profile/profile";
 import { buildProfileFromMe } from "@/utils/auth/buildProfileFromMe";
@@ -45,6 +46,7 @@ type Props = {
 
 export function UsernameEditModal({ visible, profile, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { state, updateProfile, setAccount } = useApp();
   const { patchAuthor } = useCommunity();
   const [username, setUsername] = useState(() =>
@@ -59,22 +61,23 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
     setError(null);
   }, [profile.name, visible]);
 
-  const normalized = useMemo(
-    () => normalizeOnboardingUsername(username),
-    [username],
-  );
+  const availability = useUsernameAvailability(username, {
+    currentUsername: profile.name,
+    excludeUserId: state.account?.userId,
+    enabled: visible,
+  });
 
-  const canSave =
-    isValidOnboardingUsername(normalized) &&
-    normalized !== normalizeOnboardingUsername(profile.name ?? "");
+  const changed =
+    availability.normalized !== normalizeOnboardingUsername(profile.name ?? "");
+  const canSave = availability.canUse && changed && !saving;
 
   const handleSave = () => {
-    if (!canSave || saving) return;
+    if (!canSave) return;
 
     setSaving(true);
     setError(null);
 
-    void updateUsernameOnServer(normalized)
+    void updateUsernameOnServer(availability.normalized)
       .then((me) => {
         const nextProfile = buildProfileFromMe(me);
         updateProfile({ name: nextProfile.name });
@@ -86,7 +89,7 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
           });
         }
 
-        const displayName = nextProfile.name ?? normalized;
+        const displayName = nextProfile.name ?? availability.normalized;
         patchAuthor(CURRENT_USER_ID, { name: displayName });
         if (state.account?.userId) {
           patchAuthor(dbAuthorId(state.account.userId), { name: displayName });
@@ -105,6 +108,12 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
       });
   };
 
+  const statusMessage = availability.taken
+    ? t("settings.usernameTaken")
+    : error
+      ? error
+      : null;
+
   return (
     <Modal
       visible={visible}
@@ -118,10 +127,10 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
           <UsernameEditSheet
             colors={colors}
             username={username}
-            normalized={normalized}
+            normalized={availability.normalized}
             canSave={canSave}
             saving={saving}
-            error={error}
+            statusMessage={statusMessage}
             onClose={onClose}
             onUsernameChange={setUsername}
             onSave={handleSave}
@@ -138,7 +147,7 @@ type SheetProps = {
   normalized: string;
   canSave: boolean;
   saving: boolean;
-  error: string | null;
+  statusMessage: string | null;
   onClose: () => void;
   onUsernameChange: (value: string) => void;
   onSave: () => void;
@@ -150,7 +159,7 @@ function UsernameEditSheet({
   normalized,
   canSave,
   saving,
-  error,
+  statusMessage,
   onClose,
   onUsernameChange,
   onSave,
@@ -186,10 +195,6 @@ function UsernameEditSheet({
             </Pressable>
           </View>
 
-          <Text className="mb-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            Usernames always start with @ and are saved in lowercase. This is how others
-            see you in chat and on the leaderboard.
-          </Text>
 
           <View className="gap-2">
             <Text className="text-sm font-semibold text-foreground dark:text-d-text">
@@ -212,7 +217,9 @@ function UsernameEditSheet({
             </Text>
           </View>
 
-          {error ? <Text className="mt-4 text-sm text-alert">{error}</Text> : null}
+          {statusMessage ? (
+            <Text className="mt-4 text-sm text-alert">{statusMessage}</Text>
+          ) : null}
 
           <Pressable
             accessibilityRole="button"

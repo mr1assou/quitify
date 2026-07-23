@@ -1,5 +1,5 @@
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -24,10 +24,11 @@ export default function OnboardingCreateProfile() {
   const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
   const quitDateHandlers = useQuitPlanHandlers(draft, patch);
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
 
   const canContinue = useMemo(
-    () => isCreateProfileStepComplete(draft),
-    [draft],
+    () => isCreateProfileStepComplete(draft) && usernameAvailable,
+    [draft, usernameAvailable],
   );
 
   return (
@@ -54,6 +55,7 @@ export default function OnboardingCreateProfile() {
             <CreateProfileStep
               username={draft.username}
               onUsernameChange={(username) => patch({ username })}
+              onAvailabilityChange={setUsernameAvailable}
               sex={draft.sex}
               onSexChange={(sex: ProfileSex) =>
                 patch({

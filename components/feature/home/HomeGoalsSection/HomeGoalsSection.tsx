@@ -45,7 +45,7 @@ export function HomeGoalsSection({
           ))}
         </View>
       ) : null}
-      {hasOpenGoalSlot ? (
+      {hasOpenGoalSlot && !isLoadingGoals ? (
         <View className={showGoalCards ? "mt-3" : undefined}>
           <CreateGoalButton onPress={onCreateGoal} />
         </View>

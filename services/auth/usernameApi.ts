@@ -8,7 +8,14 @@ export async function updateUsernameOnServer(username: string): Promise<AuthMeRe
   });
 
   if (!res.ok) {
-    const message = await res.text().catch(() => "");
+    let message = "";
+    try {
+      const body = (await res.json()) as { message?: string | string[] };
+      if (Array.isArray(body.message)) message = body.message.join(" ");
+      else if (typeof body.message === "string") message = body.message;
+    } catch {
+      // body already consumed or not JSON
+    }
     throw new Error(message || `Could not save username (${res.status})`);
   }
 

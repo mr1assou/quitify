@@ -5,9 +5,11 @@ import { PUSH_PERMISSION_PROMPT_DELAY_MS } from "@/constants/push/signupPushProm
 import { useApp } from "@/context/AppContext";
 import { setCachedPushTokenStatus } from "@/services/push/pushSettingsCache";
 import {
-  registerCurrentDevicePushTokenIfAuthorized,
-  requestPushPermissionAndSaveToken,
-} from "@/services/push/registerPushToken";
+  markNotificationsEnabledByUser,
+  resolveSettledPushTokenStatus,
+} from "@/services/push/resolveSettledPushTokenStatus";
+import { requestPushPermissionAndSaveToken } from "@/services/push/registerPushToken";
+import { isPushDisabledByUser } from "@/utils/push/pushDisabledStorage";
 import { isPushPromptWaitsForPaywall } from "@/utils/onboarding/postSignupFlowStorage";
 
 function schedulePermissionPrompt(): ReturnType<typeof setTimeout> {
@@ -15,6 +17,7 @@ function schedulePermissionPrompt(): ReturnType<typeof setTimeout> {
     void (async () => {
       try {
         const saved = await requestPushPermissionAndSaveToken();
+        if (saved) await markNotificationsEnabledByUser();
         setCachedPushTokenStatus(saved);
       } catch (error) {
         console.error(
@@ -29,7 +32,8 @@ function schedulePermissionPrompt(): ReturnType<typeof setTimeout> {
 /**
  * After sign-in:
  * - New sign-up waits for the post-paywall flow.
- * - Existing OS permission reassigns this device token to the current account.
+ * - Existing OS permission reassigns this device token to the current account
+ *   (unless the user explicitly turned notifications off in-app).
  * - If the OS can still ask, show its permission prompt after 5 seconds.
  */
 export function usePushNotificationsOnAuth() {
@@ -48,11 +52,16 @@ export function usePushNotificationsOnAuth() {
           return;
         }
 
+        if (await isPushDisabledByUser()) {
+          if (!cancelled) setCachedPushTokenStatus(false);
+          return;
+        }
+
         const permission = await Notifications.getPermissionsAsync();
         if (cancelled) return;
 
         if (permission.status === "granted") {
-          const saved = await registerCurrentDevicePushTokenIfAuthorized();
+          const saved = await resolveSettledPushTokenStatus();
           if (!cancelled) setCachedPushTokenStatus(saved);
           return;
         }

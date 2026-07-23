@@ -4,6 +4,7 @@ export const settings = {
   languageSection: "Language",
   language: "Language",
   username: "Username",
+  usernameTaken: "Username already taken",
   notSet: "Not set",
   signedIn: "Signed in",
   resetJourney: "Reset my journey",
