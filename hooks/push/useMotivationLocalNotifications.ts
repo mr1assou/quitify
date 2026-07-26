@@ -14,8 +14,8 @@ import {
 import { resolveSettledPushTokenStatus } from "@/services/push/resolveSettledPushTokenStatus";
 
 /**
- * Schedules motivation as local notifications at 12:30 PM and 8:30 PM US Eastern.
- * Refreshes on sign-in and when the app returns to foreground.
+ * Clears leftover local motivation schedules.
+ * Midday + evening motivation/tips are now sent as Expo push from the backend cron.
  */
 export function useMotivationLocalNotifications() {
   const { isHydrated, state } = useApp();
