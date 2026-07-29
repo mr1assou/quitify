@@ -8,8 +8,8 @@ export const RECOVERY_MODEL_WINDOWS = {
   nicotineHours: 72,
   /** Days smoke-free → 100% breathing ring */
   breathingDays: 28,
-  /** Hours smoke-free → 100% heart ring */
-  heartHours: 48,
+  /** Days smoke-free → 100% heart ring (cardiovascular risk drops significantly at ~6 months) */
+  heartDays: 180,
 } as const;
 
 function clamp01(n: number) {
@@ -26,6 +26,6 @@ export function computeRecoveryProgressValues(smokeFreeMs: number): RecoveryProg
   return {
     nicotine: clamp01(hours / RECOVERY_MODEL_WINDOWS.nicotineHours),
     breathing: clamp01(days / RECOVERY_MODEL_WINDOWS.breathingDays),
-    heart: clamp01(hours / RECOVERY_MODEL_WINDOWS.heartHours),
+    heart: clamp01(days / RECOVERY_MODEL_WINDOWS.heartDays),
   };
 }
