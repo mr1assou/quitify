@@ -1,5 +1,5 @@
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,7 +17,10 @@ import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { isCreateProfileStepComplete } from "@/utils/onboarding/createProfileOnboarding";
+import {
+  getCreateProfileFieldErrors,
+  isCreateProfileStepComplete,
+} from "@/utils/onboarding/createProfileOnboarding";
 import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 
 export default function OnboardingCreateProfile() {
@@ -25,10 +28,25 @@ export default function OnboardingCreateProfile() {
   const { draft, patch } = useOnboarding();
   const quitDateHandlers = useQuitPlanHandlers(draft, patch);
   const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(false);
+  const [attemptedContinue, setAttemptedContinue] = useState(false);
 
   const canContinue = useMemo(
     () => isCreateProfileStepComplete(draft) && usernameAvailable,
     [draft, usernameAvailable],
+  );
+
+  const fieldErrors = useMemo(() => {
+    if (!attemptedContinue) return {};
+    return getCreateProfileFieldErrors(draft, { usernameTaken });
+  }, [attemptedContinue, draft, usernameTaken]);
+
+  const onAvailabilityChange = useCallback(
+    (state: { canUse: boolean; taken: boolean; checking: boolean }) => {
+      setUsernameAvailable(state.canUse);
+      setUsernameTaken(state.taken);
+    },
+    [],
   );
 
   return (
@@ -42,7 +60,14 @@ export default function OnboardingCreateProfile() {
         title={t("onboarding.profile.title")}
         primaryLabel={t("common.continue")}
         primaryDisabled={!canContinue}
-        onPrimary={() => safeRouter.push("/onboarding/nicotine-consumption")}
+        primaryPressWhenDisabled
+        onPrimary={() => {
+          if (!canContinue) {
+            setAttemptedContinue(true);
+            return;
+          }
+          safeRouter.push("/onboarding/nicotine-consumption");
+        }}
         showBack
         scrollBody
       >
@@ -55,7 +80,7 @@ export default function OnboardingCreateProfile() {
             <CreateProfileStep
               username={draft.username}
               onUsernameChange={(username) => patch({ username })}
-              onAvailabilityChange={setUsernameAvailable}
+              onAvailabilityChange={onAvailabilityChange}
               sex={draft.sex}
               onSexChange={(sex: ProfileSex) =>
                 patch({
@@ -63,9 +88,27 @@ export default function OnboardingCreateProfile() {
                   defaultProfileImage: pickDefaultProfileImageForSex(sex),
                 })
               }
+              usernameError={
+                fieldErrors.username
+                  ? t("onboarding.profile.username.required")
+                  : fieldErrors.usernameTaken
+                    ? t("onboarding.profile.username.taken")
+                    : undefined
+              }
+              sexError={
+                fieldErrors.sex ? t("onboarding.profile.sex.required") : undefined
+              }
             />
             <OnboardingSectionDivider />
-            <CountryFields draft={draft} patch={patch} />
+            <CountryFields
+              draft={draft}
+              patch={patch}
+              fieldError={
+                fieldErrors.country
+                  ? t("onboarding.profile.country.required")
+                  : undefined
+              }
+            />
             <OnboardingSectionDivider />
             <QuitDateFields
               draft={draft}
@@ -73,6 +116,11 @@ export default function OnboardingCreateProfile() {
               onMonthChange={quitDateHandlers.updateCustomMonth}
               onDayChange={quitDateHandlers.updateCustomDay}
               onYearChange={quitDateHandlers.updateCustomYear}
+              error={
+                fieldErrors.quitDate
+                  ? t("onboarding.profile.quitDate.required")
+                  : undefined
+              }
             />
           </View>
         </ScrollView>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import { CustomQuitDatePicker } from "@/components/feature/onboarding/QuitPlanFields/CustomQuitDatePicker";
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
@@ -23,6 +23,7 @@ type Props = {
   onMonthChange: (month: number | undefined) => void;
   onDayChange: (day: number | undefined) => void;
   onYearChange: (year: number | undefined) => void;
+  error?: string;
 };
 
 const PRESETS: readonly QuitStartPreset[] = ["now", "custom"];
@@ -39,6 +40,7 @@ export function QuitStartPresetPicker({
   onMonthChange,
   onDayChange,
   onYearChange,
+  error,
 }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
@@ -81,6 +83,9 @@ export function QuitStartPresetPicker({
             onYearChange={onYearChange}
           />
         ) : null}
+        {error ? (
+          <Text className="text-xs font-semibold text-alert">{error}</Text>
+        ) : null}
       </View>
     );
   }
@@ -117,6 +122,9 @@ export function QuitStartPresetPicker({
           />
         ) : null}
       </View>
+      {error ? (
+        <Text className="text-xs font-semibold text-alert">{error}</Text>
+      ) : null}
     </View>
   );
 }

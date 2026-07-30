@@ -1,5 +1,5 @@
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,11 +13,15 @@ import { CIGARETTE_CONSUMPTION_FORM } from "@/constants/onboarding/onboardingNic
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { isNicotineConsumptionStepComplete } from "@/utils/onboarding/nicotineOnboarding";
+import {
+  getNicotineFieldErrors,
+  isNicotineConsumptionStepComplete,
+} from "@/utils/onboarding/nicotineOnboarding";
 
 export default function NicotineConsumptionOnboarding() {
   const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
+  const [attemptedContinue, setAttemptedContinue] = useState(false);
 
   useEffect(() => {
     const next: Parameters<typeof patch>[0] = {};
@@ -29,6 +33,11 @@ export default function NicotineConsumptionOnboarding() {
 
   const canContinue = useMemo(() => isNicotineConsumptionStepComplete(draft), [draft]);
 
+  const fieldErrors = useMemo(() => {
+    if (!attemptedContinue) return {};
+    return getNicotineFieldErrors(draft);
+  }, [attemptedContinue, draft]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -38,10 +47,16 @@ export default function NicotineConsumptionOnboarding() {
         step={6}
         total={ONBOARDING_TOTAL_STEPS}
         title={t("onboarding.nicotine.title")}
-        subtitle={t("onboarding.nicotine.subtitle")}
         primaryLabel={t("common.continue")}
         primaryDisabled={!canContinue}
-        onPrimary={() => safeRouter.push("/onboarding/analyzing")}
+        primaryPressWhenDisabled
+        onPrimary={() => {
+          if (!canContinue) {
+            setAttemptedContinue(true);
+            return;
+          }
+          safeRouter.push("/onboarding/analyzing");
+        }}
         showBack
         scrollBody
       >
@@ -52,7 +67,11 @@ export default function NicotineConsumptionOnboarding() {
           showsVerticalScrollIndicator={false}
         >
           <View className="w-full pb-6">
-            <NicotineConsumptionFields draft={draft} patch={patch} />
+            <NicotineConsumptionFields
+              draft={draft}
+              patch={patch}
+              fieldErrors={fieldErrors}
+            />
           </View>
         </ScrollView>
       </OnboardingShell>

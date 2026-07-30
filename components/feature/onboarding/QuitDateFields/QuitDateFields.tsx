@@ -8,6 +8,7 @@ type Props = {
   onMonthChange: (month: number | undefined) => void;
   onDayChange: (day: number | undefined) => void;
   onYearChange: (year: number | undefined) => void;
+  error?: string;
 };
 
 /** Step 5 — when the user starts their quit journey. */
@@ -17,6 +18,7 @@ export function QuitDateFields({
   onMonthChange,
   onDayChange,
   onYearChange,
+  error,
 }: Props) {
   return (
     <QuitStartPresetPicker
@@ -25,6 +27,7 @@ export function QuitDateFields({
       onMonthChange={onMonthChange}
       onDayChange={onDayChange}
       onYearChange={onYearChange}
+      error={error}
     />
   );
 }

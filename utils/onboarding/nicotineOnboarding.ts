@@ -1,6 +1,14 @@
 import { isValidCigarettesPerPack } from "@/constants/onboarding/onboardingNicotineBands";
 import type { OnboardingDraft } from "@/types";
 
+export type NicotineFieldErrors = {
+  cigsPerDay?: boolean;
+  packSize?: boolean;
+  packSizeInvalid?: boolean;
+  price?: boolean;
+  habitYears?: boolean;
+};
+
 /** True when the user typed a value that is 0 or otherwise below the minimum. */
 export function hasInvalidCigarettesPerPackInput(draft: OnboardingDraft): boolean {
   const input = draft.cigarettesPerPackInput?.trim();
@@ -43,4 +51,34 @@ export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
 /** Step 6: cigarette habit fields (dropdowns + pack cost). */
 export function isNicotineConsumptionStepComplete(draft: OnboardingDraft): boolean {
   return isNicotineHabitsComplete(draft);
+}
+
+/** Missing / invalid fields after the user taps Continue. */
+export function getNicotineFieldErrors(draft: OnboardingDraft): NicotineFieldErrors {
+  const errors: NicotineFieldErrors = {};
+
+  if (draft.cigarettesPerDayBand == null) errors.cigsPerDay = true;
+
+  const packInput = draft.cigarettesPerPackInput?.trim() ?? "";
+  if (!packInput) {
+    errors.packSize = true;
+  } else if (!isValidCigarettesPerPack(draft.cigarettesPerPack)) {
+    errors.packSizeInvalid = true;
+  }
+
+  const priceInput = draft.packCostInput?.trim() ?? "";
+  if (
+    !priceInput ||
+    !(
+      typeof draft.packCost === "number" &&
+      Number.isFinite(draft.packCost) &&
+      draft.packCost > 0
+    )
+  ) {
+    errors.price = true;
+  }
+
+  if (draft.nicotineHabitYearsBand == null) errors.habitYears = true;
+
+  return errors;
 }

@@ -23,11 +23,15 @@ import {
   patchForNicotineHabitYearsBand,
   patchForPackCostInput,
 } from "@/utils/onboarding/nicotineBands";
-import { hasInvalidCigarettesPerPackInput } from "@/utils/onboarding/nicotineOnboarding";
+import {
+  hasInvalidCigarettesPerPackInput,
+  type NicotineFieldErrors,
+} from "@/utils/onboarding/nicotineOnboarding";
 
 type Props = {
   draft: OnboardingDraft;
   patch: (next: Partial<OnboardingDraft>) => void;
+  fieldErrors?: NicotineFieldErrors;
 };
 
 function isCigarettesPerDayBand(value: string): value is CigarettesPerDayBandId {
@@ -38,7 +42,7 @@ function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBan
   return NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS.some((o) => o.value === value);
 }
 
-export function CigaretteHabitFields({ draft, patch }: Props) {
+export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
 
@@ -60,7 +64,11 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
     [localize],
   );
 
-  const packSizeError = hasInvalidCigarettesPerPackInput(draft);
+  const packSizeInvalid =
+    hasInvalidCigarettesPerPackInput(draft) || Boolean(fieldErrors?.packSizeInvalid);
+  const packSizeMissing = Boolean(fieldErrors?.packSize);
+  const packSizeHasError = packSizeInvalid || packSizeMissing;
+  const priceHasError = Boolean(fieldErrors?.price);
 
   return (
     <View className="w-full gap-5">
@@ -80,18 +88,28 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
             }
           }}
         />
+        {fieldErrors?.cigsPerDay ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.cigsPerDay.required")}
+          </Text>
+        ) : null}
       </View>
 
       <View className="gap-2">
         <OnboardingFieldLabel>{t("onboarding.nicotine.packSize.label")}</OnboardingFieldLabel>
         <CigarettesPerPackField
           value={draft.cigarettesPerPackInput}
-          hasError={packSizeError}
+          hasError={packSizeHasError}
+          placeholder={t("onboarding.nicotine.packSize.placeholder")}
           onChangeText={(raw) => patch(patchForCigarettesPerPackInput(raw))}
         />
-        {packSizeError ? (
-          <Text className="text-sm text-alert">
-            Enter more than 0
+        {packSizeMissing ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.packSize.required")}
+          </Text>
+        ) : packSizeInvalid ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.packSize.invalid")}
           </Text>
         ) : null}
       </View>
@@ -101,8 +119,15 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
         <PackCostField
           currency={draft.currency}
           value={draft.packCostInput}
+          hasError={priceHasError}
+          placeholder={t("onboarding.nicotine.price.placeholder")}
           onChangeText={(raw) => patch(patchForPackCostInput(raw))}
         />
+        {priceHasError ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.price.required")}
+          </Text>
+        ) : null}
       </View>
 
       <View className="gap-2">
@@ -121,6 +146,11 @@ export function CigaretteHabitFields({ draft, patch }: Props) {
             }
           }}
         />
+        {fieldErrors?.habitYears ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.habitYears.required")}
+          </Text>
+        ) : null}
       </View>
     </View>
   );

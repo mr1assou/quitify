@@ -8,19 +8,27 @@ type Props = {
   currency: string;
   value?: string;
   onChangeText: (raw: string) => void;
+  hasError?: boolean;
+  placeholder?: string;
 };
 
 const KEYBOARD =
   Platform.OS === "android" ? "number-pad" : ("decimal-pad" as const);
 
-export function PackCostField({ currency, value, onChangeText }: Props) {
+export function PackCostField({
+  currency,
+  value,
+  onChangeText,
+  hasError,
+  placeholder = "Enter a price",
+}: Props) {
   const { colors } = useTheme();
   const symbol = currencySymbol(currency);
   const showSymbol = symbol.trim().length > 0 && symbol.trim() !== currency;
 
   return (
     <View
-      className="flex-row items-center overflow-hidden rounded-2xl bg-section dark:bg-d-surface"
+      className={`flex-row items-center rounded-2xl bg-section dark:bg-d-surface border-2 ${hasError ? "border-alert" : "border-transparent"}`}
       style={{ minHeight: ONBOARDING_CONTROL_HEIGHT }}
     >
       <View className="items-center justify-center border-r border-border px-4 dark:border-d-border">
@@ -31,7 +39,7 @@ export function PackCostField({ currency, value, onChangeText }: Props) {
       <TextInput
         value={value ?? ""}
         onChangeText={onChangeText}
-        placeholder="0.00"
+        placeholder={placeholder}
         placeholderTextColor={colors.mutedForeground}
         keyboardType={KEYBOARD}
         className="min-w-0 flex-1 px-4 py-3 text-base text-foreground dark:text-d-text"

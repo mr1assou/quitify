@@ -16,6 +16,8 @@ type Props = {
   children: ReactNode;
   primaryLabel: string;
   primaryDisabled?: boolean;
+  /** Looks locked when disabled, but still calls onPrimary (e.g. show field errors). */
+  primaryPressWhenDisabled?: boolean;
   onPrimary: () => void;
   showBack?: boolean;
   scrollBody?: boolean;
@@ -29,12 +31,15 @@ export function OnboardingShell({
   children,
   primaryLabel,
   primaryDisabled,
+  primaryPressWhenDisabled = false,
   onPrimary,
   showBack = true,
   scrollBody = false,
 }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const looksDisabled = Boolean(primaryDisabled);
+  const blocksPress = looksDisabled && !primaryPressWhenDisabled;
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
@@ -81,13 +86,13 @@ export function OnboardingShell({
           {children}
         </View>
 
-        <View className="pb-4">
+        <View className={`pb-4 ${looksDisabled && primaryPressWhenDisabled ? "opacity-50" : ""}`}>
           <Button
             label={primaryLabel}
             onPress={onPrimary}
             size="lg"
             fullWidth
-            disabled={primaryDisabled}
+            disabled={blocksPress}
           />
         </View>
       </View>

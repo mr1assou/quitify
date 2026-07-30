@@ -15,13 +15,21 @@ import { useUsernameAvailability } from "@/hooks/auth/useUsernameAvailability";
 import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 
+type AvailabilityChange = {
+  canUse: boolean;
+  taken: boolean;
+  checking: boolean;
+};
+
 type Props = {
   username: string;
   onUsernameChange: (v: string) => void;
   sex?: ProfileSex;
   onSexChange: (v: ProfileSex) => void;
   /** Notifies parent when debounced availability changes (for Continue button). */
-  onAvailabilityChange?: (canUse: boolean) => void;
+  onAvailabilityChange?: (state: AvailabilityChange) => void;
+  usernameError?: string;
+  sexError?: string;
 };
 
 export function CreateProfileStep({
@@ -30,6 +38,8 @@ export function CreateProfileStep({
   sex,
   onSexChange,
   onAvailabilityChange,
+  usernameError,
+  sexError,
 }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -38,8 +48,17 @@ export function CreateProfileStep({
   const availability = useUsernameAvailability(username);
 
   useEffect(() => {
-    onAvailabilityChange?.(availability.canUse);
-  }, [availability.canUse, onAvailabilityChange]);
+    onAvailabilityChange?.({
+      canUse: availability.canUse,
+      taken: availability.taken,
+      checking: availability.checking,
+    });
+  }, [
+    availability.canUse,
+    availability.taken,
+    availability.checking,
+    onAvailabilityChange,
+  ]);
 
   return (
     <View className="w-full gap-5">
@@ -60,10 +79,13 @@ export function CreateProfileStep({
         <Text className="text-xs text-muted-foreground dark:text-d-muted">
           {usernameHandleLength(username)}/{USERNAME_MAX_LENGTH} characters
         </Text>
-        {availability.taken ? (
+        {availability.taken && !usernameError ? (
           <Text className="text-xs font-semibold text-alert">
             {t("onboarding.profile.username.taken")}
           </Text>
+        ) : null}
+        {usernameError ? (
+          <Text className="text-xs font-semibold text-alert">{usernameError}</Text>
         ) : null}
       </View>
 
@@ -81,6 +103,9 @@ export function CreateProfileStep({
             />
           ))}
         </View>
+        {sexError ? (
+          <Text className="text-xs font-semibold text-alert">{sexError}</Text>
+        ) : null}
       </View>
     </View>
   );

@@ -16,6 +16,7 @@ import { CountrySelectField } from "./CountrySelectField";
 type Props = {
   draft: OnboardingDraft;
   patch: (next: Partial<OnboardingDraft>) => void;
+  fieldError?: string;
 };
 
 function CurrencyDisplay({
@@ -55,8 +56,8 @@ function CurrencyDisplay({
   );
 }
 
-export function CountryFields({ draft, patch }: Props) {
-  const { countries, status, error, retry } = useCountries();
+export function CountryFields({ draft, patch, fieldError }: Props) {
+  const { countries, status, error: loadError, retry } = useCountries();
   const { selectCountry } = useCountrySelection(patch);
 
   useAutoSelectCountry(
@@ -102,13 +103,16 @@ export function CountryFields({ draft, patch }: Props) {
 
       {status === "error" ? (
         <View className="gap-2">
-          <Text className="text-sm text-alert">{error}</Text>
+          <Text className="text-sm text-alert">{loadError}</Text>
           <Pressable onPress={retry} className="self-start">
             <Text className="text-sm font-semibold text-primary dark:text-d-primary">
               Try again
             </Text>
           </Pressable>
         </View>
+      ) : null}
+      {status !== "error" && fieldError ? (
+        <Text className="text-xs font-semibold text-alert">{fieldError}</Text>
       ) : null}
     </View>
   );
