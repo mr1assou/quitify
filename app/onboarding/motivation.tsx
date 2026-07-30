@@ -6,6 +6,8 @@ import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
+import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function Motivation() {
   const { t } = useTranslation();
@@ -20,7 +22,10 @@ export default function Motivation() {
       subtitle={t("onboarding.motivation.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!level}
-      onPrimary={() => safeRouter.push("/onboarding/quit-attempts")}
+      onPrimary={() => {
+        trackOnboardingStepComplete(ONBOARDING_STEP.motivation);
+        safeRouter.push("/onboarding/quit-attempts");
+      }}
       showBack
     >
       <View className="w-full">

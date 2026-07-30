@@ -8,6 +8,8 @@ import {
   type AnalyzingTask,
 } from "@/components/feature/onboarding/AnalyzingProgress";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
+import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function OnboardingAnalyzing() {
   const { t } = useTranslation();
@@ -37,6 +39,7 @@ export default function OnboardingAnalyzing() {
   );
 
   const onComplete = useCallback(() => {
+    trackOnboardingStepComplete(ONBOARDING_STEP.analyzing);
     safeRouter.replace("/onboarding/profile");
   }, []);
 

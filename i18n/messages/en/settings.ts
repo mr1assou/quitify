@@ -15,7 +15,7 @@ export const settings = {
   shareApp: "Share Quitify",
   logout: "Log out",
   unlockVip: "Unlock VIP mode",
-  vipOffer: "See the full $4.17/month offer.",
+  vipOffer: "See the full {{price}}/month offer.",
   resetErrorTitle: "Could not reset journey",
   resetErrorMessage: "Please try again in a moment.",
 } as const;

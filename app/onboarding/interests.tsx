@@ -7,6 +7,8 @@ import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { PrimaryInterestId } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
+import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function Interests() {
   const { t } = useTranslation();
@@ -31,7 +33,10 @@ export default function Interests() {
       title={t("onboarding.interests.title")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
-      onPrimary={() => safeRouter.push("/onboarding/create-profile")}
+      onPrimary={() => {
+        trackOnboardingStepComplete(ONBOARDING_STEP.interests);
+        safeRouter.push("/onboarding/create-profile");
+      }}
       showBack
       scrollBody
     >

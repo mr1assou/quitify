@@ -7,6 +7,8 @@ import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useNotifications } from "@/context/NotificationContext";
 import { useChatUnreadTotal } from "@/hooks/chat/useChat";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
+import { openPaywall } from "@/utils/analytics/openPaywall";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export function ScreenHeaderActions() {
@@ -35,7 +37,7 @@ export function ScreenHeaderActions() {
         <View className="ml-1">
           <PremiumHeaderButton
             isPremium={false}
-            onPress={() => safeRouter.push("/paywall")}
+            onPress={() => openPaywall(PAYWALL_SOURCE.header)}
           />
         </View>
       )}

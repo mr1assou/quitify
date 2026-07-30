@@ -6,6 +6,8 @@ import { QuitAttemptsPickStep } from "@/components/feature/onboarding/QuitAttemp
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
+import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function QuitAttempts() {
   const { t } = useTranslation();
@@ -20,7 +22,10 @@ export default function QuitAttempts() {
       subtitle={t("onboarding.quitAttempts.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!choice}
-      onPrimary={() => safeRouter.push("/onboarding/interests")}
+      onPrimary={() => {
+        trackOnboardingStepComplete(ONBOARDING_STEP.quit_attempts);
+        safeRouter.push("/onboarding/interests");
+      }}
       showBack
     >
       <View className="w-full">

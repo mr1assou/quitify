@@ -14,9 +14,12 @@ import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useResetJourney } from "@/hooks/auth/useResetJourney";
+import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { usePushNotificationsSettings } from "@/hooks/push/usePushNotificationsSettings";
 import type { QuitDateApiPayload } from "@/types/onboarding/quitStartDate";
 import type { UserProfile } from "@/types/profile/profile";
+import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
+import { openPaywall } from "@/utils/analytics/openPaywall";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { shareApp } from "@/utils/app/shareApp";
 import { formatDate } from "@/utils/shared/format";
@@ -40,11 +43,14 @@ export function SelfProfileSettings({
   const { t } = useTranslation();
   const resetJourney = useResetJourney();
   const pushSettings = usePushNotificationsSettings();
+  const { plans } = usePaywallPlans();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
   const [habitModalOpen, setHabitModalOpen] = useState(false);
   const [usernameModalOpen, setUsernameModalOpen] = useState(false);
 
   const displayUsername = profile.name?.trim() || t("settings.notSet");
+  const yearlyPlan = plans.find((plan) => plan.id === "yearly");
+  const vipMonthlyPrice = yearlyPlan?.rightPrice ?? "$4.17";
 
   const accountRows: ListRow[] = isSignedIn
     ? [
@@ -150,14 +156,14 @@ export function SelfProfileSettings({
       />
 
       {!isPremium ? (
-        <Pressable onPress={() => safeRouter.push("/paywall")} className="active:opacity-70">
+        <Pressable onPress={() => openPaywall(PAYWALL_SOURCE.profile)} className="active:opacity-70">
           <View className="rounded-3xl bg-primary p-4">
             <View className="flex-row items-center">
               <Ionicons name="diamond" size={20} color={colors.white} />
               <Text className="ml-2 text-base font-bold text-white">{t("settings.unlockVip")}</Text>
             </View>
             <Text className="mt-1 text-xs text-white opacity-80">
-              {t("settings.vipOffer")}
+              {t("settings.vipOffer", { price: vipMonthlyPrice })}
             </Text>
           </View>
         </Pressable>

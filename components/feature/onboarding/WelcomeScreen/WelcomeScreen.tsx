@@ -5,6 +5,7 @@ import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
 import { WEBSITE_TERMS_URL } from "@/constants/app/website";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { trackOnboardingStart } from "@/services/analytics";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -50,7 +51,10 @@ export function WelcomeScreen() {
             label={t("welcome.getStarted")}
             size="lg"
             fullWidth
-            onPress={() => safeRouter.push("/intro")}
+            onPress={() => {
+              trackOnboardingStart();
+              safeRouter.push("/intro");
+            }}
           />
           <Pressable
             onPress={() =>

@@ -18,9 +18,12 @@ import { usePostSignupPaywall } from "@/hooks/onboarding/usePostSignupPaywall";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { usePostPaywallNotificationPrompt } from "@/hooks/push/usePostPaywallNotificationPrompt";
 import { useStats } from "@/hooks/stats/useStats";
+import { trackHomeOpenAfterOnboardingIfPending } from "@/services/analytics";
 import { getStreakElapsedMs } from "@/utils/streak/elapsedBreakdown";
 import { smokeFreeDaysInProgressFromStreakStart } from "@/utils/goals/goalStreakProgress";
 import { currencySymbol } from "@/utils/shared/format";
+import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
+import { openPaywall } from "@/utils/analytics/openPaywall";
 
 export default function Home() {
   const stats = useStats(1_000);
@@ -29,6 +32,23 @@ export default function Home() {
   const { activeGoals, progress, hasOpenGoalSlot, isReady: goalsReady } = useUserGoals();
   usePostSignupPaywall();
   usePostPaywallNotificationPrompt();
+
+  useFocusEffect(
+    useCallback(() => {
+      trackHomeOpenAfterOnboardingIfPending();
+
+      if (!state.account && gates.shouldShowSignup) {
+        setFlag("hasSeenSignupPrompt", true);
+        const t = setTimeout(() => safeRouter.push("/signup"), 250);
+        return () => clearTimeout(t);
+      }
+      if (gates.shouldShowPaywall) {
+        setFlag("hasSeenPaywall", true);
+        const t = setTimeout(() => openPaywall(PAYWALL_SOURCE.day5), 250);
+        return () => clearTimeout(t);
+      }
+    }, [state.account, gates.shouldShowSignup, gates.shouldShowPaywall, setFlag]),
+  );
 
   const openCreateGoal = useCallback(() => {
     safeRouter.push("/goals");
@@ -57,21 +77,6 @@ export default function Home() {
               : 0,
           },
     [goalsReady, progress, stats, state.profile?.streakStart],
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (!state.account && gates.shouldShowSignup) {
-        setFlag("hasSeenSignupPrompt", true);
-        const t = setTimeout(() => safeRouter.push("/signup"), 250);
-        return () => clearTimeout(t);
-      }
-      if (gates.shouldShowPaywall) {
-        setFlag("hasSeenPaywall", true);
-        const t = setTimeout(() => safeRouter.push("/paywall"), 250);
-        return () => clearTimeout(t);
-      }
-    }, [state.account, gates.shouldShowSignup, gates.shouldShowPaywall, setFlag]),
   );
 
   if (!stats || !state.profile) return null;

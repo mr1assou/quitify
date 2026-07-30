@@ -27,6 +27,8 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import { useIntroSlides } from "@/hooks/i18n/useIntroSlides";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { trackOnboardingStepComplete } from "@/services/analytics";
+import { onboardingStepForIntroSlide } from "@/utils/analytics/onboardingStepMap";
 
 const NEXT_ROUTE = "/onboarding/reasons";
 const SWIPE_THRESHOLD_RATIO = 0.22;
@@ -45,6 +47,12 @@ export function IntroPager() {
   const unifiedGradient =
     currentSlide !== undefined && introUsesUnifiedGradient(currentSlide.id);
 
+  const trackLeavingSlide = (fromIndex: number) => {
+    const slide = slides[fromIndex];
+    if (!slide) return;
+    trackOnboardingStepComplete(onboardingStepForIntroSlide(slide.id));
+  };
+
   const goTo = (page: number) => {
     const clamped = Math.max(0, Math.min(total - 1, page));
     setIndex(clamped);
@@ -52,6 +60,7 @@ export function IntroPager() {
   };
 
   const goNext = () => {
+    trackLeavingSlide(index);
     if (isLast) {
       safeRouter.replace(NEXT_ROUTE);
       return;
@@ -61,6 +70,13 @@ export function IntroPager() {
 
   const goBack = () => {
     if (index > 0) goTo(index - 1);
+  };
+
+  const finishSwipe = (fromIndex: number, target: number) => {
+    if (target > fromIndex) {
+      trackLeavingSlide(fromIndex);
+    }
+    setIndex(target);
   };
 
   const pan = Gesture.Pan()
@@ -76,7 +92,7 @@ export function IntroPager() {
       let target = index;
       if (e.translationX < -threshold && index < total - 1) target = index + 1;
       else if (e.translationX > threshold && index > 0) target = index - 1;
-      runOnJS(setIndex)(target);
+      runOnJS(finishSwipe)(index, target);
       translateX.value = withTiming(-target * width, { duration: 280 });
     });
 

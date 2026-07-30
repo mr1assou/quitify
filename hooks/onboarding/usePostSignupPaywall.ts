@@ -2,9 +2,10 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useRef } from "react";
 
 import { POST_SIGNUP_PAYWALL_DELAY_MS } from "@/constants/onboarding/postSignupFlow";
+import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
 import { useApp } from "@/context/AppContext";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
-import { safeRouter } from "@/utils/app/safeRouter";
+import { openPaywall } from "@/utils/analytics/openPaywall";
 import {
   clearPostSignupPaywallPending,
   isPostSignupPaywallPending,
@@ -40,7 +41,7 @@ export function usePostSignupPaywall() {
           if (cancelled) return;
           void clearPostSignupPaywallPending();
           setFlag("hasSeenPaywall", true);
-          safeRouter.pushStack("/paywall");
+          openPaywall(PAYWALL_SOURCE.post_signup, "pushStack");
         }, POST_SIGNUP_PAYWALL_DELAY_MS);
       })();
 

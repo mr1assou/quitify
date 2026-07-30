@@ -9,6 +9,8 @@ import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
+import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function Reasons() {
   const { t } = useTranslation();
@@ -40,7 +42,10 @@ export default function Reasons() {
       subtitle={t("onboarding.reasons.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
-      onPrimary={() => safeRouter.push("/onboarding/motivation")}
+      onPrimary={() => {
+        trackOnboardingStepComplete(ONBOARDING_STEP.reasons);
+        safeRouter.push("/onboarding/motivation");
+      }}
       showBack={false}
     >
       <View className="w-full">
