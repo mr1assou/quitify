@@ -18,6 +18,6 @@ export const paywall = {
   perMonth: "/month",
   monthlyPlan: "Monthly plan",
   yearlyPlan: "Yearly plan",
-  trialBadge: "3 days free trial",
+  trialBadge: "7 days free trial",
   recommended: "Recommended",
 } as const;

@@ -5,7 +5,6 @@ import {
   COUNTRY_CURRENCY_CONTROL_HEIGHT,
   COUNTRY_CURRENCY_CURRENCY_WIDTH,
 } from "@/constants/onboarding/onboardingCountryRow";
-import { useAutoSelectCountry } from "@/hooks/onboarding/useAutoSelectCountry";
 import { useCountries } from "@/hooks/onboarding/useCountries";
 import { useCountrySelection } from "@/hooks/onboarding/useCountrySelection";
 import type { OnboardingDraft } from "@/types";
@@ -60,16 +59,7 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
   const { countries, status, error: loadError, retry } = useCountries();
   const { selectCountry } = useCountrySelection(patch);
 
-  useAutoSelectCountry(
-    countries,
-    status === "ready",
-    draft.countryCode,
-    selectCountry,
-  );
-
   const loadingCountries = status === "loading";
-  const detectingCountry = status === "ready" && !draft.countryCode;
-  const loading = loadingCountries || detectingCountry;
   const hasCountry = !!draft.countryCode && status === "ready";
 
   return (
@@ -88,7 +78,7 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
           <CountrySelectField
             countries={countries}
             selectedCode={draft.countryCode}
-            loading={loading}
+            loading={loadingCountries}
             onSelect={selectCountry}
             showLabel={false}
             controlHeight={COUNTRY_CURRENCY_CONTROL_HEIGHT}
@@ -96,7 +86,7 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
         </View>
         <CurrencyDisplay
           currency={draft.currency}
-          loading={loading}
+          loading={loadingCountries}
           hasCountry={hasCountry}
         />
       </View>
