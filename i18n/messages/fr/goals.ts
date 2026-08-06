@@ -1,0 +1,15 @@
+export const goals = {
+  createTitle: "Créer un objectif",
+  editTitle: "Modifier l'objectif",
+  manageTitle: "Votre objectif",
+  setGoal: "Définir l'objectif",
+  saveChanges: "Enregistrer",
+  deleteGoal: "Supprimer l'objectif",
+  cigarettesAvoided: "Cigarettes évitées",
+  moneySaved: "Argent économisé",
+  saveFailed: "Impossible d'enregistrer l'objectif",
+  deleteFailed: "Impossible de supprimer l'objectif",
+  empty: "Aucun objectif pour le moment",
+  emptyHint: "Fixez une cible pour rester motivé.",
+  endsOn: "Se termine le {{date}}",
+} as const;

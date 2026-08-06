@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { reportPost as reportPostApi } from "@/services/posts/postsApi";
 
 type Props = {
@@ -20,10 +21,12 @@ function ModalBackdrop({
   onClose,
   canDismiss,
   children,
+  closeLabel,
 }: {
   onClose: () => void;
   canDismiss: boolean;
   children: React.ReactNode;
+  closeLabel: string;
 }) {
   return (
     <Modal
@@ -36,7 +39,7 @@ function ModalBackdrop({
         {canDismiss ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Close"
+            accessibilityLabel={closeLabel}
             className="absolute inset-0 bg-black/50"
             onPress={onClose}
           />
@@ -54,6 +57,7 @@ function ModalBackdrop({
 /** Report entry on community posts from other users (Play UGC policy). */
 export function PostReportMenu({ postId }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [modal, setModal] = useState<ReportModalState | null>(null);
 
   const closeModal = () => {
@@ -77,7 +81,7 @@ export function PostReportMenu({ postId }: Props) {
         hitSlop={8}
         onPress={() => setModal({ type: "confirm" })}
         className="ml-2 h-9 w-9 items-center justify-center rounded-full"
-        accessibilityLabel="Report post"
+        accessibilityLabel={t("community.reportPostA11y")}
       >
         <Ionicons
           name="alert-circle-outline"
@@ -87,7 +91,7 @@ export function PostReportMenu({ postId }: Props) {
       </Pressable>
 
       {modal?.type === "confirm" ? (
-        <ModalBackdrop onClose={closeModal} canDismiss>
+        <ModalBackdrop onClose={closeModal} canDismiss closeLabel={t("common.close")}>
           <View className="items-center">
             <View
               className="h-24 w-24 items-center justify-center rounded-full"
@@ -99,11 +103,10 @@ export function PostReportMenu({ postId }: Props) {
             </View>
 
             <Text className="mt-5 text-center text-xl font-bold text-foreground dark:text-d-text">
-              Report this post?
+              {t("community.reportConfirmTitle")}
             </Text>
             <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-              Report content that is offensive, harmful, or not related to
-              quitting smoking. Our team will review it.
+              {t("community.reportConfirmMessage")}
             </Text>
           </View>
 
@@ -114,7 +117,7 @@ export function PostReportMenu({ postId }: Props) {
               className="w-full rounded-2xl bg-alert px-10 py-3.5"
             >
               <Text className="text-center text-base font-bold text-white">
-                Report post
+                {t("community.reportConfirmCta")}
               </Text>
             </Pressable>
             <Pressable
@@ -123,7 +126,7 @@ export function PostReportMenu({ postId }: Props) {
               className="items-center py-2"
             >
               <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
-                Cancel
+                {t("common.cancel")}
               </Text>
             </Pressable>
           </View>
@@ -131,18 +134,18 @@ export function PostReportMenu({ postId }: Props) {
       ) : null}
 
       {modal?.type === "reporting" ? (
-        <ModalBackdrop onClose={closeModal} canDismiss={false}>
+        <ModalBackdrop onClose={closeModal} canDismiss={false} closeLabel={t("common.close")}>
           <View className="items-center py-4">
             <ActivityIndicator size="large" color={colors.primary} />
             <Text className="mt-5 text-center text-base font-semibold text-foreground dark:text-d-text">
-              Sending report…
+              {t("community.reportSending")}
             </Text>
           </View>
         </ModalBackdrop>
       ) : null}
 
       {modal?.type === "done" || modal?.type === "error" ? (
-        <ModalBackdrop onClose={closeModal} canDismiss>
+        <ModalBackdrop onClose={closeModal} canDismiss closeLabel={t("common.close")}>
           <View className="items-center">
             <View
               className="h-24 w-24 items-center justify-center rounded-full"
@@ -171,12 +174,14 @@ export function PostReportMenu({ postId }: Props) {
             </View>
 
             <Text className="mt-5 text-center text-xl font-bold text-foreground dark:text-d-text">
-              {modal.type === "done" ? "Thanks for reporting" : "Could not report post"}
+              {modal.type === "done"
+                ? t("community.reportThanksTitle")
+                : t("community.reportErrorTitle")}
             </Text>
             <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
               {modal.type === "done"
-                ? "Our team will review this post and take action if needed."
-                : "Please try again."}
+                ? t("community.reportThanksMessage")
+                : t("community.reportErrorMessage")}
             </Text>
           </View>
 
@@ -187,7 +192,7 @@ export function PostReportMenu({ postId }: Props) {
               className="rounded-2xl bg-primary px-10 py-3.5"
             >
               <Text className="text-center text-base font-bold text-white">
-                Got it
+                {t("common.gotIt")}
               </Text>
             </Pressable>
           </View>

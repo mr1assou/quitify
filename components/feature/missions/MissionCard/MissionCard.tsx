@@ -6,6 +6,7 @@ import { TaskRow } from "@/components/feature/missions/TaskRow";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { TodayMission } from "@/hooks/progress/useTodayMission";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 
 export function MissionCard({ mission }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { day, title, intro, tasks, completedCount, totalCount, progress, isComplete, toggleTask } =
     mission;
 
@@ -34,7 +36,8 @@ export function MissionCard({ mission }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-              Day {day} · {isComplete ? "Mission complete" : "Mission of the day"}
+              {t("missions.dayShort", { day })} ·{" "}
+              {isComplete ? t("missions.missionComplete") : t("missions.missionOfDay")}
             </Text>
             <Text className="mt-0.5 text-lg font-bold text-foreground dark:text-d-text">
               {title}
@@ -50,7 +53,7 @@ export function MissionCard({ mission }: Props) {
             fillClassName={isComplete ? "bg-accent" : "bg-primary"}
           />
           <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-            {completedCount}/{totalCount} steps done
+            {t("missions.stepsDone", { done: completedCount, total: totalCount })}
           </Text>
         </View>
 

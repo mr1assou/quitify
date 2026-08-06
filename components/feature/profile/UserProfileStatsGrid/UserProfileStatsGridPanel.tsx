@@ -5,6 +5,7 @@ import { Pressable, Text, View } from "react-native";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import type { ProfileStreak } from "@/types/profile/profileStreak";
 import { formatNumber } from "@/utils/shared/format";
@@ -17,6 +18,7 @@ type Props = {
 
 export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
   const lockStreakStats = !profile.isCurrentUser && !isPremium;
@@ -57,14 +59,16 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
         <StatTile
           icon="globe"
           tint={colors.accent}
-          label="Global rank"
+          label={t("profile.globalRank")}
           value={`#${formatNumber(profile.rank)}`}
+          vipA11y={t("profile.vipFeatureTap", { label: t("profile.globalRank") })}
         />
         <StatTile
           icon="flash"
           tint={colors.primary}
-          label="Freedom points"
+          label={t("profile.freedomPoints")}
           value={formatNumber(profile.freedomPoints)}
+          vipA11y={t("profile.vipFeatureTap", { label: t("profile.freedomPoints") })}
         />
       </View>
 
@@ -72,18 +76,20 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
         <StatTile
           icon="leaf"
           tint={colors.secondary}
-          label="Current streak"
+          label={t("profile.currentStreak")}
           value={currentStreakLabel}
           locked={lockStreakStats}
           onLockedPress={requirePremium}
+          vipA11y={t("profile.vipFeatureTap", { label: t("profile.currentStreak") })}
         />
         <StatTile
           icon="trophy"
           tint={colors.accent}
-          label="Best streak"
+          label={t("profile.bestStreak")}
           value={bestStreakLabel}
           locked={lockStreakStats}
           onLockedPress={requirePremium}
+          vipA11y={t("profile.vipFeatureTap", { label: t("profile.bestStreak") })}
         />
       </View>
     </View>
@@ -98,6 +104,7 @@ function StatTile({
   hint,
   locked = false,
   onLockedPress,
+  vipA11y,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   tint: string;
@@ -106,6 +113,7 @@ function StatTile({
   hint?: string;
   locked?: boolean;
   onLockedPress?: () => void;
+  vipA11y?: string;
 }) {
   const card = (
     <View className="rounded-3xl bg-section p-3 dark:bg-d-surface">
@@ -147,7 +155,7 @@ function StatTile({
         <Pressable
           onPress={onLockedPress}
           accessibilityRole="button"
-          accessibilityLabel={`${label}, VIP feature. Tap to unlock.`}
+          accessibilityLabel={vipA11y ?? label}
           className="active:opacity-90"
         >
           {card}

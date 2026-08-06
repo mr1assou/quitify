@@ -5,8 +5,8 @@ import { ResistedSuccessStage } from "@/components/feature/craving/CravingResult
 import { SmokedChoiceStage } from "@/components/feature/craving/CravingResult/stages/SmokedChoiceStage";
 import { useSmokedHeroSize } from "@/components/feature/craving/CravingResult/useSmokedHeroSize";
 import { LAPSE_CIGARETTE_COUNT } from "@/constants/stats/slipCigaretteCounts";
-import { LAPSE_OUTCOME_COPY, RELAPSE_OUTCOME_COPY } from "@/constants/stats/slipOutcomeCopy";
 import { useCravingResultFlow } from "@/hooks/craving/useCravingResultFlow";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { CravingResultInitialStage, CravingResultSubmitInput } from "@/types/stats/slipFlow";
 
 export type CravingResultProps = {
@@ -26,6 +26,7 @@ export function CravingResult({
   initialStage = "ask",
   isSubmitting = false,
 }: CravingResultProps) {
+  const { t } = useTranslation();
   const heroSize = useSmokedHeroSize();
   const { stage, setStage, submitSlip, submitResisted } = useCravingResultFlow({
     initialStage,
@@ -64,10 +65,28 @@ export function CravingResult({
       );
 
     case "done-lapse":
-      return <SlipOutcomeResult heroSize={heroSize} {...LAPSE_OUTCOME_COPY} onDone={onDone} />;
+      return (
+        <SlipOutcomeResult
+          heroSize={heroSize}
+          imageAccessibilityLabel={t("craving.slipLapseImageA11y")}
+          title={t("craving.slipLapseTitle")}
+          subtitle={t("craving.slipLapseSubtitle")}
+          buttonLabel={t("craving.slipLapseCta")}
+          onDone={onDone}
+        />
+      );
 
     case "done-relapse":
-      return <SlipOutcomeResult heroSize={heroSize} {...RELAPSE_OUTCOME_COPY} onDone={onDone} />;
+      return (
+        <SlipOutcomeResult
+          heroSize={heroSize}
+          imageAccessibilityLabel={t("craving.slipRelapseImageA11y")}
+          title={t("craving.slipRelapseTitle")}
+          subtitle={t("craving.slipRelapseSubtitle")}
+          buttonLabel={t("craving.slipRelapseCta")}
+          onDone={onDone}
+        />
+      );
 
     default:
       return <ResistedSuccessStage onDone={onDone} />;

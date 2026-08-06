@@ -9,6 +9,7 @@ import { SMOKED_RESULT_IMAGE } from "@/constants/app/assets";
 import type { SlipOutcomeCopy } from "@/constants/stats/slipOutcomeCopy";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useProgress } from "@/hooks/progress/useProgress";
 import { resolveHighestUnlockedBadgeId } from "@/utils/progress/badges";
 
@@ -47,6 +48,7 @@ export function SlipOutcomeResult({
   onDone,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const isPremium = useIsPremium();
   const progress = useProgress();
   const badgeId =
@@ -85,13 +87,13 @@ export function SlipOutcomeResult({
               iconColor={colors.white}
             />
           }
-          label="Your Freedom Points"
-          value="Kept"
+          label={t("craving.slipFreedomPoints")}
+          value={t("craving.slipKept")}
         />
         <SlipKeepsRow
           leading={<BadgeArt badgeId={badgeId} size={36} />}
-          label="Your badges"
-          value="Kept"
+          label={t("craving.slipBadges")}
+          value={t("craving.slipKept")}
         />
         <SlipKeepsRow
           leading={
@@ -101,8 +103,8 @@ export function SlipOutcomeResult({
               iconColor={colors.white}
             />
           }
-          label="Your rank"
-          value="Kept"
+          label={t("craving.slipRank")}
+          value={t("craving.slipKept")}
         />
         <View className="h-px bg-section dark:bg-d-border" />
         <SlipKeepsRow
@@ -113,8 +115,8 @@ export function SlipOutcomeResult({
               iconColor={colors.white}
             />
           }
-          label="Smoke-free streak"
-          value="Resets"
+          label={t("craving.slipStreak")}
+          value={t("craving.slipResets")}
           valueColor={colors.primary}
         />
       </Animated.View>

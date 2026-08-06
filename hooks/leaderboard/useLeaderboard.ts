@@ -72,14 +72,17 @@ export function useLeaderboard(): UseLeaderboardResult {
   const [snapshot, setSnapshot] = useState<LeaderboardSnapshot | null>(
     () => getLeaderboardCache(),
   );
-  const [loading, setLoading] = useState(!getLeaderboardCache());
+  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(getLeaderboardCache()?.hasMore ?? false);
   const loadingMoreRef = useRef(false);
 
   const loadPage = useCallback(
     async (offset: number, append: boolean) => {
-      if (!appState.account) return;
+      if (!appState.account) {
+        if (!append) setLoading(false);
+        return;
+      }
 
       if (append) {
         if (loadingMoreRef.current) return;

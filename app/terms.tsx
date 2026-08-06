@@ -4,16 +4,18 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export default function Terms() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
       <View className="flex-row items-center justify-between px-4 pt-2">
         <View className="w-10" />
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Terms
+          {t("legal.termsShort")}
         </Text>
         <Pressable
           onPress={() => router.back()}
@@ -28,10 +30,10 @@ export default function Terms() {
         contentContainerStyle={{ paddingBottom: 32 }}
       >
         <Text className="text-2xl font-bold text-foreground dark:text-d-text">
-          Terms and conditions
+          {t("legal.termsTitle")}
         </Text>
         <Text className="mt-4 text-base leading-6 text-muted-foreground dark:text-d-muted">
-          This is a placeholder. Replace with your final legal text before release.
+          {t("legal.placeholder")}
         </Text>
       </ScrollView>
     </ScreenCanvas>

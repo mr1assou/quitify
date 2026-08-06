@@ -12,6 +12,7 @@ import {
 
 import { QuitStartPresetPicker } from "@/components/feature/onboarding/QuitPlanFields/QuitStartPresetPicker";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
 import type {
   QuitDateApiPayload,
@@ -22,14 +23,6 @@ import {
   isQuitStartDateComplete,
   resolveQuitDatePayload,
 } from "@/utils/onboarding/resolveQuitDatePayload";
-
-const LOSS_ITEMS = [
-  "All badges earned",
-  "Freedom points balance",
-  "Goals achieved",
-  "Quit attempts and streak history",
-  "Plan day progress",
-] as const;
 
 export type ResetJourneyModalState =
   | { type: "confirm" }
@@ -44,8 +37,20 @@ type Props = {
 
 export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [quitDraft, setQuitDraft] = useState<QuitStartDateDraft>(() =>
     initialQuitStartDateDraft(),
+  );
+
+  const lossItems = useMemo(
+    () => [
+      t("profile.resetLossBadges"),
+      t("profile.resetLossFp"),
+      t("profile.resetLossGoals"),
+      t("profile.resetLossAttempts"),
+      t("profile.resetLossPlan"),
+    ],
+    [t],
   );
 
   useEffect(() => {
@@ -89,7 +94,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
         {canDismiss ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Close"
+            accessibilityLabel={t("common.close")}
             className="absolute inset-0 bg-black/50"
             onPress={handleClose}
           />
@@ -112,7 +117,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                 </View>
 
                 <Text className="mt-5 text-center text-xl font-bold text-foreground dark:text-d-text">
-                  Reset my journey?
+                  {t("profile.resetTitle")}
                 </Text>
               </View>
 
@@ -129,10 +134,10 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
 
               <View className="mt-5 rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
                 <Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-                  You will lose
+                  {t("profile.resetWillLose")}
                 </Text>
                 <View className="mt-2 gap-1.5">
-                  {LOSS_ITEMS.map((item) => (
+                  {lossItems.map((item) => (
                     <View key={item} className="flex-row items-start">
                       <Text className="mr-2 text-alert">•</Text>
                       <Text className="flex-1 text-sm leading-5 text-foreground dark:text-d-text">
@@ -153,7 +158,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                   }`}
                 >
                   <Text className="text-center text-base font-bold text-white">
-                    Reset my journey
+                    {t("profile.resetCta")}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -162,7 +167,7 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                   className="items-center py-2"
                 >
                   <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
-                    Cancel
+                    {t("common.cancel")}
                   </Text>
                 </Pressable>
               </View>
@@ -174,10 +179,10 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
             <View className="items-center px-6 py-7">
               <ActivityIndicator size="large" color={colors.primary} />
               <Text className="mt-5 text-center text-base font-semibold text-foreground dark:text-d-text">
-                Resetting your journey…
+                {t("profile.resetting")}
               </Text>
               <Text className="mt-2 text-center text-sm text-muted-foreground dark:text-d-muted">
-                Please wait a moment.
+                {t("profile.resettingHint")}
               </Text>
             </View>
           ) : null}
@@ -208,7 +213,9 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
                   onPress={handleClose}
                   className="rounded-2xl bg-primary px-10 py-3.5"
                 >
-                  <Text className="text-center text-base font-bold text-white">Got it</Text>
+                  <Text className="text-center text-base font-bold text-white">
+                    {t("common.gotIt")}
+                  </Text>
                 </Pressable>
               </View>
             </View>

@@ -1,6 +1,7 @@
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
+import { LanguageToggleButton } from "@/components/layout/LanguageToggleButton";
 import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
 import { WEBSITE_TERMS_URL } from "@/constants/app/website";
@@ -15,6 +16,7 @@ export function WelcomeScreen() {
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
       <View className="flex-row items-center justify-end gap-2 px-6 pt-3">
+        <LanguageToggleButton />
         <ThemeToggleButton />
       </View>
 

@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   noteCount: number;
@@ -10,17 +11,18 @@ type Props = {
 
 export function MissionPlanNotesButton({ noteCount, onPress }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel="Your notes"
+      accessibilityLabel={t("missions.yourNotes")}
       className="flex-row items-center gap-1.5 rounded-full border border-border/50 bg-section px-3 py-2 active:opacity-80 dark:border-d-border/60 dark:bg-d-surface"
     >
       <Ionicons name="document-text-outline" size={15} color={colors.primary} />
       <Text className="text-xs font-semibold text-foreground dark:text-d-text">
-        Your notes
+        {t("missions.yourNotes")}
       </Text>
       {noteCount > 0 ? (
         <View className="min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1">

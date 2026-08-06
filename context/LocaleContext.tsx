@@ -1,12 +1,21 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useState,
   type ReactNode,
 } from "react";
 
-import { DEFAULT_LOCALE, languageMeta } from "@/constants/i18n/languages";
-import { initQuitPlanLocale } from "@/i18n/content/quitPlanStore";
+import {
+  DEFAULT_LOCALE,
+  LOCALE_STORAGE_KEY,
+  languageMeta,
+  normalizeStoredLocale,
+} from "@/constants/i18n/languages";
+import { initQuitPlanLocale, setQuitPlanLocale } from "@/i18n/content/quitPlanStore";
 import { createTranslator } from "@/i18n/translate";
 import type { AppLocale } from "@/types/i18n/locale";
 import type { TranslationKey } from "@/i18n/translate";
@@ -25,15 +34,44 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 initQuitPlanLocale(DEFAULT_LOCALE);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const t = useMemo(() => createTranslator(DEFAULT_LOCALE), []);
+  const [locale, setLocaleState] = useState<AppLocale>(DEFAULT_LOCALE);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(LOCALE_STORAGE_KEY);
+        const stored = normalizeStoredLocale(raw);
+        if (!cancelled && stored) {
+          setLocaleState(stored);
+          setQuitPlanLocale(stored);
+        }
+      } catch {
+        // Keep DEFAULT_LOCALE until the user chooses.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const setLocale = useCallback((next: AppLocale) => {
+    setLocaleState(next);
+    setQuitPlanLocale(next);
+    void AsyncStorage.setItem(LOCALE_STORAGE_KEY, next).catch(() => {});
+  }, []);
+
+  const t = useMemo(() => createTranslator(locale), [locale]);
 
   const value = useMemo<LocaleContextValue>(
     () => ({
-      locale: DEFAULT_LOCALE,
-      setLocale: () => {},
+      locale,
+      setLocale,
       t,
     }),
-    [t],
+    [locale, setLocale, t],
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

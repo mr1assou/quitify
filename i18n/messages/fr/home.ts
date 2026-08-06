@@ -1,0 +1,17 @@
+export const home = {
+  streakLabel: "Série en cours",
+  attempt: "Tentative {{n}}",
+  since: "Depuis le {{date}}",
+  saved: "économisés",
+  cigsAvoided: "cigs évitées",
+  lifeGained: "de vie gagnée",
+  cravingCta: "J'ai une envie",
+  slipCta: "Vous avez fumé ?",
+  recoveryTitle: "Votre récupération",
+  goalsTitle: "Vos objectifs",
+  ringNicotine: "Nicotine éliminée",
+  ringBreathing: "Respiration",
+  ringHeart: "Santé cardiaque",
+  notificationsTitle: "Restez motivé",
+  notificationsCta: "Motivez moi",
+} as const;

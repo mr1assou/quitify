@@ -1,6 +1,8 @@
 import { Pressable, Text, View } from "react-native";
 
 import { RANGE_OPTIONS, STATS_FILTER_OPTIONS } from "@/constants/stats/statsRanges";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/translate";
 import type { StatsRange } from "@/types/stats/statsDashboard";
 import type { StatsFilterRange } from "@/types/stats/userStats";
 
@@ -18,11 +20,31 @@ type ChartProps = {
 
 type Props = FilterProps | ChartProps;
 
+const FILTER_LABEL_KEY: Record<StatsFilterRange, TranslationKey> = {
+  "7d": "stats.range7d",
+  "30d": "stats.range30d",
+  "90d": "stats.range90d",
+  lifetime: "stats.rangeLifetime",
+};
+
+const CHART_LABEL_KEY: Record<StatsRange, TranslationKey> = {
+  "7d": "stats.range7d",
+  "30d": "stats.range30d",
+  "90d": "stats.range90d",
+};
+
 export function RangeTabs(props: Props) {
+  const { t } = useTranslation();
   const options =
     props.variant === "filter"
-      ? STATS_FILTER_OPTIONS
-      : RANGE_OPTIONS.map((opt) => ({ id: opt.id, label: opt.label }));
+      ? STATS_FILTER_OPTIONS.map((opt) => ({
+          id: opt.id,
+          label: t(FILTER_LABEL_KEY[opt.id]),
+        }))
+      : RANGE_OPTIONS.map((opt) => ({
+          id: opt.id,
+          label: t(CHART_LABEL_KEY[opt.id]),
+        }));
 
   return (
     <View className="flex-row rounded-2xl bg-section p-1 dark:bg-d-surface">

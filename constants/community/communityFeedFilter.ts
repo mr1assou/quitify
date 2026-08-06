@@ -1,26 +1,27 @@
-import type { PostTagId } from '@/constants/community/postTags';
-import type { PostFeedSort } from '@/types/community/communityFeedFilter';
+import type { PostTagId } from "@/constants/community/postTags";
+import type { TranslationKey } from "@/i18n/translate";
+import type { PostFeedSort } from "@/types/community/communityFeedFilter";
 
 export const COMMUNITY_FEED_SORT_OPTIONS: {
   id: PostFeedSort;
-  label: string;
+  labelKey: TranslationKey;
 }[] = [
   {
-    id: 'newest',
-    label: 'Newest',
+    id: "newest",
+    labelKey: "community.newest",
   },
   {
-    id: 'hottest',
-    label: 'Most popular',
+    id: "hottest",
+    labelKey: "community.mostPopular",
   },
   {
-    id: 'most_commented',
-    label: 'Most discussed',
+    id: "most_commented",
+    labelKey: "community.mostDiscussed",
   },
 ];
 
 export const DEFAULT_COMMUNITY_FEED_FILTER = {
-  sort: 'newest' as const,
+  sort: "newest" as const,
   tagId: null as PostTagId | null,
 };
 
@@ -36,9 +37,12 @@ export function isDefaultCommunityFeedFilter(
 export function communityFeedFilterSummary(
   sort: PostFeedSort,
   tagId: PostTagId | null,
+  t: (key: TranslationKey) => string,
 ): string {
-  const sortLabel =
-    COMMUNITY_FEED_SORT_OPTIONS.find((option) => option.id === sort)?.label ?? 'Newest';
+  const sortKey =
+    COMMUNITY_FEED_SORT_OPTIONS.find((option) => option.id === sort)?.labelKey ??
+    "community.newest";
+  const sortLabel = t(sortKey);
   if (!tagId) return sortLabel;
-  return `${sortLabel} · 1 topic`;
+  return `${sortLabel} · ${t("community.oneTopic")}`;
 }

@@ -6,6 +6,7 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { BadgeWithStatus } from "@/types/progress/progress";
 import { progressToPercent } from "@/utils/progress/achievementProgress";
 
@@ -17,6 +18,7 @@ type Props = {
 
 export function NextBadgeCard({ currentBadge, progress, hasNextTarget }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const pct = progressToPercent(progress);
 
   if (!currentBadge && !hasNextTarget) {
@@ -27,7 +29,7 @@ export function NextBadgeCard({ currentBadge, progress, hasNextTarget }: Props) 
             <Ionicons name="sparkles" size={18} color={colors.white} />
           </View>
           <Text className="flex-1 text-sm font-semibold text-foreground dark:text-d-text">
-            Every badge is unlocked. You set the bar now.
+            {t("achievements.allUnlocked")}
           </Text>
         </Card>
       </Animated.View>
@@ -57,7 +59,7 @@ export function NextBadgeCard({ currentBadge, progress, hasNextTarget }: Props) 
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Current badge
+              {t("achievements.currentBadge")}
             </Text>
             <Text className="mt-0.5 text-base font-bold text-foreground dark:text-d-text">
               {currentBadge?.name ?? "—"}

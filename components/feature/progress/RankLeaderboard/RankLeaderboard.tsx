@@ -5,6 +5,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
 
@@ -40,6 +41,7 @@ function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
 }
 
 export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore }: Props) {
+  const { t } = useTranslation();
   const { pinnedViewer, pageRows } = useMemo(
     () => buildVisibleRows(leaderboard),
     [leaderboard],
@@ -50,7 +52,7 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
       <Card variant="section" padded={false}>
         <View className="border-b border-border/50 px-4 py-3 dark:border-d-border">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Global leaderboard
+            {t("achievements.globalLeaderboard")}
           </Text>
         </View>
 
@@ -75,7 +77,7 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
           {pageRows.length === 0 && !pinnedViewer ? (
             <View className="px-4 py-6">
               <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                No players on the leaderboard yet.
+                {t("achievements.leaderboardEmpty")}
               </Text>
             </View>
           ) : null}
@@ -87,7 +89,7 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
                   <ActivityIndicator />
                 </View>
               ) : (
-                <Button label="Load more" variant="secondary" fullWidth onPress={onLoadMore} />
+                <Button label={t("achievements.loadMore")} variant="secondary" fullWidth onPress={onLoadMore} />
               )}
             </View>
           ) : null}

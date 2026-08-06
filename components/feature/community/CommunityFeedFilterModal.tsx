@@ -9,6 +9,8 @@ import {
 } from "@/constants/community/communityFeedFilter";
 import { POST_TAGS } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/translate";
 import type { CommunityFeedFilter, PostFeedSort } from "@/types/community/communityFeedFilter";
 
 type Props = {
@@ -18,8 +20,15 @@ type Props = {
   onClose: () => void;
 };
 
+const SORT_LABEL_KEY: Record<PostFeedSort, TranslationKey> = {
+  newest: "community.newest",
+  hottest: "community.mostPopular",
+  most_commented: "community.mostDiscussed",
+};
+
 export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [draft, setDraft] = useState<CommunityFeedFilter>(filter);
 
@@ -48,9 +57,8 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
           <View className="mb-5 flex-row items-center justify-between">
             <View>
               <Text className="text-lg font-bold text-foreground dark:text-d-text">
-                Filter posts
+                {t("community.filterPosts")}
               </Text>
-           
             </View>
             <Pressable onPress={onClose} hitSlop={8}>
               <Ionicons name="close" size={24} color={colors.foreground} />
@@ -59,21 +67,23 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text className="mb-3 text-xs font-bold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Sort by
+              {t("community.sortBy")}
             </Text>
             <View className="gap-2">
               {COMMUNITY_FEED_SORT_OPTIONS.map((option) => (
                 <SortOptionRow
                   key={option.id}
-                  option={option}
+                  label={t(SORT_LABEL_KEY[option.id])}
                   selected={draft.sort === option.id}
-                  onSelect={(sort) => setDraft((current) => ({ ...current, sort }))}
+                  onSelect={() =>
+                    setDraft((current) => ({ ...current, sort: option.id }))
+                  }
                 />
               ))}
             </View>
 
             <Text className="mb-3 mt-6 text-xs font-bold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Topics
+              {t("community.topics")}
             </Text>
             <Pressable
               onPress={() => setDraft((current) => ({ ...current, tagId: null }))}
@@ -87,7 +97,7 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
                 className="text-sm font-semibold"
                 style={{ color: draft.tagId === null ? colors.primary : colors.foreground }}
               >
-                All topics
+                {t("community.allTopics")}
               </Text>
             </Pressable>
 
@@ -126,14 +136,16 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
               onPress={reset}
               className="flex-1 items-center justify-center rounded-full border border-section py-3 dark:border-d-border"
             >
-              <Text className="text-sm font-bold text-foreground dark:text-d-text">Reset</Text>
+              <Text className="text-sm font-bold text-foreground dark:text-d-text">
+                {t("community.resetFilters")}
+              </Text>
             </Pressable>
             <Pressable
               onPress={apply}
               className="flex-1 items-center justify-center rounded-full py-3"
               style={{ backgroundColor: colors.primary }}
             >
-              <Text className="text-sm font-bold text-white">Show posts</Text>
+              <Text className="text-sm font-bold text-white">{t("community.showPosts")}</Text>
             </Pressable>
           </View>
         </View>
@@ -143,19 +155,19 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
 }
 
 function SortOptionRow({
-  option,
+  label,
   selected,
   onSelect,
 }: {
-  option: (typeof COMMUNITY_FEED_SORT_OPTIONS)[number];
+  label: string;
   selected: boolean;
-  onSelect: (sort: PostFeedSort) => void;
+  onSelect: () => void;
 }) {
   const { colors } = useTheme();
 
   return (
     <Pressable
-      onPress={() => onSelect(option.id)}
+      onPress={onSelect}
       className="flex-row items-center rounded-2xl border px-4 py-3"
       style={{
         borderColor: selected ? colors.primary : colors.border,
@@ -173,7 +185,7 @@ function SortOptionRow({
         ) : null}
       </View>
       <View className="min-w-0 flex-1">
-        <Text className="text-sm font-bold text-foreground dark:text-d-text">{option.label}</Text>
+        <Text className="text-sm font-bold text-foreground dark:text-d-text">{label}</Text>
       </View>
     </Pressable>
   );

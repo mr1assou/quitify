@@ -8,11 +8,13 @@ import { PlanDayLockedModal } from "@/components/feature/missions/PlanDayLockedM
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { StackScreenHeader } from "@/components/layout/StackScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useOpenPlanDay } from "@/hooks/progress/useOpenPlanDay";
 import { usePlanTaskNotes } from "@/hooks/progress/usePlanTaskNotes";
 import type { PlanTaskNote } from "@/utils/progress/planTaskNotes";
 
 export function MissionPlanNotesScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const { notes, loading, refresh } = usePlanTaskNotes();
@@ -32,7 +34,7 @@ export function MissionPlanNotesScreen() {
 
   return (
     <ScreenCanvas edges={["top"]}>
-      <StackScreenHeader title="Your notes" />
+      <StackScreenHeader title={t("missions.yourNotes")} />
 
       {loading && notes.length === 0 ? (
         <View className="flex-1 items-center justify-center">
@@ -53,11 +55,10 @@ export function MissionPlanNotesScreen() {
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center px-4 py-16">
               <Text className="text-center text-base font-semibold text-foreground dark:text-d-text">
-                No notes yet
+                {t("missions.notesEmpty")}
               </Text>
               <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-                Open a day on the map, swipe to a task, and tap Add note to save your thoughts
-                here.
+                {t("missions.notesEmptyHint")}
               </Text>
             </View>
           }

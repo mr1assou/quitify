@@ -84,7 +84,7 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
             numberOfLines={1}
             style={{ color: filterActive ? colors.primary : colors.foreground }}
           >
-            {communityFeedFilterSummary(filter.sort, filter.tagId)}
+            {communityFeedFilterSummary(filter.sort, filter.tagId, t)}
           </Text>
           {filterActive ? (
             <View

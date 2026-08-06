@@ -8,6 +8,8 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+
 const HEADPHONE_IMAGE = require("../../../../../assets/images/headphones/headphone.webp");
 
 type Props = {
@@ -17,6 +19,7 @@ type Props = {
 };
 
 export function RelaxSoundHeadphonesModal({ visible, onContinue, onClose }: Props) {
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const imageSize = Math.min(width * 0.52, 220);
 
@@ -55,11 +58,11 @@ export function RelaxSoundHeadphonesModal({ visible, onContinue, onClose }: Prop
             />
 
             <Text className="mt-5 text-center text-xl font-bold text-foreground dark:text-d-text">
-              Put on your headphones and relax
+              {t("craving.headphonesTitle")}
             </Text>
 
             <Text className="mt-2 text-center text-sm text-muted-foreground dark:text-d-muted">
-              Find a quiet moment and let the sounds ease your craving.
+              {t("craving.headphonesSubtitle")}
             </Text>
           </View>
 
@@ -69,7 +72,9 @@ export function RelaxSoundHeadphonesModal({ visible, onContinue, onClose }: Prop
               onPress={handleContinue}
               className="rounded-2xl bg-primary px-10 py-3.5 dark:bg-primary"
             >
-              <Text className="text-center text-base font-bold text-white">Continue</Text>
+              <Text className="text-center text-base font-bold text-white">
+                {t("craving.headphonesContinue")}
+              </Text>
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -77,7 +82,7 @@ export function RelaxSoundHeadphonesModal({ visible, onContinue, onClose }: Prop
               className="items-center py-2"
             >
               <Text className="text-sm font-semibold text-muted-foreground dark:text-d-muted">
-                Not now
+                {t("craving.headphonesNotNow")}
               </Text>
             </Pressable>
           </View>

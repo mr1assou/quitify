@@ -2,6 +2,8 @@ import * as ImagePicker from "expo-image-picker";
 import { useCallback } from "react";
 import { Alert } from "react-native";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+
 export type ChatMediaPick = {
   uri: string;
   kind: "image" | "video" | "audio";
@@ -11,10 +13,12 @@ export type ChatMediaPick = {
 };
 
 export function usePickChatMedia() {
+  const { t } = useTranslation();
+
   const pickFromGallery = useCallback(async (): Promise<ChatMediaPick[]> => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
-      Alert.alert("Permission needed", "Allow photo access to send images and videos.");
+      Alert.alert(t("chat.permissionNeeded"), t("chat.photoPermission"));
       return [];
     }
 
@@ -40,7 +44,7 @@ export function usePickChatMedia() {
       });
     }
     return items;
-  }, []);
+  }, [t]);
 
   return { pickFromGallery };
 }

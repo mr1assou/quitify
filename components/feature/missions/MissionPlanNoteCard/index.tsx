@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 
-import { missionPlanLabel } from "@/constants/progress/plan";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { PlanTaskNote } from "@/utils/progress/planTaskNotes";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
 
 export function MissionPlanNoteCard({ entry, onPress }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Pressable
@@ -20,7 +21,7 @@ export function MissionPlanNoteCard({ entry, onPress }: Props) {
     >
       <View className="flex-row items-center justify-between gap-3">
         <Text className="text-xs font-semibold uppercase tracking-wide text-primary">
-          {missionPlanLabel(entry.planDay)}
+          {t("missions.dayShort", { day: entry.planDay })}
         </Text>
         <Ionicons name="chevron-forward" size={16} color={colors.mutedForeground} />
       </View>

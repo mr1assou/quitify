@@ -19,7 +19,8 @@ export default function AchievementScreen() {
   const { colors } = useTheme();
   const progress = useProgress();
   const refreshAccount = useRefreshAccount();
-  const { snapshot: leaderboard, loading, hasMore, loadingMore, loadMore } = useLeaderboard();
+  const { snapshot: leaderboard, loading, hasMore, loadingMore, loadMore, refresh } =
+    useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
   useFocusEffect(
@@ -27,6 +28,13 @@ export default function AchievementScreen() {
       void refreshAccount();
     }, [refreshAccount]),
   );
+
+  const handleSectionChange = (next: AchievementSection) => {
+    setSection(next);
+    if (next === "rank") {
+      void refresh();
+    }
+  };
 
   if (!progress) return null;
 
@@ -36,24 +44,20 @@ export default function AchievementScreen() {
         <ScreenHeader leading={<AppBrandMark />} />
 
         <View className="mt-6 gap-4 px-6">
-          <AchievementSectionTabs value={section} onChange={setSection} />
+          <AchievementSectionTabs value={section} onChange={handleSectionChange} />
 
           {section === "rank" ? (
-            loading && !leaderboard ? (
+            loading || !leaderboard ? (
               <View className="items-center py-16">
                 <ActivityIndicator size="large" color={colors.primary} />
               </View>
-            ) : leaderboard ? (
+            ) : (
               <RankLeaderboard
                 leaderboard={leaderboard}
                 hasMore={hasMore}
                 loadingMore={loadingMore}
                 onLoadMore={loadMore}
               />
-            ) : (
-              <View className="items-center py-16">
-                <ActivityIndicator size="large" color={colors.primary} />
-              </View>
             )
           ) : (
             <>

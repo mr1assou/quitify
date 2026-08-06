@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
@@ -52,10 +52,6 @@ export default function ProfileModal() {
             onSignOut={() => void signOut()}
           />
         </View>
-
-        <Text className="mt-8 text-center text-xs text-muted-foreground dark:text-d-muted">
-          {t("profile.version")}
-        </Text>
       </ScrollView>
     </ScreenCanvas>
   );

@@ -4,6 +4,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { GlobalRank } from "@/types/progress/progress";
 import { formatNumber } from "@/utils/shared/format";
 
@@ -13,6 +14,7 @@ type Props = {
 
 export function GlobalRankCard({ rank }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const positionDisplay = formatNumber(rank.position);
   const totalDisplay = formatNumber(rank.total);
 
@@ -25,7 +27,7 @@ export function GlobalRankCard({ rank }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Global rank
+              {t("profile.globalRank")}
             </Text>
             <Text className="mt-0.5 text-base font-bold text-foreground dark:text-d-text">
               {rank.band.label}

@@ -12,6 +12,7 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import type { ChatThreadPreview } from "@/hooks/chat/useChat";
 import { useChatParticipantPresence } from "@/hooks/chat/useChatParticipantPresence";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import { getBadgeName } from "@/utils/progress/badges";
 import { formatMessageListTime } from "@/utils/chat/formatMessageTime";
@@ -23,6 +24,7 @@ type Props = {
 
 export function ChatListRow({ preview }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { participant, lastMessage, unreadCount, threadId, lastOutgoingReadStatus } = preview;
   const { isOnline } = useChatParticipantPresence(participant);
   const timeZone = useUserTimezone();
@@ -30,7 +32,7 @@ export function ChatListRow({ preview }: Props) {
   const avatarRank = participant.leaderboardRank || participant.avatarRank || 1;
   const isSupportPeer = isSupportStaffUser(participant);
 
-  const lastText = lastMessage ? formatChatMessagePreview(lastMessage) : "Say hi 👋";
+  const lastText = lastMessage ? formatChatMessagePreview(lastMessage) : t("chat.sayHi");
   const lastFromMe = lastMessage?.senderId === "me";
 
   return (

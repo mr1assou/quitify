@@ -4,6 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { getBadgeName } from "@/utils/progress/badges";
 
@@ -18,20 +19,28 @@ type Props = {
   onEditAvatarPress?: () => void;
 };
 
-function presenceLabel(isOnline?: boolean): string | null {
+function presenceLabel(
+  isOnline: boolean | undefined,
+  online: string,
+  offline: string,
+): string | null {
   if (typeof isOnline !== "boolean") return null;
-  return isOnline ? "Online" : "Offline";
+  return isOnline ? online : offline;
 }
 
 function ProfileSubtitle({
   isOnline,
   suffix,
+  onlineLabel,
+  offlineLabel,
 }: {
   isOnline?: boolean;
   suffix?: string;
+  onlineLabel: string;
+  offlineLabel: string;
 }) {
   const { colors } = useTheme();
-  const label = presenceLabel(isOnline);
+  const label = presenceLabel(isOnline, onlineLabel, offlineLabel);
   if (!label) return null;
 
   return (
@@ -52,11 +61,13 @@ export function UserProfileHero({
   onProfilePress,
   onEditAvatarPress,
 }: Props) {
+  const { t } = useTranslation();
   const badgeName = getBadgeName(profile.badgeId);
   const avatarRank = profile.rank > 0 ? profile.rank : 1;
   const canEditAvatar = profile.isCurrentUser && Boolean(onEditAvatarPress);
   const showOnlineDot = typeof profile.isOnline === "boolean" && !canEditAvatar;
   const memberSince = memberSinceLabel?.trim() || profile.memberSinceLabel?.trim();
+  const memberSuffix = isPremium ? t("profile.vipMember") : t("profile.member");
 
   const avatar = (
     <View>
@@ -73,7 +84,7 @@ export function UserProfileHero({
         <Pressable
           onPress={onEditAvatarPress}
           className="absolute bottom-0 right-0 z-10 h-8 w-8 items-center justify-center rounded-full bg-primary"
-          accessibilityLabel="Change profile photo"
+          accessibilityLabel={t("achievements.profilePhoto")}
         >
           <Ionicons name="camera" size={16} color="#fff" />
         </Pressable>
@@ -100,7 +111,9 @@ export function UserProfileHero({
 
         <ProfileSubtitle
           isOnline={profile.isOnline}
-          suffix={isPremium ? "VIP member" : "Member"}
+          suffix={memberSuffix}
+          onlineLabel={t("profile.online")}
+          offlineLabel={t("profile.offline")}
         />
       </View>
     );
@@ -118,22 +131,24 @@ export function UserProfileHero({
 
           <ProfileSubtitle
             isOnline={profile.isOnline}
-            suffix={
-              profile.isCurrentUser ? (isPremium ? "VIP member" : "Member") : undefined
-            }
+            suffix={profile.isCurrentUser ? memberSuffix : undefined}
+            onlineLabel={t("profile.online")}
+            offlineLabel={t("profile.offline")}
           />
 
           <View className="mt-3 flex-row items-center gap-2.5">
             <BadgeArt badgeId={profile.badgeId} size={44} />
             <View className="min-w-0 flex-1">
               <Text className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                Current badge
+                {t("achievements.currentBadge")}
               </Text>
               <Text className="text-base font-bold text-foreground dark:text-d-text">
                 {badgeName}
               </Text>
               <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
-                {memberSince ? `Member since ${memberSince}` : "Member"}
+                {memberSince
+                  ? t("profile.memberSince", { date: memberSince })
+                  : t("profile.member")}
               </Text>
             </View>
           </View>

@@ -13,6 +13,7 @@ import {
 } from "@/constants/progress/badges";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { BadgeWithStatus } from "@/types/progress/progress";
 import { formatNumber, pluralize } from "@/utils/shared/format";
 
@@ -66,6 +67,7 @@ function RequirementRow({
 
 export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { state } = useApp();
   const earnedBadgeIds = state.account?.earnedBadgeIds ?? [];
   const insets = useSafeAreaInsets();
@@ -89,14 +91,14 @@ export function BadgeDetailModal({ badge, hasAccount, hasCommittedToQuit, onClos
   const displayGoalsProgress = earnable && !isFirstStep ? (badge?.goalsProgress ?? 0) : 0;
 
   const statusLabel = !earnable
-    ? "Locked"
+    ? t("achievements.locked")
     : badge?.unlocked
-      ? "Earned"
+      ? t("achievements.earned")
       : isFirstStep
         ? hasCommittedToQuit
-          ? "In progress"
-          : "Available"
-        : "In progress";
+          ? t("achievements.inProgress")
+          : t("achievements.available")
+        : t("achievements.inProgress");
 
   return (
     <Modal visible={badge !== null} transparent animationType="fade" onRequestClose={handleClose}>

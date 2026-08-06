@@ -20,6 +20,7 @@ import { CigarettesPerPackField } from "@/components/feature/onboarding/Nicotine
 import { PackCostField } from "@/components/feature/onboarding/NicotineConsumptionFields/PackCostField";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { updateHabitSettingsOnServer } from "@/services/auth/habitSettingsApi";
 import type { UserProfile } from "@/types/profile/profile";
 import { buildProfileFromMe } from "@/utils/auth/buildProfileFromMe";
@@ -164,6 +165,7 @@ function HabitSettingsSheet({
   onSave,
 }: SheetProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <View className="flex-1 justify-end bg-black/50">
@@ -179,7 +181,7 @@ function HabitSettingsSheet({
           <View className="px-6 pb-2 pt-5">
           <View className="mb-5 flex-row items-center justify-between">
             <Text className="text-xl font-bold text-foreground dark:text-d-text">
-              Smoking settings
+              {t("settings.smokingSettings")}
             </Text>
             <Pressable
               accessibilityRole="button"
@@ -247,7 +249,7 @@ function HabitSettingsSheet({
             {saving ? (
               <ActivityIndicator color={colors.white} />
             ) : (
-              <Text className="text-base font-bold text-white">Save changes</Text>
+              <Text className="text-base font-bold text-white">{t("goals.saveChanges")}</Text>
             )}
           </Pressable>
           </View>

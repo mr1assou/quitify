@@ -2,9 +2,12 @@ import { Audio } from "expo-av";
 import { useCallback, useRef, useState } from "react";
 import { Alert } from "react-native";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+
 import type { ChatMediaPick } from "./usePickChatMedia";
 
 export function useRecordChatAudio() {
+  const { t } = useTranslation();
   const recordingRef = useRef<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
 
@@ -12,7 +15,7 @@ export function useRecordChatAudio() {
     try {
       const permission = await Audio.requestPermissionsAsync();
       if (!permission.granted) {
-        Alert.alert("Permission needed", "Allow microphone access to send voice messages.");
+        Alert.alert(t("chat.permissionNeeded"), t("chat.micPermission"));
         return false;
       }
 
@@ -28,10 +31,10 @@ export function useRecordChatAudio() {
       setIsRecording(true);
       return true;
     } catch {
-      Alert.alert("Recording failed", "Could not start voice recording.");
+      Alert.alert(t("chat.recordingFailed"), t("chat.recordingFailedHint"));
       return false;
     }
-  }, []);
+  }, [t]);
 
   const stopRecording = useCallback(async (): Promise<ChatMediaPick | null> => {
     const recording = recordingRef.current;

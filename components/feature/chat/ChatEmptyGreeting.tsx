@@ -9,6 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { GREETING_IMAGE } from "@/constants/app/assets";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const IMAGE_SIZE = 240;
 const FLOAT_DISTANCE = 8;
@@ -19,11 +20,12 @@ type Props = {
 
 /** Empty chat state — greeting art with a gentle up/down float. */
 export function ChatEmptyGreeting({ participantName }: Props) {
+  const { t } = useTranslation();
   const floatY = useSharedValue(-FLOAT_DISTANCE);
   const firstName = useMemo(() => {
     const trimmed = participantName.trim();
-    return trimmed.split(/\s+/)[0] || trimmed || "them";
-  }, [participantName]);
+    return trimmed.split(/\s+/)[0] || trimmed || t("chat.emptyNameFallback");
+  }, [participantName, t]);
 
   useEffect(() => {
     floatY.value = withRepeat(
@@ -50,10 +52,10 @@ export function ChatEmptyGreeting({ participantName }: Props) {
       />
 
       <Text className="mt-4 text-center text-lg font-semibold text-foreground dark:text-d-text">
-        Say hi to {firstName}
+        {t("chat.emptyGreeting", { name: firstName })}
       </Text>
       <Text className="mt-2 text-center text-sm leading-5 text-muted-foreground dark:text-d-muted">
-        Be respectful and supportive to each other. We&apos;re all here to quit smoking together.
+        {t("chat.emptyRespect")}
       </Text>
     </View>
   );

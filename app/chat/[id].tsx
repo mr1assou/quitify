@@ -27,6 +27,7 @@ import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useChatThread } from "@/hooks/chat/useChat";
 import { useChatThreadRealtime } from "@/hooks/chat/useChatThreadRealtime";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useProactiveChatGate } from "@/hooks/premium/useProactiveChatGate";
 import { useUserTimezone } from "@/hooks/shared/useUserTimezone";
 import type { ChatMessage } from "@/types/chat/chat";
@@ -57,6 +58,7 @@ export default function ChatThreadScreen() {
   const threadId = typeof id === "string" ? id : "";
   const detail = useChatThread(threadId);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const timeZone = useUserTimezone();
   const {
     state,
@@ -197,13 +199,13 @@ export default function ChatThreadScreen() {
         if (!ok) {
           setMessageModal({
             type: "error",
-            title: "Could not delete message",
-            message: "This message may no longer be deletable.",
+            title: t("chat.deleteMessageFailed"),
+            message: t("chat.deleteMessageNotDeletable"),
           });
         }
       });
     },
-    [deleteChatMessage, threadId],
+    [deleteChatMessage, threadId, t],
   );
 
   const onSaveEdit = async (messageId: string, text: string) => {
@@ -211,8 +213,8 @@ export default function ChatThreadScreen() {
     if (!ok) {
       setMessageModal({
         type: "error",
-        title: "Could not edit message",
-        message: "This message may no longer be editable.",
+        title: t("chat.editMessageFailed"),
+        message: t("chat.editMessageNotEditable"),
       });
       return;
     }

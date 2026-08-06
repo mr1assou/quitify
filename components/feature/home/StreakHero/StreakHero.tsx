@@ -44,8 +44,11 @@ export function StreakHero({
 
   return (
     <Animated.View entering={FadeIn.duration(450)} className="items-center">
-      <View className="flex-row items-center justify-center gap-2">
-        <Text className="text-sm font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+      <View className="flex-row flex-wrap items-center justify-center gap-2 px-2">
+        <Text
+          className="text-sm font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted"
+          numberOfLines={1}
+        >
           {t("home.streakLabel")}
         </Text>
         <View className="rounded-full bg-elevated px-2.5 py-0.5 dark:bg-d-surface">

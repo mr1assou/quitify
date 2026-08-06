@@ -7,6 +7,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useProfileActivity } from "@/hooks/community/useProfileActivity";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { FeedItem } from "@/types/community/community";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import type { ProfileActivityTab } from "@/types/profile/profileActivity";
@@ -15,25 +16,26 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 import { UserProfileActivityTabs } from "./UserProfileActivityTabsPanel";
 
-const LOCKED_TAB_COPY: Record<
-  ProfileActivityTab,
-  { icon: keyof typeof Ionicons.glyphMap; label: string }
-> = {
-  posts: { icon: "document-text-outline", label: "Posts" },
-  comments: { icon: "chatbubble-outline", label: "Comments" },
-  upvoted: { icon: "caret-up-outline", label: "Upvoted" },
-};
-
 type Props = {
   profile: PlayerProfile;
 };
 
 export function UserProfileActivity({ profile }: Props) {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<ProfileActivityTab>("posts");
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
   const lockActivity = !profile.isCurrentUser && !isPremium;
   const activity = useProfileActivity(profile, !lockActivity);
+
+  const lockedCopy: Record<
+    ProfileActivityTab,
+    { icon: keyof typeof Ionicons.glyphMap; label: string }
+  > = {
+    posts: { icon: "document-text-outline", label: t("profile.activityPosts") },
+    comments: { icon: "chatbubble-outline", label: t("profile.activityComments") },
+    upvoted: { icon: "caret-up-outline", label: t("profile.activityUpvoted") },
+  };
 
   return (
     <View className="gap-3">
@@ -41,8 +43,8 @@ export function UserProfileActivity({ profile }: Props) {
 
       {lockActivity ? (
         <ProfileActivityLocked
-          icon={LOCKED_TAB_COPY[tab].icon}
-          label={LOCKED_TAB_COPY[tab].label}
+          icon={lockedCopy[tab].icon}
+          label={lockedCopy[tab].label}
           onPress={requirePremium}
         />
       ) : null}
@@ -52,7 +54,7 @@ export function UserProfileActivity({ profile }: Props) {
           items={activity.postFeed}
           loading={activity.loading}
           emptyIcon="document-text-outline"
-          emptyMessage="No posts yet."
+          emptyMessage={t("profile.emptyPosts")}
           showOwnerActions={profile.isCurrentUser}
         />
       ) : null}
@@ -60,7 +62,7 @@ export function UserProfileActivity({ profile }: Props) {
       {!lockActivity && tab === "comments" ? (
         <ActivityList
           emptyIcon="chatbubble-outline"
-          emptyMessage="No comments yet."
+          emptyMessage={t("profile.emptyComments")}
           isEmpty={!activity.loading && activity.comments.length === 0}
           loading={activity.loading}
         >
@@ -94,7 +96,7 @@ export function UserProfileActivity({ profile }: Props) {
           items={activity.upvotedFeed}
           loading={activity.loading}
           emptyIcon="caret-up-outline"
-          emptyMessage="No upvoted posts yet."
+          emptyMessage={t("profile.emptyUpvoted")}
           showOwnerActions={profile.isCurrentUser}
         />
       ) : null}

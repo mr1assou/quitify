@@ -6,6 +6,7 @@ import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 import { usePickChatMedia, type ChatMediaPick } from "./usePickChatMedia";
 import { useRecordChatAudio } from "./useRecordChatAudio";
@@ -42,10 +43,12 @@ export function MessageComposer({
   onCancelEdit,
 }: Props) {
   const { colors, resolved } = useTheme();
+  const { t } = useTranslation();
   const isDark = resolved === "dark";
   const insets = useSafeAreaInsets();
   const { progress } = useReanimatedKeyboardAnimation();
   const { pickFromGallery } = usePickChatMedia();
+  const resolvedPlaceholder = placeholder === "Message…" ? t("chat.composerPlaceholder") : placeholder;
 
   const MIN_BOTTOM_PADDING = 12;
   const containerStyle = useAnimatedStyle(() => ({
@@ -116,10 +119,10 @@ export function MessageComposer({
       {isEditing ? (
         <View className="flex-row items-center justify-between px-4 pb-2 pt-3">
           <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-            Edit message
+            {t("chat.editMessage")}
           </Text>
           <Pressable onPress={onCancelEdit} hitSlop={8}>
-            <Text className="text-sm font-semibold text-primary">Cancel</Text>
+            <Text className="text-sm font-semibold text-primary">{t("common.cancel")}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -128,10 +131,10 @@ export function MessageComposer({
         <View className="flex-row items-center justify-center gap-2 px-4 py-2">
           <View className="h-2 w-2 rounded-full bg-red-500" />
           <Text className="text-sm font-medium text-foreground dark:text-d-text">
-            Recording… release to send
+            {t("chat.recordingHint")}
           </Text>
           <Pressable onPress={() => void cancelRecording()} hitSlop={8}>
-            <Text className="text-sm font-semibold text-primary">Cancel</Text>
+            <Text className="text-sm font-semibold text-primary">{t("common.cancel")}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -139,7 +142,9 @@ export function MessageComposer({
       {isSendingMedia ? (
         <View className="flex-row items-center justify-center gap-2 px-4 py-2">
           <ActivityIndicator size="small" color={colors.primary} />
-          <Text className="text-sm text-muted-foreground dark:text-d-muted">Sending media…</Text>
+          <Text className="text-sm text-muted-foreground dark:text-d-muted">
+            {t("chat.sendingMedia")}
+          </Text>
         </View>
       ) : null}
 
@@ -170,7 +175,7 @@ export function MessageComposer({
                 onTypingChange?.(value.trim().length > 0);
               }
             }}
-            placeholder={isEditing ? "Edit your message…" : placeholder}
+            placeholder={isEditing ? t("chat.editPlaceholder") : resolvedPlaceholder}
             placeholderTextColor={colors.mutedForeground}
             multiline
             textAlignVertical="center"

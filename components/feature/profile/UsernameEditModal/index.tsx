@@ -165,6 +165,7 @@ function UsernameEditSheet({
   onSave,
 }: SheetProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { height: keyboardHeight, progress } = useReanimatedKeyboardAnimation();
 
   const sheetStyle = useAnimatedStyle(() => ({
@@ -232,7 +233,7 @@ function UsernameEditSheet({
             {saving ? (
               <ActivityIndicator color={colors.white} />
             ) : (
-              <Text className="text-base font-bold text-white">Save username</Text>
+              <Text className="text-base font-bold text-white">{t("profile.saveUsername")}</Text>
             )}
           </Pressable>
         </Animated.View>

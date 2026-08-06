@@ -73,7 +73,7 @@ export function useMissionPlan(): MissionPlan {
 
   const currentChapter = useMemo(
     () => getChapterForDay(currentDay > 0 ? currentDay : 1),
-    [currentDay],
+    [currentDay, locale],
   );
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedModule, setSelectedModule] = useState<number | null>(null);

@@ -38,6 +38,15 @@ export const missions = {
   bonusComplete: "All daily missions are done. Nice work.",
   dayTitle: "Your plan for Day {{day}}",
   dayLockedCompleteEarlier: "Complete earlier days to unlock this plan.",
+  yourNotes: "Your notes",
+  notesEmpty: "No notes yet",
+  notesEmptyHint:
+    "Open a day on the map, swipe to a task, and tap Add note to save your thoughts here.",
+  moduleHeading: "Module {{n}}: {{name}}",
+  dayShort: "Day {{day}}",
+  missionOfDay: "Mission of the day",
+  missionComplete: "Mission complete",
+  stepsDone: "{{done}}/{{total}} steps done",
 } as const;
 
 export const community = {
@@ -45,6 +54,14 @@ export const community = {
   emptyHint: "Tap + to share the first post with the community.",
   noMatch: "No posts match your filter.",
   filterPosts: "Filter posts",
+  sortBy: "Sort by",
+  topics: "Topics",
+  allTopics: "All topics",
+  oneTopic: "1 topic",
+  resetFilters: "Reset",
+  showPosts: "Show posts",
+  rules: "Rules",
+  rulesA11y: "Community rules",
   newest: "Newest",
   mostPopular: "Most popular",
   mostDiscussed: "Most discussed",
@@ -60,13 +77,25 @@ export const community = {
   searchEmpty: "No user found",
   shareTitle: "Send post",
   sending: "Sending...",
+  reportPostA11y: "Report post",
+  reportConfirmTitle: "Report this post?",
+  reportConfirmMessage:
+    "Report content that is offensive, harmful, or not related to quitting smoking. Our team will review it.",
+  reportConfirmCta: "Report post",
+  reportSending: "Sending report…",
+  reportThanksTitle: "Thanks for reporting",
+  reportThanksMessage: "Our team will review this post and take action if needed.",
+  reportErrorTitle: "Could not report post",
+  reportErrorMessage: "Please try again.",
 } as const;
 
 export const chat = {
   tabsChats: "Chats",
   tabsSupport: "Support",
   emptyGreeting: "Say hi to {{name}}",
-  emptyRespect: "Be respectful and supportive. You're both on the same journey.",
+  emptyRespect:
+    "Be respectful and supportive to each other. We're all here to quit smoking together.",
+  emptyNameFallback: "them",
   sayHi: "Say hi 👋",
   composerPlaceholder: "Message…",
   editPlaceholder: "Edit your message…",
@@ -93,6 +122,13 @@ export const chat = {
   loadChatsFailed: "Could not load people you have chatted with.",
   sendPostFailed: "Could not send post right now. Please try again.",
   noChatsYet: "No chats yet",
+  permissionNeeded: "Permission needed",
+  photoPermission: "Allow photo access to send images and videos.",
+  recordingFailed: "Recording failed",
+  recordingFailedHint: "Could not start voice recording.",
+  editMessage: "Edit message",
+  recordingHint: "Recording… release to send",
+  sendingMedia: "Sending media…",
 } as const;
 
 export const stats = {
@@ -181,6 +217,9 @@ export const achievements = {
   allUnlocked: "Every badge is unlocked. You set the bar now.",
   loadMore: "Load more",
   profilePhoto: "Your profile photo",
+  available: "Available",
+  globalLeaderboard: "Global leaderboard",
+  leaderboardEmpty: "No players on the leaderboard yet.",
 } as const;
 
 export const profile = {
@@ -194,18 +233,30 @@ export const profile = {
   offline: "Offline",
   memberSince: "Member since {{date}}",
   resetTitle: "Reset my journey?",
+  resetWillLose: "You will lose",
   resetLossBadges: "All badges earned",
   resetLossStreak: "Your current streak",
   resetLossStats: "Stats and progress",
+  resetLossFp: "Freedom points balance",
+  resetLossGoals: "Goals achieved",
+  resetLossAttempts: "Quit attempts and streak history",
+  resetLossPlan: "Plan day progress",
+  resetCta: "Reset my journey",
+  resetting: "Resetting your journey…",
+  resettingHint: "Please wait a moment.",
   activityPosts: "Posts",
   activityComments: "Comments",
   activityUpvoted: "Upvoted",
   emptyPosts: "No posts yet.",
+  emptyComments: "No comments yet.",
+  emptyUpvoted: "No upvoted posts yet.",
   globalRank: "Global rank",
   freedomPoints: "Freedom points",
   currentStreak: "Current streak",
   bestStreak: "Best streak",
   version: "Quit Smoking · v1.0",
+  saveUsername: "Save username",
+  vipFeatureTap: "{{label}}, VIP feature. Tap to unlock.",
 } as const;
 
 export const notifications = {
@@ -235,4 +286,6 @@ export const legal = {
   privacyTitle: "Privacy policy",
   termsTitle: "Terms of service",
   placeholder: "This is a placeholder. Replace with your final legal text.",
+  privacyShort: "Privacy",
+  termsShort: "Terms",
 } as const;

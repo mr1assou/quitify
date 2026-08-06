@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/Card";
 import { isFirstStepBadge } from "@/constants/progress/badges";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { BadgeWithStatus } from "@/types/progress/progress";
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 
 export function BadgesGallery({ badges }: Props) {
   const [selectedBadge, setSelectedBadge] = useState<BadgeWithStatus | null>(null);
+  const { t } = useTranslation();
   const { state } = useApp();
   const hasAccount = Boolean(state.account);
   const hasCommittedToQuit = Boolean(state.isOnboarded && state.profile?.quitDate);
@@ -34,7 +36,7 @@ export function BadgesGallery({ badges }: Props) {
       <Card variant="section">
         <View className="mb-3 flex-row items-end justify-between">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Badges
+            {t("achievements.tabBadges")}
           </Text>
           <Text className="text-xs font-semibold text-foreground dark:text-d-text">
             {unlockedCount} / {badges.length}

@@ -1,0 +1,26 @@
+export const auth = {
+  signupTitle: "S'inscrire avec l'e-mail",
+  signupSubtitle: "Nous enverrons un code de vérification à votre boîte de réception.",
+  loginTitle: "Se connecter avec l'e-mail",
+  loginSubtitle: "Nous enverrons un code de vérification à votre boîte de réception.",
+  emailLabel: "E-mail",
+  emailPlaceholder: "vous@exemple.com",
+  sendCode: "Envoyer le code de vérification",
+  otpTitle: "Vérifiez votre e-mail",
+  otpSubtitle: "Entrez le code à 6 chiffres envoyé à {{email}}.",
+  otpLabel: "Code de vérification",
+  verifyCta: "Vérifier et continuer",
+  resendCode: "Renvoyer le code",
+  resendIn: "Renvoyer dans {{seconds}} s",
+  emailExists:
+    "Cet e-mail existe déjà. Appuyez sur « J'ai déjà un compte » pour vous connecter.",
+  emailNotFound:
+    "Cet e-mail n'existe pas. Inscrivez-vous d'abord pour créer un compte.",
+  sendCodeFailed: "Impossible d'envoyer le code de vérification",
+  verifyFailed: "Échec de la vérification. Vérifiez le code et réessayez.",
+  googleFailed: "La connexion Google a échoué",
+  continueWithGoogle: "Continuer avec Google",
+  continueWithEmail: "Continuer avec l'e-mail",
+  alreadyHaveAccount: "J'ai déjà un compte",
+  needAccount: "Pas encore de compte ? S'inscrire",
+} as const;

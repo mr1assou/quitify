@@ -23,6 +23,7 @@ import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useCommunityPost } from "@/hooks/community/useCommunityPost";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { CommentReplyTarget } from "@/types/community/community";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { resolveCommentCount } from "@/utils/community/postEngagement";
@@ -33,6 +34,7 @@ const COMPOSER_MIN_BOTTOM = 8;
 export default function PostDetailScreen() {
   const { id, commentId } = useLocalSearchParams<{ id: string; commentId?: string }>();
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { detail, loading: postLoading } = useCommunityPost(id ?? "", {
     forceCommentsReload: Boolean(commentId),
@@ -160,8 +162,10 @@ export default function PostDetailScreen() {
             replyTo={replyTarget}
             placeholder={
               replyTarget
-                ? `Reply to ${formatUsernameMention(replyTarget.handle)}…`
-                : "Write a comment…"
+                ? t("chat.replyTo", {
+                    handle: formatUsernameMention(replyTarget.handle),
+                  })
+                : t("chat.writeComment")
             }
             onSubmit={async (text) => {
               await addComment(post.id, text, replyTarget);
