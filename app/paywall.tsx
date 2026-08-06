@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -44,6 +44,7 @@ const PAYWALL_MODAL_DISMISS_MS = 120;
 export default function Paywall() {
   const { t } = useTranslation();
   const { setFlag } = useApp();
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { source: sourceParam } = useLocalSearchParams<{ source?: string }>();
   const source = parsePaywallSource(
@@ -55,6 +56,8 @@ export default function Paywall() {
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const convertedRef = useRef(false);
   const dismissTrackedRef = useRef(false);
+  /** True once close/back is routing into the spin offer (allows navigation to proceed). */
+  const openingComparisonRef = useRef(false);
 
   useEffect(() => {
     trackPaywallView(source);
@@ -73,7 +76,10 @@ export default function Paywall() {
         dismissTrackedRef.current = true;
         trackPaywallDismiss(source);
       }
-      void markPostPaywallFlowComplete();
+      // Don't mark complete while we're opening the spin screen — that screen owns completion.
+      if (!openingComparisonRef.current) {
+        void markPostPaywallFlowComplete();
+      }
     };
   }, [source]);
 
@@ -83,11 +89,11 @@ export default function Paywall() {
       ? t("paywall.tryFree")
       : t("paywall.continue");
 
-  const trackDismissOnce = () => {
+  const trackDismissOnce = useCallback(() => {
     if (convertedRef.current || dismissTrackedRef.current) return;
     dismissTrackedRef.current = true;
     trackPaywallDismiss(source);
-  };
+  }, [source]);
 
   const finishPaywall = async () => {
     if (comparisonTimerRef.current) {
@@ -99,7 +105,10 @@ export default function Paywall() {
     safeRouter.back();
   };
 
-  const openComparisonAfterDismiss = () => {
+  const openComparisonAfterDismiss = useCallback(() => {
+    if (convertedRef.current || openingComparisonRef.current) return;
+    openingComparisonRef.current = true;
+
     trackDismissOnce();
     setFlag("hasSeenPaywall", true);
 
@@ -131,7 +140,17 @@ export default function Paywall() {
         }
       }, canGoBack ? PAYWALL_MODAL_DISMISS_MS : 0);
     })();
-  };
+  }, [setFlag, trackDismissOnce]);
+
+  // Close button and system/gesture back both open the spin screen (unless user purchased).
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", (event) => {
+      if (convertedRef.current || openingComparisonRef.current) return;
+      event.preventDefault();
+      openComparisonAfterDismiss();
+    });
+    return unsubscribe;
+  }, [navigation, openComparisonAfterDismiss]);
 
   const handlePrimaryCta = async () => {
     const premium = await purchasePlan(selectedPlan);

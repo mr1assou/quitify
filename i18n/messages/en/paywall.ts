@@ -25,7 +25,7 @@ export const paywall = {
   offerBadge: "{{percent}}% OFF",
   claimOffer: "Claim offer",
   declineOffer: "No thanks",
-  spinTitle: "Spin to unlock your deal",
+  spinTitle: "Spin to unlock your special deal",
   spinPrompt: "Tap spin and watch the wheel",
   spinWonTitle: "You landed on {{price}}!",
   spinCta: "Spin",

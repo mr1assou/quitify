@@ -74,8 +74,8 @@ export default function PaywallOffer() {
     return <View className="flex-1" />;
   }
 
-  const winLabel = offer.discountedYearlyPrice;
   const discountPercent = offer.discountPercent;
+  const winLabel = `${discountPercent}% OFF`;
 
   return (
     <View className="flex-1">

@@ -1,4 +1,4 @@
-/** Spin-wheel segment ids (labels come from store prices / i18n at runtime). */
+/** Spin-wheel segments — all percentages; pointer always lands on the win index (29%). */
 export const SPIN_WHEEL_WIN_INDEX = 0;
 
 export const SPIN_WHEEL_SEGMENT_IDS = [
@@ -8,6 +8,14 @@ export const SPIN_WHEEL_SEGMENT_IDS = [
   "c",
   "d",
   "e",
-  "f",
-  "g",
+] as const;
+
+/** Display labels; index 0 is the guaranteed win (greatest %). */
+export const SPIN_WHEEL_PERCENT_LABELS = [
+  "29% OFF",
+  "5% OFF",
+  "10% OFF",
+  "15% OFF",
+  "8% OFF",
+  "12% OFF",
 ] as const;

@@ -10,6 +10,7 @@ import Animated, {
 import Svg, { Circle, G, Path, Polygon, Text as SvgText } from "react-native-svg";
 
 import {
+  SPIN_WHEEL_PERCENT_LABELS,
   SPIN_WHEEL_SEGMENT_IDS,
   SPIN_WHEEL_WIN_INDEX,
 } from "@/constants/paywall/spinWheel";
@@ -28,19 +29,6 @@ const SEGMENT_COLORS = [
   "#1F2937",
   "#6366F1",
   "#1F2937",
-  "#14B8A6",
-  "#1F2937",
-] as const;
-
-const FALLBACK_LABELS = [
-  "VIP",
-  "10% OFF",
-  "15% OFF",
-  "5% OFF",
-  "20% OFF",
-  "8% OFF",
-  "12% OFF",
-  "25% OFF",
 ] as const;
 
 function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
@@ -64,6 +52,7 @@ function describeSlice(startAngle: number, endAngle: number) {
 }
 
 type Props = {
+  /** Winning slice label, e.g. "29% OFF". */
   winLabel: string;
   onWon: () => void;
 };
@@ -75,10 +64,8 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
   const [done, setDone] = useState(false);
 
   const segmentLabels = useMemo(() => {
-    return SPIN_WHEEL_SEGMENT_IDS.map((_, index) =>
-      index === SPIN_WHEEL_WIN_INDEX
-        ? winLabel || FALLBACK_LABELS[index]
-        : FALLBACK_LABELS[index],
+    return SPIN_WHEEL_PERCENT_LABELS.map((label, index) =>
+      index === SPIN_WHEEL_WIN_INDEX ? winLabel || label : label,
     );
   }, [winLabel]);
 
@@ -111,6 +98,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
     if (spinning || done) return;
     setSpinning(true);
 
+    // Always land on the greatest discount (29% / win index).
     const winMid = SPIN_WHEEL_WIN_INDEX * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
     const extraTurns = 5 + Math.floor(Math.random() * 2);
     const target = extraTurns * 360 + (360 - winMid);
@@ -167,7 +155,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
                   x={slice.labelX}
                   y={slice.labelY}
                   fill="#FFFFFF"
-                  fontSize={11}
+                  fontSize={12}
                   fontWeight="700"
                   textAnchor="middle"
                   alignmentBaseline="middle"
