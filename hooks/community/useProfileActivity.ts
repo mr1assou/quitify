@@ -145,6 +145,8 @@ export function useProfileActivity(
   const { state: communityState, appendPosts } = useCommunity();
   const communityUserId = resolveProfileCommunityUserId(profile);
   const userId = resolveProfileUserId(profile, appState.account?.userId);
+  /** Signed-in viewer — never the profile being viewed. */
+  const viewerAccountUserId = appState.account?.userId ?? null;
   const currentUserImageUrl = appState.profile?.imageUrl;
 
   const [rawActivity, setRawActivity] = useState<RawProfileActivity | null>(null);
@@ -232,7 +234,7 @@ export function useProfileActivity(
         currentUserImageUrl,
         communityState.onlineByUserId,
         communityState.presenceReady,
-        userId,
+        viewerAccountUserId,
       ),
       comments: mapProfileComments(rawActivity.commentsItems, communityUserId),
       upvotedFeed: buildFeedItems(
@@ -241,7 +243,7 @@ export function useProfileActivity(
         currentUserImageUrl,
         communityState.onlineByUserId,
         communityState.presenceReady,
-        userId,
+        viewerAccountUserId,
       ),
     };
   }, [
@@ -253,5 +255,6 @@ export function useProfileActivity(
     loading,
     rawActivity,
     userId,
+    viewerAccountUserId,
   ]);
 }
