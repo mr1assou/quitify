@@ -18,8 +18,10 @@ import {
 import { REVENUECAT_PREMIUM_ENTITLEMENT } from "@/constants/paywall/revenueCat";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import {
+  PLAY_YEARLY_SPECIAL_OFFER_IDS,
   PLAY_YEARLY_TRIAL_OFFER_ID,
 } from "@/constants/paywall/purchases";
+import type { SpecialPaywallOfferDisplay } from "@/types/paywall/specialOffer";
 import {
   getRevenueCatConfigurePromise,
   isRevenueCatConfigured,
@@ -300,6 +302,181 @@ async function purchaseSelectedPackage(
   }
   const { customerInfo } = await Purchases.purchasePackage(selectedPackage);
   return customerInfo;
+}
+
+function yearlySpecialSubscriptionOption(
+  product: PurchasesStoreProduct,
+): SubscriptionOption | null {
+  if (Platform.OS !== "android") return null;
+
+  const options = product.subscriptionOptions ?? [];
+  if (!options.length) return null;
+
+  for (const offerId of PLAY_YEARLY_SPECIAL_OFFER_IDS) {
+    const suffix = `:${offerId}`;
+    const match = options.find((option) => option.id.endsWith(suffix));
+    if (match) return match;
+  }
+
+  return null;
+}
+
+function formatMonthlyFromYearlyMicros(amountMicros: number, currencyCode: string): string {
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amountMicros / 1_000_000 / 12);
+  } catch {
+    return `${(amountMicros / 1_000_000 / 12).toFixed(2)}`;
+  }
+}
+
+function buildSpecialOfferDisplay(
+  product: PurchasesStoreProduct,
+  option: SubscriptionOption,
+): SpecialPaywallOfferDisplay {
+  const paidPhases = option.pricingPhases.filter((phase) => phase.price.amountMicros > 0);
+  const discountedPhase = option.introPhase ?? paidPhases[0] ?? null;
+  const fullPhase =
+    option.fullPricePhase ??
+    paidPhases.find(
+      (phase) =>
+        discountedPhase == null ||
+        phase.price.amountMicros !== discountedPhase.price.amountMicros,
+    ) ??
+    null;
+
+  const discountedYearlyPrice =
+    discountedPhase?.price.formatted ?? product.priceString;
+  const originalYearlyPrice =
+    fullPhase?.price.formatted ?? product.priceString;
+
+  const discountedMicros = discountedPhase?.price.amountMicros ?? 0;
+  const originalMicros =
+    fullPhase?.price.amountMicros ??
+    (typeof product.price === "number"
+      ? Math.round(product.price * 1_000_000)
+      : discountedMicros);
+  const currencyCode =
+    discountedPhase?.price.currencyCode ??
+    fullPhase?.price.currencyCode ??
+    product.currencyCode;
+
+  const discountPercent =
+    originalMicros > 0 && discountedMicros > 0 && discountedMicros < originalMicros
+      ? Math.round(((originalMicros - discountedMicros) / originalMicros) * 100)
+      : 0;
+
+  const discountedMonthly = discountedPhase
+    ? formatMonthlyFromYearlyMicros(discountedPhase.price.amountMicros, currencyCode)
+    : (product.pricePerMonthString ?? discountedYearlyPrice);
+  const originalMonthly = fullPhase
+    ? formatMonthlyFromYearlyMicros(fullPhase.price.amountMicros, currencyCode)
+    : (product.pricePerMonthString ?? originalYearlyPrice);
+
+  return {
+    plan: {
+      id: "yearly",
+      label: "Yearly plan",
+      rightPrice: discountedMonthly,
+      rightPeriod: "/mo",
+      subPrice: discountedYearlyPrice,
+      subPeriod: "/year",
+      originalRightPrice:
+        discountPercent > 0 ? originalMonthly : null,
+      originalSubPrice: discountPercent > 0 ? originalYearlyPrice : null,
+      trial: option.freePhase != null ? "7 days free trial" : null,
+      recommended: true,
+    },
+    discountedYearlyPrice,
+    originalYearlyPrice,
+    discountPercent,
+    hasFreeTrial: option.freePhase != null,
+  };
+}
+
+async function resolveYearlyPackage(): Promise<PurchasesPackage> {
+  if (!isRevenueCatLinked() || !linkedAppUserId) {
+    throw new Error("Sign in to purchase VIP.");
+  }
+  const offerings = await Purchases.getOfferings();
+  const selectedPackage = packageForPlan(offerings.current, "yearly");
+  if (!selectedPackage) {
+    throw new Error("This plan is not available yet. Check your RevenueCat offering.");
+  }
+  return selectedPackage;
+}
+
+/**
+ * Localized special-offer prices from Play (`discount-29off` or win-back).
+ * Returns null when the user is not eligible — do not fall back to base paywall prices.
+ */
+export async function fetchSpecialPaywallOffer(): Promise<SpecialPaywallOfferDisplay | null> {
+  await waitForRevenueCatReady();
+  if (!isRevenueCatLinked()) return null;
+
+  try {
+    const selectedPackage = await resolveYearlyPackage();
+    const product = await resolveYearlyStoreProduct(selectedPackage);
+    const specialOption = yearlySpecialSubscriptionOption(product);
+
+    if (!specialOption) {
+      if (__DEV__) {
+        console.warn(
+          "[revenuecat] special/win-back offers not available for this account",
+        );
+      }
+      return null;
+    }
+
+    if (__DEV__) {
+      console.log(`[revenuecat] special offer available: ${specialOption.id}`);
+    }
+    return buildSpecialOfferDisplay(product, specialOption);
+  } catch (error) {
+    if (__DEV__) {
+      console.warn("[revenuecat] fetchSpecialPaywallOffer failed", error);
+    }
+    return null;
+  }
+}
+
+/** Purchase special/win-back yearly offer when available; otherwise standard yearly. */
+export async function purchaseSpecialYearlyOffer(): Promise<boolean> {
+  if (!isRevenueCatLinked() || !linkedAppUserId) {
+    throw new Error("Sign in to purchase VIP.");
+  }
+
+  const selectedPackage = await resolveYearlyPackage();
+  const product = await resolveYearlyStoreProduct(selectedPackage);
+  const specialOption = yearlySpecialSubscriptionOption(product);
+
+  try {
+    if (specialOption) {
+      if (__DEV__) {
+        console.log(`[revenuecat] purchasing special yearly option ${specialOption.id}`);
+      }
+      const { customerInfo } = await Purchases.purchaseSubscriptionOption(specialOption);
+      return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
+    }
+
+    if (__DEV__) {
+      console.warn(
+        "[revenuecat] special offer unavailable — falling back to standard yearly purchase",
+      );
+    }
+    const customerInfo = await purchaseYearlyPlan(selectedPackage, product);
+    return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
+  } catch (error) {
+    if (isProductAlreadyPurchasedError(error)) {
+      const customerInfo = await Purchases.restorePurchases();
+      return isPremiumOwnedByAppUser(customerInfo, linkedAppUserId);
+    }
+    throw error;
+  }
 }
 
 export async function purchasePaywallPlan(planId: PaywallPlanId): Promise<boolean> {

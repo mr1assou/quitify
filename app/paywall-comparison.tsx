@@ -1,174 +1,199 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
   Text,
-  useWindowDimensions,
   View,
-  type ImageSourcePropType,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
+import { PaywallPlanOption } from "@/components/paywall/PaywallPlanOption";
+import { PaywallSpinWheel } from "@/components/paywall/PaywallSpinWheel";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
-import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
+import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website";
+import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
+import { useSpecialPaywallOffer } from "@/hooks/paywall/useSpecialPaywallOffer";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { useApp } from "@/context/AppContext";
-import { computeMonthlyCigaretteSpend } from "@/utils/paywall/monthlyCigaretteSpend";
+import {
+  trackPaywallPurchaseSuccess,
+} from "@/services/analytics";
+import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { formatCurrency } from "@/utils/shared/format";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
 
-const SHEET_HEIGHT_RATIO = 0.7;
-
-const QUITIFY_LOGO = require("../assets/images/logo.webp") as ImageSourcePropType;
-
+const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 const PAYWALL_COLORS = getThemeColors("dark");
 
-type ComparisonBoxProps = {
-  title: string;
-  amount: string;
-  period: string;
-  icon?: keyof typeof Ionicons.glyphMap;
-  logoSource?: ImageSourcePropType;
-};
-
-function ComparisonBox({
-  title,
-  amount,
-  period,
-  icon,
-  logoSource,
-}: ComparisonBoxProps) {
-  return (
-    <View className="flex-1 rounded-2xl border border-d-border bg-d-surface/95 px-3 py-4 shadow-sm">
-      <View className="mb-3 h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-d-accent-soft">
-        {logoSource ? (
-          <Image source={logoSource} style={{ width: 28, height: 28 }} contentFit="contain" />
-        ) : (
-          <Ionicons name={icon ?? "cash"} size={20} color={PAYWALL_COLORS.accent} />
-        )}
-      </View>
-      <Text className="text-xs font-semibold text-d-muted">{title}</Text>
-      <Text
-        className="mt-2 text-xl font-extrabold leading-6 tabular-nums text-d-text"
-        numberOfLines={2}
-        adjustsFontSizeToFit
-        minimumFontScale={0.75}
-      >
-        {amount}
-      </Text>
-      <Text className="mt-0.5 text-xs text-d-muted">{period}</Text>
-    </View>
-  );
-}
-
-export default function PaywallComparison() {
+export default function PaywallOffer() {
   const { t } = useTranslation();
-  const { state } = useApp();
-  const { plans } = usePaywallPlans();
   const insets = useSafeAreaInsets();
-  const { height: windowHeight } = useWindowDimensions();
-  const profile = state.profile;
-  const sheetHeight = windowHeight * SHEET_HEIGHT_RATIO;
+  const { offer, loading, purchasing, purchaseOffer } = useSpecialPaywallOffer();
+  const [phase, setPhase] = useState<"spin" | "offer">("spin");
 
-  // Covers every dismissal path, including the Android back button/gesture.
+  const dismiss = useCallback(async () => {
+    await markPostPaywallFlowComplete();
+    safeRouter.back();
+  }, []);
+
   useEffect(() => {
     return () => {
       void markPostPaywallFlowComplete();
     };
   }, []);
 
-  const monthlyCigaretteSpend = useMemo(
-    () =>
-      computeMonthlyCigaretteSpend({
-        cigarettesPerDay: profile.cigarettesPerDay,
-        cigarettesPerPack: profile.cigarettesPerPack,
-        packCost: profile.packCost,
-      }),
-    [profile.cigarettesPerDay, profile.cigarettesPerPack, profile.packCost],
-  );
+  // Safety: if we landed here without a real discount, leave immediately (no UI).
+  useEffect(() => {
+    if (loading) return;
+    if (offer != null && offer.discountPercent > 0) return;
+    void dismiss();
+  }, [dismiss, loading, offer]);
 
-  const cigaretteDisplay = formatCurrency(
-    monthlyCigaretteSpend,
-    profile.currency || "USD",
-  );
-  const quitifyDisplay =
-    plans.find((plan) => plan.id === "yearly")?.rightPrice ??
-    formatCurrency(4.17, "USD");
+  const claimOffer = async () => {
+    const premium = await purchaseOffer();
+    if (!premium) return;
 
-  const dismiss = async () => {
+    trackPaywallPurchaseSuccess({
+      source: PAYWALL_SOURCE.premium_gate,
+      planId: "yearly",
+      purchaseType: "purchase",
+    });
     await markPostPaywallFlowComplete();
     safeRouter.back();
   };
 
+  const handleWon = useCallback(() => {
+    setTimeout(() => setPhase("offer"), 600);
+  }, []);
+
+  // Don't mount spin/offer UI until the discounted offer is ready.
+  if (loading || !offer || offer.discountPercent <= 0) {
+    return <View className="flex-1" />;
+  }
+
+  const winLabel = offer.discountedYearlyPrice;
+  const discountPercent = offer.discountPercent;
+
   return (
-    <View className="flex-1 justify-end">
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Dismiss comparison"
-        className="absolute inset-0 bg-black/45"
-        onPress={() => void dismiss()}
-      />
+    <View className="flex-1">
+      <AppScreenBackground isDark showOrbs={false} />
 
       <View
-        className="overflow-hidden rounded-t-3xl"
-        style={{ height: sheetHeight }}
-      >
-        <AppScreenBackground isDark showOrbs={false} />
+        pointerEvents="none"
+        className="absolute -right-10 top-16 h-52 w-52 rounded-full bg-primary/20"
+      />
+      <View
+        pointerEvents="none"
+        className="absolute -left-16 top-56 h-44 w-44 rounded-full bg-primary/10"
+      />
 
-        <View className="flex-row items-center justify-end px-4 pt-3">
-            <Pressable
-              onPress={() => void dismiss()}
-              className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
-            >
-              <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
-            </Pressable>
-          </View>
-
-          <ScrollView
-            className="flex-1"
-            contentContainerStyle={{
-              paddingHorizontal: 24,
-              paddingBottom: Math.max(insets.bottom, 16) + 16,
-            }}
-            showsVerticalScrollIndicator={false}
+      <SafeAreaView className="flex-1 bg-transparent" edges={["top"]}>
+        <View className="flex-row items-center justify-end px-4 pt-2">
+          <Pressable
+            onPress={() => void dismiss()}
+            className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
           >
-            <Text className="text-3xl font-extrabold leading-tight text-d-text">
-              {t("paywall.comparisonTitle")}
-            </Text>
-            <Text className="mt-2 text-sm leading-5 text-d-muted">
-              {t("paywall.offerSubtitle")}
-            </Text>
+            <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
+          </Pressable>
+        </View>
 
-            <View className="mt-6 flex-row gap-3">
-              <ComparisonBox
-                icon="cash"
-                title={t("paywall.cigarettes")}
-                amount={cigaretteDisplay}
-                period={t("paywall.perMonth")}
-              />
-              <ComparisonBox
-                logoSource={QUITIFY_LOGO}
-                title={t("paywall.quitifyVip")}
-                amount={quitifyDisplay}
-                period={t("paywall.perMonth")}
-              />
+        <ScrollView
+          className="flex-1"
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingHorizontal: 24,
+            paddingTop: 4,
+            paddingBottom: Math.max(insets.bottom, 24) + 24,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          {phase === "spin" ? (
+            <View className="flex-1 justify-center py-4">
+              <Text className="mb-8 text-center text-3xl font-extrabold leading-tight text-d-text">
+                {t("paywall.spinTitle")}
+              </Text>
+              <PaywallSpinWheel winLabel={winLabel} onWon={handleWon} />
             </View>
+          ) : (
+            <Animated.View entering={FadeInDown.duration(420)}>
+              <View className="self-start rounded-full bg-primary px-3 py-1.5">
+                <Text className="text-xs font-bold uppercase tracking-wide text-white">
+                  {t("paywall.offerBadge", { percent: discountPercent })}
+                </Text>
+              </View>
 
-            <View className="mt-5">
-            <Button
-              label={t("paywall.continue")}
-              size="md"
-              fullWidth
-              onPress={() => void dismiss()}
-            />
-            </View>
-          </ScrollView>
-      </View>
+              <Text className="mt-4 text-4xl font-extrabold leading-tight text-d-text">
+                {t("paywall.staticOfferTitle")}
+              </Text>
+
+              <View className="mt-7 gap-4">
+                {BENEFIT_KEYS.map((key) => (
+                  <View key={key} className="flex-row items-start">
+                    <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-d-accent-soft">
+                      <Ionicons name="checkmark" size={17} color={PAYWALL_COLORS.accent} />
+                    </View>
+                    <Text className="flex-1 text-sm leading-5 text-d-muted">{t(key)}</Text>
+                  </View>
+                ))}
+              </View>
+
+              <View className="mt-10">
+                <Text className="text-xl font-bold text-d-text">{t("paywall.offerTitle")}</Text>
+                <Text className="mt-1.5 text-sm text-d-muted">
+                  {t("paywall.staticOfferSubtitle")}
+                </Text>
+
+                <View className="mt-6 gap-3">
+                  <PaywallPlanOption
+                    plan={offer.plan}
+                    selected
+                    onSelect={() => undefined}
+                  />
+                </View>
+
+                <View className="mt-5">
+                  <Button
+                    label={
+                      purchasing ? t("paywall.processing") : t("paywall.claimOffer")
+                    }
+                    size="md"
+                    fullWidth
+                    disabled={purchasing}
+                    onPress={() => void claimOffer()}
+                  />
+                </View>
+
+                <Pressable
+                  onPress={() => void dismiss()}
+                  className="mt-3 items-center py-2 active:opacity-70"
+                >
+                  <Text className="text-sm font-semibold text-d-muted">
+                    {t("paywall.declineOffer")}
+                  </Text>
+                </Pressable>
+
+                <View className="mt-2 flex-row items-center justify-between pb-2">
+                  <Pressable
+                    onPress={() => openExternalUrl(WEBSITE_PRIVACY_URL)}
+                    className="active:opacity-70"
+                  >
+                    <Text className="text-sm text-d-muted">{t("paywall.privacy")}</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
+                    className="active:opacity-70"
+                  >
+                    <Text className="text-sm text-d-muted">{t("paywall.terms")}</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Animated.View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }

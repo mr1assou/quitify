@@ -33,4 +33,7 @@ export type PaywallPlanDisplay = {
   subPeriod: string | null;
   trial: string | null;
   recommended: boolean;
+  /** Optional strikethrough list price (win-back / special offer). */
+  originalRightPrice?: string | null;
+  originalSubPrice?: string | null;
 };

@@ -3,6 +3,7 @@ import {
   NICOTINE_HABIT_YEARS_BANDS,
 } from "@/constants/onboarding/onboardingNicotineBands";
 import { MOTIVATION_LEVEL_OPTIONS } from "@/constants/onboarding/onboardingMotivation";
+import { ONBOARDING_OTHER_ID } from "@/constants/onboarding/onboardingOther";
 import { PRIMARY_INTEREST_OPTIONS } from "@/constants/onboarding/onboardingPrimaryInterest";
 import { PRIOR_QUIT_ATTEMPT_OPTIONS } from "@/constants/onboarding/onboardingPriorQuitAttempts";
 import { QUIT_REASON_OPTIONS } from "@/constants/onboarding/onboardingReasons";
@@ -32,6 +33,15 @@ function labelsForIds(
     .filter((label): label is string => label != null);
 }
 
+function resolveOtherText(
+  selected: boolean,
+  text: string | undefined,
+): string | undefined {
+  if (!selected) return undefined;
+  const trimmed = text?.trim();
+  return trimmed && trimmed.length > 0 ? trimmed : undefined;
+}
+
 function resolvePackPriceText(draft: OnboardingDraft): string | undefined {
   const raw = draft.packCostInput?.trim();
   if (!raw) return undefined;
@@ -57,20 +67,36 @@ export function resolveOnboardingPayloadText(
   return {
     step1: {
       quitReasons: labelsForIds(QUIT_REASON_OPTIONS, draft.quitReasonIds),
+      otherText: resolveOtherText(
+        draft.quitReasonIds.includes(ONBOARDING_OTHER_ID),
+        draft.quitReasonOtherText,
+      ),
     },
     step2: {
       motivation: labelForId(MOTIVATION_LEVEL_OPTIONS, draft.motivationLevel),
+      otherText: resolveOtherText(
+        draft.motivationLevel === ONBOARDING_OTHER_ID,
+        draft.motivationOtherText,
+      ),
     },
     step3: {
       priorQuitAttempts: labelForId(
         PRIOR_QUIT_ATTEMPT_OPTIONS,
         draft.priorQuitAttempts,
       ),
+      otherText: resolveOtherText(
+        draft.priorQuitAttempts === ONBOARDING_OTHER_ID,
+        draft.priorQuitAttemptsOtherText,
+      ),
     },
     step4: {
       primaryInterests: labelsForIds(
         PRIMARY_INTEREST_OPTIONS,
         draft.primaryInterestIds,
+      ),
+      otherText: resolveOtherText(
+        draft.primaryInterestIds.includes(ONBOARDING_OTHER_ID),
+        draft.primaryInterestOtherText,
       ),
     },
     step5: {

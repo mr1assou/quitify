@@ -24,7 +24,7 @@ export type ProfileSexOption = {
 
 /* ----------------------------- Motivation -------------------------------- */
 
-export type MotivationLevel = "high" | "medium" | "low";
+export type MotivationLevel = "high" | "medium" | "low" | "other";
 
 export type MotivationLevelOption = {
   id: MotivationLevel;
@@ -46,7 +46,8 @@ export type QuitReasonId =
   | "example"
   | "sleep"
   | "appearance"
-  | "calm";
+  | "calm"
+  | "other";
 
 export type QuitReasonOption = {
   id: QuitReasonId;
@@ -55,7 +56,7 @@ export type QuitReasonOption = {
 
 /* --------------------------- Prior quit attempts ------------------------- */
 
-export type PriorQuitAttempts = "never" | "once" | "multiple";
+export type PriorQuitAttempts = "never" | "once" | "multiple" | "other";
 
 export type PriorQuitAttemptsOption = {
   id: PriorQuitAttempts;
@@ -73,7 +74,8 @@ export type PrimaryInterestId =
   | "missions"
   | "stats"
   | "rewards"
-  | "routine";
+  | "routine"
+  | "other";
 
 export type PrimaryInterestOption = {
   id: PrimaryInterestId;
@@ -119,9 +121,17 @@ export type OnboardingDraft = {
   birthDay?: number;
   birthYear?: number;
   quitReasonIds: string[];
+  /** Custom text when quit-reason "other" is selected. */
+  quitReasonOtherText?: string;
   motivationLevel?: MotivationLevel;
+  /** Custom text when motivation "other" is selected. */
+  motivationOtherText?: string;
   priorQuitAttempts?: PriorQuitAttempts;
+  /** Custom text when prior-attempts "other" is selected. */
+  priorQuitAttemptsOtherText?: string;
   primaryInterestIds: PrimaryInterestId[];
+  /** Custom text when interest "other" is selected. */
+  primaryInterestOtherText?: string;
 
   nicotineConsumptionForm?: NicotineConsumptionFormId;
   nicotineHabitYears?: number;

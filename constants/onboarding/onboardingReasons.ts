@@ -15,4 +15,5 @@ export const QUIT_REASON_OPTIONS: readonly QuitReasonOption[] = [
   { id: "sleep", label: "Better sleep" },
   { id: "appearance", label: "Healthier teeth & skin" },
   { id: "calm", label: "Feel calmer day to day" },
+  { id: "other", label: "Other" },
 ] as const;

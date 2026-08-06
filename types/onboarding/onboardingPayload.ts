@@ -14,21 +14,29 @@ export type OnboardingPayload = {
 export type OnboardingPayloadStep1 = {
   /** Selected quit reason labels, e.g. "Better health", "Save money". */
   quitReasons: string[];
+  /** Free text when "Other" is selected. */
+  otherText?: string;
 };
 
 export type OnboardingPayloadStep2 = {
-  /** e.g. "High", "Medium", "Low". */
+  /** e.g. "High", "Medium", "Low", "Other". */
   motivation?: string;
+  /** Free text when "Other" is selected. */
+  otherText?: string;
 };
 
 export type OnboardingPayloadStep3 = {
-  /** e.g. "Never", "Once", "Multiple times". */
+  /** e.g. "Never", "Once", "Multiple times", "Other". */
   priorQuitAttempts?: string;
+  /** Free text when "Other" is selected. */
+  otherText?: string;
 };
 
 export type OnboardingPayloadStep4 = {
   /** Selected interest labels. */
   primaryInterests: string[];
+  /** Free text when "Other" is selected. */
+  otherText?: string;
 };
 
 export type OnboardingPayloadStep5 = {

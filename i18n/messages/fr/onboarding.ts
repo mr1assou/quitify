@@ -14,6 +14,8 @@ export const onboarding = {
     sleep: { label: "Mieux dormir" },
     appearance: { label: "Des dents et une peau plus saines" },
     calm: { label: "Se sentir plus calme au quotidien" },
+    other: { label: "Autre" },
+    otherPlaceholder: "Indiquez votre raison…",
   },
   motivation: {
     title: "À quel point êtes-vous prêt à arrêter la cigarette ?",
@@ -22,6 +24,8 @@ export const onboarding = {
     high: { label: "Élevée" },
     medium: { label: "Moyenne" },
     low: { label: "Faible" },
+    other: { label: "Autre" },
+    otherPlaceholder: "Dites-nous à quel point vous êtes prêt…",
   },
   quitAttempts: {
     title: "Avez-vous déjà essayé d'arrêter la cigarette ?",
@@ -39,6 +43,8 @@ export const onboarding = {
       label: "Plusieurs fois",
       hint: "J'ai déjà essayé d'arrêter la cigarette plus d'une fois.",
     },
+    other: { label: "Autre" },
+    otherPlaceholder: "Parlez-nous de vos essais passés…",
   },
   interests: {
     title: "Qu'est-ce qui vous aidera à rester sans cigarette ?",
@@ -74,6 +80,8 @@ export const onboarding = {
       label: "Une routine plus calme",
       hint: "Remplacer la cigarette par quelque chose de mieux.",
     },
+    other: { label: "Autre" },
+    otherPlaceholder: "Dites-nous ce qui vous motivera…",
   },
   profile: {
     title: "Créez votre profil d'arrêt",

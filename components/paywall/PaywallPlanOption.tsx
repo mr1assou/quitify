@@ -19,11 +19,34 @@ function PriceLine({
   amount,
   period,
   align = "left",
+  compareAt,
 }: {
   amount: string;
   period: string;
   align?: "left" | "right";
+  compareAt?: string | null;
 }) {
+  const alignClass = align === "right" ? "items-end" : "items-start";
+
+  if (compareAt) {
+    return (
+      <View className={`min-w-0 flex-1 ${alignClass}`}>
+        <View className="flex-row items-baseline">
+          <Text
+            className="shrink text-xl font-extrabold text-d-text"
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.7}
+          >
+            {amount}
+          </Text>
+          <Text className="ml-1 shrink-0 text-sm text-d-muted">{period}</Text>
+        </View>
+        <Text className="mt-0.5 text-xs text-d-muted line-through">{compareAt}</Text>
+      </View>
+    );
+  }
+
   return (
     <View
       className={`min-w-0 flex-1 flex-row items-baseline ${
@@ -70,19 +93,33 @@ export function PaywallPlanOption({ plan, selected, onSelect }: Props) {
         {hasYearlyBreakdown ? (
           <View>
             <Text className="text-base font-bold text-d-text">{planLabel}</Text>
-            <View className="mt-1 flex-row items-baseline justify-between gap-2">
-              <PriceLine amount={plan.subPrice!} period={plan.subPeriod!} />
-              <PriceLine amount={plan.rightPrice} period={plan.rightPeriod} align="right" />
+            <View className="mt-2 flex-row items-start justify-between gap-2">
+              <PriceLine
+                amount={plan.subPrice!}
+                period={plan.subPeriod!}
+                compareAt={plan.originalSubPrice}
+              />
+              <PriceLine
+                amount={plan.rightPrice}
+                period={plan.rightPeriod}
+                align="right"
+                compareAt={plan.originalRightPrice}
+              />
             </View>
             {trialLabel ? (
-              <Text className="mt-1 text-sm font-semibold text-primary">{trialLabel}</Text>
+              <Text className="mt-2 text-sm font-semibold text-primary">{trialLabel}</Text>
             ) : null}
           </View>
         ) : (
           <View className="flex-row items-center justify-between gap-3">
             <Text className="shrink text-base font-bold text-d-text">{planLabel}</Text>
             <View className="min-w-0 max-w-[55%]">
-              <PriceLine amount={plan.rightPrice} period={plan.rightPeriod} align="right" />
+              <PriceLine
+                amount={plan.rightPrice}
+                period={plan.rightPeriod}
+                align="right"
+                compareAt={plan.originalRightPrice}
+              />
             </View>
           </View>
         )}

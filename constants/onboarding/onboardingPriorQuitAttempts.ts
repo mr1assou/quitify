@@ -18,4 +18,9 @@ export const PRIOR_QUIT_ATTEMPT_OPTIONS: readonly PriorQuitAttemptsOption[] = [
     label: "Multiple times",
     hint: "I have tried to quit more than once.",
   },
+  {
+    id: "other",
+    label: "Other",
+    hint: "",
+  },
 ] as const;

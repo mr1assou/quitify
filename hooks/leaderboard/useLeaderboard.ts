@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { LEADERBOARD_PAGE_SIZE } from "@/constants/leaderboard/leaderboardPagination";
 import { useApp } from "@/context/AppContext";
@@ -65,61 +65,66 @@ function withLivePresence(
   };
 }
 
-/** Global leaderboard loaded from the API (ranked by Freedom Points, 15 per page). */
+/** Global leaderboard loaded from the API (ranked by Freedom Points, 10 per page). */
 export function useLeaderboard(): UseLeaderboardResult {
   const { state: appState } = useApp();
   const { state: communityState } = useCommunity();
+  const accountUserId = appState.account?.userId ?? null;
   const [snapshot, setSnapshot] = useState<LeaderboardSnapshot | null>(
     () => getLeaderboardCache(),
   );
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => getLeaderboardCache() == null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(getLeaderboardCache()?.hasMore ?? false);
   const loadingMoreRef = useRef(false);
+  const snapshotRef = useRef(snapshot);
+  snapshotRef.current = snapshot;
+  const prevAccountUserIdRef = useRef<number | null | undefined>(undefined);
 
-  const loadPage = useCallback(
-    async (offset: number, append: boolean) => {
-      if (!appState.account) {
-        if (!append) setLoading(false);
-        return;
+  const loadPage = useCallback(async (offset: number, append: boolean) => {
+    if (accountUserId == null) {
+      if (!append) setLoading(false);
+      return;
+    }
+
+    if (append) {
+      if (loadingMoreRef.current) return;
+      loadingMoreRef.current = true;
+      setLoadingMore(true);
+    } else if (snapshotRef.current == null) {
+      // Full-screen loader only when there is nothing to show yet.
+      setLoading(true);
+    }
+
+    try {
+      const response = await fetchLeaderboard({ offset, limit: LEADERBOARD_PAGE_SIZE });
+      const mapped = mapLeaderboardFromApi(response);
+
+      setSnapshot((previous) => {
+        const nextSnapshot =
+          append && previous ? mergeLeaderboardPages(previous, mapped) : mapped;
+        setLeaderboardCache(nextSnapshot);
+        return nextSnapshot;
+      });
+      setHasMore(response.has_more);
+    } catch {
+      if (!append) {
+        setLeaderboardCache(null);
+        setSnapshot(null);
+        setHasMore(false);
       }
-
+    } finally {
       if (append) {
-        if (loadingMoreRef.current) return;
-        loadingMoreRef.current = true;
-        setLoadingMore(true);
+        loadingMoreRef.current = false;
+        setLoadingMore(false);
       } else {
-        setLoading(true);
+        setLoading(false);
       }
+    }
+  }, [accountUserId]);
 
-      try {
-        const response = await fetchLeaderboard({ offset, limit: LEADERBOARD_PAGE_SIZE });
-        const mapped = mapLeaderboardFromApi(response);
-
-        setSnapshot((previous) => {
-          const nextSnapshot =
-            append && previous ? mergeLeaderboardPages(previous, mapped) : mapped;
-          setLeaderboardCache(nextSnapshot);
-          return nextSnapshot;
-        });
-        setHasMore(response.has_more);
-      } catch {
-        if (!append) {
-          setLeaderboardCache(null);
-          setSnapshot(null);
-          setHasMore(false);
-        }
-      } finally {
-        if (append) {
-          loadingMoreRef.current = false;
-          setLoadingMore(false);
-        } else {
-          setLoading(false);
-        }
-      }
-    },
-    [appState.account],
-  );
+  const loadPageRef = useRef(loadPage);
+  loadPageRef.current = loadPage;
 
   const refresh = useCallback(() => loadPage(0, false), [loadPage]);
 
@@ -131,11 +136,23 @@ export function useLeaderboard(): UseLeaderboardResult {
     });
   }, [loadPage]);
 
+  // One silent/background refresh per real tab focus (keeps existing ranks visible).
   useFocusEffect(
     useCallback(() => {
-      refresh();
-    }, [refresh]),
+      void loadPageRef.current(0, false);
+    }, []),
   );
+
+  useEffect(() => {
+    if (prevAccountUserIdRef.current === undefined) {
+      prevAccountUserIdRef.current = accountUserId;
+      return;
+    }
+    if (prevAccountUserIdRef.current === accountUserId) return;
+    prevAccountUserIdRef.current = accountUserId;
+    if (accountUserId == null) return;
+    void loadPageRef.current(0, false);
+  }, [accountUserId]);
 
   const liveSnapshot = useMemo(() => {
     if (!snapshot) return null;

@@ -33,7 +33,10 @@ export default function NicotineConsumptionOnboarding() {
     if (Object.keys(next).length > 0) patch(next);
   }, [draft.nicotineConsumptionForm, patch]);
 
-  const canContinue = useMemo(() => isNicotineConsumptionStepComplete(draft), [draft]);
+  const canContinue = useMemo(
+    () => isNicotineConsumptionStepComplete(draft),
+    [draft],
+  );
 
   const fieldErrors = useMemo(() => {
     if (!attemptedContinue) return {};

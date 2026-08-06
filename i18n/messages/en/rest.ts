@@ -216,6 +216,7 @@ export const achievements = {
   currentBadge: "Current badge",
   allUnlocked: "Every badge is unlocked. You set the bar now.",
   loadMore: "Load more",
+  showMore: "Show more",
   profilePhoto: "Your profile photo",
   available: "Available",
   globalLeaderboard: "Global leaderboard",

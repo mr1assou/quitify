@@ -122,11 +122,7 @@ function ThemedRoot() {
         />
         <Stack.Screen
           name="paywall-comparison"
-          options={{
-            presentation: "transparentModal",
-            animation: "fade",
-            contentStyle: { backgroundColor: "transparent" },
-          }}
+          options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
         <Stack.Screen
           name="profile"

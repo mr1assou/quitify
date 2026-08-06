@@ -14,6 +14,8 @@ export const onboarding = {
     sleep: { label: "Better sleep" },
     appearance: { label: "Healthier teeth & skin" },
     calm: { label: "Feel calmer day to day" },
+    other: { label: "Other" },
+    otherPlaceholder: "Tell us your reason…",
   },
   motivation: {
     title: "How ready are you to quit cigarettes?",
@@ -22,6 +24,8 @@ export const onboarding = {
     high: { label: "High" },
     medium: { label: "Medium" },
     low: { label: "Low" },
+    other: { label: "Other" },
+    otherPlaceholder: "Tell us how ready you feel…",
   },
   quitAttempts: {
     title: "Have you tried to quit cigarettes before?",
@@ -35,6 +39,8 @@ export const onboarding = {
       label: "Multiple times",
       hint: "I have tried to quit cigarettes more than once.",
     },
+    other: { label: "Other" },
+    otherPlaceholder: "Tell us about your past tries…",
   },
   interests: {
     title: "What will keep you cigarette-free?",
@@ -46,6 +52,8 @@ export const onboarding = {
     stats: { label: "Stats & insights", hint: "See your cigarette-free progress clearly." },
     rewards: { label: "Rewards & badges", hint: "Unlock wins as you stay smoke-free." },
     routine: { label: "A calmer routine", hint: "Replace cigarettes with something better." },
+    other: { label: "Other" },
+    otherPlaceholder: "Tell us what will keep you going…",
   },
   profile: {
     title: "Create your quit profile",

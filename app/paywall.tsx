@@ -28,14 +28,18 @@ import {
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
+import {
+  getCachedSpecialPaywallOffer,
+  prefetchSpecialPaywallOffer,
+} from "@/utils/paywall/specialOfferCache";
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 
 /** Paywall is always presented in the premium dark palette. */
 const PAYWALL_COLORS = getThemeColors("dark");
 
-/** Wait for the modal slide-down before pushing the comparison sheet. */
-const PAYWALL_MODAL_DISMISS_MS = 420;
+/** Short gap after modal dismiss so the spin screen can slide in quickly. */
+const PAYWALL_MODAL_DISMISS_MS = 120;
 
 export default function Paywall() {
   const { t } = useTranslation();
@@ -55,6 +59,11 @@ export default function Paywall() {
   useEffect(() => {
     trackPaywallView(source);
   }, [source]);
+
+  // Prefetch special offer while the paywall is open so close can show spin instantly.
+  useEffect(() => {
+    void prefetchSpecialPaywallOffer();
+  }, []);
 
   // Covers every dismissal path, including the Android back button/gesture,
   // so the deferred notification prompt is never lost.
@@ -93,16 +102,35 @@ export default function Paywall() {
   const openComparisonAfterDismiss = () => {
     trackDismissOnce();
     setFlag("hasSeenPaywall", true);
-    if (!router.canGoBack()) {
-      safeRouter.replace("/paywall-comparison");
-      return;
+
+    const canGoBack = router.canGoBack();
+    if (canGoBack) {
+      safeRouter.back();
     }
 
-    safeRouter.back();
-    comparisonTimerRef.current = setTimeout(() => {
-      comparisonTimerRef.current = null;
-      safeRouter.pushStack("/paywall-comparison");
-    }, PAYWALL_MODAL_DISMISS_MS);
+    void (async () => {
+      const cached = getCachedSpecialPaywallOffer();
+      const offer =
+        cached !== undefined ? cached : await prefetchSpecialPaywallOffer();
+
+      if (!offer || offer.discountPercent <= 0) {
+        await markPostPaywallFlowComplete();
+        return;
+      }
+
+      if (comparisonTimerRef.current) {
+        clearTimeout(comparisonTimerRef.current);
+      }
+
+      comparisonTimerRef.current = setTimeout(() => {
+        comparisonTimerRef.current = null;
+        if (canGoBack) {
+          safeRouter.pushStack("/paywall-comparison");
+        } else {
+          safeRouter.replace("/paywall-comparison");
+        }
+      }, canGoBack ? PAYWALL_MODAL_DISMISS_MS : 0);
+    })();
   };
 
   const handlePrimaryCta = async () => {

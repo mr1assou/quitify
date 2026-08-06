@@ -11,4 +11,5 @@ export const PRIMARY_INTEREST_OPTIONS: readonly PrimaryInterestOption[] = [
   { id: "stats", label: "Stats & insights", hint: "Charts and numbers about my journey." },
   { id: "rewards", label: "Rewards & badges", hint: "Unlocking achievements along the way." },
   { id: "routine", label: "A calmer routine", hint: "Replacing the habit with something better." },
+  { id: "other", label: "Other", hint: "" },
 ] as const;

@@ -7,6 +7,7 @@ export const achievements = {
   currentBadge: "Badge actuel",
   allUnlocked: "Tous les badges sont débloqués. Vous donnez le ton maintenant.",
   loadMore: "Charger plus",
+  showMore: "Afficher plus",
   profilePhoto: "Votre photo de profil",
   available: "Disponible",
   globalLeaderboard: "Classement mondial",

@@ -21,4 +21,18 @@ export const paywall = {
   yearlyPlan: "Formule annuelle",
   trialBadge: "7 jours d'essai gratuit",
   recommended: "Recommandé",
+  staticOfferTitle: "Vous avez gagné une offre spéciale !",
+  staticOfferSubtitle:
+    "Débloquez Quitify VIP pour moins cher. Offre affichée pour une durée limitée.",
+  offerBadge: "-{{percent}} %",
+  claimOffer: "Profiter de l'offre",
+  declineOffer: "Non merci",
+  spinTitle: "Tournez pour débloquer votre offre",
+  spinPrompt: "Appuyez sur Tourner et regardez la roue",
+  spinWonTitle: "Vous avez obtenu {{price}} !",
+  spinCta: "Tourner",
+  spinning: "Ça tourne…",
+  spinVip: "VIP",
+  specialOfferUnavailable:
+    "Cette offre spéciale n'est pas disponible sur votre compte pour le moment.",
 } as const;

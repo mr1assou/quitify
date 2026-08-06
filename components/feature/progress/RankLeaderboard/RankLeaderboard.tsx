@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
@@ -42,6 +42,7 @@ function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
 
 export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore }: Props) {
   const { t } = useTranslation();
+  const { colors } = useTheme();
   const { pinnedViewer, pageRows } = useMemo(
     () => buildVisibleRows(leaderboard),
     [leaderboard],
@@ -83,13 +84,15 @@ export function RankLeaderboard({ leaderboard, hasMore, loadingMore, onLoadMore 
           ) : null}
 
           {hasMore ? (
-            <View className="px-3 pt-3">
+            <View className="items-center px-3 py-3">
               {loadingMore ? (
-                <View className="items-center py-2">
-                  <ActivityIndicator />
-                </View>
+                <ActivityIndicator color={colors.primary} />
               ) : (
-                <Button label={t("achievements.loadMore")} variant="secondary" fullWidth onPress={onLoadMore} />
+                <Pressable onPress={onLoadMore} hitSlop={8} className="active:opacity-70">
+                  <Text className="text-sm font-semibold text-primary">
+                    {t("achievements.showMore")}
+                  </Text>
+                </Pressable>
               )}
             </View>
           ) : null}

@@ -47,18 +47,18 @@ export default function AchievementScreen() {
           <AchievementSectionTabs value={section} onChange={handleSectionChange} />
 
           {section === "rank" ? (
-            loading || !leaderboard ? (
+            loading && !leaderboard ? (
               <View className="items-center py-16">
                 <ActivityIndicator size="large" color={colors.primary} />
               </View>
-            ) : (
+            ) : leaderboard ? (
               <RankLeaderboard
                 leaderboard={leaderboard}
                 hasMore={hasMore}
                 loadingMore={loadingMore}
                 onLoadMore={loadMore}
               />
-            )
+            ) : null
           ) : (
             <>
               <NextBadgeCard
