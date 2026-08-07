@@ -2,13 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
   Text,
   TextInput,
   View,
 } from "react-native";
 
+import {
+  CommentActionModals,
+  type CommentModalState,
+} from "@/components/feature/community/CommentActionModals";
 import { UserAvatar } from "@/components/feature/community/UserAvatar";
 import { formatUsernameMention } from "@/constants/onboarding/onboardingUsername";
 import { useTheme } from "@/context/ThemeContext";
@@ -48,7 +51,7 @@ export function CommentRow({
   const [isEditing, setIsEditing] = useState(false);
   const [draftText, setDraftText] = useState(comment.text);
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [modal, setModal] = useState<CommentModalState | null>(null);
 
   const openProfile = () => {
     if (author.isCurrentUser) {
@@ -60,52 +63,36 @@ export function CommentRow({
 
   const mentionHandle = comment.replyToHandle?.trim();
   const showMenu = (canEdit || canDelete) && !isEditing;
+  const closeModal = () => setModal(null);
 
-  const openMenu = () => {
-    const options: {
-      text: string;
-      style?: "destructive" | "cancel";
-      onPress?: () => void;
-    }[] = [];
+  const startEdit = () => {
+    closeModal();
+    setDraftText(comment.text);
+    setIsEditing(true);
+  };
 
-    if (canEdit && onEdit) {
-      options.push({
-        text: "Edit",
-        onPress: () => {
-          setDraftText(comment.text);
-          setIsEditing(true);
-        },
+  const confirmDelete = () => {
+    if (!onDelete) return;
+    setModal({ type: "deleting" });
+    void onDelete()
+      .then((ok) => {
+        if (!ok) {
+          setModal({
+            type: "error",
+            title: "Could not delete comment",
+            message: "Please try again.",
+          });
+          return;
+        }
+        closeModal();
+      })
+      .catch(() => {
+        setModal({
+          type: "error",
+          title: "Could not delete comment",
+          message: "Please try again.",
+        });
       });
-    }
-
-    if (canDelete && onDelete) {
-      options.push({
-        text: "Delete",
-        style: "destructive",
-        onPress: () => {
-          Alert.alert("Delete comment?", "This cannot be undone.", [
-            { text: "Cancel", style: "cancel" },
-            {
-              text: "Delete",
-              style: "destructive",
-              onPress: () => {
-                setDeleting(true);
-                void onDelete()
-                  .then((ok) => {
-                    if (!ok) {
-                      Alert.alert("Could not delete comment", "Please try again.");
-                    }
-                  })
-                  .finally(() => setDeleting(false));
-              },
-            },
-          ]);
-        },
-      });
-    }
-
-    options.push({ text: "Cancel", style: "cancel" });
-    Alert.alert("Comment options", undefined, options);
   };
 
   const saveEdit = async () => {
@@ -118,7 +105,11 @@ export function CommentRow({
       if (ok) {
         setIsEditing(false);
       } else {
-        Alert.alert("Could not update comment", "Please try again.");
+        setModal({
+          type: "error",
+          title: "Could not update comment",
+          message: "Please try again.",
+        });
       }
     } finally {
       setSaving(false);
@@ -144,16 +135,11 @@ export function CommentRow({
             </Text>
             {showMenu ? (
               <Pressable
-                onPress={openMenu}
+                onPress={() => setModal({ type: "options" })}
                 hitSlop={8}
-                disabled={deleting}
                 className="ml-1 h-6 w-6 items-center justify-center"
               >
-                {deleting ? (
-                  <ActivityIndicator size="small" color={colors.mutedForeground} />
-                ) : (
-                  <Ionicons name="ellipsis-horizontal" size={16} color={colors.mutedForeground} />
-                )}
+                <Ionicons name="ellipsis-horizontal" size={16} color={colors.mutedForeground} />
               </Pressable>
             ) : null}
           </View>
@@ -182,11 +168,19 @@ export function CommentRow({
                   disabled={saving || draftText.trim().length === 0}
                   hitSlop={6}
                 >
-                  <Text
-                    className={`text-xs font-bold ${saving || draftText.trim().length === 0 ? "text-muted-foreground" : "text-primary"}`}
-                  >
-                    Save
-                  </Text>
+                  {saving ? (
+                    <ActivityIndicator size="small" color={colors.primary} />
+                  ) : (
+                    <Text
+                      className={`text-xs font-bold ${
+                        draftText.trim().length === 0
+                          ? "text-muted-foreground"
+                          : "text-primary"
+                      }`}
+                    >
+                      Save
+                    </Text>
+                  )}
                 </Pressable>
                 <Pressable
                   onPress={() => {
@@ -239,6 +233,16 @@ export function CommentRow({
           </View>
         ) : null}
       </View>
+
+      <CommentActionModals
+        state={modal}
+        canEdit={canEdit && Boolean(onEdit)}
+        canDelete={canDelete && Boolean(onDelete)}
+        onClose={closeModal}
+        onEdit={startEdit}
+        onRequestDelete={() => setModal({ type: "confirmDelete" })}
+        onConfirmDelete={confirmDelete}
+      />
     </View>
   );
 }

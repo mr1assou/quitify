@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 
 import { LAPSE_CIGARETTE_COUNT } from "@/constants/stats/slipCigaretteCounts";
 import { useApp } from "@/context/AppContext";
+import { useGoals } from "@/context/GoalsContext";
 import { createSlipEvent, deleteSlipEvent } from "@/services/slip/slipEventsApi";
 import type { CravingResultSubmitInput } from "@/types/stats/slipFlow";
 import {
@@ -11,6 +12,7 @@ import {
 
 export function useSlipSubmit() {
   const { logCraving, deleteCraving, updateProfile, state } = useApp();
+  const { refresh: refreshGoals } = useGoals();
   const startedAt = useRef(Date.now());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,11 +44,13 @@ export function useSlipSubmit() {
         });
 
         updateProfile(profilePatchFromSlipCreate(result));
+        // Backend fails active goals on slip — refresh so Home drops them immediately.
+        await refreshGoals();
       } finally {
         setIsSubmitting(false);
       }
     },
-    [logCraving, updateProfile],
+    [logCraving, refreshGoals, updateProfile],
   );
 
   const undo = useCallback(async () => {
@@ -58,10 +62,12 @@ export function useSlipSubmit() {
     if (latest.serverId != null) {
       const result = await deleteSlipEvent(latest.serverId);
       updateProfile(profilePatchFromSlipUndo(result));
+      // Undo restores goals failed by that slip — refresh Home goal cards.
+      await refreshGoals();
     }
 
     deleteCraving(latest.id);
-  }, [deleteCraving, state.cravings, updateProfile]);
+  }, [deleteCraving, refreshGoals, state.cravings, updateProfile]);
 
   return { submit, undo, isSubmitting };
 }
