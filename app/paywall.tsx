@@ -85,9 +85,7 @@ export default function Paywall() {
 
   const primaryCtaLabel = purchasing
     ? t("paywall.processing")
-    : selectedPlan === "yearly"
-      ? t("paywall.tryFree")
-      : t("paywall.continue");
+    : t("paywall.tryFree");
 
   const trackDismissOnce = useCallback(() => {
     if (convertedRef.current || dismissTrackedRef.current) return;

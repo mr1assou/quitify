@@ -18,6 +18,7 @@ import {
 import { REVENUECAT_PREMIUM_ENTITLEMENT } from "@/constants/paywall/revenueCat";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import {
+  PLAY_MONTHLY_TRIAL_OFFER_ID,
   PLAY_YEARLY_SPECIAL_OFFER_IDS,
   PLAY_YEARLY_TRIAL_OFFER_ID,
 } from "@/constants/paywall/purchases";
@@ -237,16 +238,20 @@ async function freshStoreProduct(productId: string): Promise<PurchasesStoreProdu
 function isTrialSubscriptionOption(option: SubscriptionOption): boolean {
   if (option.freePhase != null) return true;
   if (option.id.includes(PLAY_YEARLY_TRIAL_OFFER_ID)) return true;
+  if (option.id.includes(PLAY_MONTHLY_TRIAL_OFFER_ID)) return true;
   return option.pricingPhases.some((phase) => phase.price.amountMicros === 0);
 }
 
-function yearlyTrialSubscriptionOption(product: PurchasesStoreProduct): SubscriptionOption | null {
+function trialSubscriptionOption(
+  product: PurchasesStoreProduct,
+  offerId: string,
+): SubscriptionOption | null {
   if (Platform.OS !== "android") return null;
 
   const options = product.subscriptionOptions ?? [];
   if (!options.length) return null;
 
-  const trialOfferSuffix = `:${PLAY_YEARLY_TRIAL_OFFER_ID}`;
+  const trialOfferSuffix = `:${offerId}`;
   const byOfferId = options.find(
     (option) => option.id.endsWith(trialOfferSuffix) && isTrialSubscriptionOption(option),
   );
@@ -255,14 +260,27 @@ function yearlyTrialSubscriptionOption(product: PurchasesStoreProduct): Subscrip
   return options.find((option) => isTrialSubscriptionOption(option)) ?? null;
 }
 
-async function resolveYearlyStoreProduct(
+function yearlyTrialSubscriptionOption(
+  product: PurchasesStoreProduct,
+): SubscriptionOption | null {
+  return trialSubscriptionOption(product, PLAY_YEARLY_TRIAL_OFFER_ID);
+}
+
+function monthlyTrialSubscriptionOption(
+  product: PurchasesStoreProduct,
+): SubscriptionOption | null {
+  return trialSubscriptionOption(product, PLAY_MONTHLY_TRIAL_OFFER_ID);
+}
+
+async function resolveStoreProduct(
   selectedPackage: PurchasesPackage,
+  context: string,
 ): Promise<PurchasesStoreProduct> {
   const cachedProduct = selectedPackage.product;
   const freshProduct = await freshStoreProduct(cachedProduct.identifier);
   const product = freshProduct ?? cachedProduct;
 
-  logSubscriptionOptions("yearly product options", product);
+  logSubscriptionOptions(context, product);
   return product;
 }
 
@@ -288,13 +306,40 @@ async function purchaseYearlyPlan(
   return customerInfo;
 }
 
+/** New Google accounts get the 3-day monthly trial; returning users pay full price. */
+async function purchaseMonthlyPlan(
+  selectedPackage: PurchasesPackage,
+  product: PurchasesStoreProduct,
+): Promise<CustomerInfo> {
+  const trialOption = monthlyTrialSubscriptionOption(product);
+
+  if (trialOption) {
+    if (__DEV__) {
+      console.log(`[revenuecat] purchasing monthly trial option ${trialOption.id}`);
+    }
+    const { customerInfo } = await Purchases.purchaseSubscriptionOption(trialOption);
+    return customerInfo;
+  }
+
+  if (__DEV__) {
+    console.log("[revenuecat] monthly trial not eligible — purchasing at full price");
+  }
+  const { customerInfo } = await Purchases.purchasePackage(selectedPackage);
+  return customerInfo;
+}
+
 async function purchaseSelectedPackage(
   selectedPackage: PurchasesPackage,
   planId: PaywallPlanId,
 ): Promise<CustomerInfo> {
   if (planId === "yearly") {
-    const product = await resolveYearlyStoreProduct(selectedPackage);
+    const product = await resolveStoreProduct(selectedPackage, "yearly product options");
     return purchaseYearlyPlan(selectedPackage, product);
+  }
+
+  if (planId === "monthly") {
+    const product = await resolveStoreProduct(selectedPackage, "monthly product options");
+    return purchaseMonthlyPlan(selectedPackage, product);
   }
 
   if (__DEV__) {
@@ -420,7 +465,7 @@ export async function fetchSpecialPaywallOffer(): Promise<SpecialPaywallOfferDis
 
   try {
     const selectedPackage = await resolveYearlyPackage();
-    const product = await resolveYearlyStoreProduct(selectedPackage);
+    const product = await resolveStoreProduct(selectedPackage, "yearly product options");
     const specialOption = yearlySpecialSubscriptionOption(product);
 
     if (!specialOption) {
@@ -451,7 +496,7 @@ export async function purchaseSpecialYearlyOffer(): Promise<boolean> {
   }
 
   const selectedPackage = await resolveYearlyPackage();
-  const product = await resolveYearlyStoreProduct(selectedPackage);
+  const product = await resolveStoreProduct(selectedPackage, "yearly product options");
   const specialOption = yearlySpecialSubscriptionOption(product);
 
   try {

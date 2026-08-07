@@ -10,6 +10,12 @@ import {
   TextInput,
   View,
 } from "react-native";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import {
+  KeyboardAvoidingView,
+  KeyboardProvider,
+  useReanimatedKeyboardAnimation,
+} from "react-native-keyboard-controller";
 import {
   SafeAreaProvider,
   initialWindowMetrics,
@@ -113,21 +119,23 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
       onRequestClose={onClose}
     >
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <HabitSettingsSheet
-          colors={colors}
-          cigarettesPerDay={cigarettesPerDay}
-          cigarettesPerPack={cigarettesPerPack}
-          packCostInput={packCostInput}
-          profile={profile}
-          canSave={canSave}
-          saving={saving}
-          error={error}
-          onClose={onClose}
-          onCigarettesPerDayChange={setCigarettesPerDay}
-          onCigarettesPerPackChange={setCigarettesPerPack}
-          onPackCostInputChange={setPackCostInput}
-          onSave={handleSave}
-        />
+        <KeyboardProvider>
+          <HabitSettingsSheet
+            colors={colors}
+            cigarettesPerDay={cigarettesPerDay}
+            cigarettesPerPack={cigarettesPerPack}
+            packCostInput={packCostInput}
+            profile={profile}
+            canSave={canSave}
+            saving={saving}
+            error={error}
+            onClose={onClose}
+            onCigarettesPerDayChange={setCigarettesPerDay}
+            onCigarettesPerPackChange={setCigarettesPerPack}
+            onPackCostInputChange={setPackCostInput}
+            onSave={handleSave}
+          />
+        </KeyboardProvider>
       </SafeAreaProvider>
     </Modal>
   );
@@ -166,95 +174,108 @@ function HabitSettingsSheet({
 }: SheetProps) {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const { height: keyboardHeight, progress } = useReanimatedKeyboardAnimation();
+
+  const sheetStyle = useAnimatedStyle(() => ({
+    paddingBottom:
+      16 +
+      keyboardHeight.value +
+      (1 - progress.value) * Math.max(insets.bottom, 0),
+  }));
 
   return (
-    <View className="flex-1 justify-end bg-black/50">
-      <Pressable accessibilityRole="button" className="flex-1" onPress={onClose} />
-      <View
-        className="max-h-[90%] rounded-t-3xl bg-background dark:bg-d-bg"
-        style={{ paddingBottom: Math.max(insets.bottom, 16) }}
-      >
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <View className="flex-1 justify-end bg-black/50">
+        <Pressable accessibilityRole="button" className="flex-1" onPress={onClose} />
+        <Animated.View
+          style={sheetStyle}
+          className="max-h-[90%] rounded-t-3xl bg-background dark:bg-d-bg"
         >
-          <View className="px-6 pb-2 pt-5">
-          <View className="mb-5 flex-row items-center justify-between">
-            <Text className="text-xl font-bold text-foreground dark:text-d-text">
-              {t("settings.smokingSettings")}
-            </Text>
-            <Pressable
-              accessibilityRole="button"
-              onPress={onClose}
-              className="h-9 w-9 items-center justify-center rounded-full bg-section dark:bg-d-surface"
-            >
-              <Ionicons name="close" size={20} color={colors.mutedForeground} />
-            </Pressable>
-          </View>
-
-          <Text className="mb-5 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            Changes apply from today forward. Your past savings and stats stay based on
-            the values you used before.
-          </Text>
-
-          <View className="gap-4">
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                Cigarettes per day
-              </Text>
-              <TextInput
-                value={cigarettesPerDay}
-                onChangeText={onCigarettesPerDayChange}
-                keyboardType="number-pad"
-                placeholder="e.g. 20"
-                placeholderTextColor={colors.mutedForeground}
-                className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
-              />
-            </View>
-
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                Cigarettes per pack
-              </Text>
-              <CigarettesPerPackField
-                value={cigarettesPerPack}
-                onChangeText={onCigarettesPerPackChange}
-              />
-            </View>
-
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                Pack price ({currencySymbol(profile.currency)})
-              </Text>
-              <PackCostField
-                currency={profile.currency}
-                value={packCostInput}
-                onChangeText={onPackCostInputChange}
-              />
-            </View>
-          </View>
-
-          {error ? (
-            <Text className="mt-4 text-sm text-alert">{error}</Text>
-          ) : null}
-
-          <Pressable
-            accessibilityRole="button"
-            disabled={!canSave || saving}
-            onPress={onSave}
-            className={`mt-6 items-center rounded-2xl py-3.5 ${
-              canSave && !saving ? "bg-primary" : "bg-muted opacity-60"
-            }`}
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 8 }}
           >
-            {saving ? (
-              <ActivityIndicator color={colors.white} />
-            ) : (
-              <Text className="text-base font-bold text-white">{t("goals.saveChanges")}</Text>
-            )}
-          </Pressable>
-          </View>
-        </ScrollView>
+            <View className="px-6 pb-2 pt-5">
+              <View className="mb-5 flex-row items-center justify-between">
+                <Text className="text-xl font-bold text-foreground dark:text-d-text">
+                  {t("settings.smokingSettings")}
+                </Text>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={onClose}
+                  className="h-9 w-9 items-center justify-center rounded-full bg-section dark:bg-d-surface"
+                >
+                  <Ionicons name="close" size={20} color={colors.mutedForeground} />
+                </Pressable>
+              </View>
+
+              <Text className="mb-5 text-sm leading-5 text-muted-foreground dark:text-d-muted">
+                Changes apply from today forward. Your past savings and stats stay based on
+                the values you used before.
+              </Text>
+
+              <View className="gap-4">
+                <View className="gap-2">
+                  <Text className="text-sm font-semibold text-foreground dark:text-d-text">
+                    Cigarettes per day
+                  </Text>
+                  <TextInput
+                    value={cigarettesPerDay}
+                    onChangeText={onCigarettesPerDayChange}
+                    keyboardType="number-pad"
+                    placeholder="e.g. 20"
+                    placeholderTextColor={colors.mutedForeground}
+                    className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
+                  />
+                </View>
+
+                <View className="gap-2">
+                  <Text className="text-sm font-semibold text-foreground dark:text-d-text">
+                    Cigarettes per pack
+                  </Text>
+                  <CigarettesPerPackField
+                    value={cigarettesPerPack}
+                    onChangeText={onCigarettesPerPackChange}
+                  />
+                </View>
+
+                <View className="gap-2">
+                  <Text className="text-sm font-semibold text-foreground dark:text-d-text">
+                    Pack price ({currencySymbol(profile.currency)})
+                  </Text>
+                  <PackCostField
+                    currency={profile.currency}
+                    value={packCostInput}
+                    onChangeText={onPackCostInputChange}
+                  />
+                </View>
+              </View>
+
+              {error ? (
+                <Text className="mt-4 text-sm text-alert">{error}</Text>
+              ) : null}
+
+              <Pressable
+                accessibilityRole="button"
+                disabled={!canSave || saving}
+                onPress={onSave}
+                className={`mt-6 items-center rounded-2xl py-3.5 ${
+                  canSave && !saving ? "bg-primary" : "bg-muted opacity-60"
+                }`}
+              >
+                {saving ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text className="text-base font-bold text-white">
+                    {t("goals.saveChanges")}
+                  </Text>
+                )}
+              </Pressable>
+            </View>
+          </ScrollView>
+        </Animated.View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

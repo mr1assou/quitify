@@ -9,7 +9,7 @@ export const PAYWALL_PLANS_USD = [
     rightPeriod: "/mo",
     subAmountUsd: null,
     subPeriod: null,
-    trial: null,
+    trial: "3 days free trial",
     recommended: false,
   },
   {

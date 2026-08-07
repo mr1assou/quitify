@@ -19,6 +19,7 @@ export const paywall = {
   monthlyPlan: "Monthly plan",
   yearlyPlan: "Yearly plan",
   trialBadge: "7 days free trial",
+  trialBadge3Days: "3 days free trial",
   recommended: "Recommended",
   staticOfferTitle: "You won a special offer!",
   staticOfferSubtitle: "Unlock Quitify VIP for less. Limited-time display offer.",

@@ -164,10 +164,6 @@ function NoteSheet({
             </Pressable>
           </View>
 
-          <Text className="mb-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            {t("missions.noteHint")}
-          </Text>
-
           <View className="gap-2">
             <TextInput
               value={note}

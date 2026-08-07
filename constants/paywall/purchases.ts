@@ -4,6 +4,9 @@ export const PLAY_SUBSCRIPTION_PRODUCT_IDS = {
   yearly: "quitify_premium_yearly",
 } as const;
 
+/** Offer on base plan `monthly` — SubscriptionOption id is `monthly:free-trial-3day`. */
+export const PLAY_MONTHLY_TRIAL_OFFER_ID = "free-trial-3day";
+
 /** Offer on base plan `annual` — SubscriptionOption id is `annual:trial-3days-annual`. */
 export const PLAY_YEARLY_TRIAL_OFFER_ID = "trial-3days-annual";
 
@@ -26,6 +29,9 @@ export const PLAY_YEARLY_SPECIAL_OFFER_IDS = [
   PLAY_YEARLY_SPECIAL_OFFER_ID,
   PLAY_YEARLY_WINBACK_OFFER_ID,
 ] as const;
+
+/** Google Play base plan id for the monthly subscription. */
+export const PLAY_MONTHLY_BASE_PLAN_ID = "monthly";
 
 /** Google Play base plan id for the yearly subscription. */
 export const PLAY_YEARLY_BASE_PLAN_ID = "annual";

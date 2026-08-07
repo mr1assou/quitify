@@ -20,6 +20,7 @@ export const paywall = {
   monthlyPlan: "Formule mensuelle",
   yearlyPlan: "Formule annuelle",
   trialBadge: "7 jours d'essai gratuit",
+  trialBadge3Days: "3 jours d'essai gratuit",
   recommended: "Recommandé",
   staticOfferTitle: "Vous avez gagné une offre spéciale !",
   staticOfferSubtitle:

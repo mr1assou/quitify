@@ -35,7 +35,12 @@ export default function ChatsScreen() {
   const { section: sectionParam } = useLocalSearchParams<{ section?: string | string[] }>();
   const { state } = useApp();
   const insets = useSafeAreaInsets();
-  const { loadChatThreads } = useCommunity();
+  const {
+    loadChatThreads,
+    loadMoreChatThreads,
+    chatThreadsHasMore,
+    chatThreadsLoadingMore,
+  } = useCommunity();
   const threads = useChatThreads();
   const listBottom = Math.max(insets.bottom, 16) + 16;
 
@@ -61,7 +66,7 @@ export default function ChatsScreen() {
     } finally {
       setIsLoadingSupport(false);
     }
-  }, [isSupportStaff]);
+  }, [isSupportStaff, t]);
 
   useEffect(() => {
     if (parseChatsSection(sectionParam) === "support") {
@@ -111,11 +116,30 @@ export default function ChatsScreen() {
       {section === "chats" ? (
         <FlatList
           data={threads}
-          keyExtractor={(t) => t.threadId}
+          keyExtractor={(item) => item.threadId}
           ItemSeparatorComponent={() => (
             <View className="mx-6 h-px bg-section dark:bg-d-border" />
           )}
           renderItem={({ item }) => <ChatListRow preview={item} />}
+          ListFooterComponent={
+            chatThreadsHasMore ? (
+              <View className="items-center px-6 py-4">
+                {chatThreadsLoadingMore ? (
+                  <ActivityIndicator color={colors.primary} />
+                ) : (
+                  <Pressable
+                    onPress={() => void loadMoreChatThreads()}
+                    hitSlop={8}
+                    className="active:opacity-70"
+                  >
+                    <Text className="text-sm font-semibold text-primary">
+                      {t("common.seeMore")}
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
+            ) : null
+          }
           ListEmptyComponent={
             <View className="items-center px-6 pt-16">
               <Ionicons name="chatbubbles-outline" size={48} color={colors.mutedForeground} />

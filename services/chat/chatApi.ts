@@ -1,5 +1,6 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import { CHAT_MESSAGES_PAGE_SIZE } from "@/constants/chat/chatMessages";
+import { CHAT_THREADS_PAGE_SIZE } from "@/constants/chat/chatThreads";
 import type {
   BackendChatMessagesPage,
   BackendChatThreadSummary,
@@ -24,7 +25,7 @@ async function parseError(res: Response, fallback: string): Promise<never> {
 
 export async function fetchChatThreadsPage(
   offset = 0,
-  limit = 10,
+  limit = CHAT_THREADS_PAGE_SIZE,
 ): Promise<BackendChatThreadsPage> {
   const params = new URLSearchParams({
     offset: String(offset),
@@ -35,10 +36,11 @@ export async function fetchChatThreadsPage(
   return res.json() as Promise<BackendChatThreadsPage>;
 }
 
+/** Loads every thread by walking pages (prefer paginated fetch for the chats UI). */
 export async function fetchChatThreads(): Promise<BackendChatThreadSummary[]> {
   const all: BackendChatThreadSummary[] = [];
   let offset = 0;
-  const limit = 50;
+  const limit = CHAT_THREADS_PAGE_SIZE;
 
   while (true) {
     const page = await fetchChatThreadsPage(offset, limit);

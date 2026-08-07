@@ -15,6 +15,14 @@ const PLAN_LABEL_KEYS: Record<PaywallPlanId, "paywall.monthlyPlan" | "paywall.ye
   yearly: "paywall.yearlyPlan",
 };
 
+const PLAN_TRIAL_KEYS: Record<
+  PaywallPlanId,
+  "paywall.trialBadge" | "paywall.trialBadge3Days"
+> = {
+  monthly: "paywall.trialBadge3Days",
+  yearly: "paywall.trialBadge",
+};
+
 function PriceLine({
   amount,
   period,
@@ -70,7 +78,7 @@ export function PaywallPlanOption({ plan, selected, onSelect }: Props) {
   const { t } = useTranslation();
   const hasYearlyBreakdown = plan.subPrice != null && plan.subPeriod != null;
   const planLabel = t(PLAN_LABEL_KEYS[plan.id]);
-  const trialLabel = plan.trial ? t("paywall.trialBadge") : null;
+  const trialLabel = plan.trial ? t(PLAN_TRIAL_KEYS[plan.id]) : null;
 
   return (
     <View className={plan.recommended ? "relative mt-4" : undefined}>
@@ -111,16 +119,21 @@ export function PaywallPlanOption({ plan, selected, onSelect }: Props) {
             ) : null}
           </View>
         ) : (
-          <View className="flex-row items-center justify-between gap-3">
-            <Text className="shrink text-base font-bold text-d-text">{planLabel}</Text>
-            <View className="min-w-0 max-w-[55%]">
-              <PriceLine
-                amount={plan.rightPrice}
-                period={plan.rightPeriod}
-                align="right"
-                compareAt={plan.originalRightPrice}
-              />
+          <View>
+            <View className="flex-row items-center justify-between gap-3">
+              <Text className="shrink text-base font-bold text-d-text">{planLabel}</Text>
+              <View className="min-w-0 max-w-[55%]">
+                <PriceLine
+                  amount={plan.rightPrice}
+                  period={plan.rightPeriod}
+                  align="right"
+                  compareAt={plan.originalRightPrice}
+                />
+              </View>
             </View>
+            {trialLabel ? (
+              <Text className="mt-2 text-sm font-semibold text-primary">{trialLabel}</Text>
+            ) : null}
           </View>
         )}
       </Pressable>

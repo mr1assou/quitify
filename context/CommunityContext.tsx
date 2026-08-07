@@ -5,16 +5,18 @@ import {
   useMemo,
   useReducer,
   useRef,
+  useState,
   type ReactNode,
 } from "react";
 
 import { useApp } from "@/context/AppContext";
 import { CURRENT_USER_ID } from "@/constants/community/communityUsers";
+import { CHAT_THREADS_PAGE_SIZE } from "@/constants/chat/chatThreads";
 import {
   deleteChatMessage as deleteChatMessageApi,
   editChatMessage as editChatMessageApi,
   fetchChatMessages,
-  fetchChatThreads,
+  fetchChatThreadsPage,
   markChatThreadRead,
   openChatThread as openChatThreadApi,
   sendChatMessage as sendChatMessageApi,
@@ -127,6 +129,18 @@ type Action =
   | { type: "UPSERT_AUTHOR"; author: CommunityUser }
   | {
       type: "HYDRATE_CHAT_THREADS";
+      threads: ChatThread[];
+      messagesById: Record<string, ChatMessage>;
+      authorsById: Record<string, CommunityUser>;
+    }
+  | {
+      type: "REPLACE_CHAT_THREADS";
+      threads: ChatThread[];
+      messagesById: Record<string, ChatMessage>;
+      authorsById: Record<string, CommunityUser>;
+    }
+  | {
+      type: "APPEND_CHAT_THREADS";
       threads: ChatThread[];
       messagesById: Record<string, ChatMessage>;
       authorsById: Record<string, CommunityUser>;
@@ -618,6 +632,36 @@ function reducer(state: State, action: Action): State {
       };
     }
 
+    case "REPLACE_CHAT_THREADS": {
+      return {
+        ...state,
+        threads: action.threads.map((thread) => {
+          const existing = state.threads.find((row) => row.id === thread.id);
+          return mergeThreadFromSummary(existing, thread);
+        }),
+        messagesById: { ...state.messagesById, ...action.messagesById },
+        authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
+      };
+    }
+
+    case "APPEND_CHAT_THREADS": {
+      const existingIds = new Set(state.threads.map((thread) => thread.id));
+      const mergedExisting = state.threads.map((thread) => {
+        const incoming = action.threads.find((row) => row.id === thread.id);
+        return incoming ? mergeThreadFromSummary(thread, incoming) : thread;
+      });
+      const appended = action.threads
+        .filter((thread) => !existingIds.has(thread.id))
+        .map((thread) => mergeThreadFromSummary(undefined, thread));
+
+      return {
+        ...state,
+        threads: [...mergedExisting, ...appended],
+        messagesById: { ...state.messagesById, ...action.messagesById },
+        authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
+      };
+    }
+
     case "UPSERT_CHAT_THREAD": {
       const existingIndex = state.threads.findIndex((t) => t.id === action.thread.id);
       const messagesById = { ...state.messagesById };
@@ -844,6 +888,9 @@ type CommunityContextValue = {
   patchPresence: (userId: number, isOnline: boolean) => void;
   clearPresence: () => void;
   loadChatThreads: () => Promise<void>;
+  loadMoreChatThreads: () => Promise<void>;
+  chatThreadsHasMore: boolean;
+  chatThreadsLoadingMore: boolean;
   loadChatMessages: (threadId: string) => Promise<void>;
   loadMoreChatMessages: (threadId: string) => Promise<void>;
   openChatThreadWithPeer: (peerUserId: number) => Promise<string | null>;
@@ -870,6 +917,10 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const currentUserId = appState.account?.userId ?? null;
   const stateRef = useRef(state);
   stateRef.current = state;
+  const chatThreadsOffsetRef = useRef(0);
+  const loadingMoreThreadsRef = useRef(false);
+  const [chatThreadsHasMore, setChatThreadsHasMore] = useState(false);
+  const [chatThreadsLoadingMore, setChatThreadsLoadingMore] = useState(false);
   const postVoteInFlightRef = useRef<Set<string>>(new Set());
   const commentVoteInFlightRef = useRef<Set<string>>(new Set());
   const pendingPostVoteRef = useRef<Map<string, PostVote | null>>(new Map());
@@ -1223,12 +1274,12 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     if (!currentUserId) return;
 
     try {
-      const rows = await fetchChatThreads();
+      const page = await fetchChatThreadsPage(0, CHAT_THREADS_PAGE_SIZE);
       const threads: ChatThread[] = [];
       const messagesById: Record<string, ChatMessage> = {};
       const authorsById: Record<string, CommunityUser> = {};
 
-      for (const row of rows) {
+      for (const row of page.items) {
         const mapped = mapBackendThreadSummary(row, currentUserId);
         threads.push(mapped.thread);
         authorsById[mapped.participant.id] = mapped.participant;
@@ -1237,11 +1288,48 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      dispatch({ type: "HYDRATE_CHAT_THREADS", threads, messagesById, authorsById });
+      dispatch({ type: "REPLACE_CHAT_THREADS", threads, messagesById, authorsById });
+      chatThreadsOffsetRef.current = page.items.length;
+      setChatThreadsHasMore(page.has_more);
     } catch {
       // keep cached threads
     }
   }, [currentUserId]);
+
+  const loadMoreChatThreads = useCallback(async () => {
+    if (!currentUserId) return;
+    if (!chatThreadsHasMore || loadingMoreThreadsRef.current) return;
+
+    loadingMoreThreadsRef.current = true;
+    setChatThreadsLoadingMore(true);
+    try {
+      const page = await fetchChatThreadsPage(
+        chatThreadsOffsetRef.current,
+        CHAT_THREADS_PAGE_SIZE,
+      );
+      const threads: ChatThread[] = [];
+      const messagesById: Record<string, ChatMessage> = {};
+      const authorsById: Record<string, CommunityUser> = {};
+
+      for (const row of page.items) {
+        const mapped = mapBackendThreadSummary(row, currentUserId);
+        threads.push(mapped.thread);
+        authorsById[mapped.participant.id] = mapped.participant;
+        for (const message of mapped.messages) {
+          messagesById[message.id] = message;
+        }
+      }
+
+      dispatch({ type: "APPEND_CHAT_THREADS", threads, messagesById, authorsById });
+      chatThreadsOffsetRef.current += page.items.length;
+      setChatThreadsHasMore(page.has_more);
+    } catch {
+      // keep cached threads
+    } finally {
+      loadingMoreThreadsRef.current = false;
+      setChatThreadsLoadingMore(false);
+    }
+  }, [chatThreadsHasMore, currentUserId]);
 
   const loadChatMessages = useCallback(
     async (threadId: string) => {
@@ -1546,6 +1634,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       patchPresence,
       clearPresence,
       loadChatThreads,
+      loadMoreChatThreads,
+      chatThreadsHasMore,
+      chatThreadsLoadingMore,
       loadChatMessages,
       loadMoreChatMessages,
       openChatThreadWithPeer,
@@ -1583,6 +1674,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       patchPresence,
       clearPresence,
       loadChatThreads,
+      loadMoreChatThreads,
+      chatThreadsHasMore,
+      chatThreadsLoadingMore,
       loadChatMessages,
       loadMoreChatMessages,
       openChatThreadWithPeer,
