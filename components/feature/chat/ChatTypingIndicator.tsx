@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Text, View } from "react-native";
 import Animated, {
   Easing,
+  FadeInDown,
+  FadeOutUp,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -43,16 +45,20 @@ function TypingDot({ delayMs }: { delayMs: number }) {
   );
 }
 
-/** WhatsApp-style typing row above the composer. */
+/** WhatsApp-style typing row above the composer — fades in/out smoothly. */
 export function ChatTypingIndicator({ label }: Props) {
   return (
-    <View className="flex-row items-center px-4 pb-2 pt-1">
+    <Animated.View
+      entering={FadeInDown.duration(220).springify().damping(18)}
+      exiting={FadeOutUp.duration(160)}
+      className="flex-row items-center px-4 pb-2 pt-1"
+    >
       <View className="flex-row items-center rounded-full bg-section px-3 py-2 dark:bg-d-surface">
         <Text className="mr-2 text-xs text-muted-foreground dark:text-d-muted">{label}</Text>
         <TypingDot delayMs={0} />
         <TypingDot delayMs={160} />
         <TypingDot delayMs={320} />
       </View>
-    </View>
+    </Animated.View>
   );
 }

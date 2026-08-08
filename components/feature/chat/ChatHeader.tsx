@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
@@ -57,18 +58,30 @@ export function ChatHeader({
           <ChatPresenceSuffix isOnline={isOnline} lastSeenAt={lastSeenAt} />
         </View>
 
-        <View className="mt-0.5 flex-row items-center gap-1.5">
+        <View className="mt-0.5 min-h-[16px] flex-row items-center gap-1.5">
           {isTyping ? (
-            <Text className="text-xs font-medium text-primary">typing…</Text>
+            <Animated.Text
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(140)}
+              className="text-xs font-medium text-primary"
+            >
+              typing…
+            </Animated.Text>
           ) : isSupportPeer ? (
-            <Text
+            <Animated.Text
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(140)}
               className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
               numberOfLines={1}
             >
               {SUPPORT_STAFF_SUBTITLE}
-            </Text>
+            </Animated.Text>
           ) : (
-            <>
+            <Animated.View
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(140)}
+              className="min-w-0 flex-1 flex-row items-center gap-1.5"
+            >
               <BadgeArt badgeId={participant.badgeId} size={18} />
               <Text
                 className="min-w-0 flex-1 text-xs text-muted-foreground dark:text-d-muted"
@@ -76,7 +89,7 @@ export function ChatHeader({
               >
                 {badgeName}
               </Text>
-            </>
+            </Animated.View>
           )}
         </View>
       </View>

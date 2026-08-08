@@ -21,7 +21,7 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { t } = useTranslation();
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
-  const lockStreakStats = !profile.isCurrentUser && !isPremium;
+  const lockOtherUserVipStats = !profile.isCurrentUser && !isPremium;
 
   /** Snapshot at open — streak tiles stay fixed (no live countdown). */
   const snapshotNow = useMemo(() => Date.now(), []);
@@ -68,6 +68,8 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.primary}
           label={t("profile.freedomPoints")}
           value={formatNumber(profile.freedomPoints)}
+          locked={lockOtherUserVipStats}
+          onLockedPress={requirePremium}
           vipA11y={t("profile.vipFeatureTap", { label: t("profile.freedomPoints") })}
         />
       </View>
@@ -78,7 +80,7 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.secondary}
           label={t("profile.currentStreak")}
           value={currentStreakLabel}
-          locked={lockStreakStats}
+          locked={lockOtherUserVipStats}
           onLockedPress={requirePremium}
           vipA11y={t("profile.vipFeatureTap", { label: t("profile.currentStreak") })}
         />
@@ -87,7 +89,7 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.accent}
           label={t("profile.bestStreak")}
           value={bestStreakLabel}
-          locked={lockStreakStats}
+          locked={lockOtherUserVipStats}
           onLockedPress={requirePremium}
           vipA11y={t("profile.vipFeatureTap", { label: t("profile.bestStreak") })}
         />

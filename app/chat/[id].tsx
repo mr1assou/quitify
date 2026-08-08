@@ -2,7 +2,6 @@ import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  FlatList,
   Platform,
   Pressable,
   Text,
@@ -10,10 +9,11 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, LinearTransition } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { KeyboardAvoidingScreen } from "@/components/layout/KeyboardAvoidingScreen";
 
+import { ChatDaySeparator } from "@/components/feature/chat/ChatDaySeparator";
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
 import { ChatEmptyGreeting } from "@/components/feature/chat/ChatEmptyGreeting";
 import {
@@ -36,6 +36,10 @@ import {
   joinChatThread,
   leaveChatThread,
 } from "@/services/realtime/chatSocket";
+import {
+  calendarDayKeyInTimezone,
+  formatChatDaySeparator,
+} from "@/utils/chat/formatMessageTime";
 import { resolveOutgoingReadStatus } from "@/utils/chat/resolveOutgoingReadStatus";
 import {
   canShowChatMessageActions,
@@ -46,19 +50,36 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-type Row = {
+type MessageRow = {
+  kind: "message";
+  key: string;
   message: ChatMessage;
   fromMe: boolean;
   showTimestamp: boolean;
   readStatus?: "seen" | "unseen";
 };
 
+type DayRow = {
+  kind: "day";
+  key: string;
+  label: string;
+};
+
+type Row = MessageRow | DayRow;
+
+/** Animate optimistic sends + freshly arrived peer messages; skip history and post-send id replace. */
+function shouldAnimateMessageEntrance(message: ChatMessage, fromMe: boolean): boolean {
+  if (message.id.startsWith("temp-")) return true;
+  if (fromMe) return false;
+  return Date.now() - message.createdAt < 2_500;
+}
+
 export default function ChatThreadScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const threadId = typeof id === "string" ? id : "";
   const detail = useChatThread(threadId);
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const timeZone = useUserTimezone();
   const {
     state,
@@ -76,7 +97,7 @@ export default function ChatThreadScreen() {
   );
   const { peerTyping, onComposerTypingChange, stopTyping, markSeenNow } =
     useChatThreadRealtime(threadId);
-  const listRef = useRef<FlatList<Row>>(null);
+  const listRef = useRef<Animated.FlatList<Row>>(null);
   const [hydrating, setHydrating] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -133,13 +154,34 @@ export default function ChatThreadScreen() {
   const rows = useMemo<Row[]>(() => {
     if (!detail) return [];
     const FIVE_MIN = 5 * 60 * 1000;
-    const built = detail.messages.map((message, i) => {
+    const chronological: Row[] = [];
+
+    for (let i = 0; i < detail.messages.length; i++) {
+      const message = detail.messages[i];
+      const prev = detail.messages[i - 1];
       const next = detail.messages[i + 1];
+      const dayKey = calendarDayKeyInTimezone(message.createdAt, timeZone);
+      const prevDayKey = prev
+        ? calendarDayKeyInTimezone(prev.createdAt, timeZone)
+        : null;
+
+      if (dayKey !== prevDayKey) {
+        chronological.push({
+          kind: "day",
+          key: `day-${dayKey}`,
+          label: formatChatDaySeparator(message.createdAt, timeZone, locale),
+        });
+      }
+
       const showTimestamp =
         !next ||
         next.senderId !== message.senderId ||
-        next.createdAt - message.createdAt > FIVE_MIN;
-      return {
+        next.createdAt - message.createdAt > FIVE_MIN ||
+        dayKey !== calendarDayKeyInTimezone(next.createdAt, timeZone);
+
+      chronological.push({
+        kind: "message",
+        key: message.id,
         message,
         fromMe: message.senderId === "me",
         showTimestamp,
@@ -147,10 +189,12 @@ export default function ChatThreadScreen() {
           message.senderId === "me"
             ? resolveOutgoingReadStatus(message, detail.peerLastReadAt)
             : undefined,
-      };
-    });
-    return built.reverse();
-  }, [detail]);
+      });
+    }
+
+    // Inverted FlatList: reverse so newest sits at the bottom with day headers above each block.
+    return chronological.reverse();
+  }, [detail, locale, timeZone]);
 
   const loadOlder = useCallback(async () => {
     if (!threadId || !hasMore || loadingMoreRef.current || messagesLoading) return;
@@ -278,14 +322,15 @@ export default function ChatThreadScreen() {
                 </View>
               ) : null}
 
-              <FlatList
+              <Animated.FlatList
                 ref={listRef}
                 inverted
                 style={{ flex: 1, backgroundColor: "transparent" }}
                 data={rows}
                 extraData={rows.length}
                 removeClippedSubviews={false}
-                keyExtractor={(r) => r.message.id}
+                keyExtractor={(r) => r.key}
+                itemLayoutAnimation={LinearTransition.duration(220)}
                 contentContainerStyle={{
                   padding: 16,
                   paddingBottom: 8,
@@ -293,17 +338,25 @@ export default function ChatThreadScreen() {
                 }}
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode="interactive"
-                renderItem={({ item }) => (
-                  <MessageBubble
-                    message={item.message}
-                    fromMe={item.fromMe}
-                    showTimestamp={item.showTimestamp}
-                    readStatus={item.readStatus}
-                    timeZone={timeZone}
-                    showActions={item.fromMe && canShowChatMessageActions(item.message)}
-                    onPressActions={() => openMessageActions(item.message)}
-                  />
-                )}
+                renderItem={({ item }) =>
+                  item.kind === "day" ? (
+                    <ChatDaySeparator label={item.label} />
+                  ) : (
+                    <MessageBubble
+                      message={item.message}
+                      fromMe={item.fromMe}
+                      showTimestamp={item.showTimestamp}
+                      readStatus={item.readStatus}
+                      timeZone={timeZone}
+                      animateEntrance={shouldAnimateMessageEntrance(
+                        item.message,
+                        item.fromMe,
+                      )}
+                      showActions={item.fromMe && canShowChatMessageActions(item.message)}
+                      onPressActions={() => openMessageActions(item.message)}
+                    />
+                  )
+                }
                 onEndReached={() => void loadOlder()}
                 onEndReachedThreshold={0.2}
                 ListFooterComponent={
@@ -321,7 +374,9 @@ export default function ChatThreadScreen() {
           )}
         </View>
 
-        {detail && peerTyping ? <ChatTypingIndicator label={`${firstName} is typing`} /> : null}
+        {detail && peerTyping ? (
+          <ChatTypingIndicator label={`${firstName} is typing`} />
+        ) : null}
 
         <MessageComposer
           onSend={onSend}

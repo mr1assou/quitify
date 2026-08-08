@@ -3,12 +3,19 @@ import { Pressable, Text, View } from "react-native";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
+import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { LeaderboardEntry } from "@/types/leaderboard/leaderboard";
+import { safeRouter } from "@/utils/app/safeRouter";
+import { dbAuthorId } from "@/utils/community/presence";
+import { communityUserFromLeaderboardEntry } from "@/utils/leaderboard/communityUserFromLeaderboardEntry";
+import { rememberLeaderboardEntry } from "@/utils/leaderboard/leaderboardProfilePeekCache";
+import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
 import { getBadgeName } from "@/utils/progress/badges";
 import { formatNumber } from "@/utils/shared/format";
-import { navigateToSelfPlayerProfile } from "@/utils/profile/navigateToUserProfile";
-import { safeRouter } from "@/utils/app/safeRouter";
 
 type Props = {
   entry: LeaderboardEntry;
@@ -43,15 +50,57 @@ function RankLabel({ rank }: { rank: number }) {
 
 export function LeaderboardRow({ entry, showDivider }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { upsertAuthor } = useCommunity();
+  const isPremium = useIsPremium();
+  const { requirePremium } = usePremiumGate();
   const badgeName = getBadgeName(entry.badgeId);
+  const hideOtherFp = !entry.isCurrentUser && !isPremium;
 
   const openProfile = () => {
     if (entry.isCurrentUser) {
       navigateToSelfPlayerProfile();
       return;
     }
+
+    rememberLeaderboardEntry(entry);
+
+    // Prefer stable user id — rank lookup breaks when leaderboard silently refreshes to page 1.
+    if (entry.userId != null) {
+      const author = communityUserFromLeaderboardEntry(entry);
+      if (author) upsertAuthor(author);
+      safeRouter.push(`/player/community/${dbAuthorId(entry.userId)}`);
+      return;
+    }
+
     safeRouter.push(`/player/${entry.rank}`);
   };
+
+  const fpBlock = (
+    <View className="items-end pl-2">
+      <View className="flex-row items-center gap-1.5">
+        <View className="h-6 w-6 items-center justify-center rounded-full bg-accent">
+          <Ionicons
+            name={hideOtherFp ? "lock-closed" : "flash"}
+            size={12}
+            color={colors.white}
+          />
+        </View>
+        <Text
+          className={`text-sm font-bold tabular-nums ${
+            hideOtherFp
+              ? "text-muted-foreground dark:text-d-muted"
+              : "text-foreground dark:text-d-text"
+          }`}
+        >
+          {hideOtherFp ? "—" : formatNumber(entry.xp)}
+        </Text>
+      </View>
+      <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted">
+        FP
+      </Text>
+    </View>
+  );
 
   return (
     <View>
@@ -100,19 +149,21 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
           </View>
         </View>
 
-        <View className="items-end pl-2">
-          <View className="flex-row items-center gap-1.5">
-            <View className="h-6 w-6 items-center justify-center rounded-full bg-accent">
-              <Ionicons name="flash" size={12} color={colors.white} />
-            </View>
-            <Text className="text-sm font-bold tabular-nums text-foreground dark:text-d-text">
-              {formatNumber(entry.xp)}
-            </Text>
-          </View>
-          <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted">
-            FP
-          </Text>
-        </View>
+        {hideOtherFp ? (
+          <Pressable
+            onPress={requirePremium}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t("profile.vipFeatureTap", {
+              label: t("profile.freedomPoints"),
+            })}
+            className="active:opacity-80"
+          >
+            {fpBlock}
+          </Pressable>
+        ) : (
+          fpBlock
+        )}
       </Pressable>
     </View>
   );

@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
+import Animated, { SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 import { ChatMessageMedia } from "@/components/feature/chat/ChatMessageMedia";
 import { MessageReadTicks } from "@/components/feature/chat/MessageReadTicks";
@@ -18,7 +19,16 @@ type Props = {
   showTimestamp?: boolean;
   showActions?: boolean;
   onPressActions?: () => void;
+  /** Soft enter for freshly sent / received messages (skip for history). */
+  animateEntrance?: boolean;
 };
+
+function entranceFor(fromMe: boolean, animateEntrance: boolean) {
+  if (!animateEntrance) return undefined;
+  return fromMe
+    ? SlideInRight.duration(240).springify().damping(18)
+    : SlideInLeft.duration(240).springify().damping(18);
+}
 
 export function MessageBubble({
   message,
@@ -28,28 +38,30 @@ export function MessageBubble({
   showTimestamp = true,
   showActions = false,
   onPressActions,
+  animateEntrance = false,
 }: Props) {
   const { colors } = useTheme();
+  const entering = entranceFor(fromMe, animateEntrance);
 
   if (message.kind === "call") {
     return (
-      <View className="my-1 items-center">
+      <Animated.View entering={entering} className="my-1 items-center">
         <View className="rounded-full bg-section px-3 py-1 dark:bg-d-surface">
           <Text className="text-xs text-muted-foreground dark:text-d-muted">
             Call
           </Text>
         </View>
-      </View>
+      </Animated.View>
     );
   }
 
   if (message.kind === "system") {
     return (
-      <View className="my-1 items-center">
+      <Animated.View entering={entering} className="my-1 items-center">
         <View className="rounded-full bg-section px-3 py-1 dark:bg-d-surface">
           <Text className="text-xs text-muted-foreground dark:text-d-muted">{message.text}</Text>
         </View>
-      </View>
+      </Animated.View>
     );
   }
 
@@ -65,7 +77,10 @@ export function MessageBubble({
 
   if (message.isDeleted) {
     return (
-      <View className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}>
+      <Animated.View
+        entering={entering}
+        className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}
+      >
         <View
           className={[
             "max-w-[78%] rounded-3xl border border-dashed px-4 py-2.5",
@@ -82,12 +97,15 @@ export function MessageBubble({
             {time}
           </Text>
         ) : null}
-      </View>
+      </Animated.View>
     );
   }
 
   return (
-    <View className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}>
+    <Animated.View
+      entering={entering}
+      className={`my-0.5 ${fromMe ? "items-end" : "items-start"}`}
+    >
       <View className={`max-w-full flex-row items-end ${fromMe ? "justify-end" : "justify-start"}`}>
         {canShowActions ? (
           <Pressable
@@ -175,6 +193,6 @@ export function MessageBubble({
           {time}
         </Text>
       ) : null}
-    </View>
+    </Animated.View>
   );
 }

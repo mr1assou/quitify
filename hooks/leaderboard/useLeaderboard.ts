@@ -1,4 +1,3 @@
-import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { LEADERBOARD_PAGE_SIZE } from "@/constants/leaderboard/leaderboardPagination";
@@ -136,16 +135,14 @@ export function useLeaderboard(): UseLeaderboardResult {
     });
   }, [loadPage]);
 
-  // One silent/background refresh per real tab focus (keeps existing ranks visible).
-  useFocusEffect(
-    useCallback(() => {
-      void loadPageRef.current(0, false);
-    }, []),
-  );
-
+  // Refresh only when the awards/stats screens ask for it — not when a profile
+  // screen mounts useLeaderboard (that was wiping "Show more" ranks mid-navigation).
   useEffect(() => {
     if (prevAccountUserIdRef.current === undefined) {
       prevAccountUserIdRef.current = accountUserId;
+      if (accountUserId != null && snapshotRef.current == null) {
+        void loadPageRef.current(0, false);
+      }
       return;
     }
     if (prevAccountUserIdRef.current === accountUserId) return;

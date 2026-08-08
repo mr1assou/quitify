@@ -26,7 +26,10 @@ export default function AchievementScreen() {
   useFocusEffect(
     useCallback(() => {
       void refreshAccount();
-    }, [refreshAccount]),
+      if (section === "rank") {
+        void refresh();
+      }
+    }, [refresh, refreshAccount, section]),
   );
 
   const handleSectionChange = (next: AchievementSection) => {

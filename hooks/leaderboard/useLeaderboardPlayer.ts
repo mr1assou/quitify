@@ -8,6 +8,7 @@ import { dbAuthorId } from "@/utils/community/presence";
 import { buildProfileFromLeaderboardEntry } from "@/utils/leaderboard/buildProfileFromLeaderboardEntry";
 import { findLeaderboardEntryByRank } from "@/utils/leaderboard/findLeaderboardEntry";
 import { getLeaderboardCache } from "@/utils/leaderboard/leaderboardCache";
+import { peekLeaderboardEntryByRank } from "@/utils/leaderboard/leaderboardProfilePeekCache";
 
 export function useLeaderboardPlayer(rank: number): PlayerProfile | null {
   const { snapshot: leaderboard } = useLeaderboard();
@@ -18,9 +19,10 @@ export function useLeaderboardPlayer(rank: number): PlayerProfile | null {
     if (!Number.isFinite(rank) || rank < 1) return null;
 
     const snapshot = leaderboard ?? getLeaderboardCache();
-    if (!snapshot) return null;
+    const entry =
+      (snapshot ? findLeaderboardEntryByRank(snapshot, rank) : null) ??
+      peekLeaderboardEntryByRank(rank);
 
-    const entry = findLeaderboardEntryByRank(snapshot, rank);
     if (!entry) return null;
 
     const communityAuthor = entry.userId
