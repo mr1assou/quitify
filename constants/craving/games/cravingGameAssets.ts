@@ -14,8 +14,3 @@ export const MEMORY_MATCH_LOGO_IMAGE: ImageSourcePropType = require(
 export const REFLEX_TAP_LOGO_IMAGE: ImageSourcePropType = require(
   "../../../assets/images/games/3/logo.webp",
 );
-
-/** Bubble Shooter */
-export const BUBBLE_SHOOTER_LOGO_IMAGE: ImageSourcePropType = require(
-  "../../../assets/images/games/4/logo.webp",
-);

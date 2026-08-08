@@ -4,7 +4,6 @@ import type { ImageSourcePropType } from "react-native";
 
 import {
   BREATHING_LOGO_IMAGE,
-  BUBBLE_SHOOTER_LOGO_IMAGE,
   MEMORY_MATCH_LOGO_IMAGE,
   REFLEX_TAP_LOGO_IMAGE,
 } from "@/constants/craving/games/cravingGameAssets";
@@ -12,8 +11,7 @@ import {
 export type CravingGameId =
   | "breathing"
   | "memory-match"
-  | "reflex-tap"
-  | "bubble-shooter";
+  | "reflex-tap";
 
 export type CravingGamePalette = {
   light: { background: string; iconColor: string };
@@ -78,21 +76,6 @@ export const CRAVING_GAMES: readonly CravingGame[] = [
     palette: {
       light: { background: "#FFF1D6", iconColor: "#B07A1E" },
       dark: { background: "#3A2E14", iconColor: "#E8C57A" },
-    },
-  },
-  {
-    id: "bubble-shooter",
-    title: "Bubble Shooter",
-    description: "Pop 4,000 bubbles in batches before they reach the line.",
-    duration: "Open play",
-    icon: "ellipse-outline",
-    logoImage: BUBBLE_SHOOTER_LOGO_IMAGE,
-    logoCardFit: "cover",
-    href: "/craving-tools/games/bubble-shooter",
-    available: true,
-    palette: {
-      light: { background: "#E8F4FF", iconColor: "#2B7FD4" },
-      dark: { background: "#142433", iconColor: "#8FC4F5" },
     },
   },
 ] as const;

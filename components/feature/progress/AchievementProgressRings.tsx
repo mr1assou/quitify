@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -6,6 +7,8 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
+import { useIsPremium } from "@/hooks/auth/useIsPremium";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import type { GlobalRank } from "@/types/progress/progress";
@@ -32,6 +35,9 @@ export function AchievementProgressRings({
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const isPremium = useIsPremium();
+  const { requirePremium } = usePremiumGate();
+  const lockVipStats = !isPremium;
   const pct = progressToPercent(badge.progress);
   const hasEarnedBadge = badge.caption !== "—";
 
@@ -78,15 +84,28 @@ export function AchievementProgressRings({
         </Text>
 
         <View className="mt-5 w-full flex-row border-t border-background pt-5 dark:border-d-border">
-          <View className="flex-1 items-center border-r border-background pr-3 dark:border-d-border">
+          <LockedStatColumn
+            locked={lockVipStats}
+            onLockedPress={requirePremium}
+            vipA11y={t("profile.vipFeatureTap", { label: t("stats.worldwideRank") })}
+            className="flex-1 items-center border-r border-background pr-3 dark:border-d-border"
+          >
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
               {t("stats.worldwideRank")}
             </Text>
             <View className="mt-2 flex-row items-center gap-2">
-              <View className="h-8 w-8 items-center justify-center rounded-full bg-accent">
-                <Ionicons name="globe" size={16} color={colors.white} />
+              <View className="relative h-8 w-8 items-center justify-center rounded-full bg-accent">
+                <Ionicons
+                  name={lockVipStats ? "lock-closed" : "globe"}
+                  size={16}
+                  color={colors.white}
+                />
               </View>
-              {rank != null ? (
+              {lockVipStats ? (
+                <Text className="text-3xl font-bold tabular-nums text-muted-foreground dark:text-d-muted">
+                  —
+                </Text>
+              ) : rank != null ? (
                 <Text className="text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
                   #{formatNumber(rank.position)}
                 </Text>
@@ -96,44 +115,90 @@ export function AchievementProgressRings({
                 </Text>
               )}
             </View>
-          </View>
+          </LockedStatColumn>
 
-          <View className="flex-1 items-center pl-3">
+          <LockedStatColumn
+            locked={lockVipStats}
+            onLockedPress={requirePremium}
+            vipA11y={t("profile.vipFeatureTap", { label: t("stats.freedomPoints") })}
+            className="flex-1 items-center pl-3"
+          >
             <View className="flex-row items-center gap-1">
               <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
                 {t("stats.freedomPoints")}
               </Text>
-              <Pressable
-                onPress={() =>
-                  showFreedomPointsInfo(
-                    t("stats.freedomPointsInfoTitle"),
-                    t("stats.freedomPointsInfoMessage"),
-                  )
-                }
-                hitSlop={8}
-                accessibilityRole="button"
-                accessibilityLabel={t("stats.freedomPointsInfoA11y")}
-                className="active:opacity-70"
-              >
-                <Ionicons
-                  name="information-circle-outline"
-                  size={14}
-                  color={colors.mutedForeground}
-                />
-              </Pressable>
+              {!lockVipStats ? (
+                <Pressable
+                  onPress={() =>
+                    showFreedomPointsInfo(
+                      t("stats.freedomPointsInfoTitle"),
+                      t("stats.freedomPointsInfoMessage"),
+                    )
+                  }
+                  hitSlop={8}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("stats.freedomPointsInfoA11y")}
+                  className="active:opacity-70"
+                >
+                  <Ionicons
+                    name="information-circle-outline"
+                    size={14}
+                    color={colors.mutedForeground}
+                  />
+                </Pressable>
+              ) : null}
             </View>
             <View className="mt-2 flex-row items-center gap-2">
               <View className="h-8 w-8 items-center justify-center rounded-full bg-primary">
-                <Ionicons name="flash" size={16} color={colors.white} />
+                <Ionicons
+                  name={lockVipStats ? "lock-closed" : "flash"}
+                  size={16}
+                  color={colors.white}
+                />
               </View>
-              <Text className="text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
-                {formatNumber(freedomPoints)}
+              <Text
+                className={`text-3xl font-bold tabular-nums ${
+                  lockVipStats
+                    ? "text-muted-foreground dark:text-d-muted"
+                    : "text-foreground dark:text-d-text"
+                }`}
+              >
+                {lockVipStats ? "—" : formatNumber(freedomPoints)}
               </Text>
             </View>
-          </View>
+          </LockedStatColumn>
         </View>
         </View>
       </Card>
     </Animated.View>
+  );
+}
+
+function LockedStatColumn({
+  locked,
+  onLockedPress,
+  vipA11y,
+  className,
+  children,
+}: {
+  locked: boolean;
+  onLockedPress: () => void;
+  vipA11y: string;
+  className: string;
+  children: ReactNode;
+}) {
+  if (!locked) {
+    return <View className={className}>{children}</View>;
+  }
+
+  return (
+    <Pressable
+      onPress={onLockedPress}
+      accessibilityRole="button"
+      accessibilityLabel={vipA11y}
+      className={`${className} active:opacity-90`}
+    >
+      {children}
+    </Pressable>
   );
 }

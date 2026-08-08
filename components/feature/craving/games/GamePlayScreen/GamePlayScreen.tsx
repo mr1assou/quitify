@@ -4,7 +4,6 @@ import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CravingSessionHeader } from "@/components/feature/craving/CravingSessionHeader";
-import { BubbleShooterGame } from "@/components/feature/craving/games/bubble-shooter/BubbleShooterGame";
 import { BreathingExercise } from "@/components/feature/craving/breathing/BreathingExercise";
 import { MemoryMatchGame } from "@/components/feature/craving/games/memory-match/MemoryMatchGame";
 import { ReflexTapGame } from "@/components/feature/craving/games/reflex-tap/ReflexTapGame";
@@ -59,8 +58,6 @@ export function GamePlayScreen() {
         <MemoryMatchGame />
       ) : game.id === "reflex-tap" ? (
         <ReflexTapGame />
-      ) : game.id === "bubble-shooter" ? (
-        <BubbleShooterGame />
       ) : (
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
