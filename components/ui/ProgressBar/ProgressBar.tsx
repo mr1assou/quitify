@@ -17,7 +17,7 @@ type Props = {
 export function ProgressBar({
   progress,
   height = 8,
-  trackClassName = "bg-section dark:bg-d-elevated",
+  trackClassName = "bg-border dark:bg-d-elevated",
   fillClassName = "bg-primary",
 }: Props) {
   const v = useSharedValue(progress);
