@@ -19,8 +19,15 @@ export default function AchievementScreen() {
   const { colors } = useTheme();
   const progress = useProgress();
   const refreshAccount = useRefreshAccount();
-  const { snapshot: leaderboard, loading, hasMore, loadingMore, loadMore, refresh } =
-    useLeaderboard();
+  const {
+    snapshot: leaderboard,
+    loading,
+    hasMore,
+    loadingMore,
+    loadMore,
+    refresh,
+    loadUntilCurrentUserRank,
+  } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
   useFocusEffect(
@@ -41,37 +48,59 @@ export default function AchievementScreen() {
 
   if (!progress) return null;
 
+  const sectionTabs = (
+    <View className="mt-6 px-6">
+      <AchievementSectionTabs value={section} onChange={handleSectionChange} />
+    </View>
+  );
+
+  if (section === "rank") {
+    return (
+      <ScreenCanvas edges={["top"]}>
+        {loading && !leaderboard ? (
+          <View className="flex-1">
+            <ScreenHeader leading={<AppBrandMark />} />
+            {sectionTabs}
+            <View className="flex-1 items-center justify-center py-16">
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          </View>
+        ) : leaderboard ? (
+          <RankLeaderboard
+            leaderboard={leaderboard}
+            hasMore={hasMore}
+            loadingMore={loadingMore}
+            onLoadMore={loadMore}
+            onLoadUntilCurrentUserRank={loadUntilCurrentUserRank}
+            listHeader={
+              <>
+                <ScreenHeader leading={<AppBrandMark />} />
+                {sectionTabs}
+              </>
+            }
+          />
+        ) : (
+          <View className="flex-1">
+            <ScreenHeader leading={<AppBrandMark />} />
+            {sectionTabs}
+          </View>
+        )}
+      </ScreenCanvas>
+    );
+  }
+
   return (
     <ScreenCanvas edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <ScreenHeader leading={<AppBrandMark />} />
-
-        <View className="mt-6 gap-4 px-6">
-          <AchievementSectionTabs value={section} onChange={handleSectionChange} />
-
-          {section === "rank" ? (
-            loading && !leaderboard ? (
-              <View className="items-center py-16">
-                <ActivityIndicator size="large" color={colors.primary} />
-              </View>
-            ) : leaderboard ? (
-              <RankLeaderboard
-                leaderboard={leaderboard}
-                hasMore={hasMore}
-                loadingMore={loadingMore}
-                onLoadMore={loadMore}
-              />
-            ) : null
-          ) : (
-            <>
-              <NextBadgeCard
-                currentBadge={progress.currentBadge}
-                progress={progress.currentBadgeProgress}
-                hasNextTarget={Boolean(progress.nextBadge)}
-              />
-              <BadgesGallery badges={progress.badges} />
-            </>
-          )}
+        {sectionTabs}
+        <View className="mt-4 gap-4 px-6">
+          <NextBadgeCard
+            currentBadge={progress.currentBadge}
+            progress={progress.currentBadgeProgress}
+            hasNextTarget={Boolean(progress.nextBadge)}
+          />
+          <BadgesGallery badges={progress.badges} />
         </View>
       </ScrollView>
     </ScreenCanvas>

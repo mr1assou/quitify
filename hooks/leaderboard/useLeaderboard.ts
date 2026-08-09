@@ -19,6 +19,11 @@ export type UseLeaderboardResult = {
   hasMore: boolean;
   loadMore: () => void;
   refresh: () => Promise<void>;
+  /**
+   * Loads pages of 10 until the viewer's rank is covered by loaded offsets,
+   * so Spot my rank can scroll to them in-list.
+   */
+  loadUntilCurrentUserRank: () => Promise<boolean>;
 };
 
 function applyLivePresence(
@@ -64,6 +69,13 @@ function withLivePresence(
   };
 }
 
+/** True when loaded pages reach the viewer's rank (10-by-10 offsets). */
+function hasLoadedThroughViewerRank(snapshot: LeaderboardSnapshot): boolean {
+  const viewer = snapshot.currentUser;
+  if (!viewer) return false;
+  return snapshot.nextOffset >= viewer.rank || !snapshot.hasMore;
+}
+
 /** Global leaderboard loaded from the API (ranked by Freedom Points, 10 per page). */
 export function useLeaderboard(): UseLeaderboardResult {
   const { state: appState } = useApp();
@@ -80,63 +92,86 @@ export function useLeaderboard(): UseLeaderboardResult {
   snapshotRef.current = snapshot;
   const prevAccountUserIdRef = useRef<number | null | undefined>(undefined);
 
-  const loadPage = useCallback(async (offset: number, append: boolean) => {
-    if (accountUserId == null) {
-      if (!append) setLoading(false);
-      return;
-    }
+  const loadPage = useCallback(
+    async (offset: number, append: boolean): Promise<LeaderboardSnapshot | null> => {
+      if (accountUserId == null) {
+        if (!append) setLoading(false);
+        return null;
+      }
 
-    if (append) {
-      if (loadingMoreRef.current) return;
-      loadingMoreRef.current = true;
-      setLoadingMore(true);
-    } else if (snapshotRef.current == null) {
-      // Full-screen loader only when there is nothing to show yet.
-      setLoading(true);
-    }
+      if (append) {
+        if (loadingMoreRef.current) return snapshotRef.current;
+        loadingMoreRef.current = true;
+        setLoadingMore(true);
+      } else if (snapshotRef.current == null) {
+        setLoading(true);
+      }
 
-    try {
-      const response = await fetchLeaderboard({ offset, limit: LEADERBOARD_PAGE_SIZE });
-      const mapped = mapLeaderboardFromApi(response);
-
-      setSnapshot((previous) => {
+      try {
+        const response = await fetchLeaderboard({
+          offset,
+          limit: LEADERBOARD_PAGE_SIZE,
+        });
+        const mapped = mapLeaderboardFromApi(response);
+        const previous = snapshotRef.current;
         const nextSnapshot =
           append && previous ? mergeLeaderboardPages(previous, mapped) : mapped;
+
+        snapshotRef.current = nextSnapshot;
         setLeaderboardCache(nextSnapshot);
+        setSnapshot(nextSnapshot);
+        setHasMore(response.has_more);
         return nextSnapshot;
-      });
-      setHasMore(response.has_more);
-    } catch {
-      if (!append) {
-        setLeaderboardCache(null);
-        setSnapshot(null);
-        setHasMore(false);
+      } catch {
+        if (!append) {
+          setLeaderboardCache(null);
+          snapshotRef.current = null;
+          setSnapshot(null);
+          setHasMore(false);
+        }
+        return snapshotRef.current;
+      } finally {
+        if (append) {
+          loadingMoreRef.current = false;
+          setLoadingMore(false);
+        } else {
+          setLoading(false);
+        }
       }
-    } finally {
-      if (append) {
-        loadingMoreRef.current = false;
-        setLoadingMore(false);
-      } else {
-        setLoading(false);
-      }
-    }
-  }, [accountUserId]);
+    },
+    [accountUserId],
+  );
 
   const loadPageRef = useRef(loadPage);
   loadPageRef.current = loadPage;
 
-  const refresh = useCallback(() => loadPage(0, false), [loadPage]);
+  const refresh = useCallback(() => loadPage(0, false).then(() => undefined), [loadPage]);
 
   const loadMore = useCallback(() => {
-    setSnapshot((current) => {
-      if (!current || !current.hasMore || loadingMoreRef.current) return current;
-      void loadPage(current.nextOffset, true);
-      return current;
-    });
+    const current = snapshotRef.current;
+    if (!current || !current.hasMore || loadingMoreRef.current) return;
+    void loadPage(current.nextOffset, true);
   }, [loadPage]);
 
-  // Refresh only when the awards/stats screens ask for it — not when a profile
-  // screen mounts useLeaderboard (that was wiping "Show more" ranks mid-navigation).
+  const loadUntilCurrentUserRank = useCallback(async (): Promise<boolean> => {
+    let current = snapshotRef.current;
+    if (!current?.currentUser) return false;
+    if (hasLoadedThroughViewerRank(current)) return true;
+
+    // Cap pages so a bad rank cannot loop forever (10 users/page).
+    const maxPages = 500;
+    for (let i = 0; i < maxPages; i += 1) {
+      if (!current.hasMore) return true;
+      if (hasLoadedThroughViewerRank(current)) return true;
+
+      const next = await loadPage(current.nextOffset, true);
+      if (!next) return false;
+      current = next;
+    }
+
+    return hasLoadedThroughViewerRank(current);
+  }, [loadPage]);
+
   useEffect(() => {
     if (prevAccountUserIdRef.current === undefined) {
       prevAccountUserIdRef.current = accountUserId;
@@ -172,5 +207,6 @@ export function useLeaderboard(): UseLeaderboardResult {
     hasMore,
     loadMore,
     refresh,
+    loadUntilCurrentUserRank,
   };
 }

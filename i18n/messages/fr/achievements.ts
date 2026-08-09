@@ -12,4 +12,7 @@ export const achievements = {
   available: "Disponible",
   globalLeaderboard: "Classement mondial",
   leaderboardEmpty: "Aucun joueur dans le classement pour le moment.",
+  spotMyRank: "Voir mon rang",
+  spottingRank: "Recherche de votre rang…",
+  spotMyRankVipA11y: "Voir mon rang, fonction VIP. Appuyez pour débloquer.",
 } as const;

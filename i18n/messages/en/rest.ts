@@ -226,6 +226,9 @@ export const achievements = {
   available: "Available",
   globalLeaderboard: "Global leaderboard",
   leaderboardEmpty: "No players on the leaderboard yet.",
+  spotMyRank: "Spot my rank",
+  spottingRank: "Finding your rank…",
+  spotMyRankVipA11y: "Spot my rank, VIP feature. Tap to unlock.",
 } as const;
 
 export const profile = {
