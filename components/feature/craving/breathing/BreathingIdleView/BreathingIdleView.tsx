@@ -17,7 +17,12 @@ export function BreathingIdleView({ circleSize, onStartSession }: Props) {
         </Text>
       </View>
 
-      <BreathingCircle targetScale={0.55} durationMs={0} size={circleSize} />
+      <BreathingCircle
+        targetScale={0.55}
+        durationMs={0}
+        isRunning={false}
+        size={circleSize}
+      />
 
       <View className="w-full">
         <Button label="Start session" size="lg" fullWidth onPress={onStartSession} />

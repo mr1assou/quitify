@@ -34,6 +34,8 @@ export function BreathingExercise() {
       <BreathingCircle
         targetScale={breathing.phase.targetScale}
         durationMs={breathing.phase.durationMs}
+        isRunning={breathing.isRunning}
+        runToken={breathing.runToken}
         size={circleSize}
       />
 

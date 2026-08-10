@@ -12,6 +12,8 @@ type State = {
   phaseIndex: number;
   cycle: number;
   isRunning: boolean;
+  /** Increments on start/restart so timers and animations always re-arm. */
+  runToken: number;
 };
 
 /**
@@ -22,6 +24,7 @@ export function useBreathingCycle({ autoStart = false }: Options = {}) {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [cycle, setCycle] = useState(1);
   const [isRunning, setIsRunning] = useState(autoStart);
+  const [runToken, setRunToken] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearTimer = () => {
@@ -47,28 +50,32 @@ export function useBreathingCycle({ autoStart = false }: Options = {}) {
     }, current.durationMs);
 
     return clearTimer;
-  }, [isRunning, phaseIndex]);
-
-  const reset = useCallback(() => {
-    clearTimer();
-    setPhaseIndex(0);
-    setCycle(1);
-  }, []);
+  }, [isRunning, phaseIndex, runToken]);
 
   const start = useCallback(() => {
     clearTimer();
     setPhaseIndex(0);
     setCycle(1);
     setIsRunning(true);
+    setRunToken((token) => token + 1);
   }, []);
 
-  const toggle = useCallback(() => setIsRunning((r) => !r), []);
+  const reset = useCallback(() => {
+    clearTimer();
+    setPhaseIndex(0);
+    setCycle(1);
+    setIsRunning(true);
+    setRunToken((token) => token + 1);
+  }, []);
+
+  const toggle = useCallback(() => setIsRunning((running) => !running), []);
 
   const state: State = {
     phase: BREATHING_PHASES[phaseIndex],
     phaseIndex,
     cycle,
     isRunning,
+    runToken,
   };
 
   return { ...state, toggle, reset, start };

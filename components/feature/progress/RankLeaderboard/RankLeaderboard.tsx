@@ -234,10 +234,53 @@ export function RankLeaderboard({
     [highlightSelf],
   );
 
-  const canSpot = Boolean(leaderboard.currentUser) && isPremium;
+  const canSpot = Boolean(leaderboard.currentUser);
+
+  const leaderboardTitleBar = (
+    <View className="px-6">
+      <View className="overflow-hidden rounded-t-3xl border-b border-border/50 bg-section dark:border-d-border dark:bg-d-surface">
+        <View className="flex-row items-center justify-between gap-2 px-4 py-3">
+          <Text className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
+            {t("achievements.globalLeaderboard")}
+          </Text>
+          {canSpot ? (
+            <Pressable
+              onPress={() => void onSpotMyRank()}
+              disabled={spotting}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={
+                isPremium
+                  ? t("achievements.spotMyRank")
+                  : t("achievements.spotMyRankVipA11y")
+              }
+              className="flex-row items-center gap-1.5 rounded-full bg-primary/12 px-3 py-1.5 active:opacity-80 disabled:opacity-70 dark:bg-primary/20"
+            >
+              {spotting ? (
+                <ActivityIndicator size="small" color={colors.primary} />
+              ) : (
+                <Ionicons
+                  name={isPremium ? "locate" : "lock-closed"}
+                  size={14}
+                  color={colors.primary}
+                />
+              )}
+              <Text className="text-xs font-bold text-primary">
+                {spotting
+                  ? t("achievements.spottingRank")
+                  : t("achievements.spotMyRank")}
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <Animated.View entering={FadeInDown.duration(420)} className="flex-1">
+      {listHeader}
+      <View className="mt-4">{leaderboardTitleBar}</View>
       <FlatList
         ref={listRef}
         className="flex-1"
@@ -249,46 +292,13 @@ export function RankLeaderboard({
           flexGrow: 1,
         }}
         ListHeaderComponent={
-          <View>
-            {listHeader}
-            <View className="mt-4 px-6">
-              <View className="overflow-hidden rounded-t-3xl border-b border-border/50 bg-section dark:border-d-border dark:bg-d-surface">
-                <View className="flex-row items-center justify-between gap-2 px-4 py-3">
-                  <Text className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-                    {t("achievements.globalLeaderboard")}
-                  </Text>
-                  {canSpot ? (
-                    <Pressable
-                      onPress={() => void onSpotMyRank()}
-                      disabled={spotting}
-                      hitSlop={8}
-                      accessibilityRole="button"
-                      accessibilityLabel={t("achievements.spotMyRank")}
-                      className="flex-row items-center gap-1.5 rounded-full bg-primary/12 px-3 py-1.5 active:opacity-80 disabled:opacity-70 dark:bg-primary/20"
-                    >
-                      {spotting ? (
-                        <ActivityIndicator size="small" color={colors.primary} />
-                      ) : (
-                        <Ionicons name="locate" size={14} color={colors.primary} />
-                      )}
-                      <Text className="text-xs font-bold text-primary">
-                        {spotting
-                          ? t("achievements.spottingRank")
-                          : t("achievements.spotMyRank")}
-                      </Text>
-                    </Pressable>
-                  ) : null}
-                </View>
-              </View>
+          rows.length === 0 ? (
+            <View className="mx-6 bg-section px-4 py-6 dark:bg-d-surface">
+              <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
+                {t("achievements.leaderboardEmpty")}
+              </Text>
             </View>
-            {rows.length === 0 ? (
-              <View className="mx-6 bg-section px-4 py-6 dark:bg-d-surface">
-                <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-                  {t("achievements.leaderboardEmpty")}
-                </Text>
-              </View>
-            ) : null}
-          </View>
+          ) : null
         }
         ListFooterComponent={
           <View className="px-6">

@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -9,11 +10,18 @@ import Animated, {
 
 import { useTheme } from "@/context/ThemeContext";
 
+/** Resting scale at the start of an inhale (matches hold-out / idle). */
+const REST_SCALE = 0.55;
+
 type Props = {
   /** Target scale (0–1) the circle should ease toward. */
   targetScale: number;
   /** Duration of the current phase in ms. */
   durationMs: number;
+  /** When false, freeze the orb mid-animation (pause). Defaults to true. */
+  isRunning?: boolean;
+  /** Bumps on session start/restart so the orb snaps and replays from rest. */
+  runToken?: number;
   size?: number;
 };
 
@@ -21,16 +29,37 @@ type Props = {
  * A serene breathing orb that smoothly scales between phases.
  * Pure visual — driven entirely by props.
  */
-export function BreathingCircle({ targetScale, durationMs, size = 260 }: Props) {
+export function BreathingCircle({
+  targetScale,
+  durationMs,
+  isRunning = true,
+  runToken = 0,
+  size = 260,
+}: Props) {
   const { colors } = useTheme();
-  const scale = useSharedValue(targetScale);
-  const glow = useSharedValue(targetScale);
+  const scale = useSharedValue(REST_SCALE);
+  const glow = useSharedValue(REST_SCALE);
+  const prevTokenRef = useRef(runToken);
 
   useEffect(() => {
+    if (prevTokenRef.current !== runToken) {
+      prevTokenRef.current = runToken;
+      cancelAnimation(scale);
+      cancelAnimation(glow);
+      scale.value = REST_SCALE;
+      glow.value = REST_SCALE;
+    }
+
+    if (!isRunning) {
+      cancelAnimation(scale);
+      cancelAnimation(glow);
+      return;
+    }
+
     const easing = Easing.inOut(Easing.quad);
     scale.value = withTiming(targetScale, { duration: durationMs, easing });
     glow.value = withTiming(targetScale, { duration: durationMs, easing });
-  }, [targetScale, durationMs, scale, glow]);
+  }, [targetScale, durationMs, isRunning, runToken, scale, glow]);
 
   const orbStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],

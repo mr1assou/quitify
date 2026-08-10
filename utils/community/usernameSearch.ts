@@ -1,13 +1,16 @@
 export const USERNAME_SEARCH_MIN_LENGTH = 2;
 export const USERNAME_SEARCH_DEBOUNCE_MS = 300;
 
-/** Usernames are lowercase; strip leading @ and non-search characters. */
+/**
+ * Usernames are lowercase `@handle` values (hyphens allowed).
+ * Strip leading @; keep letters, digits, underscore, and hyphen for substring search.
+ */
 export function normalizeUsernameSearchQuery(raw: string): string {
   return raw
     .trim()
-    .replace(/^@+/, '')
+    .replace(/^@+/, "")
     .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '');
+    .replace(/[^a-z0-9_-]/g, "");
 }
 
 export function sanitizeUsernameSearchInput(raw: string): string {
