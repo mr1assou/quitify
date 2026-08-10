@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
 
 import { CravingToolScreen } from "@/components/feature/craving/CravingToolScreen";
@@ -24,19 +24,18 @@ export function SavedCardsScreen() {
     [idsForSection, section, locale],
   );
 
-  useEffect(() => {
+  // Clamp synchronously so Tips/Motivation switches never pass an out-of-range index.
+  const safeIndex =
+    savedQuotes.length === 0
+      ? 0
+      : Math.min(currentIndex, savedQuotes.length - 1);
+  const currentQuote = savedQuotes[safeIndex];
+
+  const onSectionChange = (next: SavedCardsSection) => {
+    setSection(next);
     setCurrentIndex(0);
-  }, [section]);
+  };
 
-  useEffect(() => {
-    if (savedQuotes.length === 0) {
-      setCurrentIndex(0);
-      return;
-    }
-    setCurrentIndex((prev) => Math.min(prev, savedQuotes.length - 1));
-  }, [savedQuotes.length]);
-
-  const currentQuote = savedQuotes[currentIndex];
   const emptyTitle =
     section === "tips" ? t("craving.savedTipsEmpty") : t("craving.savedMotivationEmpty");
   const emptySubtitle =
@@ -45,7 +44,7 @@ export function SavedCardsScreen() {
   return (
     <CravingToolScreen toolId="saved">
       <View className="flex-1 px-5 pb-6 pt-2">
-        <SavedCardsSectionTabs value={section} onChange={setSection} />
+        <SavedCardsSectionTabs value={section} onChange={onSectionChange} />
 
         {savedQuotes.length === 0 ? (
           <View className="flex-1 items-center justify-center px-4">
@@ -70,8 +69,9 @@ export function SavedCardsScreen() {
             </Text>
 
             <MotivationCardStack
+              key={section}
               quotes={savedQuotes}
-              currentIndex={currentIndex}
+              currentIndex={safeIndex}
               onIndexChange={setCurrentIndex}
             />
 

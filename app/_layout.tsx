@@ -16,6 +16,7 @@ import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
+import { AuthSessionGate } from "@/components/auth/AuthSessionGate";
 import { RevenueCatBridge } from "@/components/purchases/RevenueCatBridge";
 import { PushNotificationsBridge } from "@/components/push/PushNotificationsBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
@@ -63,6 +64,7 @@ function GoalsProviderWrapper() {
             <ChatSocketBridge />
             <NotificationSocketBridge />
             <PushNotificationsBridge />
+            <AuthSessionGate />
             <ThemedRoot />
           </WifiRequiredGate>
         </RelaxSoundPlayerProvider>

@@ -1,10 +1,22 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 
 import { TabBar } from "@/components/layout/TabBar";
+import { ThemedLoadingScreen } from "@/components/ui/ThemedLoadingScreen";
+import { WELCOME_ROUTE } from "@/constants/app/routes";
+import { useApp } from "@/context/AppContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 export default function TabsLayout() {
   const { t } = useTranslation();
+  const { state, isHydrated } = useApp();
+
+  if (!isHydrated) {
+    return <ThemedLoadingScreen />;
+  }
+
+  if (!state.isOnboarded) {
+    return <Redirect href={WELCOME_ROUTE} />;
+  }
 
   return (
     <Tabs

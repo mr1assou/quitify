@@ -1,7 +1,9 @@
 import * as Haptics from "expo-haptics";
+import { useEffect, useMemo, useRef } from "react";
 import { View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+  cancelAnimation,
   Easing,
   Extrapolation,
   interpolate,
@@ -46,35 +48,86 @@ export function MotivationCardStack({
 
   const translateX = useSharedValue(0);
   const opacity = useSharedValue(1);
+  const mountedRef = useRef(true);
+  const swipeLockRef = useRef(false);
 
   const total = quotes.length;
-  const currentQuote = quotes[currentIndex];
+  const safeIndex = total === 0 ? 0 : Math.min(Math.max(currentIndex, 0), total - 1);
+  const currentQuote = quotes[safeIndex];
   const footerTotal = displayTotal ?? total;
 
-  const nextIndexForDirection = (direction: 1 | -1) =>
-    direction > 0
-      ? (currentIndex + 1) % total
-      : (currentIndex - 1 + total) % total;
+  const currentIndexRef = useRef(safeIndex);
+  const totalRef = useRef(total);
+  const canGoToIndexRef = useRef(canGoToIndex);
+  const onSwipeBlockedRef = useRef(onSwipeBlocked);
+  const onIndexChangeRef = useRef(onIndexChange);
 
-  const trySwipe = (direction: 1 | -1) => {
-    const nextIndex = nextIndexForDirection(direction);
-    if (canGoToIndex && !canGoToIndex(nextIndex)) {
-      translateX.value = withSpring(0, SPRING_BACK);
-      onSwipeBlocked?.();
-      return;
-    }
-    animateSwipeOut(direction);
-  };
+  currentIndexRef.current = safeIndex;
+  totalRef.current = total;
+  canGoToIndexRef.current = canGoToIndex;
+  onSwipeBlockedRef.current = onSwipeBlocked;
+  onIndexChangeRef.current = onIndexChange;
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      swipeLockRef.current = false;
+      cancelAnimation(translateX);
+      cancelAnimation(opacity);
+    };
+  }, [opacity, translateX]);
+
+  // Reset visuals when the quote list size changes (tab / catalog refresh).
+  useEffect(() => {
+    swipeLockRef.current = false;
+    cancelAnimation(translateX);
+    cancelAnimation(opacity);
+    translateX.value = 0;
+    opacity.value = 1;
+  }, [total, opacity, translateX]);
+
+  const nextIndexForDirection = (direction: 1 | -1, index: number, count: number) =>
+    direction > 0 ? (index + 1) % count : (index - 1 + count) % count;
 
   const commitIndexChange = (direction: 1 | -1) => {
+    if (!mountedRef.current) return;
+    const count = totalRef.current;
+    if (count <= 0) {
+      swipeLockRef.current = false;
+      return;
+    }
+
     Haptics.selectionAsync().catch(() => {});
-    const nextIndex = nextIndexForDirection(direction);
-    onIndexChange(nextIndex);
-    // Slowly fade the new card in once React has swapped the content.
+    const nextIndex = nextIndexForDirection(direction, currentIndexRef.current, count);
+    onIndexChangeRef.current(nextIndex);
     opacity.value = withTiming(1, {
       duration: NEW_CARD_FADE_DURATION_MS,
       easing: Easing.out(Easing.cubic),
     });
+    swipeLockRef.current = false;
+  };
+
+  const rejectSwipe = () => {
+    if (!mountedRef.current) return;
+    swipeLockRef.current = false;
+    translateX.value = withSpring(0, SPRING_BACK);
+    onSwipeBlockedRef.current?.();
+  };
+
+  const trySwipe = (direction: 1 | -1) => {
+    if (!mountedRef.current || swipeLockRef.current) return;
+    const count = totalRef.current;
+    if (count <= 0) return;
+
+    const nextIndex = nextIndexForDirection(direction, currentIndexRef.current, count);
+    if (canGoToIndexRef.current && !canGoToIndexRef.current(nextIndex)) {
+      rejectSwipe();
+      return;
+    }
+
+    swipeLockRef.current = true;
+    animateSwipeOut(direction);
   };
 
   const animateSwipeOut = (direction: 1 | -1) => {
@@ -94,22 +147,28 @@ export function MotivationCardStack({
     );
   };
 
-  const pan = Gesture.Pan()
-    .activeOffsetX([-12, 12])
-    .failOffsetY([-30, 30])
-    .onUpdate((event) => {
-      translateX.value = event.translationX;
-    })
-    .onEnd((event) => {
-      const threshold = cardWidth * SWIPE_THRESHOLD_RATIO;
-      if (event.translationX < -threshold) {
-        runOnJS(trySwipe)(1);
-      } else if (event.translationX > threshold) {
-        runOnJS(trySwipe)(-1);
-      } else {
-        translateX.value = withSpring(0, SPRING_BACK);
-      }
-    });
+  const pan = useMemo(
+    () =>
+      Gesture.Pan()
+        .activeOffsetX([-12, 12])
+        .failOffsetY([-30, 30])
+        .onUpdate((event) => {
+          translateX.value = event.translationX;
+        })
+        .onEnd((event) => {
+          const threshold = cardWidth * SWIPE_THRESHOLD_RATIO;
+          if (event.translationX < -threshold) {
+            runOnJS(trySwipe)(1);
+          } else if (event.translationX > threshold) {
+            runOnJS(trySwipe)(-1);
+          } else {
+            translateX.value = withSpring(0, SPRING_BACK);
+          }
+        }),
+    // Gesture captures shared values / cardWidth; recreate when width changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- trySwipe uses refs
+    [cardWidth, translateX],
+  );
 
   const cardStyle = useAnimatedStyle(() => {
     const rotate = interpolate(
@@ -127,7 +186,9 @@ export function MotivationCardStack({
     };
   });
 
-  const footer = `${Math.min(currentIndex + 1, footerTotal)} / ${footerTotal}`;
+  if (!currentQuote) return null;
+
+  const footer = `${Math.min(safeIndex + 1, footerTotal)} / ${footerTotal}`;
 
   return (
     <View

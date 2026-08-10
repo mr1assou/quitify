@@ -1,5 +1,7 @@
 import { router as expoRouter, type Href } from "expo-router";
 
+import { WELCOME_ROUTE } from "@/constants/app/routes";
+
 /** Blocks duplicate navigations to the same destination within a short window. */
 const NAV_LOCK_MS = 400;
 
@@ -24,6 +26,20 @@ function withNavLock(key: string, action: () => void) {
   action();
 }
 
+/** Clears stacked screens then lands on welcome (used after logout). */
+export function resetToWelcome() {
+  withNavLock(`reset:${WELCOME_ROUTE}`, () => {
+    try {
+      if (expoRouter.canDismiss()) {
+        expoRouter.dismissAll();
+      }
+    } catch {
+      // Some roots cannot dismiss; replace still gets us to welcome.
+    }
+    expoRouter.replace(WELCOME_ROUTE);
+  });
+}
+
 /** Router wrappers that ignore duplicate navigation within a short window. */
 export const safeRouter = {
   /** Uses navigate so top-level screens are not stacked twice. */
@@ -45,4 +61,6 @@ export const safeRouter = {
         expoRouter.replace(fallback);
       }
     }),
+
+  resetToWelcome,
 };

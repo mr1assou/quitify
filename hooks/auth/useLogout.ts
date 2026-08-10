@@ -1,10 +1,9 @@
 import { useCallback, useRef } from "react";
 
-import { WELCOME_ROUTE } from "@/constants/app/routes";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { safeRouter } from "@/utils/app/safeRouter";
+import { resetToWelcome } from "@/utils/app/safeRouter";
 import { clearGoogleSignInSession } from "@/utils/auth/clearGoogleSignInSession";
 
 /** Signs out, wipes local app state, and returns the user to the welcome screen. */
@@ -23,7 +22,8 @@ export function useLogout() {
       await clearGoogleSignInSession();
       resetCommunity();
       resetOnboardingDraft();
-      safeRouter.replace(WELCOME_ROUTE);
+      // Dismiss stacked screens so Android back cannot reopen logged-in UI.
+      resetToWelcome();
     } catch {
       loggingOutRef.current = false;
     }
