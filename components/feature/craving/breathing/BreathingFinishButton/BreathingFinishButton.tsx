@@ -3,9 +3,10 @@ import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   onPress: () => void;
+  disabled?: boolean;
 };
 
-export function BreathingFinishButton({ onPress }: Props) {
+export function BreathingFinishButton({ onPress, disabled = false }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -14,6 +15,8 @@ export function BreathingFinishButton({ onPress }: Props) {
       variant="accent"
       size="lg"
       fullWidth
+      disabled={disabled}
+      preventDoublePress
       onPress={onPress}
     />
   );

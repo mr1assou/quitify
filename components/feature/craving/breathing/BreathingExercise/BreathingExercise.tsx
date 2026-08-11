@@ -12,7 +12,7 @@ export function BreathingExercise() {
   const { width } = useWindowDimensions();
   const circleSize = Math.min(width * 0.72, 300);
 
-  const { isStarted, startSession, finishSession, elapsedMs, breathing } =
+  const { isStarted, isFinishing, startSession, finishSession, elapsedMs, breathing } =
     useBreathingSession();
 
   if (!isStarted) {
@@ -46,7 +46,10 @@ export function BreathingExercise() {
           onToggle={breathing.toggle}
           onReset={breathing.reset}
         />
-        <BreathingFinishButton onPress={finishSession} />
+        <BreathingFinishButton
+          onPress={finishSession}
+          disabled={isFinishing}
+        />
       </View>
     </View>
   );
