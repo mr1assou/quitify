@@ -5,7 +5,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
 import {
   ActivityIndicator,
@@ -15,7 +14,6 @@ import {
   Text,
   View,
 } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
 import { useTheme } from "@/context/ThemeContext";
@@ -33,7 +31,6 @@ type Props = {
   onLoadMore: () => void;
   /** Loads 10-by-10 pages until the viewer's rank is in range. */
   onLoadUntilCurrentUserRank: () => Promise<boolean>;
-  listHeader?: ReactNode;
 };
 
 type ListRow = {
@@ -83,7 +80,6 @@ export function RankLeaderboard({
   loadingMore,
   onLoadMore,
   onLoadUntilCurrentUserRank,
-  listHeader,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -278,8 +274,7 @@ export function RankLeaderboard({
   );
 
   return (
-    <Animated.View entering={FadeInDown.duration(420)} className="flex-1">
-      {listHeader}
+    <View className="flex-1">
       <View className="mt-4">{leaderboardTitleBar}</View>
       <FlatList
         ref={listRef}
@@ -345,6 +340,6 @@ export function RankLeaderboard({
           </View>
         </View>
       ) : null}
-    </Animated.View>
+    </View>
   );
 }

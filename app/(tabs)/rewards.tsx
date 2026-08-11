@@ -30,79 +30,66 @@ export default function AchievementScreen() {
   } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
+  // Soft refresh only when the Awards tab gains focus — never wipe chrome on section swap.
   useFocusEffect(
     useCallback(() => {
       void refreshAccount();
-      if (section === "rank") {
-        void refresh();
-      }
-    }, [refresh, refreshAccount, section]),
-  );
-
-  const handleSectionChange = (next: AchievementSection) => {
-    setSection(next);
-    if (next === "rank") {
       void refresh();
-    }
-  };
+    }, [refresh, refreshAccount]),
+  );
 
   if (!progress) return null;
 
-  const sectionTabs = (
-    <View className="mt-6 px-6">
-      <AchievementSectionTabs value={section} onChange={handleSectionChange} />
-    </View>
-  );
+  const showRank = section === "rank";
 
-  if (section === "rank") {
-    return (
-      <ScreenCanvas edges={["top"]}>
-        {loading && !leaderboard ? (
-          <View className="flex-1">
-            <ScreenHeader leading={<AppBrandMark />} />
-            {sectionTabs}
-            <View className="flex-1 items-center justify-center py-16">
-              <ActivityIndicator size="large" color={colors.primary} />
-            </View>
-          </View>
-        ) : leaderboard ? (
+  return (
+    <ScreenCanvas edges={["top"]}>
+      <ScreenHeader leading={<AppBrandMark />} />
+      <View className="mt-6 px-6">
+        <AchievementSectionTabs value={section} onChange={setSection} />
+      </View>
+
+      {/* Keep both panels mounted so tab switches don't remount chrome or reset scroll. */}
+      <View
+        className="flex-1"
+        style={{ display: showRank ? "flex" : "none" }}
+        pointerEvents={showRank ? "auto" : "none"}
+        accessibilityElementsHidden={!showRank}
+        importantForAccessibility={showRank ? "auto" : "no-hide-descendants"}
+      >
+        {leaderboard ? (
           <RankLeaderboard
             leaderboard={leaderboard}
             hasMore={hasMore}
             loadingMore={loadingMore}
             onLoadMore={loadMore}
             onLoadUntilCurrentUserRank={loadUntilCurrentUserRank}
-            listHeader={
-              <>
-                <ScreenHeader leading={<AppBrandMark />} />
-                {sectionTabs}
-              </>
-            }
           />
         ) : (
-          <View className="flex-1">
-            <ScreenHeader leading={<AppBrandMark />} />
-            {sectionTabs}
+          <View className="flex-1 items-center justify-center py-16">
+            {loading ? <ActivityIndicator size="large" color={colors.primary} /> : null}
           </View>
         )}
-      </ScreenCanvas>
-    );
-  }
+      </View>
 
-  return (
-    <ScreenCanvas edges={["top"]}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <ScreenHeader leading={<AppBrandMark />} />
-        {sectionTabs}
-        <View className="mt-4 gap-4 px-6">
-          <NextBadgeCard
-            currentBadge={progress.currentBadge}
-            progress={progress.currentBadgeProgress}
-            hasNextTarget={Boolean(progress.nextBadge)}
-          />
-          <BadgesGallery badges={progress.badges} />
-        </View>
-      </ScrollView>
+      <View
+        className="flex-1"
+        style={{ display: showRank ? "none" : "flex" }}
+        pointerEvents={showRank ? "none" : "auto"}
+        accessibilityElementsHidden={showRank}
+        importantForAccessibility={showRank ? "no-hide-descendants" : "auto"}
+      >
+        <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+          <View className="mt-4 gap-4 px-6">
+            <NextBadgeCard
+              currentBadge={progress.currentBadge}
+              progress={progress.currentBadgeProgress}
+              hasNextTarget={Boolean(progress.nextBadge)}
+            />
+            <BadgesGallery badges={progress.badges} />
+          </View>
+        </ScrollView>
+      </View>
     </ScreenCanvas>
   );
 }
