@@ -55,7 +55,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
   const badgeName = getBadgeName(entry.badgeId);
-  const hideOtherFp = !entry.isCurrentUser && !isPremium;
+  const hideFp = !isPremium;
 
   const openProfile = () => {
     if (entry.isCurrentUser) {
@@ -81,19 +81,19 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
       <View className="flex-row items-center gap-1.5">
         <View className="h-6 w-6 items-center justify-center rounded-full bg-accent">
           <Ionicons
-            name={hideOtherFp ? "lock-closed" : "flash"}
+            name={hideFp ? "lock-closed" : "flash"}
             size={12}
             color={colors.white}
           />
         </View>
         <Text
           className={`text-sm font-bold tabular-nums ${
-            hideOtherFp
+            hideFp
               ? "text-muted-foreground dark:text-d-muted"
               : "text-foreground dark:text-d-text"
           }`}
         >
-          {hideOtherFp ? "—" : formatNumber(entry.xp)}
+          {hideFp ? "—" : formatNumber(entry.xp)}
         </Text>
       </View>
       <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground dark:text-d-muted">
@@ -149,7 +149,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
           </View>
         </View>
 
-        {hideOtherFp ? (
+        {hideFp ? (
           <Pressable
             onPress={requirePremium}
             hitSlop={8}
