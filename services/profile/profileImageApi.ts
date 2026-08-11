@@ -1,6 +1,8 @@
 import { authenticatedFetch } from "@/services/api/authenticatedFetch";
 import { uploadImageToPresignedUrl } from "@/services/posts/postsApi";
 import type { AllowedImageContentType, PresignedUploadResponse } from "@/types/community/postsApi";
+import { getLocalFileSizeBytes } from "@/utils/media/getLocalFileSizeBytes";
+import { assertNoViolation, profileImageTooLarge } from "@/utils/media/validateMediaLimits";
 
 async function parseErrorMessage(res: Response, fallback: string): Promise<string> {
   try {
@@ -15,10 +17,11 @@ async function parseErrorMessage(res: Response, fallback: string): Promise<strin
 
 export async function requestProfileUploadUrl(
   contentType: AllowedImageContentType,
+  fileSizeBytes: number,
 ): Promise<PresignedUploadResponse> {
   const res = await authenticatedFetch("/profile/upload-url", {
     method: "POST",
-    body: JSON.stringify({ contentType }),
+    body: JSON.stringify({ contentType, fileSizeBytes }),
   });
 
   if (!res.ok) {
@@ -45,7 +48,13 @@ export async function uploadProfileImage(
   localUri: string,
   contentType: AllowedImageContentType,
 ): Promise<string> {
-  const { uploadUrl, imageUrl } = await requestProfileUploadUrl(contentType);
+  const sizeBytes = await getLocalFileSizeBytes(localUri);
+  if (sizeBytes == null) {
+    throw new Error("Could not read photo size. Try another image.");
+  }
+  assertNoViolation(profileImageTooLarge(sizeBytes));
+
+  const { uploadUrl, imageUrl } = await requestProfileUploadUrl(contentType, sizeBytes);
   await uploadImageToPresignedUrl(uploadUrl, localUri, contentType);
   return imageUrl;
 }

@@ -67,6 +67,17 @@ export const community = {
   mostDiscussed: "Most discussed",
   createPost: "Create post",
   editPost: "Edit post",
+  mediaTooLargeTitle: "File too large",
+  mediaTooLongTitle: "Video too long",
+  profilePhotoTooLarge:
+    "Profile photos must be 2 MB or smaller. Choose a smaller image.",
+  postImageTooLarge: "Post images must be 5 MB or smaller. Choose a smaller photo.",
+  postVideoTooLarge:
+    "Videos must be 100 MB or smaller. Trim or compress your video and try again.",
+  postVideoTooLong:
+    "Videos must be 60 seconds or shorter. Trim your video and try again.",
+  sourceImageTooLarge:
+    "This photo is too large to process. Choose a smaller image.",
   titleLabel: "Title",
   titlePlaceholder: "What's on your mind?",
   bodyPlaceholder: "Body text (optional)",

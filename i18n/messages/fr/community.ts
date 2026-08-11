@@ -16,6 +16,18 @@ export const community = {
   mostDiscussed: "Plus commentées",
   createPost: "Créer une publication",
   editPost: "Modifier la publication",
+  mediaTooLargeTitle: "Fichier trop volumineux",
+  mediaTooLongTitle: "Vidéo trop longue",
+  profilePhotoTooLarge:
+    "Les photos de profil doivent faire 2 Mo ou moins. Choisissez une image plus petite.",
+  postImageTooLarge:
+    "Les images de publication doivent faire 5 Mo ou moins. Choisissez une photo plus petite.",
+  postVideoTooLarge:
+    "Les vidéos doivent faire 100 Mo ou moins. Raccourcissez ou compressez votre vidéo, puis réessayez.",
+  postVideoTooLong:
+    "Les vidéos doivent durer 60 secondes ou moins. Raccourcissez votre vidéo, puis réessayez.",
+  sourceImageTooLarge:
+    "Cette photo est trop volumineuse pour être traitée. Choisissez une image plus petite.",
   titleLabel: "Titre",
   titlePlaceholder: "Qu'avez-vous en tête ?",
   bodyPlaceholder: "Texte (facultatif)",

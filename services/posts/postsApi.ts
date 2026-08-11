@@ -33,10 +33,17 @@ async function parseErrorMessage(res: Response, fallback: string): Promise<strin
 
 export async function requestPostUploadUrl(
   contentType: AllowedPostContentType,
+  fileSizeBytes: number,
+  durationMs?: number,
 ): Promise<PresignedUploadResponse> {
+  const body: Record<string, unknown> = { contentType, fileSizeBytes };
+  if (durationMs != null) {
+    body.durationMs = durationMs;
+  }
+
   const res = await authenticatedFetch("/upload-url", {
     method: "POST",
-    body: JSON.stringify({ contentType }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

@@ -152,6 +152,7 @@ export function usePostComposer() {
             uri: media.uri,
             kind: media.kind,
             mimeType: media.mimeType,
+            durationMs: media.durationMs,
           });
           imageUrl = uploaded.publicUrl;
           if (media.kind === "image") {
