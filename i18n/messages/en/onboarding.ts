@@ -72,6 +72,7 @@ export const onboarding = {
     },
     country: {
       required: "Choose country",
+      hint: "Used for savings in your local currency.",
     },
     quitDate: {
       required: "Choose when you will quit",

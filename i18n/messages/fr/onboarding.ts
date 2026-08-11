@@ -100,6 +100,7 @@ export const onboarding = {
     },
     country: {
       required: "Choisissez un pays",
+      hint: "Utilisé pour les économies dans votre devise locale.",
     },
     quitDate: {
       required: "Choisissez quand vous arrêterez",

@@ -1,12 +1,18 @@
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { useEffect } from "react";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import {
   COUNTRY_CURRENCY_CONTROL_HEIGHT,
   COUNTRY_CURRENCY_CURRENCY_WIDTH,
 } from "@/constants/onboarding/onboardingCountryRow";
+import {
+  DEFAULT_ONBOARDING_COUNTRY_CODE,
+  findCountryByCode,
+} from "@/constants/onboarding/defaultCountry";
 import { useCountries } from "@/hooks/onboarding/useCountries";
 import { useCountrySelection } from "@/hooks/onboarding/useCountrySelection";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { OnboardingDraft } from "@/types";
 import { currencySymbol } from "@/utils/shared/format";
 
@@ -56,11 +62,39 @@ function CurrencyDisplay({
 }
 
 export function CountryFields({ draft, patch, fieldError }: Props) {
+  const { t } = useTranslation();
   const { countries, status, error: loadError, retry } = useCountries();
   const { selectCountry } = useCountrySelection(patch);
 
   const loadingCountries = status === "loading";
   const hasCountry = !!draft.countryCode && status === "ready";
+
+  // Keep default Canada in sync with the loaded country list (flag / currency).
+  useEffect(() => {
+    if (status !== "ready" || countries.length === 0) return;
+    if (draft.countryCode && draft.countryCode !== DEFAULT_ONBOARDING_COUNTRY_CODE) {
+      return;
+    }
+    const canada = findCountryByCode(countries, DEFAULT_ONBOARDING_COUNTRY_CODE);
+    if (!canada) return;
+    if (
+      draft.countryCode === canada.code &&
+      draft.countryName === canada.name &&
+      draft.countryFlag === canada.flagPng &&
+      draft.currency === canada.currencyCode
+    ) {
+      return;
+    }
+    selectCountry(canada);
+  }, [
+    countries,
+    draft.countryCode,
+    draft.countryFlag,
+    draft.countryName,
+    draft.currency,
+    selectCountry,
+    status,
+  ]);
 
   return (
     <View className="gap-2">
@@ -90,6 +124,10 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
           hasCountry={hasCountry}
         />
       </View>
+
+      <Text className="text-xs text-muted-foreground dark:text-d-muted">
+        {t("onboarding.profile.country.hint")}
+      </Text>
 
       {status === "error" ? (
         <View className="gap-2">

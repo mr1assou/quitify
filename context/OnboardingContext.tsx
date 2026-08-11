@@ -13,6 +13,7 @@ import type {
   UserProfile,
 } from "@/types";
 import { DEFAULT_CIGARETTES_PER_PACK } from "@/constants/onboarding/onboardingNicotineBands";
+import { DEFAULT_ONBOARDING_COUNTRY } from "@/constants/onboarding/defaultCountry";
 import { normalizeOnboardingUsername } from "@/constants/onboarding/onboardingUsername";
 import { parseBirthYmd } from "@/utils/profile/birthdate";
 import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
@@ -26,7 +27,10 @@ const initial: OnboardingDraft = {
   primaryInterestIds: [],
   cigarettesPerDay: 0,
   cigarettesPerPack: 0,
-  currency: "USD",
+  countryCode: DEFAULT_ONBOARDING_COUNTRY.code,
+  countryName: DEFAULT_ONBOARDING_COUNTRY.name,
+  countryFlag: DEFAULT_ONBOARDING_COUNTRY.flagPng,
+  currency: DEFAULT_ONBOARDING_COUNTRY.currencyCode,
   quitStartPreset: "now",
   startTimestamp: startOfLocalDay(),
 };
