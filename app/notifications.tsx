@@ -26,12 +26,14 @@ export default function NotificationsScreen() {
   const { colors } = useTheme();
   const {
     notifications,
+    unreadCount,
     loading,
     loadingMore,
     hasMore,
     refresh,
     loadMore,
     markOneRead,
+    markAllRead,
   } = useNotifications();
 
   useFocusEffect(
@@ -52,7 +54,24 @@ export default function NotificationsScreen() {
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
-      <StackScreenHeader title={t("notifications.title")} />
+      <StackScreenHeader
+        title={t("notifications.title")}
+        rightAction={
+          unreadCount > 0 ? (
+            <Pressable
+              onPress={() => void markAllRead()}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={t("notifications.readAll")}
+              className="active:opacity-70"
+            >
+              <Text className="text-sm font-semibold text-primary">
+                {t("notifications.readAll")}
+              </Text>
+            </Pressable>
+          ) : undefined
+        }
+      />
 
       <FlatList
         data={notifications}

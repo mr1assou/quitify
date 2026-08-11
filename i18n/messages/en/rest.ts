@@ -282,6 +282,7 @@ export const profile = {
 export const notifications = {
   title: "Notifications",
   empty: "You're all caught up. New notifications will show up here.",
+  readAll: "Read all",
   commented: "commented on your post",
   replied: "replied to your comment",
   upvoted: "upvoted your post",
