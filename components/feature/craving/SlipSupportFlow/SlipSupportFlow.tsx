@@ -13,7 +13,7 @@ import { useTranslation } from "@/hooks/i18n/useTranslation";
 export function SlipSupportFlow() {
   const { t } = useTranslation();
   const { submit, undo, isSubmitting } = useSlipSubmit();
-  const { showBack, register, goBack } = useOutcomeBackHandler();
+  const { register } = useOutcomeBackHandler();
 
   const close = useCallback(() => router.back(), []);
 
@@ -24,8 +24,6 @@ export function SlipSupportFlow() {
     >
       <CravingSessionHeader
         title={t("craving.slipTitle")}
-        showBack={showBack && !isSubmitting}
-        onBack={goBack}
         onClose={isSubmitting ? () => {} : close}
       />
 
