@@ -88,6 +88,7 @@ export function useLeaderboard(): UseLeaderboardResult {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(getLeaderboardCache()?.hasMore ?? false);
   const loadingMoreRef = useRef(false);
+  const refreshGenerationRef = useRef(0);
   const snapshotRef = useRef(snapshot);
   snapshotRef.current = snapshot;
   const prevAccountUserIdRef = useRef<number | null | undefined>(undefined);
@@ -99,12 +100,20 @@ export function useLeaderboard(): UseLeaderboardResult {
         return null;
       }
 
+      let requestGeneration: number;
+
       if (append) {
         if (loadingMoreRef.current) return snapshotRef.current;
+        requestGeneration = refreshGenerationRef.current;
         loadingMoreRef.current = true;
         setLoadingMore(true);
-      } else if (snapshotRef.current == null) {
-        setLoading(true);
+      } else {
+        requestGeneration = ++refreshGenerationRef.current;
+        loadingMoreRef.current = false;
+        setLoadingMore(false);
+        if (snapshotRef.current == null) {
+          setLoading(true);
+        }
       }
 
       try {
@@ -112,6 +121,12 @@ export function useLeaderboard(): UseLeaderboardResult {
           offset,
           limit: LEADERBOARD_PAGE_SIZE,
         });
+
+        // Soft refresh bumps the generation — drop late append/older refresh results.
+        if (requestGeneration !== refreshGenerationRef.current) {
+          return snapshotRef.current;
+        }
+
         const mapped = mapLeaderboardFromApi(response);
         const previous = snapshotRef.current;
         const nextSnapshot =
@@ -123,7 +138,7 @@ export function useLeaderboard(): UseLeaderboardResult {
         setHasMore(response.has_more);
         return nextSnapshot;
       } catch {
-        if (!append) {
+        if (!append && requestGeneration === refreshGenerationRef.current) {
           setLeaderboardCache(null);
           snapshotRef.current = null;
           setSnapshot(null);
@@ -131,11 +146,13 @@ export function useLeaderboard(): UseLeaderboardResult {
         }
         return snapshotRef.current;
       } finally {
-        if (append) {
-          loadingMoreRef.current = false;
-          setLoadingMore(false);
-        } else {
-          setLoading(false);
+        if (requestGeneration === refreshGenerationRef.current) {
+          if (append) {
+            loadingMoreRef.current = false;
+            setLoadingMore(false);
+          } else {
+            setLoading(false);
+          }
         }
       }
     },
@@ -158,9 +175,11 @@ export function useLeaderboard(): UseLeaderboardResult {
     if (!current?.currentUser) return false;
     if (hasLoadedThroughViewerRank(current)) return true;
 
+    const generationAtStart = refreshGenerationRef.current;
     // Cap pages so a bad rank cannot loop forever (10 users/page).
     const maxPages = 500;
     for (let i = 0; i < maxPages; i += 1) {
+      if (generationAtStart !== refreshGenerationRef.current) return false;
       if (!current.hasMore) return true;
       if (hasLoadedThroughViewerRank(current)) return true;
 

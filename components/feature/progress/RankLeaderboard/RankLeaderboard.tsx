@@ -20,7 +20,10 @@ import { useTheme } from "@/context/ThemeContext";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
-import { listLeaderboardEntries } from "@/utils/leaderboard/findLeaderboardEntry";
+import {
+  listLeaderboardEntries,
+  listOtherLeaderboardEntries,
+} from "@/utils/leaderboard/findLeaderboardEntry";
 
 const ROW_HEIGHT = 78;
 
@@ -40,38 +43,36 @@ type ListRow = {
   isSelf: boolean;
 };
 
-function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
-  pinnedViewer: LeaderboardEntry | null;
-  pageRows: LeaderboardEntry[];
-} {
-  const entries = listLeaderboardEntries(leaderboard);
-  const viewer = leaderboard.currentUser;
-  if (!viewer) {
-    return { pinnedViewer: null, pageRows: entries };
-  }
-
-  // Prefer showing the viewer in natural rank order once their page range is loaded.
-  const rankLoaded = leaderboard.nextOffset >= viewer.rank || !leaderboard.hasMore;
-  if (rankLoaded) {
-    return { pinnedViewer: null, pageRows: entries };
-  }
-
-  const pageRows = entries.filter(
-    (entry) => !(entry.userId != null && entry.userId === viewer.userId),
-  );
-
-  return {
-    pinnedViewer: viewer,
-    pageRows,
-  };
-}
-
 function isViewerEntry(entry: LeaderboardEntry, viewer: LeaderboardEntry | null): boolean {
   if (!viewer) return entry.isCurrentUser;
   if (viewer.userId != null && entry.userId != null) {
     return entry.userId === viewer.userId;
   }
-  return entry.isCurrentUser || entry.rank === viewer.rank;
+  return entry.isCurrentUser;
+}
+
+function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
+  pinnedViewer: LeaderboardEntry | null;
+  pageRows: LeaderboardEntry[];
+} {
+  const viewer = leaderboard.currentUser;
+  // Page rows never include the viewer — avoids pin + in-list duplicate.
+  const others = listOtherLeaderboardEntries(leaderboard);
+
+  if (!viewer) {
+    return { pinnedViewer: null, pageRows: others };
+  }
+
+  // Once loaded pages cover the viewer's rank, show them once in natural order.
+  const rankLoaded = !leaderboard.hasMore || leaderboard.nextOffset >= viewer.rank;
+  if (rankLoaded) {
+    return { pinnedViewer: null, pageRows: listLeaderboardEntries(leaderboard) };
+  }
+
+  return {
+    pinnedViewer: viewer,
+    pageRows: others,
+  };
 }
 
 export function RankLeaderboard({
@@ -108,11 +109,15 @@ export function RankLeaderboard({
     }
     for (let index = 0; index < pageRows.length; index += 1) {
       const entry = pageRows[index];
+      // Never render YOU twice if pin is active.
+      if (pinnedViewer && isViewerEntry(entry, leaderboard.currentUser)) {
+        continue;
+      }
       const isSelf = isViewerEntry(entry, leaderboard.currentUser);
       out.push({
         key: entry.userId != null ? `u-${entry.userId}` : `r-${entry.rank}-${entry.name}`,
         entry,
-        showDivider: index > 0 || pinnedViewer !== null,
+        showDivider: out.length > 0,
         isSelf: pinnedViewer ? false : isSelf,
       });
     }

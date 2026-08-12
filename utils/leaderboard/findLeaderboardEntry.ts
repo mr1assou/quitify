@@ -1,21 +1,45 @@
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
 
-export function listLeaderboardEntries(snapshot: LeaderboardSnapshot): LeaderboardEntry[] {
-  const byKey = new Map<string, LeaderboardEntry>();
+function isViewerEntry(
+  entry: LeaderboardEntry,
+  viewer: LeaderboardEntry | null | undefined,
+): boolean {
+  if (!viewer) return entry.isCurrentUser;
+  if (viewer.userId != null && entry.userId != null) {
+    return entry.userId === viewer.userId;
+  }
+  return entry.isCurrentUser;
+}
+
+/** Page people only — never includes the viewer (viewer lives on `currentUser`). */
+export function listOtherLeaderboardEntries(
+  snapshot: LeaderboardSnapshot,
+): LeaderboardEntry[] {
+  const viewer = snapshot.currentUser;
+  const byUserId = new Map<number, LeaderboardEntry>();
 
   for (const row of snapshot.others) {
     if (row.kind !== "entry") continue;
-    const key = row.entry.userId != null ? `u-${row.entry.userId}` : `r-${row.entry.rank}`;
-    byKey.set(key, row.entry);
+    const entry = row.entry;
+    if (isViewerEntry(entry, viewer)) continue;
+    if (entry.userId == null) continue;
+    byUserId.set(entry.userId, entry);
   }
 
+  return [...byUserId.values()].sort((a, b) => a.rank - b.rank);
+}
+
+/**
+ * Flattened board for lookups: others + current user once.
+ * Prefer `currentUser` when both exist so the YOU row is authoritative.
+ */
+export function listLeaderboardEntries(snapshot: LeaderboardSnapshot): LeaderboardEntry[] {
+  const others = listOtherLeaderboardEntries(snapshot);
   const current = snapshot.currentUser;
-  if (current) {
-    const currentKey = current.userId != null ? `u-${current.userId}` : `r-${current.rank}`;
-    byKey.set(currentKey, current);
-  }
+  if (!current) return others;
 
-  return [...byKey.values()].sort((a, b) => a.rank - b.rank);
+  const withoutSelf = others.filter((entry) => !isViewerEntry(entry, current));
+  return [...withoutSelf, current].sort((a, b) => a.rank - b.rank);
 }
 
 export function findLeaderboardEntryByRank(

@@ -21,10 +21,35 @@ function mapEntry(row: BackendLeaderboardEntry): LeaderboardEntry {
   };
 }
 
+function isSameLeaderboardUser(
+  entry: LeaderboardEntry,
+  viewer: LeaderboardEntry | null | undefined,
+): boolean {
+  if (!viewer) return entry.isCurrentUser;
+  if (viewer.userId != null && entry.userId != null) {
+    return entry.userId === viewer.userId;
+  }
+  return entry.isCurrentUser;
+}
+
+/** Drop the viewer from page rows — by flag and by user id. */
+function excludeViewer(
+  entries: LeaderboardEntry[],
+  viewer: LeaderboardEntry | null,
+): LeaderboardEntry[] {
+  return entries.filter((entry) => !isSameLeaderboardUser(entry, viewer));
+}
+
 export function mapLeaderboardFromApi(response: BackendLeaderboardResponse): LeaderboardSnapshot {
   const currentUser = response.viewer ? mapEntry(response.viewer) : null;
+  const viewerUserId = currentUser?.userId ?? response.viewer?.user_id ?? null;
+
   const others: LeaderboardRow[] = response.items
-    .filter((row) => !row.is_current_user)
+    .filter((row) => {
+      if (row.is_current_user) return false;
+      if (viewerUserId != null && row.user_id === viewerUserId) return false;
+      return true;
+    })
     .map((row) => ({ kind: "entry" as const, entry: mapEntry(row) }));
 
   return {
@@ -40,24 +65,21 @@ export function mergeLeaderboardPages(
   previous: LeaderboardSnapshot,
   nextPage: LeaderboardSnapshot,
 ): LeaderboardSnapshot {
+  const currentUser = nextPage.currentUser ?? previous.currentUser;
   const byUserId = new Map<number, LeaderboardEntry>();
 
-  for (const row of previous.others) {
+  for (const row of [...previous.others, ...nextPage.others]) {
     if (row.kind !== "entry" || row.entry.userId == null) continue;
+    if (isSameLeaderboardUser(row.entry, currentUser)) continue;
     byUserId.set(row.entry.userId, row.entry);
   }
 
-  for (const row of nextPage.others) {
-    if (row.kind !== "entry" || row.entry.userId == null) continue;
-    byUserId.set(row.entry.userId, row.entry);
-  }
-
-  const others = [...byUserId.values()]
+  const others = excludeViewer([...byUserId.values()], currentUser)
     .sort((a, b) => a.rank - b.rank)
     .map((entry) => ({ kind: "entry" as const, entry }));
 
   return {
-    currentUser: nextPage.currentUser,
+    currentUser,
     others,
     totalUsers: nextPage.totalUsers,
     hasMore: nextPage.hasMore,
