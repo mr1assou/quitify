@@ -17,6 +17,7 @@ import {
 
 import { LeaderboardRow } from "@/components/feature/progress/LeaderboardRow";
 import { useTheme } from "@/context/ThemeContext";
+import type { LeaderboardViewMode } from "@/hooks/leaderboard/useLeaderboard";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { LeaderboardEntry, LeaderboardSnapshot } from "@/types/leaderboard/leaderboard";
@@ -31,9 +32,10 @@ type Props = {
   leaderboard: LeaderboardSnapshot;
   hasMore: boolean;
   loadingMore: boolean;
+  viewMode: LeaderboardViewMode;
   onLoadMore: () => void;
-  /** Loads 10-by-10 pages until the viewer's rank is in range. */
-  onLoadUntilCurrentUserRank: () => Promise<boolean>;
+  /** One request: jump to a small window around your rank. */
+  onSpotAroundCurrentUser: () => Promise<boolean>;
 };
 
 type ListRow = {
@@ -51,78 +53,64 @@ function isViewerEntry(entry: LeaderboardEntry, viewer: LeaderboardEntry | null)
   return entry.isCurrentUser;
 }
 
-function buildVisibleRows(leaderboard: LeaderboardSnapshot): {
-  pinnedViewer: LeaderboardEntry | null;
-  pageRows: LeaderboardEntry[];
-} {
+/**
+ * Browse: top pages only (YOU appears once your range is loaded via Show more).
+ * Around: neighborhood window always includes YOU.
+ */
+function buildPageRows(
+  leaderboard: LeaderboardSnapshot,
+  viewMode: LeaderboardViewMode,
+): LeaderboardEntry[] {
   const viewer = leaderboard.currentUser;
-  // Page rows never include the viewer — avoids pin + in-list duplicate.
   const others = listOtherLeaderboardEntries(leaderboard);
 
-  if (!viewer) {
-    return { pinnedViewer: null, pageRows: others };
+  if (!viewer) return others;
+
+  if (viewMode === "around") {
+    return listLeaderboardEntries(leaderboard);
   }
 
-  // Once loaded pages cover the viewer's rank, show them once in natural order.
   const rankLoaded = !leaderboard.hasMore || leaderboard.nextOffset >= viewer.rank;
-  if (rankLoaded) {
-    return { pinnedViewer: null, pageRows: listLeaderboardEntries(leaderboard) };
-  }
+  if (!rankLoaded) return others;
 
-  return {
-    pinnedViewer: viewer,
-    pageRows: others,
-  };
+  return listLeaderboardEntries(leaderboard);
 }
 
 export function RankLeaderboard({
   leaderboard,
   hasMore,
   loadingMore,
+  viewMode,
   onLoadMore,
-  onLoadUntilCurrentUserRank,
+  onSpotAroundCurrentUser,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { isPremium, requirePremium } = usePremiumGate();
   const listRef = useRef<FlatList<ListRow>>(null);
+  const listViewportHeightRef = useRef(0);
   const [spotting, setSpotting] = useState(false);
   const [highlightSelf, setHighlightSelf] = useState(false);
   const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const spotGenerationRef = useRef(0);
   const pendingScrollRef = useRef(false);
 
-  const { pinnedViewer, pageRows } = useMemo(
-    () => buildVisibleRows(leaderboard),
-    [leaderboard],
+  const pageRows = useMemo(
+    () => buildPageRows(leaderboard, viewMode),
+    [leaderboard, viewMode],
   );
 
   const rows = useMemo<ListRow[]>(() => {
-    const out: ListRow[] = [];
-    if (pinnedViewer) {
-      out.push({
-        key: `pinned-${pinnedViewer.userId ?? pinnedViewer.rank}`,
-        entry: pinnedViewer,
-        showDivider: false,
-        isSelf: true,
-      });
-    }
-    for (let index = 0; index < pageRows.length; index += 1) {
-      const entry = pageRows[index];
-      // Never render YOU twice if pin is active.
-      if (pinnedViewer && isViewerEntry(entry, leaderboard.currentUser)) {
-        continue;
-      }
+    return pageRows.map((entry, index) => {
       const isSelf = isViewerEntry(entry, leaderboard.currentUser);
-      out.push({
+      return {
         key: entry.userId != null ? `u-${entry.userId}` : `r-${entry.rank}-${entry.name}`,
         entry,
-        showDivider: out.length > 0,
-        isSelf: pinnedViewer ? false : isSelf,
-      });
-    }
-    return out;
-  }, [leaderboard.currentUser, pageRows, pinnedViewer]);
+        showDivider: index > 0,
+        isSelf,
+      };
+    });
+  }, [leaderboard.currentUser, pageRows]);
 
   const selfIndex = useMemo(
     () => rows.findIndex((row) => row.isSelf),
@@ -153,11 +141,11 @@ export function RankLeaderboard({
         return;
       }
 
-      listRef.current?.scrollToIndex({
-        index,
-        viewPosition: 0.5,
-        animated: true,
-      });
+      const listHeight = listViewportHeightRef.current;
+      const centerPad = listHeight > 0 ? Math.max(0, listHeight / 2 - ROW_HEIGHT / 2) : 0;
+      const offset = Math.max(0, index * ROW_HEIGHT - centerPad);
+
+      listRef.current?.scrollToOffset({ offset, animated: true });
       flashSelf();
       setSpotting(false);
       pendingScrollRef.current = false;
@@ -165,13 +153,12 @@ export function RankLeaderboard({
     [flashSelf],
   );
 
-  // After 10-by-10 pages finish loading, rows update — then center the You row.
   useEffect(() => {
     if (!pendingScrollRef.current) return;
     if (selfIndex < 0) return;
 
     const generation = spotGenerationRef.current;
-    const timer = setTimeout(() => scrollSelfToCenter(generation), 100);
+    const timer = setTimeout(() => scrollSelfToCenter(generation), 80);
     return () => clearTimeout(timer);
   }, [rows, selfIndex, scrollSelfToCenter]);
 
@@ -185,14 +172,30 @@ export function RankLeaderboard({
     pendingScrollRef.current = false;
 
     try {
-      await onLoadUntilCurrentUserRank();
+      // Already viewing the around window with YOU in list — just scroll.
+      if (viewMode === "around" && selfIndexRef.current >= 0) {
+        pendingScrollRef.current = true;
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            if (pendingScrollRef.current) scrollSelfToCenter(generation);
+          }, 50);
+        });
+        return;
+      }
+
+      const loaded = await onSpotAroundCurrentUser();
       if (generation !== spotGenerationRef.current) return;
+
+      if (!loaded) {
+        setSpotting(false);
+        return;
+      }
+
       pendingScrollRef.current = true;
-      // Scroll after the expanded list is committed (effect + fallback timer).
       requestAnimationFrame(() => {
         setTimeout(() => {
           if (pendingScrollRef.current) scrollSelfToCenter(generation);
-        }, 120);
+        }, 100);
       });
     } catch {
       if (generation === spotGenerationRef.current) {
@@ -208,10 +211,10 @@ export function RankLeaderboard({
       highestMeasuredFrameIndex: number;
       averageItemLength: number;
     }) => {
-      const offset = Math.max(0, info.averageItemLength * info.index);
+      const offset = Math.max(0, ROW_HEIGHT * info.index);
       listRef.current?.scrollToOffset({ offset, animated: false });
       const generation = spotGenerationRef.current;
-      setTimeout(() => scrollSelfToCenter(generation), 120);
+      setTimeout(() => scrollSelfToCenter(generation), 80);
     },
     [scrollSelfToCenter],
   );
@@ -220,22 +223,19 @@ export function RankLeaderboard({
     ({ item }) => (
       <View className="px-6">
         <View className="bg-section px-2 dark:bg-d-surface">
-          <View
-            className={
-              item.isSelf && highlightSelf
-                ? "rounded-2xl bg-primary/12 dark:bg-primary/20"
-                : undefined
-            }
-          >
-            <LeaderboardRow entry={item.entry} showDivider={item.showDivider} />
-          </View>
+          <LeaderboardRow
+            entry={item.entry}
+            showDivider={item.showDivider}
+            emphasized={item.isSelf && highlightSelf}
+          />
         </View>
       </View>
     ),
     [highlightSelf],
   );
 
-  const canSpot = Boolean(leaderboard.currentUser);
+  const viewer = leaderboard.currentUser;
+  const canSpot = Boolean(viewer);
 
   const leaderboardTitleBar = (
     <View className="px-6">
@@ -287,6 +287,9 @@ export function RankLeaderboard({
         data={rows}
         keyExtractor={(item) => item.key}
         renderItem={renderItem}
+        onLayout={(event) => {
+          listViewportHeightRef.current = event.nativeEvent.layout.height;
+        }}
         contentContainerStyle={{
           paddingBottom: 120,
           flexGrow: 1,
@@ -327,8 +330,9 @@ export function RankLeaderboard({
           index,
         })}
         onScrollToIndexFailed={onScrollToIndexFailed}
-        initialNumToRender={Math.max(16, rows.length)}
-        windowSize={11}
+        initialNumToRender={16}
+        maxToRenderPerBatch={12}
+        windowSize={7}
         removeClippedSubviews={false}
       />
 

@@ -24,13 +24,13 @@ export default function AchievementScreen() {
     loading,
     hasMore,
     loadingMore,
+    viewMode,
     loadMore,
     refresh,
-    loadUntilCurrentUserRank,
+    spotAroundCurrentUser,
   } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
-  // Soft refresh only when the Awards tab gains focus — never wipe chrome on section swap.
   useFocusEffect(
     useCallback(() => {
       void refreshAccount();
@@ -49,7 +49,6 @@ export default function AchievementScreen() {
         <AchievementSectionTabs value={section} onChange={setSection} />
       </View>
 
-      {/* Keep both panels mounted so tab switches don't remount chrome or reset scroll. */}
       <View
         className="flex-1"
         style={{ display: showRank ? "flex" : "none" }}
@@ -62,8 +61,9 @@ export default function AchievementScreen() {
             leaderboard={leaderboard}
             hasMore={hasMore}
             loadingMore={loadingMore}
+            viewMode={viewMode}
             onLoadMore={loadMore}
-            onLoadUntilCurrentUserRank={loadUntilCurrentUserRank}
+            onSpotAroundCurrentUser={spotAroundCurrentUser}
           />
         ) : (
           <View className="flex-1 items-center justify-center py-16">

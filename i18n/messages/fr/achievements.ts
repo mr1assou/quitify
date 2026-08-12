@@ -15,4 +15,7 @@ export const achievements = {
   spotMyRank: "Voir mon rang",
   spottingRank: "Recherche de votre rang…",
   spotMyRankVipA11y: "Voir mon rang, fonction VIP. Appuyez pour débloquer.",
+  yourRankLabel: "Votre rang",
+  showingNearYou: "Joueurs près de vous",
+  backToTop: "Retour au n°1",
 } as const;

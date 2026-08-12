@@ -20,9 +20,11 @@ import { formatNumber } from "@/utils/shared/format";
 type Props = {
   entry: LeaderboardEntry;
   showDivider?: boolean;
+  /** Extra pulse after Spot my rank (on top of the always-on YOU row style). */
+  emphasized?: boolean;
 };
 
-function RankLabel({ rank }: { rank: number }) {
+function RankLabel({ rank, isSelf }: { rank: number; isSelf?: boolean }) {
   if (rank === 1) {
     return (
       <View className="mr-2 w-7 items-center rounded-full bg-accent/12 py-0.5">
@@ -42,13 +44,19 @@ function RankLabel({ rank }: { rank: number }) {
   }
 
   return (
-    <Text className="mr-2 w-7 text-center text-xs font-semibold tabular-nums text-muted-foreground dark:text-d-muted">
+    <Text
+      className={`mr-2 w-7 text-center text-xs font-semibold tabular-nums ${
+        isSelf
+          ? "text-primary"
+          : "text-muted-foreground dark:text-d-muted"
+      }`}
+    >
       {rank}
     </Text>
   );
 }
 
-export function LeaderboardRow({ entry, showDivider }: Props) {
+export function LeaderboardRow({ entry, showDivider, emphasized = false }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { upsertAuthor } = useCommunity();
@@ -56,6 +64,7 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
   const { requirePremium } = usePremiumGate();
   const badgeName = getBadgeName(entry.badgeId);
   const hideFp = !isPremium;
+  const isSelf = entry.isCurrentUser;
 
   const openProfile = () => {
     if (entry.isCurrentUser) {
@@ -103,17 +112,27 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
   );
 
   return (
-    <View>
-      {showDivider ? (
+    <View
+      className={
+        isSelf
+          ? emphasized
+            ? "rounded-2xl border border-primary/50 bg-primary/20 dark:border-primary/60 dark:bg-primary/30"
+            : "rounded-2xl border border-primary/35 bg-primary/12 dark:border-primary/45 dark:bg-primary/18"
+          : undefined
+      }
+    >
+      {showDivider && !isSelf ? (
         <View className="ml-28 h-px bg-border/40 dark:bg-d-border" />
       ) : null}
       <Pressable
         onPress={openProfile}
         className="flex-row items-center px-3 py-3 active:opacity-80"
         accessibilityRole="button"
-        accessibilityLabel={`View ${entry.name}'s profile`}
+        accessibilityLabel={
+          isSelf ? t("achievements.yourRankLabel") : `View ${entry.name}'s profile`
+        }
       >
-        <RankLabel rank={entry.rank} />
+        <RankLabel rank={entry.rank} isSelf={isSelf} />
 
         <LeaderboardAvatar
           name={entry.name}
@@ -127,13 +146,17 @@ export function LeaderboardRow({ entry, showDivider }: Props) {
         <View className="ml-3 min-w-0 flex-1">
           <View className="flex-row items-center gap-2">
             <Text
-              className="flex-shrink text-base font-semibold text-foreground dark:text-d-text"
+              className={`flex-shrink text-base font-semibold ${
+                isSelf
+                  ? "text-primary"
+                  : "text-foreground dark:text-d-text"
+              }`}
               numberOfLines={1}
             >
               {entry.name}
             </Text>
-            {entry.isCurrentUser ? (
-              <View className="rounded-full bg-accent px-2 py-0.5">
+            {isSelf ? (
+              <View className="rounded-full bg-primary px-2 py-0.5">
                 <Text className="text-[10px] font-bold uppercase text-white">You</Text>
               </View>
             ) : null}

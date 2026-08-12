@@ -240,6 +240,9 @@ export const achievements = {
   spotMyRank: "Spot my rank",
   spottingRank: "Finding your rank…",
   spotMyRankVipA11y: "Spot my rank, VIP feature. Tap to unlock.",
+  yourRankLabel: "Your rank",
+  showingNearYou: "Showing players near you",
+  backToTop: "Back to #1",
 } as const;
 
 export const profile = {

@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { LEADERBOARD_PAGE_SIZE } from "@/constants/leaderboard/leaderboardPagination";
+import {
+  LEADERBOARD_AROUND_PAGE_SIZE,
+  LEADERBOARD_AROUND_RADIUS,
+  LEADERBOARD_PAGE_SIZE,
+} from "@/constants/leaderboard/leaderboardPagination";
 import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { fetchLeaderboard } from "@/services/leaderboard/leaderboardApi";
@@ -12,18 +16,21 @@ import {
   mergeLeaderboardPages,
 } from "@/utils/leaderboard/mapLeaderboardFromApi";
 
+export type LeaderboardViewMode = "browse" | "around";
+
 export type UseLeaderboardResult = {
   snapshot: LeaderboardSnapshot | null;
   loading: boolean;
   loadingMore: boolean;
   hasMore: boolean;
+  /** browse = from #1 downward; around = neighborhood jump from Spot my rank */
+  viewMode: LeaderboardViewMode;
   loadMore: () => void;
   refresh: () => Promise<void>;
-  /**
-   * Loads pages of 10 until the viewer's rank is covered by loaded offsets,
-   * so Spot my rank can scroll to them in-list.
-   */
-  loadUntilCurrentUserRank: () => Promise<boolean>;
+  /** One request: load ~25 players around you (scales to tens of thousands). */
+  spotAroundCurrentUser: () => Promise<boolean>;
+  /** Return to the top of the global board. */
+  backToTop: () => Promise<void>;
 };
 
 function applyLivePresence(
@@ -69,14 +76,11 @@ function withLivePresence(
   };
 }
 
-/** True when loaded pages reach the viewer's rank (10-by-10 offsets). */
-function hasLoadedThroughViewerRank(snapshot: LeaderboardSnapshot): boolean {
-  const viewer = snapshot.currentUser;
-  if (!viewer) return false;
-  return snapshot.nextOffset >= viewer.rank || !snapshot.hasMore;
+function aroundOffsetForRank(rank: number): number {
+  return Math.max(0, rank - 1 - LEADERBOARD_AROUND_RADIUS);
 }
 
-/** Global leaderboard loaded from the API (ranked by Freedom Points, 10 per page). */
+/** Global leaderboard — browse from the top, or jump to a window around you. */
 export function useLeaderboard(): UseLeaderboardResult {
   const { state: appState } = useApp();
   const { state: communityState } = useCommunity();
@@ -87,14 +91,27 @@ export function useLeaderboard(): UseLeaderboardResult {
   const [loading, setLoading] = useState(() => getLeaderboardCache() == null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(getLeaderboardCache()?.hasMore ?? false);
+  const [viewMode, setViewMode] = useState<LeaderboardViewMode>("browse");
   const loadingMoreRef = useRef(false);
+  const spottingRef = useRef(false);
   const refreshGenerationRef = useRef(0);
   const snapshotRef = useRef(snapshot);
   snapshotRef.current = snapshot;
   const prevAccountUserIdRef = useRef<number | null | undefined>(undefined);
 
+  const commitSnapshot = useCallback((next: LeaderboardSnapshot) => {
+    snapshotRef.current = next;
+    setLeaderboardCache(next);
+    setSnapshot(next);
+    setHasMore(next.hasMore);
+  }, []);
+
   const loadPage = useCallback(
-    async (offset: number, append: boolean): Promise<LeaderboardSnapshot | null> => {
+    async (
+      offset: number,
+      append: boolean,
+      limit: number = LEADERBOARD_PAGE_SIZE,
+    ): Promise<LeaderboardSnapshot | null> => {
       if (accountUserId == null) {
         if (!append) setLoading(false);
         return null;
@@ -103,11 +120,14 @@ export function useLeaderboard(): UseLeaderboardResult {
       let requestGeneration: number;
 
       if (append) {
-        if (loadingMoreRef.current) return snapshotRef.current;
+        if (loadingMoreRef.current || spottingRef.current) return snapshotRef.current;
         requestGeneration = refreshGenerationRef.current;
         loadingMoreRef.current = true;
         setLoadingMore(true);
       } else {
+        if (spottingRef.current) {
+          return snapshotRef.current;
+        }
         requestGeneration = ++refreshGenerationRef.current;
         loadingMoreRef.current = false;
         setLoadingMore(false);
@@ -117,12 +137,8 @@ export function useLeaderboard(): UseLeaderboardResult {
       }
 
       try {
-        const response = await fetchLeaderboard({
-          offset,
-          limit: LEADERBOARD_PAGE_SIZE,
-        });
+        const response = await fetchLeaderboard({ offset, limit });
 
-        // Soft refresh bumps the generation — drop late append/older refresh results.
         if (requestGeneration !== refreshGenerationRef.current) {
           return snapshotRef.current;
         }
@@ -132,10 +148,8 @@ export function useLeaderboard(): UseLeaderboardResult {
         const nextSnapshot =
           append && previous ? mergeLeaderboardPages(previous, mapped) : mapped;
 
-        snapshotRef.current = nextSnapshot;
-        setLeaderboardCache(nextSnapshot);
-        setSnapshot(nextSnapshot);
-        setHasMore(response.has_more);
+        commitSnapshot(nextSnapshot);
+        if (!append) setViewMode("browse");
         return nextSnapshot;
       } catch {
         if (!append && requestGeneration === refreshGenerationRef.current) {
@@ -156,7 +170,7 @@ export function useLeaderboard(): UseLeaderboardResult {
         }
       }
     },
-    [accountUserId],
+    [accountUserId, commitSnapshot],
   );
 
   const loadPageRef = useRef(loadPage);
@@ -164,32 +178,47 @@ export function useLeaderboard(): UseLeaderboardResult {
 
   const refresh = useCallback(() => loadPage(0, false).then(() => undefined), [loadPage]);
 
+  const backToTop = useCallback(() => loadPage(0, false).then(() => undefined), [loadPage]);
+
   const loadMore = useCallback(() => {
     const current = snapshotRef.current;
-    if (!current || !current.hasMore || loadingMoreRef.current) return;
-    void loadPage(current.nextOffset, true);
-  }, [loadPage]);
-
-  const loadUntilCurrentUserRank = useCallback(async (): Promise<boolean> => {
-    let current = snapshotRef.current;
-    if (!current?.currentUser) return false;
-    if (hasLoadedThroughViewerRank(current)) return true;
-
-    const generationAtStart = refreshGenerationRef.current;
-    // Cap pages so a bad rank cannot loop forever (10 users/page).
-    const maxPages = 500;
-    for (let i = 0; i < maxPages; i += 1) {
-      if (generationAtStart !== refreshGenerationRef.current) return false;
-      if (!current.hasMore) return true;
-      if (hasLoadedThroughViewerRank(current)) return true;
-
-      const next = await loadPage(current.nextOffset, true);
-      if (!next) return false;
-      current = next;
+    if (!current || !current.hasMore || loadingMoreRef.current || spottingRef.current) {
+      return;
     }
-
-    return hasLoadedThroughViewerRank(current);
+    void loadPage(current.nextOffset, true, LEADERBOARD_PAGE_SIZE);
   }, [loadPage]);
+
+  /**
+   * How big apps do it: never download ranks 1…N.
+   * One request for a small neighborhood around your rank, then scroll inside it.
+   */
+  const spotAroundCurrentUser = useCallback(async (): Promise<boolean> => {
+    const current = snapshotRef.current;
+    const viewer = current?.currentUser;
+    if (!viewer || accountUserId == null) return false;
+
+    spottingRef.current = true;
+    const generationAtStart = refreshGenerationRef.current;
+
+    try {
+      const offset = aroundOffsetForRank(viewer.rank);
+      const response = await fetchLeaderboard({
+        offset,
+        limit: LEADERBOARD_AROUND_PAGE_SIZE,
+      });
+
+      if (generationAtStart !== refreshGenerationRef.current) return false;
+
+      const mapped = mapLeaderboardFromApi(response);
+      commitSnapshot(mapped);
+      setViewMode("around");
+      return mapped.currentUser != null;
+    } catch {
+      return false;
+    } finally {
+      spottingRef.current = false;
+    }
+  }, [accountUserId, commitSnapshot]);
 
   useEffect(() => {
     if (prevAccountUserIdRef.current === undefined) {
@@ -224,8 +253,10 @@ export function useLeaderboard(): UseLeaderboardResult {
     loading,
     loadingMore,
     hasMore,
+    viewMode,
     loadMore,
     refresh,
-    loadUntilCurrentUserRank,
+    spotAroundCurrentUser,
+    backToTop,
   };
 }
