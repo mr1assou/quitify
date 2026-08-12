@@ -106,6 +106,7 @@ export function buildLeaderboard({
     others,
     totalUsers: total,
     hasMore: false,
+    startOffset: 0,
     nextOffset: Math.min(COMMUNITY_TOP_COUNT, total),
   };
 }

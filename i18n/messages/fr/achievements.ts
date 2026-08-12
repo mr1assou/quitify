@@ -18,4 +18,5 @@ export const achievements = {
   yourRankLabel: "Votre rang",
   showingNearYou: "Joueurs près de vous",
   backToTop: "Retour au n°1",
+  showPrevious: "Afficher précédent",
 } as const;

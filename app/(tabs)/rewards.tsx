@@ -23,9 +23,12 @@ export default function AchievementScreen() {
     snapshot: leaderboard,
     loading,
     hasMore,
+    hasMoreAbove,
     loadingMore,
+    loadingAbove,
     viewMode,
     loadMore,
+    loadMoreAbove,
     refresh,
     spotAroundCurrentUser,
   } = useLeaderboard();
@@ -60,9 +63,12 @@ export default function AchievementScreen() {
           <RankLeaderboard
             leaderboard={leaderboard}
             hasMore={hasMore}
+            hasMoreAbove={hasMoreAbove}
             loadingMore={loadingMore}
+            loadingAbove={loadingAbove}
             viewMode={viewMode}
             onLoadMore={loadMore}
+            onLoadMoreAbove={loadMoreAbove}
             onSpotAroundCurrentUser={spotAroundCurrentUser}
           />
         ) : (

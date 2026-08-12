@@ -243,6 +243,7 @@ export const achievements = {
   yourRankLabel: "Your rank",
   showingNearYou: "Showing players near you",
   backToTop: "Back to #1",
+  showPrevious: "Show previous",
 } as const;
 
 export const profile = {

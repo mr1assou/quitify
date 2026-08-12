@@ -57,6 +57,7 @@ export function mapLeaderboardFromApi(response: BackendLeaderboardResponse): Lea
     others,
     totalUsers: response.total_users,
     hasMore: response.has_more,
+    startOffset: response.offset,
     nextOffset: response.offset + response.items.length,
   };
 }
@@ -78,11 +79,15 @@ export function mergeLeaderboardPages(
     .sort((a, b) => a.rank - b.rank)
     .map((entry) => ({ kind: "entry" as const, entry }));
 
+  const extendedDown = nextPage.nextOffset >= previous.nextOffset;
+
   return {
     currentUser,
     others,
-    totalUsers: nextPage.totalUsers,
-    hasMore: nextPage.hasMore,
-    nextOffset: nextPage.nextOffset,
+    totalUsers: Math.max(previous.totalUsers, nextPage.totalUsers),
+    // Downward page owns hasMore; upward prepend keeps the previous below-flag.
+    hasMore: extendedDown ? nextPage.hasMore : previous.hasMore,
+    startOffset: Math.min(previous.startOffset, nextPage.startOffset),
+    nextOffset: Math.max(previous.nextOffset, nextPage.nextOffset),
   };
 }

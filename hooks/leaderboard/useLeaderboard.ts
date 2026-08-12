@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
+  LEADERBOARD_AROUND_ABOVE,
   LEADERBOARD_AROUND_PAGE_SIZE,
-  LEADERBOARD_AROUND_RADIUS,
   LEADERBOARD_PAGE_SIZE,
 } from "@/constants/leaderboard/leaderboardPagination";
 import { useApp } from "@/context/AppContext";
@@ -22,14 +22,16 @@ export type UseLeaderboardResult = {
   snapshot: LeaderboardSnapshot | null;
   loading: boolean;
   loadingMore: boolean;
+  loadingAbove: boolean;
   hasMore: boolean;
-  /** browse = from #1 downward; around = neighborhood jump from Spot my rank */
+  /** True when around-mode window can still load better ranks. */
+  hasMoreAbove: boolean;
   viewMode: LeaderboardViewMode;
   loadMore: () => void;
+  loadMoreAbove: () => void;
   refresh: () => Promise<void>;
-  /** One request: load ~25 players around you (scales to tens of thousands). */
+  /** One request: load a small on-screen section around you. */
   spotAroundCurrentUser: () => Promise<boolean>;
-  /** Return to the top of the global board. */
   backToTop: () => Promise<void>;
 };
 
@@ -77,10 +79,10 @@ function withLivePresence(
 }
 
 function aroundOffsetForRank(rank: number): number {
-  return Math.max(0, rank - 1 - LEADERBOARD_AROUND_RADIUS);
+  return Math.max(0, rank - 1 - LEADERBOARD_AROUND_ABOVE);
 }
 
-/** Global leaderboard — browse from the top, or jump to a window around you. */
+/** Global leaderboard — browse from the top, or jump around you with up/down pages. */
 export function useLeaderboard(): UseLeaderboardResult {
   const { state: appState } = useApp();
   const { state: communityState } = useCommunity();
@@ -90,9 +92,11 @@ export function useLeaderboard(): UseLeaderboardResult {
   );
   const [loading, setLoading] = useState(() => getLeaderboardCache() == null);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [loadingAbove, setLoadingAbove] = useState(false);
   const [hasMore, setHasMore] = useState(getLeaderboardCache()?.hasMore ?? false);
   const [viewMode, setViewMode] = useState<LeaderboardViewMode>("browse");
   const loadingMoreRef = useRef(false);
+  const loadingAboveRef = useRef(false);
   const spottingRef = useRef(false);
   const refreshGenerationRef = useRef(0);
   const snapshotRef = useRef(snapshot);
@@ -120,7 +124,9 @@ export function useLeaderboard(): UseLeaderboardResult {
       let requestGeneration: number;
 
       if (append) {
-        if (loadingMoreRef.current || spottingRef.current) return snapshotRef.current;
+        if (loadingMoreRef.current || spottingRef.current || loadingAboveRef.current) {
+          return snapshotRef.current;
+        }
         requestGeneration = refreshGenerationRef.current;
         loadingMoreRef.current = true;
         setLoadingMore(true);
@@ -130,7 +136,9 @@ export function useLeaderboard(): UseLeaderboardResult {
         }
         requestGeneration = ++refreshGenerationRef.current;
         loadingMoreRef.current = false;
+        loadingAboveRef.current = false;
         setLoadingMore(false);
+        setLoadingAbove(false);
         if (snapshotRef.current == null) {
           setLoading(true);
         }
@@ -182,16 +190,58 @@ export function useLeaderboard(): UseLeaderboardResult {
 
   const loadMore = useCallback(() => {
     const current = snapshotRef.current;
-    if (!current || !current.hasMore || loadingMoreRef.current || spottingRef.current) {
+    if (
+      !current ||
+      !current.hasMore ||
+      loadingMoreRef.current ||
+      loadingAboveRef.current ||
+      spottingRef.current
+    ) {
       return;
     }
     void loadPage(current.nextOffset, true, LEADERBOARD_PAGE_SIZE);
   }, [loadPage]);
 
-  /**
-   * How big apps do it: never download ranks 1…N.
-   * One request for a small neighborhood around your rank, then scroll inside it.
-   */
+  /** Prepend better ranks above the current around/browse window. */
+  const loadMoreAbove = useCallback(() => {
+    const current = snapshotRef.current;
+    if (
+      !current ||
+      current.startOffset <= 0 ||
+      loadingMoreRef.current ||
+      loadingAboveRef.current ||
+      spottingRef.current ||
+      accountUserId == null
+    ) {
+      return;
+    }
+
+    const limit = Math.min(LEADERBOARD_PAGE_SIZE, current.startOffset);
+    const offset = current.startOffset - limit;
+    const generationAtStart = refreshGenerationRef.current;
+
+    loadingAboveRef.current = true;
+    setLoadingAbove(true);
+
+    void (async () => {
+      try {
+        const response = await fetchLeaderboard({ offset, limit });
+        if (generationAtStart !== refreshGenerationRef.current) return;
+
+        const mapped = mapLeaderboardFromApi(response);
+        const previous = snapshotRef.current;
+        if (!previous) return;
+
+        commitSnapshot(mergeLeaderboardPages(previous, mapped));
+      } finally {
+        if (generationAtStart === refreshGenerationRef.current) {
+          loadingAboveRef.current = false;
+          setLoadingAbove(false);
+        }
+      }
+    })();
+  }, [accountUserId, commitSnapshot]);
+
   const spotAroundCurrentUser = useCallback(async (): Promise<boolean> => {
     const current = snapshotRef.current;
     const viewer = current?.currentUser;
@@ -248,13 +298,19 @@ export function useLeaderboard(): UseLeaderboardResult {
     snapshot,
   ]);
 
+  const hasMoreAbove =
+    viewMode === "around" && (liveSnapshot?.startOffset ?? 0) > 0;
+
   return {
     snapshot: liveSnapshot,
     loading,
     loadingMore,
+    loadingAbove,
     hasMore,
+    hasMoreAbove,
     viewMode,
     loadMore,
+    loadMoreAbove,
     refresh,
     spotAroundCurrentUser,
     backToTop,

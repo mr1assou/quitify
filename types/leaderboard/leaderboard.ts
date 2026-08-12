@@ -32,6 +32,8 @@ export type LeaderboardSnapshot = {
   others: LeaderboardRow[];
   totalUsers: number;
   hasMore: boolean;
-  /** Next API offset for loading more rows. */
+  /** First loaded API offset (0-based). Used to paginate upward. */
+  startOffset: number;
+  /** Next API offset for loading more rows downward. */
   nextOffset: number;
 };
