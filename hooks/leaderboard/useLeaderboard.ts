@@ -32,6 +32,8 @@ export type UseLeaderboardResult = {
   refresh: () => Promise<void>;
   /** One request: load a small on-screen section around you. */
   spotAroundCurrentUser: () => Promise<boolean>;
+  /** Leave Spot mode and reload ranks 1–10 (normal browse). */
+  resetToBrowse: () => Promise<void>;
   backToTop: () => Promise<void>;
 };
 
@@ -188,6 +190,27 @@ export function useLeaderboard(): UseLeaderboardResult {
 
   const backToTop = useCallback(() => loadPage(0, false).then(() => undefined), [loadPage]);
 
+  /**
+   * Leave Spot-window and reload top of board (10-by-10 browse).
+   * Used when Awards gains focus so Spot state never sticks across screens.
+   */
+  const resetToBrowse = useCallback(async () => {
+    spottingRef.current = false;
+    setViewMode("browse");
+
+    const current = snapshotRef.current;
+    // Spot window starts mid-board — drop it so we don't flash those ranks as "browse".
+    if (current && current.startOffset > 0) {
+      snapshotRef.current = null;
+      setLeaderboardCache(null);
+      setSnapshot(null);
+      setHasMore(false);
+      setLoading(true);
+    }
+
+    await loadPage(0, false);
+  }, [loadPage]);
+
   const loadMore = useCallback(() => {
     const current = snapshotRef.current;
     if (
@@ -313,6 +336,7 @@ export function useLeaderboard(): UseLeaderboardResult {
     loadMoreAbove,
     refresh,
     spotAroundCurrentUser,
+    resetToBrowse,
     backToTop,
   };
 }

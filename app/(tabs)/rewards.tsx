@@ -29,16 +29,17 @@ export default function AchievementScreen() {
     viewMode,
     loadMore,
     loadMoreAbove,
-    refresh,
+    resetToBrowse,
     spotAroundCurrentUser,
   } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
+  // Leaving Awards must drop Spot-window — next visit is normal top-10 browse.
   useFocusEffect(
     useCallback(() => {
       void refreshAccount();
-      void refresh();
-    }, [refresh, refreshAccount]),
+      void resetToBrowse();
+    }, [resetToBrowse, refreshAccount]),
   );
 
   if (!progress) return null;

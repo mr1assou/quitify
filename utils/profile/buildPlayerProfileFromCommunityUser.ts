@@ -3,6 +3,7 @@ import { XP_PER_SMOKE_FREE_DAY } from "@/constants/progress/levels";
 import type { CommunityUser } from "@/types/community/community";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { withMockOnlineStatus } from "@/utils/community/mockOnlineStatus";
+import { parseDbUserId } from "@/utils/community/presence";
 import {
   bestSmokeFreeDaysForRank,
   memberSinceLabelForRank,
@@ -16,9 +17,11 @@ export function buildPlayerProfileFromCommunityUser(
 ): PlayerProfile {
   const resolved = withMockOnlineStatus(user);
   const freedomPoints = resolved.smokeFreeDays * XP_PER_SMOKE_FREE_DAY;
+  const userId = parseDbUserId(resolved.id) ?? undefined;
 
   return {
     id: toCommunityProfileId(resolved.id),
+    userId,
     name: resolved.name,
     rank: resolved.leaderboardRank,
     totalPlayers,
