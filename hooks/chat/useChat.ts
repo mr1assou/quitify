@@ -35,6 +35,9 @@ export function useChatThreads(): ChatThreadPreview[] {
           .map((mid) => state.messagesById[mid])
           .filter((m): m is ChatMessage => Boolean(m));
 
+        // Only show people you've actually messaged (at least one message).
+        if (messages.length === 0) return null;
+
         const lastMessage = messages[messages.length - 1] ?? null;
         const unreadCount =
           thread.unreadCount ??

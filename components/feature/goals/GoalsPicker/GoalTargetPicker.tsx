@@ -2,10 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useMemo, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 
+import { GoalDaysAheadInfoModal } from "@/components/feature/goals/GoalDaysAheadInfoModal";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 import { formatMinTargetError } from "@/utils/goals/goalLabels";
-import { showGoalDaysAheadInfo } from "@/utils/goals/showGoalDaysAheadInfo";
 import {
   cigarettesAvoidedAtSmokeFreeDays,
   moneySavedAtSmokeFreeDays,
@@ -114,6 +114,7 @@ export function GoalTargetPicker({
     initialDays != null ? String(initialDays) : "",
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [infoVisible, setInfoVisible] = useState(false);
 
   const streakDays = useMemo(
     () => smokeFreeDaysFromStreakStart(streakStart, now),
@@ -172,7 +173,7 @@ export function GoalTargetPicker({
             {formatMinDaysAheadBanner(minDaysAhead, streakDays)}
           </Text>
           <Pressable
-            onPress={() => showGoalDaysAheadInfo(isValid ? parsedDays ?? undefined : undefined)}
+            onPress={() => setInfoVisible(true)}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="How minimum days ahead works"
@@ -186,6 +187,12 @@ export function GoalTargetPicker({
           </Pressable>
         </View>
       </View>
+
+      <GoalDaysAheadInfoModal
+        visible={infoVisible}
+        daysAhead={isValid ? parsedDays ?? undefined : undefined}
+        onClose={() => setInfoVisible(false)}
+      />
 
       <View className="gap-2">
         <Text className="px-1 text-sm font-semibold text-foreground dark:text-d-text">

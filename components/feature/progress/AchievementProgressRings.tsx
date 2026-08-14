@@ -1,16 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { BadgeArt } from "@/components/feature/progress/BadgeArt";
+import { FreedomPointsInfoModal } from "@/components/feature/stats/FreedomPointsInfoModal";
 import { Card } from "@/components/ui/Card";
 import { ProgressRing } from "@/components/ui/ProgressRing";
 import { useTheme } from "@/context/ThemeContext";
 import { useIsPremium } from "@/hooks/auth/useIsPremium";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import type { GlobalRank } from "@/types/progress/progress";
 import type { AchievementBadgeMetric } from "@/utils/progress/achievementProgress";
 import { progressToPercent } from "@/utils/progress/achievementProgress";
@@ -37,6 +38,7 @@ export function AchievementProgressRings({
   const { colors } = useTheme();
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
+  const [infoVisible, setInfoVisible] = useState(false);
   const lockVipStats = !isPremium;
   const pct = progressToPercent(badge.progress);
   const hasEarnedBadge = badge.caption !== "—";
@@ -127,26 +129,19 @@ export function AchievementProgressRings({
               <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
                 {t("stats.freedomPoints")}
               </Text>
-              {!lockVipStats ? (
-                <Pressable
-                  onPress={() =>
-                    showFreedomPointsInfo(
-                      t("stats.freedomPointsInfoTitle"),
-                      t("stats.freedomPointsInfoMessage"),
-                    )
-                  }
-                  hitSlop={8}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("stats.freedomPointsInfoA11y")}
-                  className="active:opacity-70"
-                >
-                  <Ionicons
-                    name="information-circle-outline"
-                    size={14}
-                    color={colors.mutedForeground}
-                  />
-                </Pressable>
-              ) : null}
+              <Pressable
+                onPress={() => setInfoVisible(true)}
+                hitSlop={8}
+                accessibilityRole="button"
+                accessibilityLabel={t("stats.freedomPointsInfoA11y")}
+                className="active:opacity-70"
+              >
+                <Ionicons
+                  name="information-circle-outline"
+                  size={14}
+                  color={colors.mutedForeground}
+                />
+              </Pressable>
             </View>
             <View className="mt-2 flex-row items-center gap-2">
               <View className="h-8 w-8 items-center justify-center rounded-full bg-primary">
@@ -170,6 +165,8 @@ export function AchievementProgressRings({
         </View>
         </View>
       </Card>
+
+      <FreedomPointsInfoModal visible={infoVisible} onClose={() => setInfoVisible(false)} />
     </Animated.View>
   );
 }

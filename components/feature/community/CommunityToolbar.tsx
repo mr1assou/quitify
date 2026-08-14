@@ -10,7 +10,6 @@ import { isSupportRole } from "@/constants/auth/userRoles";
 import { useApp } from "@/context/AppContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { CommunityFeedFilter } from "@/types/community/communityFeedFilter";
 import { safeRouter } from "@/utils/app/safeRouter";
 
@@ -32,7 +31,6 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { state: appState } = useApp();
-  const { requirePremium } = usePremiumGate();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterActive = !isDefaultCommunityFeedFilter(filter.sort, filter.tagId);
   const isSupportStaff = isSupportRole(appState.account?.role);
@@ -66,10 +64,7 @@ export function CommunityToolbar({ filter, onFilterChange }: Props) {
     <>
       <View className="flex-row items-center justify-between px-6 pb-2 pt-3">
         <Pressable
-          onPress={() => {
-            if (!requirePremium()) return;
-            setFilterOpen(true);
-          }}
+          onPress={() => setFilterOpen(true)}
           accessibilityRole="button"
           accessibilityLabel={t("community.filterPosts")}
           className="h-10 max-w-[52%] flex-row items-center rounded-full bg-section px-3 dark:bg-d-surface"

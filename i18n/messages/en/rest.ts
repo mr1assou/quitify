@@ -12,6 +12,28 @@ export const goals = {
   empty: "No goals yet",
   emptyHint: "Set a target to stay motivated.",
   endsOn: "Ends {{date}}",
+  infoTitle: "How goals work",
+  infoIntro:
+    "Goals are extra smoke-free days you commit to from today. The minimum you can choose depends on your current streak:",
+  infoTier0Streak: "0–2 days",
+  infoTier0Min: "at least 1 day ahead",
+  infoTier1Streak: "3–13 days",
+  infoTier1Min: "at least 2 days ahead",
+  infoTier2Streak: "14–29 days",
+  infoTier2Min: "at least 3 days ahead",
+  infoTier3Streak: "30–39 days",
+  infoTier3Min: "at least 4 days ahead",
+  infoTier4Streak: "40–49 days",
+  infoTier4Min: "at least 5 days ahead",
+  infoTier5Streak: "50+ days",
+  infoTier5Min: "at least 6 days ahead",
+  infoFpTitle: "Freedom Points bonus",
+  infoFpBody:
+    "When you achieve your goal, you earn a one-time bonus of {{fpPerDay}} FP for each day in your goal. The bonus is added automatically the moment you hit your target.",
+  infoFpExample:
+    "Example: a 7-day-ahead goal pays 70 FP ({{fpPerDay}} × 7) when you complete it.",
+  infoFpExampleForDays:
+    "Your {{days}}-day goal will pay {{fp}} FP when you achieve it.",
 } as const;
 
 export const missions = {

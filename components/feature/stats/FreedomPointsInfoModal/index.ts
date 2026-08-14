@@ -1,0 +1,1 @@
+export { FreedomPointsInfoModal } from "./FreedomPointsInfoModal";

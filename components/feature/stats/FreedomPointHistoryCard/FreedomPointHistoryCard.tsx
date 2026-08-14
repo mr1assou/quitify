@@ -1,11 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
+import { FreedomPointsInfoModal } from "@/components/feature/stats/FreedomPointsInfoModal";
 import { StatsListPagination } from "@/components/feature/stats/StatsListPagination";
 import { Card } from "@/components/ui/Card";
 import { STATS_LIST_PAGE_SIZE } from "@/constants/stats/statsListPagination";
-import { showFreedomPointsInfo } from "@/utils/stats/showFreedomPointsInfo";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePaginatedList } from "@/hooks/shared/usePaginatedList";
@@ -26,6 +27,7 @@ type Props = {
 export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const [infoVisible, setInfoVisible] = useState(false);
 
   const { page, totalPages, setPage, paginatedItems: visibleEntries } = usePaginatedList(
     entries,
@@ -59,12 +61,7 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
                 {t("stats.freedomPoints")}
               </Text>
               <Pressable
-                onPress={() =>
-                  showFreedomPointsInfo(
-                    t("stats.freedomPointsInfoTitle"),
-                    t("stats.freedomPointsInfoMessage"),
-                  )
-                }
+                onPress={() => setInfoVisible(true)}
                 hitSlop={8}
                 accessibilityRole="button"
                 accessibilityLabel={t("stats.freedomPointsInfoA11y")}
@@ -80,6 +77,8 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
             <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">{summaryLabel}</Text>
           </View>
         </View>
+
+        <FreedomPointsInfoModal visible={infoVisible} onClose={() => setInfoVisible(false)} />
 
         {entries.length === 0 ? (
           <View className="mt-4 rounded-2xl bg-elevated px-4 py-4 dark:bg-d-elevated">

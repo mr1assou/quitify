@@ -12,4 +12,26 @@ export const goals = {
   empty: "Aucun objectif pour le moment",
   emptyHint: "Fixez une cible pour rester motivé.",
   endsOn: "Se termine le {{date}}",
+  infoTitle: "Comment fonctionnent les objectifs",
+  infoIntro:
+    "Les objectifs sont des jours sans cigarette supplémentaires que vous vous engagez à tenir à partir d'aujourd'hui. Le minimum dépend de votre série actuelle :",
+  infoTier0Streak: "0–2 jours",
+  infoTier0Min: "au moins 1 jour d'avance",
+  infoTier1Streak: "3–13 jours",
+  infoTier1Min: "au moins 2 jours d'avance",
+  infoTier2Streak: "14–29 jours",
+  infoTier2Min: "au moins 3 jours d'avance",
+  infoTier3Streak: "30–39 jours",
+  infoTier3Min: "au moins 4 jours d'avance",
+  infoTier4Streak: "40–49 jours",
+  infoTier4Min: "au moins 5 jours d'avance",
+  infoTier5Streak: "50+ jours",
+  infoTier5Min: "au moins 6 jours d'avance",
+  infoFpTitle: "Bonus de Freedom Points",
+  infoFpBody:
+    "Lorsque vous atteignez votre objectif, vous gagnez un bonus unique de {{fpPerDay}} FP pour chaque jour de votre objectif. Le bonus est ajouté automatiquement dès que vous atteignez la cible.",
+  infoFpExample:
+    "Exemple : un objectif de 7 jours d'avance rapporte 70 FP ({{fpPerDay}} × 7) une fois terminé.",
+  infoFpExampleForDays:
+    "Votre objectif de {{days}} jours rapportera {{fp}} FP lorsque vous l'aurez atteint.",
 } as const;

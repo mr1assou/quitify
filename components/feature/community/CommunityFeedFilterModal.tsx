@@ -10,6 +10,7 @@ import {
 import { POST_TAGS } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import type { TranslationKey } from "@/i18n/translate";
 import type { CommunityFeedFilter, PostFeedSort } from "@/types/community/communityFeedFilter";
 
@@ -29,6 +30,7 @@ const SORT_LABEL_KEY: Record<PostFeedSort, TranslationKey> = {
 export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { requirePremium } = usePremiumGate();
   const insets = useSafeAreaInsets();
   const [draft, setDraft] = useState<CommunityFeedFilter>(filter);
 
@@ -41,6 +43,7 @@ export function CommunityFeedFilterModal({ visible, filter, onApply, onClose }: 
   };
 
   const apply = () => {
+    if (!requirePremium()) return;
     onApply(draft);
     onClose();
   };
