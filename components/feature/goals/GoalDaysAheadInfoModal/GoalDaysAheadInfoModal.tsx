@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { Modal, Pressable, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/ui/Button";
 import { GOAL_COMPLETION_BONUS } from "@/constants/goals/goalRewards";
@@ -28,6 +29,8 @@ const TIER_KEYS = [
 export function GoalDaysAheadInfoModal({ visible, daysAhead, onClose }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
 
   const handleClose = () => {
     Haptics.selectionAsync().catch(() => {});
@@ -42,9 +45,14 @@ export function GoalDaysAheadInfoModal({ visible, daysAhead, onClose }: Props) {
         })
       : null;
 
+  const maxCardHeight = Math.min(windowHeight - insets.top - insets.bottom - 32, windowHeight * 0.9);
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={handleClose}>
-      <View className="flex-1 items-center justify-center px-5 py-8">
+      <View
+        className="flex-1 items-center justify-center px-5"
+        style={{ paddingTop: Math.max(insets.top, 16), paddingBottom: Math.max(insets.bottom, 16) }}
+      >
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t("common.close")}
@@ -52,57 +60,67 @@ export function GoalDaysAheadInfoModal({ visible, daysAhead, onClose }: Props) {
           onPress={handleClose}
         />
 
-        <View className="w-full max-w-md rounded-3xl bg-background px-6 pb-6 pt-7 dark:bg-d-bg">
-          <View className="items-center">
-            <View
-              className="h-16 w-16 items-center justify-center rounded-full"
-              style={{ backgroundColor: `${colors.primary}22` }}
-            >
-              <Ionicons name="flag-outline" size={30} color={colors.primary} />
-            </View>
-            <Text className="mt-4 text-center text-xl font-bold text-foreground dark:text-d-text">
-              {t("goals.infoTitle")}
-            </Text>
-          </View>
-
-          <Text className="mt-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            {t("goals.infoIntro")}
-          </Text>
-
-          <View className="mt-3 gap-2.5 rounded-2xl bg-section px-3.5 py-3.5 dark:bg-d-surface">
-            {TIER_KEYS.map((tier) => (
-              <View key={tier.streak} className="flex-row items-start gap-2">
-                <Text className="w-[92px] text-sm font-semibold text-foreground dark:text-d-text">
-                  {t(tier.streak)}
-                </Text>
-                <Text className="flex-1 text-sm text-muted-foreground dark:text-d-muted">
-                  → {t(tier.min)}
-                </Text>
+        <View
+          className="w-full max-w-md overflow-hidden rounded-3xl bg-background dark:bg-d-bg"
+          style={{ maxHeight: maxCardHeight }}
+        >
+          <ScrollView
+            contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 28, paddingBottom: 24 }}
+            showsVerticalScrollIndicator
+            bounces
+            nestedScrollEnabled
+          >
+            <View className="items-center">
+              <View
+                className="h-16 w-16 items-center justify-center rounded-full"
+                style={{ backgroundColor: `${colors.primary}22` }}
+              >
+                <Ionicons name="flag-outline" size={30} color={colors.primary} />
               </View>
-            ))}
-          </View>
-
-          <Text className="mt-4 text-sm font-bold text-foreground dark:text-d-text">
-            {t("goals.infoFpTitle")}
-          </Text>
-          <Text className="mt-1 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            {t("goals.infoFpBody", { fpPerDay: FP_PER_DAY })}
-          </Text>
-          <Text className="mt-2 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-            {t("goals.infoFpExample", { fpPerDay: FP_PER_DAY })}
-          </Text>
-
-          {personalizedExample ? (
-            <View className="mt-3 rounded-2xl bg-primary/15 px-3.5 py-3">
-              <Text className="text-sm font-semibold leading-5 text-primary">
-                {personalizedExample}
+              <Text className="mt-4 text-center text-xl font-bold text-foreground dark:text-d-text">
+                {t("goals.infoTitle")}
               </Text>
             </View>
-          ) : null}
 
-          <View className="mt-5">
-            <Button label={t("common.gotIt")} onPress={handleClose} fullWidth />
-          </View>
+            <Text className="mt-4 text-sm leading-5 text-muted-foreground dark:text-d-muted">
+              {t("goals.infoIntro")}
+            </Text>
+
+            <View className="mt-3 gap-2.5 rounded-2xl bg-section px-3.5 py-3.5 dark:bg-d-surface">
+              {TIER_KEYS.map((tier) => (
+                <View key={tier.streak} className="flex-row items-start gap-2">
+                  <Text className="w-[92px] text-sm font-semibold text-foreground dark:text-d-text">
+                    {t(tier.streak)}
+                  </Text>
+                  <Text className="flex-1 text-sm text-muted-foreground dark:text-d-muted">
+                    → {t(tier.min)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text className="mt-4 text-sm font-bold text-foreground dark:text-d-text">
+              {t("goals.infoFpTitle")}
+            </Text>
+            <Text className="mt-1 text-sm leading-5 text-muted-foreground dark:text-d-muted">
+              {t("goals.infoFpBody", { fpPerDay: FP_PER_DAY })}
+            </Text>
+            <Text className="mt-2 text-sm leading-5 text-muted-foreground dark:text-d-muted">
+              {t("goals.infoFpExample", { fpPerDay: FP_PER_DAY })}
+            </Text>
+
+            {personalizedExample ? (
+              <View className="mt-3 rounded-2xl bg-primary/15 px-3.5 py-3">
+                <Text className="text-sm font-semibold leading-5 text-primary">
+                  {personalizedExample}
+                </Text>
+              </View>
+            ) : null}
+
+            <View className="mt-5">
+              <Button label={t("common.gotIt")} onPress={handleClose} fullWidth />
+            </View>
+          </ScrollView>
         </View>
       </View>
     </Modal>
