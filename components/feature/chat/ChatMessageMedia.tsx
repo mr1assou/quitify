@@ -1,14 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Audio, ResizeMode, Video } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 import { Image } from "expo-image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useTheme } from "@/context/ThemeContext";
 import type { ChatMessage } from "@/types/chat/chat";
 import { formatMediaDuration } from "@/utils/chat/formatMediaDuration";
 
+import { ChatAudioMessage } from "./ChatAudioMessage";
 import { ChatImageLightbox } from "./ChatImageLightbox";
 
 type Props = {
@@ -33,12 +33,7 @@ export function ChatMessageMedia({ message }: Props) {
   }
 
   if (message.kind === "audio" && message.mediaUrl) {
-    return (
-      <ChatAudioMessage
-        uri={message.mediaUrl}
-        durationMs={message.mediaDurationMs}
-      />
-    );
+    return <ChatAudioMessage uri={message.mediaUrl} durationMs={message.mediaDurationMs} />;
   }
 
   return null;
@@ -146,103 +141,3 @@ function ChatVideoMessage({ uri, durationMs }: { uri: string; durationMs?: numbe
   );
 }
 
-function ChatAudioMessage({
-  uri,
-  durationMs,
-}: {
-  uri: string;
-  durationMs?: number;
-}) {
-  const { colors } = useTheme();
-  const soundRef = useRef<Audio.Sound | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const [positionMs, setPositionMs] = useState(0);
-
-  const unload = useCallback(async () => {
-    const sound = soundRef.current;
-    soundRef.current = null;
-    if (!sound) return;
-    try {
-      await sound.unloadAsync();
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      void unload();
-    };
-  }, [unload]);
-
-  const togglePlay = async () => {
-    try {
-      if (playing && soundRef.current) {
-        await soundRef.current.pauseAsync();
-        setPlaying(false);
-        return;
-      }
-
-      if (!soundRef.current) {
-        const { sound } = await Audio.Sound.createAsync(
-          { uri },
-          { shouldPlay: true },
-          (status) => {
-            if (!status.isLoaded) return;
-            setPositionMs(status.positionMillis ?? 0);
-            if (status.didJustFinish) {
-              setPlaying(false);
-              setPositionMs(0);
-            }
-          },
-        );
-        soundRef.current = sound;
-        setPlaying(true);
-        return;
-      }
-
-      await soundRef.current.playAsync();
-      setPlaying(true);
-    } catch {
-      setPlaying(false);
-    }
-  };
-
-  const label = formatMediaDuration(playing ? positionMs : durationMs);
-
-  return (
-    <Pressable
-      onPress={() => void togglePlay()}
-      className="min-w-[180px] flex-row items-center gap-3"
-      accessibilityLabel="Voice message"
-    >
-      <View
-        className="h-9 w-9 items-center justify-center rounded-full"
-        style={{ backgroundColor: `${colors.primary}20` }}
-      >
-        <Ionicons
-          name={playing ? "pause" : "play"}
-          size={18}
-          color={colors.primary}
-        />
-      </View>
-      <View className="flex-1 flex-row items-center gap-1">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <View
-            key={i}
-            className="rounded-full"
-            style={{
-              width: 3,
-              height: 8 + (i % 3) * 6,
-              backgroundColor: colors.primary,
-              opacity: playing ? 1 : 0.65,
-            }}
-          />
-        ))}
-      </View>
-      <Text className="text-xs font-medium text-muted-foreground dark:text-d-muted">
-        {label}
-      </Text>
-    </Pressable>
-  );
-}

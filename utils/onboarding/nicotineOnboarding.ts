@@ -6,6 +6,7 @@ export type NicotineFieldErrors = {
   packSize?: boolean;
   packSizeInvalid?: boolean;
   price?: boolean;
+  priceInvalid?: boolean;
   habitYears?: boolean;
 };
 
@@ -16,6 +17,16 @@ export function hasInvalidCigarettesPerPackInput(draft: OnboardingDraft): boolea
     input != null &&
     input.length > 0 &&
     !isValidCigarettesPerPack(draft.cigarettesPerPack)
+  );
+}
+
+export function hasInvalidPackCostInput(draft: OnboardingDraft): boolean {
+  const input = draft.packCostInput?.trim();
+  if (!input) return false;
+  return !(
+    typeof draft.packCost === "number" &&
+    Number.isFinite(draft.packCost) &&
+    draft.packCost > 0
   );
 }
 
@@ -67,15 +78,16 @@ export function getNicotineFieldErrors(draft: OnboardingDraft): NicotineFieldErr
   }
 
   const priceInput = draft.packCostInput?.trim() ?? "";
-  if (
-    !priceInput ||
+  if (!priceInput) {
+    errors.price = true;
+  } else if (
     !(
       typeof draft.packCost === "number" &&
       Number.isFinite(draft.packCost) &&
       draft.packCost > 0
     )
   ) {
-    errors.price = true;
+    errors.priceInvalid = true;
   }
 
   if (draft.nicotineHabitYearsBand == null) errors.habitYears = true;

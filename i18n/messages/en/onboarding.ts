@@ -100,6 +100,7 @@ export const onboarding = {
       label: "Price per pack",
       placeholder: "Enter a price",
       required: "Enter a price",
+      invalid: "Pack price must be greater than 0.",
     },
     "1_5": { label: "1–5", hint: "Occasional smoker" },
     "6_10": { label: "6–10", hint: "Light smoker" },

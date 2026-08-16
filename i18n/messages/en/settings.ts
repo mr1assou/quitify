@@ -11,6 +11,7 @@ export const settings = {
   saveProgress: "Save my progress",
   quitDate: "Quit date",
   smokingSettings: "Smoking settings",
+  packPriceRequired: "Pack price must be greater than 0.",
   talkToSupport: "Talk to support",
   shareApp: "Share Quitify",
   logout: "Log out",

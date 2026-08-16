@@ -158,15 +158,13 @@ export function RankLeaderboard({
 
     setSpotting(true);
     try {
-      if (viewMode === "around") {
-        if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current);
-        setHighlightSelf(true);
-        highlightTimerRef.current = setTimeout(() => setHighlightSelf(false), 1800);
-        return;
-      }
-
       await onSpotAroundCurrentUser();
-      // List resets to the around section; YOU is near the top — no scroll needed.
+      if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current);
+      setHighlightSelf(true);
+      highlightTimerRef.current = setTimeout(() => setHighlightSelf(false), 1800);
+      requestAnimationFrame(() => {
+        listRef.current?.scrollToOffset({ offset: 0, animated: false });
+      });
     } finally {
       setSpotting(false);
     }

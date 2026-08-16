@@ -45,6 +45,15 @@ function resolveOtherText(
 function resolvePackPriceText(draft: OnboardingDraft): string | undefined {
   const raw = draft.packCostInput?.trim();
   if (!raw) return undefined;
+  if (
+    !(
+      typeof draft.packCost === "number" &&
+      Number.isFinite(draft.packCost) &&
+      draft.packCost > 0
+    )
+  ) {
+    return undefined;
+  }
   const symbol = currencySymbol(draft.currency).trim();
   if (symbol.length > 0 && symbol !== draft.currency) {
     return `${symbol}${raw}`;

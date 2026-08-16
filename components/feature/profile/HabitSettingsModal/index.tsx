@@ -68,7 +68,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
       Number.isFinite(perPack) &&
       perPack > 0 &&
       Number.isFinite(packCost) &&
-      packCost >= 0
+      packCost > 0
     );
   }, [cigarettesPerDay, cigarettesPerPack, packCostInput]);
 
@@ -175,6 +175,8 @@ function HabitSettingsSheet({
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const { height: keyboardHeight, progress } = useReanimatedKeyboardAnimation();
+  const packCost = parsePackPrice(packCostInput);
+  const packCostInvalid = packCostInput.trim().length > 0 && !(packCost > 0);
 
   const sheetStyle = useAnimatedStyle(() => ({
     paddingBottom:
@@ -248,7 +250,13 @@ function HabitSettingsSheet({
                     currency={profile.currency}
                     value={packCostInput}
                     onChangeText={onPackCostInputChange}
+                    hasError={packCostInvalid}
                   />
+                  {packCostInvalid ? (
+                    <Text className="text-sm text-alert">
+                      {t("settings.packPriceRequired")}
+                    </Text>
+                  ) : null}
                 </View>
               </View>
 

@@ -129,6 +129,7 @@ export const onboarding = {
       label: "Prix par paquet",
       placeholder: "Entrez un prix",
       required: "Entrez un prix",
+      invalid: "Le prix du paquet doit être supérieur à 0.",
     },
     "1_5": { label: "1 à 5", hint: "Fumeur occasionnel" },
     "6_10": { label: "6 à 10", hint: "Fumeur léger" },

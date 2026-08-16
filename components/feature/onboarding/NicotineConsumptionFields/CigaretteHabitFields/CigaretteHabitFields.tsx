@@ -25,6 +25,7 @@ import {
 } from "@/utils/onboarding/nicotineBands";
 import {
   hasInvalidCigarettesPerPackInput,
+  hasInvalidPackCostInput,
   type NicotineFieldErrors,
 } from "@/utils/onboarding/nicotineOnboarding";
 
@@ -68,7 +69,10 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
     hasInvalidCigarettesPerPackInput(draft) || Boolean(fieldErrors?.packSizeInvalid);
   const packSizeMissing = Boolean(fieldErrors?.packSize);
   const packSizeHasError = packSizeInvalid || packSizeMissing;
-  const priceHasError = Boolean(fieldErrors?.price);
+  const priceInvalid =
+    hasInvalidPackCostInput(draft) || Boolean(fieldErrors?.priceInvalid);
+  const priceMissing = Boolean(fieldErrors?.price);
+  const priceHasError = priceInvalid || priceMissing;
 
   return (
     <View className="w-full gap-5">
@@ -123,9 +127,13 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
           placeholder={t("onboarding.nicotine.price.placeholder")}
           onChangeText={(raw) => patch(patchForPackCostInput(raw))}
         />
-        {priceHasError ? (
+        {priceMissing ? (
           <Text className="text-xs font-semibold text-alert">
             {t("onboarding.nicotine.price.required")}
+          </Text>
+        ) : priceInvalid ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.price.invalid")}
           </Text>
         ) : null}
       </View>

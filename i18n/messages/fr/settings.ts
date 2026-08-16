@@ -11,6 +11,7 @@ export const settings = {
   saveProgress: "Enregistrer mes progrès",
   quitDate: "Date d'arrêt",
   smokingSettings: "Paramètres de tabagisme",
+  packPriceRequired: "Le prix du paquet doit être supérieur à 0.",
   talkToSupport: "Parler au support",
   shareApp: "Partager Quitify",
   logout: "Se déconnecter",
