@@ -1,5 +1,7 @@
 import { Text, View } from "react-native";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+
 type Props = {
   matchedPairs: number;
   totalPairs: number;
@@ -19,13 +21,14 @@ export function MemoryHud({
   moves,
   secondsLeft,
 }: Props) {
+  const { t } = useTranslation();
   const urgent = secondsLeft <= 30;
 
   return (
     <View className="px-6 pb-2 pt-1">
       <View className="mb-3">
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Time
+          {t("craving.timeLabel")}
         </Text>
         <Text
           className={`font-mono text-2xl font-bold tabular-nums ${
@@ -39,7 +42,7 @@ export function MemoryHud({
       <View className="flex-row items-end justify-between">
         <View>
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Pairs
+            {t("craving.pairsLabel")}
           </Text>
           <Text className="font-mono text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
             {matchedPairs}/{totalPairs}
@@ -47,7 +50,7 @@ export function MemoryHud({
         </View>
         <View className="items-end">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Moves
+            {t("craving.movesLabel")}
           </Text>
           <Text className="font-mono text-3xl font-bold tabular-nums text-foreground dark:text-d-text">
             {moves}

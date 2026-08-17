@@ -24,7 +24,7 @@ type Props = {
 export function GoalTargetScreen({ mode = "create", goalId }: Props) {
   const { t } = useTranslation();
   const { state } = useApp();
-  const { goals, minTargets, setGoal, refresh, isReady } = useUserGoals();
+  const { goals, minTargets, maxTargets, setGoal, refresh, isReady } = useUserGoals();
   const { requirePremium } = usePremiumGate();
   const now = useNow(1000);
   const isEdit = mode === "edit";
@@ -98,6 +98,7 @@ export function GoalTargetScreen({ mode = "create", goalId }: Props) {
             currency={state.profile.currency}
             economics={economics}
             minDaysAheadFromServer={minTargets.smoke_free_days}
+            maxDaysAheadFromServer={maxTargets.smoke_free_days ?? undefined}
             initialDays={initialDays}
             confirmLabel={isEdit ? t("goals.saveChanges") : t("goals.setGoal")}
             onConfirm={handleConfirm}

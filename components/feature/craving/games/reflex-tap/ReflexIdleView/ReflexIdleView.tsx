@@ -29,8 +29,10 @@ export function ReflexIdleView({ onStart }: Props) {
           {t("craving.ninjaTitle")}
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          {CIGARETTE_NINJA_DURATION_LABEL} battle swipe to slice cigarettes, vapes, and smoke clouds. Reach{" "}
-          {CIGARETTE_NINJA_TARGET_SCORE} points to win.
+          {t("craving.ninjaIdleBody", {
+            duration: CIGARETTE_NINJA_DURATION_LABEL,
+            score: CIGARETTE_NINJA_TARGET_SCORE,
+          })}
         </Text>
       </Animated.View>
 
@@ -45,7 +47,7 @@ export function ReflexIdleView({ onStart }: Props) {
           source={REFLEX_TAP_LOGO_IMAGE}
           style={{ width: logoWidth, height: logoHeight }}
           resizeMode="contain"
-          accessibilityLabel="Cigarette Ninja game"
+          accessibilityLabel={t("craving.ninjaA11y")}
         />
       </Animated.View>
 

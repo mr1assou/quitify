@@ -3,6 +3,7 @@ import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   isRunning: boolean;
@@ -13,17 +14,18 @@ type Props = {
 
 export function BreathingControls({ isRunning, cycle, onToggle, onReset }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View className="items-center gap-6">
       <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-        Cycle {cycle}
+        {t("craving.breathingCycle", { count: cycle })}
       </Text>
 
       <View className="flex-row items-center gap-6">
         <ControlButton
           icon="refresh"
-          label="Restart"
+          label={t("craving.breathingRestart")}
           onPress={() => {
             Haptics.selectionAsync().catch(() => {});
             onReset();
@@ -32,7 +34,7 @@ export function BreathingControls({ isRunning, cycle, onToggle, onReset }: Props
         />
         <ControlButton
           icon={isRunning ? "pause" : "play"}
-          label={isRunning ? "Pause" : "Resume"}
+          label={isRunning ? t("craving.breathingPause") : t("craving.breathingResume")}
           size={72}
           filled
           onPress={() => {

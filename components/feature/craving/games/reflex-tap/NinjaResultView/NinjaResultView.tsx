@@ -4,6 +4,7 @@ import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   won: boolean;
@@ -25,17 +26,18 @@ export function NinjaResultView({
   onDone,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const title = won
-    ? "Goal reached!"
+    ? t("craving.ninjaWonTitle")
     : timedOut
-      ? "Time's up"
-      : "Battle paused";
+      ? t("craving.ninjaTimedOutTitle")
+      : t("craving.ninjaPausedTitle");
   const subtitle = won
-    ? `You scored ${score} and beat the ${targetScore} point goal.`
+    ? t("craving.ninjaWonSubtitle", { score, target: targetScore })
     : timedOut
-      ? `You scored ${score} — reach ${targetScore} to win next time.`
-      : `You scored ${score}. Keep slicing until you hit ${targetScore}.`;
+      ? t("craving.ninjaTimedOutSubtitle", { score, target: targetScore })
+      : t("craving.ninjaPausedSubtitle", { score, target: targetScore });
   const icon = won ? "trophy" : timedOut ? "time-outline" : "flash";
 
   return (
@@ -59,19 +61,19 @@ export function NinjaResultView({
       >
         <View className="items-center">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Final score
+            {t("craving.finalScore")}
           </Text>
           <Text className="mt-2 font-mono text-6xl font-bold tabular-nums text-foreground dark:text-d-text">
             {score}
           </Text>
           <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">
-            Goal: {targetScore}
+            {t("craving.goalValue", { target: targetScore })}
           </Text>
         </View>
 
         <View className="items-center">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Best combo
+            {t("craving.bestCombo")}
           </Text>
           <Text className="mt-1 font-mono text-3xl font-bold tabular-nums text-accent">
             x{bestCombo}
@@ -83,9 +85,9 @@ export function NinjaResultView({
         entering={FadeInUp.delay(380).duration(420)}
         className="w-full gap-3"
       >
-        <Button label="Play again" size="lg" fullWidth onPress={onPlayAgain} />
+        <Button label={t("craving.playAgain")} size="lg" fullWidth onPress={onPlayAgain} />
         <Button
-          label="Done"
+          label={t("craving.done")}
           size="lg"
           variant="ghost"
           fullWidth

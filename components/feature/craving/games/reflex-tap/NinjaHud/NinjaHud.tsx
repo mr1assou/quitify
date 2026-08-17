@@ -8,6 +8,8 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+
 type Props = {
   score: number;
   targetScore: number;
@@ -22,6 +24,7 @@ function formatCountdown(seconds: number): string {
 }
 
 export function NinjaHud({ score, targetScore, combo, secondsLeft }: Props) {
+  const { t } = useTranslation();
   const comboScale = useSharedValue(1);
   const urgent = secondsLeft <= 60;
   const goalProgress = Math.min(100, (score / targetScore) * 100);
@@ -43,7 +46,7 @@ export function NinjaHud({ score, targetScore, combo, secondsLeft }: Props) {
       <View className="mb-3 flex-row items-end justify-between">
         <View>
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Time
+            {t("craving.timeLabel")}
           </Text>
           <Text
             className={`font-mono text-2xl font-bold tabular-nums ${
@@ -55,7 +58,7 @@ export function NinjaHud({ score, targetScore, combo, secondsLeft }: Props) {
         </View>
         <View className="items-end">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Score
+            {t("craving.scoreLabel")}
           </Text>
           <Text className="font-mono text-2xl font-bold tabular-nums text-foreground dark:text-d-text">
             {score}
@@ -70,7 +73,7 @@ export function NinjaHud({ score, targetScore, combo, secondsLeft }: Props) {
       <View className="mb-2">
         <View className="mb-1 flex-row items-center justify-between">
           <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-            Goal
+            {t("craving.goalLabel")}
           </Text>
           <Text className="font-mono text-sm font-bold tabular-nums text-accent">
             {Math.round(goalProgress)}%
@@ -87,7 +90,7 @@ export function NinjaHud({ score, targetScore, combo, secondsLeft }: Props) {
       {combo >= 2 ? (
         <Animated.View style={comboStyle} className="items-center pt-1">
           <Text className="text-xs font-semibold uppercase tracking-widest text-accent">
-            Combo x{combo}
+            {t("craving.comboX", { count: combo })}
           </Text>
         </Animated.View>
       ) : null}

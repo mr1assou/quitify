@@ -6,9 +6,20 @@ import { BreathingFinishButton } from "@/components/feature/craving/breathing/Br
 import { BreathingIdleView } from "@/components/feature/craving/breathing/BreathingIdleView";
 import { BreathingPhaseLabel } from "@/components/feature/craving/breathing/BreathingPhaseLabel";
 import { BreathingSessionTimer } from "@/components/feature/craving/breathing/BreathingSessionTimer";
+import type { BreathingPhaseId } from "@/constants/craving/breathing";
 import { useBreathingSession } from "@/hooks/craving/breathing/useBreathingSession";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/translate";
+
+const PHASE_LABEL_KEYS: Record<BreathingPhaseId, TranslationKey> = {
+  inhale: "craving.breatheIn",
+  "hold-in": "craving.hold",
+  exhale: "craving.breatheOut",
+  "hold-out": "craving.breatheRest",
+};
 
 export function BreathingExercise() {
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const circleSize = Math.min(width * 0.72, 300);
 
@@ -27,7 +38,7 @@ export function BreathingExercise() {
         <BreathingSessionTimer elapsedMs={elapsedMs} />
         <BreathingPhaseLabel
           phaseId={breathing.phase.id}
-          label={breathing.phase.label}
+          label={t(PHASE_LABEL_KEYS[breathing.phase.id])}
         />
       </View>
 

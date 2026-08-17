@@ -48,4 +48,5 @@ export type GoalsStateResponse = {
   progress: GoalProgressSnapshot;
   goals: UserGoal[];
   minTargets: Record<ActiveGoalType, number>;
+  maxTargets: Record<ActiveGoalType, number | null>;
 };

@@ -41,6 +41,7 @@ type Props = {
 
 export function HabitSettingsModal({ visible, profile, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { state, updateProfile, setAccount } = useApp();
   const [cigarettesPerDay, setCigarettesPerDay] = useState(String(profile.cigarettesPerDay));
   const [cigarettesPerPack, setCigarettesPerPack] = useState(
@@ -103,7 +104,7 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
         onClose();
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Could not save settings.");
+        setError(err instanceof Error ? err.message : t("settings.saveFailed"));
       })
       .finally(() => {
         setSaving(false);
@@ -213,20 +214,19 @@ function HabitSettingsSheet({
               </View>
 
               <Text className="mb-5 text-sm leading-5 text-muted-foreground dark:text-d-muted">
-                Changes apply from today forward. Your past savings and stats stay based on
-                the values you used before.
+                {t("settings.smokingSettingsHint")}
               </Text>
 
               <View className="gap-4">
                 <View className="gap-2">
                   <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                    Cigarettes per day
+                    {t("settings.cigarettesPerDay")}
                   </Text>
                   <TextInput
                     value={cigarettesPerDay}
                     onChangeText={onCigarettesPerDayChange}
                     keyboardType="number-pad"
-                    placeholder="e.g. 20"
+                    placeholder={t("settings.cigarettesPerDayPlaceholder")}
                     placeholderTextColor={colors.mutedForeground}
                     className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
                   />
@@ -234,23 +234,25 @@ function HabitSettingsSheet({
 
                 <View className="gap-2">
                   <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                    Cigarettes per pack
+                    {t("settings.cigarettesPerPack")}
                   </Text>
                   <CigarettesPerPackField
                     value={cigarettesPerPack}
                     onChangeText={onCigarettesPerPackChange}
+                    placeholder={t("onboarding.nicotine.packSize.placeholder")}
                   />
                 </View>
 
                 <View className="gap-2">
                   <Text className="text-sm font-semibold text-foreground dark:text-d-text">
-                    Pack price ({currencySymbol(profile.currency)})
+                    {t("settings.packPrice", { symbol: currencySymbol(profile.currency) })}
                   </Text>
                   <PackCostField
                     currency={profile.currency}
                     value={packCostInput}
                     onChangeText={onPackCostInputChange}
                     hasError={packCostInvalid}
+                    placeholder={t("onboarding.nicotine.price.placeholder")}
                   />
                   {packCostInvalid ? (
                     <Text className="text-sm text-alert">

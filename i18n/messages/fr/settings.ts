@@ -11,6 +11,13 @@ export const settings = {
   saveProgress: "Enregistrer mes progrès",
   quitDate: "Date d'arrêt",
   smokingSettings: "Paramètres de tabagisme",
+  smokingSettingsHint:
+    "Les modifications s'appliquent à partir d'aujourd'hui. Vos économies et statistiques passées restent basées sur les valeurs utilisées auparavant.",
+  cigarettesPerDay: "Cigarettes par jour",
+  cigarettesPerDayPlaceholder: "ex. 20",
+  cigarettesPerPack: "Cigarettes par paquet",
+  packPrice: "Prix du paquet ({{symbol}})",
+  saveFailed: "Impossible d'enregistrer les paramètres.",
   packPriceRequired: "Le prix du paquet doit être supérieur à 0.",
   talkToSupport: "Parler au support",
   shareApp: "Partager Quitify",

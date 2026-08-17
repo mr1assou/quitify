@@ -16,6 +16,7 @@ import Animated, {
 import { useTheme } from "@/context/ThemeContext";
 import { MEMORY_SYMBOLS, type MemorySymbol } from "@/constants/craving/games/memoryMatch";
 import type { MemoryCard as MemoryCardType } from "@/hooks/craving/games/useMemoryMatchGame";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   card: MemoryCardType;
@@ -34,6 +35,7 @@ function findSymbol(symbolId: string): MemorySymbol {
 }
 
 export function MemoryCard({ card, size, disabled = false, onPress }: Props) {
+  const { t } = useTranslation();
   const { resolved } = useTheme();
   const symbol = findSymbol(card.symbolId);
   const iconColor = resolved === "dark" ? symbol.color.dark : symbol.color.light;
@@ -118,10 +120,10 @@ export function MemoryCard({ card, size, disabled = false, onPress }: Props) {
         accessibilityRole="button"
         accessibilityLabel={
           card.isMatched
-            ? `Matched ${symbol.id}`
+            ? t("craving.memoryMatchedCard", { id: symbol.id })
             : card.isFlipped
-              ? `Revealed ${symbol.id}`
-              : "Hidden card"
+              ? t("craving.memoryRevealedCard", { id: symbol.id })
+              : t("craving.memoryHiddenCard")
         }
         accessibilityState={{ disabled }}
         style={{ width: size, height: size }}

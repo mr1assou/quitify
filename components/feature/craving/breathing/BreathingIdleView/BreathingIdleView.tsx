@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 
 import { BreathingCircle } from "@/components/feature/craving/breathing/BreathingCircle";
 import { Button } from "@/components/ui/Button";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   circleSize: number;
@@ -9,11 +10,13 @@ type Props = {
 };
 
 export function BreathingIdleView({ circleSize, onStartSession }: Props) {
+  const { t } = useTranslation();
+
   return (
     <View className="flex-1 items-center justify-between px-6 pb-6 pt-4">
       <View className="h-12 items-center justify-center px-4">
         <Text className="text-center text-sm text-muted-foreground dark:text-d-muted">
-          Take a moment. When you&apos;re ready, start your breathing session.
+          {t("craving.breathingIdleHint")}
         </Text>
       </View>
 
@@ -25,7 +28,7 @@ export function BreathingIdleView({ circleSize, onStartSession }: Props) {
       />
 
       <View className="w-full">
-        <Button label="Start session" size="lg" fullWidth onPress={onStartSession} />
+        <Button label={t("craving.startSession")} size="lg" fullWidth onPress={onStartSession} />
       </View>
     </View>
   );

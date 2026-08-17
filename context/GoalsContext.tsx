@@ -12,12 +12,14 @@ import { EMPTY_GOALS_STATE } from "@/constants/goals/emptyGoalsState";
 import { useApp } from "@/context/AppContext";
 import { fetchGoalsState, setUserGoal, deleteUserGoal } from "@/services/goals/goalsApi";
 import type { ActiveGoalType, GoalsStateResponse, UserGoal } from "@/types/goals/goal";
+import { maxDaysAheadFromStreakDays } from "@/utils/goals/goalStreakProgress";
 
 type GoalsContextValue = {
   goals: UserGoal[];
   activeGoals: UserGoal[];
   progress: GoalsStateResponse["progress"];
   minTargets: GoalsStateResponse["minTargets"];
+  maxTargets: GoalsStateResponse["maxTargets"];
   isReady: boolean;
   hasOpenGoalSlot: boolean;
   refresh: () => Promise<GoalsStateResponse>;
@@ -112,6 +114,13 @@ export function GoalsProvider({ children }: { children: ReactNode }) {
       activeGoals,
       progress: goalsState?.progress ?? EMPTY_GOALS_STATE.progress,
       minTargets: goalsState?.minTargets ?? EMPTY_GOALS_STATE.minTargets,
+      maxTargets:
+        goalsState?.maxTargets ?? {
+          smoke_free_days: maxDaysAheadFromStreakDays(
+            goalsState?.progress.smokeFreeDays ?? 0,
+          ),
+          cigarettes_avoided: null,
+        },
       isReady,
       hasOpenGoalSlot:
         isReady &&

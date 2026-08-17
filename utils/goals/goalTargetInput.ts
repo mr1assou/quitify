@@ -17,8 +17,11 @@ export function isGoalTargetValid(
   type: ActiveGoalType,
   value: number,
   minTarget: number,
+  maxTarget?: number | null,
 ): boolean {
-  return Number.isInteger(value) && value >= minTarget;
+  if (!Number.isInteger(value) || value < minTarget) return false;
+  if (maxTarget != null && value > maxTarget) return false;
+  return true;
 }
 
 export function goalTargetInputPlaceholder(type: ActiveGoalType): string {

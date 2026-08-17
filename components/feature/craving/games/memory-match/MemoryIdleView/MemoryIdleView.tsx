@@ -8,12 +8,14 @@ import {
   MEMORY_MATCH_PAIR_COUNT,
   MEMORY_MATCH_PREVIEW_SEC,
 } from "@/constants/craving/games/memoryMatch";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   onStart: () => void;
 };
 
 export function MemoryIdleView({ onStart }: Props) {
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const logoWidth = Math.min(width - 80, 280);
   const logoHeight = logoWidth * 0.78;
@@ -25,12 +27,14 @@ export function MemoryIdleView({ onStart }: Props) {
         className="items-center gap-3 px-4"
       >
         <Text className="text-center text-2xl font-bold text-foreground dark:text-d-text">
-          Memory match
+          {t("craving.memoryMatchTitle")}
         </Text>
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          All cards are shown for {MEMORY_MATCH_PREVIEW_SEC} seconds first. Then
-          match all {MEMORY_MATCH_PAIR_COUNT} pairs in{" "}
-          {MEMORY_MATCH_DURATION_SEC / 60} minutes.
+          {t("craving.memoryIdleBody", {
+            preview: MEMORY_MATCH_PREVIEW_SEC,
+            pairs: MEMORY_MATCH_PAIR_COUNT,
+            minutes: MEMORY_MATCH_DURATION_SEC / 60,
+          })}
         </Text>
       </Animated.View>
 
@@ -45,7 +49,7 @@ export function MemoryIdleView({ onStart }: Props) {
           source={MEMORY_MATCH_LOGO_IMAGE}
           style={{ width: logoWidth, height: logoHeight }}
           resizeMode="contain"
-          accessibilityLabel="Memory match game"
+          accessibilityLabel={t("craving.memoryA11y")}
         />
       </Animated.View>
 
@@ -53,7 +57,7 @@ export function MemoryIdleView({ onStart }: Props) {
         entering={FadeInUp.delay(300).duration(400)}
         className="w-full"
       >
-        <Button label="Start game" size="lg" fullWidth onPress={onStart} />
+        <Button label={t("craving.startGame")} size="lg" fullWidth onPress={onStart} />
       </Animated.View>
     </View>
   );

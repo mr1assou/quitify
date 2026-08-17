@@ -5,7 +5,7 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { GoalDaysAheadInfoModal } from "@/components/feature/goals/GoalDaysAheadInfoModal";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
-import { formatMinTargetError } from "@/utils/goals/goalLabels";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   cigarettesAvoidedAtSmokeFreeDays,
   moneySavedAtSmokeFreeDays,
@@ -13,7 +13,7 @@ import {
 } from "@/utils/goals/goalEconomics";
 import {
   formatDaysAheadGoalDeadline,
-  formatMinDaysAheadBanner,
+  maxDaysAheadFromStreakStart,
   minDaysAheadFromStreakStart,
   smokeFreeDaysFromStreakStart,
   totalSmokeFreeDaysAtGoalDeadline,
@@ -32,6 +32,8 @@ type Props = {
   economics: GoalEconomics;
   /** Server-computed minimum; falls back to client streak tiers when omitted. */
   minDaysAheadFromServer?: number;
+  /** Server-computed maximum; falls back to client streak tiers when omitted. */
+  maxDaysAheadFromServer?: number;
   initialDays?: number;
   confirmLabel?: string;
   onConfirm: (days: number) => void | Promise<void>;
@@ -105,11 +107,13 @@ export function GoalTargetPicker({
   currency,
   economics,
   minDaysAheadFromServer,
+  maxDaysAheadFromServer,
   initialDays,
   confirmLabel = "Set goal",
   onConfirm,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [daysInput, setDaysInput] = useState(
     initialDays != null ? String(initialDays) : "",
   );
@@ -127,9 +131,16 @@ export function GoalTargetPicker({
     return Math.max(fromStreak, minDaysAheadFromServer);
   }, [streakStart, now, minDaysAheadFromServer]);
 
+  const maxDaysAhead = useMemo(() => {
+    const fromStreak = maxDaysAheadFromStreakStart(streakStart, now);
+    if (maxDaysAheadFromServer == null) return fromStreak;
+    return Math.min(fromStreak, maxDaysAheadFromServer);
+  }, [streakStart, now, maxDaysAheadFromServer]);
+
   const parsedDays = parseGoalTargetInput(GOAL_TYPE, daysInput);
   const isValid =
-    parsedDays != null && isGoalTargetValid(GOAL_TYPE, parsedDays, minDaysAhead);
+    parsedDays != null &&
+    isGoalTargetValid(GOAL_TYPE, parsedDays, minDaysAhead, maxDaysAhead);
   const symbol = currencySymbol(currency);
 
   const handleDaysChange = useCallback((text: string) => {
@@ -170,7 +181,13 @@ export function GoalTargetPicker({
       <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
         <View className="flex-row items-start gap-2">
           <Text className="flex-1 text-sm font-semibold text-primary">
-            {formatMinDaysAheadBanner(minDaysAhead, streakDays)}
+            {streakDays < 3
+              ? t("goals.rangeBanner", { min: minDaysAhead, max: maxDaysAhead })
+              : t("goals.rangeBannerWithStreak", {
+                  streak: streakDays,
+                  min: minDaysAhead,
+                  max: maxDaysAhead,
+                })}
           </Text>
           <Pressable
             onPress={() => setInfoVisible(true)}
@@ -218,7 +235,9 @@ export function GoalTargetPicker({
 
       {parsedDays != null && !isValid ? (
         <Text className="px-1 text-sm font-medium text-alert">
-          {formatMinTargetError(GOAL_TYPE, minDaysAhead)}
+          {parsedDays > maxDaysAhead
+            ? t("goals.maxError", { max: maxDaysAhead })
+            : t("goals.minError", { min: minDaysAhead })}
         </Text>
       ) : null}
 

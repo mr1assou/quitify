@@ -11,6 +11,13 @@ export const settings = {
   saveProgress: "Save my progress",
   quitDate: "Quit date",
   smokingSettings: "Smoking settings",
+  smokingSettingsHint:
+    "Changes apply from today forward. Your past savings and stats stay based on the values you used before.",
+  cigarettesPerDay: "Cigarettes per day",
+  cigarettesPerDayPlaceholder: "e.g. 20",
+  cigarettesPerPack: "Cigarettes per pack",
+  packPrice: "Pack price ({{symbol}})",
+  saveFailed: "Could not save settings.",
   packPriceRequired: "Pack price must be greater than 0.",
   talkToSupport: "Talk to support",
   shareApp: "Share Quitify",

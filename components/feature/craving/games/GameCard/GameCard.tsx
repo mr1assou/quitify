@@ -9,6 +9,7 @@ import Animated, {
 
 import { useTheme } from "@/context/ThemeContext";
 import type { CravingGame } from "@/constants/craving/games/cravingGames";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function GameCard({ game, locked = false, onPress }: Props) {
+  const { t } = useTranslation();
   const { resolved } = useTheme();
   const palette = resolved === "dark" ? game.palette.dark : game.palette.light;
 
@@ -136,7 +138,7 @@ export function GameCard({ game, locked = false, onPress }: Props) {
             style={{ color: palette.iconColor, opacity: 0.7 }}
             className="mt-1 text-[10px] font-semibold uppercase tracking-wide"
           >
-            Coming soon
+            {t("craving.comingSoon")}
           </Text>
         ) : locked ? (
           <View className="mt-1 flex-row items-center gap-1">

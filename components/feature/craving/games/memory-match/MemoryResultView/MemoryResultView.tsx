@@ -4,6 +4,7 @@ import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   matchedPairs: number;
@@ -25,17 +26,18 @@ export function MemoryResultView({
   onDone,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const title = won
-    ? "Mind cleared"
+    ? t("craving.memoryWonTitle")
     : timedOut
-      ? "Time's up"
-      : "Good session";
+      ? t("craving.memoryTimedOutTitle")
+      : t("craving.memoryStoppedTitle");
   const subtitle = won
-    ? "All pairs matched. Craving session complete."
+    ? t("craving.memoryWonSubtitle")
     : timedOut
-      ? "You matched what you could. Every pair counts."
-      : "You stopped when you felt ready. That's what counts.";
+      ? t("craving.memoryTimedOutSubtitle")
+      : t("craving.memoryStoppedSubtitle");
 
   return (
     <View className="flex-1 items-center justify-between px-6 pb-6 pt-4">
@@ -61,13 +63,13 @@ export function MemoryResultView({
         className="items-center gap-1"
       >
         <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-          Pairs matched
+          {t("craving.pairsMatched")}
         </Text>
         <Text className="font-mono text-6xl font-bold tabular-nums text-foreground dark:text-d-text">
           {matchedPairs}/{totalPairs}
         </Text>
         <Text className="mt-2 text-sm text-muted-foreground dark:text-d-muted">
-          in {moves} {moves === 1 ? "move" : "moves"}
+          {t(moves === 1 ? "craving.inMovesOne" : "craving.inMovesMany", { count: moves })}
         </Text>
       </Animated.View>
 
@@ -75,9 +77,9 @@ export function MemoryResultView({
         entering={FadeInUp.delay(380).duration(420)}
         className="w-full gap-3"
       >
-        <Button label="Play again" size="lg" fullWidth onPress={onPlayAgain} />
+        <Button label={t("craving.playAgain")} size="lg" fullWidth onPress={onPlayAgain} />
         <Button
-          label="Done"
+          label={t("craving.done")}
           size="lg"
           variant="ghost"
           fullWidth

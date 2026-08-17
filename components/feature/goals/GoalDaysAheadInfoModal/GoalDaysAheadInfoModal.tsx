@@ -88,11 +88,11 @@ export function GoalDaysAheadInfoModal({ visible, daysAhead, onClose }: Props) {
 
             <View className="mt-3 gap-2.5 rounded-2xl bg-section px-3.5 py-3.5 dark:bg-d-surface">
               {TIER_KEYS.map((tier) => (
-                <View key={tier.streak} className="flex-row items-start gap-2">
-                  <Text className="w-[92px] text-sm font-semibold text-foreground dark:text-d-text">
+                <View key={tier.streak} className="gap-0.5">
+                  <Text className="text-sm font-semibold text-foreground dark:text-d-text">
                     {t(tier.streak)}
                   </Text>
-                  <Text className="flex-1 text-sm text-muted-foreground dark:text-d-muted">
+                  <Text className="text-sm text-muted-foreground dark:text-d-muted">
                     → {t(tier.min)}
                   </Text>
                 </View>

@@ -4,14 +4,15 @@ import { Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { GameList } from "@/components/feature/craving/games/GameList";
-import { CRAVING_GAMES } from "@/constants/craving/games/cravingGames";
 import type { CravingGame } from "@/constants/craving/games/cravingGames";
+import { useLocalizedCravingGames } from "@/hooks/i18n/useLocalizedCravingGames";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { isGameUnlocked } from "@/utils/premium/gameAccess";
 
 export function GamesHub() {
   const { t } = useTranslation();
+  const games = useLocalizedCravingGames();
   const { isPremium, requirePremium } = usePremiumGate();
 
   const handleGamePress = useCallback(
@@ -36,7 +37,7 @@ export function GamesHub() {
 
       <View className="flex-1">
         <GameList
-          games={CRAVING_GAMES}
+          games={games}
           isPremium={isPremium}
           onGamePress={handleGamePress}
         />

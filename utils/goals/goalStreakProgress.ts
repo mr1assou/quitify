@@ -22,6 +22,15 @@ export function minDaysAheadFromStreakDays(streakDays: number): number {
   return 6;
 }
 
+export function maxDaysAheadFromStreakDays(streakDays: number): number {
+  if (streakDays < 3) return 3;
+  if (streakDays < 14) return 7;
+  if (streakDays < 30) return 14;
+  if (streakDays < 40) return 21;
+  if (streakDays < 50) return 30;
+  return 45;
+}
+
 export function smokeFreeDaysFromStreakStart(
   streakStart: string | Date | number,
   now = Date.now(),
@@ -34,6 +43,13 @@ export function minDaysAheadFromStreakStart(
   now = Date.now(),
 ): number {
   return minDaysAheadFromStreakDays(smokeFreeDaysFromStreakStart(streakStart, now));
+}
+
+export function maxDaysAheadFromStreakStart(
+  streakStart: string | Date | number,
+  now = Date.now(),
+): number {
+  return maxDaysAheadFromStreakDays(smokeFreeDaysFromStreakStart(streakStart, now));
 }
 
 export function smokeFreeDaysInProgressFromStreakStart(
@@ -92,20 +108,4 @@ export function totalSmokeFreeDaysAtGoalDeadline(
   daysAhead: number,
 ): number {
   return goalDeadlineElapsedMs(streakStart, now, daysAhead) / MS_DAY;
-}
-
-export function formatMinDaysAheadBanner(
-  minDaysAhead: number,
-  streakDays: number,
-): string {
-  const minLabel =
-    minDaysAhead <= 1
-      ? "Choose at least 1 day ahead."
-      : `Choose at least ${minDaysAhead} days ahead.`;
-
-  if (streakDays < 3) {
-    return minLabel;
-  }
-
-  return `Based on your ${streakDays}-day smoke-free streak, ${minLabel.charAt(0).toLowerCase()}${minLabel.slice(1)}`;
 }

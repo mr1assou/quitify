@@ -7,16 +7,18 @@ import { CravingSessionHeader } from "@/components/feature/craving/CravingSessio
 import { BreathingExercise } from "@/components/feature/craving/breathing/BreathingExercise";
 import { MemoryMatchGame } from "@/components/feature/craving/games/memory-match/MemoryMatchGame";
 import { ReflexTapGame } from "@/components/feature/craving/games/reflex-tap/ReflexTapGame";
-import { getCravingGame } from "@/constants/craving/games/cravingGames";
+import { useLocalizedCravingGame } from "@/hooks/i18n/useLocalizedCravingGames";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { isGameUnlocked } from "@/utils/premium/gameAccess";
 
 /** Router for a single craving game — picks the right gameplay screen by id. */
 export function GamePlayScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { t } = useTranslation();
   const { isPremium, requirePremium } = usePremiumGate();
-  const game = id ? getCravingGame(id) : undefined;
+  const game = useLocalizedCravingGame(id);
   const unlocked = game ? isGameUnlocked(game.id, isPremium) : false;
   const close = useCallback(() => router.back(), []);
 
@@ -33,7 +35,7 @@ export function GamePlayScreen() {
         edges={["top", "bottom"]}
       >
         <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-          This game does not exist.
+          {t("craving.gameMissing")}
         </Text>
       </SafeAreaView>
     );
@@ -61,7 +63,7 @@ export function GamePlayScreen() {
       ) : (
         <View className="flex-1 items-center justify-center px-6">
           <Text className="text-center text-base text-muted-foreground dark:text-d-muted">
-            Coming soon.
+            {t("craving.comingSoon")}
           </Text>
         </View>
       )}
