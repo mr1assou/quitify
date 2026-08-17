@@ -2,6 +2,7 @@ import { Audio } from "expo-av";
 import { useCallback, useRef, useState } from "react";
 import { Alert } from "react-native";
 
+import { VOICE_NOTE_RECORDING } from "@/constants/chat/chatAudioRecording";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 import type { ChatMediaPick } from "./usePickChatMedia";
@@ -24,9 +25,7 @@ export function useRecordChatAudio() {
         playsInSilentModeIOS: true,
       });
 
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      );
+      const { recording } = await Audio.Recording.createAsync(VOICE_NOTE_RECORDING);
       recordingRef.current = recording;
       setIsRecording(true);
       return true;

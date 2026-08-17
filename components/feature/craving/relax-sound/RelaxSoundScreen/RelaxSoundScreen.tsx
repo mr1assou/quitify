@@ -1,4 +1,5 @@
 import { safeRouter } from "@/utils/app/safeRouter";
+import { useEffect } from "react";
 import { FlatList, Text, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -17,9 +18,18 @@ const HORIZONTAL_PADDING = 48;
 export function RelaxSoundScreen() {
   const { width } = useWindowDimensions();
   const cardWidth = (width - HORIZONTAL_PADDING - COLUMN_GAP) / 2;
-  const { activeId, loadingId, isPlaying, progress } = useRelaxSoundPlayerContext();
+  const { activeId, loadingId, isPlaying, progress, loadAndPlay, preload } =
+    useRelaxSoundPlayerContext();
   const { sounds, isLoading, error } = useRelaxSoundsCatalogContext();
   const { isPremium, requirePremium } = usePremiumGate();
+
+  useEffect(() => {
+    const firstUnlocked = sounds.find((sound) =>
+      isRelaxSoundUnlocked(sounds, sound.id, isPremium),
+    );
+    if (!firstUnlocked) return;
+    void preload(firstUnlocked.id, { uri: firstUnlocked.audioUrl });
+  }, [isPremium, preload, sounds]);
 
   return (
     <CravingToolScreen toolId="relax-sound">
@@ -69,6 +79,7 @@ export function RelaxSoundScreen() {
                         requirePremium();
                         return;
                       }
+                      void loadAndPlay(item.id, { uri: item.audioUrl });
                       safeRouter.push(`/craving-tools/relax-sound/${item.id}`);
                     }}
                   />

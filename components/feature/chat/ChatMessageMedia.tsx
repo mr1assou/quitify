@@ -33,7 +33,13 @@ export function ChatMessageMedia({ message }: Props) {
   }
 
   if (message.kind === "audio" && message.mediaUrl) {
-    return <ChatAudioMessage uri={message.mediaUrl} durationMs={message.mediaDurationMs} />;
+    return (
+      <ChatAudioMessage
+        id={message.id}
+        uri={message.mediaUrl}
+        durationMs={message.mediaDurationMs}
+      />
+    );
   }
 
   return null;

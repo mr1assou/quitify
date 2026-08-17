@@ -16,6 +16,9 @@ export type RelaxSoundProgress = {
 export function useRelaxSoundPlayer() {
   const soundRef = useRef<Audio.Sound | null>(null);
   const activeIdRef = useRef<string | null>(null);
+  const pendingIdRef = useRef<string | null>(null);
+  const pendingPromiseRef = useRef<Promise<void> | null>(null);
+  const genRef = useRef(0);
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -36,6 +39,9 @@ export function useRelaxSoundPlayer() {
   }, []);
 
   const unload = useCallback(async () => {
+    genRef.current += 1;
+    pendingIdRef.current = null;
+    pendingPromiseRef.current = null;
     const sound = soundRef.current;
     soundRef.current = null;
     activeIdRef.current = null;
@@ -66,54 +72,118 @@ export function useRelaxSoundPlayer() {
     setIsPlaying(false);
   }, []);
 
-  const stop = useCallback(async () => {
-    await unload();
-    setActiveId(null);
-    resetProgress();
-  }, [resetProgress, unload]);
+  const playLoaded = useCallback(async (id: string) => {
+    const sound = soundRef.current;
+    if (!sound) return false;
+    try {
+      const status = await sound.getStatusAsync();
+      if (!status.isLoaded) return false;
+      if (!status.isPlaying) await sound.playAsync();
+      activeIdRef.current = id;
+      setActiveId(id);
+      setIsPlaying(true);
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
 
-  const loadAndPlay = useCallback(
-    async (id: string, source: AVPlaybackSource) => {
+  const loadSound = useCallback(
+    async (id: string, source: AVPlaybackSource, shouldPlay: boolean) => {
       if (activeIdRef.current === id && soundRef.current) {
-        try {
-          await soundRef.current.playAsync();
-          setIsPlaying(true);
-        } catch {
-          // ignore
-        }
+        if (shouldPlay) await playLoaded(id);
         return;
       }
 
-      setLoadingId(id);
-      resetProgress();
-      try {
-        await unload();
+      if (pendingIdRef.current === id && pendingPromiseRef.current) {
+        await pendingPromiseRef.current;
+        if (shouldPlay) await playLoaded(id);
+        return;
+      }
+
+      const gen = ++genRef.current;
+      pendingIdRef.current = id;
+      if (shouldPlay) {
+        setLoadingId(id);
+        if (activeIdRef.current !== id) resetProgress();
+      }
+
+      const run = (async () => {
+        const previous = soundRef.current;
+        soundRef.current = null;
+        if (previous) {
+          void previous
+            .stopAsync()
+            .catch(() => {})
+            .then(() => previous.unloadAsync().catch(() => {}));
+        }
 
         const { sound } = await Audio.Sound.createAsync(
           source,
           {
             isLooping: true,
-            shouldPlay: true,
+            shouldPlay,
             volume: 1,
             progressUpdateIntervalMillis: 250,
           },
           onPlaybackStatusUpdate,
+          false,
         );
+
+        if (gen !== genRef.current) {
+          await sound.unloadAsync().catch(() => {});
+          return;
+        }
 
         soundRef.current = sound;
         activeIdRef.current = id;
-        setActiveId(id);
-        setIsPlaying(true);
+        if (shouldPlay) {
+          setActiveId(id);
+          setIsPlaying(true);
+        }
+      })();
+
+      pendingPromiseRef.current = run;
+      try {
+        await run;
       } catch {
-        activeIdRef.current = null;
-        setActiveId(null);
-        resetProgress();
+        if (gen === genRef.current) {
+          activeIdRef.current = null;
+          setActiveId(null);
+          resetProgress();
+        }
       } finally {
-        setLoadingId(null);
+        if (gen === genRef.current) {
+          pendingIdRef.current = null;
+          pendingPromiseRef.current = null;
+          setLoadingId(null);
+        }
       }
     },
-    [onPlaybackStatusUpdate, resetProgress, unload],
+    [onPlaybackStatusUpdate, playLoaded, resetProgress],
   );
+
+  const loadAndPlay = useCallback(
+    async (id: string, source: AVPlaybackSource) => {
+      await loadSound(id, source, true);
+    },
+    [loadSound],
+  );
+
+  const preload = useCallback(
+    async (id: string, source: AVPlaybackSource) => {
+      if (soundRef.current || pendingIdRef.current) return;
+      await loadSound(id, source, false);
+    },
+    [loadSound],
+  );
+
+  const stop = useCallback(async () => {
+    await unload();
+    setActiveId(null);
+    setLoadingId(null);
+    resetProgress();
+  }, [resetProgress, unload]);
 
   const togglePlayPause = useCallback(async () => {
     const sound = soundRef.current;
@@ -160,8 +230,9 @@ export function useRelaxSoundPlayer() {
     isPlaying,
     progress,
     loadAndPlay,
+    preload,
     togglePlayPause,
     seekTo,
     stop,
   };
-};
+}

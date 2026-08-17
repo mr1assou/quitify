@@ -5,18 +5,27 @@ import { PanResponder, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
 import { formatMediaDuration } from "@/utils/chat/formatMediaDuration";
+import {
+  getPlayingChatAudioId,
+  setPlayingChatAudioId,
+  subscribeChatAudioPlayback,
+} from "@/utils/chat/chatAudioPlayback";
 
 type Props = {
+  id: string;
   uri: string;
   durationMs?: number;
 };
 
 const NEAR_END_MS = 200;
 
-export function ChatAudioMessage({ uri, durationMs }: Props) {
+export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   const { colors } = useTheme();
   const soundRef = useRef<Audio.Sound | null>(null);
+  const loadPromiseRef = useRef<Promise<Audio.Sound | null> | null>(null);
+  const loadGenRef = useRef(0);
   const seekingRef = useRef(false);
+  const playingRef = useRef(false);
   const widthRef = useRef(0);
   const totalMsRef = useRef(durationMs ?? 0);
   const positionMsRef = useRef(0);
@@ -30,65 +39,113 @@ export function ChatAudioMessage({ uri, durationMs }: Props) {
   positionMsRef.current = positionMs;
 
   const unload = useCallback(async () => {
+    loadGenRef.current += 1;
+    loadPromiseRef.current = null;
     const sound = soundRef.current;
     soundRef.current = null;
+    playingRef.current = false;
     setPlaying(false);
+    if (getPlayingChatAudioId() === id) setPlayingChatAudioId(null);
     if (!sound) return;
     try {
       await sound.unloadAsync();
     } catch {
       // ignore
     }
-  }, []);
-
-  useEffect(() => {
-    setPositionMs(0);
-    positionMsRef.current = 0;
-    setPlaying(false);
-    setLoadedDurationMs(durationMs ?? 0);
-    void unload();
-    return () => {
-      void unload();
-    };
-  }, [unload, uri]);
+  }, [id]);
 
   const applyStatus = useCallback((status: Audio.AVPlaybackStatus) => {
     if (!status.isLoaded) return;
     if (status.durationMillis) setLoadedDurationMs(status.durationMillis);
+    if (status.didJustFinish) {
+      playingRef.current = false;
+      setPlaying(false);
+      setPositionMs(0);
+      if (getPlayingChatAudioId() === id) setPlayingChatAudioId(null);
+      void soundRef.current?.setPositionAsync(0).catch(() => {});
+      return;
+    }
+    if (status.isPlaying && getPlayingChatAudioId() !== id) {
+      playingRef.current = false;
+      setPlaying(false);
+      void soundRef.current?.pauseAsync().catch(() => {});
+      return;
+    }
     if (!seekingRef.current) {
       setPositionMs(status.positionMillis ?? 0);
     }
-    if (status.didJustFinish) {
-      setPlaying(false);
-      setPositionMs(0);
-      const finished = soundRef.current;
-      soundRef.current = null;
-      void finished?.unloadAsync().catch(() => {});
-    }
-  }, []);
+  }, [id]);
 
   const ensureSound = useCallback(async () => {
     const existing = soundRef.current;
     if (existing) {
-      const status = await existing.getStatusAsync();
-      if (status.isLoaded) return existing;
-      await existing.unloadAsync().catch(() => {});
+      try {
+        const status = await existing.getStatusAsync();
+        if (status.isLoaded) return existing;
+      } catch {
+        // reload below
+      }
       soundRef.current = null;
+      await existing.unloadAsync().catch(() => {});
     }
 
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      playsInSilentModeIOS: true,
-    });
+    if (!loadPromiseRef.current) {
+      const gen = loadGenRef.current;
+      const requestedUri = uri;
+      const promise = (async () => {
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+        });
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: requestedUri },
+          { shouldPlay: false, progressUpdateIntervalMillis: 80 },
+          applyStatus,
+        );
+        if (loadGenRef.current !== gen) {
+          await sound.unloadAsync().catch(() => {});
+          return null;
+        }
+        soundRef.current = sound;
+        return sound;
+      })();
+      loadPromiseRef.current = promise;
+      void promise.finally(() => {
+        if (loadPromiseRef.current === promise) loadPromiseRef.current = null;
+      });
+    }
 
-    const { sound } = await Audio.Sound.createAsync(
-      { uri },
-      { shouldPlay: false, progressUpdateIntervalMillis: 80 },
-      applyStatus,
-    );
-    soundRef.current = sound;
-    return sound;
+    return loadPromiseRef.current;
   }, [applyStatus, uri]);
+
+  const pauseLocal = useCallback(async () => {
+    playingRef.current = false;
+    setPlaying(false);
+    try {
+      await soundRef.current?.pauseAsync();
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    return subscribeChatAudioPlayback((activeId) => {
+      if (activeId === id) return;
+      void pauseLocal();
+    });
+  }, [id, pauseLocal]);
+
+  useEffect(() => {
+    setPositionMs(0);
+    positionMsRef.current = 0;
+    playingRef.current = false;
+    setPlaying(false);
+    setLoadedDurationMs(durationMs ?? 0);
+    void ensureSound();
+    return () => {
+      void unload();
+    };
+  }, [ensureSound, unload, uri]);
 
   const seekTo = useCallback(
     async (nextMs: number) => {
@@ -97,6 +154,7 @@ export function ChatAudioMessage({ uri, durationMs }: Props) {
       setPositionMs(clamped);
       try {
         const sound = await ensureSound();
+        if (!sound) return;
         await sound.setPositionAsync(clamped);
       } catch {
         // keep local position until playback works
@@ -109,12 +167,15 @@ export function ChatAudioMessage({ uri, durationMs }: Props) {
   const togglePlay = useCallback(async () => {
     try {
       const sound = await ensureSound();
+      if (!sound) return;
       const status = await sound.getStatusAsync();
       if (!status.isLoaded) return;
 
       if (status.isPlaying) {
         await sound.pauseAsync();
+        playingRef.current = false;
         setPlaying(false);
+        if (getPlayingChatAudioId() === id) setPlayingChatAudioId(null);
         return;
       }
 
@@ -126,13 +187,16 @@ export function ChatAudioMessage({ uri, durationMs }: Props) {
         setPositionMs(0);
       }
 
-      await sound.playAsync();
+      setPlayingChatAudioId(id);
+      playingRef.current = true;
       setPlaying(true);
+      await sound.playAsync();
     } catch {
+      playingRef.current = false;
       setPlaying(false);
       await unload();
     }
-  }, [ensureSound, unload]);
+  }, [ensureSound, id, unload]);
 
   const panResponder = useRef(
     PanResponder.create({
