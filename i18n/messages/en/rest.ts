@@ -32,6 +32,11 @@ export const goals = {
     "Based on your {{streak}}-day smoke-free streak, choose between {{min}} and {{max}} days ahead.",
   minError: "Choose at least {{min}} days ahead.",
   maxError: "Choose at most {{max}} days ahead.",
+  daysAhead: "Days ahead",
+  daysAheadInfoA11y: "How days ahead work",
+  completesAt: "Goal completes at {{duration}} smoke-free",
+  durationDay: "{{count}} day",
+  durationDays: "{{count}} days",
   infoFpTitle: "Freedom Points bonus",
   infoFpBody:
     "When you achieve your goal, you earn a one-time bonus of {{fpPerDay}} FP for each day in your goal. The bonus is added automatically the moment you hit your target.",
@@ -89,6 +94,11 @@ export const community = {
   showPosts: "Show posts",
   rules: "Rules",
   rulesA11y: "Community rules",
+  rulesTitle: "Community rules",
+  rulesBody:
+    "Please respect our community. No sexual content and no topics outside quitting smoking. Breaking these rules may lead to your account being suspended.",
+  rulesImageA11y: "Community rules alert",
+  rulesCloseA11y: "Close community rules",
   newest: "Newest",
   mostPopular: "Most popular",
   mostDiscussed: "Most discussed",
@@ -244,6 +254,9 @@ export const stats = {
   oneTimeGoalBonus: "One-time goal bonus",
   reward: "Reward",
   fpAmount: "+{{amount}} FP",
+  fpCongratsTitle: "Congratulations!",
+  fpCongratsBody:
+    "You earned {{amount}} Freedom Points. Keep going — every smoke-free day counts.",
   goalTitleMoney: "Save {{amount}}",
   goalTitleSmokeFreeDays: "Add {{count}} more smoke-free days",
   goalTitleSmokeFreeDay: "Add {{count}} more smoke-free day",

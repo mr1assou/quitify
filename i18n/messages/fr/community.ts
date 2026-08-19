@@ -11,6 +11,11 @@ export const community = {
   showPosts: "Afficher",
   rules: "Règles",
   rulesA11y: "Règles de la communauté",
+  rulesTitle: "Règles de la communauté",
+  rulesBody:
+    "Merci de respecter notre communauté. Pas de contenu sexuel et pas de sujets hors arrêt du tabac. Le non-respect de ces règles peut entraîner la suspension de votre compte.",
+  rulesImageA11y: "Alerte des règles de la communauté",
+  rulesCloseA11y: "Fermer les règles de la communauté",
   newest: "Plus récentes",
   mostPopular: "Plus populaires",
   mostDiscussed: "Plus commentées",

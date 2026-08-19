@@ -1,5 +1,4 @@
-import { getStreakElapsedMs, MS_DAY } from "@/utils/streak/elapsedBreakdown";
-import { formatStreakDuration } from "@/utils/streak/formatStreakLabel";
+import { breakdownElapsedMs, getStreakElapsedMs, MS_DAY } from "@/utils/streak/elapsedBreakdown";
 
 /** Floor for days-ahead goals. */
 export const MIN_DAYS_AHEAD = 1;
@@ -97,9 +96,15 @@ export function formatDaysAheadGoalDeadline(
   streakStart: string | Date | number,
   now: number,
   daysAhead: number,
+  formatDayCount: (count: number) => string = (count) =>
+    `${count} ${count === 1 ? "day" : "days"}`,
 ): string {
   const deadlineMs = goalDeadlineElapsedMs(streakStart, now, daysAhead);
-  return formatStreakDuration(deadlineMs, now, { includeSeconds: true });
+  const parts = breakdownElapsedMs(deadlineMs);
+  const pad2 = (n: number) => String(Math.max(0, Math.floor(n))).padStart(2, "0");
+  const hms = `${pad2(parts.hours)}h ${pad2(parts.minutes)}min ${pad2(parts.seconds)}s`;
+  if (parts.days > 0) return `${formatDayCount(parts.days)} ${hms}`;
+  return hms;
 }
 
 export function totalSmokeFreeDaysAtGoalDeadline(

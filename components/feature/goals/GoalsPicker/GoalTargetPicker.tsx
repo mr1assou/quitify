@@ -173,7 +173,9 @@ export function GoalTargetPicker({
     : "";
 
   const deadlineLabel = showGoalPreview
-    ? formatDaysAheadGoalDeadline(streakStart, now, parsedDays)
+    ? formatDaysAheadGoalDeadline(streakStart, now, parsedDays, (count) =>
+        t(count === 1 ? "goals.durationDay" : "goals.durationDays", { count }),
+      )
     : null;
 
   return (
@@ -193,7 +195,7 @@ export function GoalTargetPicker({
             onPress={() => setInfoVisible(true)}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel="How minimum days ahead works"
+            accessibilityLabel={t("goals.daysAheadInfoA11y")}
             className="mt-0.5 active:opacity-70"
           >
             <Ionicons
@@ -213,7 +215,7 @@ export function GoalTargetPicker({
 
       <View className="gap-2">
         <Text className="px-1 text-sm font-semibold text-foreground dark:text-d-text">
-          Days ahead
+          {t("goals.daysAhead")}
         </Text>
         <View
           className="flex-row items-center overflow-hidden rounded-2xl bg-section dark:bg-d-surface"
@@ -244,7 +246,7 @@ export function GoalTargetPicker({
       {deadlineLabel ? (
         <View className="rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
           <Text className="text-sm font-semibold text-primary">
-            Goal completes at {deadlineLabel} smoke-free
+            {t("goals.completesAt", { duration: deadlineLabel })}
           </Text>
         </View>
       ) : null}
@@ -252,13 +254,13 @@ export function GoalTargetPicker({
       {showGoalPreview ? (
         <>
           <ReadOnlyField
-            label="Cigarettes avoided"
+            label={t("goals.cigarettesAvoided")}
             value={cigarettesDisplay}
             placeholder="0"
           />
 
           <ReadOnlyField
-            label="Money saved"
+            label={t("goals.moneySaved")}
             value={savingsDisplay}
             placeholder="0"
             prefix={symbol}

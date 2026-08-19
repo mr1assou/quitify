@@ -32,6 +32,11 @@ export const goals = {
     "D'après votre série de {{streak}} jours sans cigarette, choisissez entre {{min}} et {{max}} jours d'avance.",
   minError: "Choisissez au moins {{min}} jours d'avance.",
   maxError: "Choisissez au plus {{max}} jours d'avance.",
+  daysAhead: "Jours d'avance",
+  daysAheadInfoA11y: "Comment fonctionnent les jours d'avance",
+  completesAt: "L'objectif sera atteint à {{duration}} sans cigarette",
+  durationDay: "{{count}} jour",
+  durationDays: "{{count}} jours",
   infoFpTitle: "Bonus de Freedom Points",
   infoFpBody:
     "Lorsque vous atteignez votre objectif, vous gagnez un bonus unique de {{fpPerDay}} FP pour chaque jour de votre objectif. Le bonus est ajouté automatiquement dès que vous atteignez la cible.",

@@ -113,6 +113,11 @@ function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: st
           <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
             {description}
           </Text>
+          {row.attemptNumber != null ? (
+            <Text className="mt-0.5 text-xs text-muted-foreground dark:text-d-muted">
+              {t("stats.attemptNumber", { n: row.attemptNumber })}
+            </Text>
+          ) : null}
         </View>
         <View className="items-end">
           <Text className="text-xs text-muted-foreground dark:text-d-muted">{earnedOn}</Text>

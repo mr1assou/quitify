@@ -18,6 +18,10 @@ type Props = {
 };
 
 const NEAR_END_MS = 200;
+/** Status positions this close to a pending seek target are considered settled. */
+const SEEK_SETTLE_TOLERANCE_MS = 350;
+/** Give up waiting for the seek to settle after this long (failed/slow seek). */
+const SEEK_SETTLE_TIMEOUT_MS = 1_500;
 
 export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   const { colors } = useTheme();
@@ -25,6 +29,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   const loadPromiseRef = useRef<Promise<Audio.Sound | null> | null>(null);
   const loadGenRef = useRef(0);
   const seekingRef = useRef(false);
+  const pendingSeekRef = useRef<{ targetMs: number; at: number } | null>(null);
   const playingRef = useRef(false);
   const widthRef = useRef(0);
   const totalMsRef = useRef(durationMs ?? 0);
@@ -41,6 +46,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   const unload = useCallback(async () => {
     loadGenRef.current += 1;
     loadPromiseRef.current = null;
+    pendingSeekRef.current = null;
     const sound = soundRef.current;
     soundRef.current = null;
     playingRef.current = false;
@@ -58,6 +64,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
     if (!status.isLoaded) return;
     if (status.durationMillis) setLoadedDurationMs(status.durationMillis);
     if (status.didJustFinish) {
+      pendingSeekRef.current = null;
       playingRef.current = false;
       setPlaying(false);
       setPositionMs(0);
@@ -71,9 +78,20 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
       void soundRef.current?.pauseAsync().catch(() => {});
       return;
     }
-    if (!seekingRef.current) {
-      setPositionMs(status.positionMillis ?? 0);
+    if (seekingRef.current) return;
+
+    // After a seek, the player still reports a few stale pre-seek positions.
+    // Hold the thumb at the target until playback catches up (or times out).
+    const pending = pendingSeekRef.current;
+    if (pending) {
+      const position = status.positionMillis ?? 0;
+      const settled = Math.abs(position - pending.targetMs) <= SEEK_SETTLE_TOLERANCE_MS;
+      const expired = Date.now() - pending.at > SEEK_SETTLE_TIMEOUT_MS;
+      if (!settled && !expired) return;
+      pendingSeekRef.current = null;
     }
+
+    setPositionMs(status.positionMillis ?? 0);
   }, [id]);
 
   const ensureSound = useCallback(async () => {
@@ -138,6 +156,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   useEffect(() => {
     setPositionMs(0);
     positionMsRef.current = 0;
+    pendingSeekRef.current = null;
     playingRef.current = false;
     setPlaying(false);
     setLoadedDurationMs(durationMs ?? 0);
@@ -151,6 +170,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
     async (nextMs: number) => {
       const duration = totalMsRef.current;
       const clamped = Math.max(0, Math.min(nextMs, duration || nextMs));
+      pendingSeekRef.current = { targetMs: clamped, at: Date.now() };
       setPositionMs(clamped);
       try {
         const sound = await ensureSound();
@@ -183,6 +203,7 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
       const atEnd =
         duration > 0 && (status.positionMillis ?? 0) >= duration - NEAR_END_MS;
       if (atEnd || status.didJustFinish) {
+        pendingSeekRef.current = { targetMs: 0, at: Date.now() };
         await sound.setPositionAsync(0);
         setPositionMs(0);
       }

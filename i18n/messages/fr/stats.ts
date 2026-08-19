@@ -74,6 +74,9 @@ export const stats = {
   oneTimeGoalBonus: "Bonus d'objectif unique",
   reward: "Récompense",
   fpAmount: "+{{amount}} FP",
+  fpCongratsTitle: "Félicitations !",
+  fpCongratsBody:
+    "Vous avez gagné {{amount}} Freedom Points. Continuez — chaque jour sans cigarette compte.",
   goalTitleMoney: "Économiser {{amount}}",
   goalTitleSmokeFreeDays: "Ajouter {{count}} jours sans cigarette",
   goalTitleSmokeFreeDay: "Ajouter {{count}} jour sans cigarette",
