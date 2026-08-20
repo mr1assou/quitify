@@ -256,7 +256,7 @@ export const stats = {
   fpAmount: "+{{amount}} FP",
   fpCongratsTitle: "Congratulations!",
   fpCongratsBody:
-    "You earned {{amount}} Freedom Points. Keep going — every smoke-free day counts.",
+    "You earned {{amount}} Freedom Points. Keep going  every smoke-free day counts.",
   goalTitleMoney: "Save {{amount}}",
   goalTitleSmokeFreeDays: "Add {{count}} more smoke-free days",
   goalTitleSmokeFreeDay: "Add {{count}} more smoke-free day",
