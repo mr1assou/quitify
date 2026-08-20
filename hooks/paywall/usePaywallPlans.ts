@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 
 import type { PaywallPlanDisplay } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
-import { fetchPaywallOffering } from "@/services/purchases";
+import {
+  fetchPaywallOffering,
+  fetchPaywallTrialEligibility,
+} from "@/services/purchases";
 import {
   buildPaywallPlansFromOffering,
   buildPaywallPlansFromUsd,
@@ -41,7 +44,9 @@ export function usePaywallPlans(): PaywallPlansState {
         if (cancelled) return;
 
         if (offering) {
-          setPlans(buildPaywallPlansFromOffering(offering));
+          const trialEligibility = await fetchPaywallTrialEligibility(offering);
+          if (cancelled) return;
+          setPlans(buildPaywallPlansFromOffering(offering, trialEligibility));
           setUsesStorePrices(true);
         } else {
           setPlans(buildPaywallPlansFromUsd());

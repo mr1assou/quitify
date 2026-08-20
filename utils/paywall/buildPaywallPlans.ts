@@ -6,6 +6,7 @@ import {
   type PaywallPlanId,
 } from "@/constants/paywall/paywallPlans";
 import { packageForPlan } from "@/services/purchases/revenueCat";
+import type { PaywallTrialEligibility } from "@/services/purchases/revenueCat";
 import { formatCurrency } from "@/utils/shared/format";
 
 function usdPlanDisplay(planId: PaywallPlanId): PaywallPlanDisplay {
@@ -65,9 +66,21 @@ function mapPlanFromStore(
   };
 }
 
-/** Localized prices from Google Play / App Store via RevenueCat. */
+/**
+ * Localized prices from Google Play / App Store via RevenueCat.
+ * When eligibility is known, the trial badge is hidden for plans the store
+ * would charge at full price — the paywall never promises a trial the user
+ * won't get at checkout.
+ */
 export function buildPaywallPlansFromOffering(
   offering: PurchasesOffering,
+  trialEligibility?: PaywallTrialEligibility,
 ): PaywallPlanDisplay[] {
-  return PAYWALL_PLANS_USD.map((plan) => mapPlanFromStore(plan.id, offering));
+  return PAYWALL_PLANS_USD.map((plan) => {
+    const display = mapPlanFromStore(plan.id, offering);
+    if (trialEligibility && !trialEligibility[plan.id]) {
+      return { ...display, trial: null };
+    }
+    return display;
+  });
 }

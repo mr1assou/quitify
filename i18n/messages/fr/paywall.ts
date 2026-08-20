@@ -7,6 +7,7 @@ export const paywall = {
   offerTitle: "Découvrez votre offre",
   offerSubtitle: "Abonnement à renouvellement automatique, résiliable à tout moment",
   tryFree: "Essayer gratuitement",
+  subscribe: "S'abonner",
   continue: "Continuer",
   processing: "Traitement...",
   restore: "Restaurer les achats",

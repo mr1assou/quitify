@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Image, Text, View } from "react-native";
 import Animated, { FadeInUp, ZoomIn } from "react-native-reanimated";
 
+import { LapseConfirmModal } from "@/components/feature/craving/CravingResult/LapseConfirmModal";
 import { Button } from "@/components/ui/Button";
 import { SMOKED_QUESTION_IMAGE } from "@/constants/app/assets";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
@@ -21,6 +23,7 @@ export function SmokedChoiceStage({
   onRelapse,
 }: Props) {
   const { t } = useTranslation();
+  const [lapseConfirmVisible, setLapseConfirmVisible] = useState(false);
 
   return (
     <View className="gap-4">
@@ -36,9 +39,11 @@ export function SmokedChoiceStage({
           <Text className="mt-3 text-2xl font-bold text-foreground dark:text-d-text">
             {t("craving.slipWhatHappened")}
           </Text>
-          <Text className="mt-1 px-6 text-center text-sm text-muted-foreground dark:text-d-muted">
-            {t("craving.slipWhatHappenedHint")}
-          </Text>
+          <View className="mt-3 mx-2 rounded-2xl bg-section px-4 py-3 dark:bg-d-surface">
+            <Text className="text-center text-sm font-medium leading-5 text-foreground dark:text-d-text">
+              {t("craving.slipAuthenticHint")}
+            </Text>
+          </View>
         </Animated.View>
       </View>
 
@@ -50,7 +55,7 @@ export function SmokedChoiceStage({
           fullWidth
           loading={isSubmitting}
           disabled={isSubmitting}
-          onPress={onLapse}
+          onPress={() => setLapseConfirmVisible(true)}
         />
         <Button
           label={t("craving.slipRelapse")}
@@ -61,6 +66,15 @@ export function SmokedChoiceStage({
           onPress={onRelapse}
         />
       </Animated.View>
+
+      <LapseConfirmModal
+        visible={lapseConfirmVisible && !isSubmitting}
+        onClose={() => setLapseConfirmVisible(false)}
+        onConfirm={() => {
+          setLapseConfirmVisible(false);
+          onLapse();
+        }}
+      />
     </View>
   );
 }

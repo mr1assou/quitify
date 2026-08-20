@@ -1,6 +1,7 @@
 export {
   ensureRevenueCatConfigured,
   fetchPaywallOffering,
+  fetchPaywallTrialEligibility,
   fetchSpecialPaywallOffer,
   getRevenueCatOwnershipIds,
   hasPremiumEntitlement,
@@ -15,4 +16,4 @@ export {
   waitForRevenueCatReady,
 } from "./revenueCat";
 
-export type { RestorePurchasesResult } from "./revenueCat";
+export type { PaywallTrialEligibility, RestorePurchasesResult } from "./revenueCat";

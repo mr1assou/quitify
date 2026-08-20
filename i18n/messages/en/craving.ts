@@ -15,9 +15,13 @@ export const craving = {
   sessionSmoked: "I smoked",
   slipTitle: "Slip support",
   slipWhatHappened: "What happened?",
-  slipWhatHappenedHint:
-    "One slip is a lapse. Going back to regular smoking is a relapse.",
+  slipAuthenticHint:
+    "Please be honest with yourself. If you smoked, log it. A lapse is one slip. A relapse is going back to regular smoking.",
   slipLapse: "Lapse",
+  slipLapseConfirmTitle: "Log this lapse?",
+  slipLapseConfirmBody:
+    "This will reset your smoke-free streak and start a new attempt.",
+  slipLapseConfirmCta: "Confirm lapse",
   slipRelapse: "Relapse",
   slipChoiceA11y: "Are you still in, or back to smoking?",
   slipCountTitle: "About how many did you smoke?",

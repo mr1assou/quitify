@@ -578,6 +578,53 @@ export async function fetchPaywallOffering(): Promise<PurchasesOffering | null> 
   return offerings.current ?? null;
 }
 
+export type PaywallTrialEligibility = Record<PaywallPlanId, boolean>;
+
+async function planTrialAvailable(
+  offering: PurchasesOffering,
+  planId: PaywallPlanId,
+): Promise<boolean> {
+  try {
+    const selectedPackage = packageForPlan(offering, planId);
+    if (!selectedPackage) return false;
+
+    const product = await resolveStoreProduct(
+      selectedPackage,
+      `${planId} trial eligibility`,
+    );
+
+    if (Platform.OS === "android") {
+      const option =
+        planId === "yearly"
+          ? yearlyTrialSubscriptionOption(product)
+          : monthlyTrialSubscriptionOption(product);
+      return option != null;
+    }
+
+    return product.introPrice != null;
+  } catch {
+    // If the store can't confirm the trial, don't promise one.
+    return false;
+  }
+}
+
+/**
+ * Whether this user actually gets the free trial at checkout.
+ * Google Play omits "new customer acquisition" offers for users who already
+ * had a subscription, so a missing free phase means full price would apply.
+ * The check mirrors the purchase path (same option lookup), so the paywall
+ * badge and the real checkout can never disagree.
+ */
+export async function fetchPaywallTrialEligibility(
+  offering: PurchasesOffering,
+): Promise<PaywallTrialEligibility> {
+  const [monthly, yearly] = await Promise.all([
+    planTrialAvailable(offering, "monthly"),
+    planTrialAvailable(offering, "yearly"),
+  ]);
+  return { monthly, yearly };
+}
+
 export async function getRevenueCatOwnershipIds(): Promise<{
   appUserId: string;
   originalAppUserId: string;

@@ -6,6 +6,7 @@ export const paywall = {
   offerTitle: "Show your offer",
   offerSubtitle: "Auto-renewing subscription, cancel anytime",
   tryFree: "Try free",
+  subscribe: "Subscribe",
   continue: "Continue",
   processing: "Processing...",
   restore: "Restore purchases",

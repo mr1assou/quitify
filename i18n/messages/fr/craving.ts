@@ -15,9 +15,13 @@ export const craving = {
   sessionSmoked: "J'ai fumé",
   slipTitle: "Soutien après un écart",
   slipWhatHappened: "Que s'est-il passé ?",
-  slipWhatHappenedHint:
-    "Un seul écart est un laps. Reprendre une consommation régulière est une rechute.",
+  slipAuthenticHint:
+    "Soyez honnête avec vous-même. Si vous avez fumé, enregistrez-le. Un écart, c'est une seule cigarette. Une rechute, c'est reprendre une consommation régulière.",
   slipLapse: "Écart",
+  slipLapseConfirmTitle: "Enregistrer cet écart ?",
+  slipLapseConfirmBody:
+    "Cela remettra votre série sans cigarette à zéro et commencera une nouvelle tentative.",
+  slipLapseConfirmCta: "Confirmer l'écart",
   slipRelapse: "Rechute",
   slipChoiceA11y: "Êtes-vous encore dans le sevrage, ou de retour à la cigarette ?",
   slipCountTitle: "Environ combien en avez-vous fumé ?",

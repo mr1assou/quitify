@@ -83,9 +83,13 @@ export default function Paywall() {
     };
   }, [source]);
 
+  const selectedPlanHasTrial =
+    plans.find((plan) => plan.id === selectedPlan)?.trial != null;
   const primaryCtaLabel = purchasing
     ? t("paywall.processing")
-    : t("paywall.tryFree");
+    : selectedPlanHasTrial
+      ? t("paywall.tryFree")
+      : t("paywall.subscribe");
 
   const trackDismissOnce = useCallback(() => {
     if (convertedRef.current || dismissTrackedRef.current) return;
