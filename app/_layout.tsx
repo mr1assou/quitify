@@ -15,6 +15,7 @@ import { LocaleProvider } from "@/context/LocaleContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { AppScreenBackground } from "@/components/layout/AppScreenBackground";
+import { ForceUpdateGate } from "@/components/layout/ForceUpdateGate";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
 import { AuthSessionGate } from "@/components/auth/AuthSessionGate";
 import { FreedomPointsCongratsBridge } from "@/components/feature/progress/FreedomPointsCongratsBridge";
@@ -66,6 +67,7 @@ function GoalsProviderWrapper() {
             <NotificationSocketBridge />
             <PushNotificationsBridge />
             <FreedomPointsCongratsBridge />
+            <ForceUpdateGate />
             <AuthSessionGate />
             <ThemedRoot />
           </WifiRequiredGate>

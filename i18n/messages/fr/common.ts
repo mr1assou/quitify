@@ -36,4 +36,8 @@ export const common = {
   selectMethod: "Choisir une méthode",
   selectRange: "Choisir une plage…",
   selectPlaceholder: "Sélectionner…",
+  updateRequiredTitle: "Mise à jour disponible",
+  updateRequiredBody:
+    "Une nouvelle version de Quitify est disponible. Mettez à jour l'application pour continuer.",
+  updateNow: "Mettre à jour",
 } as const;
