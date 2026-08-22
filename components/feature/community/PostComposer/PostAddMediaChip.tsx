@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   onPress: () => void;
@@ -12,6 +13,7 @@ type Props = {
 
 export function PostAddMediaChip({ onPress, className, embedded = false }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Pressable
@@ -22,7 +24,7 @@ export function PostAddMediaChip({ onPress, className, embedded = false }: Props
     >
       <Ionicons name="images-outline" size={16} color={colors.mutedForeground} />
       <Text className="ml-1.5 text-sm font-semibold" style={{ color: colors.mutedForeground }}>
-        Add media
+        {t("community.addMedia")}
       </Text>
     </Pressable>
   );

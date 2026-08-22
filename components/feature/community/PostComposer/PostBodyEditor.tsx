@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import { LinkifiedTextInput } from "@/components/ui/LinkifiedTextInput";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 import { PostAddMediaChip } from "./PostAddMediaChip";
 
@@ -24,6 +25,7 @@ export function PostBodyEditor({
   showAddMedia = true,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [inputHeight, setInputHeight] = useState(BODY_MIN_HEIGHT);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export function PostBodyEditor({
       <LinkifiedTextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="Body text (optional)"
+        placeholder={t("community.bodyPlaceholder")}
         placeholderTextColor={colors.mutedForeground}
         multiline
         textAlignVertical="top"

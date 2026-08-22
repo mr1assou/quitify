@@ -21,6 +21,7 @@ import { useApp } from "@/context/AppContext";
 import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { fetchChatThreadsPage } from "@/services/chat/chatApi";
 import type { BackendChatThreadSummary } from "@/types/chat/chatApi";
 import type { CommunityUser } from "@/types/community/community";
@@ -51,6 +52,7 @@ function mapThreadRecipient(
 
 export default function SharePostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { state: appState } = useApp();
   const { requirePremium } = usePremiumGate();
@@ -100,7 +102,7 @@ export default function SharePostScreen() {
         hasMoreRef.current = page.has_more;
         offsetRef.current += mapped.length;
       } catch {
-        setError("Could not load people you have chatted with.");
+        setError(t("chat.loadChatsFailed"));
         if (reset) setUsers([]);
       } finally {
         if (reset) setLoading(false);
@@ -110,7 +112,7 @@ export default function SharePostScreen() {
         }
       }
     },
-    [currentUserId, state.authorsById],
+    [currentUserId, state.authorsById, t],
   );
 
   useFocusEffect(
@@ -140,7 +142,7 @@ export default function SharePostScreen() {
       await share(id);
       safeRouter.backOr("/(tabs)/community");
     } catch {
-      setError("Could not send post right now. Please try again.");
+      setError(t("chat.sendPostFailed"));
       setSending(false);
     }
   };
@@ -149,11 +151,11 @@ export default function SharePostScreen() {
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
-      <StackScreenHeader title="Send post" />
+      <StackScreenHeader title={t("community.shareTitle")} />
 
       <View className="px-6 pt-2 pb-1">
         <Text className="text-sm text-muted-foreground dark:text-d-muted">
-          People you have chatted with
+          {t("community.shareRecipientsHint")}
         </Text>
       </View>
 
@@ -192,10 +194,10 @@ export default function SharePostScreen() {
         <View className="mt-10 items-center px-6">
           <Ionicons name="chatbubbles-outline" size={40} color={colors.mutedForeground} />
           <Text className="mt-3 text-center text-base font-semibold text-foreground dark:text-d-text">
-            No chats yet
+            {t("chat.noChatsYet")}
           </Text>
           <Text className="mt-1 text-center text-sm text-muted-foreground dark:text-d-muted">
-            Start a conversation from Chats first, then you can send posts here.
+            {t("community.shareNoChatsHint")}
           </Text>
         </View>
       )}
@@ -216,8 +218,13 @@ export default function SharePostScreen() {
           >
             <Text className="text-base font-bold text-white">
               {sending
-                ? "Sending..."
-                : `Send to ${selectedUserIds.length} ${selectedUserIds.length === 1 ? "person" : "people"}`}
+                ? t("community.sending")
+                : t(
+                    selectedUserIds.length === 1
+                      ? "community.shareSendToOne"
+                      : "community.shareSendToMany",
+                    { count: selectedUserIds.length },
+                  )}
             </Text>
           </Pressable>
         </View>

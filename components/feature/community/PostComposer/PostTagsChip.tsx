@@ -3,6 +3,7 @@ import { Pressable, Text } from "react-native";
 
 import { getPostTag, type PostTagId } from "@/constants/community/postTags";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 type Props = {
   selectedTagId: PostTagId | null;
@@ -12,6 +13,7 @@ type Props = {
 
 export function PostTagsChip({ selectedTagId, onPress, onClear }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   if (selectedTagId) {
     const tag = getPostTag(selectedTagId);
@@ -38,7 +40,7 @@ export function PostTagsChip({ selectedTagId, onPress, onClear }: Props) {
     >
       <Ionicons name="add" size={16} color={colors.mutedForeground} />
       <Text className="ml-1.5 text-sm font-semibold" style={{ color: colors.mutedForeground }}>
-        Choose a tag *
+        {t("community.chooseTag")}
       </Text>
     </Pressable>
   );
