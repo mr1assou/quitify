@@ -19,6 +19,7 @@ import { ForceUpdateGate } from "@/components/layout/ForceUpdateGate";
 import { WifiRequiredGate } from "@/components/layout/WifiRequiredGate";
 import { AuthSessionGate } from "@/components/auth/AuthSessionGate";
 import { FreedomPointsCongratsBridge } from "@/components/feature/progress/FreedomPointsCongratsBridge";
+import { LocaleSyncBridge } from "@/components/i18n/LocaleSyncBridge";
 import { RevenueCatBridge } from "@/components/purchases/RevenueCatBridge";
 import { PushNotificationsBridge } from "@/components/push/PushNotificationsBridge";
 import { PresenceSocketBridge } from "@/components/realtime/PresenceSocketBridge";
@@ -67,6 +68,7 @@ function GoalsProviderWrapper() {
             <NotificationSocketBridge />
             <PushNotificationsBridge />
             <FreedomPointsCongratsBridge />
+            <LocaleSyncBridge />
             <ForceUpdateGate />
             <AuthSessionGate />
             <ThemedRoot />

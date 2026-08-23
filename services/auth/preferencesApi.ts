@@ -2,6 +2,8 @@ import { API_URL } from "@/config/api";
 import { getAccessToken } from "@/utils/auth/authStorage";
 
 export type UpdateUserPreferencesPayload = {
+  /** App language ("en" | "fr") — backend uses it for push notification copy. */
+  locale?: string;
   motivationCardIndex?: number;
   tipsCardIndex?: number;
   savedTipCardIds?: string[];

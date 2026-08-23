@@ -32,6 +32,8 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
   const pendingSeekRef = useRef<{ targetMs: number; at: number } | null>(null);
   const playingRef = useRef(false);
   const widthRef = useRef(0);
+  /** Screen X of the track's left edge, captured when a drag starts. */
+  const trackLeftRef = useRef(0);
   const totalMsRef = useRef(durationMs ?? 0);
   const positionMsRef = useRef(0);
   const seekToRef = useRef<(nextMs: number) => Promise<void>>(async () => {});
@@ -170,14 +172,23 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
     async (nextMs: number) => {
       const duration = totalMsRef.current;
       const clamped = Math.max(0, Math.min(nextMs, duration || nextMs));
+      // Hold the thumb at the target until the seek fully lands: seekingRef
+      // gates every status update while the seek is in flight, and
+      // pendingSeekRef filters stale ticks that were queued before it.
+      seekingRef.current = true;
       pendingSeekRef.current = { targetMs: clamped, at: Date.now() };
       setPositionMs(clamped);
       try {
         const sound = await ensureSound();
         if (!sound) return;
-        await sound.setPositionAsync(clamped);
+        const status = await sound.setPositionAsync(clamped);
+        if (status.isLoaded) {
+          setPositionMs(status.positionMillis ?? clamped);
+        }
       } catch {
         // keep local position until playback works
+      } finally {
+        seekingRef.current = false;
       }
     },
     [ensureSound],
@@ -226,6 +237,10 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
       onPanResponderTerminationRequest: () => false,
       onPanResponderGrant: (event) => {
         seekingRef.current = true;
+        // locationX is only reliable on the initial touch; from it derive the
+        // track's absolute screen X so moves can use stable pageX coordinates.
+        trackLeftRef.current =
+          event.nativeEvent.pageX - event.nativeEvent.locationX;
         const next = positionFromTouch(
           event.nativeEvent.locationX,
           widthRef.current,
@@ -233,25 +248,28 @@ export function ChatAudioMessage({ id, uri, durationMs }: Props) {
         );
         setPositionMs(next);
       },
-      onPanResponderMove: (event) => {
+      onPanResponderMove: (_event, gestureState) => {
         const next = positionFromTouch(
-          event.nativeEvent.locationX,
+          gestureState.moveX - trackLeftRef.current,
           widthRef.current,
           totalMsRef.current,
         );
         setPositionMs(next);
       },
-      onPanResponderRelease: (event) => {
+      onPanResponderRelease: (event, gestureState) => {
+        // moveX is 0 when the user tapped without dragging.
+        const pageX =
+          gestureState.moveX !== 0 ? gestureState.moveX : event.nativeEvent.pageX;
         const next = positionFromTouch(
-          event.nativeEvent.locationX,
+          pageX - trackLeftRef.current,
           widthRef.current,
           totalMsRef.current,
         );
-        seekingRef.current = false;
+        // seekTo keeps seekingRef true until the seek lands — no gap where a
+        // stale status tick could snap the thumb back.
         void seekToRef.current(next);
       },
       onPanResponderTerminate: () => {
-        seekingRef.current = false;
         void seekToRef.current(positionMsRef.current);
       },
     }),
