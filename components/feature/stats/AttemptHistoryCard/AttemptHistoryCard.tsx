@@ -97,7 +97,7 @@ function AttemptRow({
   timeZone: string;
   onPress: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const status = attemptOutcomeLabel(row, t);
 
   return (
@@ -130,7 +130,7 @@ function AttemptRow({
       </View>
 
       <Text className="mt-2 text-xs text-muted-foreground dark:text-d-muted">
-        {formatAttemptDateRange(row, timeZone, t)}
+        {formatAttemptDateRange(row, timeZone, t, locale)}
       </Text>
     </Pressable>
   );

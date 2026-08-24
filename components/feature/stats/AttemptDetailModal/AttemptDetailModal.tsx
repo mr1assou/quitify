@@ -20,7 +20,7 @@ type Props = {
 };
 
 export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Props) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -30,7 +30,7 @@ export function AttemptDetailModal({ attempt, currency, timeZone, onClose }: Pro
   };
 
   const detailRows = attempt
-    ? buildAttemptDetailRows(attempt, currency, timeZone, t)
+    ? buildAttemptDetailRows(attempt, currency, timeZone, t, locale)
     : [];
 
   return (

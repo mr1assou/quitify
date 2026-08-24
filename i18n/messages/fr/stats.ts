@@ -41,7 +41,7 @@ export const stats = {
   inProgress: "En cours",
   cigarettesSmokedOnSlips: "Cigarettes fumées lors d'écarts",
   outcome: "Résultat",
-  dateRangeInProgress: "{{start}} , En cours",
+  dateRangeInProgress: "{{start}} – En cours",
   yourGoals: "Vos objectifs",
   goalSingular: "{{count}} objectif",
   goalPlural: "{{count}} objectifs",
@@ -81,4 +81,8 @@ export const stats = {
   goalTitleSmokeFreeDays: "Ajouter {{count}} jours sans cigarette",
   goalTitleSmokeFreeDay: "Ajouter {{count}} jour sans cigarette",
   goalTitleCigarettes: "Éviter {{count}} cigarettes",
+  milestonesTitle: "Étapes",
+  milestonesSubtitle: "Des rappels jour après jour du chemin parcouru.",
+  milestoneReached: "Atteinte",
+  milestoneUnlocks: "Se débloque",
 } as const;

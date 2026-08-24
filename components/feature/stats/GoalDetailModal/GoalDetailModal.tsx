@@ -21,7 +21,7 @@ type Props = {
 };
 
 export function GoalDetailModal({ goal, currency, timeZone, onClose }: Props) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -30,7 +30,7 @@ export function GoalDetailModal({ goal, currency, timeZone, onClose }: Props) {
     onClose();
   };
 
-  const detailRows = goal ? buildGoalDetailRows(goal, currency, timeZone, t) : [];
+  const detailRows = goal ? buildGoalDetailRows(goal, currency, timeZone, t, locale) : [];
   const isActive = goal?.status === "active";
   const isCompleted = goal?.status === "completed";
 

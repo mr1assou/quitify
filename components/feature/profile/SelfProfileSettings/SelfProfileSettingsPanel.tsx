@@ -41,7 +41,7 @@ export function SelfProfileSettings({
   onSignOut,
 }: Props) {
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const resetJourney = useResetJourney();
   const pushSettings = usePushNotificationsSettings();
   const { plans } = usePaywallPlans();
@@ -88,7 +88,7 @@ export function SelfProfileSettings({
       id: "quit-date",
       icon: "calendar-outline",
       label: t("settings.quitDate"),
-      value: formatDate(profile.quitDate),
+      value: formatDate(profile.quitDate, locale),
     },
     {
       id: "habits",

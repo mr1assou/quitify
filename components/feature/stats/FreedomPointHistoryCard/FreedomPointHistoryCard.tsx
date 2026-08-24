@@ -100,10 +100,10 @@ export function FreedomPointHistoryCard({ entries, totalFreedomPoints, timeZone 
 }
 
 function LedgerRow({ row, timeZone }: { row: FreedomPointLedgerRow; timeZone: string }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const label = freedomPointSourceLabel(row, t);
   const description = freedomPointSourceDescription(row, t);
-  const earnedOn = formatUtcDateInTimezone(row.earnedAt, timeZone);
+  const earnedOn = formatUtcDateInTimezone(row.earnedAt, timeZone, locale);
 
   return (
     <View className="rounded-2xl bg-elevated px-3 py-3 dark:bg-d-elevated">

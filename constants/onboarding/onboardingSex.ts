@@ -12,25 +12,14 @@ export const PROFILE_SEX_OPTIONS: readonly ProfileSexOption[] = [
   { id: "prefer_not_say", label: "Prefer not to say" },
 ] as const;
 
-const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-] as const;
-
-export const MONTH_OPTIONS: DropdownOption[] = MONTH_NAMES.map((name, i) => ({
-  value: i + 1,
-  label: name,
-}));
+/** Short month names in the app language (e.g. "Jan" / "janv."), capitalized. */
+export function monthDropdownOptions(locale?: string): DropdownOption[] {
+  const formatter = new Intl.DateTimeFormat(locale ?? "en", { month: "short" });
+  return Array.from({ length: 12 }, (_, i) => {
+    const label = formatter.format(new Date(2024, i, 1));
+    return { value: i + 1, label: label.charAt(0).toUpperCase() + label.slice(1) };
+  });
+}
 
 export const DAY_OPTIONS: DropdownOption[] = Array.from({ length: 31 }, (_, i) => ({
   value: i + 1,

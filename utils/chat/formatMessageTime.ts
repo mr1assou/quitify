@@ -64,10 +64,16 @@ export function formatChatDaySeparator(
   return formatTimestampInTimezone(timestamp, timeZone, DAY_SEPARATOR_OPTIONS, locale);
 }
 
+const YESTERDAY_WORD: Record<string, string> = {
+  en: "Yesterday",
+  fr: "Hier",
+};
+
 /** Chat list label: today → clock, yesterday → "Yesterday", else short date. */
 export function formatMessageListTime(
   timestamp: number,
   timeZone: string,
+  locale?: string,
   now = Date.now(),
 ): string {
   const day = calendarDayKeyInTimezone(timestamp, timeZone);
@@ -76,7 +82,7 @@ export function formatMessageListTime(
   if (day === today) return formatMessageClockTime(timestamp, timeZone);
 
   const yesterday = calendarDayKeyInTimezone(now - 86_400_000, timeZone);
-  if (day === yesterday) return "Yesterday";
+  if (day === yesterday) return YESTERDAY_WORD[locale ?? "en"] ?? YESTERDAY_WORD.en;
 
-  return formatTimestampInTimezone(timestamp, timeZone, LIST_DATE_OPTIONS);
+  return formatTimestampInTimezone(timestamp, timeZone, LIST_DATE_OPTIONS, locale);
 }

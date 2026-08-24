@@ -1,13 +1,58 @@
+import type { AppLocale } from "@/types/i18n/locale";
+
+type RelativeWords = {
+  justNow: string;
+  minAgo: (m: number) => string;
+  hoursAgo: (h: number) => string;
+  todayAt: (at: string) => string;
+  yesterdayAt: (at: string) => string;
+  dateAt: (date: string, at: string) => string;
+  lastSeen: (fragment: string) => string;
+  yesterday: string;
+};
+
+const RELATIVE_WORDS: Record<AppLocale, RelativeWords> = {
+  en: {
+    justNow: "just now",
+    minAgo: (m) => `${m} min ago`,
+    hoursAgo: (h) => `${h}h ago`,
+    todayAt: (at) => `today at ${at}`,
+    yesterdayAt: (at) => `yesterday at ${at}`,
+    dateAt: (date, at) => `${date} at ${at}`,
+    lastSeen: (fragment) => `Last seen ${fragment}`,
+    yesterday: "Yesterday",
+  },
+  fr: {
+    justNow: "à l'instant",
+    minAgo: (m) => `il y a ${m} min`,
+    hoursAgo: (h) => `il y a ${h} h`,
+    todayAt: (at) => `aujourd'hui à ${at}`,
+    yesterdayAt: (at) => `hier à ${at}`,
+    dateAt: (date, at) => `le ${date} à ${at}`,
+    lastSeen: (fragment) => `Vu ${fragment}`,
+    yesterday: "Hier",
+  },
+};
+
+function relativeWords(locale?: AppLocale): RelativeWords {
+  return RELATIVE_WORDS[locale ?? "en"] ?? RELATIVE_WORDS.en;
+}
+
 /** Time-only last-seen fragment for chat headers (e.g. "2h ago", "today at 14:32"). */
-export function formatLastSeenAgo(timestamp: number, now = Date.now()): string {
+export function formatLastSeenAgo(
+  timestamp: number,
+  locale?: AppLocale,
+  now = Date.now(),
+): string {
+  const words = relativeWords(locale);
   const diff = Math.max(0, now - timestamp);
   const minutes = Math.floor(diff / 60_000);
 
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes} min ago`;
+  if (minutes < 1) return words.justNow;
+  if (minutes < 60) return words.minAgo(minutes);
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return words.hoursAgo(hours);
 
   const at = formatClockTime(timestamp);
   const d = new Date(timestamp);
@@ -17,7 +62,7 @@ export function formatLastSeenAgo(timestamp: number, now = Date.now()): string {
     d.getMonth() === nowD.getMonth() &&
     d.getDate() === nowD.getDate();
 
-  if (sameDay) return `today at ${at}`;
+  if (sameDay) return words.todayAt(at);
 
   const yesterday = new Date(now - 24 * 60 * 60 * 1000);
   if (
@@ -25,45 +70,20 @@ export function formatLastSeenAgo(timestamp: number, now = Date.now()): string {
     d.getMonth() === yesterday.getMonth() &&
     d.getDate() === yesterday.getDate()
   ) {
-    return `yesterday at ${at}`;
+    return words.yesterdayAt(at);
   }
 
-  const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  return `${date} at ${at}`;
+  const date = d.toLocaleDateString(locale, { month: "short", day: "numeric" });
+  return words.dateAt(date, at);
 }
 
 /** Human-readable last-seen line for chat headers (e.g. "Last seen 2h ago"). */
-export function formatLastSeen(timestamp: number, now = Date.now()): string {
-  const diff = Math.max(0, now - timestamp);
-  const minutes = Math.floor(diff / 60_000);
-
-  if (minutes < 1) return "Last seen just now";
-  if (minutes < 60) return `Last seen ${minutes} min ago`;
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `Last seen ${hours}h ago`;
-
-  const at = formatClockTime(timestamp);
-  const d = new Date(timestamp);
-  const nowD = new Date(now);
-  const sameDay =
-    d.getFullYear() === nowD.getFullYear() &&
-    d.getMonth() === nowD.getMonth() &&
-    d.getDate() === nowD.getDate();
-
-  if (sameDay) return `Last seen today at ${at}`;
-
-  const yesterday = new Date(now - 24 * 60 * 60 * 1000);
-  if (
-    d.getFullYear() === yesterday.getFullYear() &&
-    d.getMonth() === yesterday.getMonth() &&
-    d.getDate() === yesterday.getDate()
-  ) {
-    return `Last seen yesterday at ${at}`;
-  }
-
-  const date = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  return `Last seen ${date} at ${at}`;
+export function formatLastSeen(
+  timestamp: number,
+  locale?: AppLocale,
+  now = Date.now(),
+): string {
+  return relativeWords(locale).lastSeen(formatLastSeenAgo(timestamp, locale, now));
 }
 
 /** Compact human-readable "X ago" string for community feed / chat. */
@@ -98,7 +118,11 @@ export function formatClockTime(timestamp: number): string {
 }
 
 /** Smarter chat-list label: today → "14:32", yesterday → "Yesterday", else date. */
-export function formatChatRelativeDate(timestamp: number, now = Date.now()): string {
+export function formatChatRelativeDate(
+  timestamp: number,
+  locale?: AppLocale,
+  now = Date.now(),
+): string {
   const d = new Date(timestamp);
   const nowD = new Date(now);
   const sameDay =
@@ -114,10 +138,10 @@ export function formatChatRelativeDate(timestamp: number, now = Date.now()): str
     d.getMonth() === yesterday.getMonth() &&
     d.getDate() === yesterday.getDate()
   ) {
-    return "Yesterday";
+    return relativeWords(locale).yesterday;
   }
 
-  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return d.toLocaleDateString(locale, { month: "short", day: "numeric" });
 }
 
 /** Compact 1.2k / 12.4k / 1.3M style counts for likes / shares. */

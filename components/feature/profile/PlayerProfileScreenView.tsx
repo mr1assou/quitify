@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePlayerProfileStreak } from "@/hooks/profile/usePlayerProfileStreak";
 import { ProfileImageEditorModal } from "@/components/feature/profile/ProfileImageEditorModal";
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
@@ -16,14 +17,15 @@ type Props = {
 
 export function PlayerProfileScreen({ profile }: Props) {
   const [avatarEditorOpen, setAvatarEditorOpen] = useState(false);
+  const { locale } = useTranslation();
   const { streak, memberSinceMs } = usePlayerProfileStreak(profile);
 
   const memberSinceLabel = useMemo(() => {
     if (memberSinceMs != null) {
-      return formatMemberSinceLabel(memberSinceMs);
+      return formatMemberSinceLabel(memberSinceMs, locale);
     }
     return profile?.memberSinceLabel?.trim() || undefined;
-  }, [memberSinceMs, profile?.memberSinceLabel]);
+  }, [memberSinceMs, profile?.memberSinceLabel, locale]);
 
   if (!profile) {
     return (

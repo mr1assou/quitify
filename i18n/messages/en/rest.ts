@@ -184,6 +184,7 @@ export const chat = {
   editMessage: "Edit message",
   recordingHint: "Recording… release to send",
   sendingMedia: "Sending media…",
+  lastSeenPrefix: "last seen",
 } as const;
 
 export const stats = {
@@ -268,6 +269,10 @@ export const stats = {
   goalTitleSmokeFreeDays: "Add {{count}} more smoke-free days",
   goalTitleSmokeFreeDay: "Add {{count}} more smoke-free day",
   goalTitleCigarettes: "Avoid {{count}} cigarettes",
+  milestonesTitle: "Milestones",
+  milestonesSubtitle: "Day-by-day reminders of how far you've come.",
+  milestoneReached: "Reached",
+  milestoneUnlocks: "Unlocks",
 } as const;
 
 export const achievements = {

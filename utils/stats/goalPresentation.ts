@@ -30,24 +30,25 @@ export function formatGoalStatsTimeline(
   row: GoalStatsRow,
   timeZone: string,
   t: Translate,
+  locale?: string,
 ): string {
-  const started = formatUtcIsoInTimezone(row.startedAt, timeZone);
+  const started = formatUtcIsoInTimezone(row.startedAt, timeZone, locale);
   const ends =
     row.status === "active" && row.type === "smoke_free_days"
-      ? formatSmokeFreeGoalEndDate(row.startedAt, row.target, timeZone)
+      ? formatSmokeFreeGoalEndDate(row.startedAt, row.target, timeZone, locale)
       : null;
 
   if (row.completedAt) {
     return t("stats.timelineCompleted", {
       started,
-      at: formatUtcIsoInTimezone(row.completedAt, timeZone),
+      at: formatUtcIsoInTimezone(row.completedAt, timeZone, locale),
     });
   }
 
   if (row.failedAt) {
     return t("stats.timelineFailed", {
       started,
-      at: formatUtcIsoInTimezone(row.failedAt, timeZone),
+      at: formatUtcIsoInTimezone(row.failedAt, timeZone, locale),
     });
   }
 
@@ -82,26 +83,27 @@ export function buildGoalDetailRows(
   _currency: string,
   timeZone: string,
   t: Translate,
+  locale?: string,
 ): GoalDetailRow[] {
   const rows: GoalDetailRow[] = [
     {
       label: t("stats.started"),
-      value: formatUtcIsoInTimezone(row.startedAt, timeZone),
+      value: formatUtcIsoInTimezone(row.startedAt, timeZone, locale),
     },
   ];
 
   if (row.completedAt) {
     rows.push({
       label: t("stats.completed"),
-      value: formatUtcIsoInTimezone(row.completedAt, timeZone),
+      value: formatUtcIsoInTimezone(row.completedAt, timeZone, locale),
     });
   } else if (row.failedAt) {
     rows.push({
       label: t("stats.failed"),
-      value: formatUtcIsoInTimezone(row.failedAt, timeZone),
+      value: formatUtcIsoInTimezone(row.failedAt, timeZone, locale),
     });
   } else if (row.type === "smoke_free_days") {
-    const ends = formatSmokeFreeGoalEndDate(row.startedAt, row.target, timeZone);
+    const ends = formatSmokeFreeGoalEndDate(row.startedAt, row.target, timeZone, locale);
     rows.push({
       label: t("stats.goalTargetEnd"),
       value: ends ?? t("stats.inProgress"),

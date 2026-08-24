@@ -36,6 +36,7 @@ export function buildAttemptDetailRows(
   currency: string,
   timeZone: string,
   t: Translate,
+  locale?: string,
 ): AttemptDetailRow[] {
   const smokeFreeHours = row.durationSeconds / 3600;
   const smokeFreeDisplay =
@@ -46,12 +47,12 @@ export function buildAttemptDetailRows(
   const rows: AttemptDetailRow[] = [
     {
       label: t("stats.started"),
-      value: formatUtcIsoInTimezone(row.startedAt, timeZone),
+      value: formatUtcIsoInTimezone(row.startedAt, timeZone, locale),
     },
     {
       label: t("stats.endedLabel"),
       value: row.endedAt
-        ? formatUtcIsoInTimezone(row.endedAt, timeZone)
+        ? formatUtcIsoInTimezone(row.endedAt, timeZone, locale)
         : t("stats.inProgress"),
     },
     {
@@ -88,8 +89,9 @@ export function formatAttemptDateRange(
   row: AttemptStatsRow,
   timeZone: string,
   t: Translate,
+  locale?: string,
 ): string {
-  const start = formatUtcIsoInTimezone(row.startedAt, timeZone);
+  const start = formatUtcIsoInTimezone(row.startedAt, timeZone, locale);
   if (!row.endedAt) return t("stats.dateRangeInProgress", { start });
-  return `${start} – ${formatUtcIsoInTimezone(row.endedAt, timeZone)}`;
+  return `${start} – ${formatUtcIsoInTimezone(row.endedAt, timeZone, locale)}`;
 }

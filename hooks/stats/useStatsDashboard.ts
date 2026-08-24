@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { useApp } from "@/context/AppContext";
+import { useLocale } from "@/context/LocaleContext";
 import { useNow } from "@/hooks/shared/useNow";
 import type {
   CravingTimeBucket,
@@ -24,6 +25,7 @@ export type StatsDashboard = {
 
 export function useStatsDashboard(): StatsDashboard | null {
   const { state } = useApp();
+  const { locale } = useLocale();
   const now = useNow(60_000);
   const [range, setRange] = useState<StatsRange>("7d");
 
@@ -32,9 +34,9 @@ export function useStatsDashboard(): StatsDashboard | null {
     return {
       range,
       setRange,
-      series: buildSavingsSeries(state.profile, range, now),
+      series: buildSavingsSeries(state.profile, range, now, locale),
       savings: buildSavingsBreakdown(state.profile, now),
       cravingBuckets: buildCravingTimeBuckets(state.cravings),
     };
-  }, [state.profile, state.cravings, now, range]);
+  }, [state.profile, state.cravings, now, range, locale]);
 }

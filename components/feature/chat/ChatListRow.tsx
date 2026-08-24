@@ -24,7 +24,7 @@ type Props = {
 
 export function ChatListRow({ preview }: Props) {
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { participant, lastMessage, unreadCount, threadId, lastOutgoingReadStatus } = preview;
   const { isOnline } = useChatParticipantPresence(participant);
   const timeZone = useUserTimezone();
@@ -58,7 +58,7 @@ export function ChatListRow({ preview }: Props) {
           </Text>
           {lastMessage ? (
             <Text className="text-xs text-muted-foreground dark:text-d-muted">
-              {formatMessageListTime(lastMessage.createdAt, timeZone)}
+              {formatMessageListTime(lastMessage.createdAt, timeZone, locale)}
             </Text>
           ) : null}
         </View>

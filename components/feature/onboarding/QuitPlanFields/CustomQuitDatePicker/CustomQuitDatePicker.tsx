@@ -6,7 +6,8 @@ import {
   QUIT_DATE_CONTROL_HEIGHT,
   quitStartYearOptions,
 } from "@/constants/onboarding/onboardingQuitPlan";
-import { MONTH_OPTIONS } from "@/constants/onboarding/onboardingSex";
+import { monthDropdownOptions } from "@/constants/onboarding/onboardingSex";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { QuitStartDateDraft } from "@/types/onboarding/quitStartDate";
 import { ymdDayDropdownOptions } from "@/utils/shared/dates";
 import {
@@ -28,6 +29,8 @@ export function CustomQuitDatePicker({
   onDayChange,
   onYearChange,
 }: Props) {
+  const { locale } = useTranslation();
+  const monthOptions = useMemo(() => monthDropdownOptions(locale), [locale]);
   const yearOptions = useMemo(() => quitStartYearOptions(), []);
   const dayOptions = useMemo(
     () => ymdDayDropdownOptions(draft.quitStartMonth, draft.quitStartYear),
@@ -45,7 +48,7 @@ export function CustomQuitDatePicker({
             fieldLabel="Month"
             value={draft.quitStartMonth}
             placeholder="Month"
-            options={MONTH_OPTIONS}
+            options={monthOptions}
             onChange={onMonthChange}
             hideLabel
             controlHeight={QUIT_DATE_CONTROL_HEIGHT}

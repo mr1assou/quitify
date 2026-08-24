@@ -38,4 +38,5 @@ export const chat = {
   editMessage: "Modifier le message",
   recordingHint: "Enregistrement… relâchez pour envoyer",
   sendingMedia: "Envoi du média…",
+  lastSeenPrefix: "vu",
 } as const;

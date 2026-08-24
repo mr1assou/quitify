@@ -24,11 +24,11 @@ export function ActiveGoalCard({
   onPress,
 }: Props) {
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const icon = goalTypeIcon(goal.type);
   const endDate =
     goal.status === "active" && goal.type === "smoke_free_days"
-      ? formatSmokeFreeGoalEndDate(goal.startedAt, goal.target, getDeviceTimezone())
+      ? formatSmokeFreeGoalEndDate(goal.startedAt, goal.target, getDeviceTimezone(), locale)
       : null;
 
   const content = (

@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { formatLastSeenAgo } from "@/utils/community";
 
 const PREFIX_VISIBLE_MS = 2500;
@@ -18,6 +19,7 @@ type Props = {
 
 /** On enter: "last seen " shows ~2.5s, fades out, then only the time remains. */
 export function ChatLastSeenSuffix({ lastSeenAt }: Props) {
+  const { t, locale } = useTranslation();
   const [showPrefix, setShowPrefix] = useState(true);
   const prefixOpacity = useSharedValue(1);
 
@@ -46,11 +48,11 @@ export function ChatLastSeenSuffix({ lastSeenAt }: Props) {
           style={prefixStyle}
           className="text-xs text-muted-foreground dark:text-d-muted"
         >
-          last seen{" "}
+          {t("chat.lastSeenPrefix")}{" "}
         </Animated.Text>
       ) : null}
       <Text className="text-xs text-muted-foreground dark:text-d-muted" numberOfLines={1}>
-        {formatLastSeenAgo(lastSeenAt)}
+        {formatLastSeenAgo(lastSeenAt, locale)}
       </Text>
     </View>
   );

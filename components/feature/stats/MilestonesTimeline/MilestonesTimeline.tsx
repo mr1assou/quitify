@@ -4,6 +4,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Card } from "@/components/ui/Card";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { JourneyMilestone } from "@/types/stats/statsDashboard";
 import { formatDate } from "@/utils/shared/format";
 
@@ -13,6 +14,7 @@ type Props = {
 
 export function MilestonesTimeline({ milestones }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Animated.View entering={FadeInDown.duration(420)}>
@@ -23,10 +25,10 @@ export function MilestonesTimeline({ milestones }: Props) {
           </View>
           <View className="flex-1">
             <Text className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
-              Milestones
+              {t("stats.milestonesTitle")}
             </Text>
             <Text className="mt-0.5 text-sm text-foreground dark:text-d-text">
-              Day-by-day reminders of how far you&apos;ve come.
+              {t("stats.milestonesSubtitle")}
             </Text>
           </View>
         </View>
@@ -56,6 +58,7 @@ function TimelineRow({
   isLast: boolean;
 }) {
   const { colors } = useTheme();
+  const { t, locale } = useTranslation();
   return (
     <View className="flex-row">
       <View className="items-center" style={{ width: 28 }}>
@@ -93,7 +96,8 @@ function TimelineRow({
           {milestone.description}
         </Text>
         <Text className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground dark:text-d-muted">
-          {milestone.reached ? "Reached" : "Unlocks"} · {formatDate(milestone.unlocksAt)}
+          {milestone.reached ? t("stats.milestoneReached") : t("stats.milestoneUnlocks")} ·{" "}
+          {formatDate(milestone.unlocksAt, locale)}
         </Text>
       </View>
     </View>

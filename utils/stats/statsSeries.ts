@@ -13,23 +13,29 @@ import { MS_DAY } from "@/utils/time/ms";
 
 export { dailySavings, moneyPerCigarette } from "@/utils/stats/quitImpact";
 
-function shortWeekday(ts: number) {
-  return new Date(ts).toLocaleDateString(undefined, { weekday: "short" });
+function shortWeekday(ts: number, locale?: string) {
+  return new Date(ts).toLocaleDateString(locale, { weekday: "short" });
 }
 
-function shortMonthDay(ts: number) {
-  return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+function shortMonthDay(ts: number, locale?: string) {
+  return new Date(ts).toLocaleDateString(locale, { month: "short", day: "numeric" });
 }
 
-function seriesLabel(range: StatsRange, index: number, dayCount: number, dayStart: number): string {
-  if (range === "7d") return shortWeekday(dayStart);
+function seriesLabel(
+  range: StatsRange,
+  index: number,
+  dayCount: number,
+  dayStart: number,
+  locale?: string,
+): string {
+  if (range === "7d") return shortWeekday(dayStart, locale);
   if (range === "30d") {
     return index === 0 || index === dayCount - 1 || index % 6 === 0
-      ? shortMonthDay(dayStart)
+      ? shortMonthDay(dayStart, locale)
       : "";
   }
   return index === 0 || index === dayCount - 1 || index % 14 === 0
-    ? shortMonthDay(dayStart)
+    ? shortMonthDay(dayStart, locale)
     : "";
 }
 
@@ -52,6 +58,7 @@ export function buildSavingsSeries(
   profile: UserProfile,
   range: StatsRange,
   now: number,
+  locale?: string,
 ): SeriesPoint[] {
   const perDay = dailySavings(profile);
   const quitDate = profile.quitDate;
@@ -68,7 +75,7 @@ export function buildSavingsSeries(
     const value = (activeMs / MS_DAY) * perDay;
 
     points.push({
-      label: seriesLabel(range, i, dayCount, dayStart),
+      label: seriesLabel(range, i, dayCount, dayStart, locale),
       value,
       ts: dayStart,
     });

@@ -29,13 +29,16 @@ export function StreakHero({
   currencySymbol,
 }: Props) {
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const now = useNow(1000);
   const streakLabel = useMemo(
     () => formatCurrentStreak(streakStart, now),
     [streakStart, now],
   );
-  const streakSinceLabel = useMemo(() => formatDate(streakStart), [streakStart]);
+  const streakSinceLabel = useMemo(
+    () => formatDate(streakStart, locale),
+    [streakStart, locale],
+  );
 
   const moneyDisplay = `${currencySymbol}${moneySaved.toLocaleString(undefined, {
     minimumFractionDigits: moneySaved < 100 ? 2 : 0,

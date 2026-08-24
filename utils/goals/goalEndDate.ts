@@ -11,13 +11,14 @@ export function computeSmokeFreeGoalEndAtIso(
   return new Date(startMs + targetDays * MS_DAY).toISOString();
 }
 
-/** Formats the goal end date and time in the user's timezone. */
+/** Formats the goal end date and time in the user's timezone and app language. */
 export function formatSmokeFreeGoalEndDate(
   startedAt: string,
   targetDays: number,
   timeZone: string,
+  locale?: string,
 ): string | null {
   const iso = computeSmokeFreeGoalEndAtIso(startedAt, targetDays);
   if (!iso) return null;
-  return formatUtcIsoInTimezone(iso, timeZone);
+  return formatUtcIsoInTimezone(iso, timeZone, locale);
 }

@@ -103,7 +103,7 @@ function GoalRow({
   timeZone: string;
   onPress: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const status = goalStatusLabel(row.status, t);
   const isActive = row.status === "active";
   const isCompleted = row.status === "completed";
@@ -151,7 +151,7 @@ function GoalRow({
       </Text>
 
       <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-        {formatGoalStatsTimeline(row, timeZone, t)}
+        {formatGoalStatsTimeline(row, timeZone, t, locale)}
       </Text>
     </Pressable>
   );

@@ -83,18 +83,19 @@ export function pluralize(n: number, singular: string, plural?: string): string 
   return n === 1 ? singular : (plural ?? `${singular}s`);
 }
 
-export function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString(undefined, {
+/** Calendar date in the app language when `locale` is given (device language otherwise). */
+export function formatDate(timestamp: number, locale?: string): string {
+  return new Date(timestamp).toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
 }
 
-export function formatDateTime(timestamp: number): string {
+export function formatDateTime(timestamp: number, locale?: string): string {
   const d = new Date(timestamp);
-  return `${d.toLocaleDateString(undefined, {
+  return `${d.toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
-  })}, ${d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
+  })}, ${d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`;
 }
