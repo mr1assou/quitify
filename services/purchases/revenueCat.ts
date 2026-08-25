@@ -10,6 +10,7 @@ import Purchases, {
   type PurchasesStoreProduct,
   type SubscriptionOption,
 } from "react-native-purchases";
+import { AppEventsLogger } from "react-native-fbsdk-next";
 
 import {
   REVENUECAT_ANDROID_API_KEY,
@@ -33,6 +34,30 @@ import {
 let linkedAppUserId: string | null = null;
 let syncChain: Promise<void> = Promise.resolve();
 let syncGeneration = 0;
+
+/**
+ * Passes device + Meta anonymous IDs to RevenueCat so Meta Ads can attribute purchases.
+ * Safe to call multiple times; failures are swallowed (ads attribution only).
+ */
+async function syncMetaAdsAttributionIds(): Promise<void> {
+  try {
+    await Purchases.collectDeviceIdentifiers();
+    const fbAnonId = await AppEventsLogger.getAnonymousID();
+    if (fbAnonId) {
+      await Purchases.setFBAnonymousID(fbAnonId);
+    }
+    if (__DEV__) {
+      console.log(
+        "[revenuecat] Meta attribution ids synced",
+        fbAnonId ? "(fbAnonId set)" : "(fbAnonId missing)",
+      );
+    }
+  } catch (error) {
+    if (__DEV__) {
+      console.warn("[revenuecat] Meta attribution sync failed", error);
+    }
+  }
+}
 
 function enqueueRevenueCatSync(task: () => Promise<void>): Promise<void> {
   syncChain = syncChain.then(task, task);
@@ -81,6 +106,7 @@ export function ensureRevenueCatConfigured(appUserId: number): Promise<void> {
     Purchases.configure({ apiKey, appUserID: id });
     markRevenueCatConfigured();
     linkedAppUserId = id;
+    await syncMetaAdsAttributionIds();
     if (__DEV__) {
       console.log(`[revenuecat] configured for user ${id}`);
     }
@@ -122,6 +148,7 @@ export async function syncRevenueCatUser(userId: number | undefined): Promise<vo
         if (__DEV__) {
           console.log(`[revenuecat] already linked as ${appUserId}`);
         }
+        await syncMetaAdsAttributionIds();
         return;
       }
 
@@ -129,6 +156,7 @@ export async function syncRevenueCatUser(userId: number | undefined): Promise<vo
       if (isSyncStale(generation)) return;
 
       linkedAppUserId = appUserId;
+      await syncMetaAdsAttributionIds();
       if (__DEV__) {
         console.log(
           `[revenuecat] linked user ${appUserId} (created=${created}, rcId=${customerInfo.originalAppUserId})`,

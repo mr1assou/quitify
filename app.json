@@ -81,8 +81,8 @@
           "clientToken": "5bb14ffdd48e8b4c232f59979f9203e0",
           "displayName": "Quitify",
           "scheme": "fb3949821035154808",
-          "advertiserIDCollectionEnabled": false,
-          "autoLogAppEventsEnabled": false,
+          "advertiserIDCollectionEnabled": true,
+          "autoLogAppEventsEnabled": true,
           "isAutoInitEnabled": true
         }
       ],
