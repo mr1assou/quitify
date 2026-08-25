@@ -7,8 +7,6 @@ import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { ONBOARDING_OTHER_ID } from "@/constants/onboarding/onboardingOther";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
-import { trackOnboardingStepComplete } from "@/services/analytics";
 import type { MotivationLevel } from "@/types/onboarding/onboarding";
 
 export default function Motivation() {
@@ -30,7 +28,6 @@ export default function Motivation() {
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {
-        trackOnboardingStepComplete(ONBOARDING_STEP.motivation);
         safeRouter.push("/onboarding/quit-attempts");
       }}
       showBack

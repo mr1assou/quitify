@@ -18,7 +18,6 @@ import { usePostSignupPaywall } from "@/hooks/onboarding/usePostSignupPaywall";
 import { useUserGoals } from "@/hooks/goals/useUserGoals";
 import { usePostPaywallNotificationPrompt } from "@/hooks/push/usePostPaywallNotificationPrompt";
 import { useStats } from "@/hooks/stats/useStats";
-import { trackHomeOpenAfterOnboardingIfPending } from "@/services/analytics";
 import { getStreakElapsedMs } from "@/utils/streak/elapsedBreakdown";
 import { smokeFreeDaysInProgressFromStreakStart } from "@/utils/goals/goalStreakProgress";
 import { currencySymbol } from "@/utils/shared/format";
@@ -35,8 +34,6 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      trackHomeOpenAfterOnboardingIfPending();
-
       if (!state.account && gates.shouldShowSignup) {
         setFlag("hasSeenSignupPrompt", true);
         const t = setTimeout(() => safeRouter.push("/signup"), 250);

@@ -22,8 +22,6 @@ import {
   isCreateProfileStepComplete,
 } from "@/utils/onboarding/createProfileOnboarding";
 import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
-import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
-import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function OnboardingCreateProfile() {
   const { t } = useTranslation();
@@ -68,7 +66,6 @@ export default function OnboardingCreateProfile() {
             setAttemptedContinue(true);
             return;
           }
-          trackOnboardingStepComplete(ONBOARDING_STEP.create_profile);
           safeRouter.push("/onboarding/nicotine-consumption");
         }}
         showBack

@@ -3,7 +3,7 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 type OpenMode = "push" | "pushStack";
 
-/** Opens paywall with a tracked `source` query param. */
+/** Opens paywall with a `source` query param (entry point). */
 export function openPaywall(
   source: PaywallSource,
   mode: OpenMode = "push",

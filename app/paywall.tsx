@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
@@ -14,17 +14,11 @@ import { PaywallPlanOption } from "@/components/paywall/PaywallPlanOption";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
 import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website";
-import { parsePaywallSource } from "@/constants/analytics/paywall";
 import { useApp } from "@/context/AppContext";
 import type { PaywallPlanId } from "@/constants/paywall/paywallPlans";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { usePaywallPurchase } from "@/hooks/paywall/usePaywallPurchase";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import {
-  trackPaywallDismiss,
-  trackPaywallPurchaseSuccess,
-  trackPaywallView,
-} from "@/services/analytics";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
@@ -46,22 +40,13 @@ export default function Paywall() {
   const { setFlag } = useApp();
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
-  const { source: sourceParam } = useLocalSearchParams<{ source?: string }>();
-  const source = parsePaywallSource(
-    Array.isArray(sourceParam) ? sourceParam[0] : sourceParam,
-  );
   const { plans } = usePaywallPlans();
   const { purchasePlan, restore, busy, purchasing, restoring } = usePaywallPurchase();
   const [selectedPlan, setSelectedPlan] = useState<PaywallPlanId>("yearly");
   const comparisonTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const convertedRef = useRef(false);
-  const dismissTrackedRef = useRef(false);
   /** True once close/back is routing into the spin offer (allows navigation to proceed). */
   const openingComparisonRef = useRef(false);
-
-  useEffect(() => {
-    trackPaywallView(source);
-  }, [source]);
 
   // Prefetch special offer while the paywall is open so close can show spin instantly.
   useEffect(() => {
@@ -72,16 +57,12 @@ export default function Paywall() {
   // so the deferred notification prompt is never lost.
   useEffect(() => {
     return () => {
-      if (!convertedRef.current && !dismissTrackedRef.current) {
-        dismissTrackedRef.current = true;
-        trackPaywallDismiss(source);
-      }
       // Don't mark complete while we're opening the spin screen — that screen owns completion.
       if (!openingComparisonRef.current) {
         void markPostPaywallFlowComplete();
       }
     };
-  }, [source]);
+  }, []);
 
   const selectedPlanHasTrial =
     plans.find((plan) => plan.id === selectedPlan)?.trial != null;
@@ -90,12 +71,6 @@ export default function Paywall() {
     : selectedPlanHasTrial
       ? t("paywall.tryFree")
       : t("paywall.subscribe");
-
-  const trackDismissOnce = useCallback(() => {
-    if (convertedRef.current || dismissTrackedRef.current) return;
-    dismissTrackedRef.current = true;
-    trackPaywallDismiss(source);
-  }, [source]);
 
   const finishPaywall = async () => {
     if (comparisonTimerRef.current) {
@@ -111,7 +86,6 @@ export default function Paywall() {
     if (convertedRef.current || openingComparisonRef.current) return;
     openingComparisonRef.current = true;
 
-    trackDismissOnce();
     setFlag("hasSeenPaywall", true);
 
     const canGoBack = router.canGoBack();
@@ -142,7 +116,7 @@ export default function Paywall() {
         }
       }, canGoBack ? PAYWALL_MODAL_DISMISS_MS : 0);
     })();
-  }, [setFlag, trackDismissOnce]);
+  }, [setFlag]);
 
   // Close button and system/gesture back both open the spin screen (unless user purchased).
   useEffect(() => {
@@ -159,11 +133,6 @@ export default function Paywall() {
     if (!premium) return;
 
     convertedRef.current = true;
-    trackPaywallPurchaseSuccess({
-      source,
-      planId: selectedPlan,
-      purchaseType: "purchase",
-    });
     await finishPaywall();
   };
 
@@ -172,10 +141,6 @@ export default function Paywall() {
     if (!premium) return;
 
     convertedRef.current = true;
-    trackPaywallPurchaseSuccess({
-      source,
-      purchaseType: "restore",
-    });
     await finishPaywall();
   };
 

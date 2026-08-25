@@ -17,8 +17,6 @@ import {
   getNicotineFieldErrors,
   isNicotineConsumptionStepComplete,
 } from "@/utils/onboarding/nicotineOnboarding";
-import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
-import { trackOnboardingStepComplete } from "@/services/analytics";
 
 export default function NicotineConsumptionOnboarding() {
   const { t } = useTranslation();
@@ -60,7 +58,6 @@ export default function NicotineConsumptionOnboarding() {
             setAttemptedContinue(true);
             return;
           }
-          trackOnboardingStepComplete(ONBOARDING_STEP.nicotine);
           safeRouter.push("/onboarding/analyzing");
         }}
         showBack

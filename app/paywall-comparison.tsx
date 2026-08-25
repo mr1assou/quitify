@@ -15,12 +15,8 @@ import { PaywallSpinWheel } from "@/components/paywall/PaywallSpinWheel";
 import { Button } from "@/components/ui/Button";
 import { getThemeColors } from "@/constants/app/theme";
 import { WEBSITE_PRIVACY_URL, WEBSITE_TERMS_URL } from "@/constants/app/website";
-import { PAYWALL_SOURCE } from "@/constants/analytics/paywall";
 import { useSpecialPaywallOffer } from "@/hooks/paywall/useSpecialPaywallOffer";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import {
-  trackPaywallPurchaseSuccess,
-} from "@/services/analytics";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
@@ -56,11 +52,6 @@ export default function PaywallOffer() {
     const premium = await purchaseOffer();
     if (!premium) return;
 
-    trackPaywallPurchaseSuccess({
-      source: PAYWALL_SOURCE.premium_gate,
-      planId: "yearly",
-      purchaseType: "purchase",
-    });
     await markPostPaywallFlowComplete();
     safeRouter.back();
   };

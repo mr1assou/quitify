@@ -7,8 +7,6 @@ import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import { ONBOARDING_OTHER_ID } from "@/constants/onboarding/onboardingOther";
 import { useOnboarding } from "@/context/OnboardingContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
-import { ONBOARDING_STEP } from "@/constants/analytics/onboarding";
-import { trackOnboardingStepComplete } from "@/services/analytics";
 import type { PriorQuitAttempts } from "@/types/onboarding/onboarding";
 
 export default function QuitAttempts() {
@@ -30,7 +28,6 @@ export default function QuitAttempts() {
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {
-        trackOnboardingStepComplete(ONBOARDING_STEP.quit_attempts);
         safeRouter.push("/onboarding/interests");
       }}
       showBack

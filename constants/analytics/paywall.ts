@@ -1,7 +1,4 @@
-/**
- * Paywall funnel Analytics.
- * Use one event name + `source` / `plan_id` params to measure attraction.
- */
+/** Paywall entry points — kept as query `source` for funnel routing / future ads SDK. */
 export const PAYWALL_SOURCE = {
   post_signup: "post_signup",
   day5: "day5",
@@ -13,14 +10,6 @@ export const PAYWALL_SOURCE = {
 
 export type PaywallSource =
   (typeof PAYWALL_SOURCE)[keyof typeof PAYWALL_SOURCE];
-
-export const PAYWALL_ANALYTICS_EVENT = {
-  paywallView: "paywall_view",
-  paywallPurchaseSuccess: "paywall_purchase_success",
-  paywallDismiss: "paywall_dismiss",
-} as const;
-
-export type PaywallPurchaseType = "purchase" | "restore";
 
 export function parsePaywallSource(value: unknown): PaywallSource {
   if (

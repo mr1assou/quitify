@@ -7,7 +7,6 @@ import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStor
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import { syncOnboardingToBackend } from "./syncOnboardingApi";
 import type { GoogleAuthResponse } from "./types";
-import { trackUserSignup } from "@/services/analytics";
 
 type CompleteHandlers = {
   setAccount: (account: UserAccount) => void;
@@ -46,10 +45,6 @@ export async function finalizeGoogleAuth(
 
     handlers.setAccount(session.account);
     handlers.completeOnboarding(session.profile);
-
-    if (auth.isNewUser) {
-      trackUserSignup("google", session.account.userId);
-    }
   })().finally(() => {
     finishPromise = null;
   });
