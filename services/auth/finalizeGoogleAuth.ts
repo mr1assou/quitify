@@ -4,6 +4,8 @@ import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayloa
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
+import { logMetaCompleteRegistration } from "@/services/analytics/metaEvents";
+
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import { syncOnboardingToBackend } from "./syncOnboardingApi";
 import type { GoogleAuthResponse } from "./types";
@@ -45,6 +47,10 @@ export async function finalizeGoogleAuth(
 
     handlers.setAccount(session.account);
     handlers.completeOnboarding(session.profile);
+
+    if (auth.isNewUser) {
+      logMetaCompleteRegistration("google");
+    }
   })().finally(() => {
     finishPromise = null;
   });
