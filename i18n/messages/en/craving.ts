@@ -27,7 +27,7 @@ export const craving = {
   slipCountTitle: "About how many did you smoke?",
   slipCountSubtitle: "Enter your best estimate (minimum {{min}} cigarettes).",
   slipCountLabel: "Cigarettes smoked",
-  slipCountError: "Enter a whole number between {{min}} and {{max}}.",
+  slipCountError: "Enter a whole number of at least {{min}}.",
   slipFreedomPoints: "Your Freedom Points",
   slipBadges: "Your badges",
   slipRank: "Your rank",

@@ -5,7 +5,6 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Button } from "@/components/ui/Button";
 import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import {
-  RELAPSE_MAX_CIGARETTE_COUNT,
   RELAPSE_MIN_CIGARETTE_COUNT,
   isValidRelapseCigaretteCount,
   parseRelapseCigaretteCount,
@@ -78,7 +77,6 @@ export function CigaretteCountStep({ onSelect, isSubmitting }: Props) {
           <Text className="px-1 text-sm font-medium text-alert">
             {t("craving.slipCountError", {
               min: RELAPSE_MIN_CIGARETTE_COUNT,
-              max: RELAPSE_MAX_CIGARETTE_COUNT,
             })}
           </Text>
         ) : null}

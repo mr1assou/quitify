@@ -4,8 +4,6 @@ export const LAPSE_CIGARETTE_COUNT = 1;
 /** Relapse requires an approximate count — at least two cigarettes. */
 export const RELAPSE_MIN_CIGARETTE_COUNT = 2;
 
-export const RELAPSE_MAX_CIGARETTE_COUNT = 100;
-
 export function parseRelapseCigaretteCount(raw: string): number | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;
@@ -20,7 +18,6 @@ export function isValidRelapseCigaretteCount(count: number | null): count is num
   return (
     count != null &&
     Number.isInteger(count) &&
-    count >= RELAPSE_MIN_CIGARETTE_COUNT &&
-    count <= RELAPSE_MAX_CIGARETTE_COUNT
+    count >= RELAPSE_MIN_CIGARETTE_COUNT
   );
 }
