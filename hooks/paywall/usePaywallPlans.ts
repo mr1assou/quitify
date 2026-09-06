@@ -6,10 +6,7 @@ import {
   fetchPaywallOffering,
   fetchPaywallTrialEligibility,
 } from "@/services/purchases";
-import {
-  buildPaywallPlansFromOffering,
-  buildPaywallPlansFromUsd,
-} from "@/utils/paywall/buildPaywallPlans";
+import { buildPaywallPlansFromOffering } from "@/utils/paywall/buildPaywallPlans";
 
 type PaywallPlansState = {
   plans: PaywallPlanDisplay[];
@@ -18,18 +15,18 @@ type PaywallPlansState = {
   usesStorePrices: boolean;
 };
 
-/** Paywall prices from the store when logged in; USD fallback otherwise. */
+/** Paywall prices from RevenueCat / the store only — no hardcoded USD fallback. */
 export function usePaywallPlans(): PaywallPlansState {
   const { state, isHydrated } = useApp();
   const userId = state.account?.userId;
 
-  const [plans, setPlans] = useState<PaywallPlanDisplay[]>(buildPaywallPlansFromUsd);
-  const [loading, setLoading] = useState(false);
+  const [plans, setPlans] = useState<PaywallPlanDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
   const [usesStorePrices, setUsesStorePrices] = useState(false);
 
   useEffect(() => {
     if (!isHydrated || userId == null) {
-      setPlans(buildPaywallPlansFromUsd());
+      setPlans([]);
       setUsesStorePrices(false);
       setLoading(false);
       return;
@@ -49,12 +46,12 @@ export function usePaywallPlans(): PaywallPlansState {
           setPlans(buildPaywallPlansFromOffering(offering, trialEligibility));
           setUsesStorePrices(true);
         } else {
-          setPlans(buildPaywallPlansFromUsd());
+          setPlans([]);
           setUsesStorePrices(false);
         }
       } catch {
         if (!cancelled) {
-          setPlans(buildPaywallPlansFromUsd());
+          setPlans([]);
           setUsesStorePrices(false);
         }
       } finally {

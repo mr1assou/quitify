@@ -24,6 +24,8 @@ export const settings = {
   logout: "Se déconnecter",
   unlockVip: "Débloquer le mode VIP",
   vipOffer: "Voir l'offre complète à {{price}}/mois.",
+  vipOfferLoading: "Chargement de votre offre…",
+  vipOfferGeneric: "Voir l'offre VIP complète.",
   resetErrorTitle: "Impossible de réinitialiser le parcours",
   resetErrorMessage: "Veuillez réessayer dans un instant.",
 } as const;

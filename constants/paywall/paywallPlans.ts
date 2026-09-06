@@ -1,13 +1,11 @@
 export type PaywallPlanId = "monthly" | "yearly";
 
-/** Subscription list prices in USD (fallback when store prices are unavailable). */
-export const PAYWALL_PLANS_USD = [
+/** Plan metadata only — prices always come from RevenueCat / the store. */
+export const PAYWALL_PLAN_META = [
   {
     id: "monthly" as const,
     label: "Monthly plan",
-    rightAmountUsd: 8.99,
     rightPeriod: "/mo",
-    subAmountUsd: null,
     subPeriod: null,
     trial: "3 days free trial",
     recommended: false,
@@ -15,9 +13,7 @@ export const PAYWALL_PLANS_USD = [
   {
     id: "yearly" as const,
     label: "Yearly plan",
-    rightAmountUsd: 4.17,
     rightPeriod: "/mo",
-    subAmountUsd: 49.99,
     subPeriod: "/year",
     trial: "7 days free trial",
     recommended: true,

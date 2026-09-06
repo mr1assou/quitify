@@ -214,7 +214,7 @@ export default function Paywall() {
                 label={primaryCtaLabel}
                 size="md"
                 fullWidth
-                disabled={busy}
+                disabled={busy || plans.length === 0}
                 onPress={() => void handlePrimaryCta()}
               />
             </View>

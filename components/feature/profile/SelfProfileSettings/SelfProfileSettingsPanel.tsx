@@ -44,14 +44,14 @@ export function SelfProfileSettings({
   const { t, locale } = useTranslation();
   const resetJourney = useResetJourney();
   const pushSettings = usePushNotificationsSettings();
-  const { plans } = usePaywallPlans();
+  const { plans, loading: plansLoading } = usePaywallPlans();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
   const [habitModalOpen, setHabitModalOpen] = useState(false);
   const [usernameModalOpen, setUsernameModalOpen] = useState(false);
 
   const displayUsername = profile.name?.trim() || t("settings.notSet");
   const yearlyPlan = plans.find((plan) => plan.id === "yearly");
-  const vipMonthlyPrice = yearlyPlan?.rightPrice ?? "$4.17";
+  const vipMonthlyPrice = yearlyPlan?.rightPrice ?? null;
 
   const accountRows: ListRow[] = isSignedIn
     ? [
@@ -165,7 +165,11 @@ export function SelfProfileSettings({
               <Text className="ml-2 text-base font-bold text-white">{t("settings.unlockVip")}</Text>
             </View>
             <Text className="mt-1 text-xs text-white opacity-80">
-              {t("settings.vipOffer", { price: vipMonthlyPrice })}
+              {vipMonthlyPrice != null
+                ? t("settings.vipOffer", { price: vipMonthlyPrice })
+                : plansLoading
+                  ? t("settings.vipOfferLoading")
+                  : t("settings.vipOfferGeneric")}
             </Text>
           </View>
         </Pressable>

@@ -24,6 +24,8 @@ export const settings = {
   logout: "Log out",
   unlockVip: "Unlock VIP mode",
   vipOffer: "See the full {{price}}/month offer.",
+  vipOfferLoading: "Loading your offer…",
+  vipOfferGeneric: "See the full VIP offer.",
   resetErrorTitle: "Could not reset journey",
   resetErrorMessage: "Please try again in a moment.",
 } as const;
