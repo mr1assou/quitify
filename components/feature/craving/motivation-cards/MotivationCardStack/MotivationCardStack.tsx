@@ -30,7 +30,7 @@ type Props = {
   /** When set, swipes that would land on a disallowed index are cancelled. */
   canGoToIndex?: (nextIndex: number) => boolean;
   onSwipeBlocked?: () => void;
-  /** Footer total override (e.g. show 2 instead of full catalog for free tier). */
+  /** Footer total override (defaults to quotes.length). Free tier still only unlocks 2 cards. */
   displayTotal?: number;
 };
 

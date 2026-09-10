@@ -2,7 +2,6 @@ import { useCallback, useEffect } from "react";
 
 import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import {
-  FREE_SWIPEABLE_CARD_COUNT,
   isSwipeableCardIndexUnlocked,
   maxUnlockedSwipeableCardIndex,
 } from "@/utils/premium/swipeableCardAccess";
@@ -46,6 +45,7 @@ export function usePremiumLimitedSwipeableSession(tool: SwipeableCardToolId) {
     goToIndex,
     canGoToIndex,
     requirePremium,
-    displayTotal: isPremium ? session.quotes.length : FREE_SWIPEABLE_CARD_COUNT,
+    /** Always show full catalog size (e.g. 2/1500); free users still only unlock 2 cards. */
+    displayTotal: session.quotes.length,
   };
 }
