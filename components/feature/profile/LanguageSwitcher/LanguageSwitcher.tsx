@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,7 +16,6 @@ export function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
 
   const choose = (next: AppLocale) => {
-    Haptics.selectionAsync().catch(() => {});
     if (next !== locale) setLocale(next);
     setOpen(false);
   };
@@ -32,7 +30,6 @@ export function LanguageSwitcher() {
             label: t("settings.language"),
             value: language.nativeName,
             onPress: () => {
-              Haptics.selectionAsync().catch(() => {});
               setOpen(true);
             },
           },

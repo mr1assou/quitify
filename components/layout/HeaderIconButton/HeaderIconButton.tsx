@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -26,10 +25,7 @@ export function HeaderIconButton({
   return (
     <Pressable
       accessibilityLabel={accessibilityLabel}
-      onPress={() => {
-        Haptics.selectionAsync().catch(() => {});
-        onPress();
-      }}
+      onPress={onPress}
       className={`relative h-11 w-11 items-center justify-center rounded-full active:opacity-80 ${className}`}
     >
       <Ionicons name={icon} size={22} color={iconColor ?? colors.foreground} />

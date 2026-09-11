@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, View } from "react-native";
 import Animated, {
   Easing,
@@ -40,7 +39,6 @@ export function ThemeToggleButton() {
         : t("theme.a11ySystem");
 
   const onPress = () => {
-    Haptics.selectionAsync().catch(() => {});
     rotate.value = withSequence(
       withTiming(0.5, { duration: 280, easing: Easing.out(Easing.cubic) }),
       withTiming(1, { duration: 0 }),

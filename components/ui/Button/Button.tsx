@@ -61,7 +61,7 @@ export function Button({
   fullWidth = false,
   leading,
   trailing,
-  haptic = true,
+  haptic = false,
   preventDoublePress = true,
   loading = false,
   disabled,

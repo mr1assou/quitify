@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import * as Haptics from "expo-haptics";
 import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -43,7 +42,6 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             canPreventDefault: true,
           });
           if (!focused && !event.defaultPrevented) {
-            Haptics.selectionAsync().catch(() => {});
             navigation.navigate(route.name);
           }
         };

@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
 import { Switch, Text, View } from "react-native";
 import Animated, {
@@ -63,7 +62,6 @@ export function PushNotificationsToggle({
   }));
 
   const handleChange = (value: boolean) => {
-    Haptics.selectionAsync().catch(() => {});
     onValueChange(value);
   };
 

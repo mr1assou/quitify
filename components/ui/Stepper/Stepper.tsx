@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -19,7 +18,6 @@ export function Stepper({ value, onChange, min = 0, max = 999, step = 1, suffix 
   const set = (next: number) => {
     const clamped = Math.min(max, Math.max(min, next));
     if (clamped !== value) {
-      Haptics.selectionAsync().catch(() => {});
       onChange(clamped);
     }
   };

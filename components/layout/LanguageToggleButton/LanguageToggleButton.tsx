@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { LANGUAGES } from "@/constants/i18n/languages";
@@ -18,7 +17,6 @@ export function LanguageToggleButton() {
   const { locale, setLocale, t, language } = useTranslation();
 
   const onPress = () => {
-    Haptics.selectionAsync().catch(() => {});
     setLocale(nextLocale(locale));
   };
 

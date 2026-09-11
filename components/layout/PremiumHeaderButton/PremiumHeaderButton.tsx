@@ -1,5 +1,4 @@
 import { Image } from "expo-image";
-import * as Haptics from "expo-haptics";
 import { Pressable } from "react-native";
 
 import { VIP_IMAGE } from "@/constants/app/assets";
@@ -16,10 +15,7 @@ export function PremiumHeaderButton({ isPremium, onPress }: Props) {
   return (
     <Pressable
       accessibilityLabel={isPremium ? t("profile.vipMember") : t("layout.upgradeVip")}
-      onPress={() => {
-        Haptics.selectionAsync().catch(() => {});
-        onPress();
-      }}
+      onPress={onPress}
       className="h-11 items-center justify-center active:opacity-80"
       style={{ opacity: isPremium ? 1 : 0.92 }}
     >

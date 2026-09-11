@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { Pressable, Text } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
@@ -27,7 +26,6 @@ export function Chip({
     >
       <Pressable
         onPress={() => {
-          Haptics.selectionAsync().catch(() => {});
           onPress?.();
         }}
         className={[
