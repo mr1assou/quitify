@@ -1,6 +1,5 @@
 import { isFirstStepBadge } from "@/constants/progress/badges";
 import type { BadgeWithStatus, ProgressSummary } from "@/types/progress/progress";
-import { resolveHighestUnlockedBadgeId } from "@/utils/progress/badges";
 
 export type AchievementBadgeMetric = {
   /** 0..1 progress toward the next badge tier */
@@ -36,16 +35,14 @@ export function computeNextBadgeDisplayProgress(nextBadge: BadgeWithStatus): num
 /** Badge ring + FP total for the stats screen header. */
 export function computeAchievementBadgeSummary(
   summary: ProgressSummary,
-  isPremium = false,
 ): AchievementBadgeSummary {
-  const badgeProgress = summary.currentBadgeProgress;
-  const earnedBadgeId = resolveHighestUnlockedBadgeId(summary.badges, isPremium);
   const currentBadge = summary.currentBadge;
-  const currentBadgeId = earnedBadgeId ?? "first-step";
+  // Image + caption must use the same earned badge (no VIP filter).
+  const currentBadgeId = currentBadge?.id ?? "first-step";
 
   return {
     badge: {
-      progress: badgeProgress,
+      progress: summary.currentBadgeProgress,
       label: "Current badge",
       caption: currentBadge?.name ?? "—",
     },

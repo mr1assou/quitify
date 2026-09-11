@@ -59,7 +59,7 @@ export default function Stats() {
   );
 
   const badgeSummary = progress
-    ? computeAchievementBadgeSummary(progress, isPremium)
+    ? computeAchievementBadgeSummary(progress)
     : null;
 
   const displayRank = useMemo(() => {
