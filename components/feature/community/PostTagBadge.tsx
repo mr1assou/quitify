@@ -12,10 +12,18 @@ export function PostTagBadge({ tagId, className }: Props) {
 
   return (
     <View
-      className={`self-start rounded-full px-4 py-1.5 ${className ?? ""}`}
-      style={{ backgroundColor: tag.backgroundColor }}
+      className={`rounded-full px-4 py-1.5 ${className ?? ""}`}
+      style={{
+        alignSelf: "flex-start",
+        flexShrink: 0,
+        backgroundColor: tag.backgroundColor,
+      }}
     >
-      <Text className="text-xs font-semibold" style={{ color: tag.textColor }}>
+      <Text
+        numberOfLines={1}
+        className="text-xs font-semibold"
+        style={{ color: tag.textColor, flexShrink: 0 }}
+      >
         {tag.label}
       </Text>
     </View>
