@@ -21,6 +21,9 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
   const { t } = useTranslation();
   const isPremium = useIsPremium();
   const { requirePremium } = usePremiumGate();
+  /** Global rank + Freedom Points are VIP-only on any profile. */
+  const lockVipOnlyStats = !isPremium;
+  /** Streak tiles stay visible on your own profile; locked when viewing others as free. */
   const lockOtherUserVipStats = !profile.isCurrentUser && !isPremium;
 
   /** Snapshot at open — streak tiles stay fixed (no live countdown). */
@@ -61,6 +64,8 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.accent}
           label={t("profile.globalRank")}
           value={`#${formatNumber(profile.rank)}`}
+          locked={lockVipOnlyStats}
+          onLockedPress={requirePremium}
           vipA11y={t("profile.vipFeatureTap", { label: t("profile.globalRank") })}
         />
         <StatTile
@@ -68,7 +73,7 @@ export function UserProfileStatsGrid({ profile, streak }: Props) {
           tint={colors.primary}
           label={t("profile.freedomPoints")}
           value={formatNumber(profile.freedomPoints)}
-          locked={lockOtherUserVipStats}
+          locked={lockVipOnlyStats}
           onLockedPress={requirePremium}
           vipA11y={t("profile.vipFeatureTap", { label: t("profile.freedomPoints") })}
         />
