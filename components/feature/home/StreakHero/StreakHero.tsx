@@ -30,9 +30,9 @@ export function StreakHero({
 }: Props) {
   const { colors } = useTheme();
   const { t, locale } = useTranslation();
-  const now = useNow(1000);
+  const now = useNow(30_000);
   const streakLabel = useMemo(
-    () => formatCurrentStreak(streakStart, now),
+    () => formatCurrentStreak(streakStart, now, { includeSeconds: false }),
     [streakStart, now],
   );
   const streakSinceLabel = useMemo(
@@ -62,7 +62,7 @@ export function StreakHero({
       </View>
 
       <Text
-        className="mt-4 px-1 text-center text-2xl font-bold leading-9 tabular-nums text-foreground dark:text-d-text"
+        className="mt-4 px-1 text-center text-5xl font-bold leading-[52px] tabular-nums text-foreground dark:text-d-text"
         accessibilityLabel={`Current streak ${streakLabel}, attempt ${attemptNumber}`}
       >
         {streakLabel}
