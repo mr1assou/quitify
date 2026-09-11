@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -26,7 +25,6 @@ export function GoalDetailModal({ goal, currency, timeZone, onClose }: Props) {
   const insets = useSafeAreaInsets();
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 

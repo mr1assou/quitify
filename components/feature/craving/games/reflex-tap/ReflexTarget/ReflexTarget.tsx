@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { memo, useCallback, useEffect, useState } from "react";
 import { Platform, Pressable, View } from "react-native";
 import Animated, {
@@ -60,13 +59,6 @@ function ReflexTargetImpl({ target, areaWidth, areaHeight, onTap }: Props) {
   const handlePress = useCallback(() => {
     if (tapped) return;
     setTapped(true);
-    if (target.type.kind === "good") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    } else {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(
-        () => {},
-      );
-    }
     onTap(target.id, target.type.kind);
     scale.value = withTiming(1.45, {
       duration: 160,

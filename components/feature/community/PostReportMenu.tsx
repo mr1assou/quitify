@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
@@ -61,14 +60,10 @@ export function PostReportMenu({ postId }: Props) {
   const [modal, setModal] = useState<ReportModalState | null>(null);
 
   const closeModal = () => {
-    Haptics.selectionAsync().catch(() => {});
     setModal(null);
   };
 
   const onConfirmReport = () => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(
-      () => {},
-    );
     setModal({ type: "reporting" });
     void reportPostApi(postId)
       .then(() => setModal({ type: "done" }))

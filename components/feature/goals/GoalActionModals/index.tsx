@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -23,12 +22,10 @@ export function GoalActionModals({ state, onClose, onConfirmDelete }: Props) {
 
   const handleClose = () => {
     if (!canDismiss) return;
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
   const handleConfirmDelete = () => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     onConfirmDelete?.();
   };
 

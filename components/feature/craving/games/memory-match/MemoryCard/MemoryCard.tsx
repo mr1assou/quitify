@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, {
@@ -90,7 +89,6 @@ export function MemoryCard({ card, size, disabled = false, onPress }: Props) {
 
   const handlePress = () => {
     if (disabled || card.isFlipped || card.isMatched) return;
-    Haptics.selectionAsync().catch(() => {});
     flip.value = withTiming(1, {
       duration: FLIP_OPEN_MS,
       easing: Easing.out(Easing.cubic),

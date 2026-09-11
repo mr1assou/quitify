@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -95,9 +94,6 @@ export function UsernameEditModal({ visible, profile, onClose }: Props) {
           patchAuthor(dbAuthorId(state.account.userId), { name: displayName });
         }
 
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
-          () => {},
-        );
         onClose();
       })
       .catch((err: unknown) => {

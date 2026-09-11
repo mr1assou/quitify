@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -49,7 +48,6 @@ export function MissionTaskSwipeCard({
 
   const markDone = () => {
     if (!interactive || task.done || isToggling) return;
-    Haptics.selectionAsync().catch(() => {});
     void onToggle(task.id, true);
   };
 

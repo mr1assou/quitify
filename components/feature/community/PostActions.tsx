@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { DownvoteIcon, UpvoteIcon } from "@/components/feature/community/VoteIcons";
@@ -33,7 +32,6 @@ export function PostActions({
   const { colors, resolved } = useTheme();
 
   const handleVote = (vote: PostVote) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     onVote(vote);
   };
 
@@ -98,7 +96,6 @@ export function PostActions({
           activeColor={colors.primary}
           defaultColor={colors.mutedForeground}
           onPress={() => {
-            Haptics.selectionAsync().catch(() => {});
             onShare();
           }}
         />

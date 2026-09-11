@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import {
   Image,
   Modal,
@@ -24,12 +23,10 @@ export function RelaxSoundHeadphonesModal({ visible, onContinue, onClose }: Prop
   const imageSize = Math.min(width * 0.52, 220);
 
   const handleContinue = () => {
-    Haptics.selectionAsync().catch(() => {});
     onContinue();
   };
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 

@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Modal, Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -33,7 +32,6 @@ export function GoalDaysAheadInfoModal({ visible, daysAhead, onClose }: Props) {
   const { height: windowHeight } = useWindowDimensions();
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 

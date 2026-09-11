@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -72,14 +71,12 @@ export function ResetJourneyModals({ state, onClose, onConfirm }: Props) {
 
   const handleClose = () => {
     if (!canDismiss) return;
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
   const handleConfirm = () => {
     const payload = resolveQuitDatePayload(quitDraft);
     if (!payload) return;
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     onConfirm?.(payload);
   };
 

@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -98,9 +97,6 @@ export function HabitSettingsModal({ visible, profile, onClose }: Props) {
             freedomPoints: me.freedomPoints ?? state.account.freedomPoints,
           });
         }
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(
-          () => {},
-        );
         onClose();
       })
       .catch((err: unknown) => {

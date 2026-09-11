@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { DownvoteIcon, UpvoteIcon } from "@/components/feature/community/VoteIcons";
@@ -32,7 +31,6 @@ export function CommentVoteActions({
       : colors.foreground;
 
   const handleVote = (vote: PostVote) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     onVote(vote);
   };
 

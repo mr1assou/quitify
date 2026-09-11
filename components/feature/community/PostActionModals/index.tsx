@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -68,7 +67,6 @@ function ActionRow({
   const tint = destructive ? colors.alert : colors.primary;
 
   const handlePress = () => {
-    Haptics.selectionAsync().catch(() => {});
     onPress();
   };
 
@@ -109,12 +107,10 @@ export function PostActionModals({
 
   const handleClose = () => {
     if (!canDismiss) return;
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
   const handleConfirmDelete = () => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     onConfirmDelete?.();
   };
 

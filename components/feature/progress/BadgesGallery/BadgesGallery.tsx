@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -55,7 +54,6 @@ export function BadgesGallery({ badges }: Props) {
                   openInGrid={openInGrid}
                   delay={idx * 40}
                   onPress={() => {
-                    Haptics.selectionAsync().catch(() => {});
                     setSelectedBadge(badge);
                   }}
                 />

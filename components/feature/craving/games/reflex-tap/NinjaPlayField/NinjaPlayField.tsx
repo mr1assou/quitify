@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { PanResponder, View, type LayoutChangeEvent } from "react-native";
 import Svg, { Polyline } from "react-native-svg";
-import * as Haptics from "expo-haptics";
 
 import { NinjaFlyingObjectSprite } from "@/components/feature/craving/games/reflex-tap/NinjaFlyingObject";
 import { NinjaSliceBurst } from "@/components/feature/craving/games/reflex-tap/NinjaSliceBurst";
@@ -32,14 +31,6 @@ export function NinjaPlayField({
   onBurstDone,
 }: Props) {
   const { colors } = useTheme();
-  const lastBurstCount = useRef(0);
-
-  useEffect(() => {
-    if (bursts.length > lastBurstCount.current) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-    }
-    lastBurstCount.current = bursts.length;
-  }, [bursts.length]);
 
   const panResponder = useMemo(
     () =>

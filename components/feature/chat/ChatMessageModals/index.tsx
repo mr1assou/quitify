@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -71,7 +70,6 @@ function ActionRow({
   const tint = destructive ? colors.alert : colors.primary;
 
   const handlePress = () => {
-    Haptics.selectionAsync().catch(() => {});
     onPress();
   };
 
@@ -108,7 +106,6 @@ export function ChatMessageModals({
   if (!state) return null;
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
@@ -144,7 +141,6 @@ export function ChatMessageModals({
               icon="trash-outline"
               destructive
               onPress={() => {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
                 onDelete(message);
               }}
             />

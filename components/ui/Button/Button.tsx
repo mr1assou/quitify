@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { type ReactNode, useRef } from "react";
 import { ActivityIndicator, Pressable, Text, type PressableProps } from "react-native";
 import Animated, {
@@ -19,7 +18,6 @@ type ButtonProps = Omit<PressableProps, "children" | "style"> & {
   fullWidth?: boolean;
   leading?: ReactNode;
   trailing?: ReactNode;
-  haptic?: boolean;
   preventDoublePress?: boolean;
   loading?: boolean;
 };
@@ -61,7 +59,6 @@ export function Button({
   fullWidth = false,
   leading,
   trailing,
-  haptic = false,
   preventDoublePress = true,
   loading = false,
   disabled,
@@ -94,7 +91,6 @@ export function Button({
             pressLockedRef.current = false;
           }, 700);
         }
-        if (haptic) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
         onPress?.(e);
       }}
       style={animatedStyle}

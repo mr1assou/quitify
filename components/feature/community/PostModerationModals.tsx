@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -58,12 +57,10 @@ export function PostModerationModals({ state, onClose, onConfirmRemove }: Props)
 
   const handleClose = () => {
     if (!canDismiss) return;
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
   const handleConfirm = () => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     onConfirmRemove?.();
   };
 

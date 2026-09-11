@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -61,7 +60,6 @@ export function MissionTaskCardStack({
   const currentTask = tasks[currentIndex];
 
   const commitIndexChange = (direction: 1 | -1) => {
-    Haptics.selectionAsync().catch(() => {});
     const nextIndex =
       direction > 0
         ? (currentIndex + 1) % total

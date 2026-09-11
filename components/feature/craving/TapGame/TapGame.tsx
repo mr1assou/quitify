@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -24,7 +23,6 @@ export function TapGame({ target = 20, onComplete }: Props) {
   }));
 
   const onTap = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     scale.value = withSpring(0.9, { damping: 14, stiffness: 320 });
     setTimeout(() => {
       scale.value = withSpring(1, { damping: 12, stiffness: 240 });
@@ -32,7 +30,6 @@ export function TapGame({ target = 20, onComplete }: Props) {
     setTaps((t) => {
       const n = t + 1;
       if (n >= target) {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
         onComplete?.();
       }
       return n;

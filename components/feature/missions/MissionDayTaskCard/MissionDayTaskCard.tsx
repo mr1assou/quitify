@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -32,7 +31,6 @@ export function MissionDayTaskCard({ task, index, interactive, onToggle }: Props
 
   const onPress = () => {
     if (!interactive) return;
-    Haptics.selectionAsync().catch(() => {});
     onToggle(task.id, !task.done);
   };
 

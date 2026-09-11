@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
@@ -15,7 +14,6 @@ export function TaskRow({ task, onToggle }: Props) {
   const { colors } = useTheme();
 
   const onPress = () => {
-    Haptics.selectionAsync().catch(() => {});
     onToggle(task.id, !task.done);
   };
 

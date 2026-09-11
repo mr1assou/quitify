@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -27,7 +26,6 @@ export function BreathingControls({ isRunning, cycle, onToggle, onReset }: Props
           icon="refresh"
           label={t("craving.breathingRestart")}
           onPress={() => {
-            Haptics.selectionAsync().catch(() => {});
             onReset();
           }}
           color={colors.mutedForeground}
@@ -38,7 +36,6 @@ export function BreathingControls({ isRunning, cycle, onToggle, onReset }: Props
           size={72}
           filled
           onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
             onToggle();
           }}
           color={colors.white}
