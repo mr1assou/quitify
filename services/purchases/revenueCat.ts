@@ -600,6 +600,7 @@ export async function restoreRevenueCatPurchases(): Promise<RestorePurchasesResu
 
 /** Current offering with localized store prices (logged-in users only). */
 export async function fetchPaywallOffering(): Promise<PurchasesOffering | null> {
+  await waitForRevenueCatReady();
   if (!isRevenueCatLinked()) return null;
 
   const offerings = await Purchases.getOfferings();

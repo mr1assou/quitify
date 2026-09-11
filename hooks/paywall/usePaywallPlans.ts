@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import type { PaywallPlanDisplay } from "@/constants/paywall/paywallPlans";
 import { useApp } from "@/context/AppContext";
 import {
-  fetchPaywallOffering,
-  fetchPaywallTrialEligibility,
-} from "@/services/purchases";
-import { buildPaywallPlansFromOffering } from "@/utils/paywall/buildPaywallPlans";
+  getCachedPaywallPlans,
+  prefetchPaywallPlans,
+} from "@/utils/paywall/paywallPlansCache";
 
 type PaywallPlansState = {
   plans: PaywallPlanDisplay[];
@@ -19,10 +18,11 @@ type PaywallPlansState = {
 export function usePaywallPlans(): PaywallPlansState {
   const { state, isHydrated } = useApp();
   const userId = state.account?.userId;
+  const cached = userId != null ? getCachedPaywallPlans(userId) : undefined;
 
-  const [plans, setPlans] = useState<PaywallPlanDisplay[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [usesStorePrices, setUsesStorePrices] = useState(false);
+  const [plans, setPlans] = useState<PaywallPlanDisplay[]>(() => cached ?? []);
+  const [loading, setLoading] = useState(() => cached == null);
+  const [usesStorePrices, setUsesStorePrices] = useState(() => cached != null);
 
   useEffect(() => {
     if (!isHydrated || userId == null) {
@@ -32,31 +32,24 @@ export function usePaywallPlans(): PaywallPlansState {
       return;
     }
 
+    const existing = getCachedPaywallPlans(userId);
+    if (existing) {
+      setPlans(existing);
+      setUsesStorePrices(true);
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
     setLoading(true);
 
     void (async () => {
-      try {
-        const offering = await fetchPaywallOffering();
-        if (cancelled) return;
+      const nextPlans = await prefetchPaywallPlans(userId);
+      if (cancelled) return;
 
-        if (offering) {
-          const trialEligibility = await fetchPaywallTrialEligibility(offering);
-          if (cancelled) return;
-          setPlans(buildPaywallPlansFromOffering(offering, trialEligibility));
-          setUsesStorePrices(true);
-        } else {
-          setPlans([]);
-          setUsesStorePrices(false);
-        }
-      } catch {
-        if (!cancelled) {
-          setPlans([]);
-          setUsesStorePrices(false);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+      setPlans(nextPlans);
+      setUsesStorePrices(nextPlans.length > 0);
+      setLoading(false);
     })();
 
     return () => {

@@ -66,7 +66,7 @@ export function StreakHero({
       </View>
 
       <Text
-        className="mt-4 px-1 text-center text-5xl font-bold leading-[52px] tabular-nums text-foreground dark:text-d-text"
+        className="mt-4 px-1 text-center text-4xl font-bold leading-10 tabular-nums text-foreground dark:text-d-text"
         accessibilityLabel={`Current streak ${streakLabel}, attempt ${attemptNumber}`}
         numberOfLines={1}
         adjustsFontSizeToFit

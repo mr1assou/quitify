@@ -10,6 +10,7 @@ import {
   syncRevenueCatUser,
   waitForRevenueCatReady,
 } from "@/services/purchases/revenueCat";
+import { clearPaywallPlansCache, prefetchPaywallPlans } from "@/utils/paywall/paywallPlansCache";
 
 /** Links RevenueCat to the logged-in user and keeps premium in sync with subscriptions. */
 export function useRevenueCatBootstrap() {
@@ -47,12 +48,14 @@ export function useRevenueCatBootstrap() {
     if (!isHydrated) return;
 
     if (userId == null) {
+      clearPaywallPlansCache();
       void syncRevenueCatUser(undefined);
       return;
     }
 
     void (async () => {
       await syncRevenueCatUser(userId);
+      void prefetchPaywallPlans(userId);
       await reconcilePremium();
     })();
   }, [isHydrated, userId, reconcilePremium]);

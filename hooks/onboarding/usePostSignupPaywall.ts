@@ -11,6 +11,7 @@ import {
   isPostSignupPaywallPending,
   markPostPaywallFlowComplete,
 } from "@/utils/onboarding/postSignupFlowStorage";
+import { prefetchPaywallPlans } from "@/utils/paywall/paywallPlansCache";
 
 /** After sign-up: brief Home preview, then paywall for non-VIP users. */
 export function usePostSignupPaywall() {
@@ -37,11 +38,22 @@ export function usePostSignupPaywall() {
           return;
         }
 
+        const userId = state.account?.userId;
+        if (userId != null) {
+          void prefetchPaywallPlans(userId);
+        }
+
         timeoutId = setTimeout(() => {
           if (cancelled) return;
-          void clearPostSignupPaywallPending();
-          setFlag("hasSeenPaywall", true);
-          openPaywall(PAYWALL_SOURCE.post_signup, "pushStack");
+          void (async () => {
+            if (userId != null) {
+              await prefetchPaywallPlans(userId);
+            }
+            if (cancelled) return;
+            await clearPostSignupPaywallPending();
+            setFlag("hasSeenPaywall", true);
+            openPaywall(PAYWALL_SOURCE.post_signup, "pushStack");
+          })();
         }, POST_SIGNUP_PAYWALL_DELAY_MS);
       })();
 
@@ -49,6 +61,6 @@ export function usePostSignupPaywall() {
         cancelled = true;
         if (timeoutId) clearTimeout(timeoutId);
       };
-    }, [state.account?.email, isPremium, setFlag]),
+    }, [state.account?.email, state.account?.userId, isPremium, setFlag]),
   );
 }
