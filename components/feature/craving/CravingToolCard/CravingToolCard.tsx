@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -80,10 +79,7 @@ export function CravingToolCard({
       onPressOut={() => {
         scale.value = withSpring(1, { damping: 14, stiffness: 220 });
       }}
-      onPress={() => {
-        Haptics.selectionAsync().catch(() => {});
-        onPress();
-      }}
+      onPress={onPress}
       style={[{ flexBasis: "48%" }, animatedStyle]}
       className={`rounded-3xl p-4 ${styles.card}`}
     >

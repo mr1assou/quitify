@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import {
   ActivityIndicator,
   ImageBackground,
@@ -64,10 +63,7 @@ export function RelaxSoundCard({
       onPressOut={() => {
         scale.value = withSpring(1, { damping: 14, stiffness: 220 });
       }}
-      onPress={() => {
-        Haptics.selectionAsync().catch(() => {});
-        onPress();
-      }}
+      onPress={onPress}
       style={[
         {
           width: "100%",

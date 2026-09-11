@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -81,10 +80,7 @@ export function MissionMapCurrentNode({ day, onPress }: Props) {
           onPressOut={() => {
             press.value = withSpring(1, { damping: 14, stiffness: 220 });
           }}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-            onPress();
-          }}
+          onPress={onPress}
           style={[
             pressStyle,
             {

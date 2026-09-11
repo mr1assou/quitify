@@ -1,5 +1,4 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -60,10 +59,7 @@ export function SlipCTA({ onPress }: Props) {
           onPressOut={() => {
             press.value = withSpring(1, { damping: 14, stiffness: 220 });
           }}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => {});
-            onPress();
-          }}
+          onPress={onPress}
           style={pressStyle}
           className="h-40 w-40 items-center justify-center rounded-full bg-primary"
         >

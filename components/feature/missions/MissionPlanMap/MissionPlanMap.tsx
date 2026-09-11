@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, ZoomIn } from "react-native-reanimated";
@@ -108,11 +107,9 @@ export function MissionPlanMap({
 
           const onPress = () => {
             if (locked) {
-              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
               onLockedDayPress?.(day.day);
               return;
             }
-            Haptics.selectionAsync().catch(() => {});
             onSelectDay(day.day);
           };
 

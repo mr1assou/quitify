@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { ActivityIndicator, Pressable, Text } from "react-native";
 
@@ -30,7 +29,6 @@ export function SaveCardButton({ section, cardId }: Props) {
       disabled={pending}
       onPress={() => {
         if (!requirePremium()) return;
-        Haptics.selectionAsync().catch(() => {});
         setPending(true);
         void toggleSaved(section, cardId).finally(() => setPending(false));
       }}

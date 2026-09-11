@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Modal, Pressable, Text, View } from "react-native";
 
 import { Button } from "@/components/ui/Button";
@@ -17,12 +16,10 @@ export function LapseConfirmModal({ visible, onClose, onConfirm }: Props) {
   const { t } = useTranslation();
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 
   const handleConfirm = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
     onConfirm();
   };
 

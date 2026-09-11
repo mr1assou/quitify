@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { useEffect, useMemo, useRef } from "react";
 import { View, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -98,7 +97,6 @@ export function MotivationCardStack({
       return;
     }
 
-    Haptics.selectionAsync().catch(() => {});
     const nextIndex = nextIndexForDirection(direction, currentIndexRef.current, count);
     onIndexChangeRef.current(nextIndex);
     opacity.value = withTiming(1, {

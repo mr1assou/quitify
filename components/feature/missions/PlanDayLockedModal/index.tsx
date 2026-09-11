@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Modal, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -22,7 +21,6 @@ export function PlanDayLockedModal({ content, onClose }: Props) {
   const visible = content !== null;
 
   const handleClose = () => {
-    Haptics.selectionAsync().catch(() => {});
     onClose();
   };
 

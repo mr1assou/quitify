@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -47,7 +46,6 @@ export function GameCard({ game, locked = false, onPress }: Props) {
       }}
       onPress={() => {
         if (disabled) return;
-        Haptics.selectionAsync().catch(() => {});
         onPress();
       }}
       style={[
