@@ -170,8 +170,13 @@ export function RankLeaderboard({
     }
   };
 
+  const handleLoadMore = () => {
+    if (loadingMore || spotting) return;
+    onLoadMore();
+  };
+
   const handleLoadMoreAbove = () => {
-    if (loadingAbove || spotting) return;
+    if (loadingAbove || spotting || loadingMore) return;
     pendingAboveAdjustRef.current = scrollOffsetRef.current;
     onLoadMoreAbove();
   };
@@ -289,7 +294,13 @@ export function RankLeaderboard({
                   {loadingMore || spotting ? (
                     <ActivityIndicator color={colors.primary} />
                   ) : (
-                    <Pressable onPress={onLoadMore} hitSlop={8} className="active:opacity-70">
+                    <Pressable
+                      onPress={handleLoadMore}
+                      disabled={loadingMore || spotting}
+                      hitSlop={8}
+                      className="active:opacity-70"
+                      accessibilityRole="button"
+                    >
                       <Text className="text-sm font-semibold text-primary">
                         {t("achievements.showMore")}
                       </Text>

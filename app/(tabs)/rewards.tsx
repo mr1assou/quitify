@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
@@ -34,12 +34,18 @@ export default function AchievementScreen() {
   } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("rank");
 
-  // Leaving Awards must drop Spot-window — next visit is normal top-10 browse.
+  const refreshAccountRef = useRef(refreshAccount);
+  refreshAccountRef.current = refreshAccount;
+  const resetToBrowseRef = useRef(resetToBrowse);
+  resetToBrowseRef.current = resetToBrowse;
+
+  // Only on focus enter — not when callback identities change mid-browse
+  // (that was cancelling in-flight Show more).
   useFocusEffect(
     useCallback(() => {
-      void refreshAccount();
-      void resetToBrowse();
-    }, [resetToBrowse, refreshAccount]),
+      void refreshAccountRef.current();
+      void resetToBrowseRef.current();
+    }, []),
   );
 
   if (!progress) return null;
@@ -65,7 +71,7 @@ export default function AchievementScreen() {
             leaderboard={leaderboard}
             hasMore={hasMore}
             hasMoreAbove={hasMoreAbove}
-            loadingMore={loadingMore}
+            loadingMore={loadingMore || loading}
             loadingAbove={loadingAbove}
             viewMode={viewMode}
             onLoadMore={loadMore}

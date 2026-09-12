@@ -99,8 +99,13 @@ export function useLeaderboard(): UseLeaderboardResult {
   const [viewMode, setViewMode] = useState<LeaderboardViewMode>("browse");
   const loadingMoreRef = useRef(false);
   const loadingAboveRef = useRef(false);
+  const loadingBrowseRef = useRef(false);
   const spottingRef = useRef(false);
+  /** Invalidates in-flight browse/append/above work when a newer browse load starts. */
   const refreshGenerationRef = useRef(0);
+  /** Ensures only the lock owner clears loadingMore / loadingAbove. */
+  const loadMoreEpochRef = useRef(0);
+  const loadAboveEpochRef = useRef(0);
   const snapshotRef = useRef(snapshot);
   snapshotRef.current = snapshot;
   const prevAccountUserIdRef = useRef<number | null | undefined>(undefined);
@@ -119,17 +124,27 @@ export function useLeaderboard(): UseLeaderboardResult {
       limit: number = LEADERBOARD_PAGE_SIZE,
     ): Promise<LeaderboardSnapshot | null> => {
       if (accountUserId == null) {
-        if (!append) setLoading(false);
+        if (!append) {
+          loadingBrowseRef.current = false;
+          setLoading(false);
+        }
         return null;
       }
 
       let requestGeneration: number;
+      let moreEpoch = 0;
 
       if (append) {
-        if (loadingMoreRef.current || spottingRef.current || loadingAboveRef.current) {
+        if (
+          loadingMoreRef.current ||
+          loadingBrowseRef.current ||
+          spottingRef.current ||
+          loadingAboveRef.current
+        ) {
           return snapshotRef.current;
         }
         requestGeneration = refreshGenerationRef.current;
+        moreEpoch = ++loadMoreEpochRef.current;
         loadingMoreRef.current = true;
         setLoadingMore(true);
       } else {
@@ -137,13 +152,15 @@ export function useLeaderboard(): UseLeaderboardResult {
           return snapshotRef.current;
         }
         requestGeneration = ++refreshGenerationRef.current;
+        // Invalidate any in-flight Show more / Show previous locks.
+        loadMoreEpochRef.current += 1;
+        loadAboveEpochRef.current += 1;
         loadingMoreRef.current = false;
         loadingAboveRef.current = false;
+        loadingBrowseRef.current = true;
         setLoadingMore(false);
         setLoadingAbove(false);
-        if (snapshotRef.current == null) {
-          setLoading(true);
-        }
+        setLoading(true);
       }
 
       try {
@@ -170,13 +187,15 @@ export function useLeaderboard(): UseLeaderboardResult {
         }
         return snapshotRef.current;
       } finally {
-        if (requestGeneration === refreshGenerationRef.current) {
-          if (append) {
+        if (append) {
+          // Always clear if we still own the lock (avoids stuck Show more).
+          if (moreEpoch === loadMoreEpochRef.current) {
             loadingMoreRef.current = false;
             setLoadingMore(false);
-          } else {
-            setLoading(false);
           }
+        } else if (requestGeneration === refreshGenerationRef.current) {
+          loadingBrowseRef.current = false;
+          setLoading(false);
         }
       }
     },
@@ -217,6 +236,7 @@ export function useLeaderboard(): UseLeaderboardResult {
       !current ||
       !current.hasMore ||
       loadingMoreRef.current ||
+      loadingBrowseRef.current ||
       loadingAboveRef.current ||
       spottingRef.current
     ) {
@@ -232,6 +252,7 @@ export function useLeaderboard(): UseLeaderboardResult {
       !current ||
       current.startOffset <= 0 ||
       loadingMoreRef.current ||
+      loadingBrowseRef.current ||
       loadingAboveRef.current ||
       spottingRef.current ||
       accountUserId == null
@@ -242,6 +263,7 @@ export function useLeaderboard(): UseLeaderboardResult {
     const limit = Math.min(LEADERBOARD_PAGE_SIZE, current.startOffset);
     const offset = current.startOffset - limit;
     const generationAtStart = refreshGenerationRef.current;
+    const aboveEpoch = ++loadAboveEpochRef.current;
 
     loadingAboveRef.current = true;
     setLoadingAbove(true);
@@ -257,7 +279,7 @@ export function useLeaderboard(): UseLeaderboardResult {
 
         commitSnapshot(mergeLeaderboardPages(previous, mapped));
       } finally {
-        if (generationAtStart === refreshGenerationRef.current) {
+        if (aboveEpoch === loadAboveEpochRef.current) {
           loadingAboveRef.current = false;
           setLoadingAbove(false);
         }
@@ -269,6 +291,9 @@ export function useLeaderboard(): UseLeaderboardResult {
     const current = snapshotRef.current;
     const viewer = current?.currentUser;
     if (!viewer || accountUserId == null) return false;
+    if (loadingBrowseRef.current || loadingMoreRef.current || loadingAboveRef.current) {
+      return false;
+    }
 
     spottingRef.current = true;
     const generationAtStart = refreshGenerationRef.current;
