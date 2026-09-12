@@ -1,22 +1,44 @@
 import { useMemo } from "react";
 
-import { buildMotivationQuotes } from "@/i18n/content/buildMotivationQuotes";
-import { buildTipQuotes } from "@/i18n/content/buildTipQuotes";
-import { useTranslation } from "@/hooks/i18n/useTranslation";
+import type { MotivationQuote } from "@/constants/craving/motivationCardTypes";
 import type { SwipeableCardToolId } from "@/hooks/craving/useSwipeableCardSession";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 
-export function useLocalizedTipQuotes() {
+export function useLocalizedTipQuotes(): readonly MotivationQuote[] {
   const { locale } = useTranslation();
-  return useMemo(() => buildTipQuotes(locale), [locale]);
+  return useMemo(() => {
+    const { buildTipQuotes } =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require("@/i18n/content/buildTipQuotes") as typeof import("@/i18n/content/buildTipQuotes");
+    return buildTipQuotes(locale);
+  }, [locale]);
 }
 
-export function useLocalizedMotivationQuotes() {
+export function useLocalizedMotivationQuotes(): readonly MotivationQuote[] {
   const { locale } = useTranslation();
-  return useMemo(() => buildMotivationQuotes(locale), [locale]);
+  return useMemo(() => {
+    const { buildMotivationQuotes } =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require("@/i18n/content/buildMotivationQuotes") as typeof import("@/i18n/content/buildMotivationQuotes");
+    return buildMotivationQuotes(locale);
+  }, [locale]);
 }
 
-export function useLocalizedCardQuotes(tool: SwipeableCardToolId) {
-  const tips = useLocalizedTipQuotes();
-  const motivation = useLocalizedMotivationQuotes();
-  return tool === "tips" ? tips : motivation;
+/** Loads only the catalog for the active tool (tips XOR motivation). */
+export function useLocalizedCardQuotes(
+  tool: SwipeableCardToolId,
+): readonly MotivationQuote[] {
+  const { locale } = useTranslation();
+  return useMemo(() => {
+    if (tool === "tips") {
+      const { buildTipQuotes } =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        require("@/i18n/content/buildTipQuotes") as typeof import("@/i18n/content/buildTipQuotes");
+      return buildTipQuotes(locale);
+    }
+    const { buildMotivationQuotes } =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require("@/i18n/content/buildMotivationQuotes") as typeof import("@/i18n/content/buildMotivationQuotes");
+    return buildMotivationQuotes(locale);
+  }, [locale, tool]);
 }

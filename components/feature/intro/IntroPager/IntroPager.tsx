@@ -1,7 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useState } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -32,6 +39,7 @@ const NEXT_ROUTE = "/onboarding/reasons";
 const SWIPE_THRESHOLD_RATIO = 0.22;
 
 export function IntroPager() {
+  const navigation = useNavigation();
   const { colors, resolved } = useTheme();
   const { t } = useTranslation();
   const slides = useIntroSlides();
@@ -47,15 +55,24 @@ export function IntroPager() {
   const unifiedGradient =
     currentSlide !== undefined && introUsesUnifiedGradient(currentSlide.id);
   const pageWidth = Math.max(width, 1);
+  const indexRef = useRef(index);
+  indexRef.current = index;
+  const pageWidthRef = useRef(pageWidth);
+  pageWidthRef.current = pageWidth;
+  const allowLeaveRef = useRef(false);
 
   const goTo = (page: number) => {
     const clamped = Math.max(0, Math.min(total - 1, page));
+    indexRef.current = clamped;
     setIndex(clamped);
-    translateX.value = withTiming(-clamped * pageWidth, { duration: 320 });
+    translateX.value = withTiming(-clamped * pageWidthRef.current, {
+      duration: 320,
+    });
   };
 
   const goNext = () => {
     if (isLast) {
+      allowLeaveRef.current = true;
       safeRouter.replace(NEXT_ROUTE);
       return;
     }
@@ -63,14 +80,43 @@ export function IntroPager() {
   };
 
   const goBack = () => {
-    if (index > 0) {
-      goTo(index - 1);
+    if (indexRef.current > 0) {
+      goTo(indexRef.current - 1);
       return;
     }
+    allowLeaveRef.current = true;
     safeRouter.backOr("/onboarding");
   };
 
+  // System back / edge swipe: step slides first; leave only from slide 1.
+  useEffect(() => {
+    const onHardwareBack = () => {
+      if (indexRef.current > 0) {
+        goTo(indexRef.current - 1);
+        return true;
+      }
+      return false;
+    };
+    const hardwareSub = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onHardwareBack,
+    );
+
+    const removeNav = navigation.addListener("beforeRemove", (event) => {
+      if (allowLeaveRef.current || indexRef.current <= 0) return;
+      event.preventDefault();
+      goTo(indexRef.current - 1);
+    });
+
+    return () => {
+      hardwareSub.remove();
+      removeNav();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation, total, translateX]);
+
   const finishSwipe = (target: number) => {
+    indexRef.current = target;
     setIndex(target);
   };
 
@@ -149,14 +195,26 @@ export function IntroPager() {
                 trackStyle,
               ]}
             >
-              {slides.map((slide, i) => (
-                <Slide
-                  key={slide.id}
-                  slide={slide}
-                  width={pageWidth}
-                  active={i === index}
-                />
-              ))}
+              {slides.map((slide, i) => {
+                // Mount active ± 1 so swipe still shows the next/prev slide.
+                const mounted = Math.abs(i - index) <= 1;
+                if (!mounted) {
+                  return (
+                    <View
+                      key={slide.id}
+                      style={{ width: pageWidth, flex: 1 }}
+                    />
+                  );
+                }
+                return (
+                  <Slide
+                    key={slide.id}
+                    slide={slide}
+                    width={pageWidth}
+                    active={i === index}
+                  />
+                );
+              })}
             </Animated.View>
           </GestureDetector>
         </View>

@@ -1,5 +1,6 @@
-import { IntroPager } from "@/components/feature/intro/IntroPager";
+import { Redirect } from "expo-router";
 
-export default function Intro() {
-  return <IntroPager />;
+/** Legacy root route — intro now lives in the onboarding stack for fast nav. */
+export default function IntroRedirect() {
+  return <Redirect href="/onboarding/intro" />;
 }
