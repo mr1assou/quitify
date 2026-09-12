@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, Text, type PressableProps } from "react-n
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -19,6 +19,13 @@ type ButtonProps = Omit<PressableProps, "children" | "style"> & {
   leading?: ReactNode;
   trailing?: ReactNode;
   preventDoublePress?: boolean;
+  /** Soft press scale + opacity feedback. */
+  pressScale?: boolean;
+  /**
+   * Keep the pressed look after tap (no bounce-back). Use for screen navigations
+   * so the release animation does not look like a second click.
+   */
+  holdPressFeedback?: boolean;
   loading?: boolean;
 };
 
@@ -60,6 +67,8 @@ export function Button({
   leading,
   trailing,
   preventDoublePress = true,
+  pressScale = true,
+  holdPressFeedback = false,
   loading = false,
   disabled,
   onPress,
@@ -67,8 +76,13 @@ export function Button({
 }: ButtonProps) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
   const pressLockedRef = useRef(false);
-  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const holdPressedRef = useRef(false);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
   const isDisabled = disabled || loading;
   const spinnerColor =
     variant === "ghost" || variant === "secondary" ? colors.primary : colors.white;
@@ -78,10 +92,15 @@ export function Button({
       {...rest}
       disabled={isDisabled}
       onPressIn={() => {
-        scale.value = withSpring(0.96, { damping: 18, stiffness: 280 });
+        if (!pressScale || holdPressedRef.current) return;
+        scale.value = withTiming(0.97, { duration: 70 });
+        opacity.value = withTiming(0.88, { duration: 70 });
       }}
       onPressOut={() => {
-        scale.value = withSpring(1, { damping: 14, stiffness: 220 });
+        if (!pressScale) return;
+        if (holdPressedRef.current) return;
+        scale.value = withTiming(1, { duration: 120 });
+        opacity.value = withTiming(1, { duration: 120 });
       }}
       onPress={(e) => {
         if (preventDoublePress && pressLockedRef.current) return;
@@ -91,9 +110,12 @@ export function Button({
             pressLockedRef.current = false;
           }, 700);
         }
+        if (holdPressFeedback && pressScale) {
+          holdPressedRef.current = true;
+        }
         onPress?.(e);
       }}
-      style={animatedStyle}
+      style={pressScale ? animatedStyle : undefined}
       className={[
         "flex-row items-center justify-center",
         sizeContainer[size],

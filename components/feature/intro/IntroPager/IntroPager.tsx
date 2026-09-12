@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   runOnJS,
@@ -35,7 +35,9 @@ export function IntroPager() {
   const { colors, resolved } = useTheme();
   const { t } = useTranslation();
   const slides = useIntroSlides();
-  const [width, setWidth] = useState(0);
+  const { width: windowWidth } = useWindowDimensions();
+  // Ready on first paint so welcome→intro does not slide over an empty screen.
+  const [width, setWidth] = useState(() => Math.round(windowWidth));
   const [index, setIndex] = useState(0);
   const [pagerAndFooterH, setPagerAndFooterH] = useState(0);
   const translateX = useSharedValue(0);
@@ -44,11 +46,12 @@ export function IntroPager() {
   const currentSlide = slides[index];
   const unifiedGradient =
     currentSlide !== undefined && introUsesUnifiedGradient(currentSlide.id);
+  const pageWidth = Math.max(width, 1);
 
   const goTo = (page: number) => {
     const clamped = Math.max(0, Math.min(total - 1, page));
     setIndex(clamped);
-    translateX.value = withTiming(-clamped * width, { duration: 320 });
+    translateX.value = withTiming(-clamped * pageWidth, { duration: 320 });
   };
 
   const goNext = () => {
@@ -60,7 +63,11 @@ export function IntroPager() {
   };
 
   const goBack = () => {
-    if (index > 0) goTo(index - 1);
+    if (index > 0) {
+      goTo(index - 1);
+      return;
+    }
+    safeRouter.backOr("/onboarding");
   };
 
   const finishSwipe = (target: number) => {
@@ -71,17 +78,17 @@ export function IntroPager() {
     .activeOffsetX([-12, 12])
     .failOffsetY([-20, 20])
     .onUpdate((e) => {
-      const next = -index * width + e.translationX;
-      const min = -(total - 1) * width;
+      const next = -index * pageWidth + e.translationX;
+      const min = -(total - 1) * pageWidth;
       translateX.value = Math.max(min, Math.min(0, next));
     })
     .onEnd((e) => {
-      const threshold = width * SWIPE_THRESHOLD_RATIO;
+      const threshold = pageWidth * SWIPE_THRESHOLD_RATIO;
       let target = index;
       if (e.translationX < -threshold && index < total - 1) target = index + 1;
       else if (e.translationX > threshold && index > 0) target = index - 1;
       runOnJS(finishSwipe)(target);
-      translateX.value = withTiming(-target * width, { duration: 280 });
+      translateX.value = withTiming(-target * pageWidth, { duration: 280 });
     });
 
   const trackStyle = useAnimatedStyle(() => ({
@@ -94,16 +101,14 @@ export function IntroPager() {
       edges={["top", "bottom"]}
     >
       <View className="h-12 flex-row items-center px-4 pt-2">
-        {index > 0 ? (
-          <Pressable
-            onPress={goBack}
-            className="-ml-2 h-10 w-10 items-center justify-center rounded-full active:bg-section dark:active:bg-d-surface"
-          >
-            <Ionicons name="chevron-back" size={22} color={colors.foreground} />
-          </Pressable>
-        ) : (
-          <View className="h-10 w-10" />
-        )}
+        <Pressable
+          onPress={goBack}
+          className="-ml-2 h-10 w-10 items-center justify-center rounded-full active:bg-section dark:active:bg-d-surface"
+          accessibilityRole="button"
+          accessibilityLabel={t("common.back")}
+        >
+          <Ionicons name="chevron-back" size={22} color={colors.foreground} />
+        </Pressable>
       </View>
 
       <View
@@ -133,29 +138,27 @@ export function IntroPager() {
         ) : null}
 
         <View className="flex-1 overflow-hidden">
-          {width > 0 ? (
-            <GestureDetector gesture={pan}>
-              <Animated.View
-                style={[
-                  {
-                    flex: 1,
-                    flexDirection: "row",
-                    width: width * total,
-                  },
-                  trackStyle,
-                ]}
-              >
-                {slides.map((slide, i) => (
-                  <Slide
-                    key={slide.id}
-                    slide={slide}
-                    width={width}
-                    active={i === index}
-                  />
-                ))}
-              </Animated.View>
-            </GestureDetector>
-          ) : null}
+          <GestureDetector gesture={pan}>
+            <Animated.View
+              style={[
+                {
+                  flex: 1,
+                  flexDirection: "row",
+                  width: pageWidth * total,
+                },
+                trackStyle,
+              ]}
+            >
+              {slides.map((slide, i) => (
+                <Slide
+                  key={slide.id}
+                  slide={slide}
+                  width={pageWidth}
+                  active={i === index}
+                />
+              ))}
+            </Animated.View>
+          </GestureDetector>
         </View>
 
         <View

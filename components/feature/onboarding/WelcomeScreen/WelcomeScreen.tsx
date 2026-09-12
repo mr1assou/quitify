@@ -1,5 +1,7 @@
+import { useCallback, useRef, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
+import { useFocusEffect } from "expo-router";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { LanguageToggleButton } from "@/components/layout/LanguageToggleButton";
 import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
@@ -11,6 +13,21 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 export function WelcomeScreen() {
   const { t } = useTranslation();
+  const startingRef = useRef(false);
+  const isFirstFocusRef = useRef(true);
+  const [startButtonKey, setStartButtonKey] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      startingRef.current = false;
+      if (isFirstFocusRef.current) {
+        isFirstFocusRef.current = false;
+        return;
+      }
+      // Remount so held press feedback from the last navigate is cleared.
+      setStartButtonKey((key) => key + 1);
+    }, []),
+  );
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>
@@ -49,11 +66,16 @@ export function WelcomeScreen() {
 
         <Animated.View entering={FadeInDown.delay(400).duration(500)} className="gap-3">
           <Button
+            key={startButtonKey}
             label={t("welcome.getStarted")}
             size="lg"
             fullWidth
+            holdPressFeedback
             onPress={() => {
-              safeRouter.push("/intro");
+              if (startingRef.current) return;
+              startingRef.current = true;
+              // Push (keep welcome under intro) so system/UI back returns here.
+              safeRouter.pushStack("/intro");
             }}
           />
           <Pressable

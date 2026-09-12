@@ -96,7 +96,16 @@ function ThemedRoot() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="onboarding" />
-        <Stack.Screen name="intro" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen
+          name="intro"
+          options={{
+            animation: "slide_from_right",
+            animationDuration: 280,
+            gestureEnabled: true,
+            fullScreenGestureEnabled: true,
+            contentStyle: { backgroundColor: "transparent" },
+          }}
+        />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
           name="craving-session"
