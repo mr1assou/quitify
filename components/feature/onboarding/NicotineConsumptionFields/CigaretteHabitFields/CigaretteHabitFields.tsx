@@ -8,6 +8,7 @@ import { SelectFieldString } from "@/components/ui/SelectFieldString";
 import {
   CIGARETTES_PER_DAY_BANDS,
   CIGARETTES_PER_DAY_DROPDOWN_OPTIONS,
+  isCustomCigarettesPerDayBand,
   NICOTINE_HABIT_YEARS_BANDS,
   NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS,
   type CigarettesPerDayBandId,
@@ -19,11 +20,13 @@ import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   patchForCigarettesPerDayBand,
+  patchForCigarettesPerDayCustomInput,
   patchForCigarettesPerPackInput,
   patchForNicotineHabitYearsBand,
   patchForPackCostInput,
 } from "@/utils/onboarding/nicotineBands";
 import {
+  hasInvalidCigarettesPerDayCustomInput,
   hasInvalidCigarettesPerPackInput,
   hasInvalidPackCostInput,
   type NicotineFieldErrors,
@@ -46,22 +49,29 @@ function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBan
 export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
+  const showCustomCigsPerDay = isCustomCigarettesPerDayBand(
+    draft.cigarettesPerDayBand,
+  );
 
   const cigarettesPerDayOptions = useMemo(
     () =>
-      localize(CIGARETTES_PER_DAY_BANDS, "onboarding.nicotine", ["label"]).map((band) => ({
-        value: band.id,
-        label: band.label,
-      })),
+      localize(CIGARETTES_PER_DAY_BANDS, "onboarding.nicotine", ["label"]).map(
+        (band) => ({
+          value: band.id,
+          label: band.label,
+        }),
+      ),
     [localize],
   );
 
   const habitYearsOptions = useMemo(
     () =>
-      localize(NICOTINE_HABIT_YEARS_BANDS, "onboarding.nicotine", ["label"]).map((band) => ({
-        value: band.id,
-        label: band.label,
-      })),
+      localize(NICOTINE_HABIT_YEARS_BANDS, "onboarding.nicotine", ["label"]).map(
+        (band) => ({
+          value: band.id,
+          label: band.label,
+        }),
+      ),
     [localize],
   );
 
@@ -73,11 +83,18 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
     hasInvalidPackCostInput(draft) || Boolean(fieldErrors?.priceInvalid);
   const priceMissing = Boolean(fieldErrors?.price);
   const priceHasError = priceInvalid || priceMissing;
+  const customCigsInvalid =
+    hasInvalidCigarettesPerDayCustomInput(draft) ||
+    Boolean(fieldErrors?.cigsPerDayCustomInvalid);
+  const customCigsMissing = Boolean(fieldErrors?.cigsPerDayCustom);
+  const customCigsHasError = customCigsInvalid || customCigsMissing;
 
   return (
     <View className="w-full gap-5">
       <View className="gap-2">
-        <OnboardingFieldLabel>{t("onboarding.nicotine.cigsPerDay.label")}</OnboardingFieldLabel>
+        <OnboardingFieldLabel>
+          {t("onboarding.nicotine.cigsPerDay.label")}
+        </OnboardingFieldLabel>
         <SelectFieldString
           fieldLabel={t("onboarding.nicotine.cigsPerDay.label")}
           showLabel={false}
@@ -88,7 +105,12 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
           controlHeight={ONBOARDING_CONTROL_HEIGHT}
           onChange={(value) => {
             if (value && isCigarettesPerDayBand(value)) {
-              patch(patchForCigarettesPerDayBand(value));
+              patch(
+                patchForCigarettesPerDayBand(
+                  value,
+                  draft.cigarettesPerDayCustomInput,
+                ),
+              );
             }
           }}
         />
@@ -99,8 +121,33 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
         ) : null}
       </View>
 
+      {showCustomCigsPerDay ? (
+        <View className="gap-2">
+          <OnboardingFieldLabel>
+            {t("onboarding.nicotine.cigsPerDay.customLabel")}
+          </OnboardingFieldLabel>
+          <CigarettesPerPackField
+            value={draft.cigarettesPerDayCustomInput}
+            hasError={customCigsHasError}
+            placeholder={t("onboarding.nicotine.cigsPerDay.customPlaceholder")}
+            onChangeText={(raw) => patch(patchForCigarettesPerDayCustomInput(raw))}
+          />
+          {customCigsMissing ? (
+            <Text className="text-xs font-semibold text-alert">
+              {t("onboarding.nicotine.cigsPerDay.customRequired")}
+            </Text>
+          ) : customCigsInvalid ? (
+            <Text className="text-xs font-semibold text-alert">
+              {t("onboarding.nicotine.cigsPerDay.customInvalid")}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
+
       <View className="gap-2">
-        <OnboardingFieldLabel>{t("onboarding.nicotine.packSize.label")}</OnboardingFieldLabel>
+        <OnboardingFieldLabel>
+          {t("onboarding.nicotine.packSize.label")}
+        </OnboardingFieldLabel>
         <CigarettesPerPackField
           value={draft.cigarettesPerPackInput}
           hasError={packSizeHasError}
@@ -119,7 +166,9 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
       </View>
 
       <View className="gap-2">
-        <OnboardingFieldLabel>{t("onboarding.nicotine.price.label")}</OnboardingFieldLabel>
+        <OnboardingFieldLabel>
+          {t("onboarding.nicotine.price.label")}
+        </OnboardingFieldLabel>
         <PackCostField
           currency={draft.currency}
           value={draft.packCostInput}
@@ -139,7 +188,9 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
       </View>
 
       <View className="gap-2">
-        <OnboardingFieldLabel>{t("onboarding.nicotine.habitYears.label")}</OnboardingFieldLabel>
+        <OnboardingFieldLabel>
+          {t("onboarding.nicotine.habitYears.label")}
+        </OnboardingFieldLabel>
         <SelectFieldString
           fieldLabel={t("onboarding.nicotine.habitYears.label")}
           showLabel={false}

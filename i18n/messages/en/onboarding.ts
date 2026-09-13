@@ -85,6 +85,10 @@ export const onboarding = {
     cigsPerDay: {
       label: "Cigarettes per day",
       required: "Choose cigarettes per day",
+      customLabel: "Exact cigarettes per day",
+      customPlaceholder: "Enter a number",
+      customRequired: "Enter a number",
+      customInvalid: "Enter more than 0",
     },
     habitYears: {
       label: "How long have you smoked cigarettes?",
@@ -108,7 +112,8 @@ export const onboarding = {
     "16_20": { label: "16–20", hint: "About 1 pack per day" },
     "21_30": { label: "21–30", hint: "Heavy smoker" },
     "31_40": { label: "31–40", hint: "Very heavy smoker" },
-    "40_plus": { label: "40+", hint: "2+ packs per day" },
+    "40_50": { label: "40–50", hint: "About 2 packs per day" },
+    custom: { label: "Custom", hint: "Enter your exact number" },
     less_than_1: { label: "Less than 1 year" },
     "1_3": { label: "1–3 years" },
     "4_7": { label: "4–7 years" },

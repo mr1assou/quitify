@@ -139,6 +139,8 @@ export type OnboardingDraft = {
 
   cigarettesPerDay: number;
   cigarettesPerDayBand?: CigarettesPerDayBandId;
+  /** Raw custom cigarettes/day text when band is `custom`. */
+  cigarettesPerDayCustomInput?: string;
   cigarettesPerPack: number;
   /** Raw pack size text the user typed (whole number, min 1). */
   cigarettesPerPackInput?: string;

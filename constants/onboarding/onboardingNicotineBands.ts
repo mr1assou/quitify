@@ -16,7 +16,8 @@ export const CIGARETTES_PER_DAY_BANDS = [
   { id: "16_20", label: "16–20", hint: "About 1 pack per day", cigarettesPerDay: 18 },
   { id: "21_30", label: "21–30", hint: "Heavy smoker", cigarettesPerDay: 25 },
   { id: "31_40", label: "31–40", hint: "Very heavy smoker", cigarettesPerDay: 35 },
-  { id: "40_plus", label: "40+", hint: "2+ packs per day", cigarettesPerDay: 45 },
+  { id: "40_50", label: "40–50", hint: "About 2 packs per day", cigarettesPerDay: 45 },
+  { id: "custom", label: "Custom", hint: "Enter your exact number", cigarettesPerDay: 0 },
 ] as const;
 
 export const NICOTINE_HABIT_YEARS_BANDS = [
@@ -30,6 +31,20 @@ export const NICOTINE_HABIT_YEARS_BANDS = [
 
 export type CigarettesPerDayBandId = (typeof CIGARETTES_PER_DAY_BANDS)[number]["id"];
 export type NicotineHabitYearsBandId = (typeof NICOTINE_HABIT_YEARS_BANDS)[number]["id"];
+
+export const CUSTOM_CIGARETTES_PER_DAY_BAND_ID = "custom" as const;
+
+export const MIN_CIGARETTES_PER_DAY = 1;
+
+export function isCustomCigarettesPerDayBand(
+  id: CigarettesPerDayBandId | undefined,
+): boolean {
+  return id === CUSTOM_CIGARETTES_PER_DAY_BAND_ID;
+}
+
+export function isValidCigarettesPerDay(value: number): boolean {
+  return Number.isInteger(value) && value >= MIN_CIGARETTES_PER_DAY;
+}
 
 export const CIGARETTES_PER_DAY_DROPDOWN_OPTIONS: StringDropdownOption[] =
   CIGARETTES_PER_DAY_BANDS.map((b) => ({ value: b.id, label: b.label }));

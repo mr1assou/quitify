@@ -1,8 +1,14 @@
-import { isValidCigarettesPerPack } from "@/constants/onboarding/onboardingNicotineBands";
+import {
+  isCustomCigarettesPerDayBand,
+  isValidCigarettesPerDay,
+  isValidCigarettesPerPack,
+} from "@/constants/onboarding/onboardingNicotineBands";
 import type { OnboardingDraft } from "@/types";
 
 export type NicotineFieldErrors = {
   cigsPerDay?: boolean;
+  cigsPerDayCustom?: boolean;
+  cigsPerDayCustomInvalid?: boolean;
   packSize?: boolean;
   packSizeInvalid?: boolean;
   price?: boolean;
@@ -30,6 +36,18 @@ export function hasInvalidPackCostInput(draft: OnboardingDraft): boolean {
   );
 }
 
+export function hasInvalidCigarettesPerDayCustomInput(
+  draft: OnboardingDraft,
+): boolean {
+  if (!isCustomCigarettesPerDayBand(draft.cigarettesPerDayBand)) return false;
+  const input = draft.cigarettesPerDayCustomInput?.trim();
+  return (
+    input != null &&
+    input.length > 0 &&
+    !isValidCigarettesPerDay(draft.cigarettesPerDay)
+  );
+}
+
 function hasValidCigarettesPerPackInput(draft: OnboardingDraft): boolean {
   const input = draft.cigarettesPerPackInput?.trim();
   return (
@@ -50,9 +68,16 @@ function hasValidPackCost(draft: OnboardingDraft): boolean {
   );
 }
 
+function hasValidCigarettesPerDaySelection(draft: OnboardingDraft): boolean {
+  if (draft.cigarettesPerDayBand == null) return false;
+  if (!isCustomCigarettesPerDayBand(draft.cigarettesPerDayBand)) return true;
+  const input = draft.cigarettesPerDayCustomInput?.trim() ?? "";
+  return input.length > 0 && isValidCigarettesPerDay(draft.cigarettesPerDay);
+}
+
 export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
   return (
-    draft.cigarettesPerDayBand != null &&
+    hasValidCigarettesPerDaySelection(draft) &&
     hasValidCigarettesPerPackInput(draft) &&
     hasValidPackCost(draft) &&
     draft.nicotineHabitYearsBand != null
@@ -68,7 +93,16 @@ export function isNicotineConsumptionStepComplete(draft: OnboardingDraft): boole
 export function getNicotineFieldErrors(draft: OnboardingDraft): NicotineFieldErrors {
   const errors: NicotineFieldErrors = {};
 
-  if (draft.cigarettesPerDayBand == null) errors.cigsPerDay = true;
+  if (draft.cigarettesPerDayBand == null) {
+    errors.cigsPerDay = true;
+  } else if (isCustomCigarettesPerDayBand(draft.cigarettesPerDayBand)) {
+    const customInput = draft.cigarettesPerDayCustomInput?.trim() ?? "";
+    if (!customInput) {
+      errors.cigsPerDayCustom = true;
+    } else if (!isValidCigarettesPerDay(draft.cigarettesPerDay)) {
+      errors.cigsPerDayCustomInvalid = true;
+    }
+  }
 
   const packInput = draft.cigarettesPerPackInput?.trim() ?? "";
   if (!packInput) {
