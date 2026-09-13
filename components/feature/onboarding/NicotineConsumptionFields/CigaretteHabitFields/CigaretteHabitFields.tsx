@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Text, useWindowDimensions, View } from "react-native";
 
 import { CigarettesPerPackField } from "@/components/feature/onboarding/NicotineConsumptionFields/CigarettesPerPackField";
 import { PackCostField } from "@/components/feature/onboarding/NicotineConsumptionFields/PackCostField";
@@ -49,6 +49,8 @@ function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBan
 export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
+  const { height: windowHeight } = useWindowDimensions();
+  const cigsPerDaySheetHeight = Math.min(windowHeight * 0.58, 420);
   const showCustomCigsPerDay = isCustomCigarettesPerDayBand(
     draft.cigarettesPerDayBand,
   );
@@ -103,6 +105,7 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
           options={cigarettesPerDayOptions}
           allowClear={false}
           controlHeight={ONBOARDING_CONTROL_HEIGHT}
+          maxListHeight={cigsPerDaySheetHeight}
           onChange={(value) => {
             if (value && isCigarettesPerDayBand(value)) {
               patch(

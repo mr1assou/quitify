@@ -24,6 +24,8 @@ type Props = {
   allowClear?: boolean;
   showLabel?: boolean;
   controlHeight?: number;
+  /** Caps the options list height inside the bottom sheet. */
+  maxListHeight?: number;
   compact?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -38,6 +40,7 @@ export function SelectFieldString({
   allowClear = true,
   showLabel = true,
   controlHeight,
+  maxListHeight,
   compact = false,
   disabled = false,
   loading = false,
@@ -50,7 +53,7 @@ export function SelectFieldString({
   const selectedLabel =
     value !== undefined ? options.find((o) => o.value === value)?.label : undefined;
 
-  const maxListH = Math.min(winH * 0.45, 320);
+  const maxListH = maxListHeight ?? Math.min(winH * 0.45, 320);
   const useSimpleList = options.length <= 6;
 
   const renderOption = (item: StringDropdownOption) => {
