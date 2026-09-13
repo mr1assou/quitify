@@ -2,16 +2,15 @@ import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
   Pressable,
   Text,
-  UIManager,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { FadeInDown, LinearTransition } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { KeyboardGestureArea } from "react-native-keyboard-controller";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
-import { KeyboardAvoidingScreen } from "@/components/layout/KeyboardAvoidingScreen";
+import { ChatKeyboardShell } from "@/components/feature/chat/ChatKeyboardShell";
 
 import { ChatDaySeparator } from "@/components/feature/chat/ChatDaySeparator";
 import { ChatHeader } from "@/components/feature/chat/ChatHeader";
@@ -46,9 +45,6 @@ import {
 } from "@/utils/chat/chatMessageMutation";
 import { safeRouter } from "@/utils/app/safeRouter";
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 type MessageRow = {
   kind: "message";
@@ -305,7 +301,7 @@ export default function ChatThreadScreen() {
         <ChatHeaderPlaceholder />
       )}
 
-      <KeyboardAvoidingScreen>
+      <ChatKeyboardShell>
         <View style={{ flex: 1, backgroundColor: "transparent" }}>
           {showMessagesLoader ? (
             <View className="flex-1 items-center justify-center gap-3">
@@ -322,54 +318,59 @@ export default function ChatThreadScreen() {
                 </View>
               ) : null}
 
-              <Animated.FlatList
-                ref={listRef}
-                inverted
-                style={{ flex: 1, backgroundColor: "transparent" }}
-                data={rows}
-                extraData={rows.length}
-                removeClippedSubviews={false}
-                keyExtractor={(r) => r.key}
-                itemLayoutAnimation={LinearTransition.duration(220)}
-                contentContainerStyle={{
-                  padding: 16,
-                  paddingBottom: 8,
-                  flexGrow: rows.length ? 0 : 1,
-                }}
-                keyboardShouldPersistTaps="handled"
-                keyboardDismissMode="interactive"
-                renderItem={({ item }) =>
-                  item.kind === "day" ? (
-                    <ChatDaySeparator label={item.label} />
-                  ) : (
-                    <MessageBubble
-                      message={item.message}
-                      fromMe={item.fromMe}
-                      showTimestamp={item.showTimestamp}
-                      readStatus={item.readStatus}
-                      timeZone={timeZone}
-                      animateEntrance={shouldAnimateMessageEntrance(
-                        item.message,
-                        item.fromMe,
-                      )}
-                      showActions={item.fromMe && canShowChatMessageActions(item.message)}
-                      onPressActions={() => openMessageActions(item.message)}
-                    />
-                  )
-                }
-                onEndReached={() => void loadOlder()}
-                onEndReachedThreshold={0.2}
-                ListFooterComponent={
-                  loadingMore ? (
-                    <View className="items-center py-3">
-                      <ActivityIndicator size="small" color={colors.primary} />
-                      <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
-                        Loading earlier messages…
-                      </Text>
-                    </View>
-                  ) : null
-                }
-              />
+              <KeyboardGestureArea
+                style={{ flex: 1 }}
+                interpolator="ios"
+                textInputNativeID="chat-composer-input"
+              >
+                <Animated.FlatList
+                  ref={listRef}
+                  inverted
+                  style={{ flex: 1, backgroundColor: "transparent" }}
+                  data={rows}
+                  extraData={rows.length}
+                  removeClippedSubviews={false}
+                  keyExtractor={(r) => r.key}
+                  contentContainerStyle={{
+                    padding: 16,
+                    paddingBottom: 8,
+                    flexGrow: rows.length ? 0 : 1,
+                  }}
+                  keyboardShouldPersistTaps="handled"
+                  keyboardDismissMode="interactive"
+                  renderItem={({ item }) =>
+                    item.kind === "day" ? (
+                      <ChatDaySeparator label={item.label} />
+                    ) : (
+                      <MessageBubble
+                        message={item.message}
+                        fromMe={item.fromMe}
+                        showTimestamp={item.showTimestamp}
+                        readStatus={item.readStatus}
+                        timeZone={timeZone}
+                        animateEntrance={shouldAnimateMessageEntrance(
+                          item.message,
+                          item.fromMe,
+                        )}
+                        showActions={item.fromMe && canShowChatMessageActions(item.message)}
+                        onPressActions={() => openMessageActions(item.message)}
+                      />
+                    )
+                  }
+                  onEndReached={() => void loadOlder()}
+                  onEndReachedThreshold={0.2}
+                  ListFooterComponent={
+                    loadingMore ? (
+                      <View className="items-center py-3">
+                        <ActivityIndicator size="small" color={colors.primary} />
+                        <Text className="mt-1 text-xs text-muted-foreground dark:text-d-muted">
+                          Loading earlier messages…
+                        </Text>
+                      </View>
+                    ) : null
+                  }
+                />
+              </KeyboardGestureArea>
             </Animated.View>
           )}
         </View>
@@ -388,7 +389,7 @@ export default function ChatThreadScreen() {
           onSaveEdit={onSaveEdit}
           onCancelEdit={() => setEditingMessage(null)}
         />
-      </KeyboardAvoidingScreen>
+      </ChatKeyboardShell>
 
       <ChatMessageModals
         state={messageModal}

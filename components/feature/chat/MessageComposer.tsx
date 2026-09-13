@@ -2,8 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { useReanimatedKeyboardAnimation } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useChatComposerKeyboardProgress } from "@/components/feature/chat/ChatKeyboardShell";
 
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
@@ -46,7 +47,7 @@ export function MessageComposer({
   const { t } = useTranslation();
   const isDark = resolved === "dark";
   const insets = useSafeAreaInsets();
-  const { progress } = useReanimatedKeyboardAnimation();
+  const progress = useChatComposerKeyboardProgress();
   const { pickFromGallery } = usePickChatMedia();
   const resolvedPlaceholder = placeholder === "Message…" ? t("chat.composerPlaceholder") : placeholder;
 
@@ -167,6 +168,7 @@ export function MessageComposer({
           style={{ minHeight: CONTROL, maxHeight: INPUT_MAX_HEIGHT }}
         >
           <TextInput
+            nativeID="chat-composer-input"
             value={text}
             editable={!busy}
             onChangeText={(value) => {
