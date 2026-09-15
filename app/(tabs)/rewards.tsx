@@ -32,7 +32,7 @@ export default function AchievementScreen() {
     resetToBrowse,
     spotAroundCurrentUser,
   } = useLeaderboard();
-  const [section, setSection] = useState<AchievementSection>("rank");
+  const [section, setSection] = useState<AchievementSection>("badges");
 
   const refreshAccountRef = useRef(refreshAccount);
   refreshAccountRef.current = refreshAccount;

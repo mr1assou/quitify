@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import Animated, { FadeIn, ZoomIn } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
 import { MissionMapCurrentNode } from "@/components/feature/missions/MissionMapCurrentNode";
@@ -74,7 +73,7 @@ export function MissionPlanMap({
       }}
     >
       {width > 0 ? (
-        <Animated.View entering={FadeIn.delay(200).duration(600)} style={{ position: "absolute" }}>
+        <View style={{ position: "absolute" }}>
           <Svg width={width} height={height}>
             {centers.slice(0, -1).map((from, i) => {
               const to = centers[i + 1];
@@ -92,7 +91,7 @@ export function MissionPlanMap({
               );
             })}
           </Svg>
-        </Animated.View>
+        </View>
       ) : null}
 
       <View style={{ height }}>
@@ -117,14 +116,13 @@ export function MissionPlanMap({
 
           if (isCurrent) {
             return (
-              <Animated.View
+              <View
                 key={day.day}
-                entering={ZoomIn.delay(index * 40).springify().damping(18)}
                 className={`px-7 ${align}`}
                 style={{ height: ROW, justifyContent: "center" }}
               >
                 <MissionMapCurrentNode day={day.day} onPress={onPress} />
-              </Animated.View>
+              </View>
             );
           }
 
@@ -150,9 +148,8 @@ export function MissionPlanMap({
           }
 
           return (
-            <Animated.View
+            <View
               key={day.day}
-              entering={ZoomIn.delay(index * 40).springify().damping(18)}
               className={`px-7 ${align}`}
               style={{ height: ROW, justifyContent: "center" }}
             >
@@ -196,7 +193,7 @@ export function MissionPlanMap({
                   </Text>
                 ) : null}
               </Pressable>
-            </Animated.View>
+            </View>
           );
         })}
       </View>
