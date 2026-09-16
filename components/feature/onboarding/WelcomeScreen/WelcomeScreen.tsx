@@ -1,4 +1,5 @@
 import { Image, Pressable, Text, View } from "react-native";
+import { useEffect } from "react";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { LanguageToggleButton } from "@/components/layout/LanguageToggleButton";
@@ -6,11 +7,16 @@ import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
 import { WEBSITE_TERMS_URL } from "@/constants/app/website";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { logWelcomeView } from "@/services/analytics/firebaseEvents";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 
 export function WelcomeScreen() {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    logWelcomeView();
+  }, []);
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>

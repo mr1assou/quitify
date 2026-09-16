@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -27,6 +27,7 @@ import {
   GoogleAccountAlreadyExistsError,
   GoogleAccountNotFoundError,
 } from "@/services/auth/googleNativeAuthApi";
+import { logSignupView } from "@/services/analytics/firebaseEvents";
 
 
 export default function OnboardingProfile() {
@@ -48,6 +49,10 @@ export default function OnboardingProfile() {
   const [pageH, setPageH] = useState(0);
   const imageHeight = Math.min(Math.round(introHeroImageHeight(winH) * 1.08), 510);
   const bottomPad = insets.bottom + 40;
+
+  useEffect(() => {
+    if (!isLoginFlow) logSignupView();
+  }, [isLoginFlow]);
 
   const continueWithGoogle = useCallback(async () => {
     if (busy || !isReady) return;

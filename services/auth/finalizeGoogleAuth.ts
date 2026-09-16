@@ -5,6 +5,7 @@ import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftC
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
 import { logMetaCompleteRegistration } from "@/services/analytics/metaEvents";
+import { logSignupSuccess } from "@/services/analytics/firebaseEvents";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import { syncOnboardingToBackend } from "./syncOnboardingApi";
@@ -50,6 +51,7 @@ export async function finalizeGoogleAuth(
 
     if (auth.isNewUser) {
       logMetaCompleteRegistration("google");
+      logSignupSuccess("google");
     }
   })().finally(() => {
     finishPromise = null;

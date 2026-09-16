@@ -1,52 +1,38 @@
-import { useCallback, useRef, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ScrollView, View } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 
 import { AchievementSectionTabs } from "@/components/feature/achievement/AchievementSectionTabs";
+import { AwardsRankSection } from "@/components/feature/achievement/AwardsRankSection";
 import { BadgesGallery } from "@/components/feature/progress/BadgesGallery";
 import { NextBadgeCard } from "@/components/feature/progress/NextBadgeCard";
-import { RankLeaderboard } from "@/components/feature/progress/RankLeaderboard";
 import { AppBrandMark } from "@/components/layout/AppBrandMark";
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import type { AchievementSection } from "@/constants/progress/achievementSections";
-import { useTheme } from "@/context/ThemeContext";
-import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
 import { useRefreshAccount } from "@/hooks/auth/useRefreshAccount";
 import { useProgress } from "@/hooks/progress/useProgress";
 
 export default function AchievementScreen() {
-  const { colors } = useTheme();
   const progress = useProgress();
   const refreshAccount = useRefreshAccount();
-  const {
-    snapshot: leaderboard,
-    loading,
-    hasMore,
-    hasMoreAbove,
-    loadingMore,
-    loadingAbove,
-    viewMode,
-    loadMore,
-    loadMoreAbove,
-    resetToBrowse,
-    spotAroundCurrentUser,
-  } = useLeaderboard();
   const [section, setSection] = useState<AchievementSection>("badges");
+  /** Keep Rank mounted after first open so tab switches stay instant. */
+  const [rankMounted, setRankMounted] = useState(false);
 
   const refreshAccountRef = useRef(refreshAccount);
   refreshAccountRef.current = refreshAccount;
-  const resetToBrowseRef = useRef(resetToBrowse);
-  resetToBrowseRef.current = resetToBrowse;
 
-  // Only on focus enter — not when callback identities change mid-browse
-  // (that was cancelling in-flight Show more).
   useFocusEffect(
     useCallback(() => {
       void refreshAccountRef.current();
-      void resetToBrowseRef.current();
     }, []),
   );
+
+  const onSectionChange = useCallback((next: AchievementSection) => {
+    if (next === "rank") setRankMounted(true);
+    setSection(next);
+  }, []);
 
   if (!progress) return null;
 
@@ -56,34 +42,20 @@ export default function AchievementScreen() {
     <ScreenCanvas edges={["top"]}>
       <ScreenHeader leading={<AppBrandMark />} />
       <View className="mt-6 px-6">
-        <AchievementSectionTabs value={section} onChange={setSection} />
+        <AchievementSectionTabs value={section} onChange={onSectionChange} />
       </View>
 
-      <View
-        className="flex-1"
-        style={{ display: showRank ? "flex" : "none" }}
-        pointerEvents={showRank ? "auto" : "none"}
-        accessibilityElementsHidden={!showRank}
-        importantForAccessibility={showRank ? "auto" : "no-hide-descendants"}
-      >
-        {leaderboard ? (
-          <RankLeaderboard
-            leaderboard={leaderboard}
-            hasMore={hasMore}
-            hasMoreAbove={hasMoreAbove}
-            loadingMore={loadingMore || loading}
-            loadingAbove={loadingAbove}
-            viewMode={viewMode}
-            onLoadMore={loadMore}
-            onLoadMoreAbove={loadMoreAbove}
-            onSpotAroundCurrentUser={spotAroundCurrentUser}
-          />
-        ) : (
-          <View className="flex-1 items-center justify-center py-16">
-            {loading ? <ActivityIndicator size="large" color={colors.primary} /> : null}
-          </View>
-        )}
-      </View>
+      {rankMounted ? (
+        <View
+          className="flex-1"
+          style={{ display: showRank ? "flex" : "none" }}
+          pointerEvents={showRank ? "auto" : "none"}
+          accessibilityElementsHidden={!showRank}
+          importantForAccessibility={showRank ? "auto" : "no-hide-descendants"}
+        >
+          <AwardsRankSection active={showRank} />
+        </View>
+      ) : null}
 
       <View
         className="flex-1"

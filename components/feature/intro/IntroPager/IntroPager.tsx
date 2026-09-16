@@ -34,6 +34,7 @@ import {
 import { useTheme } from "@/context/ThemeContext";
 import { useIntroSlides } from "@/hooks/i18n/useIntroSlides";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { logIntroSlide } from "@/services/analytics/firebaseEvents";
 
 const NEXT_ROUTE = "/onboarding/reasons";
 const SWIPE_THRESHOLD_RATIO = 0.22;
@@ -60,6 +61,10 @@ export function IntroPager() {
   const pageWidthRef = useRef(pageWidth);
   pageWidthRef.current = pageWidth;
   const allowLeaveRef = useRef(false);
+
+  useEffect(() => {
+    logIntroSlide(index + 1);
+  }, [index]);
 
   const goTo = (page: number) => {
     const clamped = Math.max(0, Math.min(total - 1, page));

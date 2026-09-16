@@ -16,6 +16,10 @@ import {
   isPurchaseCancelledError,
   purchaseErrorMessage,
 } from "@/utils/purchases/revenueCatErrors";
+import {
+  logPaywallPurchaseFail,
+  logPaywallPurchaseSuccess,
+} from "@/services/analytics/firebaseEvents";
 
 export function useSpecialPaywallOffer() {
   const { state, setAccount } = useApp();
@@ -55,18 +59,28 @@ export function useSpecialPaywallOffer() {
     setPurchasing(true);
     try {
       const entitled = await purchaseSpecialYearlyOffer();
-      if (!entitled) return false;
+      if (!entitled) {
+        logPaywallPurchaseFail("special");
+        return false;
+      }
 
       const ownership = await getRevenueCatOwnershipIds();
-      return await persistPremiumStatus(
+      const premium = await persistPremiumStatus(
         true,
         setAccount,
         state.account,
         ownership?.originalAppUserId ?? String(state.account?.userId ?? ""),
       );
+      if (premium) {
+        logPaywallPurchaseSuccess("special");
+      } else {
+        logPaywallPurchaseFail("special");
+      }
+      return premium;
     } catch (error) {
       if (isPurchaseCancelledError(error)) return false;
 
+      logPaywallPurchaseFail("special");
       Alert.alert(
         "Subscription",
         purchaseErrorMessage(

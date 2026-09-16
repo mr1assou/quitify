@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -20,6 +20,10 @@ import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
+import {
+  logPaywallClose,
+  logPaywallView,
+} from "@/services/analytics/firebaseEvents";
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 const PAYWALL_COLORS = getThemeColors("dark");
@@ -29,14 +33,36 @@ export default function PaywallOffer() {
   const insets = useSafeAreaInsets();
   const { offer, loading, purchasing, purchaseOffer } = useSpecialPaywallOffer();
   const [phase, setPhase] = useState<"spin" | "offer">("spin");
+  const phaseRef = useRef(phase);
+  phaseRef.current = phase;
+  const closedLoggedRef = useRef(false);
+  const convertedRef = useRef(false);
+  const spinViewLoggedRef = useRef(false);
+  const specialViewLoggedRef = useRef(false);
 
   const dismiss = useCallback(async () => {
+    if (
+      !closedLoggedRef.current &&
+      !convertedRef.current &&
+      (spinViewLoggedRef.current || specialViewLoggedRef.current)
+    ) {
+      closedLoggedRef.current = true;
+      logPaywallClose(phaseRef.current === "spin" ? "spin" : "special");
+    }
     await markPostPaywallFlowComplete();
     safeRouter.back();
   }, []);
 
   useEffect(() => {
     return () => {
+      if (
+        !closedLoggedRef.current &&
+        !convertedRef.current &&
+        (spinViewLoggedRef.current || specialViewLoggedRef.current)
+      ) {
+        closedLoggedRef.current = true;
+        logPaywallClose(phaseRef.current === "spin" ? "spin" : "special");
+      }
       void markPostPaywallFlowComplete();
     };
   }, []);
@@ -48,10 +74,23 @@ export default function PaywallOffer() {
     void dismiss();
   }, [dismiss, loading, offer]);
 
+  useEffect(() => {
+    if (loading || !offer || offer.discountPercent <= 0) return;
+    if (phase === "spin" && !spinViewLoggedRef.current) {
+      spinViewLoggedRef.current = true;
+      logPaywallView("spin");
+    }
+    if (phase === "offer" && !specialViewLoggedRef.current) {
+      specialViewLoggedRef.current = true;
+      logPaywallView("special");
+    }
+  }, [loading, offer, phase]);
+
   const claimOffer = async () => {
     const premium = await purchaseOffer();
     if (!premium) return;
 
+    convertedRef.current = true;
     await markPostPaywallFlowComplete();
     safeRouter.back();
   };

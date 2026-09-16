@@ -1,12 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { logOnboardingStep } from "@/services/analytics/firebaseEvents";
 
 type Props = {
   step: number;
@@ -40,6 +41,10 @@ export function OnboardingShell({
   const { t } = useTranslation();
   const looksDisabled = Boolean(primaryDisabled);
   const blocksPress = looksDisabled && !primaryPressWhenDisabled;
+
+  useEffect(() => {
+    logOnboardingStep(step);
+  }, [step]);
 
   return (
     <ScreenCanvas edges={["top", "bottom"]}>

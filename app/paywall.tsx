@@ -26,6 +26,10 @@ import {
   getCachedSpecialPaywallOffer,
   prefetchSpecialPaywallOffer,
 } from "@/utils/paywall/specialOfferCache";
+import {
+  logPaywallClose,
+  logPaywallView,
+} from "@/services/analytics/firebaseEvents";
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 
@@ -47,6 +51,11 @@ export default function Paywall() {
   const convertedRef = useRef(false);
   /** True once close/back is routing into the spin offer (allows navigation to proceed). */
   const openingComparisonRef = useRef(false);
+  const closedLoggedRef = useRef(false);
+
+  useEffect(() => {
+    logPaywallView("normal");
+  }, []);
 
   // Prefetch special offer while the paywall is open so close can show spin instantly.
   useEffect(() => {
@@ -62,6 +71,12 @@ export default function Paywall() {
         void markPostPaywallFlowComplete();
       }
     };
+  }, []);
+
+  const logNormalCloseOnce = useCallback(() => {
+    if (closedLoggedRef.current || convertedRef.current) return;
+    closedLoggedRef.current = true;
+    logPaywallClose("normal");
   }, []);
 
   const selectedPlanHasTrial =
@@ -85,6 +100,7 @@ export default function Paywall() {
   const openComparisonAfterDismiss = useCallback(() => {
     if (convertedRef.current || openingComparisonRef.current) return;
     openingComparisonRef.current = true;
+    logNormalCloseOnce();
 
     setFlag("hasSeenPaywall", true);
 
@@ -116,7 +132,7 @@ export default function Paywall() {
         }
       }, canGoBack ? PAYWALL_MODAL_DISMISS_MS : 0);
     })();
-  }, [setFlag]);
+  }, [logNormalCloseOnce, setFlag]);
 
   // Close button and system/gesture back both open the spin screen (unless user purchased).
   useEffect(() => {
