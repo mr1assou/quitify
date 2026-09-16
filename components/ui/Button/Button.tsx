@@ -1,4 +1,4 @@
-import { type ReactNode, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, Text, type PressableProps } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -83,26 +83,32 @@ export function Button({
     transform: [{ scale: scale.value }],
     opacity: opacity.value,
   }));
-  const isDisabled = disabled || loading;
+  const isDisabled = Boolean(disabled || loading);
   const spinnerColor =
     variant === "ghost" || variant === "secondary" ? colors.primary : colors.white;
+
+  useEffect(() => {
+    opacity.value = withTiming(isDisabled ? 0.5 : 1, { duration: 120 });
+    scale.value = withTiming(1, { duration: 120 });
+  }, [isDisabled, opacity, scale]);
 
   return (
     <AnimatedPressable
       {...rest}
       disabled={isDisabled}
       onPressIn={() => {
-        if (!pressScale || holdPressedRef.current) return;
+        if (isDisabled || !pressScale || holdPressedRef.current) return;
         scale.value = withTiming(0.97, { duration: 70 });
         opacity.value = withTiming(0.88, { duration: 70 });
       }}
       onPressOut={() => {
-        if (!pressScale) return;
+        if (isDisabled || !pressScale) return;
         if (holdPressedRef.current) return;
         scale.value = withTiming(1, { duration: 120 });
         opacity.value = withTiming(1, { duration: 120 });
       }}
       onPress={(e) => {
+        if (isDisabled) return;
         if (preventDoublePress && pressLockedRef.current) return;
         if (preventDoublePress) {
           pressLockedRef.current = true;
@@ -121,7 +127,6 @@ export function Button({
         sizeContainer[size],
         containerByVariant[variant],
         fullWidth ? "w-full" : "self-start",
-        isDisabled ? "opacity-50" : "",
       ].join(" ")}
     >
       {loading ? (
