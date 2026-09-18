@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from "react-native";
+import { KeyboardController } from "react-native-keyboard-controller";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -60,31 +61,47 @@ export function MessageComposer({
   }));
   const { isRecording, startRecording, stopRecording, cancelRecording } = useRecordChatAudio();
   const [text, setText] = useState("");
+  const textRef = useRef("");
+  const inputRef = useRef<TextInput>(null);
   const isEditing = Boolean(editState);
+
+  const updateText = (value: string) => {
+    textRef.current = value;
+    setText(value);
+  };
 
   useEffect(() => {
     if (editState) {
-      setText(editState.initialText);
+      updateText(editState.initialText);
       return;
     }
-    setText("");
+    updateText("");
   }, [editState]);
 
   const hasText = text.trim().length > 0;
   const busy = disabled || isSendingMedia || isRecording;
 
+  const keepKeyboardOpen = () => {
+    inputRef.current?.focus();
+    KeyboardController.setFocusTo("current");
+  };
+
   const submit = () => {
-    const trimmed = text.trim();
+    const trimmed = textRef.current.trim();
     if (!trimmed || busy) return;
+    keepKeyboardOpen();
     onTypingChange?.(false);
 
     if (isEditing && editState && onSaveEdit) {
       void onSaveEdit(editState.messageId, trimmed);
+      keepKeyboardOpen();
       return;
     }
 
     onSend(trimmed);
+    textRef.current = "";
     setText("");
+    keepKeyboardOpen();
   };
 
   const onMicPressIn = async () => {
@@ -168,11 +185,13 @@ export function MessageComposer({
           style={{ minHeight: CONTROL, maxHeight: INPUT_MAX_HEIGHT }}
         >
           <TextInput
+            ref={inputRef}
             nativeID="chat-composer-input"
             value={text}
             editable={!busy}
+            blurOnSubmit={false}
             onChangeText={(value) => {
-              setText(value);
+              updateText(value);
               if (!isEditing) {
                 onTypingChange?.(value.trim().length > 0);
               }
@@ -193,7 +212,9 @@ export function MessageComposer({
 
         {hasText ? (
           <Pressable
-            onPress={submit}
+            focusable={false}
+            onPressIn={submit}
+            onPressOut={keepKeyboardOpen}
             hitSlop={6}
             disabled={busy}
             className="items-center justify-center rounded-full bg-primary"

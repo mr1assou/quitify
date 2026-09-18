@@ -347,15 +347,15 @@ export default function ChatThreadScreen() {
                   keyExtractor={keyExtractor}
                   renderItem={renderItem}
                   windowSize={11}
-                  maxToRenderPerBatch={8}
-                  updateCellsBatchingPeriod={50}
+                  maxToRenderPerBatch={16}
+                  updateCellsBatchingPeriod={0}
                   initialNumToRender={16}
                   contentContainerStyle={{
                     padding: 16,
                     paddingBottom: 8,
                     flexGrow: rows.length ? 0 : 1,
                   }}
-                  keyboardShouldPersistTaps="handled"
+                  keyboardShouldPersistTaps="always"
                   keyboardDismissMode="none"
                   automaticallyAdjustKeyboardInsets={false}
                   automaticallyAdjustContentInsets={false}
