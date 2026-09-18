@@ -8,8 +8,9 @@ import {
 import { useSharedValue } from "react-native-reanimated";
 
 /**
- * Tracks keyboard height/progress on the UI thread without forcing Android
- * adjustResize (which relayouts the whole chat and feels laggy).
+ * Tracks keyboard height/progress on the UI thread. Android uses
+ * ADJUST_NOTHING so the window does not resize; a spacer under the composer
+ * lifts the input like WhatsApp.
  */
 export function useChatKeyboardMotion() {
   const height = useSharedValue(0);

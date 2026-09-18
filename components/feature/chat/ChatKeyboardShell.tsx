@@ -23,30 +23,27 @@ type Props = {
 };
 
 /**
- * Slides the thread + composer with the keyboard (UI thread).
- * The window does not resize, so bubbles stay put like WhatsApp / Instagram.
+ * WhatsApp-style: list stays in place, a spacer grows under the composer so
+ * only the input (and the list viewport) move with the keyboard on the UI thread.
  */
 export function ChatKeyboardShell({ children }: Props) {
   const { height, progress } = useChatKeyboardMotion();
-  const bodyStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: -height.value }],
+  const spacerStyle = useAnimatedStyle(() => ({
+    height: height.value,
   }));
 
   return (
     <ChatKeyboardProgressContext.Provider value={progress}>
-      <View style={styles.clip}>
-        <Animated.View style={[styles.body, bodyStyle]}>{children}</Animated.View>
+      <View style={styles.root}>
+        {children}
+        <Animated.View pointerEvents="none" style={spacerStyle} />
       </View>
     </ChatKeyboardProgressContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  clip: {
-    flex: 1,
-    overflow: "hidden",
-  },
-  body: {
+  root: {
     flex: 1,
   },
 });

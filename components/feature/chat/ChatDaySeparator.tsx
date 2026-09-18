@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Text, View } from "react-native";
 
 type Props = {
@@ -5,7 +6,7 @@ type Props = {
 };
 
 /** Centered day / month / year label between chat message blocks. */
-export function ChatDaySeparator({ label }: Props) {
+export const ChatDaySeparator = memo(function ChatDaySeparator({ label }: Props) {
   return (
     <View className="my-3 items-center px-4" accessibilityRole="header">
       <Text className="text-center text-xs font-medium text-muted-foreground dark:text-d-muted">
@@ -13,4 +14,4 @@ export function ChatDaySeparator({ label }: Props) {
       </Text>
     </View>
   );
-}
+});

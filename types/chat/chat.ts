@@ -5,6 +5,8 @@ export type MessageReadStatus = "seen" | "unseen";
 
 export type ChatMessage = {
   id: string;
+  /** Stays the same when an optimistic send is swapped for the server id. */
+  clientKey?: string;
   threadId: string;
   senderId: string;
   text: string;

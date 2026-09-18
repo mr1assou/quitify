@@ -2,12 +2,12 @@ import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  FlatList,
   Pressable,
   Text,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { FadeInDown } from "react-native-reanimated";
 import { KeyboardGestureArea } from "react-native-keyboard-controller";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
 import { ChatKeyboardShell } from "@/components/feature/chat/ChatKeyboardShell";
@@ -63,13 +63,6 @@ type DayRow = {
 
 type Row = MessageRow | DayRow;
 
-/** Animate optimistic sends + freshly arrived peer messages; skip history and post-send id replace. */
-function shouldAnimateMessageEntrance(message: ChatMessage, fromMe: boolean): boolean {
-  if (message.id.startsWith("temp-")) return true;
-  if (fromMe) return false;
-  return Date.now() - message.createdAt < 2_500;
-}
-
 export default function ChatThreadScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const threadId = typeof id === "string" ? id : "";
@@ -93,7 +86,7 @@ export default function ChatThreadScreen() {
   );
   const { peerTyping, onComposerTypingChange, stopTyping, markSeenNow } =
     useChatThreadRealtime(threadId);
-  const listRef = useRef<Animated.FlatList<Row>>(null);
+  const listRef = useRef<FlatList<Row>>(null);
   const [hydrating, setHydrating] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -177,7 +170,7 @@ export default function ChatThreadScreen() {
 
       chronological.push({
         kind: "message",
-        key: message.id,
+        key: message.clientKey ?? message.id,
         message,
         fromMe: message.senderId === "me",
         showTimestamp,
@@ -212,7 +205,7 @@ export default function ChatThreadScreen() {
     if (!requireSendAccess()) return;
     stopTyping();
     void sendMessage(detail.participant.id, text, detail.threadId);
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
   };
 
   const openMessageActions = useCallback((message: ChatMessage) => {
@@ -268,7 +261,7 @@ export default function ChatThreadScreen() {
     setSendingMedia(true);
     try {
       await sendMediaMessages(detail.participant.id, items, detail.threadId);
-      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
     } finally {
       setSendingMedia(false);
     }
@@ -277,6 +270,29 @@ export default function ChatThreadScreen() {
   const firstName = detail
     ? detail.participant.name.trim().split(/\s+/)[0] || detail.participant.name
     : "";
+
+  const keyExtractor = useCallback((row: Row) => row.key, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Row }) => {
+      if (item.kind === "day") {
+        return <ChatDaySeparator label={item.label} />;
+      }
+
+      return (
+        <MessageBubble
+          message={item.message}
+          fromMe={item.fromMe}
+          showTimestamp={item.showTimestamp}
+          readStatus={item.readStatus}
+          timeZone={timeZone}
+          showActions={item.fromMe && canShowChatMessageActions(item.message)}
+          onPressActions={openMessageActions}
+        />
+      );
+    },
+    [openMessageActions, timeZone],
+  );
 
   if (showNotFound) {
     return (
@@ -311,7 +327,7 @@ export default function ChatThreadScreen() {
               </Text>
             </View>
           ) : (
-            <Animated.View entering={FadeInDown.duration(360)} style={{ flex: 1, backgroundColor: "transparent" }}>
+            <View style={{ flex: 1, backgroundColor: "transparent" }}>
               {rows.length === 0 && detail ? (
                 <View className="absolute left-0 right-0 top-4 z-10" pointerEvents="none">
                   <ChatEmptyGreeting participantName={detail.participant.name} />
@@ -323,40 +339,26 @@ export default function ChatThreadScreen() {
                 interpolator="ios"
                 textInputNativeID="chat-composer-input"
               >
-                <Animated.FlatList
+                <FlatList
                   ref={listRef}
                   inverted
                   style={{ flex: 1, backgroundColor: "transparent" }}
                   data={rows}
-                  extraData={rows.length}
-                  removeClippedSubviews={false}
-                  keyExtractor={(r) => r.key}
+                  keyExtractor={keyExtractor}
+                  renderItem={renderItem}
+                  windowSize={11}
+                  maxToRenderPerBatch={8}
+                  updateCellsBatchingPeriod={50}
+                  initialNumToRender={16}
                   contentContainerStyle={{
                     padding: 16,
                     paddingBottom: 8,
                     flexGrow: rows.length ? 0 : 1,
                   }}
                   keyboardShouldPersistTaps="handled"
-                  keyboardDismissMode="interactive"
-                  renderItem={({ item }) =>
-                    item.kind === "day" ? (
-                      <ChatDaySeparator label={item.label} />
-                    ) : (
-                      <MessageBubble
-                        message={item.message}
-                        fromMe={item.fromMe}
-                        showTimestamp={item.showTimestamp}
-                        readStatus={item.readStatus}
-                        timeZone={timeZone}
-                        animateEntrance={shouldAnimateMessageEntrance(
-                          item.message,
-                          item.fromMe,
-                        )}
-                        showActions={item.fromMe && canShowChatMessageActions(item.message)}
-                        onPressActions={() => openMessageActions(item.message)}
-                      />
-                    )
-                  }
+                  keyboardDismissMode="none"
+                  automaticallyAdjustKeyboardInsets={false}
+                  automaticallyAdjustContentInsets={false}
                   onEndReached={() => void loadOlder()}
                   onEndReachedThreshold={0.2}
                   ListFooterComponent={
@@ -371,7 +373,7 @@ export default function ChatThreadScreen() {
                   }
                 />
               </KeyboardGestureArea>
-            </Animated.View>
+            </View>
           )}
         </View>
 

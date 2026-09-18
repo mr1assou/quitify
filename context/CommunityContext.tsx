@@ -799,8 +799,12 @@ function reducer(state: State, action: Action): State {
 
     case "REPLACE_CHAT_MESSAGE": {
       const messagesById = { ...state.messagesById };
+      const previous = messagesById[action.tempId];
       delete messagesById[action.tempId];
-      messagesById[action.message.id] = action.message;
+      messagesById[action.message.id] = {
+        ...action.message,
+        clientKey: previous?.clientKey ?? action.tempId,
+      };
 
       const threads = state.threads.map((thread) => {
         if (!thread.messageIds.includes(action.tempId)) return thread;
@@ -1499,6 +1503,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       const tempId = `temp-${Date.now()}`;
       const optimistic: ChatMessage = {
         id: tempId,
+        clientKey: tempId,
         threadId: resolvedThreadId,
         senderId: CURRENT_USER_ID,
         text: trimmed,
@@ -1546,6 +1551,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
         const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
         const optimistic: ChatMessage = {
           id: tempId,
+          clientKey: tempId,
           threadId: resolvedThreadId,
           senderId: CURRENT_USER_ID,
           text: "",
