@@ -14,8 +14,13 @@ import { getAccessToken } from "@/utils/auth/authStorage";
 /** Keeps the chat WebSocket alive while the user is signed in. */
 export function useChatSocket() {
   const { isHydrated, state } = useApp();
-  const { loadChatThreads, receiveChatMessage, applyChatMessageUpdate, setMessagesSeen } =
-    useCommunity();
+  const {
+    loadChatThreads,
+    receiveChatMessage,
+    applyChatMessageUpdate,
+    setMessagesSeen,
+    flushChatOutbox,
+  } = useCommunity();
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const signedIn = isHydrated && Boolean(state.account);
   const userId = state.account?.userId ?? null;
@@ -27,7 +32,7 @@ export function useChatSocket() {
     }
 
     let cancelled = false;
-    let unsubscribe = () => undefined;
+    let unsubscribe: () => void = () => undefined;
 
     const connect = async () => {
       const token = await getAccessToken();
@@ -39,6 +44,8 @@ export function useChatSocket() {
         // API so anything missed while the socket was down still shows up.
         onConnected: () => {
           void loadChatThreads();
+          // Anything written on the device while offline goes out now.
+          void flushChatOutbox();
         },
         onMessage: (payload) => {
           if (payload.sender_id === userId) return;
@@ -61,6 +68,7 @@ export function useChatSocket() {
 
       connectChatSocket(token);
       await loadChatThreads();
+      void flushChatOutbox();
     };
 
     void connect();
@@ -70,7 +78,15 @@ export function useChatSocket() {
       unsubscribe();
       disconnectChatSocket();
     };
-  }, [applyChatMessageUpdate, loadChatThreads, receiveChatMessage, setMessagesSeen, signedIn, userId]);
+  }, [
+    applyChatMessageUpdate,
+    flushChatOutbox,
+    loadChatThreads,
+    receiveChatMessage,
+    setMessagesSeen,
+    signedIn,
+    userId,
+  ]);
 
   useEffect(() => {
     if (!signedIn || !userId) return;
@@ -85,9 +101,10 @@ export function useChatSocket() {
         if (!token) return;
         connectChatSocket(token);
         await loadChatThreads();
+        void flushChatOutbox();
       })();
     });
 
     return () => subscription.remove();
-  }, [loadChatThreads, signedIn, userId]);
+  }, [flushChatOutbox, loadChatThreads, signedIn, userId]);
 }

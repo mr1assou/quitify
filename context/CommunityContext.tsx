@@ -33,7 +33,20 @@ import {
   voteOnComment,
   voteOnPost,
 } from "@/services/posts/postsApi";
-import type { ChatMessage, ChatThread } from "@/types/chat/chat";
+import type { ChatMessage, ChatThread, MessageSyncStatus } from "@/types/chat/chat";
+import {
+  insertPendingMessage,
+  markMessageFailed,
+  markMessagePending,
+  markMessageSent,
+  readOlderThreadMessages,
+  readOutbox,
+  readThreadMessages,
+  upsertServerMessages,
+  type OutboxItem,
+} from "@/services/chat/localChatDb";
+import { CHAT_MESSAGES_PAGE_SIZE } from "@/constants/chat/chatMessages";
+import type { SendChatMessagePayload } from "@/types/chat/chatApi";
 import type { CommunityPost, CommunityUser, PostComment, PostVote } from "@/types/community/community";
 import type { BackendPostCommentEngagement, BackendPostEngagement } from "@/types/community/postsApi";
 import {
@@ -175,6 +188,7 @@ type Action =
       message: ChatMessage;
     }
   | { type: "PATCH_CHAT_MESSAGE"; message: ChatMessage }
+  | { type: "SET_MESSAGE_SYNC_STATUS"; messageId: string; syncStatus: MessageSyncStatus }
   | { type: "PATCH_COMMENT_VOTE"; commentId: string; myVote: PostVote | null }
   | { type: "SYNC_COMMENT_ENGAGEMENT"; commentId: string; engagement: BackendPostCommentEngagement }
   | { type: "SET_MESSAGES_SEEN"; threadId: string; lastReadAt: number }
@@ -258,6 +272,31 @@ function isPendingChatMessageId(id: string): boolean {
 
 function collectPendingMessageIds(messageIds: string[]): string[] {
   return messageIds.filter(isPendingChatMessageId);
+}
+
+/**
+ * Server payloads never carry `clientKey`. Keep the key we already render under
+ * so a bubble is not remounted when the same message arrives again (history
+ * refresh, thread summary, socket echo).
+ */
+function preserveClientKey(
+  messagesById: Record<string, ChatMessage>,
+  message: ChatMessage,
+): ChatMessage {
+  if (message.clientKey) return message;
+  const existingKey = messagesById[message.id]?.clientKey;
+  return existingKey ? { ...message, clientKey: existingKey } : message;
+}
+
+function mergeMessagesPreservingKeys(
+  current: Record<string, ChatMessage>,
+  incoming: Record<string, ChatMessage>,
+): Record<string, ChatMessage> {
+  const merged = { ...current };
+  for (const message of Object.values(incoming)) {
+    merged[message.id] = preserveClientKey(current, message);
+  }
+  return merged;
 }
 
 function reducer(state: State, action: Action): State {
@@ -627,7 +666,7 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         threads: [...mergedApiThreads, ...localOnlyThreads],
-        messagesById: { ...state.messagesById, ...action.messagesById },
+        messagesById: mergeMessagesPreservingKeys(state.messagesById, action.messagesById),
         authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
       };
     }
@@ -639,7 +678,7 @@ function reducer(state: State, action: Action): State {
           const existing = state.threads.find((row) => row.id === thread.id);
           return mergeThreadFromSummary(existing, thread);
         }),
-        messagesById: { ...state.messagesById, ...action.messagesById },
+        messagesById: mergeMessagesPreservingKeys(state.messagesById, action.messagesById),
         authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
       };
     }
@@ -657,7 +696,7 @@ function reducer(state: State, action: Action): State {
       return {
         ...state,
         threads: [...mergedExisting, ...appended],
-        messagesById: { ...state.messagesById, ...action.messagesById },
+        messagesById: mergeMessagesPreservingKeys(state.messagesById, action.messagesById),
         authorsById: mergeAuthorsById(state.authorsById, action.authorsById),
       };
     }
@@ -666,7 +705,7 @@ function reducer(state: State, action: Action): State {
       const existingIndex = state.threads.findIndex((t) => t.id === action.thread.id);
       const messagesById = { ...state.messagesById };
       for (const message of action.messages) {
-        messagesById[message.id] = message;
+        messagesById[message.id] = preserveClientKey(state.messagesById, message);
       }
       const participant = mergeCommunityUser(
         state.authorsById[action.participant.id],
@@ -699,7 +738,7 @@ function reducer(state: State, action: Action): State {
       const messagesById = { ...state.messagesById };
       const messageIds: string[] = [];
       for (const message of action.messages) {
-        messagesById[message.id] = message;
+        messagesById[message.id] = preserveClientKey(state.messagesById, message);
         messageIds.push(message.id);
       }
 
@@ -732,7 +771,7 @@ function reducer(state: State, action: Action): State {
       const messagesById = { ...state.messagesById };
       const prependIds: string[] = [];
       for (const message of action.messages) {
-        messagesById[message.id] = message;
+        messagesById[message.id] = preserveClientKey(state.messagesById, message);
         prependIds.push(message.id);
       }
 
@@ -751,7 +790,7 @@ function reducer(state: State, action: Action): State {
     }
 
     case "RECEIVE_CHAT_MESSAGE": {
-      const { message } = action;
+      const message = preserveClientKey(state.messagesById, action.message);
       const messagesById = { ...state.messagesById, [message.id]: message };
       let authorsById = state.authorsById;
       if (action.participant) {
@@ -827,10 +866,23 @@ function reducer(state: State, action: Action): State {
         [action.message.id]: {
           ...existing,
           ...action.message,
+          clientKey: existing.clientKey ?? action.message.clientKey,
           readStatus: existing.readStatus,
         },
       };
       return { ...state, messagesById };
+    }
+
+    case "SET_MESSAGE_SYNC_STATUS": {
+      const existing = state.messagesById[action.messageId];
+      if (!existing || existing.syncStatus === action.syncStatus) return state;
+      return {
+        ...state,
+        messagesById: {
+          ...state.messagesById,
+          [action.messageId]: { ...existing, syncStatus: action.syncStatus },
+        },
+      };
     }
 
     case "SET_MESSAGES_SEEN": {
@@ -905,6 +957,8 @@ type CommunityContextValue = {
     threadId?: string,
   ) => Promise<void>;
   markThreadRead: (threadId: string) => Promise<void>;
+  /** Retry messages saved on the device that have not reached the server yet. */
+  flushChatOutbox: () => Promise<void>;
   editChatMessage: (threadId: string, messageId: string, text: string) => Promise<boolean>;
   deleteChatMessage: (threadId: string, messageId: string) => Promise<boolean>;
   receiveChatMessage: (message: ChatMessage, participant?: CommunityUser) => void;
@@ -927,6 +981,8 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const [chatThreadsLoadingMore, setChatThreadsLoadingMore] = useState(false);
   const postVoteInFlightRef = useRef<Set<string>>(new Set());
   const commentVoteInFlightRef = useRef<Set<string>>(new Set());
+  /** Chat outbox rows currently being pushed to the server (by clientKey). */
+  const outboxInFlightRef = useRef<Set<string>>(new Set());
   const pendingPostVoteRef = useRef<Map<string, PostVote | null>>(new Map());
   const pendingCommentVoteRef = useRef<Map<string, PostVote | null>>(new Map());
   /** Latest optimistic myVote per post — avoids stale stateRef between rapid taps. */
@@ -1335,27 +1391,47 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     }
   }, [chatThreadsHasMore, currentUserId]);
 
+  /**
+   * Local-first (WhatsApp-style): show what the phone already has right away,
+   * then refresh from the server in the background and store the result.
+   * Only waits for the network when the device has nothing for this thread.
+   */
   const loadChatMessages = useCallback(
     async (threadId: string) => {
       if (!currentUserId) return;
+      const userId = currentUserId;
 
+      let hadLocal = false;
       try {
-        const page = await fetchChatMessages(Number(threadId));
-        const messages = page.items.map((row) =>
-          mapBackendMessage(row, currentUserId),
-        );
-        dispatch({
-          type: "SET_THREAD_MESSAGES",
-          threadId,
-          messages,
-          hasMore: page.has_more,
-          peerLastReadAt: page.peer_last_read_at
-            ? Date.parse(page.peer_last_read_at)
-            : undefined,
-        });
+        const local = await readThreadMessages(userId, threadId, CHAT_MESSAGES_PAGE_SIZE);
+        if (local.length > 0) {
+          hadLocal = true;
+          dispatch({ type: "SET_THREAD_MESSAGES", threadId, messages: local });
+        }
       } catch {
-        // keep cached messages
+        // local store unavailable — fall through to the network
       }
+
+      const refresh = (async () => {
+        try {
+          const page = await fetchChatMessages(Number(threadId));
+          const messages = page.items.map((row) => mapBackendMessage(row, userId));
+          void upsertServerMessages(userId, messages).catch(() => undefined);
+          dispatch({
+            type: "SET_THREAD_MESSAGES",
+            threadId,
+            messages,
+            hasMore: page.has_more,
+            peerLastReadAt: page.peer_last_read_at
+              ? Date.parse(page.peer_last_read_at)
+              : undefined,
+          });
+        } catch {
+          // keep cached messages
+        }
+      })();
+
+      if (!hadLocal) await refresh;
     },
     [currentUserId],
   );
@@ -1363,6 +1439,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const loadMoreChatMessages = useCallback(
     async (threadId: string) => {
       if (!currentUserId) return;
+      const userId = currentUserId;
 
       const thread = state.threads.find((row) => row.id === threadId);
       if (!thread?.hasMoreMessages || thread.messageIds.length === 0) return;
@@ -1371,13 +1448,28 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       const oldest = state.messagesById[oldestId];
       if (!oldest) return;
 
+      // Older history already on the device → no network round-trip.
+      try {
+        const local = await readOlderThreadMessages(
+          userId,
+          threadId,
+          oldest.createdAt,
+          CHAT_MESSAGES_PAGE_SIZE,
+        );
+        if (local.length >= CHAT_MESSAGES_PAGE_SIZE) {
+          dispatch({ type: "APPEND_THREAD_MESSAGES", threadId, messages: local, hasMore: true });
+          return;
+        }
+      } catch {
+        // fall through to the network
+      }
+
       const before = new Date(oldest.createdAt).toISOString();
 
       try {
         const page = await fetchChatMessages(Number(threadId), before);
-        const messages = page.items.map((row) =>
-          mapBackendMessage(row, currentUserId),
-        );
+        const messages = page.items.map((row) => mapBackendMessage(row, userId));
+        void upsertServerMessages(userId, messages).catch(() => undefined);
         dispatch({
           type: "APPEND_THREAD_MESSAGES",
           threadId,
@@ -1421,13 +1513,22 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
   const receiveChatMessage = useCallback(
     (message: ChatMessage, participant?: CommunityUser) => {
       dispatch({ type: "RECEIVE_CHAT_MESSAGE", message, participant });
+      if (currentUserId) {
+        void upsertServerMessages(currentUserId, [message]).catch(() => undefined);
+      }
     },
-    [],
+    [currentUserId],
   );
 
-  const applyChatMessageUpdate = useCallback((message: ChatMessage) => {
-    dispatch({ type: "PATCH_CHAT_MESSAGE", message });
-  }, []);
+  const applyChatMessageUpdate = useCallback(
+    (message: ChatMessage) => {
+      dispatch({ type: "PATCH_CHAT_MESSAGE", message });
+      if (currentUserId) {
+        void upsertServerMessages(currentUserId, [message]).catch(() => undefined);
+      }
+    },
+    [currentUserId],
+  );
 
   const editChatMessage = useCallback(
     async (threadId: string, messageId: string, text: string) => {
@@ -1440,10 +1541,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
           Number(messageId),
           { text: trimmed },
         );
-        dispatch({
-          type: "PATCH_CHAT_MESSAGE",
-          message: mapBackendMessage(updated, currentUserId),
-        });
+        const message = mapBackendMessage(updated, currentUserId);
+        dispatch({ type: "PATCH_CHAT_MESSAGE", message });
+        void upsertServerMessages(currentUserId, [message]).catch(() => undefined);
         return true;
       } catch {
         return false;
@@ -1461,10 +1561,9 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
           Number(threadId),
           Number(messageId),
         );
-        dispatch({
-          type: "PATCH_CHAT_MESSAGE",
-          message: mapBackendMessage(deleted, currentUserId),
-        });
+        const message = mapBackendMessage(deleted, currentUserId);
+        dispatch({ type: "PATCH_CHAT_MESSAGE", message });
+        void upsertServerMessages(currentUserId, [message]).catch(() => undefined);
         return true;
       } catch {
         return false;
@@ -1481,26 +1580,116 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
     [currentUserId],
   );
 
+  /**
+   * Outbox worker. Pushes one locally-stored message to the server; on success
+   * the bubble keeps its key and just swaps the temp id for the server id, on
+   * failure it is marked so the next flush (reconnect / foreground) retries it.
+   */
+  const deliverOutboxItem = useCallback(
+    async (userId: number, item: OutboxItem): Promise<void> => {
+      const { message, media } = item;
+      const clientKey = message.clientKey ?? message.id;
+      if (outboxInFlightRef.current.has(clientKey)) return;
+      outboxInFlightRef.current.add(clientKey);
+
+      try {
+        let payload: SendChatMessagePayload;
+        if (message.kind === "text") {
+          payload = { message_type: "text", text: message.text };
+        } else if (media && (message.kind === "image" || message.kind === "video" || message.kind === "audio")) {
+          const uploaded = await uploadChatMediaToR2({
+            uri: media.uri,
+            kind: message.kind,
+            mimeType: media.mimeType,
+          });
+          payload = {
+            message_type: message.kind,
+            media_url: uploaded.publicUrl,
+            media_mime_type: uploaded.contentType,
+            media_duration_ms: message.mediaDurationMs,
+            media_size_bytes: media.sizeBytes ?? uploaded.sizeBytes,
+          };
+        } else {
+          // Nothing left to upload for this row — drop it from the outbox.
+          void markMessageFailed(userId, clientKey).catch(() => undefined);
+          return;
+        }
+
+        const sent = mapBackendMessage(
+          await sendChatMessageApi(Number(message.threadId), payload),
+          userId,
+        );
+        void markMessageSent(userId, clientKey, sent).catch(() => undefined);
+        dispatch({ type: "REPLACE_CHAT_MESSAGE", tempId: clientKey, message: sent });
+      } catch {
+        void markMessageFailed(userId, clientKey).catch(() => undefined);
+        dispatch({ type: "SET_MESSAGE_SYNC_STATUS", messageId: clientKey, syncStatus: "failed" });
+      } finally {
+        outboxInFlightRef.current.delete(clientKey);
+      }
+    },
+    [],
+  );
+
+  /** Retry everything still on the device (called on reconnect / app foreground). */
+  const flushChatOutbox = useCallback(async () => {
+    if (!currentUserId) return;
+    const userId = currentUserId;
+
+    let items: OutboxItem[];
+    try {
+      items = await readOutbox(userId);
+    } catch {
+      return;
+    }
+
+    for (const item of items) {
+      const clientKey = item.message.clientKey ?? item.message.id;
+      if (outboxInFlightRef.current.has(clientKey)) continue;
+
+      // Make it visible again (e.g. pending from a previous session) and mark as retrying.
+      const known = stateRef.current.messagesById[clientKey];
+      const pendingMessage: ChatMessage = { ...item.message, syncStatus: "pending" };
+      if (!known) {
+        dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: pendingMessage });
+      } else if (known.syncStatus !== "pending") {
+        dispatch({ type: "SET_MESSAGE_SYNC_STATUS", messageId: clientKey, syncStatus: "pending" });
+      }
+      void markMessagePending(userId, clientKey).catch(() => undefined);
+
+      // Sequential so the peer receives them in the order they were written.
+      await deliverOutboxItem(userId, { ...item, message: pendingMessage });
+    }
+  }, [currentUserId, deliverOutboxItem]);
+
+  const resolveThreadIdForPeer = useCallback(
+    async (participantId: string, threadId?: string): Promise<string | null> => {
+      if (threadId) return threadId;
+      const existing = stateRef.current.threads.find(
+        (thread) => thread.participantId === participantId,
+      );
+      if (existing) return existing.id;
+      const peerUserId = parseDbUserId(participantId);
+      if (!peerUserId) return null;
+      return openChatThreadWithPeer(peerUserId);
+    },
+    [openChatThreadWithPeer],
+  );
+
+  /**
+   * WhatsApp-style send: write to the phone, show the bubble, return.
+   * The network happens afterwards through the outbox.
+   */
   const sendMessage = useCallback(
     async (participantId: string, text: string, threadId?: string) => {
       const trimmed = text.trim();
       if (!trimmed || !currentUserId) return;
+      const userId = currentUserId;
 
-      const peerUserId = parseDbUserId(participantId);
-      if (!peerUserId) return;
+      const resolvedThreadId = await resolveThreadIdForPeer(participantId, threadId);
+      if (!resolvedThreadId) return;
 
-      let resolvedThreadId = threadId;
-      if (!resolvedThreadId) {
-        const existing = state.threads.find((thread) => thread.participantId === participantId);
-        resolvedThreadId = existing?.id;
-      }
-      if (!resolvedThreadId) {
-        const opened = await openChatThreadWithPeer(peerUserId);
-        if (!opened) return;
-        resolvedThreadId = opened;
-      }
-
-      const tempId = `temp-${Date.now()}`;
+      const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       const optimistic: ChatMessage = {
         id: tempId,
         clientKey: tempId,
@@ -1509,44 +1698,25 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
         text: trimmed,
         createdAt: Date.now(),
         kind: "text",
+        syncStatus: "pending",
       };
-      dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
 
-      try {
-        const sent = await sendChatMessageApi(Number(resolvedThreadId), {
-          message_type: "text",
-          text: trimmed,
-        });
-        dispatch({
-          type: "REPLACE_CHAT_MESSAGE",
-          tempId,
-          message: mapBackendMessage(sent, currentUserId),
-        });
-      } catch {
-        // optimistic message stays until refresh
-      }
+      dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
+      void insertPendingMessage(userId, optimistic, null).catch(() => undefined);
+      void deliverOutboxItem(userId, { message: optimistic, media: null });
     },
-    [currentUserId, openChatThreadWithPeer, state.threads],
+    [currentUserId, deliverOutboxItem, resolveThreadIdForPeer],
   );
 
   const sendMediaMessages = useCallback(
     async (participantId: string, items: ChatMediaPick[], threadId?: string) => {
       if (!currentUserId || items.length === 0) return;
+      const userId = currentUserId;
 
-      const peerUserId = parseDbUserId(participantId);
-      if (!peerUserId) return;
+      const resolvedThreadId = await resolveThreadIdForPeer(participantId, threadId);
+      if (!resolvedThreadId) return;
 
-      let resolvedThreadId = threadId;
-      if (!resolvedThreadId) {
-        const existing = state.threads.find((thread) => thread.participantId === participantId);
-        resolvedThreadId = existing?.id;
-      }
-      if (!resolvedThreadId) {
-        const opened = await openChatThreadWithPeer(peerUserId);
-        if (!opened) return;
-        resolvedThreadId = opened;
-      }
-
+      const queued: OutboxItem[] = [];
       for (const item of items) {
         const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
         const optimistic: ChatMessage = {
@@ -1557,36 +1727,28 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
           text: "",
           createdAt: Date.now(),
           kind: item.kind,
+          // Local file shows in the bubble until the upload finishes.
           mediaUrl: item.uri,
           mediaMimeType: item.mimeType,
           mediaDurationMs: item.durationMs,
+          mediaSizeBytes: item.sizeBytes,
+          syncStatus: "pending",
         };
-        dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
+        const media = { uri: item.uri, mimeType: item.mimeType, sizeBytes: item.sizeBytes };
 
-        try {
-          const uploaded = await uploadChatMediaToR2({
-            uri: item.uri,
-            kind: item.kind,
-            mimeType: item.mimeType,
-          });
-          const sent = await sendChatMessageApi(Number(resolvedThreadId), {
-            message_type: item.kind,
-            media_url: uploaded.publicUrl,
-            media_mime_type: uploaded.contentType,
-            media_duration_ms: item.durationMs,
-            media_size_bytes: item.sizeBytes ?? uploaded.sizeBytes,
-          });
-          dispatch({
-            type: "REPLACE_CHAT_MESSAGE",
-            tempId,
-            message: mapBackendMessage(sent, currentUserId),
-          });
-        } catch {
-          // optimistic preview stays until refresh
-        }
+        dispatch({ type: "RECEIVE_CHAT_MESSAGE", message: optimistic });
+        void insertPendingMessage(userId, optimistic, media).catch(() => undefined);
+        queued.push({ message: optimistic, media });
       }
+
+      // Upload + send in the background, in order.
+      void (async () => {
+        for (const item of queued) {
+          await deliverOutboxItem(userId, item);
+        }
+      })();
     },
-    [currentUserId, openChatThreadWithPeer, state.threads],
+    [currentUserId, deliverOutboxItem, resolveThreadIdForPeer],
   );
 
   const markThreadRead = useCallback(async (threadId: string) => {
@@ -1649,6 +1811,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       sendMessage,
       sendMediaMessages,
       markThreadRead,
+      flushChatOutbox,
       editChatMessage,
       deleteChatMessage,
       receiveChatMessage,
@@ -1689,6 +1852,7 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       sendMessage,
       sendMediaMessages,
       markThreadRead,
+      flushChatOutbox,
       editChatMessage,
       deleteChatMessage,
       receiveChatMessage,

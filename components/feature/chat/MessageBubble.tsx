@@ -159,7 +159,7 @@ export const MessageBubble = memo(function MessageBubble({
           {fromMe && status ? (
             <View className={`flex-row items-center justify-end gap-1 ${hasMedia ? "px-2 pb-1" : "mt-1"}`}>
               <Text className="text-[10px] text-muted-foreground dark:text-d-muted">{time}</Text>
-              <MessageReadTicks status={status} />
+              <MessageReadTicks status={status} syncStatus={message.syncStatus} />
             </View>
           ) : null}
         </View>

@@ -3,10 +3,20 @@ export type ChatMessageKind = "text" | "image" | "video" | "audio" | "call" | "s
 /** Read receipt for outgoing messages (from peer's last_read_at). */
 export type MessageReadStatus = "seen" | "unseen";
 
+/**
+ * Local-first delivery state (WhatsApp-style):
+ * pending = saved on device, not yet accepted by the server;
+ * failed = server rejected / offline, will retry from the outbox;
+ * sent = server has it.
+ */
+export type MessageSyncStatus = "pending" | "sent" | "failed";
+
 export type ChatMessage = {
   id: string;
   /** Stays the same when an optimistic send is swapped for the server id. */
   clientKey?: string;
+  /** Missing means "sent" (history from the server). */
+  syncStatus?: MessageSyncStatus;
   threadId: string;
   senderId: string;
   text: string;
@@ -15,6 +25,7 @@ export type ChatMessage = {
   mediaUrl?: string;
   mediaMimeType?: string;
   mediaDurationMs?: number;
+  mediaSizeBytes?: number;
   readStatus?: MessageReadStatus;
   isDeleted?: boolean;
   editedAt?: number;
