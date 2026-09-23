@@ -1,5 +1,6 @@
 import type { OnboardingDraft, UserAccount, UserProfile } from "@/types";
 import { saveAuthTokens } from "@/utils/auth/authStorage";
+import { saveAppSession } from "@/utils/auth/sessionStorage";
 import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayload";
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
@@ -37,6 +38,7 @@ export async function finalizeEmailSignup(
     throw new Error("Onboarding was not saved on the server");
   }
 
+  await saveAppSession(session);
   handlers.setAccount(session.account);
   handlers.completeOnboarding(session.profile);
   logMetaCompleteRegistration("email");

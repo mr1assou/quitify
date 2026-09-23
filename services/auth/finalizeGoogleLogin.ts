@@ -1,5 +1,6 @@
 import type { UserAccount, UserProfile } from "@/types";
 import { saveAuthTokens } from "@/utils/auth/authStorage";
+import { saveAppSession } from "@/utils/auth/sessionStorage";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 import type { UserSessionFromApi } from "./loadUserSessionFromApi";
@@ -18,6 +19,7 @@ export async function finalizeGoogleLogin(
   await saveAuthTokens(auth.accessToken, auth.refreshToken);
 
   const session = await loadUserSessionFromApi(auth.accessToken);
+  await saveAppSession(session);
 
   if (session.account) {
     handlers.setAccount(session.account);

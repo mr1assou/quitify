@@ -43,7 +43,7 @@ export function mapAuthMeToSession(
   };
 }
 
-/** Loads onboarded state + profile from `GET /auth/me` (no local profile cache). */
+/** Loads onboarded state + profile from `GET /auth/me`. */
 export async function loadUserSessionFromApi(
   accessToken: string,
 ): Promise<UserSessionFromApi> {

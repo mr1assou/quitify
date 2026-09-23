@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   type ReactNode,
@@ -19,6 +20,7 @@ import type {
   UserProfile,
 } from "@/types";
 import { clearStoredAuth } from "@/utils/auth/clearStoredAuth";
+import { saveAppSession } from "@/utils/auth/sessionStorage";
 import { dayKey } from "@/utils/shared/dates";
 import { syncRevenueCatUser } from "@/services/purchases/revenueCat";
 type Action =
@@ -193,6 +195,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
 
   const isHydrated = useAppHydration(onRestore);
+
+  // Keep a local session snapshot so cold starts can stay signed in offline.
+  useEffect(() => {
+    if (!isHydrated || !state.account) return;
+    void saveAppSession({
+      isOnboarded: state.isOnboarded,
+      profile: state.profile,
+      account: state.account,
+    });
+  }, [isHydrated, state.account, state.isOnboarded, state.profile]);
 
   const completeOnboarding = useCallback((profile: UserProfile) => {
     dispatch({ type: "COMPLETE_ONBOARDING", profile });

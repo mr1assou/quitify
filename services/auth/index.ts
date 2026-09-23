@@ -1,5 +1,6 @@
-export { fetchAuthMe } from "./meApi";
+export { fetchAuthMe, AuthHttpError, AuthNetworkError } from "./meApi";
 export type { AuthMeResponse } from "./meApi";
+export { refreshAuthTokens } from "./refreshAuthApi";
 export { loadUserSessionFromApi } from "./loadUserSessionFromApi";
 export type { UserSessionFromApi } from "./loadUserSessionFromApi";
 export { updateUserPreferences } from "./preferencesApi";
