@@ -77,10 +77,10 @@
       [
         "react-native-fbsdk-next",
         {
-          "appID": "3949821035154808",
-          "clientToken": "5bb14ffdd48e8b4c232f59979f9203e0",
+          "appID": "28169252679437459",
+          "clientToken": "147ad22aed096f21df2589ba202f1120",
           "displayName": "Quitify",
-          "scheme": "fb3949821035154808",
+          "scheme": "fb28169252679437459",
           "advertiserIDCollectionEnabled": true,
           "autoLogAppEventsEnabled": true,
           "isAutoInitEnabled": true
