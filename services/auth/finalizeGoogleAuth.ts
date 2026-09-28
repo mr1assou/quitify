@@ -5,7 +5,6 @@ import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayloa
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
-import { logMetaCompleteRegistration } from "@/services/analytics/metaEvents";
 import { logSignupSuccess } from "@/services/analytics/firebaseEvents";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
@@ -52,7 +51,6 @@ export async function finalizeGoogleAuth(
     handlers.completeOnboarding(session.profile);
 
     if (auth.isNewUser) {
-      logMetaCompleteRegistration("google");
       logSignupSuccess("google");
     }
   })().finally(() => {

@@ -5,7 +5,6 @@ import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayloa
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
 
-import { logMetaCompleteRegistration } from "@/services/analytics/metaEvents";
 import { logSignupSuccess } from "@/services/analytics/firebaseEvents";
 
 import { loadUserSessionFromApi } from "./loadUserSessionFromApi";
@@ -41,6 +40,5 @@ export async function finalizeEmailSignup(
   await saveAppSession(session);
   handlers.setAccount(session.account);
   handlers.completeOnboarding(session.profile);
-  logMetaCompleteRegistration("email");
   logSignupSuccess("email");
 }

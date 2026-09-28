@@ -75,18 +75,6 @@
       ],
       "expo-localization",
       [
-        "react-native-fbsdk-next",
-        {
-          "appID": "1739548963981323",
-          "clientToken": "caa53a1528b189c9f3b7972c949a594d",
-          "displayName": "Quitify",
-          "scheme": "fb1739548963981323",
-          "advertiserIDCollectionEnabled": true,
-          "autoLogAppEventsEnabled": true,
-          "isAutoInitEnabled": true
-        }
-      ],
-      [
         "@react-native-firebase/app",
         {
           "ios": {
