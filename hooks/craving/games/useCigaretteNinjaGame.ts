@@ -1,19 +1,25 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import {
+  runOnJS,
+  useFrameCallback,
+  useSharedValue,
+  type SharedValue,
+} from "react-native-reanimated";
 
 import {
   CIGARETTE_NINJA_BOSS_AT_SEC,
   CIGARETTE_NINJA_COMBO_WINDOW_MS,
   CIGARETTE_NINJA_DURATION_SEC,
+  CIGARETTE_NINJA_GRAVITY,
   CIGARETTE_NINJA_MIN_SLICE_PX,
   CIGARETTE_NINJA_OBJECT_CONFIG,
   CIGARETTE_NINJA_SPAWN_BATCH_MAX,
   CIGARETTE_NINJA_SPAWN_BATCH_MIN,
   CIGARETTE_NINJA_TARGET_SCORE,
+  CIGARETTE_NINJA_TERMINAL_VY,
 } from "@/constants/craving/games/cigaretteNinja";
 import {
-  advanceFlyingObject,
   createFlyingObject,
-  isOffScreen,
   maxObjectsForElapsed,
   objectRadius,
   segmentIntersectsCircle,
@@ -38,8 +44,26 @@ export type NinjaSliceBurst = {
 
 export type NinjaTrailPoint = { x: number; y: number };
 
+/** Per-object motion, advanced on the UI thread every frame. */
+export type NinjaPhysics = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  rotation: number;
+  rotationSpeed: number;
+  size: number;
+  /** Set once the object left the field, until React unmounts it. */
+  offscreen: boolean;
+};
+
+export type NinjaPhysicsMap = Record<string, NinjaPhysics>;
+
+type Positions = Record<string, { x: number; y: number }>;
+
 type State = {
   status: CigaretteNinjaStatus;
+  /** Identity + health. Positions live in `physics` (UI thread). */
   objects: NinjaFlyingObject[];
   score: number;
   combo: number;
@@ -48,20 +72,17 @@ type State = {
   destroyed: number;
   lastHitAt: number;
   bursts: NinjaSliceBurst[];
-  trail: NinjaTrailPoint[];
-  elapsedMs: number;
 };
 
 type Action =
   | { type: "start" }
   | { type: "reset" }
   | { type: "finish" }
-  | { type: "tick"; dt: number; field: FieldSize }
   | { type: "spawn"; object: NinjaFlyingObject }
   | { type: "spawnBatch"; objects: NinjaFlyingObject[] }
-  | { type: "slice"; segment: NinjaTrailPoint[]; at: number }
+  | { type: "removeObjects"; ids: string[] }
+  | { type: "slice"; hits: Positions; at: number }
   | { type: "clearBurst"; id: string }
-  | { type: "setTrail"; trail: NinjaTrailPoint[] }
   | { type: "secondTick" };
 
 function createInitialState(): State {
@@ -75,19 +96,18 @@ function createInitialState(): State {
     destroyed: 0,
     lastHitAt: 0,
     bursts: [],
-    trail: [],
-    elapsedMs: 0,
   };
 }
 
 function applySliceHit(
   state: State,
   object: NinjaFlyingObject,
-  at: number,
+  at: { x: number; y: number },
+  now: number,
 ): State {
   const config = CIGARETTE_NINJA_OBJECT_CONFIG[object.kind];
   const withinCombo =
-    state.lastHitAt > 0 && at - state.lastHitAt <= CIGARETTE_NINJA_COMBO_WINDOW_MS;
+    state.lastHitAt > 0 && now - state.lastHitAt <= CIGARETTE_NINJA_COMBO_WINDOW_MS;
   const combo = withinCombo ? state.combo + 1 : 1;
   const comboBonus = Math.max(0, combo - 1);
   const scoreGain = config.score + comboBonus * 5;
@@ -101,9 +121,9 @@ function applySliceHit(
       );
 
   const burst: NinjaSliceBurst = {
-    id: `burst-${object.id}-${at}`,
-    x: object.x,
-    y: object.y,
+    id: `burst-${object.id}-${now}`,
+    x: at.x,
+    y: at.y,
     combo,
   };
 
@@ -114,7 +134,7 @@ function applySliceHit(
     combo: destroyedNow ? combo : state.combo,
     bestCombo: destroyedNow ? Math.max(state.bestCombo, combo) : state.bestCombo,
     destroyed: destroyedNow ? state.destroyed + 1 : state.destroyed,
-    lastHitAt: destroyedNow ? at : state.lastHitAt,
+    lastHitAt: destroyedNow ? now : state.lastHitAt,
     bursts: [...state.bursts, burst],
   };
 
@@ -160,48 +180,31 @@ function reducer(state: State, action: Action): State {
       }
       return { ...state, secondsLeft };
     }
-    case "tick": {
-      if (state.status !== "playing") return state;
-      const elapsedMs = state.elapsedMs + action.dt;
-      const objects = state.objects
-        .map((o) => advanceFlyingObject(o, action.field, action.dt))
-        .filter((o) => !isOffScreen(o, action.field));
-      return { ...state, objects, elapsedMs };
-    }
     case "spawn":
       if (state.status !== "playing") return state;
       return { ...state, objects: [...state.objects, action.object] };
     case "spawnBatch":
       if (state.status !== "playing" || action.objects.length === 0) return state;
       return { ...state, objects: [...state.objects, ...action.objects] };
+    case "removeObjects": {
+      if (action.ids.length === 0) return state;
+      const gone = new Set(action.ids);
+      const objects = state.objects.filter((o) => !gone.has(o.id));
+      if (objects.length === state.objects.length) return state;
+      return { ...state, objects };
+    }
     case "slice": {
-      if (state.status !== "playing" || action.segment.length < 2) return state;
-      const start = action.segment[action.segment.length - 2];
-      const end = action.segment[action.segment.length - 1];
-      const sliceLen = Math.hypot(end.x - start.x, end.y - start.y);
-      if (sliceLen < CIGARETTE_NINJA_MIN_SLICE_PX) return state;
-
+      if (state.status !== "playing") return state;
       let next = state;
       for (const object of state.objects) {
+        const pos = action.hits[object.id];
+        if (!pos) continue;
         const current = next.objects.find((o) => o.id === object.id);
         if (!current) continue;
-        const hit = segmentIntersectsCircle(
-          start.x,
-          start.y,
-          end.x,
-          end.y,
-          current.x,
-          current.y,
-          objectRadius(current.kind),
-        );
-        if (hit) {
-          next = applySliceHit(next, current, action.at);
-        }
+        next = applySliceHit(next, current, pos, action.at);
       }
       return next;
     }
-    case "setTrail":
-      return { ...state, trail: action.trail };
     case "clearBurst":
       return {
         ...state,
@@ -212,69 +215,144 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-/** Fruit-Ninja-style craving battle — swipe to slice flying cigarettes. */
+function physicsFromObject(object: NinjaFlyingObject): NinjaPhysics {
+  return {
+    x: object.x,
+    y: object.y,
+    vx: object.vx,
+    vy: object.vy,
+    rotation: object.rotation,
+    rotationSpeed: object.rotationSpeed,
+    size: CIGARETTE_NINJA_OBJECT_CONFIG[object.kind].size,
+    offscreen: false,
+  };
+}
+
+/**
+ * Fruit-Ninja-style craving battle — swipe to slice flying cigarettes.
+ *
+ * Motion runs on the UI thread (Reanimated frame callback + shared values).
+ * React state only changes on spawn, slice, off-screen removal, and the clock.
+ */
 export function useCigaretteNinjaGame() {
   const [state, dispatch] = useReducer(reducer, undefined, createInitialState);
+  const [trail, setTrail] = useState<NinjaTrailPoint[]>([]);
   const counterRef = useRef(0);
   const fieldRef = useRef<FieldSize>({ width: 0, height: 0 });
   const spawnAtRef = useRef(0);
   const bossSpawnedRef = useRef(false);
-  const rafRef = useRef<number | null>(null);
-  const lastFrameRef = useRef(0);
   const objectsCountRef = useRef(0);
+  const objectsRef = useRef(state.objects);
+  const trailRef = useRef<NinjaTrailPoint[]>([]);
+
+  const physics: SharedValue<NinjaPhysicsMap> = useSharedValue<NinjaPhysicsMap>(
+    {},
+  );
+  const fieldSize = useSharedValue<FieldSize>({ width: 0, height: 0 });
 
   objectsCountRef.current = state.objects.length;
+  objectsRef.current = state.objects;
 
-  const setFieldSize = useCallback((width: number, height: number) => {
-    fieldRef.current = { width, height };
+  const setFieldSize = useCallback(
+    (width: number, height: number) => {
+      fieldRef.current = { width, height };
+      fieldSize.value = { width, height };
+    },
+    [fieldSize],
+  );
+
+  // Add physics for new spawns; drop sliced / finished objects.
+  // Existing entries keep their live UI-thread positions.
+  useEffect(() => {
+    const spawned: NinjaPhysicsMap = {};
+    const ids: string[] = [];
+    for (const object of state.objects) {
+      ids.push(object.id);
+      spawned[object.id] = physicsFromObject(object);
+    }
+    physics.modify((current) => {
+      "worklet";
+      const prev = current as NinjaPhysicsMap;
+      const next: NinjaPhysicsMap = {};
+      for (const id of ids) {
+        next[id] = prev[id] ?? spawned[id];
+      }
+      return next;
+    });
+  }, [physics, state.objects]);
+
+  const removeOffscreen = useCallback((ids: string[]) => {
+    dispatch({ type: "removeObjects", ids });
   }, []);
 
-  useEffect(() => {
-    if (state.status !== "playing") {
-      if (rafRef.current != null) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
-      return;
-    }
+  const gravity = CIGARETTE_NINJA_GRAVITY;
+  const terminalVy = CIGARETTE_NINJA_TERMINAL_VY;
 
-    bossSpawnedRef.current = false;
-    spawnAtRef.current = performance.now();
-    lastFrameRef.current = performance.now();
+  // Per-frame integration on the UI thread. No React re-render per frame.
+  const onFrame = useCallback(
+    (info: { timeSincePreviousFrame: number | null }) => {
+      "worklet";
+      const field = fieldSize.value;
+      if (field.width <= 0 || field.height <= 0) return;
 
-    const loop = (now: number) => {
-      const dt = Math.min(32, now - lastFrameRef.current);
-      lastFrameRef.current = now;
-      const field = fieldRef.current;
+      const dt = Math.min(32, info.timeSincePreviousFrame ?? 16);
+      const scale = dt / 16;
+      const gone: string[] = [];
+      const map = physics.value;
 
-      if (field.width > 0 && field.height > 0) {
-        dispatch({ type: "tick", dt, field });
+      for (const id in map) {
+        const o = map[id];
+        if (o.offscreen) continue;
+        o.x += o.vx * scale;
+        o.y += o.vy * scale;
+        o.vy = Math.min(terminalVy, o.vy + gravity * scale);
+        o.rotation += o.rotationSpeed * scale;
 
-        const elapsedMs = now - spawnAtRef.current;
-        if (
-          !bossSpawnedRef.current &&
-          elapsedMs >= CIGARETTE_NINJA_BOSS_AT_SEC * 1000
-        ) {
-          bossSpawnedRef.current = true;
-          counterRef.current += 1;
-          dispatch({
-            type: "spawn",
-            object: createFlyingObject(
-              `boss-${counterRef.current}`,
-              field,
-              { forceBoss: true },
-            ),
-          });
+        const pad = o.size * 0.6;
+        if (o.y > field.height + pad || o.x < -pad || o.x > field.width + pad) {
+          o.offscreen = true;
+          gone.push(id);
         }
       }
 
-      rafRef.current = requestAnimationFrame(loop);
-    };
+      physics.modify(undefined, true);
 
-    rafRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-    };
+      if (gone.length > 0) runOnJS(removeOffscreen)(gone);
+    },
+    [fieldSize, gravity, physics, removeOffscreen, terminalVy],
+  );
+
+  const frame = useFrameCallback(onFrame, false);
+
+  useEffect(() => {
+    const playing = state.status === "playing";
+    if (playing) {
+      bossSpawnedRef.current = false;
+      spawnAtRef.current = performance.now();
+    } else {
+      physics.value = {};
+    }
+    frame.setActive(playing);
+  }, [frame, physics, state.status]);
+
+  useEffect(() => {
+    if (state.status !== "playing") return;
+    const id = setInterval(() => {
+      if (bossSpawnedRef.current) return;
+      const field = fieldRef.current;
+      if (field.width <= 0 || field.height <= 0) return;
+      const elapsedMs = performance.now() - spawnAtRef.current;
+      if (elapsedMs < CIGARETTE_NINJA_BOSS_AT_SEC * 1000) return;
+      bossSpawnedRef.current = true;
+      counterRef.current += 1;
+      dispatch({
+        type: "spawn",
+        object: createFlyingObject(`boss-${counterRef.current}`, field, {
+          forceBoss: true,
+        }),
+      });
+    }, 250);
+    return () => clearInterval(id);
   }, [state.status]);
 
   useEffect(() => {
@@ -323,19 +401,45 @@ export function useCigaretteNinjaGame() {
   const reset = useCallback(() => dispatch({ type: "reset" }), []);
   const finish = useCallback(() => dispatch({ type: "finish" }), []);
 
-  const trailRef = useRef<NinjaTrailPoint[]>([]);
+  const extendSwipe = useCallback(
+    (x: number, y: number) => {
+      trailRef.current = [...trailRef.current.slice(-10), { x, y }];
+      setTrail(trailRef.current);
+      if (trailRef.current.length < 2) return;
 
-  const extendSwipe = useCallback((x: number, y: number) => {
-    trailRef.current = [...trailRef.current.slice(-10), { x, y }];
-    dispatch({ type: "setTrail", trail: trailRef.current });
-    if (trailRef.current.length >= 2) {
-      dispatch({ type: "slice", segment: trailRef.current, at: Date.now() });
-    }
-  }, []);
+      const startPoint = trailRef.current[trailRef.current.length - 2];
+      const endPoint = trailRef.current[trailRef.current.length - 1];
+      const sliceLen = Math.hypot(
+        endPoint.x - startPoint.x,
+        endPoint.y - startPoint.y,
+      );
+      if (sliceLen < CIGARETTE_NINJA_MIN_SLICE_PX) return;
+
+      const map = physics.value;
+      const hits: Positions = {};
+      for (const object of objectsRef.current) {
+        const pos = map[object.id];
+        if (!pos || pos.offscreen) continue;
+        const hit = segmentIntersectsCircle(
+          startPoint.x,
+          startPoint.y,
+          endPoint.x,
+          endPoint.y,
+          pos.x,
+          pos.y,
+          objectRadius(object.kind),
+        );
+        if (hit) hits[object.id] = { x: pos.x, y: pos.y };
+      }
+      if (Object.keys(hits).length === 0) return;
+      dispatch({ type: "slice", hits, at: Date.now() });
+    },
+    [physics],
+  );
 
   const endSwipe = useCallback(() => {
     trailRef.current = [];
-    dispatch({ type: "setTrail", trail: [] });
+    setTrail([]);
   }, []);
 
   const clearBurst = useCallback((id: string) => {
@@ -345,13 +449,14 @@ export function useCigaretteNinjaGame() {
   return {
     status: state.status,
     objects: state.objects,
+    physics,
     score: state.score,
     combo: state.combo,
     bestCombo: state.bestCombo,
     secondsLeft: state.secondsLeft,
     destroyed: state.destroyed,
     bursts: state.bursts,
-    trail: state.trail,
+    trail,
     start,
     reset,
     finish,

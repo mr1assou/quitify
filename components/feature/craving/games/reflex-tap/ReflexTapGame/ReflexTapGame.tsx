@@ -46,6 +46,7 @@ export function ReflexTapGame() {
       />
       <NinjaPlayField
         objects={game.objects}
+        physics={game.physics}
         trail={game.trail}
         bursts={game.bursts}
         onLayoutField={game.setFieldSize}
