@@ -35,27 +35,18 @@ let linkedAppUserId: string | null = null;
 let syncChain: Promise<void> = Promise.resolve();
 let syncGeneration = 0;
 
-/**
- * Passes device + Meta anonymous IDs and user email to RevenueCat so Meta Ads can attribute purchases
- * and improve Event Match Quality (EMQ).
- * Safe to call multiple times; failures are swallowed (ads attribution only).
- */
-async function syncMetaAdsAttributionIds(email?: string | null): Promise<void> {
+/** Passes device + Meta anonymous IDs to RevenueCat for purchase attribution. */
+async function syncMetaAdsAttributionIds(): Promise<void> {
   try {
     await Purchases.collectDeviceIdentifiers();
     const fbAnonId = await AppEventsLogger.getAnonymousID();
     if (fbAnonId) {
       await Purchases.setFBAnonymousID(fbAnonId);
     }
-    const cleanEmail = email?.trim().toLowerCase();
-    if (cleanEmail) {
-      await Purchases.setEmail(cleanEmail);
-    }
     if (__DEV__) {
       console.log(
         "[revenuecat] Meta attribution ids synced",
         fbAnonId ? "(fbAnonId set)" : "(fbAnonId missing)",
-        cleanEmail ? `(email: ${cleanEmail})` : "(no email)",
       );
     }
   } catch (error) {
@@ -128,7 +119,6 @@ export function ensureRevenueCatConfigured(appUserId: number): Promise<void> {
  */
 export async function syncRevenueCatUser(
   userId: number | undefined,
-  email?: string | null,
 ): Promise<void> {
   if (userId == null) {
     syncGeneration++;
@@ -157,7 +147,7 @@ export async function syncRevenueCatUser(
         if (__DEV__) {
           console.log(`[revenuecat] already linked as ${appUserId}`);
         }
-        await syncMetaAdsAttributionIds(email);
+        await syncMetaAdsAttributionIds();
         return;
       }
 
@@ -165,7 +155,7 @@ export async function syncRevenueCatUser(
       if (isSyncStale(generation)) return;
 
       linkedAppUserId = appUserId;
-      await syncMetaAdsAttributionIds(email);
+      await syncMetaAdsAttributionIds();
       if (__DEV__) {
         console.log(
           `[revenuecat] linked user ${appUserId} (created=${created}, rcId=${customerInfo.originalAppUserId})`,
