@@ -4,6 +4,7 @@ import {
   isValidCigarettesPerPack,
 } from "@/constants/onboarding/onboardingNicotineBands";
 import type { OnboardingDraft } from "@/types";
+import { isQuitDateComplete } from "@/utils/onboarding/quitPlan";
 
 export type NicotineFieldErrors = {
   cigsPerDay?: boolean;
@@ -14,6 +15,7 @@ export type NicotineFieldErrors = {
   price?: boolean;
   priceInvalid?: boolean;
   habitYears?: boolean;
+  quitDate?: boolean;
 };
 
 /** True when the user typed a value that is 0 or otherwise below the minimum. */
@@ -79,14 +81,13 @@ export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
   return (
     hasValidCigarettesPerDaySelection(draft) &&
     hasValidCigarettesPerPackInput(draft) &&
-    hasValidPackCost(draft) &&
-    draft.nicotineHabitYearsBand != null
+    hasValidPackCost(draft)
   );
 }
 
-/** Step 6: cigarette habit fields (dropdowns + pack cost). */
+/** Step 6: cigarette habit fields (dropdowns + pack cost) + quit date. */
 export function isNicotineConsumptionStepComplete(draft: OnboardingDraft): boolean {
-  return isNicotineHabitsComplete(draft);
+  return isNicotineHabitsComplete(draft) && isQuitDateComplete(draft);
 }
 
 /** Missing / invalid fields after the user taps Continue. */
@@ -124,7 +125,7 @@ export function getNicotineFieldErrors(draft: OnboardingDraft): NicotineFieldErr
     errors.priceInvalid = true;
   }
 
-  if (draft.nicotineHabitYearsBand == null) errors.habitYears = true;
+  if (!isQuitDateComplete(draft)) errors.quitDate = true;
 
   return errors;
 }

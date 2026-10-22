@@ -1,16 +1,15 @@
 import type { OnboardingDraft } from "@/types";
 import { isValidOnboardingUsername } from "@/constants/onboarding/onboardingUsername";
-import { isQuitDateComplete } from "@/utils/onboarding/quitPlan";
 
 export type CreateProfileFieldErrors = {
   username?: boolean;
   usernameTaken?: boolean;
   sex?: boolean;
   country?: boolean;
-  quitDate?: boolean;
+  profileImage?: boolean;
 };
 
-/** Step 5 — profile details + quit start date. */
+/** Step 5 — profile details + profile photo (quit date moved to step 6). */
 export function isCreateProfileStepComplete(draft: OnboardingDraft): boolean {
   const usernameOk = isValidOnboardingUsername(draft.username);
   const sexOk = draft.sex !== undefined;
@@ -18,7 +17,11 @@ export function isCreateProfileStepComplete(draft: OnboardingDraft): boolean {
   const countryOk =
     typeof draft.countryCode === "string" && draft.countryCode.length === 2;
 
-  return usernameOk && sexOk && countryOk && isQuitDateComplete(draft);
+  const profileImageOk =
+    typeof draft.customProfileImageUrl === "string" &&
+    draft.customProfileImageUrl.length > 0;
+
+  return usernameOk && sexOk && countryOk && profileImageOk;
 }
 
 /** Missing / invalid fields after the user taps Continue. */
@@ -40,7 +43,14 @@ export function getCreateProfileFieldErrors(
     errors.country = true;
   }
 
-  if (!isQuitDateComplete(draft)) errors.quitDate = true;
+  if (
+    !(
+      typeof draft.customProfileImageUrl === "string" &&
+      draft.customProfileImageUrl.length > 0
+    )
+  ) {
+    errors.profileImage = true;
+  }
 
   return errors;
 }

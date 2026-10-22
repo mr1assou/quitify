@@ -105,6 +105,10 @@ export const onboarding = {
     quitDate: {
       required: "Choisissez quand vous arrêterez",
     },
+    photo: {
+      label: "Photo de profil",
+      required: "Ajoutez une photo de profil",
+    },
     birthdate: { label: "Date de naissance" },
   },
   nicotine: {

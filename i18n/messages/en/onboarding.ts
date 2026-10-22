@@ -77,6 +77,10 @@ export const onboarding = {
     quitDate: {
       required: "Choose when you will quit",
     },
+    photo: {
+      label: "Profile photo",
+      required: "Add a profile photo",
+    },
     birthdate: { label: "Date of birth" },
   },
   nicotine: {

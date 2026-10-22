@@ -3,26 +3,24 @@ import { Text, useWindowDimensions, View } from "react-native";
 
 import { CigarettesPerPackField } from "@/components/feature/onboarding/NicotineConsumptionFields/CigarettesPerPackField";
 import { PackCostField } from "@/components/feature/onboarding/NicotineConsumptionFields/PackCostField";
+import { QuitDateFields } from "@/components/feature/onboarding/QuitDateFields";
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
 import { SelectFieldString } from "@/components/ui/SelectFieldString";
 import {
   CIGARETTES_PER_DAY_BANDS,
   CIGARETTES_PER_DAY_DROPDOWN_OPTIONS,
   isCustomCigarettesPerDayBand,
-  NICOTINE_HABIT_YEARS_BANDS,
-  NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS,
   type CigarettesPerDayBandId,
-  type NicotineHabitYearsBandId,
 } from "@/constants/onboarding/onboardingNicotineBands";
 import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import type { OnboardingDraft } from "@/types";
 import { useLocalizedCatalog } from "@/hooks/i18n/useLocalizedCatalog";
+import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   patchForCigarettesPerDayBand,
   patchForCigarettesPerDayCustomInput,
   patchForCigarettesPerPackInput,
-  patchForNicotineHabitYearsBand,
   patchForPackCostInput,
 } from "@/utils/onboarding/nicotineBands";
 import {
@@ -42,13 +40,10 @@ function isCigarettesPerDayBand(value: string): value is CigarettesPerDayBandId 
   return CIGARETTES_PER_DAY_DROPDOWN_OPTIONS.some((o) => o.value === value);
 }
 
-function isNicotineHabitYearsBand(value: string): value is NicotineHabitYearsBandId {
-  return NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS.some((o) => o.value === value);
-}
-
 export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
+  const quitDateHandlers = useQuitPlanHandlers(draft, patch);
   const { height: windowHeight } = useWindowDimensions();
   const cigsPerDaySheetHeight = Math.min(windowHeight * 0.58, 420);
   const showCustomCigsPerDay = isCustomCigarettesPerDayBand(
@@ -58,17 +53,6 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const cigarettesPerDayOptions = useMemo(
     () =>
       localize(CIGARETTES_PER_DAY_BANDS, "onboarding.nicotine", ["label"]).map(
-        (band) => ({
-          value: band.id,
-          label: band.label,
-        }),
-      ),
-    [localize],
-  );
-
-  const habitYearsOptions = useMemo(
-    () =>
-      localize(NICOTINE_HABIT_YEARS_BANDS, "onboarding.nicotine", ["label"]).map(
         (band) => ({
           value: band.id,
           label: band.label,
@@ -190,30 +174,18 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
         ) : null}
       </View>
 
-      <View className="gap-2">
-        <OnboardingFieldLabel>
-          {t("onboarding.nicotine.habitYears.label")}
-        </OnboardingFieldLabel>
-        <SelectFieldString
-          fieldLabel={t("onboarding.nicotine.habitYears.label")}
-          showLabel={false}
-          value={draft.nicotineHabitYearsBand}
-          placeholder={t("common.selectRange")}
-          options={habitYearsOptions}
-          allowClear={false}
-          controlHeight={ONBOARDING_CONTROL_HEIGHT}
-          onChange={(value) => {
-            if (value && isNicotineHabitYearsBand(value)) {
-              patch(patchForNicotineHabitYearsBand(value));
-            }
-          }}
-        />
-        {fieldErrors?.habitYears ? (
-          <Text className="text-xs font-semibold text-alert">
-            {t("onboarding.nicotine.habitYears.required")}
-          </Text>
-        ) : null}
-      </View>
+      <QuitDateFields
+        draft={draft}
+        onSelectPreset={quitDateHandlers.selectPreset}
+        onMonthChange={quitDateHandlers.updateCustomMonth}
+        onDayChange={quitDateHandlers.updateCustomDay}
+        onYearChange={quitDateHandlers.updateCustomYear}
+        error={
+          fieldErrors?.quitDate
+            ? t("onboarding.profile.quitDate.required")
+            : undefined
+        }
+      />
     </View>
   );
 }

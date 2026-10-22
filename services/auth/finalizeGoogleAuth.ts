@@ -4,6 +4,7 @@ import { saveAppSession } from "@/utils/auth/sessionStorage";
 import { buildOnboardingPayload } from "@/utils/onboarding/buildOnboardingPayload";
 import { isOnboardingDraftComplete } from "@/utils/onboarding/isOnboardingDraftComplete";
 import { markPostSignupFlowPending } from "@/utils/onboarding/postSignupFlowStorage";
+import { uploadPendingOnboardingProfilePhoto } from "@/utils/onboarding/uploadPendingOnboardingProfilePhoto";
 
 import { logMetaCompleteRegistration } from "@/services/analytics/metaEvents";
 import { logSignupSuccess } from "@/services/analytics/firebaseEvents";
@@ -40,6 +41,10 @@ export async function finalizeGoogleAuth(
       }
       const syncedAt = Date.now();
       await syncOnboardingToBackend(buildOnboardingPayload(draft, syncedAt));
+
+      if (draft.customProfileImageUrl) {
+        await uploadPendingOnboardingProfilePhoto(draft.customProfileImageUrl);
+      }
     }
 
     const session = await loadUserSessionFromApi(auth.accessToken);

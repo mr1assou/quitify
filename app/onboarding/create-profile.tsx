@@ -9,13 +9,12 @@ import {
 
 import { CountryFields } from "@/components/feature/onboarding/CountryFields";
 import { CreateProfileStep } from "@/components/feature/onboarding/CreateProfileStep";
-import { QuitDateFields } from "@/components/feature/onboarding/QuitDateFields";
+import { OnboardingProfileImagePicker } from "@/components/feature/onboarding/OnboardingProfileImagePicker";
 import { OnboardingShell } from "@/components/feature/onboarding/OnboardingShell";
 import { OnboardingSectionDivider } from "@/components/feature/onboarding/shared/OnboardingSectionDivider";
 import { ONBOARDING_TOTAL_STEPS } from "@/constants/onboarding/onboardingFlow";
 import type { ProfileSex } from "@/types";
 import { useOnboarding } from "@/context/OnboardingContext";
-import { useQuitPlanHandlers } from "@/hooks/onboarding/useQuitPlanHandlers";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import {
   getCreateProfileFieldErrors,
@@ -26,7 +25,6 @@ import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfil
 export default function OnboardingCreateProfile() {
   const { t } = useTranslation();
   const { draft, patch } = useOnboarding();
-  const quitDateHandlers = useQuitPlanHandlers(draft, patch);
   const [usernameAvailable, setUsernameAvailable] = useState(false);
   const [usernameTaken, setUsernameTaken] = useState(false);
   const [attemptedContinue, setAttemptedContinue] = useState(false);
@@ -77,6 +75,15 @@ export default function OnboardingCreateProfile() {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 8 }}
         >
           <View className="gap-8 pb-2">
+            <OnboardingProfileImagePicker
+              imageUrl={draft.customProfileImageUrl}
+              onImageUploaded={(url) => patch({ customProfileImageUrl: url })}
+              error={
+                fieldErrors.profileImage
+                  ? t("onboarding.profile.photo.required")
+                  : undefined
+              }
+            />
             <CreateProfileStep
               username={draft.username}
               onUsernameChange={(username) => patch({ username })}
@@ -106,19 +113,6 @@ export default function OnboardingCreateProfile() {
               fieldError={
                 fieldErrors.country
                   ? t("onboarding.profile.country.required")
-                  : undefined
-              }
-            />
-            <OnboardingSectionDivider />
-            <QuitDateFields
-              draft={draft}
-              onSelectPreset={quitDateHandlers.selectPreset}
-              onMonthChange={quitDateHandlers.updateCustomMonth}
-              onDayChange={quitDateHandlers.updateCustomDay}
-              onYearChange={quitDateHandlers.updateCustomYear}
-              error={
-                fieldErrors.quitDate
-                  ? t("onboarding.profile.quitDate.required")
                   : undefined
               }
             />

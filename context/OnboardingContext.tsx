@@ -91,7 +91,9 @@ export function buildProfile(draft: OnboardingDraft): UserProfile {
     countryFlag: draft.countryFlag,
     currency: draft.currency,
     imageUrl:
-      draft.defaultProfileImage ?? pickDefaultProfileImageForSex(draft.sex),
+      draft.customProfileImageUrl ??
+      draft.defaultProfileImage ??
+      pickDefaultProfileImageForSex(draft.sex),
     quitReasonIds: reasonIds.length > 0 ? [...reasonIds] : undefined,
     motivationLevel: draft.motivationLevel,
     priorQuitAttempts: draft.priorQuitAttempts,

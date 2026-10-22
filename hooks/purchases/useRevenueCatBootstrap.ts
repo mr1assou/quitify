@@ -44,6 +44,8 @@ export function useRevenueCatBootstrap() {
     }
   }, [setAccount]);
 
+  const email = state.account?.email;
+
   useEffect(() => {
     if (!isHydrated) return;
 
@@ -54,11 +56,11 @@ export function useRevenueCatBootstrap() {
     }
 
     void (async () => {
-      await syncRevenueCatUser(userId);
+      await syncRevenueCatUser(userId, email);
       void prefetchPaywallPlans(userId);
       await reconcilePremium();
     })();
-  }, [isHydrated, userId, reconcilePremium]);
+  }, [isHydrated, userId, email, reconcilePremium]);
 
   useEffect(() => {
     if (!userId) return;

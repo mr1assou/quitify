@@ -117,6 +117,8 @@ export type OnboardingDraft = {
   sex?: ProfileSex;
   /** Bundled default avatar picked when sex is selected (stored in DB as `image_url`). */
   defaultProfileImage?: string;
+  /** User-selected profile image (local URI during onboarding, uploaded to R2 on sign up). */
+  customProfileImageUrl?: string;
   birthMonth?: number;
   birthDay?: number;
   birthYear?: number;
