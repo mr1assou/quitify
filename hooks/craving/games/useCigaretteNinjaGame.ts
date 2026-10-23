@@ -244,6 +244,7 @@ export function useCigaretteNinjaGame() {
   const objectsCountRef = useRef(0);
   const objectsRef = useRef(state.objects);
   const trailRef = useRef<NinjaTrailPoint[]>([]);
+  const trailPaintRafRef = useRef<number | null>(null);
 
   const physics: SharedValue<NinjaPhysicsMap> = useSharedValue<NinjaPhysicsMap>(
     {},
@@ -261,6 +262,23 @@ export function useCigaretteNinjaGame() {
     [fieldSize],
   );
 
+  const clearTrail = useCallback(() => {
+    trailRef.current = [];
+    setTrail([]);
+    if (trailPaintRafRef.current != null) {
+      cancelAnimationFrame(trailPaintRafRef.current);
+      trailPaintRafRef.current = null;
+    }
+  }, []);
+
+  const scheduleTrailPaint = useCallback(() => {
+    if (trailPaintRafRef.current != null) return;
+    trailPaintRafRef.current = requestAnimationFrame(() => {
+      trailPaintRafRef.current = null;
+      setTrail(trailRef.current);
+    });
+  }, []);
+
   // Add physics for new spawns; drop sliced / finished objects.
   // Existing entries keep their live UI-thread positions.
   useEffect(() => {
@@ -277,7 +295,7 @@ export function useCigaretteNinjaGame() {
       for (const id of ids) {
         next[id] = prev[id] ?? spawned[id];
       }
-      return next;
+      return next as typeof current;
     });
   }, [physics, state.objects]);
 
@@ -331,9 +349,10 @@ export function useCigaretteNinjaGame() {
       spawnAtRef.current = performance.now();
     } else {
       physics.value = {};
+      clearTrail();
     }
     frame.setActive(playing);
-  }, [frame, physics, state.status]);
+  }, [clearTrail, frame, physics, state.status]);
 
   useEffect(() => {
     if (state.status !== "playing") return;
@@ -397,14 +416,22 @@ export function useCigaretteNinjaGame() {
     return () => clearInterval(id);
   }, [state.status]);
 
-  const start = useCallback(() => dispatch({ type: "start" }), []);
-  const reset = useCallback(() => dispatch({ type: "reset" }), []);
+  const start = useCallback(() => {
+    clearTrail();
+    dispatch({ type: "start" });
+  }, [clearTrail]);
+
+  const reset = useCallback(() => {
+    clearTrail();
+    dispatch({ type: "reset" });
+  }, [clearTrail]);
+
   const finish = useCallback(() => dispatch({ type: "finish" }), []);
 
   const extendSwipe = useCallback(
     (x: number, y: number) => {
       trailRef.current = [...trailRef.current.slice(-10), { x, y }];
-      setTrail(trailRef.current);
+      scheduleTrailPaint();
       if (trailRef.current.length < 2) return;
 
       const startPoint = trailRef.current[trailRef.current.length - 2];
@@ -434,13 +461,12 @@ export function useCigaretteNinjaGame() {
       if (Object.keys(hits).length === 0) return;
       dispatch({ type: "slice", hits, at: Date.now() });
     },
-    [physics],
+    [physics, scheduleTrailPaint],
   );
 
   const endSwipe = useCallback(() => {
-    trailRef.current = [];
-    setTrail([]);
-  }, []);
+    clearTrail();
+  }, [clearTrail]);
 
   const clearBurst = useCallback((id: string) => {
     dispatch({ type: "clearBurst", id });
