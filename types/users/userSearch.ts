@@ -11,4 +11,5 @@ export type BackendUserSearchResult = {
 
 export type BackendUserSearchResponse = {
   items: BackendUserSearchResult[];
+  has_more: boolean;
 };

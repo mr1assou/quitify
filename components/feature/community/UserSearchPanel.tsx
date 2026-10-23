@@ -13,15 +13,26 @@ import {
 export function UserSearchPanel() {
   const { colors } = useTheme();
   const [query, setQuery] = useState("");
-  const { debouncedQuery, users, loading, error, isQueryTooShort } = useUserSearch(query);
+  const {
+    debouncedQuery,
+    users,
+    loading,
+    loadingMore,
+    hasMore,
+    error,
+    loadMoreError,
+    isQueryTooShort,
+    isDebouncing,
+    loadMore,
+  } = useUserSearch(query);
 
   const showHint = debouncedQuery.length === 0;
   const showTooShort = isQueryTooShort;
-  const showLoading = !showHint && !showTooShort && loading;
-  const showResults = !showHint && !showTooShort && !loading && !error && users.length > 0;
+  const showLoading = !showHint && !showTooShort && (loading || isDebouncing);
+  const showResults = !showHint && !showTooShort && !showLoading && !error && users.length > 0;
   const showEmpty =
-    !showHint && !showTooShort && !loading && !error && users.length === 0;
-  const showError = !showHint && !showTooShort && !loading && Boolean(error);
+    !showHint && !showTooShort && !showLoading && !error && users.length === 0;
+  const showError = !showHint && !showTooShort && !showLoading && Boolean(error);
 
   return (
     <View className="px-6 pt-2">
@@ -78,6 +89,19 @@ export function UserSearchPanel() {
           {users.map((user) => (
             <SearchUserResultRow key={user.id} user={user} />
           ))}
+          {hasMore || loadingMore || loadMoreError ? (
+            <View className="items-center py-3">
+              {loadingMore ? (
+                <ActivityIndicator color={colors.primary} />
+              ) : (
+                <Pressable onPress={loadMore} hitSlop={8} className="active:opacity-70">
+                  <Text className="text-sm font-semibold text-primary">
+                    {loadMoreError ?? "Load more"}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          ) : null}
         </View>
       ) : null}
     </View>

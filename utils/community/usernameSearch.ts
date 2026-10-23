@@ -1,5 +1,6 @@
 export const USERNAME_SEARCH_MIN_LENGTH = 2;
 export const USERNAME_SEARCH_DEBOUNCE_MS = 300;
+export const USERNAME_SEARCH_PAGE_SIZE = 20;
 
 /**
  * Usernames are lowercase `@handle` values (hyphens allowed).
