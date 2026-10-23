@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { useCommunity } from "@/context/CommunityContext";
 import {
   USERNAME_SEARCH_DEBOUNCE_MS,
   USERNAME_SEARCH_MIN_LENGTH,
@@ -21,6 +22,9 @@ export type UserSearchResult = {
 
 /** Debounced username search against onboarded normal-role users. */
 export function useUserSearch(query: string): UserSearchResult {
+  const { state, upsertAuthor } = useCommunity();
+  const authorsByIdRef = useRef(state.authorsById);
+  authorsByIdRef.current = state.authorsById;
   const normalizedQuery = normalizeUsernameSearchQuery(query);
   const debouncedQuery = useDebouncedValue(normalizedQuery, USERNAME_SEARCH_DEBOUNCE_MS);
   const [users, setUsers] = useState<CommunityUser[]>([]);
@@ -45,7 +49,13 @@ export function useUserSearch(query: string): UserSearchResult {
     searchUsersByUsername(debouncedQuery)
       .then((response) => {
         if (cancelled) return;
-        setUsers(response.items.map(mapSearchUserToCommunityUser));
+        const mappedUsers = response.items.map(mapSearchUserToCommunityUser);
+        for (const user of mappedUsers) {
+          if (!authorsByIdRef.current[user.id]) {
+            upsertAuthor(user);
+          }
+        }
+        setUsers(mappedUsers);
       })
       .catch(() => {
         if (cancelled) return;
@@ -59,7 +69,7 @@ export function useUserSearch(query: string): UserSearchResult {
     return () => {
       cancelled = true;
     };
-  }, [debouncedQuery, isQueryTooShort]);
+  }, [debouncedQuery, isQueryTooShort, upsertAuthor]);
 
   return {
     query,
