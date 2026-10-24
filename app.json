@@ -18,6 +18,7 @@
       }
     },
     "android": {
+      "allowBackup": false,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#1A1410",
