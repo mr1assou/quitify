@@ -278,6 +278,8 @@ export const stats = {
 export const achievements = {
   tabRank: "Global Rank",
   tabBadges: "Badges",
+  moreBadgesDescription: "View your unlocked badges and progress toward the next one.",
+  moreRankDescription: "See how you rank among the Quitify community.",
   locked: "Locked",
   earned: "Earned",
   inProgress: "In progress",

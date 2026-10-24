@@ -1,6 +1,8 @@
 export const achievements = {
   tabRank: "Rang mondial",
   tabBadges: "Badges",
+  moreBadgesDescription: "Consultez vos badges obtenus et votre progression vers le prochain.",
+  moreRankDescription: "Découvrez votre classement parmi la communauté Quitify.",
   locked: "Verrouillé",
   earned: "Obtenu",
   inProgress: "En cours",

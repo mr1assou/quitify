@@ -30,7 +30,9 @@ export default function TabsLayout() {
       <Tabs.Screen name="community" options={{ title: t("tabs.community") }} />
       <Tabs.Screen name="missions" options={{ title: t("tabs.missions") }} />
       <Tabs.Screen name="stats" options={{ title: t("tabs.stats") }} />
-      <Tabs.Screen name="rewards" options={{ title: t("tabs.achievements") }} />
+      <Tabs.Screen name="rewards" options={{ title: t("tabs.more") }} />
+      <Tabs.Screen name="badges" options={{ href: null }} />
+      <Tabs.Screen name="global-rank" options={{ href: null }} />
     </Tabs>
   );
 }

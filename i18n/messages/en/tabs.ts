@@ -3,5 +3,5 @@ export const tabs = {
   community: "Community",
   missions: "Your missions",
   stats: "Stats",
-  achievements: "Achievement",
+  more: "More...",
 } as const;

@@ -1,4 +1,3 @@
-export * from "./achievementSections";
 export * from "./badgeImages";
 export * from "./badges";
 export * from "./dailyFocus";

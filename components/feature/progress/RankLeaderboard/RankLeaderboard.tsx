@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { ReactNode } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -26,9 +27,8 @@ import {
   listOtherLeaderboardEntries,
 } from "@/utils/leaderboard/findLeaderboardEntry";
 
-const ROW_HEIGHT = 78;
-
 type Props = {
+  screenHeader?: ReactNode;
   leaderboard: LeaderboardSnapshot;
   hasMore: boolean;
   hasMoreAbove: boolean;
@@ -75,6 +75,7 @@ function buildPageRows(
 }
 
 export function RankLeaderboard({
+  screenHeader,
   leaderboard,
   hasMore,
   hasMoreAbove,
@@ -89,12 +90,9 @@ export function RankLeaderboard({
   const { colors } = useTheme();
   const { isPremium, requirePremium } = usePremiumGate();
   const listRef = useRef<FlatList<ListRow>>(null);
-  const scrollOffsetRef = useRef(0);
   const [spotting, setSpotting] = useState(false);
   const [highlightSelf, setHighlightSelf] = useState(false);
   const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendingAboveAdjustRef = useRef<number | null>(null);
-  const prevRowCountRef = useRef(0);
 
   const pageRows = useMemo(
     () => buildPageRows(leaderboard, viewMode),
@@ -118,28 +116,6 @@ export function RankLeaderboard({
       if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current);
     };
   }, []);
-
-  // Keep scroll position stable when rows are prepended above.
-  useEffect(() => {
-    const prevCount = prevRowCountRef.current;
-    const added = rows.length - prevCount;
-    prevRowCountRef.current = rows.length;
-
-    if (pendingAboveAdjustRef.current == null) return;
-    if (added <= 0) {
-      pendingAboveAdjustRef.current = null;
-      return;
-    }
-
-    const baseOffset = pendingAboveAdjustRef.current;
-    pendingAboveAdjustRef.current = null;
-    requestAnimationFrame(() => {
-      listRef.current?.scrollToOffset({
-        offset: baseOffset + added * ROW_HEIGHT,
-        animated: false,
-      });
-    });
-  }, [rows.length]);
 
   // Highlight YOU when entering around mode (no auto-scroll — window fits on screen).
   useEffect(() => {
@@ -177,14 +153,13 @@ export function RankLeaderboard({
 
   const handleLoadMoreAbove = () => {
     if (loadingAbove || spotting || loadingMore) return;
-    pendingAboveAdjustRef.current = scrollOffsetRef.current;
     onLoadMoreAbove();
   };
 
   const renderItem = useCallback<ListRenderItem<ListRow>>(
     ({ item }) => (
-      <View className="px-6" style={{ height: ROW_HEIGHT }}>
-        <View className="h-full justify-center bg-section px-2 dark:bg-d-surface">
+      <View className="px-6">
+        <View className="justify-center bg-section px-2 dark:bg-d-surface">
           <LeaderboardRow
             entry={item.entry}
             showDivider={item.showDivider}
@@ -242,39 +217,39 @@ export function RankLeaderboard({
 
   return (
     <View className="flex-1">
-      <View className="mt-4">{leaderboardTitleBar}</View>
-
-      {hasMoreAbove ? (
-        <View className="px-6">
-          <View className="items-center border-b border-border/40 bg-section px-3 py-3 dark:border-d-border dark:bg-d-surface">
-            {loadingAbove ? (
-              <ActivityIndicator color={colors.primary} />
-            ) : (
-              <Pressable
-                onPress={handleLoadMoreAbove}
-                hitSlop={8}
-                className="active:opacity-70"
-                accessibilityRole="button"
-              >
-                <Text className="text-sm font-semibold text-primary">
-                  {t("achievements.showPrevious")}
-                </Text>
-              </Pressable>
-            )}
-          </View>
-        </View>
-      ) : null}
-
       <FlatList
         ref={listRef}
         className="flex-1"
+        maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
         data={rows}
         keyExtractor={(item) => item.key}
         renderItem={renderItem}
-        onScroll={(event) => {
-          scrollOffsetRef.current = event.nativeEvent.contentOffset.y;
-        }}
-        scrollEventThrottle={16}
+        ListHeaderComponent={
+          <View>
+            {screenHeader}
+            <View className="mt-4">{leaderboardTitleBar}</View>
+            {hasMoreAbove ? (
+              <View className="px-6">
+                <View className="items-center border-b border-border/40 bg-section px-3 py-3 dark:border-d-border dark:bg-d-surface">
+                  {loadingAbove ? (
+                    <ActivityIndicator color={colors.primary} />
+                  ) : (
+                    <Pressable
+                      onPress={handleLoadMoreAbove}
+                      hitSlop={8}
+                      className="active:opacity-70"
+                      accessibilityRole="button"
+                    >
+                      <Text className="text-sm font-semibold text-primary">
+                        {t("achievements.showPrevious")}
+                      </Text>
+                    </Pressable>
+                  )}
+                </View>
+              </View>
+            ) : null}
+          </View>
+        }
         contentContainerStyle={{
           paddingBottom: 120,
           flexGrow: 1,
@@ -313,11 +288,6 @@ export function RankLeaderboard({
             </View>
           </View>
         }
-        getItemLayout={(_data, index) => ({
-          length: ROW_HEIGHT,
-          offset: ROW_HEIGHT * index,
-          index,
-        })}
         initialNumToRender={16}
         maxToRenderPerBatch={12}
         windowSize={7}

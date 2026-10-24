@@ -48,7 +48,7 @@ export function BadgesGallery({ badges }: Props) {
             const openInGrid = badge.unlocked || isFirstStepBadge(badge.id);
 
             return (
-              <View key={badge.id} className="w-1/3 px-1 py-1" style={{ height: BADGE_TILE_HEIGHT }}>
+              <View key={badge.id} className="w-1/3 px-1 py-1">
                 <BadgeTile
                   badge={badge}
                   openInGrid={openInGrid}
@@ -67,9 +67,6 @@ export function BadgesGallery({ badges }: Props) {
 }
 
 const BADGE_ART_SIZE = 72;
-
-/** Fixed tile height so long badge names don’t stretch one card in a row. */
-const BADGE_TILE_HEIGHT = 124;
 
 function BadgeStatusIcon({
   openInGrid,
@@ -114,13 +111,13 @@ function BadgeTile({
   return (
     <Animated.View
       entering={FadeInDown.duration(380).delay(delay).springify().damping(18)}
-      className="flex-1"
+      className="self-stretch"
     >
       <Pressable
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel={`${badge.name} badge details`}
-        className={`h-full items-center justify-center gap-1.5 rounded-2xl bg-elevated px-1.5 py-2 active:opacity-80 dark:bg-d-elevated ${
+        className={`items-center justify-center gap-1.5 rounded-2xl bg-elevated px-1.5 py-2 active:opacity-80 dark:bg-d-elevated ${
           openInGrid ? "" : "opacity-45"
         }`}
       >
@@ -128,7 +125,7 @@ function BadgeTile({
           <BadgeArt badgeId={badge.id} size={BADGE_ART_SIZE} />
           <BadgeStatusIcon openInGrid={openInGrid} unlocked={badge.unlocked} />
         </View>
-        <View className="h-8 w-full justify-center px-0.5">
+        <View className="w-full justify-center px-0.5">
           <Text
             className={`text-center text-[10px] font-semibold leading-tight ${
               openInGrid
