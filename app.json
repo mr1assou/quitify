@@ -99,6 +99,10 @@
       [
         "expo-build-properties",
         {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          },
           "ios": {
             "useFrameworks": "static",
             "forceStaticLinking": [
@@ -108,6 +112,7 @@
           }
         }
       ],
+      "./plugins/withOptimizedR8Proguard",
       "expo-sqlite"
     ],
     "experiments": {

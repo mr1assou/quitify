@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useEffect } from "react";
 
 import { OnboardingFieldLabel } from "@/components/feature/onboarding/shared/OnboardingFieldLabel";
@@ -26,11 +26,9 @@ type Props = {
 
 function CurrencyDisplay({
   currency,
-  loading,
   hasCountry,
 }: {
   currency: string;
-  loading: boolean;
   hasCountry: boolean;
 }) {
   const symbol = currencySymbol(currency);
@@ -45,9 +43,7 @@ function CurrencyDisplay({
         height: COUNTRY_CURRENCY_CONTROL_HEIGHT,
       }}
     >
-      {loading ? (
-        <ActivityIndicator size="small" />
-      ) : hasCountry ? (
+      {hasCountry ? (
         <Text
           className="text-sm font-semibold text-foreground dark:text-d-text"
           numberOfLines={1}
@@ -63,15 +59,14 @@ function CurrencyDisplay({
 
 export function CountryFields({ draft, patch, fieldError }: Props) {
   const { t } = useTranslation();
-  const { countries, status, error: loadError, retry } = useCountries();
+  const countries = useCountries();
   const { selectCountry } = useCountrySelection(patch);
 
-  const loadingCountries = status === "loading";
-  const hasCountry = !!draft.countryCode && status === "ready";
+  const hasCountry = !!draft.countryCode;
 
-  // Keep default Canada in sync with the loaded country list (flag / currency).
+  // Keep the default Canada selection in sync with bundled country data.
   useEffect(() => {
-    if (status !== "ready" || countries.length === 0) return;
+    if (countries.length === 0) return;
     if (draft.countryCode && draft.countryCode !== DEFAULT_ONBOARDING_COUNTRY_CODE) {
       return;
     }
@@ -93,7 +88,6 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
     draft.countryName,
     draft.currency,
     selectCountry,
-    status,
   ]);
 
   return (
@@ -112,7 +106,6 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
           <CountrySelectField
             countries={countries}
             selectedCode={draft.countryCode}
-            loading={loadingCountries}
             onSelect={selectCountry}
             showLabel={false}
             controlHeight={COUNTRY_CURRENCY_CONTROL_HEIGHT}
@@ -120,7 +113,6 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
         </View>
         <CurrencyDisplay
           currency={draft.currency}
-          loading={loadingCountries}
           hasCountry={hasCountry}
         />
       </View>
@@ -129,17 +121,7 @@ export function CountryFields({ draft, patch, fieldError }: Props) {
         {t("onboarding.profile.country.hint")}
       </Text>
 
-      {status === "error" ? (
-        <View className="gap-2">
-          <Text className="text-sm text-alert">{loadError}</Text>
-          <Pressable onPress={retry} className="self-start">
-            <Text className="text-sm font-semibold text-primary dark:text-d-primary">
-              Try again
-            </Text>
-          </Pressable>
-        </View>
-      ) : null}
-      {status !== "error" && fieldError ? (
+      {fieldError ? (
         <Text className="text-xs font-semibold text-alert">{fieldError}</Text>
       ) : null}
     </View>

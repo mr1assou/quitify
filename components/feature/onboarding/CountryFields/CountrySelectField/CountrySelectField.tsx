@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useMemo, useState } from "react";
 import {
-  ActivityIndicator,
   Modal,
   Platform,
   Pressable,
@@ -31,7 +30,6 @@ import type { Country } from "@/types/app/country";
 type Props = {
   countries: readonly Country[];
   selectedCode?: string;
-  loading?: boolean;
   onSelect: (country: Country) => void;
   /** When false, parent renders the label (e.g. side-by-side with currency). */
   showLabel?: boolean;
@@ -41,7 +39,6 @@ type Props = {
 export function CountrySelectField({
   countries,
   selectedCode,
-  loading,
   onSelect,
   showLabel = true,
   controlHeight = 48,
@@ -78,20 +75,18 @@ export function CountrySelectField({
     <View className="w-full">
       {showLabel ? <OnboardingFieldLabel>Country</OnboardingFieldLabel> : null}
       <Pressable
-        onPress={() => !loading && countries.length > 0 && setOpen(true)}
-        disabled={loading || countries.length === 0}
+        onPress={() => countries.length > 0 && setOpen(true)}
+        disabled={countries.length === 0}
         className={[
           "flex-row items-center justify-between rounded-2xl bg-section px-3 dark:bg-d-surface",
           showLabel ? "mt-1.5" : "",
         ].join(" ")}
         style={{ height: controlHeight }}
       >
-        {loading ? (
-          <ActivityIndicator color={colors.primary} />
-        ) : selected ? (
+        {selected ? (
           <View className="flex-1 flex-row items-center gap-3">
             <Image
-              source={{ uri: selected.flagPng }}
+              source={selected.flagAsset}
               style={{ width: 24, height: 17, borderRadius: 2 }}
               contentFit="cover"
             />
@@ -233,7 +228,7 @@ function CountrySearchSheet({
                       className="flex-row items-center gap-3 rounded-xl px-3 py-3 active:bg-section dark:active:bg-d-surface"
                     >
                       <Image
-                        source={{ uri: item.flagPng }}
+                        source={item.flagAsset}
                         style={{ width: 32, height: 22, borderRadius: 3 }}
                         contentFit="cover"
                       />

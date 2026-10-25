@@ -45,7 +45,7 @@ export type OnboardingPayloadStep5 = {
   sex?: string;
   /** Country name as shown in the picker, e.g. "France". */
   country?: string;
-  /** PNG flag URL, e.g. from REST Countries `flags.png`. */
+  /** Country flag URL retained for backend and profile compatibility. */
   countryFlag?: string;
   /** Currency code as shown next to country, e.g. "EUR" or "$". */
   currency: string;
