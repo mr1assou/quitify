@@ -7,18 +7,19 @@ import {
 import { pickDefaultProfileImage } from "@/utils/profile/pickDefaultProfileImage";
 
 const PROFILE_IMAGE_SOURCES: Record<DefaultProfileImagePath, ImageSourcePropType> = {
-  "profile8.webp": require("../../assets/images/profiles/profile8.webp"),
-  "profile9.webp": require("../../assets/images/profiles/profile9.webp"),
-  "profile10.webp": require("../../assets/images/profiles/profile10.webp"),
-  "profile11.webp": require("../../assets/images/profiles/profile11.webp"),
-  "profile12.webp": require("../../assets/images/profiles/profile12.webp"),
-  "profile13.webp": require("../../assets/images/profiles/profile13.webp"),
-  "profile1.webp": require("../../assets/images/profiles/profile1.webp"),
-  "profile3.webp": require("../../assets/images/profiles/profile3.webp"),
+  "profile24.webp": require("../../assets/images/profiles/profile24.webp"),
+  "profile14.webp": require("../../assets/images/profiles/profile14.webp"),
+  "profile15.webp": require("../../assets/images/profiles/profile15.webp"),
+  "profile16.webp": require("../../assets/images/profiles/profile16.webp"),
+  "profile17.webp": require("../../assets/images/profiles/profile17.webp"),
+  "profile18.webp": require("../../assets/images/profiles/profile18.webp"),
+  "profile19.webp": require("../../assets/images/profiles/profile19.webp"),
+  "profile20.webp": require("../../assets/images/profiles/profile20.webp"),
+  "profile21.webp": require("../../assets/images/profiles/profile21.webp"),
+  "profile22.webp": require("../../assets/images/profiles/profile22.webp"),
+  "profile23.webp": require("../../assets/images/profiles/profile23.webp"),
   "profile4.webp": require("../../assets/images/profiles/profile4.webp"),
   "profile5.webp": require("../../assets/images/profiles/profile5.webp"),
-  "profile6.webp": require("../../assets/images/profiles/profile6.webp"),
-  "profile7.webp": require("../../assets/images/profiles/profile7.webp"),
 };
 
 export function bundledProfileImageSource(

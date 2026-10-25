@@ -2,8 +2,8 @@ import type { ImageSourcePropType } from "react-native";
 
 /** Profile photos for synthetic global-rank players. */
 export const LEADERBOARD_PROFILE_IMAGES: readonly ImageSourcePropType[] = [
-  require("../../assets/images/profiles/profile1.webp"),
-  require("../../assets/images/profiles/profile3.webp"),
+  require("../../assets/images/profiles/profile4.webp"),
+  require("../../assets/images/profiles/profile5.webp"),
 ];
 
 export function profileImageForRank(rank: number): ImageSourcePropType {

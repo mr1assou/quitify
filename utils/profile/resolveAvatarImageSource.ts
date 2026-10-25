@@ -37,7 +37,7 @@ export function resolveAvatarImageSource(
 
   // Older profiles may still reference a bundled filename that was removed.
   if (PROFILE_IMAGE_FILENAME_PATTERN.test(filename) && !trimmed.includes("://")) {
-    return bundledProfileImageSource("profile1.webp");
+    return bundledProfileImageSource("profile4.webp");
   }
 
   return { uri: trimmed };
