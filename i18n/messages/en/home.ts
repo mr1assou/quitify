@@ -2,6 +2,7 @@ export const home = {
   streakLabel: "Current streak",
   attempt: "Attempt {{n}}",
   since: "Since {{date}}",
+  impactTitle: "Your progress",
   saved: "saved",
   cigsAvoided: "cigs avoided",
   lifeGained: "life gained",

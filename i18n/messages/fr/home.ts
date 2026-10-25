@@ -1,6 +1,7 @@
 export const home = {
   streakLabel: "Série en cours",
   attempt: "Tentative {{n}}",
+  impactTitle: "Vos progrès",
   since: "Depuis le {{date}}",
   saved: "économisés",
   cigsAvoided: "cigs évitées",

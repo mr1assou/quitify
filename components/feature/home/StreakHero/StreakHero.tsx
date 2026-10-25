@@ -4,8 +4,14 @@ import type { ComponentProps } from "react";
 import { useMemo } from "react";
 import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+import Svg, {
+  Defs,
+  LinearGradient,
+  Path,
+  Rect,
+  Stop,
+} from "react-native-svg";
 
-import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { useNow } from "@/hooks/shared/useNow";
 import { formatCurrentStreak } from "@/utils/streak";
@@ -28,7 +34,6 @@ export function StreakHero({
   lifeMinutesGained,
   currencySymbol,
 }: Props) {
-  const { colors } = useTheme();
   const { t, locale } = useTranslation();
   const now = useNow(30_000);
   const streakLabel = useMemo(
@@ -80,28 +85,33 @@ export function StreakHero({
       </Text>
 
       <View className="mt-8 w-full gap-3">
-        <View className="flex-row gap-3">
-          <StatPill
-            icon="cash"
-            tint={colors.primary}
-            value={moneyDisplay}
-            label={t("home.saved")}
-          />
-          <StatPill
-            icon="smoking"
-            iconSet="materialCommunity"
-            tint={colors.primary}
-            value={formatNumber(cigarettesAvoided)}
-            label={t("home.cigsAvoided")}
-          />
+        <View className="relative w-full overflow-hidden rounded-3xl bg-primary px-5 py-4 shadow-sm">
+          <ImpactCardBackground />
+          <Text className="mb-2 px-1 text-base font-bold" style={{ color: "#3D3630" }}>
+            {t("home.impactTitle")}
+          </Text>
+
+          <View>
+            <ImpactRow
+              icon="cash"
+              value={moneyDisplay}
+              label={t("home.saved")}
+            />
+            <ImpactDivider />
+            <ImpactRow
+              icon="smoking"
+              iconSet="materialCommunity"
+              value={formatNumber(cigarettesAvoided)}
+              label={t("home.cigsAvoided")}
+            />
+            <ImpactDivider />
+            <ImpactRow
+              icon="heart"
+              value={formatLifeGained(lifeMinutesGained)}
+              label={t("home.lifeGained")}
+            />
+          </View>
         </View>
-        <StatPill
-          icon="heart"
-          tint={colors.accent}
-          value={formatLifeGained(lifeMinutesGained)}
-          label={t("home.lifeGained")}
-          fullWidth
-        />
       </View>
     </Animated.View>
   );
@@ -110,50 +120,73 @@ export function StreakHero({
 type IonName = ComponentProps<typeof Ionicons>["name"];
 type MciName = ComponentProps<typeof MaterialCommunityIcons>["name"];
 
-function StatPill({
+function ImpactRow({
   icon,
   iconSet = "ionicons",
-  tint,
   value,
   label,
-  fullWidth = false,
 }: {
   icon: IonName | MciName;
   iconSet?: "ionicons" | "materialCommunity";
-  tint: string;
   value: string;
   label: string;
-  fullWidth?: boolean;
 }) {
   return (
-    <View
-      className={`flex-row items-center rounded-3xl bg-elevated p-4 dark:bg-d-surface ${
-        fullWidth ? "w-full" : "flex-1"
-      }`}
-    >
-      <View
-        style={{ backgroundColor: tint }}
-        className="mr-3 h-11 w-11 items-center justify-center rounded-2xl"
-      >
+    <View className="min-h-[58px] flex-row items-center gap-3 py-2">
+      <View className="h-9 w-9 items-center justify-center rounded-xl bg-white">
         {iconSet === "materialCommunity" ? (
-          <MaterialCommunityIcons name={icon as MciName} size={22} color="#fff" />
+          <MaterialCommunityIcons name={icon as MciName} size={21} color="#3D3630" />
         ) : (
-          <Ionicons name={icon as IonName} size={22} color="#fff" />
+          <Ionicons name={icon as IonName} size={21} color="#3D3630" />
         )}
       </View>
-      <View className="min-w-0 flex-1">
-        <Text
-          className="text-xl font-bold text-foreground dark:text-d-text"
-          numberOfLines={1}
-          adjustsFontSizeToFit
-          minimumFontScale={0.75}
-        >
-          {value}
-        </Text>
-        <Text className="mt-0.5 text-xs uppercase tracking-wider text-muted-foreground dark:text-d-muted">
-          {label}
-        </Text>
-      </View>
+      <Text
+        className="min-w-0 flex-1 text-sm font-medium"
+        style={{ color: "#3D3630", opacity: 0.85 }}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+      <Text
+        className="max-w-[52%] shrink-0 text-right text-lg font-bold tabular-nums"
+        style={{ color: "#3D3630" }}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.7}
+      >
+        {value}
+      </Text>
     </View>
   );
 }
+
+function ImpactDivider() {
+  return <View className="h-px" style={{ backgroundColor: "rgba(61,54,48,0.18)" }} />;
+}
+
+function ImpactCardBackground() {
+  return (
+    <Svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 360 240"
+      preserveAspectRatio="none"
+      style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0 }}
+      pointerEvents="none"
+    >
+      <Defs>
+        <LinearGradient id="homeImpactCardGradient" x1="0" y1="0" x2="1" y2="1">
+          <Stop offset="0" stopColor="#FF9633" />
+          <Stop offset="1" stopColor="#FF7A00" />
+        </LinearGradient>
+      </Defs>
+      <Rect x="0" y="0" width="360" height="240" fill="url(#homeImpactCardGradient)" />
+      <Path
+        d="M248 0C293 16 333 43 360 72V0H248Z"
+        fill="#FFFFFF"
+        fillOpacity={0.1}
+      />
+    </Svg>
+  );
+}
+
