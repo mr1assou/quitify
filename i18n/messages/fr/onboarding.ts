@@ -90,6 +90,7 @@ export const onboarding = {
       placeholder: "@username",
       taken: "Ce nom d'utilisateur est déjà pris",
       required: "Entrez un nom d'utilisateur",
+      maxLength: "Maximum : {{count}} caractères",
     },
     sex: {
       label: "Sexe",
@@ -107,7 +108,9 @@ export const onboarding = {
     },
     photo: {
       label: "Photo de profil",
-      required: "Ajoutez une photo de profil",
+      required: "Ajoutez une photo ou choisissez un avatar",
+      addPhoto: "Ajouter votre propre photo",
+      avatarOption: "Avatar {number}",
     },
     birthdate: { label: "Date de naissance" },
   },

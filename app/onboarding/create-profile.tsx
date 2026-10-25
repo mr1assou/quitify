@@ -20,7 +20,6 @@ import {
   getCreateProfileFieldErrors,
   isCreateProfileStepComplete,
 } from "@/utils/onboarding/createProfileOnboarding";
-import { pickDefaultProfileImageForSex } from "@/utils/profile/pickDefaultProfileImage";
 
 export default function OnboardingCreateProfile() {
   const { t } = useTranslation();
@@ -77,7 +76,19 @@ export default function OnboardingCreateProfile() {
           <View className="gap-8 pb-2">
             <OnboardingProfileImagePicker
               imageUrl={draft.customProfileImageUrl}
-              onImageUploaded={(url) => patch({ customProfileImageUrl: url })}
+              defaultAvatarPath={draft.defaultProfileImage}
+              onImageUploaded={(url) =>
+                patch({
+                  customProfileImageUrl: url,
+                  defaultProfileImage: undefined,
+                })
+              }
+              onAvatarSelected={(imagePath) =>
+                patch({
+                  defaultProfileImage: imagePath,
+                  customProfileImageUrl: undefined,
+                })
+              }
               error={
                 fieldErrors.profileImage
                   ? t("onboarding.profile.photo.required")
@@ -89,12 +100,7 @@ export default function OnboardingCreateProfile() {
               onUsernameChange={(username) => patch({ username })}
               onAvailabilityChange={onAvailabilityChange}
               sex={draft.sex}
-              onSexChange={(sex: ProfileSex) =>
-                patch({
-                  sex,
-                  defaultProfileImage: pickDefaultProfileImageForSex(sex),
-                })
-              }
+              onSexChange={(sex: ProfileSex) => patch({ sex })}
               usernameError={
                 fieldErrors.username
                   ? t("onboarding.profile.username.required")

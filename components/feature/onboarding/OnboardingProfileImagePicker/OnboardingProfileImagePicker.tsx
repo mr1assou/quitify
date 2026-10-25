@@ -6,6 +6,7 @@ import {
   Alert,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -14,11 +15,17 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
+  DEFAULT_PROFILE_IMAGE_PATHS,
+  type DefaultProfileImagePath,
+} from "@/constants/profile/defaultProfileImagePaths";
+import { bundledProfileImageSource } from "@/constants/onboarding/defaultProfileImages";
+import {
   PostImageCropEditor,
   type PostImageCropEditorHandle,
 } from "@/components/feature/community/PostComposer/PostImageCropEditor";
 import { usePickProfileImage } from "@/components/feature/profile/usePickProfileImage";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "@/hooks/i18n/useTranslation";
 import type { PostImageCrop } from "@/types/community/community";
 import { DEFAULT_POST_IMAGE_CROP } from "@/utils/community/postImageCrop";
 import { normalizeImageOrientation } from "@/utils/posts/optimizePostImage";
@@ -28,23 +35,29 @@ import { resolveAvatarImageSource } from "@/utils/profile/resolveAvatarImageSour
 type Props = {
   /** The local image URI or R2 URL (if any). */
   imageUrl?: string;
+  /** Selected bundled avatar filename, if any. */
+  defaultAvatarPath?: string;
   /** Called when the image is cropped and confirmed locally. */
   onImageUploaded: (localUri: string) => void;
+  /** Called when the user selects a bundled avatar instead of uploading a photo. */
+  onAvatarSelected: (imagePath: DefaultProfileImagePath) => void;
   /** Validation error string from parent. */
   error?: string;
 };
 
 /**
  * Circular profile-photo picker for onboarding step 5.
- * Displays avatar placeholder with an attached '+' badge button.
- * Clicking opens a popup Modal to crop and choose which part of the photo to show.
+ * Lets users upload a photo or select one of the bundled profile avatars.
  */
 export function OnboardingProfileImagePicker({
   imageUrl,
+  defaultAvatarPath,
   onImageUploaded,
+  onAvatarSelected,
   error,
 }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { pickImages } = usePickProfileImage();
   const cropEditorRef = useRef<PostImageCropEditorHandle>(null);
 
@@ -88,7 +101,7 @@ export function OnboardingProfileImagePicker({
     }
   }, [crop, handleCloseModal, onImageUploaded, pickedUri]);
 
-  const avatarSource = resolveAvatarImageSource(imageUrl);
+  const avatarSource = resolveAvatarImageSource(imageUrl || defaultAvatarPath);
 
   return (
     <View className="w-full items-center">
@@ -98,11 +111,15 @@ export function OnboardingProfileImagePicker({
           onPress={() => void handlePick()}
           className="relative"
           accessibilityRole="button"
-          accessibilityLabel="Add profile photo"
+          accessibilityLabel={t("onboarding.profile.photo.addPhoto")}
         >
           <View
             className="h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-section dark:border-d-border dark:bg-d-surface"
-            style={imageUrl ? { borderColor: colors.primary } : undefined}
+            style={
+              imageUrl || defaultAvatarPath
+                ? { borderColor: colors.primary }
+                : undefined
+            }
           >
             {avatarSource ? (
               <Image
@@ -122,7 +139,7 @@ export function OnboardingProfileImagePicker({
           {/* '+' / edit badge attached to photo */}
           <View className="absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full bg-primary shadow-sm">
             <Ionicons
-              name={imageUrl ? "camera" : "add"}
+              name={imageUrl || defaultAvatarPath ? "camera" : "add"}
               size={18}
               color="#ffffff"
             />
@@ -134,6 +151,46 @@ export function OnboardingProfileImagePicker({
             {error}
           </Text>
         ) : null}
+      </View>
+
+      <View className="mt-4 w-full items-center">
+        <ScrollView
+          horizontal
+          nestedScrollEnabled
+          showsHorizontalScrollIndicator={false}
+          className="w-full"
+          contentContainerStyle={{ gap: 12, paddingHorizontal: 4 }}
+        >
+          {DEFAULT_PROFILE_IMAGE_PATHS.map((imagePath, index) => {
+            const selected = !imageUrl && defaultAvatarPath === imagePath;
+
+            return (
+              <Pressable
+                key={imagePath}
+                onPress={() => onAvatarSelected(imagePath)}
+                accessibilityRole="button"
+                accessibilityLabel={t("onboarding.profile.photo.avatarOption", {
+                  number: index + 1,
+                })}
+                accessibilityState={{ selected }}
+                className={`relative h-14 w-14 items-center justify-center rounded-full border-2 p-0.5 ${
+                  selected ? "border-primary" : "border-border dark:border-d-border"
+                }`}
+              >
+                <Image
+                  source={bundledProfileImageSource(imagePath)}
+                  style={{ width: "100%", height: "100%", borderRadius: 999 }}
+                  contentFit="cover"
+                />
+                {selected ? (
+                  <View className="absolute bottom-0 right-0 h-5 w-5 items-center justify-center rounded-full bg-primary">
+                    <Ionicons name="checkmark" size={12} color={colors.white} />
+                  </View>
+                ) : null}
+              </Pressable>
+            );
+          })}
+        </ScrollView>
       </View>
 
       {/* Modal popup to frame / crop the image */}

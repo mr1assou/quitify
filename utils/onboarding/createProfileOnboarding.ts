@@ -18,8 +18,10 @@ export function isCreateProfileStepComplete(draft: OnboardingDraft): boolean {
     typeof draft.countryCode === "string" && draft.countryCode.length === 2;
 
   const profileImageOk =
-    typeof draft.customProfileImageUrl === "string" &&
-    draft.customProfileImageUrl.length > 0;
+    (typeof draft.customProfileImageUrl === "string" &&
+      draft.customProfileImageUrl.length > 0) ||
+    (typeof draft.defaultProfileImage === "string" &&
+      draft.defaultProfileImage.length > 0);
 
   return usernameOk && sexOk && countryOk && profileImageOk;
 }
@@ -43,12 +45,13 @@ export function getCreateProfileFieldErrors(
     errors.country = true;
   }
 
-  if (
-    !(
-      typeof draft.customProfileImageUrl === "string" &&
-      draft.customProfileImageUrl.length > 0
-    )
-  ) {
+  const hasProfileImage =
+    (typeof draft.customProfileImageUrl === "string" &&
+      draft.customProfileImageUrl.length > 0) ||
+    (typeof draft.defaultProfileImage === "string" &&
+      draft.defaultProfileImage.length > 0);
+
+  if (!hasProfileImage) {
     errors.profileImage = true;
   }
 

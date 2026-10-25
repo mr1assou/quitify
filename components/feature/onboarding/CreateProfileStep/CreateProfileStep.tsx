@@ -5,9 +5,9 @@ import { Chip } from "@/components/ui/Chip";
 import type { ProfileSex } from "@/types";
 import {
   normalizeOnboardingUsername,
-  usernameHandleLength,
   USERNAME_MAX_LENGTH,
   USERNAME_STORED_MAX_LENGTH,
+  usernameHandleLength,
 } from "@/constants/onboarding/onboardingUsername";
 import { PROFILE_SEX_OPTIONS } from "@/constants/onboarding/onboardingSex";
 import { useTheme } from "@/context/ThemeContext";
@@ -46,6 +46,7 @@ export function CreateProfileStep({
   const { localize } = useLocalizedCatalog();
   const sexOptions = localize(PROFILE_SEX_OPTIONS, "onboarding.profile.sex", ["label"]);
   const availability = useUsernameAvailability(username);
+  const usernameAtLimit = usernameHandleLength(username) >= USERNAME_MAX_LENGTH;
 
   useEffect(() => {
     onAvailabilityChange?.({
@@ -76,9 +77,13 @@ export function CreateProfileStep({
           maxLength={USERNAME_STORED_MAX_LENGTH}
           className="rounded-2xl bg-section px-4 py-3 text-base text-foreground dark:bg-d-surface dark:text-d-text"
         />
-        <Text className="text-xs text-muted-foreground dark:text-d-muted">
-          {usernameHandleLength(username)}/{USERNAME_MAX_LENGTH} characters
-        </Text>
+        {usernameAtLimit ? (
+          <Text className="text-xs text-muted-foreground dark:text-d-muted">
+            {t("onboarding.profile.username.maxLength", {
+              count: USERNAME_MAX_LENGTH,
+            })}
+          </Text>
+        ) : null}
         {availability.taken && !usernameError ? (
           <Text className="text-xs font-semibold text-alert">
             {t("onboarding.profile.username.taken")}

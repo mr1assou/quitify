@@ -49,6 +49,8 @@ export type OnboardingPayloadStep5 = {
   countryFlag?: string;
   /** Currency code as shown next to country, e.g. "EUR" or "$". */
   currency: string;
+  /** Filename of the selected bundled profile avatar, if any. */
+  profileImage?: string;
   /** Quit timing preset: "Now" or "Custom". */
   quitDatePreset?: string;
   /** UTC ISO-8601 quit instant (local quit-day midnight). */

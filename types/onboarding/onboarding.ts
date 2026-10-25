@@ -115,7 +115,7 @@ export type QuitStartPresetOption = {
 export type OnboardingDraft = {
   username: string;
   sex?: ProfileSex;
-  /** Bundled default avatar picked when sex is selected (stored in DB as `image_url`). */
+  /** User-selected bundled avatar filename (stored in DB as `image_url`). */
   defaultProfileImage?: string;
   /** User-selected profile image (local URI during onboarding, uploaded to R2 on sign up). */
   customProfileImageUrl?: string;

@@ -114,6 +114,7 @@ export function resolveOnboardingPayloadText(
       country: draft.countryName,
       countryFlag: draft.countryFlag,
       currency: draft.currency,
+      profileImage: draft.defaultProfileImage,
       quitDatePreset: quitPayload?.quitDatePreset,
       quitDate: quitPayload?.quitDate,
     },
