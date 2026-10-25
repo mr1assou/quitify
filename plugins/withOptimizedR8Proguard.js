@@ -49,6 +49,22 @@ module.exports = function withOptimizedR8Proguard(config) {
       });
     }
 
+    const optimizedResourceShrinking = config.modResults.find(
+      (property) =>
+        property.type === "property" &&
+        property.key === "android.r8.optimizedResourceShrinking",
+    );
+
+    if (optimizedResourceShrinking) {
+      optimizedResourceShrinking.value = "true";
+    } else {
+      config.modResults.push({
+        type: "property",
+        key: "android.r8.optimizedResourceShrinking",
+        value: "true",
+      });
+    }
+
     return config;
   });
 };
