@@ -15,7 +15,7 @@ export const CIGARETTE_NINJA_CIGARETTE_IMAGES: readonly ImageSourcePropType[] = 
 
 export const CIGARETTE_NINJA_VAPE_IMAGES: readonly ImageSourcePropType[] = [
   require("../../../assets/images/games/3/vape1.webp"),
-  require("../../../assets/images/games/3/vape2.webp"),
+  require("../../../assets/images/games/3/vape.webp"),
 ];
 
 /** Smoke targets alternate between cigar and lighter art. */
