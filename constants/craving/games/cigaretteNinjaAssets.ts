@@ -8,7 +8,7 @@ export const CIGARETTE_NINJA_LOGO_IMAGE: ImageSourcePropType = require(
 );
 
 export const CIGARETTE_NINJA_CIGARETTE_IMAGES: readonly ImageSourcePropType[] = [
-  require("../../../assets/images/games/3/cigarette1.webp"),
+  require("../../../assets/images/games/3/logo.webp"),
   require("../../../assets/images/games/3/pack1.webp"),
   require("../../../assets/images/games/3/pack2.webp"),
 ];
