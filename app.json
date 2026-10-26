@@ -113,7 +113,8 @@
         }
       ],
       "./plugins/withOptimizedR8Proguard",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

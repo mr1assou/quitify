@@ -28,7 +28,7 @@ const RELAX_SOUND_COVER_LOADERS = {
   filmScore: () =>
     require("../../assets/images/music/images/film_movie.webp") as ImageSourcePropType,
   listen: () =>
-    require("../../assets/images/music/images/listen_wave.webp") as ImageSourcePropType,
+    require("../../assets/images/music/images/listen.webp") as ImageSourcePropType,
   lostDiary: () =>
     require("../../assets/images/music/images/lost_diary.webp") as ImageSourcePropType,
   midi: () =>
