@@ -1,15 +1,13 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePlayerProfileStreak } from "@/hooks/profile/usePlayerProfileStreak";
 import { ProfileImageEditorModal } from "@/components/feature/profile/ProfileImageEditorModal";
 import { ProfileScreenHeader } from "@/components/feature/profile/ProfileScreenHeader";
 import { UserProfileContent } from "@/components/feature/profile/UserProfileContent";
 import type { PlayerProfile } from "@/types/profile/playerProfile";
 import { safeRouter } from "@/utils/app/safeRouter";
-import { formatMemberSinceLabel } from "@/utils/profile/formatMemberSinceLabel";
 
 type Props = {
   profile: PlayerProfile | null;
@@ -17,15 +15,7 @@ type Props = {
 
 export function PlayerProfileScreen({ profile }: Props) {
   const [avatarEditorOpen, setAvatarEditorOpen] = useState(false);
-  const { locale } = useTranslation();
-  const { streak, memberSinceMs } = usePlayerProfileStreak(profile);
-
-  const memberSinceLabel = useMemo(() => {
-    if (memberSinceMs != null) {
-      return formatMemberSinceLabel(memberSinceMs, locale);
-    }
-    return profile?.memberSinceLabel?.trim() || undefined;
-  }, [memberSinceMs, profile?.memberSinceLabel, locale]);
+  const { streak } = usePlayerProfileStreak(profile);
 
   if (!profile) {
     return (
@@ -50,7 +40,6 @@ export function PlayerProfileScreen({ profile }: Props) {
             profile={profile}
             showActions
             streak={streak}
-            memberSinceLabel={memberSinceLabel}
             onEditAvatarPress={
               profile.isCurrentUser ? () => setAvatarEditorOpen(true) : undefined
             }

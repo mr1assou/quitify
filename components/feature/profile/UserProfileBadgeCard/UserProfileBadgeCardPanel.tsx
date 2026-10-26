@@ -23,9 +23,6 @@ export function UserProfileBadgeCard({ profile }: Props) {
           <Text className="mt-0.5 text-lg font-bold text-foreground dark:text-d-text">
             {badgeName}
           </Text>
-          <Text className="mt-1 text-sm text-muted-foreground dark:text-d-muted">
-            Member since {profile.memberSinceLabel}
-          </Text>
         </View>
       </View>
     </Card>
