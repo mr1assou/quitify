@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { PanResponder, View, type LayoutChangeEvent } from "react-native";
-import type { SharedValue } from "react-native-reanimated";
 import Svg, { Polyline } from "react-native-svg";
 
 import { NinjaFlyingObjectSprite } from "@/components/feature/craving/games/reflex-tap/NinjaFlyingObject";
@@ -8,14 +7,12 @@ import { NinjaSliceBurst } from "@/components/feature/craving/games/reflex-tap/N
 import { useTheme } from "@/context/ThemeContext";
 import type {
   NinjaSliceBurst as Burst,
-  NinjaPhysicsMap,
   NinjaTrailPoint,
 } from "@/hooks/craving/games/useCigaretteNinjaGame";
 import type { NinjaFlyingObject } from "@/utils/craving/games/cigaretteNinjaMath";
 
 type Props = {
   objects: readonly NinjaFlyingObject[];
-  physics: SharedValue<NinjaPhysicsMap>;
   trail: readonly NinjaTrailPoint[];
   bursts: readonly Burst[];
   onLayoutField: (width: number, height: number) => void;
@@ -26,7 +23,6 @@ type Props = {
 
 export function NinjaPlayField({
   objects,
-  physics,
   trail,
   bursts,
   onLayoutField,
@@ -71,11 +67,7 @@ export function NinjaPlayField({
       {...panResponder.panHandlers}
     >
       {objects.map((object) => (
-        <NinjaFlyingObjectSprite
-          key={object.id}
-          object={object}
-          physics={physics}
-        />
+        <NinjaFlyingObjectSprite key={object.id} object={object} />
       ))}
 
       {bursts.map((burst) => (

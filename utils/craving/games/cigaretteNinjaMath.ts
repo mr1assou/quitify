@@ -102,6 +102,26 @@ export function createFlyingObject(
   };
 }
 
+/** A still target inside the play field. It does not fall. */
+export function createSliceTarget(
+  id: string,
+  field: FieldSize,
+  options: { forceBoss?: boolean; forceGolden?: boolean } = {},
+): NinjaFlyingObject {
+  const object = createFlyingObject(id, field, options);
+  const config = CIGARETTE_NINJA_OBJECT_CONFIG[object.kind];
+  const margin = config.size * 0.65;
+  return {
+    ...object,
+    x: margin + Math.random() * Math.max(field.width - margin * 2, 1),
+    y: margin + Math.random() * Math.max(field.height - margin * 2, 1),
+    vx: 0,
+    vy: 0,
+    rotation: 0,
+    rotationSpeed: 0,
+  };
+}
+
 export function advanceFlyingObject(
   object: NinjaFlyingObject,
   field: FieldSize,

@@ -1,67 +1,39 @@
 import { memo } from "react";
 import { Image, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  type SharedValue,
-} from "react-native-reanimated";
+import Animated, { FadeOut } from "react-native-reanimated";
 
 import { getCigaretteNinjaObjectImage } from "@/constants/craving/games/cigaretteNinjaAssets";
 import { CIGARETTE_NINJA_OBJECT_CONFIG } from "@/constants/craving/games/cigaretteNinja";
 import { useTheme } from "@/context/ThemeContext";
-import type { NinjaPhysicsMap } from "@/hooks/craving/games/useCigaretteNinjaGame";
 import type { NinjaFlyingObject } from "@/utils/craving/games/cigaretteNinjaMath";
 
 type Props = {
   object: NinjaFlyingObject;
-  physics: SharedValue<NinjaPhysicsMap>;
 };
 
-/**
- * Position/rotation come from the shared physics map on the UI thread,
- * so the sprite moves every frame without a React re-render.
- */
+/** Still sprite. It fades out when it hides or is sliced. */
 export const NinjaFlyingObjectSprite = memo(function NinjaFlyingObjectSprite({
   object,
-  physics,
 }: Props) {
   const { resolved, colors } = useTheme();
   const config = CIGARETTE_NINJA_OBJECT_CONFIG[object.kind];
   const size = config.size;
   const isBoss = object.kind === "boss";
   const imageSize = size * (isBoss ? 1 : 0.96);
-  const half = size / 2;
-  const id = object.id;
-
-  const motionStyle = useAnimatedStyle(() => {
-    const p = physics.value[id];
-    if (!p) {
-      return { opacity: 0 };
-    }
-    return {
-      opacity: p.offscreen ? 0 : 1,
-      transform: [
-        { translateX: p.x - half },
-        { translateY: p.y - half },
-        { rotate: `${p.rotation}deg` },
-      ],
-    };
-  });
 
   return (
     <Animated.View
+      exiting={FadeOut.duration(450)}
       pointerEvents="none"
-      style={[
-        {
-          position: "absolute",
-          left: 0,
-          top: 0,
-          width: size,
-          height: size,
-          alignItems: "center",
-          justifyContent: "center",
-        },
-        motionStyle,
-      ]}
+      style={{
+        position: "absolute",
+        left: object.x - size / 2,
+        top: object.y - size / 2,
+        width: size,
+        height: size,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
       <Image
         source={getCigaretteNinjaObjectImage(object.kind, object.spriteVariant)}

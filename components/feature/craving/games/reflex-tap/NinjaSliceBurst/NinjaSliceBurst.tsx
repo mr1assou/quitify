@@ -1,12 +1,5 @@
 import { useEffect } from "react";
-import { Text } from "react-native";
-import Animated, {
-  Easing,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import { Text, View } from "react-native";
 
 type Props = {
   id: string;
@@ -16,45 +9,25 @@ type Props = {
   onDone: (id: string) => void;
 };
 
+/** Short combo label. No scale or fade animation. */
 export function NinjaSliceBurst({ id, x, y, combo, onDone }: Props) {
-  const progress = useSharedValue(0);
-
   useEffect(() => {
-    progress.value = withTiming(
-      1,
-      { duration: 480, easing: Easing.out(Easing.cubic) },
-      (finished) => {
-        if (finished) runOnJS(onDone)(id);
-      },
-    );
-  }, [id, onDone, progress]);
+    const timeoutId = setTimeout(() => onDone(id), 400);
+    return () => clearTimeout(timeoutId);
+  }, [id, onDone]);
 
-  const style = useAnimatedStyle(() => ({
-    opacity: 1 - progress.value,
-    transform: [{ scale: 0.6 + progress.value * 1.4 }],
-  }));
+  if (combo < 2) return null;
 
   return (
-    <Animated.View
+    <View
       pointerEvents="none"
-      style={[
-        {
-          position: "absolute",
-          left: x - 28,
-          top: y - 28,
-          width: 56,
-          height: 56,
-          borderRadius: 28,
-          backgroundColor: "rgba(255, 140, 80, 0.35)",
-          alignItems: "center",
-          justifyContent: "center",
-        },
-        style,
-      ]}
+      style={{
+        position: "absolute",
+        left: x - 18,
+        top: y - 18,
+      }}
     >
-      {combo >= 2 ? (
-        <Text className="text-xs font-bold text-accent">x{combo}</Text>
-      ) : null}
-    </Animated.View>
+      <Text className="text-xs font-bold text-accent">x{combo}</Text>
+    </View>
   );
 }
