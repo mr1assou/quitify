@@ -28,6 +28,8 @@ export type NinjaFlyingObject = {
   maxHealth: number;
   /** Picks alternate art for vape / smoke kinds. */
   spriteVariant: number;
+  /** Fading out because its time on screen ended. */
+  leaving?: boolean;
 };
 
 export function segmentIntersectsCircle(

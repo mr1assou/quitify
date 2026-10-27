@@ -52,6 +52,7 @@ export function ReflexTapGame() {
         onSwipePoint={game.extendSwipe}
         onSwipeEnd={game.endSwipe}
         onBurstDone={game.clearBurst}
+        onObjectHidden={game.removeObject}
       />
       <GameDoneBar onPress={game.finish} />
     </View>

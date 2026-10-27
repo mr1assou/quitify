@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
+import { DeleteAccountModal } from "@/components/feature/profile/DeleteAccountModal";
 import {
   ResetJourneyModals,
   type ResetJourneyModalState,
@@ -14,6 +15,7 @@ import { ThemeSwitcher } from "@/components/feature/profile/ThemeSwitcher";
 import { ListGroup, type ListRow } from "@/components/ui/ListGroup";
 import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
+import { useDeleteAccount } from "@/hooks/auth/useDeleteAccount";
 import { useResetJourney } from "@/hooks/auth/useResetJourney";
 import { usePaywallPlans } from "@/hooks/paywall/usePaywallPlans";
 import { usePushNotificationsSettings } from "@/hooks/push/usePushNotificationsSettings";
@@ -43,11 +45,13 @@ export function SelfProfileSettings({
   const { colors } = useTheme();
   const { t, locale } = useTranslation();
   const resetJourney = useResetJourney();
+  const deleteAccount = useDeleteAccount();
   const pushSettings = usePushNotificationsSettings();
   const { plans, loading: plansLoading } = usePaywallPlans();
   const [resetModal, setResetModal] = useState<ResetJourneyModalState | null>(null);
   const [habitModalOpen, setHabitModalOpen] = useState(false);
   const [usernameModalOpen, setUsernameModalOpen] = useState(false);
+  const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
 
   const displayUsername = profile.name?.trim() || t("settings.notSet");
   const yearlyPlan = plans.find((plan) => plan.id === "yearly");
@@ -157,6 +161,20 @@ export function SelfProfileSettings({
         ]}
       />
 
+      {isSignedIn ? (
+        <ListGroup
+          rows={[
+            {
+              id: "delete-account",
+              icon: "trash-outline",
+              label: t("settings.deleteAccount"),
+              destructive: true,
+              onPress: () => setDeleteAccountOpen(true),
+            },
+          ]}
+        />
+      ) : null}
+
       {!isPremium ? (
         <Pressable onPress={() => openPaywall(PAYWALL_SOURCE.profile)} className="active:opacity-70">
           <View className="rounded-3xl bg-primary p-4">
@@ -191,6 +209,12 @@ export function SelfProfileSettings({
         visible={usernameModalOpen}
         profile={profile}
         onClose={() => setUsernameModalOpen(false)}
+      />
+
+      <DeleteAccountModal
+        visible={deleteAccountOpen}
+        onClose={() => setDeleteAccountOpen(false)}
+        onConfirm={deleteAccount}
       />
     </View>
   );

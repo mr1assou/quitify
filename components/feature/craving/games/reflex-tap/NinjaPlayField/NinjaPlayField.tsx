@@ -19,6 +19,7 @@ type Props = {
   onSwipePoint: (x: number, y: number) => void;
   onSwipeEnd: () => void;
   onBurstDone: (id: string) => void;
+  onObjectHidden: (id: string) => void;
 };
 
 export function NinjaPlayField({
@@ -29,6 +30,7 @@ export function NinjaPlayField({
   onSwipePoint,
   onSwipeEnd,
   onBurstDone,
+  onObjectHidden,
 }: Props) {
   const { colors } = useTheme();
 
@@ -67,18 +69,11 @@ export function NinjaPlayField({
       {...panResponder.panHandlers}
     >
       {objects.map((object) => (
-        <NinjaFlyingObjectSprite key={object.id} object={object} />
+        <NinjaFlyingObjectSprite key={object.id} object={object} onHidden={onObjectHidden} />
       ))}
 
       {bursts.map((burst) => (
-        <NinjaSliceBurst
-          key={burst.id}
-          id={burst.id}
-          x={burst.x}
-          y={burst.y}
-          combo={burst.combo}
-          onDone={onBurstDone}
-        />
+        <NinjaSliceBurst key={burst.id} burst={burst} onDone={onBurstDone} />
       ))}
 
       {trail.length >= 2 ? (

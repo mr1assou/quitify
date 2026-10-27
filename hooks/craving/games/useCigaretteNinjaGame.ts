@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import {
@@ -7,6 +8,7 @@ import {
   CIGARETTE_NINJA_MIN_SLICE_PX,
   CIGARETTE_NINJA_OBJECT_CONFIG,
   CIGARETTE_NINJA_TARGET_SCORE,
+  type CigaretteNinjaObjectKind,
 } from "@/constants/craving/games/cigaretteNinja";
 import {
   createSliceTarget,
@@ -28,11 +30,22 @@ export type NinjaSliceBurst = {
   x: number;
   y: number;
   combo: number;
+  points: number;
+  /** Swipe direction in radians. The cut follows this line. */
+  angle: number;
+  kind: CigaretteNinjaObjectKind;
+  spriteVariant: number;
+  /** The target broke apart. A boss chip stays on screen. */
+  split: boolean;
 };
 
 export type NinjaTrailPoint = { x: number; y: number };
 
-type Positions = Record<string, { x: number; y: number }>;
+type SliceHit = { x: number; y: number; angle: number };
+type Positions = Record<string, SliceHit>;
+
+/** One slice on the same target cannot register again until this passes. */
+const HIT_GAP_MS = 320;
 
 /** How long a normal target stays on screen before it hides. */
 const TARGET_VISIBLE_MS = 3500;
@@ -60,6 +73,7 @@ type Action =
   | { type: "spawn"; object: NinjaFlyingObject }
   | { type: "spawnBatch"; objects: NinjaFlyingObject[] }
   | { type: "removeObjects"; ids: string[] }
+  | { type: "beginHide"; id: string }
   | { type: "slice"; hits: Positions; at: number }
   | { type: "clearBurst"; id: string }
   | { type: "secondTick" };
@@ -81,7 +95,7 @@ function createInitialState(): State {
 function applySliceHit(
   state: State,
   object: NinjaFlyingObject,
-  at: { x: number; y: number },
+  at: SliceHit,
   now: number,
 ): State {
   const config = CIGARETTE_NINJA_OBJECT_CONFIG[object.kind];
@@ -104,6 +118,11 @@ function applySliceHit(
     x: at.x,
     y: at.y,
     combo,
+    points: scoreGain,
+    angle: at.angle,
+    kind: object.kind,
+    spriteVariant: object.spriteVariant,
+    split: destroyedNow,
   };
 
   const next: State = {
@@ -172,6 +191,13 @@ function reducer(state: State, action: Action): State {
       if (objects.length === state.objects.length) return state;
       return { ...state, objects };
     }
+    case "beginHide":
+      return {
+        ...state,
+        objects: state.objects.map((object) =>
+          object.id === action.id ? { ...object, leaving: true } : object,
+        ),
+      };
     case "slice": {
       if (state.status !== "playing") return state;
       let next = state;
@@ -210,6 +236,7 @@ export function useCigaretteNinjaGame() {
   const trailRef = useRef<NinjaTrailPoint[]>([]);
   const trailPaintRafRef = useRef<number | null>(null);
   const hideTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const recentHitsRef = useRef<Record<string, number>>({});
 
   objectsCountRef.current = state.objects.length;
   objectsRef.current = state.objects;
@@ -235,8 +262,12 @@ export function useCigaretteNinjaGame() {
     });
   }, []);
 
-  const hideObject = useCallback((id: string) => {
+  const startHide = useCallback((id: string) => {
     delete hideTimersRef.current[id];
+    dispatch({ type: "beginHide", id });
+  }, []);
+
+  const removeObject = useCallback((id: string) => {
     dispatch({ type: "removeObjects", ids: [id] });
   }, []);
 
@@ -260,13 +291,16 @@ export function useCigaretteNinjaGame() {
       clearTimeout(hideTimersRef.current[id]);
       delete hideTimersRef.current[id];
     }
+    for (const id of Object.keys(recentHitsRef.current)) {
+      if (!alive.has(id)) delete recentHitsRef.current[id];
+    }
 
     for (const object of state.objects) {
-      if (hideTimersRef.current[object.id]) continue;
+      if (object.leaving || hideTimersRef.current[object.id]) continue;
       const visibleMs = object.kind === "boss" ? BOSS_VISIBLE_MS : TARGET_VISIBLE_MS;
-      hideTimersRef.current[object.id] = setTimeout(() => hideObject(object.id), visibleMs);
+      hideTimersRef.current[object.id] = setTimeout(() => startHide(object.id), visibleMs);
     }
-  }, [clearTrail, hideObject, state.objects, state.status]);
+  }, [clearTrail, startHide, state.objects, state.status]);
 
   useEffect(() => {
     if (state.status !== "playing") return;
@@ -349,8 +383,13 @@ export function useCigaretteNinjaGame() {
       );
       if (sliceLen < CIGARETTE_NINJA_MIN_SLICE_PX) return;
 
+      const now = Date.now();
+      const angle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x);
       const hits: Positions = {};
       for (const object of objectsRef.current) {
+        if (object.leaving) continue;
+        const lastHit = recentHitsRef.current[object.id] ?? 0;
+        if (now - lastHit < HIT_GAP_MS) continue;
         const hit = segmentIntersectsCircle(
           startPoint.x,
           startPoint.y,
@@ -360,10 +399,13 @@ export function useCigaretteNinjaGame() {
           object.y,
           objectRadius(object.kind),
         );
-        if (hit) hits[object.id] = { x: object.x, y: object.y };
+        if (!hit) continue;
+        recentHitsRef.current[object.id] = now;
+        hits[object.id] = { x: object.x, y: object.y, angle };
       }
       if (Object.keys(hits).length === 0) return;
-      dispatch({ type: "slice", hits, at: Date.now() });
+      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+      dispatch({ type: "slice", hits, at: now });
     },
     [scheduleTrailPaint],
   );
@@ -393,5 +435,6 @@ export function useCigaretteNinjaGame() {
     extendSwipe,
     endSwipe,
     clearBurst,
+    removeObject,
   };
 }

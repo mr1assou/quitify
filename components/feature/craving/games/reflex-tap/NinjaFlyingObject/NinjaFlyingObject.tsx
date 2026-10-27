@@ -1,6 +1,12 @@
-import { memo } from "react";
+import { useEffect } from "react";
 import { Image, View } from "react-native";
-import Animated, { FadeOut } from "react-native-reanimated";
+import Animated, {
+  cancelAnimation,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 import { getCigaretteNinjaObjectImage } from "@/constants/craving/games/cigaretteNinjaAssets";
 import { CIGARETTE_NINJA_OBJECT_CONFIG } from "@/constants/craving/games/cigaretteNinja";
@@ -9,31 +15,43 @@ import type { NinjaFlyingObject } from "@/utils/craving/games/cigaretteNinjaMath
 
 type Props = {
   object: NinjaFlyingObject;
+  onHidden: (id: string) => void;
 };
 
-/** Still sprite. It fades out when it hides or is sliced. */
-export const NinjaFlyingObjectSprite = memo(function NinjaFlyingObjectSprite({
-  object,
-}: Props) {
+/** Still target. A slice removes it at once. A timeout fades it out. */
+export function NinjaFlyingObjectSprite({ object, onHidden }: Props) {
   const { resolved, colors } = useTheme();
   const config = CIGARETTE_NINJA_OBJECT_CONFIG[object.kind];
   const size = config.size;
   const isBoss = object.kind === "boss";
   const imageSize = size * (isBoss ? 1 : 0.96);
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    if (!object.leaving) return;
+    opacity.value = withTiming(0, { duration: 450 }, (finished) => {
+      if (finished) runOnJS(onHidden)(object.id);
+    });
+    return () => cancelAnimation(opacity);
+  }, [object.id, object.leaving, onHidden, opacity]);
+
+  const fadeStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
 
   return (
     <Animated.View
-      exiting={FadeOut.duration(450)}
       pointerEvents="none"
-      style={{
-        position: "absolute",
-        left: object.x - size / 2,
-        top: object.y - size / 2,
-        width: size,
-        height: size,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      style={[
+        {
+          position: "absolute",
+          left: object.x - size / 2,
+          top: object.y - size / 2,
+          width: size,
+          height: size,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        fadeStyle,
+      ]}
     >
       <Image
         source={getCigaretteNinjaObjectImage(object.kind, object.spriteVariant)}
@@ -65,4 +83,4 @@ export const NinjaFlyingObjectSprite = memo(function NinjaFlyingObjectSprite({
       ) : null}
     </Animated.View>
   );
-});
+}
