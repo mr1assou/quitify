@@ -17,8 +17,8 @@ import {
   purchaseErrorMessage,
 } from "@/utils/purchases/revenueCatErrors";
 import {
-  logPaywallPurchaseFail,
-  logPaywallPurchaseSuccess,
+  logSpecialPaywallPurchaseFail,
+  logSpecialPaywallPurchaseSuccess,
 } from "@/services/analytics/firebaseEvents";
 
 export function useSpecialPaywallOffer() {
@@ -60,7 +60,7 @@ export function useSpecialPaywallOffer() {
     try {
       const entitled = await purchaseSpecialYearlyOffer();
       if (!entitled) {
-        logPaywallPurchaseFail("special");
+        logSpecialPaywallPurchaseFail();
         return false;
       }
 
@@ -72,15 +72,15 @@ export function useSpecialPaywallOffer() {
         ownership?.originalAppUserId ?? String(state.account?.userId ?? ""),
       );
       if (premium) {
-        logPaywallPurchaseSuccess("special");
+        logSpecialPaywallPurchaseSuccess();
       } else {
-        logPaywallPurchaseFail("special");
+        logSpecialPaywallPurchaseFail();
       }
       return premium;
     } catch (error) {
       if (isPurchaseCancelledError(error)) return false;
 
-      logPaywallPurchaseFail("special");
+      logSpecialPaywallPurchaseFail();
       Alert.alert(
         "Subscription",
         purchaseErrorMessage(

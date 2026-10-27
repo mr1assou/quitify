@@ -21,8 +21,10 @@ import { openExternalUrl } from "@/utils/app/openExternalUrl";
 import { safeRouter } from "@/utils/app/safeRouter";
 import { markPostPaywallFlowComplete } from "@/utils/onboarding/postSignupFlowStorage";
 import {
-  logPaywallClose,
-  logPaywallView,
+  logSpecialPaywallClose,
+  logSpecialPaywallView,
+  logSpinPaywallClose,
+  logSpinPaywallView,
 } from "@/services/analytics/firebaseEvents";
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
@@ -47,7 +49,8 @@ export default function PaywallOffer() {
       (spinViewLoggedRef.current || specialViewLoggedRef.current)
     ) {
       closedLoggedRef.current = true;
-      logPaywallClose(phaseRef.current === "spin" ? "spin" : "special");
+      if (phaseRef.current === "spin") logSpinPaywallClose();
+      else logSpecialPaywallClose();
     }
     await markPostPaywallFlowComplete();
     safeRouter.back();
@@ -61,7 +64,8 @@ export default function PaywallOffer() {
         (spinViewLoggedRef.current || specialViewLoggedRef.current)
       ) {
         closedLoggedRef.current = true;
-        logPaywallClose(phaseRef.current === "spin" ? "spin" : "special");
+        if (phaseRef.current === "spin") logSpinPaywallClose();
+        else logSpecialPaywallClose();
       }
       void markPostPaywallFlowComplete();
     };
@@ -78,11 +82,11 @@ export default function PaywallOffer() {
     if (loading || !offer || offer.discountPercent <= 0) return;
     if (phase === "spin" && !spinViewLoggedRef.current) {
       spinViewLoggedRef.current = true;
-      logPaywallView("spin");
+      logSpinPaywallView();
     }
     if (phase === "offer" && !specialViewLoggedRef.current) {
       specialViewLoggedRef.current = true;
-      logPaywallView("special");
+      logSpecialPaywallView();
     }
   }, [loading, offer, phase]);
 

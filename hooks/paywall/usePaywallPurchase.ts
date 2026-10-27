@@ -32,7 +32,7 @@ export function usePaywallPurchase() {
       try {
         const entitled = await purchasePaywallPlan(planId);
         if (!entitled) {
-          logPaywallPurchaseFail("normal");
+          logPaywallPurchaseFail();
           return false;
         }
 
@@ -44,15 +44,15 @@ export function usePaywallPurchase() {
           ownership?.originalAppUserId ?? String(state.account?.userId ?? ""),
         );
         if (premium) {
-          logPaywallPurchaseSuccess("normal");
+          logPaywallPurchaseSuccess();
         } else {
-          logPaywallPurchaseFail("normal");
+          logPaywallPurchaseFail();
         }
         return premium;
       } catch (error) {
         if (isPurchaseCancelledError(error)) return false;
 
-        logPaywallPurchaseFail("normal");
+        logPaywallPurchaseFail();
         Alert.alert(
           "Subscription",
           purchaseErrorMessage(

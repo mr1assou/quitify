@@ -54,7 +54,7 @@ export default function Paywall() {
   const closedLoggedRef = useRef(false);
 
   useEffect(() => {
-    logPaywallView("normal");
+    logPaywallView();
   }, []);
 
   // Prefetch special offer while the paywall is open so close can show spin instantly.
@@ -76,7 +76,7 @@ export default function Paywall() {
   const logNormalCloseOnce = useCallback(() => {
     if (closedLoggedRef.current || convertedRef.current) return;
     closedLoggedRef.current = true;
-    logPaywallClose("normal");
+    logPaywallClose();
   }, []);
 
   const selectedPlanHasTrial =

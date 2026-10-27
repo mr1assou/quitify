@@ -1,10 +1,7 @@
 import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
 
 import { FUNNEL_EVENTS } from "@/constants/analytics/funnel";
-import {
-  PAYWALL_EVENTS,
-  type PaywallAnalyticsType,
-} from "@/constants/analytics/paywallEvents";
+import { PAYWALL_EVENTS } from "@/constants/analytics/paywallEvents";
 
 type FunnelParams = Record<string, string | number>;
 
@@ -42,22 +39,42 @@ export function logSignupSuccess(method: "email" | "google"): void {
   logFirebaseEvent(FUNNEL_EVENTS.signupSuccess, { method });
 }
 
-export function logPaywallView(type: PaywallAnalyticsType): void {
-  logFirebaseEvent(PAYWALL_EVENTS.view, { type });
+export function logPaywallView(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.view);
 }
 
-export function logPaywallClose(type: PaywallAnalyticsType): void {
-  logFirebaseEvent(PAYWALL_EVENTS.close, { type });
+export function logPaywallClose(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.close);
 }
 
-export function logPaywallPurchaseSuccess(
-  type: Extract<PaywallAnalyticsType, "normal" | "special">,
-): void {
-  logFirebaseEvent(PAYWALL_EVENTS.purchaseSuccess, { type });
+export function logPaywallPurchaseSuccess(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.purchaseSuccess);
 }
 
-export function logPaywallPurchaseFail(
-  type: Extract<PaywallAnalyticsType, "normal" | "special">,
-): void {
-  logFirebaseEvent(PAYWALL_EVENTS.purchaseFail, { type });
+export function logPaywallPurchaseFail(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.purchaseFail);
+}
+
+export function logSpecialPaywallView(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.specialView);
+}
+
+export function logSpecialPaywallClose(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.specialClose);
+}
+
+export function logSpecialPaywallPurchaseSuccess(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.specialPurchaseSuccess);
+}
+
+export function logSpecialPaywallPurchaseFail(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.specialPurchaseFail);
+}
+
+export function logSpinPaywallView(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.spinView);
+}
+
+export function logSpinPaywallClose(): void {
+  logFirebaseEvent(PAYWALL_EVENTS.spinClose);
 }
