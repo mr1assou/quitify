@@ -1,6 +1,10 @@
 import { getAnalytics, logEvent } from "@react-native-firebase/analytics";
 
-import { FUNNEL_EVENTS } from "@/constants/analytics/funnel";
+import {
+  FUNNEL_EVENTS,
+  INTRO_SLIDE_EVENTS,
+  ONBOARDING_STEP_EVENTS,
+} from "@/constants/analytics/funnel";
 import { PAYWALL_EVENTS } from "@/constants/analytics/paywallEvents";
 
 type FunnelParams = Record<string, string | number>;
@@ -24,11 +28,15 @@ export function logWelcomeView(): void {
 }
 
 export function logIntroSlide(slide: number): void {
-  logFirebaseEvent(FUNNEL_EVENTS.introSlide, { slide });
+  const name = INTRO_SLIDE_EVENTS[slide as keyof typeof INTRO_SLIDE_EVENTS];
+  if (!name) return;
+  logFirebaseEvent(name);
 }
 
 export function logOnboardingStep(step: number): void {
-  logFirebaseEvent(FUNNEL_EVENTS.onboardingStep, { step });
+  const name = ONBOARDING_STEP_EVENTS[step as keyof typeof ONBOARDING_STEP_EVENTS];
+  if (!name) return;
+  logFirebaseEvent(name);
 }
 
 export function logSignupView(): void {
