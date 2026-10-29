@@ -4,6 +4,7 @@ import {
   FUNNEL_EVENTS,
   INTRO_SLIDE_EVENTS,
   ONBOARDING_STEP_EVENTS,
+  SIGNUP_SUCCESS_EVENTS,
 } from "@/constants/analytics/funnel";
 import { PAYWALL_EVENTS } from "@/constants/analytics/paywallEvents";
 
@@ -44,7 +45,7 @@ export function logSignupView(): void {
 }
 
 export function logSignupSuccess(method: "email" | "google"): void {
-  logFirebaseEvent(FUNNEL_EVENTS.signupSuccess, { method });
+  logFirebaseEvent(SIGNUP_SUCCESS_EVENTS[method]);
 }
 
 export function logPaywallView(): void {

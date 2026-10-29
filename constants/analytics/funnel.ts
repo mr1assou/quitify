@@ -2,7 +2,12 @@
 export const FUNNEL_EVENTS = {
   welcomeView: "quitify_welcome_view",
   signupView: "quitify_signup_view",
-  signupSuccess: "signup_success",
+} as const;
+
+/** One event per signup method. There is no method parameter. */
+export const SIGNUP_SUCCESS_EVENTS = {
+  email: "signup_success_email",
+  google: "signup_success_google",
 } as const;
 
 /** One event per intro slide. There is no slide-number parameter. */
