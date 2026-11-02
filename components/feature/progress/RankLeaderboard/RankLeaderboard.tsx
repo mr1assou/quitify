@@ -156,26 +156,11 @@ export function RankLeaderboard({
     onLoadMoreAbove();
   };
 
-  const renderItem = useCallback<ListRenderItem<ListRow>>(
-    ({ item }) => (
-      <View className="px-6">
-        <View className="justify-center bg-section px-2 dark:bg-d-surface">
-          <LeaderboardRow
-            entry={item.entry}
-            showDivider={item.showDivider}
-            emphasized={item.isSelf && highlightSelf}
-          />
-        </View>
-      </View>
-    ),
-    [highlightSelf],
-  );
-
   const viewer = leaderboard.currentUser;
   const canSpot = Boolean(viewer);
 
   const leaderboardTitleBar = (
-    <View className="px-6">
+    <View className="px-6" collapsable={false}>
       <View className="overflow-hidden rounded-t-3xl border-b border-border/50 bg-section dark:border-d-border dark:bg-d-surface">
         <View className="flex-row items-center justify-between gap-2 px-4 py-3">
           <Text className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-d-muted">
@@ -215,8 +200,25 @@ export function RankLeaderboard({
     </View>
   );
 
+  const renderItem = useCallback<ListRenderItem<ListRow>>(
+    ({ item }) => (
+      <View className="px-6">
+        <View className="justify-center bg-section px-2 dark:bg-d-surface">
+          <LeaderboardRow
+            entry={item.entry}
+            showDivider={item.showDivider}
+            emphasized={item.isSelf && highlightSelf}
+          />
+        </View>
+      </View>
+    ),
+    [highlightSelf],
+  );
+
   return (
     <View className="flex-1">
+      {screenHeader}
+      <View className="mt-4">{leaderboardTitleBar}</View>
       <FlatList
         ref={listRef}
         className="flex-1"
@@ -225,30 +227,26 @@ export function RankLeaderboard({
         keyExtractor={(item) => item.key}
         renderItem={renderItem}
         ListHeaderComponent={
-          <View>
-            {screenHeader}
-            <View className="mt-4">{leaderboardTitleBar}</View>
-            {hasMoreAbove ? (
-              <View className="px-6">
-                <View className="items-center border-b border-border/40 bg-section px-3 py-3 dark:border-d-border dark:bg-d-surface">
-                  {loadingAbove ? (
-                    <ActivityIndicator color={colors.primary} />
-                  ) : (
-                    <Pressable
-                      onPress={handleLoadMoreAbove}
-                      hitSlop={8}
-                      className="active:opacity-70"
-                      accessibilityRole="button"
-                    >
-                      <Text className="text-sm font-semibold text-primary">
-                        {t("achievements.showPrevious")}
-                      </Text>
-                    </Pressable>
-                  )}
-                </View>
+          hasMoreAbove ? (
+            <View className="px-6">
+              <View className="items-center border-b border-border/40 bg-section px-3 py-3 dark:border-d-border dark:bg-d-surface">
+                {loadingAbove ? (
+                  <ActivityIndicator color={colors.primary} />
+                ) : (
+                  <Pressable
+                    onPress={handleLoadMoreAbove}
+                    hitSlop={8}
+                    className="active:opacity-70"
+                    accessibilityRole="button"
+                  >
+                    <Text className="text-sm font-semibold text-primary">
+                      {t("achievements.showPrevious")}
+                    </Text>
+                  </Pressable>
+                )}
               </View>
-            ) : null}
-          </View>
+            </View>
+          ) : null
         }
         contentContainerStyle={{
           paddingBottom: 120,
