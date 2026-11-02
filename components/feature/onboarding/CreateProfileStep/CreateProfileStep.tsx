@@ -69,7 +69,8 @@ export function CreateProfileStep({
         </Text>
         <TextInput
           value={username}
-          onChangeText={(text) => onUsernameChange(normalizeOnboardingUsername(text))}
+          onChangeText={onUsernameChange}
+          onBlur={() => onUsernameChange(normalizeOnboardingUsername(username))}
           placeholder={t("onboarding.profile.username.placeholder")}
           placeholderTextColor={colors.mutedForeground}
           autoCapitalize="none"

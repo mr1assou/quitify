@@ -199,9 +199,8 @@ function UsernameEditSheet({
             </Text>
             <TextInput
               value={username}
-              onChangeText={(text) =>
-                onUsernameChange(normalizeOnboardingUsername(text))
-              }
+              onChangeText={onUsernameChange}
+              onBlur={() => onUsernameChange(normalizeOnboardingUsername(username))}
               placeholder="@username"
               placeholderTextColor={colors.mutedForeground}
               autoCapitalize="none"
