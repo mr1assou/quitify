@@ -11,7 +11,6 @@ import { usePremiumGate } from "@/hooks/premium/usePremiumGate";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePlanState } from "@/hooks/progress/usePlanState";
 import type { ResolvedPlanTask } from "@/types";
-import { currentMissionDay } from "@/utils/streak";
 
 export function usePlanProgress() {
   const { locale } = useTranslation();
@@ -20,25 +19,21 @@ export function usePlanProgress() {
   const { planState, loading, error, refresh, toggleTaskOnServer, saveTaskNoteOnServer } =
     usePlanState();
 
-  const fallbackDay = useMemo(() => {
-    if (!state.profile?.streakStart && !state.profile?.quitDate) return 0;
-    if (!state.profile) return 0;
-    return currentMissionDay(state.profile, Date.now());
-  }, [state.profile]);
-
   const serverCurrentDay = planState?.currentDay ?? 0;
   const serverUnlocked = planState?.unlockedThroughDay ?? 0;
 
+  // Days open only from the server plan. A calendar guess was marking
+  // earlier days opened before that response arrived.
   const currentDay =
-    planState != null
-      ? serverCurrentDay > 0
+    planState == null
+      ? 0
+      : serverCurrentDay > 0
         ? serverCurrentDay
         : serverUnlocked > 0
           ? 1
-          : 0
-      : fallbackDay;
+          : 0;
 
-  const unlockedThroughDay = planState != null ? serverUnlocked : fallbackDay;
+  const unlockedThroughDay = planState == null ? 0 : serverUnlocked;
 
   const currentChapter = useMemo(
     () => getChapterForDay(currentDay > 0 ? currentDay : 1),
