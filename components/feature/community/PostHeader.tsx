@@ -6,12 +6,14 @@ import { BadgeArt } from "@/components/feature/progress/BadgeArt";
 import { LeaderboardAvatar } from "@/components/feature/progress/LeaderboardAvatar";
 import { resolveCountryFlagUrl } from "@/constants/leaderboard/leaderboardCountries";
 import { useApp } from "@/context/AppContext";
+import { useCommunity } from "@/context/CommunityContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useLeaderboard } from "@/hooks/leaderboard/useLeaderboard";
 import type { CommunityUser } from "@/types/community/community";
-import { getBadgeName } from "@/utils/progress/badges";
 import { formatRelativeTime } from "@/utils/community";
+import { resolveOnlineFromMap } from "@/utils/community/presence";
 import { navigateToUserProfile } from "@/utils/profile/navigateToUserProfile";
+import { getBadgeName } from "@/utils/progress/badges";
 
 type Props = {
   author: CommunityUser;
@@ -23,7 +25,16 @@ type Props = {
 export function PostHeader({ author, createdAt, onMore }: Props) {
   const { colors } = useTheme();
   const { state } = useApp();
+  const { state: communityState } = useCommunity();
   const { snapshot: leaderboard } = useLeaderboard();
+  const isOnline = author.isCurrentUser
+    ? true
+    : (resolveOnlineFromMap(
+        author.id,
+        communityState.onlineByUserId,
+        author.isOnline,
+        communityState.presenceReady,
+      ) ?? author.isOnline);
 
   const badgeId = author.badgeId;
   const badgeName = getBadgeName(badgeId);
@@ -65,7 +76,7 @@ export function PostHeader({ author, createdAt, onMore }: Props) {
           imageUrl={avatarUrl}
           size={44}
           flagLeft={-8}
-          isOnline={author.isOnline}
+          isOnline={isOnline}
         />
 
         <View className="ml-3 min-w-0 flex-1">

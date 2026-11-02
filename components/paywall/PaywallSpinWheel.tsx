@@ -24,12 +24,23 @@ const SEGMENT_ANGLE = 360 / SEGMENT_COUNT;
 
 const SEGMENT_COLORS = [
   "#F97316",
-  "#1F2937",
-  "#0EA5A4",
-  "#1F2937",
-  "#6366F1",
-  "#1F2937",
+  "#F3E6D8",
+  "#14B8A6",
+  "#F3E6D8",
+  "#818CF8",
+  "#F3E6D8",
 ] as const;
+
+const SEGMENT_LABEL_COLORS = [
+  "#FFFFFF",
+  "#3D3630",
+  "#FFFFFF",
+  "#3D3630",
+  "#FFFFFF",
+  "#3D3630",
+] as const;
+
+const WHEEL_CREAM = "#FFF8F3";
 
 function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -81,6 +92,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
           label: segmentLabels[index],
           path: describeSlice(start, end),
           color: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
+          labelColor: SEGMENT_LABEL_COLORS[index % SEGMENT_LABEL_COLORS.length],
           labelX: labelPos.x,
           labelY: labelPos.y,
         };
@@ -121,7 +133,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
 
   return (
     <View className="items-center">
-      <Text className="mb-4 px-4 text-center text-base font-semibold text-d-muted">
+      <Text className="mb-4 px-4 text-center text-base font-semibold text-muted-foreground">
         {done
           ? t("paywall.spinWonTitle", { price: winLabel })
           : t("paywall.spinPrompt")}
@@ -144,17 +156,17 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
               cx={CENTER}
               cy={CENTER}
               r={RADIUS + 6}
-              fill="#111827"
+              fill={WHEEL_CREAM}
               stroke="#F97316"
               strokeWidth={4}
             />
             {slices.map((slice) => (
               <G key={slice.id}>
-                <Path d={slice.path} fill={slice.color} stroke="#0B1220" strokeWidth={2} />
+                <Path d={slice.path} fill={slice.color} stroke={WHEEL_CREAM} strokeWidth={2} />
                 <SvgText
                   x={slice.labelX}
                   y={slice.labelY}
-                  fill="#FFFFFF"
+                  fill={slice.labelColor}
                   fontSize={12}
                   fontWeight="700"
                   textAnchor="middle"
@@ -168,7 +180,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
               cx={CENTER}
               cy={CENTER}
               r={28}
-              fill="#0B1220"
+              fill="#FFFFFF"
               stroke="#F97316"
               strokeWidth={3}
             />

@@ -17,9 +17,11 @@ type Props = {
   title?: string;
   text?: string;
   className?: string;
+  /** Post screen only. The feed truncates with "..." and opens the post. */
+  expandable?: boolean;
 };
 
-export function PostTextContent({ title, text, className }: Props) {
+export function PostTextContent({ title, text, className, expandable = false }: Props) {
   const { colors } = useTheme();
   const [expanded, setExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
@@ -52,7 +54,7 @@ export function PostTextContent({ title, text, className }: Props) {
     color: colors.foreground,
   };
 
-  const showToggle = Boolean(text && canExpand);
+  const showToggle = expandable && Boolean(text && canExpand);
 
   return (
     <View className={className}>
@@ -61,8 +63,8 @@ export function PostTextContent({ title, text, className }: Props) {
         <View style={title ? { marginTop: 8 } : undefined}>
           <LinkifiedText
             style={bodyStyle}
-            numberOfLines={expanded ? undefined : BODY_COLLAPSED_LINES}
-            onTextLayout={handleBodyLayout}
+            numberOfLines={expandable && expanded ? undefined : BODY_COLLAPSED_LINES}
+            onTextLayout={expandable ? handleBodyLayout : undefined}
           >
             {text}
           </LinkifiedText>

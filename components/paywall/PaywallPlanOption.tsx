@@ -41,16 +41,16 @@ function PriceLine({
       <View className={`min-w-0 flex-1 ${alignClass}`}>
         <View className="flex-row items-baseline">
           <Text
-            className="shrink text-xl font-extrabold text-d-text"
+            className="shrink text-xl font-extrabold text-foreground"
             numberOfLines={1}
             adjustsFontSizeToFit
             minimumFontScale={0.7}
           >
             {amount}
           </Text>
-          <Text className="ml-1 shrink-0 text-sm text-d-muted">{period}</Text>
+          <Text className="ml-1 shrink-0 text-sm text-muted-foreground">{period}</Text>
         </View>
-        <Text className="mt-0.5 text-xs text-d-muted line-through">{compareAt}</Text>
+        <Text className="mt-0.5 text-xs text-muted-foreground line-through">{compareAt}</Text>
       </View>
     );
   }
@@ -62,14 +62,14 @@ function PriceLine({
       }`}
     >
       <Text
-        className="shrink text-lg font-bold text-d-text"
+        className="shrink text-lg font-bold text-foreground"
         numberOfLines={1}
         adjustsFontSizeToFit
         minimumFontScale={0.7}
       >
         {amount}
       </Text>
-      <Text className="ml-0.5 shrink-0 text-xs text-d-muted">{period}</Text>
+      <Text className="ml-0.5 shrink-0 text-xs text-muted-foreground">{period}</Text>
     </View>
   );
 }
@@ -95,12 +95,12 @@ export function PaywallPlanOption({ plan, selected, onSelect }: Props) {
       <Pressable
         onPress={onSelect}
         className={`rounded-2xl border px-5 py-4 shadow-sm ${
-          selected ? "border-primary bg-d-elevated/95" : "border-d-border bg-d-surface/90"
+          selected ? "border-primary bg-elevated/95" : "border-border bg-section/90"
         }`}
       >
         {hasYearlyBreakdown ? (
           <View>
-            <Text className="text-base font-bold text-d-text">{planLabel}</Text>
+            <Text className="text-base font-bold text-foreground">{planLabel}</Text>
             <View className="mt-2 flex-row items-start justify-between gap-2">
               <PriceLine
                 amount={plan.subPrice!}
@@ -121,7 +121,7 @@ export function PaywallPlanOption({ plan, selected, onSelect }: Props) {
         ) : (
           <View>
             <View className="flex-row items-center justify-between gap-3">
-              <Text className="shrink text-base font-bold text-d-text">{planLabel}</Text>
+              <Text className="shrink text-base font-bold text-foreground">{planLabel}</Text>
               <View className="min-w-0 max-w-[55%]">
                 <PriceLine
                   amount={plan.rightPrice}

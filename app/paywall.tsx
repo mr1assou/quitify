@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -33,8 +34,8 @@ import {
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
 
-/** Paywall is always presented in the premium dark palette. */
-const PAYWALL_COLORS = getThemeColors("dark");
+/** Paywall, special offer, and spinner always use the light palette. */
+const PAYWALL_COLORS = getThemeColors("light");
 
 /** Short gap after modal dismiss so the spin screen can slide in quickly. */
 const PAYWALL_MODAL_DISMISS_MS = 120;
@@ -162,7 +163,8 @@ export default function Paywall() {
 
   return (
     <View className="flex-1">
-      <AppScreenBackground isDark showOrbs={false} />
+      <StatusBar style="dark" />
+      <AppScreenBackground isDark={false} showOrbs={false} />
 
       <View
         pointerEvents="none"
@@ -177,7 +179,7 @@ export default function Paywall() {
         <View className="flex-row items-center justify-end px-4 pt-2">
           <Pressable
             onPress={openComparisonAfterDismiss}
-            className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
+            className="h-10 w-10 items-center justify-center rounded-full bg-section/85 active:opacity-70"
           >
             <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
           </Pressable>
@@ -193,24 +195,24 @@ export default function Paywall() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-4xl font-extrabold leading-tight text-d-text">
+          <Text className="text-4xl font-extrabold leading-tight text-foreground">
             {t("paywall.title")}
           </Text>
 
           <View className="mt-7 gap-4">
             {BENEFIT_KEYS.map((key) => (
               <View key={key} className="flex-row items-start">
-                <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-d-accent-soft">
+                <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-accent-soft">
                   <Ionicons name="checkmark" size={17} color={PAYWALL_COLORS.accent} />
                 </View>
-                <Text className="flex-1 text-sm leading-5 text-d-muted">{t(key)}</Text>
+                <Text className="flex-1 text-sm leading-5 text-muted-foreground">{t(key)}</Text>
               </View>
             ))}
           </View>
 
           <View className="mt-10">
-            <Text className="text-xl font-bold text-d-text">{t("paywall.offerTitle")}</Text>
-            <Text className="mt-1.5 text-sm text-d-muted">
+            <Text className="text-xl font-bold text-foreground">{t("paywall.offerTitle")}</Text>
+            <Text className="mt-1.5 text-sm text-muted-foreground">
               {t("paywall.offerSubtitle")}
             </Text>
 
@@ -240,7 +242,7 @@ export default function Paywall() {
               disabled={busy}
               className="mt-3 items-center py-2 active:opacity-70"
             >
-              <Text className="text-sm font-semibold text-d-muted">
+              <Text className="text-sm font-semibold text-muted-foreground">
                 {restoring ? t("paywall.restoring") : t("paywall.restore")}
               </Text>
             </Pressable>
@@ -250,13 +252,13 @@ export default function Paywall() {
                 onPress={() => openExternalUrl(WEBSITE_PRIVACY_URL)}
                 className="active:opacity-70"
               >
-                <Text className="text-sm text-d-muted">{t("paywall.privacy")}</Text>
+                <Text className="text-sm text-muted-foreground">{t("paywall.privacy")}</Text>
               </Pressable>
               <Pressable
                 onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
                 className="active:opacity-70"
               >
-                <Text className="text-sm text-d-muted">{t("paywall.terms")}</Text>
+                <Text className="text-sm text-muted-foreground">{t("paywall.terms")}</Text>
               </Pressable>
             </View>
           </View>

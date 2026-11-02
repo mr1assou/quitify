@@ -28,6 +28,7 @@ export default function CommunityScreen() {
       <FlatList
         data={feed}
         keyExtractor={(item) => item.post.id}
+        removeClippedSubviews={false}
         ListHeaderComponent={
           <CommunityScrollHeader filter={filter} onFilterChange={applyFilter} />
         }

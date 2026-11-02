@@ -123,21 +123,21 @@ export function useCommunityFeed() {
     setFilter(next);
   }, []);
 
+  // Presence is applied in PostHeader. Rebuilding the list for each online
+  // change makes some Android phones ignore taps until the next scroll.
   const feed = useMemo(() => {
     return buildFeedItems(
       state.posts,
       state.authorsById,
       appState.profile?.imageUrl,
-      state.onlineByUserId,
-      state.presenceReady,
+      undefined,
+      false,
       accountUserId,
     );
   }, [
     accountUserId,
     appState.profile?.imageUrl,
     state.authorsById,
-    state.onlineByUserId,
-    state.presenceReady,
     state.posts,
   ]);
 

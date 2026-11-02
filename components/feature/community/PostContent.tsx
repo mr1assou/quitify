@@ -11,6 +11,8 @@ type Props = {
   onPress?: () => void;
   className?: string;
   mediaVariant?: PostMediaGalleryVariant;
+  /** Post screen only. Lists truncate with "...". */
+  expandable?: boolean;
 };
 
 export function PostContent({
@@ -18,6 +20,7 @@ export function PostContent({
   onPress,
   className = "mt-3",
   mediaVariant = "feed",
+  expandable = false,
 }: Props) {
   const hasText = Boolean(post.title || post.text);
   const hasMedia = Boolean(post.media?.length);
@@ -28,7 +31,9 @@ export function PostContent({
       {post.tagId || hasText ? (
         <Pressable onPress={onPress} disabled={!onPress} className={className}>
           {post.tagId ? <PostTagBadge tagId={post.tagId} className="mb-2" /> : null}
-          {hasText ? <PostTextContent title={post.title} text={post.text} /> : null}
+          {hasText ? (
+            <PostTextContent title={post.title} text={post.text} expandable={expandable} />
+          ) : null}
         </Pressable>
       ) : null}
 

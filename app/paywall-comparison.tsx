@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
@@ -28,7 +29,7 @@ import {
 } from "@/services/analytics/firebaseEvents";
 
 const BENEFIT_KEYS = ["paywall.benefit1", "paywall.benefit2"] as const;
-const PAYWALL_COLORS = getThemeColors("dark");
+const PAYWALL_COLORS = getThemeColors("light");
 
 export default function PaywallOffer() {
   const { t } = useTranslation();
@@ -105,7 +106,12 @@ export default function PaywallOffer() {
 
   // Don't mount spin/offer UI until the discounted offer is ready.
   if (loading || !offer || offer.discountPercent <= 0) {
-    return <View className="flex-1" />;
+    return (
+      <View className="flex-1">
+        <StatusBar style="dark" />
+        <AppScreenBackground isDark={false} showOrbs={false} />
+      </View>
+    );
   }
 
   const discountPercent = offer.discountPercent;
@@ -113,7 +119,8 @@ export default function PaywallOffer() {
 
   return (
     <View className="flex-1">
-      <AppScreenBackground isDark showOrbs={false} />
+      <StatusBar style="dark" />
+      <AppScreenBackground isDark={false} showOrbs={false} />
 
       <View
         pointerEvents="none"
@@ -128,7 +135,7 @@ export default function PaywallOffer() {
         <View className="flex-row items-center justify-end px-4 pt-2">
           <Pressable
             onPress={() => void dismiss()}
-            className="h-10 w-10 items-center justify-center rounded-full bg-d-surface/85 active:opacity-70"
+            className="h-10 w-10 items-center justify-center rounded-full bg-section/85 active:opacity-70"
           >
             <Ionicons name="close" size={20} color={PAYWALL_COLORS.foreground} />
           </Pressable>
@@ -146,7 +153,7 @@ export default function PaywallOffer() {
         >
           {phase === "spin" ? (
             <View className="flex-1 justify-center py-4">
-              <Text className="mb-8 text-center text-3xl font-extrabold leading-tight text-d-text">
+              <Text className="mb-8 text-center text-3xl font-extrabold leading-tight text-foreground">
                 {t("paywall.spinTitle")}
               </Text>
               <PaywallSpinWheel winLabel={winLabel} onWon={handleWon} />
@@ -159,24 +166,24 @@ export default function PaywallOffer() {
                 </Text>
               </View>
 
-              <Text className="mt-4 text-4xl font-extrabold leading-tight text-d-text">
+              <Text className="mt-4 text-4xl font-extrabold leading-tight text-foreground">
                 {t("paywall.staticOfferTitle")}
               </Text>
 
               <View className="mt-7 gap-4">
                 {BENEFIT_KEYS.map((key) => (
                   <View key={key} className="flex-row items-start">
-                    <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-d-accent-soft">
+                    <View className="mr-3 mt-0.5 h-7 w-7 items-center justify-center rounded-full bg-accent-soft">
                       <Ionicons name="checkmark" size={17} color={PAYWALL_COLORS.accent} />
                     </View>
-                    <Text className="flex-1 text-sm leading-5 text-d-muted">{t(key)}</Text>
+                    <Text className="flex-1 text-sm leading-5 text-muted-foreground">{t(key)}</Text>
                   </View>
                 ))}
               </View>
 
               <View className="mt-10">
-                <Text className="text-xl font-bold text-d-text">{t("paywall.offerTitle")}</Text>
-                <Text className="mt-1.5 text-sm text-d-muted">
+                <Text className="text-xl font-bold text-foreground">{t("paywall.offerTitle")}</Text>
+                <Text className="mt-1.5 text-sm text-muted-foreground">
                   {t("paywall.staticOfferSubtitle")}
                 </Text>
 
@@ -204,7 +211,7 @@ export default function PaywallOffer() {
                   onPress={() => void dismiss()}
                   className="mt-3 items-center py-2 active:opacity-70"
                 >
-                  <Text className="text-sm font-semibold text-d-muted">
+                  <Text className="text-sm font-semibold text-muted-foreground">
                     {t("paywall.declineOffer")}
                   </Text>
                 </Pressable>
@@ -214,13 +221,13 @@ export default function PaywallOffer() {
                     onPress={() => openExternalUrl(WEBSITE_PRIVACY_URL)}
                     className="active:opacity-70"
                   >
-                    <Text className="text-sm text-d-muted">{t("paywall.privacy")}</Text>
+                    <Text className="text-sm text-muted-foreground">{t("paywall.privacy")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => openExternalUrl(WEBSITE_TERMS_URL)}
                     className="active:opacity-70"
                   >
-                    <Text className="text-sm text-d-muted">{t("paywall.terms")}</Text>
+                    <Text className="text-sm text-muted-foreground">{t("paywall.terms")}</Text>
                   </Pressable>
                 </View>
               </View>

@@ -109,7 +109,7 @@ export default function PostDetailScreen() {
           >
             <View className="px-6 pt-2">
               <PostHeader author={author} createdAt={post.createdAt} />
-              <PostContent post={post} className="mt-4" />
+              <PostContent post={post} className="mt-4" expandable />
 
               <PostActions
                 upvoteCount={post.upvoteCount}
