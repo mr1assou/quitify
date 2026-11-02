@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { ActivityIndicator, View } from "react-native";
 
@@ -29,12 +29,21 @@ export function AwardsRankSection({ screenHeader }: Props) {
 
   const resetToBrowseRef = useRef(resetToBrowse);
   resetToBrowseRef.current = resetToBrowse;
+  const [serverReady, setServerReady] = useState(false);
 
+  // This screen never paints the list saved by Stats or other screens.
+  // The first open always waits for a server response.
   useEffect(() => {
-    void resetToBrowseRef.current();
+    let active = true;
+    void resetToBrowseRef.current().finally(() => {
+      if (active) setServerReady(true);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  if (!leaderboard) {
+  if (!serverReady || !leaderboard) {
     return (
       <View className="flex-1">
         {screenHeader}
