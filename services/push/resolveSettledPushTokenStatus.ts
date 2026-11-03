@@ -1,6 +1,9 @@
 import * as Notifications from "expo-notifications";
 
-import { fetchPushTokenStatus } from "@/services/push/pushTokenApi";
+import {
+  clearPushTokensOnBackend,
+  fetchPushTokenStatus,
+} from "@/services/push/pushTokenApi";
 import { registerCurrentDevicePushTokenIfAuthorized } from "@/services/push/registerPushToken";
 import {
   clearPushDisabledByUser,
@@ -9,27 +12,33 @@ import {
 } from "@/utils/push/pushDisabledStorage";
 
 /**
- * Settled in-app push status for this device.
- * Avoids a false→true flash when OS permission is already granted but the
- * token row is missing until re-registration finishes.
+ * Final in-app push status for this device.
+ * Returns only after the phone permission and the saved token agree, so the
+ * Home prompt is not shown and then hidden while a stale token is cleared.
  */
 export async function resolveSettledPushTokenStatus(): Promise<boolean> {
-  const hasToken = await fetchPushTokenStatus();
-  if (hasToken) {
-    await clearPushDisabledByUser();
-    return true;
-  }
-
   if (await isPushDisabledByUser()) {
     return false;
   }
 
   const permission = await Notifications.getPermissionsAsync();
   if (permission.status !== "granted") {
+    if (await fetchPushTokenStatus()) {
+      await clearPushTokensOnBackend();
+    }
     return false;
   }
 
-  return registerCurrentDevicePushTokenIfAuthorized();
+  if (await fetchPushTokenStatus()) {
+    await clearPushDisabledByUser();
+    return true;
+  }
+
+  const registered = await registerCurrentDevicePushTokenIfAuthorized();
+  if (registered) {
+    await clearPushDisabledByUser();
+  }
+  return registered;
 }
 
 export async function markNotificationsDisabledByUser(): Promise<void> {

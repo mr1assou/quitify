@@ -60,14 +60,11 @@ export function usePushNotificationsOnAuth() {
         const permission = await Notifications.getPermissionsAsync();
         if (cancelled) return;
 
-        if (permission.status === "granted") {
-          const saved = await resolveSettledPushTokenStatus();
-          if (!cancelled) setCachedPushTokenStatus(saved);
-          return;
-        }
+        const saved = await resolveSettledPushTokenStatus();
+        if (cancelled) return;
+        setCachedPushTokenStatus(saved);
 
-        setCachedPushTokenStatus(false);
-        if (permission.canAskAgain) {
+        if (!saved && permission.status !== "granted" && permission.canAskAgain) {
           timeoutId = schedulePermissionPrompt();
         }
       } catch (error) {

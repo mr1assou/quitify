@@ -1,23 +1,23 @@
 export const intro = {
   success: {
-    title: "Arrêter la cigarette n'est pas une question de chance",
-    body: "La plupart des gens essaient seuls et rechutent. Quitify est conçu pour les fumeurs, avec un vrai soutien quand l'envie frappe.",
+    title: "Suivez chaque tentative",
+    body: "Quitify enregistre chaque essai, pour que vous voyiez jusqu'où vous êtes allé et commenciez le suivant avec un plan plus clair.",
   },
   shortTime: {
-    title: "Le plus dur est temporaire",
-    body: "Quitify vous aide à passer ce cap. Ensuite, ça devient plus facile.",
+    title: "Fixez un objectif visible",
+    body: "Créez un objectif pour l'argent que vous voulez garder, les jours que vous voulez atteindre, ou la vie que vous voulez retrouver. L'application montre chaque jour où vous en êtes.",
   },
   transformation: {
-    title: "Votre transformation commence maintenant",
-    body: "En avançant vers une vie sans tabac, vous devenez plus fort, plus maître de vous et en meilleure santé chaque jour.",
+    title: "Restez motivé quand c'est difficile",
+    body: "Les points de liberté, les badges et votre rang transforment chaque jour sans cigarette en une victoire visible. Ces petites récompenses vous font avancer quand la motivation baisse.",
   },
   chance: {
-    title: "C'est le moment d'arrêter la cigarette",
-    body: "Commencez aujourd'hui. Posez le paquet et reprenez votre vie, une étape, une envie, une victoire à la fois.",
+    title: "Vous pouvez battre cette envie",
+    body: "Elle paraît immense, puis elle passe. Restez avec elle et sentez à quel point vous êtes déjà fort. Chaque envie que vous dépassez est une victoire que vous gardez.",
   },
   afterOnboard: {
-    title: "Rejoignez ceux qui ont choisi d'arrêter",
-    body: "Rejoignez des personnes qui ont brisé l'habitude avec Quitify : de vrais progrès, un vrai soutien, et un parcours qui fonctionne.",
+    title: "Vous n'arrêtez pas seul",
+    body: "Suivez votre série, vos objectifs et vos tentatives au même endroit. La communauté est là quand vous avez besoin de voir que d'autres personnes font la même chose.",
   },
   cta: {
     next: "Suivant",

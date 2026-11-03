@@ -40,7 +40,7 @@ export default function Interests() {
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {
-        safeRouter.push("/onboarding/create-profile");
+        safeRouter.push("/onboarding/nicotine-consumption");
       }}
       showBack
       scrollBody

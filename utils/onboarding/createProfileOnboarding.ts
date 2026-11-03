@@ -9,7 +9,7 @@ export type CreateProfileFieldErrors = {
   profileImage?: boolean;
 };
 
-/** Step 5 — profile details + profile photo (quit date moved to step 6). */
+/** Step 6 — profile details + profile photo (quit date stays on step 5). */
 export function isCreateProfileStepComplete(draft: OnboardingDraft): boolean {
   const usernameOk = isValidOnboardingUsername(draft.username);
   const sexOk = draft.sex !== undefined;

@@ -85,7 +85,7 @@ export type PrimaryInterestOption = {
 
 /* ------------------------ Nicotine consumption form ---------------------- */
 
-/** Onboarding step 6 only collects cigarette consumption. */
+/** Onboarding step 5 only collects cigarette consumption. */
 export type NicotineConsumptionFormId = "cigarettes";
 
 /* ----------------------------- Quit plan -------------------------------- */
@@ -149,11 +149,11 @@ export type OnboardingDraft = {
   packCost?: number;
   /** Raw pack cost text the user typed (for payload / DB). */
   packCostInput?: string;
-  /** ISO 3166-1 alpha-2 from REST Countries (step 5). */
+  /** ISO 3166-1 alpha-2 from REST Countries (step 6). */
   countryCode?: string;
-  /** Display name from REST Countries (step 5), used in payload / DB. */
+  /** Display name from REST Countries (step 6), used in payload / DB. */
   countryName?: string;
-  /** PNG flag URL from REST Countries (step 5). */
+  /** PNG flag URL from REST Countries (step 6). */
   countryFlag?: string;
   currency: string;
 

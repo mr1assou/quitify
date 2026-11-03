@@ -46,7 +46,7 @@ type Props = {
 };
 
 /**
- * Circular profile-photo picker for onboarding step 5.
+ * Circular profile-photo picker for onboarding step 6.
  * Lets users upload a photo or select one of the bundled profile avatars.
  */
 export function OnboardingProfileImagePicker({

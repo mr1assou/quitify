@@ -1,9 +1,12 @@
 import { Image } from "expo-image";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { Text, View, type ImageSourcePropType } from "react-native";
 
 import { Button } from "@/components/ui/Button";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 import { usePushNotificationsSettings } from "@/hooks/push/usePushNotificationsSettings";
+import { isPostSignupPaywallPending } from "@/utils/onboarding/postSignupFlowStorage";
 
 const SMOKED_IMAGE =
   require("../../../../assets/images/smoked/smoked_result.webp") as ImageSourcePropType;
@@ -13,11 +16,28 @@ export function HomeNotificationPrompt() {
   const {
     enabled,
     busy,
-    ready,
+    settled,
     setNotificationsEnabled,
   } = usePushNotificationsSettings();
+  const [paywallBlocking, setPaywallBlocking] = useState(true);
 
-  if (!ready || enabled) return null;
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      void isPostSignupPaywallPending()
+        .then((pending) => {
+          if (!cancelled) setPaywallBlocking(pending);
+        })
+        .catch(() => {
+          if (!cancelled) setPaywallBlocking(false);
+        });
+      return () => {
+        cancelled = true;
+      };
+    }, []),
+  );
+
+  if (!settled || paywallBlocking || enabled) return null;
 
   return (
     <View className="mx-6 mt-6 rounded-3xl border border-border bg-elevated p-5 dark:border-d-border dark:bg-d-surface">

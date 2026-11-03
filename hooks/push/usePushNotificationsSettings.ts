@@ -1,6 +1,6 @@
 import { useFocusEffect } from "expo-router";
 import * as Notifications from "expo-notifications";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, Linking } from "react-native";
 
 import { useApp } from "@/context/AppContext";
@@ -33,6 +33,9 @@ export function usePushNotificationsSettings() {
   );
   const [busy, setBusy] = useState(false);
   const [ready, setReady] = useState(() => getCachedPushTokenStatus() !== null);
+  /** True only after this screen has received one finished status check. */
+  const [settled, setSettled] = useState(false);
+  const refreshGen = useRef(0);
 
   const applyStatus = useCallback((hasToken: boolean) => {
     setCachedPushTokenStatus(hasToken);
@@ -55,6 +58,7 @@ export function usePushNotificationsSettings() {
         if (hasToken === null) {
           setEnabled(false);
           setReady(false);
+          setSettled(false);
           return;
         }
         setEnabled(hasToken);
@@ -76,17 +80,18 @@ export function usePushNotificationsSettings() {
   );
 
   const refresh = useCallback(async () => {
+    const gen = ++refreshGen.current;
     try {
       const hasToken = await resolveSettledPushTokenStatus();
+      if (gen !== refreshGen.current) return;
       applyStatus(hasToken);
+      setSettled(true);
 
       if (hasToken) {
-        void syncPushTokenWithBackend()
-          .then(() => resolveSettledPushTokenStatus())
-          .then(applyStatus)
-          .catch(() => {});
+        void syncPushTokenWithBackend().catch(() => {});
       }
     } catch {
+      if (gen !== refreshGen.current) return;
       // Keep cached toggle state if the API is unreachable.
       if (getCachedPushTokenStatus() !== null) {
         setReady(true);
@@ -157,6 +162,7 @@ export function usePushNotificationsSettings() {
     enabled,
     busy,
     ready,
+    settled,
     setNotificationsEnabled,
     refresh,
   };

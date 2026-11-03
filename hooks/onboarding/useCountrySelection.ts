@@ -5,7 +5,7 @@ import type { Country } from "@/types/app/country";
 
 type Patch = (next: Partial<OnboardingDraft>) => void;
 
-/** Step 5 — selecting a country also sets `currency` from API data. */
+/** Step 6 — selecting a country also sets `currency` from API data. */
 export function useCountrySelection(patch: Patch) {
   const selectCountry = useCallback(
     (country: Country) => {

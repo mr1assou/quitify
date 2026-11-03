@@ -1,25 +1,23 @@
 export const intro = {
   success: {
-    title: "Quitting cigarettes isn't luck",
-    body: "Most people try alone and fall back. Quitify is made for cigarette smokers with real support when the urge hits.",
+    title: "Track every attempt",
+    body: "Quitify saves each try, so you can see how far you went and begin the next one with a clearer plan.",
   },
   shortTime: {
-    title: "The hardest part is temporary",
-    body: "Quitify helps you get through it and beyond that, it gets easier.",
+    title: "Set a goal you can see",
+    body: "Create a goal for the money you want to save, the days you want to reach, or the life you want back. The app shows how close you are every day.",
   },
   transformation: {
-    title: "Your transformation starts now",
-    body:
-      "As you move toward a smoke-free life, you'll grow stronger, more in control, and healthier every day.",
+    title: "Stay motivated when it feels hard",
+    body: "Freedom points, badges, and your rank turn each smoke free day into a win you can see. Small rewards keep you moving when motivation drops.",
   },
   chance: {
-    title: "This is your moment to quit cigarettes",
-    body: "Start today. Put down the pack and take your life back one step, one craving, one win at a time.",
+    title: "You can beat this craving",
+    body: "It feels huge, then it passes. Stay with it and feel how strong you already are. Every craving you outlast is a win you get to keep.",
   },
   afterOnboard: {
-    title: "Join those who chose to quit",
-    body:
-      "Join people who have successfully broken the habit with Quitify real progress, real support, and a path that actually works.",
+    title: "You quit with support, not alone",
+    body: "Track your streak, your goals, and your attempts in one place. The community is there when you need a reminder that other people are doing this too.",
   },
   cta: {
     next: "Next",

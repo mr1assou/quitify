@@ -123,15 +123,6 @@ export default function PaywallOffer() {
       <StatusBar style={isDark ? "light" : "dark"} />
       <AppScreenBackground isDark={isDark} showOrbs={false} />
 
-      <View
-        pointerEvents="none"
-        className="absolute -right-10 top-16 h-52 w-52 rounded-full bg-primary/20"
-      />
-      <View
-        pointerEvents="none"
-        className="absolute -left-16 top-56 h-44 w-44 rounded-full bg-primary/10"
-      />
-
       <SafeAreaView className="flex-1 bg-transparent" edges={["top"]}>
         <View className="flex-row items-center justify-end px-4 pt-2">
           <Pressable

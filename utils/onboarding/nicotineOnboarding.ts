@@ -85,7 +85,7 @@ export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
   );
 }
 
-/** Step 6: cigarette habit fields (dropdowns + pack cost) + quit date. */
+/** Step 5: cigarette habit fields (dropdowns + pack cost) + quit date. */
 export function isNicotineConsumptionStepComplete(draft: OnboardingDraft): boolean {
   return isNicotineHabitsComplete(draft) && isQuitDateComplete(draft);
 }
