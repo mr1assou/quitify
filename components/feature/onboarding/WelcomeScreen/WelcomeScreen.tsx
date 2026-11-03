@@ -2,6 +2,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import { useEffect } from "react";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenCanvas } from "@/components/layout/ScreenCanvas";
+import { useTheme } from "@/context/ThemeContext";
 import { LanguageToggleButton } from "@/components/layout/LanguageToggleButton";
 import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { Button } from "@/components/ui/Button";
@@ -13,6 +14,7 @@ import { safeRouter } from "@/utils/app/safeRouter";
 
 export function WelcomeScreen() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   useEffect(() => {
     logWelcomeView();
@@ -29,7 +31,8 @@ export function WelcomeScreen() {
         <View className="flex-1 items-center justify-center">
           <Animated.View
             entering={FadeIn.duration(700)}
-            className="h-44 w-44 items-center justify-center rounded-3xl border border-border/60 bg-section p-3 dark:border-d-border dark:bg-d-surface/95"
+            className="h-44 w-44 items-center justify-center rounded-3xl border p-3"
+            style={{ backgroundColor: colors.section, borderColor: colors.border }}
           >
             <Image
               source={require("../../../../assets/images/logo.webp")}

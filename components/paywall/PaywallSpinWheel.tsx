@@ -14,6 +14,7 @@ import {
   SPIN_WHEEL_SEGMENT_IDS,
   SPIN_WHEEL_WIN_INDEX,
 } from "@/constants/paywall/spinWheel";
+import { useTheme } from "@/context/ThemeContext";
 import { useTranslation } from "@/hooks/i18n/useTranslation";
 
 const WHEEL_SIZE = 300;
@@ -22,25 +23,10 @@ const RADIUS = WHEEL_SIZE / 2 - 8;
 const SEGMENT_COUNT = SPIN_WHEEL_SEGMENT_IDS.length;
 const SEGMENT_ANGLE = 360 / SEGMENT_COUNT;
 
-const SEGMENT_COLORS = [
-  "#F97316",
-  "#F3E6D8",
-  "#14B8A6",
-  "#F3E6D8",
-  "#818CF8",
-  "#F3E6D8",
-] as const;
-
-const SEGMENT_LABEL_COLORS = [
-  "#FFFFFF",
-  "#3D3630",
-  "#FFFFFF",
-  "#3D3630",
-  "#FFFFFF",
-  "#3D3630",
-] as const;
-
-const WHEEL_CREAM = "#FFF8F3";
+const LIGHT_SEGMENT_COLORS = ["#F97316", "#F3E6D8", "#14B8A6", "#F3E6D8", "#818CF8", "#F3E6D8"] as const;
+const DARK_SEGMENT_COLORS = ["#F97316", "#3D3228", "#14B8A6", "#3D3228", "#818CF8", "#3D3228"] as const;
+const LIGHT_LABEL_COLORS = ["#FFFFFF", "#3D3630", "#FFFFFF", "#3D3630", "#FFFFFF", "#3D3630"] as const;
+const DARK_LABEL_COLORS = ["#FFFFFF", "#F7F0E8", "#FFFFFF", "#F7F0E8", "#FFFFFF", "#F7F0E8"] as const;
 
 function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -70,6 +56,12 @@ type Props = {
 
 export function PaywallSpinWheel({ winLabel, onWon }: Props) {
   const { t } = useTranslation();
+  const { resolved } = useTheme();
+  const isDark = resolved === "dark";
+  const segmentColors = isDark ? DARK_SEGMENT_COLORS : LIGHT_SEGMENT_COLORS;
+  const labelColors = isDark ? DARK_LABEL_COLORS : LIGHT_LABEL_COLORS;
+  const wheelRim = isDark ? "#1A1410" : "#FFF8F3";
+  const wheelHub = isDark ? "#252018" : "#FFFFFF";
   const rotation = useSharedValue(0);
   const [spinning, setSpinning] = useState(false);
   const [done, setDone] = useState(false);
@@ -91,13 +83,13 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
           id,
           label: segmentLabels[index],
           path: describeSlice(start, end),
-          color: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
-          labelColor: SEGMENT_LABEL_COLORS[index % SEGMENT_LABEL_COLORS.length],
+          color: segmentColors[index % segmentColors.length],
+          labelColor: labelColors[index % labelColors.length],
           labelX: labelPos.x,
           labelY: labelPos.y,
         };
       }),
-    [segmentLabels],
+    [labelColors, segmentColors, segmentLabels],
   );
 
   const finishSpin = useCallback(() => {
@@ -133,7 +125,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
 
   return (
     <View className="items-center">
-      <Text className="mb-4 px-4 text-center text-base font-semibold text-muted-foreground">
+      <Text className="mb-4 px-4 text-center text-base font-semibold text-muted-foreground dark:text-d-muted">
         {done
           ? t("paywall.spinWonTitle", { price: winLabel })
           : t("paywall.spinPrompt")}
@@ -156,13 +148,13 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
               cx={CENTER}
               cy={CENTER}
               r={RADIUS + 6}
-              fill={WHEEL_CREAM}
+              fill={wheelRim}
               stroke="#F97316"
               strokeWidth={4}
             />
             {slices.map((slice) => (
               <G key={slice.id}>
-                <Path d={slice.path} fill={slice.color} stroke={WHEEL_CREAM} strokeWidth={2} />
+                <Path d={slice.path} fill={slice.color} stroke={wheelRim} strokeWidth={2} />
                 <SvgText
                   x={slice.labelX}
                   y={slice.labelY}
@@ -180,7 +172,7 @@ export function PaywallSpinWheel({ winLabel, onWon }: Props) {
               cx={CENTER}
               cy={CENTER}
               r={28}
-              fill="#FFFFFF"
+              fill={wheelHub}
               stroke="#F97316"
               strokeWidth={3}
             />

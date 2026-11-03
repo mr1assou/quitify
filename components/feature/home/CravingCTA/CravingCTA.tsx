@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -62,7 +62,7 @@ export function CravingCTA({ onPress }: Props) {
           style={pressStyle}
           className="h-40 w-40 items-center justify-center rounded-full bg-primary"
         >
-          <Ionicons name="flash" size={36} color={colors.white} />
+          <MaterialCommunityIcons name="head-flash" size={40} color={colors.white} />
           <Text className="mt-2 px-4 text-center text-base font-bold text-white">
             {t("home.cravingCta")}
           </Text>
