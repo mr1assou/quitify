@@ -10,7 +10,7 @@ type Props = {
   fieldErrors?: NicotineFieldErrors;
 };
 
-/** Step 5 body: cigarette habits. */
+/** Step 6 body: cigarette habits. */
 export function NicotineConsumptionFields({ draft, patch, fieldErrors }: Props) {
   return (
     <View className="w-full">

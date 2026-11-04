@@ -52,7 +52,7 @@ export default function OnboardingCreateProfile() {
       style={{ flex: 1 }}
     >
       <OnboardingShell
-        step={6}
+        step={5}
         total={ONBOARDING_TOTAL_STEPS}
         title={t("onboarding.profile.title")}
         primaryLabel={t("common.continue")}
@@ -63,7 +63,7 @@ export default function OnboardingCreateProfile() {
             setAttemptedContinue(true);
             return;
           }
-          safeRouter.push("/onboarding/analyzing");
+          safeRouter.push("/onboarding/nicotine-consumption");
         }}
         showBack
         scrollBody
