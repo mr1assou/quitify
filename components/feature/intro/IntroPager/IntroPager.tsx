@@ -39,6 +39,9 @@ import { logIntroSlide } from "@/services/analytics/firebaseEvents";
 const NEXT_ROUTE = "/onboarding/reasons";
 const SWIPE_THRESHOLD_RATIO = 0.22;
 
+/** Kept so step 1 back opens slide 5 again if the intro screen is recreated. */
+let rememberedIntroIndex = 0;
+
 export function IntroPager() {
   const navigation = useNavigation();
   const { colors, resolved } = useTheme();
@@ -47,9 +50,11 @@ export function IntroPager() {
   const { width: windowWidth } = useWindowDimensions();
   // Ready on first paint so welcome→intro does not slide over an empty screen.
   const [width, setWidth] = useState(() => Math.round(windowWidth));
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(rememberedIntroIndex);
   const [pagerAndFooterH, setPagerAndFooterH] = useState(0);
-  const translateX = useSharedValue(0);
+  const translateX = useSharedValue(
+    -rememberedIntroIndex * Math.max(Math.round(windowWidth), 1),
+  );
   const total = slides.length;
   const isLast = index === total - 1;
   const currentSlide = slides[index];
@@ -69,6 +74,7 @@ export function IntroPager() {
   const goTo = (page: number) => {
     const clamped = Math.max(0, Math.min(total - 1, page));
     indexRef.current = clamped;
+    rememberedIntroIndex = clamped;
     setIndex(clamped);
     translateX.value = withTiming(-clamped * pageWidthRef.current, {
       duration: 320,
@@ -77,8 +83,8 @@ export function IntroPager() {
 
   const goNext = () => {
     if (isLast) {
-      allowLeaveRef.current = true;
-      safeRouter.replace(NEXT_ROUTE);
+      rememberedIntroIndex = indexRef.current;
+      safeRouter.pushStack(NEXT_ROUTE);
       return;
     }
     goTo(index + 1);
@@ -89,6 +95,7 @@ export function IntroPager() {
       goTo(indexRef.current - 1);
       return;
     }
+    rememberedIntroIndex = 0;
     allowLeaveRef.current = true;
     safeRouter.backOr("/onboarding");
   };
@@ -96,6 +103,7 @@ export function IntroPager() {
   // System back / edge swipe: step slides first; leave only from slide 1.
   useEffect(() => {
     const onHardwareBack = () => {
+      if (!navigation.isFocused()) return false;
       if (indexRef.current > 0) {
         goTo(indexRef.current - 1);
         return true;
@@ -122,6 +130,7 @@ export function IntroPager() {
 
   const finishSwipe = (target: number) => {
     indexRef.current = target;
+    rememberedIntroIndex = target;
     setIndex(target);
   };
 

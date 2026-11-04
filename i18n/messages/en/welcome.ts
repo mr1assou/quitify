@@ -1,7 +1,5 @@
 export const welcome = {
   title: "Begin your healthy journey",
-  subtitle:
-    "Begin your Quitify journey to a smoke-free life and reclaim your time and health",
   getStarted: "Let's get started",
   haveAccount: "I already have an account",
   termsIntro:

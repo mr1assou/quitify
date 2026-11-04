@@ -48,12 +48,6 @@ export function WelcomeScreen() {
           >
             {t("welcome.title")}
           </Animated.Text>
-          <Animated.Text
-            entering={FadeInUp.delay(280).duration(500)}
-            className="mt-3 px-2 text-center text-base text-muted-foreground dark:text-d-muted"
-          >
-            {t("welcome.subtitle")}
-          </Animated.Text>
         </View>
 
         <Animated.View entering={FadeInDown.delay(400).duration(500)} className="gap-3">
