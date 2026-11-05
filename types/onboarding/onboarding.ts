@@ -71,10 +71,6 @@ export type PrimaryInterestId =
   | "money"
   | "health"
   | "cravings"
-  | "missions"
-  | "stats"
-  | "rewards"
-  | "routine"
   | "other";
 
 export type PrimaryInterestOption = {

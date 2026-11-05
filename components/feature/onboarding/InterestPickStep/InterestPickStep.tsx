@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { OnboardingOtherComposer } from "@/components/feature/onboarding/shared/OnboardingOtherComposer";
 import { Chip } from "@/components/ui/Chip";
@@ -53,40 +53,31 @@ export function InterestPickStep({
   };
 
   return (
-    <>
-      <ScrollView
-        className="w-full flex-1"
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: 8 }}
-      >
-        <View className="w-full gap-3">
-          {options.map((opt) => (
-            <Chip
-              key={opt.id}
-              label={opt.label}
-              size="lg"
-              fullWidth
-              selected={ids.includes(opt.id)}
-              onPress={() => handlePress(opt.id)}
-            />
-          ))}
-        </View>
+    <View className="w-full gap-3">
+      {options.map((opt) => (
+        <Chip
+          key={opt.id}
+          label={opt.label}
+          size="lg"
+          fullWidth
+          selected={ids.includes(opt.id)}
+          onPress={() => handlePress(opt.id)}
+        />
+      ))}
 
-        {otherSelected && otherText.trim().length > 0 && !composerOpen ? (
-          <Pressable
-            onPress={openComposer}
-            className="mt-3 rounded-2xl border border-border bg-elevated px-4 py-3 dark:border-d-border dark:bg-d-elevated"
+      {otherSelected && otherText.trim().length > 0 && !composerOpen ? (
+        <Pressable
+          onPress={openComposer}
+          className="rounded-2xl border border-border bg-elevated px-4 py-3 dark:border-d-border dark:bg-d-elevated"
+        >
+          <Text
+            className="text-sm leading-5 text-foreground dark:text-d-text"
+            numberOfLines={3}
           >
-            <Text
-              className="text-sm leading-5 text-foreground dark:text-d-text"
-              numberOfLines={3}
-            >
-              {otherText.trim()}
-            </Text>
-          </Pressable>
-        ) : null}
-      </ScrollView>
+            {otherText.trim()}
+          </Text>
+        </Pressable>
+      ) : null}
 
       <OnboardingOtherComposer
         visible={composerOpen && otherSelected}
@@ -96,6 +87,6 @@ export function InterestPickStep({
         onChangeText={onOtherTextChange}
         onClose={closeComposer}
       />
-    </>
+    </View>
   );
 }

@@ -10,7 +10,10 @@ import {
   CIGARETTES_PER_DAY_BANDS,
   CIGARETTES_PER_DAY_DROPDOWN_OPTIONS,
   isCustomCigarettesPerDayBand,
+  NICOTINE_HABIT_YEARS_BANDS,
+  NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS,
   type CigarettesPerDayBandId,
+  type NicotineHabitYearsBandId,
 } from "@/constants/onboarding/onboardingNicotineBands";
 import { ONBOARDING_CONTROL_HEIGHT } from "@/constants/onboarding/onboardingFlow";
 import type { OnboardingDraft } from "@/types";
@@ -21,6 +24,7 @@ import {
   patchForCigarettesPerDayBand,
   patchForCigarettesPerDayCustomInput,
   patchForCigarettesPerPackInput,
+  patchForNicotineHabitYearsBand,
   patchForPackCostInput,
 } from "@/utils/onboarding/nicotineBands";
 import {
@@ -40,6 +44,10 @@ function isCigarettesPerDayBand(value: string): value is CigarettesPerDayBandId 
   return CIGARETTES_PER_DAY_DROPDOWN_OPTIONS.some((o) => o.value === value);
 }
 
+function isHabitYearsBand(value: string): value is NicotineHabitYearsBandId {
+  return NICOTINE_HABIT_YEARS_DROPDOWN_OPTIONS.some((o) => o.value === value);
+}
+
 export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const { t } = useTranslation();
   const { localize } = useLocalizedCatalog();
@@ -53,6 +61,17 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
   const cigarettesPerDayOptions = useMemo(
     () =>
       localize(CIGARETTES_PER_DAY_BANDS, "onboarding.nicotine", ["label"]).map(
+        (band) => ({
+          value: band.id,
+          label: band.label,
+        }),
+      ),
+    [localize],
+  );
+
+  const habitYearsOptions = useMemo(
+    () =>
+      localize(NICOTINE_HABIT_YEARS_BANDS, "onboarding.nicotine", ["label"]).map(
         (band) => ({
           value: band.id,
           label: band.label,
@@ -77,6 +96,32 @@ export function CigaretteHabitFields({ draft, patch, fieldErrors }: Props) {
 
   return (
     <View className="w-full gap-5">
+      <View className="gap-2">
+        <OnboardingFieldLabel>
+          {t("onboarding.nicotine.habitYears.label")}
+        </OnboardingFieldLabel>
+        <SelectFieldString
+          fieldLabel={t("onboarding.nicotine.habitYears.label")}
+          showLabel={false}
+          value={draft.nicotineHabitYearsBand}
+          placeholder={t("common.selectRange")}
+          options={habitYearsOptions}
+          allowClear={false}
+          controlHeight={ONBOARDING_CONTROL_HEIGHT}
+          maxListHeight={cigsPerDaySheetHeight}
+          onChange={(value) => {
+            if (value && isHabitYearsBand(value)) {
+              patch(patchForNicotineHabitYearsBand(value));
+            }
+          }}
+        />
+        {fieldErrors?.habitYears ? (
+          <Text className="text-xs font-semibold text-alert">
+            {t("onboarding.nicotine.habitYears.required")}
+          </Text>
+        ) : null}
+      </View>
+
       <View className="gap-2">
         <OnboardingFieldLabel>
           {t("onboarding.nicotine.cigsPerDay.label")}

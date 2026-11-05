@@ -19,7 +19,6 @@ const PROFILE_IMAGE_SOURCES: Record<DefaultProfileImagePath, ImageSourcePropType
   "profile22.webp": require("../../assets/images/profiles/profile22.webp"),
   "profile23.webp": require("../../assets/images/profiles/profile23.webp"),
   "profile4.webp": require("../../assets/images/profiles/profile4.webp"),
-  "profile5.webp": require("../../assets/images/profiles/profile5.webp"),
 };
 
 export function bundledProfileImageSource(

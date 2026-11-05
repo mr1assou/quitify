@@ -48,10 +48,6 @@ export const onboarding = {
     money: { label: "Money I save", hint: "Watching what you no longer spend on packs." },
     health: { label: "Feeling healthier", hint: "Breathing easier after quitting cigarettes." },
     cravings: { label: "Handling cravings", hint: "Tools when you want a cigarette." },
-    missions: { label: "Daily missions", hint: "Small tasks that build quit momentum." },
-    stats: { label: "Stats & insights", hint: "See your cigarette-free progress clearly." },
-    rewards: { label: "Rewards & badges", hint: "Unlock wins as you stay smoke-free." },
-    routine: { label: "A calmer routine", hint: "Replace cigarettes with something better." },
     other: { label: "Other" },
     otherPlaceholder: "Tell us what will keep you going…",
   },
@@ -98,7 +94,7 @@ export const onboarding = {
       customInvalid: "Enter more than 0",
     },
     habitYears: {
-      label: "How long have you smoked cigarettes?",
+      label: "Years of smoking?",
       required: "Choose how long you have smoked",
     },
     packSize: {

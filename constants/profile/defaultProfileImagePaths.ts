@@ -12,7 +12,6 @@ export const DEFAULT_PROFILE_IMAGE_PATHS = [
   "profile22.webp",
   "profile23.webp",
   "profile4.webp",
-  "profile5.webp",
 ] as const;
 
 export type DefaultProfileImagePath = (typeof DEFAULT_PROFILE_IMAGE_PATHS)[number];

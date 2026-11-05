@@ -77,9 +77,14 @@ function hasValidCigarettesPerDaySelection(draft: OnboardingDraft): boolean {
   return input.length > 0 && isValidCigarettesPerDay(draft.cigarettesPerDay);
 }
 
+function hasValidHabitYears(draft: OnboardingDraft): boolean {
+  return draft.nicotineHabitYearsBand != null;
+}
+
 export function isNicotineHabitsComplete(draft: OnboardingDraft): boolean {
   return (
     hasValidCigarettesPerDaySelection(draft) &&
+    hasValidHabitYears(draft) &&
     hasValidCigarettesPerPackInput(draft) &&
     hasValidPackCost(draft)
   );
@@ -110,6 +115,10 @@ export function getNicotineFieldErrors(draft: OnboardingDraft): NicotineFieldErr
     errors.packSize = true;
   } else if (!isValidCigarettesPerPack(draft.cigarettesPerPack)) {
     errors.packSizeInvalid = true;
+  }
+
+  if (draft.nicotineHabitYearsBand == null) {
+    errors.habitYears = true;
   }
 
   const priceInput = draft.packCostInput?.trim() ?? "";

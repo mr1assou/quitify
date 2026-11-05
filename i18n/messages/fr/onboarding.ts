@@ -64,22 +64,6 @@ export const onboarding = {
       label: "Gérer les envies",
       hint: "Des outils quand l'envie de fumer arrive.",
     },
-    missions: {
-      label: "Missions quotidiennes",
-      hint: "De petites tâches qui renforcent votre sevrage.",
-    },
-    stats: {
-      label: "Stats et insights",
-      hint: "Voir clairement vos progrès sans cigarette.",
-    },
-    rewards: {
-      label: "Récompenses et badges",
-      hint: "Débloquer des victoires en restant sans tabac.",
-    },
-    routine: {
-      label: "Une routine plus calme",
-      hint: "Remplacer la cigarette par quelque chose de mieux.",
-    },
     other: { label: "Autre" },
     otherPlaceholder: "Dites-nous ce qui vous motivera…",
   },
@@ -127,7 +111,7 @@ export const onboarding = {
       customInvalid: "Entrez un nombre supérieur à 0",
     },
     habitYears: {
-      label: "Depuis combien de temps fumez-vous ?",
+      label: "Années de tabagisme ?",
       required: "Choisissez depuis combien de temps vous fumez",
     },
     packSize: {
