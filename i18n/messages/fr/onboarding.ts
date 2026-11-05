@@ -1,7 +1,6 @@
 export const onboarding = {
   reasons: {
     title: "Pourquoi voulez-vous arrêter la cigarette ?",
-    subtitle: "Choisissez ce qui compte le plus. Vous pouvez en sélectionner plusieurs.",
     health: { label: "Une meilleure santé" },
     family: { label: "La famille et les proches" },
     money: { label: "Économiser de l'argent" },
@@ -19,8 +18,6 @@ export const onboarding = {
   },
   motivation: {
     title: "À quel point êtes-vous prêt à arrêter la cigarette ?",
-    subtitle:
-      "Soyez honnête. Nous adapterons Quitify à là où vous en êtes maintenant.",
     high: { label: "Élevée" },
     medium: { label: "Moyenne" },
     low: { label: "Faible" },
@@ -29,8 +26,6 @@ export const onboarding = {
   },
   quitAttempts: {
     title: "Avez-vous déjà essayé d'arrêter la cigarette ?",
-    subtitle:
-      "Les essais passés ne sont pas des échecs. Ils nous aident à bâtir un plan plus intelligent pour vous.",
     never: {
       label: "Jamais",
       hint: "C'est mon premier vrai essai, ou je n'ai pas compté les essais précédents.",

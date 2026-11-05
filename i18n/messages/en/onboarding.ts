@@ -1,7 +1,6 @@
 export const onboarding = {
   reasons: {
     title: "Why do you want to quit cigarettes?",
-    subtitle: "Pick what matters most. You can choose more than one.",
     health: { label: "Better health" },
     family: { label: "Family & loved ones" },
     money: { label: "Save money" },
@@ -19,8 +18,6 @@ export const onboarding = {
   },
   motivation: {
     title: "How ready are you to quit cigarettes?",
-    subtitle: "Be honest  we'll match Quitify to where you are right now.",
-
     high: { label: "High" },
     medium: { label: "Medium" },
     low: { label: "Low" },
@@ -29,7 +26,6 @@ export const onboarding = {
   },
   quitAttempts: {
     title: "Have you tried to quit cigarettes before?",
-    subtitle: "Past tries aren't failures they help us build a smarter plan for you.",
     never: {
       label: "Never",
       hint: "This is my first real try, or I have not counted past tries before.",

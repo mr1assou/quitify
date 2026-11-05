@@ -24,7 +24,6 @@ export default function QuitAttempts() {
       step={3}
       total={ONBOARDING_TOTAL_STEPS}
       title={t("onboarding.quitAttempts.title")}
-      subtitle={t("onboarding.quitAttempts.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {

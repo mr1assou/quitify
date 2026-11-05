@@ -45,7 +45,6 @@ export default function Reasons() {
       step={1}
       total={ONBOARDING_TOTAL_STEPS}
       title={t("onboarding.reasons.title")}
-      subtitle={t("onboarding.reasons.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {

@@ -24,7 +24,6 @@ export default function Motivation() {
       step={2}
       total={ONBOARDING_TOTAL_STEPS}
       title={t("onboarding.motivation.title")}
-      subtitle={t("onboarding.motivation.subtitle")}
       primaryLabel={t("common.continue")}
       primaryDisabled={!canContinue}
       onPrimary={() => {
